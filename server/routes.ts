@@ -75,7 +75,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      let appointments = [];
+      let appointments: any[] = [];
 
       if (user.role === 'doctor' && user.doctor) {
         appointments = await storage.getAppointmentsByDoctor(user.doctor.id);
@@ -238,7 +238,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      let records = [];
+      let records: any[] = [];
 
       if (user.role === 'doctor' && user.doctor) {
         records = await storage.getMedicalRecordsByDoctor(user.doctor.id);

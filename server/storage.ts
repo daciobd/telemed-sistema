@@ -222,27 +222,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAppointmentWithDetails(id: number): Promise<AppointmentWithDetails | undefined> {
-    const [result] = await db
-      .select()
-      .from(appointments)
-      .leftJoin(patients, eq(appointments.patientId, patients.id))
-      .leftJoin(users, eq(patients.userId, users.id))
-      .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
-      .leftJoin(users, eq(doctors.userId, users.id))
-      .where(eq(appointments.id, id));
+    const appointment = await this.getAppointment(id);
+    if (!appointment) return undefined;
 
-    if (!result) return undefined;
+    const patient = await this.getPatientWithUser(appointment.patientId);
+    const doctor = await this.getDoctorWithUser(appointment.doctorId);
+    
+    if (!patient || !doctor) return undefined;
 
     return {
-      ...result.appointments,
-      patient: {
-        ...result.patients!,
-        user: result.users!,
-      },
-      doctor: {
-        ...result.doctors!,
-        user: result.users!,
-      },
+      ...appointment,
+      patient,
+      doctor,
     };
   }
 
@@ -260,61 +251,59 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAppointmentsByPatient(patientId: number): Promise<AppointmentWithDetails[]> {
-    const results = await db
+    // First get all appointments for the patient
+    const appointmentList = await db
       .select()
       .from(appointments)
-      .leftJoin(patients, eq(appointments.patientId, patients.id))
-      .leftJoin(users, eq(patients.userId, users.id))
-      .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
-      .leftJoin(users, eq(doctors.userId, users.id))
       .where(eq(appointments.patientId, patientId))
       .orderBy(desc(appointments.appointmentDate));
 
-    return results.map(result => ({
-      ...result.appointments,
-      patient: {
-        ...result.patients!,
-        user: result.users!,
-      },
-      doctor: {
-        ...result.doctors!,
-        user: result.users!,
-      },
-    }));
+    // Then get detailed information for each appointment
+    const results = [];
+    for (const appointment of appointmentList) {
+      const patient = await this.getPatientWithUser(appointment.patientId);
+      const doctor = await this.getDoctorWithUser(appointment.doctorId);
+      
+      if (patient && doctor) {
+        results.push({
+          ...appointment,
+          patient,
+          doctor,
+        });
+      }
+    }
+
+    return results;
   }
 
   async getAppointmentsByDoctor(doctorId: number): Promise<AppointmentWithDetails[]> {
-    const results = await db
+    const appointmentList = await db
       .select()
       .from(appointments)
-      .leftJoin(patients, eq(appointments.patientId, patients.id))
-      .leftJoin(users, eq(patients.userId, users.id))
-      .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
-      .leftJoin(users, eq(doctors.userId, users.id))
       .where(eq(appointments.doctorId, doctorId))
       .orderBy(desc(appointments.appointmentDate));
 
-    return results.map(result => ({
-      ...result.appointments,
-      patient: {
-        ...result.patients!,
-        user: result.users!,
-      },
-      doctor: {
-        ...result.doctors!,
-        user: result.users!,
-      },
-    }));
+    const results = [];
+    for (const appointment of appointmentList) {
+      const patient = await this.getPatientWithUser(appointment.patientId);
+      const doctor = await this.getDoctorWithUser(appointment.doctorId);
+      
+      if (patient && doctor) {
+        results.push({
+          ...appointment,
+          patient,
+          doctor,
+        });
+      }
+    }
+
+    return results;
   }
 
   async getAppointmentsByDateRange(startDate: Date, endDate: Date): Promise<AppointmentWithDetails[]> {
-    const results = await db
+    const appointmentList = await db
       .select()
       .from(appointments)
-      .leftJoin(patients, eq(appointments.patientId, patients.id))
-      .leftJoin(users, eq(patients.userId, users.id))
-      .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
-      .leftJoin(users, eq(doctors.userId, users.id))
       .where(
         and(
           gte(appointments.appointmentDate, startDate),
@@ -323,17 +312,21 @@ export class DatabaseStorage implements IStorage {
       )
       .orderBy(appointments.appointmentDate);
 
-    return results.map(result => ({
-      ...result.appointments,
-      patient: {
-        ...result.patients!,
-        user: result.users!,
-      },
-      doctor: {
-        ...result.doctors!,
-        user: result.users!,
-      },
-    }));
+    const results = [];
+    for (const appointment of appointmentList) {
+      const patient = await this.getPatientWithUser(appointment.patientId);
+      const doctor = await this.getDoctorWithUser(appointment.doctorId);
+      
+      if (patient && doctor) {
+        results.push({
+          ...appointment,
+          patient,
+          doctor,
+        });
+      }
+    }
+
+    return results;
   }
 
   async getTodayAppointmentsByDoctor(doctorId: number): Promise<AppointmentWithDetails[]> {

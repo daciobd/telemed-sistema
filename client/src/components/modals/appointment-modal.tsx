@@ -66,23 +66,26 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
   const { data: patients } = useQuery({
     queryKey: ["/api/patients"],
     retry: false,
-    enabled: user?.role === "doctor" || user?.role === "admin",
+    enabled: !!user && (user.role === "doctor" || user.role === "admin"),
   });
 
   const { data: doctors } = useQuery({
     queryKey: ["/api/doctors"],
     retry: false,
-    enabled: user?.role === "patient" || user?.role === "admin",
+    enabled: !!user && (user.role === "patient" || user.role === "admin"),
   });
 
   const createAppointmentMutation = useMutation({
     mutationFn: async (data: AppointmentFormData) => {
+      console.log("Form data:", data);
       const appointmentData = {
         ...data,
         appointmentDate: new Date(data.appointmentDate),
       };
       
-      await apiRequest("POST", "/api/appointments", appointmentData);
+      console.log("Sending appointment data:", appointmentData);
+      const response = await apiRequest("POST", "/api/appointments", appointmentData);
+      return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/appointments"] });
@@ -143,7 +146,7 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {patients?.map((patient: any) => (
+                        {(patients as any[])?.map((patient: any) => (
                           <SelectItem key={patient.id} value={patient.id.toString()}>
                             {patient.user.firstName} {patient.user.lastName}
                           </SelectItem>
@@ -170,7 +173,7 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {doctors?.map((doctor: any) => (
+                        {(doctors as any[])?.map((doctor: any) => (
                           <SelectItem key={doctor.id} value={doctor.id.toString()}>
                             Dr. {doctor.user.firstName} {doctor.user.lastName} - {doctor.specialty}
                           </SelectItem>
@@ -232,6 +235,7 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
                       rows={3}
                       placeholder="Observações sobre a consulta..."
                       {...field}
+                      value={field.value || ""}
                     />
                   </FormControl>
                   <FormMessage />
