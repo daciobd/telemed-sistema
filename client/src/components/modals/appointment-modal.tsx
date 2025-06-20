@@ -11,6 +11,7 @@ import { insertAppointmentSchema } from "@shared/schema";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -56,6 +57,9 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
       duration: 30,
       status: "scheduled",
       notes: "",
+      appointmentDate: "",
+      patientId: undefined,
+      doctorId: undefined,
     },
   });
 
@@ -118,6 +122,9 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Nova Consulta</DialogTitle>
+          <DialogDescription>
+            Agende uma nova consulta médica preenchendo as informações abaixo.
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
