@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, FileText, Search, Calendar, Users, Video } from "lucide-react";
 import AppointmentModal from "@/components/modals/appointment-modal";
-import TeleconsultModal from "@/components/modals/teleconsult-modal";
+import TeleconsultAuctionModal from "@/components/modals/teleconsult-auction-modal";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function QuickActions() {
@@ -112,7 +112,7 @@ export default function QuickActions() {
         onClose={() => setIsAppointmentModalOpen(false)}
       />
       
-      <TeleconsultModal 
+      <TeleconsultAuctionModal 
         isOpen={isTeleconsultModalOpen}
         onClose={() => setIsTeleconsultModalOpen(false)}
       />

@@ -125,7 +125,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create teleconsultation request
+  // Create teleconsultation request - Auction system
   app.post('/api/teleconsult', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
@@ -147,43 +147,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "gynecology": "Ginecologia"
       };
       
-      // Find available doctors for the specialty
-      const doctors = await storage.getAllDoctors();
       const targetSpecialty = specialtyMap[specialty] || specialty;
-      const availableDoctors = doctors.filter(doctor => 
-        doctor.specialty.toLowerCase().includes(targetSpecialty.toLowerCase()) ||
-        doctor.specialty.toLowerCase() === "clínica geral" // General doctors can handle any specialty
-      );
-      
-      if (availableDoctors.length === 0) {
-        return res.status(404).json({ message: "Nenhum médico disponível para esta especialidade" });
-      }
 
-      // Select the first available doctor
-      const selectedDoctor = availableDoctors[0];
-      
+      // Create initial teleconsult request without assigned doctor
       const teleconsultData = {
         patientId: user.patient.id,
-        doctorId: selectedDoctor.id,
-        appointmentDate: new Date(),
+        doctorId: null, // No doctor assigned yet
+        appointmentDate: null,
         type: "telemedicine" as const,
         status: "pending" as const,
         consultationType: consultationType || "immediate",
-        offeredPrice: offeredPrice?.toString(),
+        offeredPrice: offeredPrice,
         symptoms: symptoms || null,
+        specialty: targetSpecialty,
         duration: 30,
       };
 
-      const appointment = await storage.createAppointment(teleconsultData);
+      const appointment = await storage.createTeleconsultRequest(teleconsultData);
       
+      // Find available doctors for the specialty
+      const doctors = await storage.getAllDoctors();
+      const availableDoctors = doctors.filter(doctor => 
+        doctor.specialty.toLowerCase().includes(targetSpecialty.toLowerCase()) ||
+        doctor.specialty.toLowerCase() === "clínica geral"
+      );
+      
+      if (availableDoctors.length === 0) {
+        await storage.updateAppointmentStatus(appointment.id, "no_immediate_response");
+        return res.status(404).json({ 
+          message: "Nenhum médico disponível para esta especialidade",
+          appointmentId: appointment.id,
+          status: "no_doctors_available"
+        });
+      }
+
+      // Simulate sending offers to doctors (in real app, this would be real-time notifications)
+      // For demo, we'll simulate immediate responses
+      setTimeout(async () => {
+        await storage.simulateDoctorResponses(appointment.id, availableDoctors, offeredPrice, consultationType);
+      }, 2000);
+
       res.status(201).json({
         appointment,
-        doctor: selectedDoctor,
-        message: "Teleconsultation request created successfully"
+        availableDoctors: availableDoctors.length,
+        message: "Oferta enviada para médicos disponíveis",
+        status: "waiting_responses"
       });
     } catch (error) {
       console.error("Error creating teleconsultation:", error);
       res.status(500).json({ message: "Failed to create teleconsultation request" });
+    }
+  });
+
+  // Get teleconsultation status and responses
+  app.get('/api/teleconsult/:id/status', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const appointment = await storage.getTeleconsultRequest(appointmentId);
+      
+      if (!appointment) {
+        return res.status(404).json({ message: "Teleconsultation request not found" });
+      }
+
+      const responses = await storage.getTeleconsultResponses(appointmentId);
+      
+      res.json({
+        appointment,
+        responses,
+        hasImmediateAcceptance: responses.some(r => r.responseType === "immediate_accept"),
+        scheduleOffers: responses.filter(r => r.responseType === "schedule_offer"),
+      });
+    } catch (error) {
+      console.error("Error getting teleconsultation status:", error);
+      res.status(500).json({ message: "Failed to get teleconsultation status" });
+    }
+  });
+
+  // Accept a doctor's response
+  app.post('/api/teleconsult/:id/accept-response/:responseId', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const responseId = parseInt(req.params.responseId);
+      
+      const result = await storage.acceptDoctorResponse(appointmentId, responseId);
+      
+      res.json({
+        message: "Response accepted successfully",
+        appointment: result
+      });
+    } catch (error) {
+      console.error("Error accepting doctor response:", error);
+      res.status(500).json({ message: "Failed to accept doctor response" });
     }
   });
 

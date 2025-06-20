@@ -68,16 +68,17 @@ export const doctors = pgTable("doctors", {
 export const appointments = pgTable("appointments", {
   id: serial("id").primaryKey(),
   patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
-  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
-  appointmentDate: timestamp("appointment_date").notNull(),
+  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }), // nullable for initial requests
+  appointmentDate: timestamp("appointment_date"),
   duration: integer("duration").notNull().default(30), // in minutes
   type: varchar("type", { enum: ["routine", "followup", "emergency", "telemedicine"] }).notNull(),
-  status: varchar("status", { enum: ["scheduled", "confirmed", "completed", "cancelled", "rescheduled", "pending", "accepted"] }).notNull().default("scheduled"),
+  status: varchar("status", { enum: ["scheduled", "confirmed", "completed", "cancelled", "rescheduled", "pending", "accepted", "no_immediate_response", "waiting_schedule_offers"] }).notNull().default("scheduled"),
   consultationType: varchar("consultation_type", { enum: ["immediate", "scheduled"] }).notNull().default("scheduled"),
   offeredPrice: numeric("offered_price", { precision: 10, scale: 2 }),
   acceptedPrice: numeric("accepted_price", { precision: 10, scale: 2 }),
   symptoms: text("symptoms"),
   notes: text("notes"),
+  specialty: varchar("specialty", { length: 50 }),
   prescription: text("prescription"),
   diagnosis: text("diagnosis"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -95,6 +96,18 @@ export const medicalRecords = pgTable("medical_records", {
   attachments: jsonb("attachments"), // JSON array of file URLs
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Table for doctor responses to teleconsultation requests
+export const teleconsultResponses = pgTable("teleconsult_responses", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
+  responseType: varchar("response_type", { enum: ["immediate_accept", "schedule_offer", "declined"] }).notNull(),
+  offeredDateTime: timestamp("offered_date_time"), // for schedule offers
+  message: text("message"),
+  isAccepted: boolean("is_accepted").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Relations
@@ -137,6 +150,18 @@ export const appointmentsRelations = relations(appointments, ({ one, many }) => 
     references: [doctors.id],
   }),
   medicalRecords: many(medicalRecords),
+  teleconsultResponses: many(teleconsultResponses),
+}));
+
+export const teleconsultResponsesRelations = relations(teleconsultResponses, ({ one }) => ({
+  appointment: one(appointments, {
+    fields: [teleconsultResponses.appointmentId],
+    references: [appointments.id],
+  }),
+  doctor: one(doctors, {
+    fields: [teleconsultResponses.doctorId],
+    references: [doctors.id],
+  }),
 }));
 
 export const medicalRecordsRelations = relations(medicalRecords, ({ one }) => ({

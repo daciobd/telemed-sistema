@@ -4,6 +4,7 @@ import {
   doctors,
   appointments,
   medicalRecords,
+  teleconsultResponses,
   type User,
   type UpsertUser,
   type Patient,
@@ -54,6 +55,14 @@ export interface IStorage {
   getAppointmentsByDoctor(doctorId: number): Promise<AppointmentWithDetails[]>;
   getAppointmentsByDateRange(startDate: Date, endDate: Date): Promise<AppointmentWithDetails[]>;
   getTodayAppointmentsByDoctor(doctorId: number): Promise<AppointmentWithDetails[]>;
+  
+  // Teleconsultation auction operations
+  createTeleconsultRequest(data: any): Promise<Appointment>;
+  getTeleconsultRequest(id: number): Promise<Appointment | undefined>;
+  updateAppointmentStatus(id: number, status: string): Promise<void>;
+  simulateDoctorResponses(appointmentId: number, doctors: any[], offeredPrice: number, consultationType: string): Promise<void>;
+  getTeleconsultResponses(appointmentId: number): Promise<any[]>;
+  acceptDoctorResponse(appointmentId: number, responseId: number): Promise<Appointment>;
   
   // Medical record operations
   createMedicalRecord(record: InsertMedicalRecord): Promise<MedicalRecord>;
@@ -401,6 +410,118 @@ export class DatabaseStorage implements IStorage {
       .from(medicalRecords)
       .where(eq(medicalRecords.doctorId, doctorId))
       .orderBy(desc(medicalRecords.createdAt));
+  }
+
+  // Teleconsultation auction operations
+  async createTeleconsultRequest(data: any): Promise<Appointment> {
+    const [appointment] = await db.insert(appointments).values(data).returning();
+    return appointment;
+  }
+
+  async getTeleconsultRequest(id: number): Promise<Appointment | undefined> {
+    const [appointment] = await db.select().from(appointments).where(eq(appointments.id, id));
+    return appointment;
+  }
+
+  async updateAppointmentStatus(id: number, status: string): Promise<void> {
+    await db.update(appointments).set({ status }).where(eq(appointments.id, id));
+  }
+
+  async simulateDoctorResponses(appointmentId: number, doctors: any[], offeredPrice: number, consultationType: string): Promise<void> {
+    // Simulate doctor responses for demo purposes
+    for (const doctor of doctors.slice(0, 3)) { // Limit to first 3 doctors
+      const responseType = Math.random() > 0.7 ? "immediate_accept" : 
+                          consultationType === "immediate" ? "declined" : "schedule_offer";
+      
+      let offeredDateTime = null;
+      if (responseType === "schedule_offer") {
+        // Offer a time slot within next 24 hours
+        const now = new Date();
+        offeredDateTime = new Date(now.getTime() + Math.random() * 24 * 60 * 60 * 1000);
+      }
+
+      await db.insert(teleconsultResponses).values({
+        appointmentId,
+        doctorId: doctor.id,
+        responseType,
+        offeredDateTime,
+        message: responseType === "immediate_accept" ? "Disponível agora" : 
+                responseType === "schedule_offer" ? "Posso atender no horário proposto" : 
+                "Não posso atender neste valor",
+      });
+
+      // If immediate acceptance, update appointment
+      if (responseType === "immediate_accept") {
+        await db.update(appointments).set({
+          doctorId: doctor.id,
+          status: "accepted",
+          appointmentDate: new Date(),
+        }).where(eq(appointments.id, appointmentId));
+        break; // Stop after first acceptance
+      }
+    }
+
+    // If no immediate acceptance and there are schedule offers, update status
+    const responses = await this.getTeleconsultResponses(appointmentId);
+    const hasImmediate = responses.some(r => r.responseType === "immediate_accept");
+    const hasSchedule = responses.some(r => r.responseType === "schedule_offer");
+
+    if (!hasImmediate) {
+      if (hasSchedule) {
+        await this.updateAppointmentStatus(appointmentId, "waiting_schedule_offers");
+      } else {
+        await this.updateAppointmentStatus(appointmentId, "no_immediate_response");
+      }
+    }
+  }
+
+  async getTeleconsultResponses(appointmentId: number): Promise<any[]> {
+    const responses = await db
+      .select({
+        response: teleconsultResponses,
+        doctor: doctors,
+        user: users,
+      })
+      .from(teleconsultResponses)
+      .leftJoin(doctors, eq(teleconsultResponses.doctorId, doctors.id))
+      .leftJoin(users, eq(doctors.userId, users.id))
+      .where(eq(teleconsultResponses.appointmentId, appointmentId));
+
+    return responses.map(r => ({
+      ...r.response,
+      doctor: r.doctor ? { ...r.doctor, user: r.user } : null,
+    }));
+  }
+
+  async acceptDoctorResponse(appointmentId: number, responseId: number): Promise<Appointment> {
+    // Get the response details
+    const [response] = await db
+      .select()
+      .from(teleconsultResponses)
+      .where(eq(teleconsultResponses.id, responseId));
+
+    if (!response) {
+      throw new Error("Response not found");
+    }
+
+    // Update the appointment with the selected doctor and time
+    const [updatedAppointment] = await db
+      .update(appointments)
+      .set({
+        doctorId: response.doctorId,
+        appointmentDate: response.offeredDateTime || new Date(),
+        status: "confirmed",
+      })
+      .where(eq(appointments.id, appointmentId))
+      .returning();
+
+    // Mark this response as accepted
+    await db
+      .update(teleconsultResponses)
+      .set({ isAccepted: true })
+      .where(eq(teleconsultResponses.id, responseId));
+
+    return updatedAppointment;
   }
 }
 
