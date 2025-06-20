@@ -137,14 +137,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { specialty, symptoms, offeredPrice, consultationType } = req.body;
       
+      // Map frontend specialty keys to database values
+      const specialtyMap: Record<string, string> = {
+        "general": "Clínica Geral",
+        "cardiology": "Cardiologia", 
+        "dermatology": "Dermatologia",
+        "pediatrics": "Pediatria",
+        "psychiatry": "Psiquiatria",
+        "gynecology": "Ginecologia"
+      };
+      
       // Find available doctors for the specialty
       const doctors = await storage.getAllDoctors();
+      const targetSpecialty = specialtyMap[specialty] || specialty;
       const availableDoctors = doctors.filter(doctor => 
-        doctor.specialty.toLowerCase().includes(specialty.toLowerCase())
+        doctor.specialty.toLowerCase().includes(targetSpecialty.toLowerCase()) ||
+        doctor.specialty.toLowerCase() === "clínica geral" // General doctors can handle any specialty
       );
       
       if (availableDoctors.length === 0) {
-        return res.status(404).json({ message: "No doctors available for this specialty" });
+        return res.status(404).json({ message: "Nenhum médico disponível para esta especialidade" });
       }
 
       // Select the first available doctor

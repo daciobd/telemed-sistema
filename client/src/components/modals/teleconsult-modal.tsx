@@ -104,26 +104,39 @@ export default function TeleconsultModal({ isOpen, onClose }: TeleconsultModalPr
       const response = await apiRequest("POST", "/api/teleconsult", teleconsultData);
       return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       setStep("searching");
       setTimeout(() => {
         setStep("found");
-      }, 3000);
+        toast({
+          title: "Médico encontrado!",
+          description: `Conectando com Dr. ${data.doctor?.user?.firstName || 'Especialista'} - ${data.doctor?.specialty}`,
+        });
+      }, 2000);
       
       queryClient.invalidateQueries({ queryKey: ["/api/appointments"] });
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
       
       toast({
-        title: "Teleconsulta solicitada",
-        description: "Buscando médicos disponíveis...",
+        title: "Buscando médicos",
+        description: "Procurando especialistas disponíveis...",
       });
     },
     onError: (error) => {
-      toast({
-        title: "Erro",
-        description: "Não foi possível solicitar a teleconsulta. Tente novamente.",
-        variant: "destructive",
-      });
+      console.error("Teleconsult error:", error);
+      if (error.message?.includes("Nenhum médico disponível")) {
+        toast({
+          title: "Nenhum médico disponível",
+          description: "Tente ajustar o preço ou escolher outra especialidade.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Erro na busca",
+          description: error.message || "Não foi possível buscar médicos. Tente novamente.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
