@@ -428,50 +428,81 @@ export class DatabaseStorage implements IStorage {
   }
 
   async simulateDoctorResponses(appointmentId: number, doctors: any[], offeredPrice: number, consultationType: string): Promise<void> {
-    // Simulate doctor responses for demo purposes
-    for (const doctor of doctors.slice(0, 3)) { // Limit to first 3 doctors
-      const responseType = Math.random() > 0.7 ? "immediate_accept" : 
-                          consultationType === "immediate" ? "declined" : "schedule_offer";
+    // Simulate realistic doctor responses based on price and consultation type
+    const responses = [];
+    
+    for (const doctor of doctors.slice(0, Math.min(4, doctors.length))) {
+      // Response probability based on price (higher price = more likely to accept)
+      const priceScore = Math.min(offeredPrice / 400, 1); // Max score at R$ 400+
+      const acceptanceProbability = priceScore * 0.6 + 0.2; // 20% base + up to 60% based on price
       
+      let responseType: string;
       let offeredDateTime = null;
-      if (responseType === "schedule_offer") {
-        // Offer a time slot within next 24 hours
-        const now = new Date();
-        offeredDateTime = new Date(now.getTime() + Math.random() * 24 * 60 * 60 * 1000);
+      let message = "";
+
+      if (Math.random() < acceptanceProbability) {
+        if (consultationType === "immediate" && Math.random() < 0.7) {
+          responseType = "immediate_accept";
+          message = "Disponível agora! Iniciando videochamada...";
+        } else {
+          responseType = "schedule_offer";
+          // Offer realistic time slots
+          const now = new Date();
+          const hoursToAdd = Math.random() < 0.5 ? 
+            Math.floor(Math.random() * 6) + 1 : // Next 1-6 hours
+            Math.floor(Math.random() * 48) + 24; // Tomorrow or day after
+          offeredDateTime = new Date(now.getTime() + hoursToAdd * 60 * 60 * 1000);
+          message = `Posso atender ${offeredDateTime.toLocaleDateString('pt-BR')} às ${offeredDateTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+        }
+      } else {
+        responseType = "declined";
+        const reasons = [
+          "Valor abaixo do meu honorário mínimo",
+          "Não tenho horário disponível hoje",
+          "Especialidade muito específica para este valor",
+          "Agenda lotada nas próximas 48h"
+        ];
+        message = reasons[Math.floor(Math.random() * reasons.length)];
       }
 
-      await db.insert(teleconsultResponses).values({
+      responses.push({
         appointmentId,
         doctorId: doctor.id,
         responseType,
         offeredDateTime,
-        message: responseType === "immediate_accept" ? "Disponível agora" : 
-                responseType === "schedule_offer" ? "Posso atender no horário proposto" : 
-                "Não posso atender neste valor",
+        message,
       });
-
-      // If immediate acceptance, update appointment
-      if (responseType === "immediate_accept") {
-        await db.update(appointments).set({
-          doctorId: doctor.id,
-          status: "accepted",
-          appointmentDate: new Date(),
-        }).where(eq(appointments.id, appointmentId));
-        break; // Stop after first acceptance
-      }
     }
 
-    // If no immediate acceptance and there are schedule offers, update status
-    const responses = await this.getTeleconsultResponses(appointmentId);
-    const hasImmediate = responses.some(r => r.responseType === "immediate_accept");
-    const hasSchedule = responses.some(r => r.responseType === "schedule_offer");
+    // Insert all responses immediately for demo
+    for (const response of responses) {
+      await db.insert(teleconsultResponses).values({
+        appointmentId: response.appointmentId,
+        doctorId: response.doctorId,
+        responseType: response.responseType as "immediate_accept" | "schedule_offer" | "declined",
+        offeredDateTime: response.offeredDateTime,
+        message: response.message,
+        isAccepted: false,
+      });
+    }
 
-    if (!hasImmediate) {
-      if (hasSchedule) {
-        await this.updateAppointmentStatus(appointmentId, "waiting_schedule_offers");
-      } else {
-        await this.updateAppointmentStatus(appointmentId, "no_immediate_response");
-      }
+    // Check if there's an immediate acceptance
+    const immediateAcceptance = responses.find(r => r.responseType === "immediate_accept");
+    if (immediateAcceptance) {
+      await db.update(appointments).set({
+        doctorId: immediateAcceptance.doctorId,
+        status: "accepted",
+        appointmentDate: new Date(),
+      }).where(eq(appointments.id, appointmentId));
+      return;
+    }
+
+    // Update status based on available options
+    const hasScheduleOffers = responses.some(r => r.responseType === "schedule_offer");
+    if (hasScheduleOffers) {
+      await this.updateAppointmentStatus(appointmentId, "waiting_schedule_offers");
+    } else {
+      await this.updateAppointmentStatus(appointmentId, "no_immediate_response");
     }
   }
 

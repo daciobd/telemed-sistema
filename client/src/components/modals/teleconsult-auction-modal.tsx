@@ -353,10 +353,50 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
           Aguarde as respostas...
         </p>
       </div>
+      
+      {/* Show responses as they come in */}
+      {teleconsultStatus?.responses && teleconsultStatus.responses.length > 0 && (
+        <div className="space-y-3 max-h-64 overflow-y-auto">
+          <h4 className="font-medium text-sm text-gray-700">Respostas recebidas:</h4>
+          {teleconsultStatus.responses.map((response: any, index: number) => (
+            <Card key={index} className="text-left">
+              <CardContent className="p-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                    {response.responseType === "immediate_accept" ? (
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    ) : response.responseType === "schedule_offer" ? (
+                      <Calendar className="h-4 w-4 text-blue-600" />
+                    ) : (
+                      <XCircle className="h-4 w-4 text-red-600" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">
+                      Dr. {response.doctor?.user?.firstName} {response.doctor?.user?.lastName}
+                    </p>
+                    <p className="text-xs text-gray-600">{response.doctor?.specialty}</p>
+                    <p className="text-xs text-gray-500 mt-1">{response.message}</p>
+                  </div>
+                  <Badge 
+                    variant={response.responseType === "immediate_accept" ? "default" : 
+                            response.responseType === "schedule_offer" ? "secondary" : "destructive"}
+                    className="text-xs"
+                  >
+                    {response.responseType === "immediate_accept" ? "Aceito" :
+                     response.responseType === "schedule_offer" ? "Horário" : "Recusado"}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+      
       <div className="space-y-2">
         <div className="flex items-center justify-center space-x-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-sm">Aguardando respostas dos médicos</span>
+          <span className="text-sm">Aguardando mais respostas...</span>
         </div>
       </div>
     </div>

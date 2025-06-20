@@ -181,11 +181,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Simulate sending offers to doctors (in real app, this would be real-time notifications)
-      // For demo, we'll simulate immediate responses
+      // Simulate sending offers to doctors with realistic timing
       setTimeout(async () => {
         await storage.simulateDoctorResponses(appointment.id, availableDoctors, offeredPrice, consultationType);
-      }, 2000);
+      }, 1000);
 
       res.status(201).json({
         appointment,
