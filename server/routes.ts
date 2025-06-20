@@ -125,6 +125,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Create teleconsultation request
+  app.post('/api/teleconsult', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'patient' || !user.patient) {
+        return res.status(403).json({ message: "Only patients can request teleconsultation" });
+      }
+
+      const { specialty, symptoms, offeredPrice, consultationType } = req.body;
+      
+      // Find available doctors for the specialty
+      const doctors = await storage.getAllDoctors();
+      const availableDoctors = doctors.filter(doctor => 
+        doctor.specialty.toLowerCase().includes(specialty.toLowerCase())
+      );
+      
+      if (availableDoctors.length === 0) {
+        return res.status(404).json({ message: "No doctors available for this specialty" });
+      }
+
+      // Select the first available doctor
+      const selectedDoctor = availableDoctors[0];
+      
+      const teleconsultData = {
+        patientId: user.patient.id,
+        doctorId: selectedDoctor.id,
+        appointmentDate: new Date(),
+        type: "telemedicine" as const,
+        status: "pending" as const,
+        consultationType: consultationType || "immediate",
+        offeredPrice: offeredPrice?.toString(),
+        symptoms: symptoms || null,
+        duration: 30,
+      };
+
+      const appointment = await storage.createAppointment(teleconsultData);
+      
+      res.status(201).json({
+        appointment,
+        doctor: selectedDoctor,
+        message: "Teleconsultation request created successfully"
+      });
+    } catch (error) {
+      console.error("Error creating teleconsultation:", error);
+      res.status(500).json({ message: "Failed to create teleconsultation request" });
+    }
+  });
+
   app.put('/api/appointments/:id', isAuthenticated, async (req: any, res) => {
     try {
       const appointmentId = parseInt(req.params.id);

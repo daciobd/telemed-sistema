@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText, Search, Calendar, Users } from "lucide-react";
+import { Plus, FileText, Search, Calendar, Users, Video } from "lucide-react";
 import AppointmentModal from "@/components/modals/appointment-modal";
+import TeleconsultModal from "@/components/modals/teleconsult-modal";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function QuickActions() {
   const { user } = useAuth();
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [isTeleconsultModalOpen, setIsTeleconsultModalOpen] = useState(false);
 
   return (
     <>
@@ -21,19 +23,20 @@ export default function QuickActions() {
           {user?.role === "patient" && (
             <>
               <Button 
-                className="w-full flex items-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => setIsAppointmentModalOpen(true)}
+                className="w-full flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                onClick={() => setIsTeleconsultModalOpen(true)}
               >
-                <Plus className="h-4 w-4" />
-                <span>Agendar Consulta</span>
+                <Video className="h-4 w-4" />
+                <span>Teleconsulta Imediata</span>
               </Button>
               
               <Button 
                 variant="outline"
                 className="w-full flex items-center space-x-3 hover:bg-gray-50"
+                onClick={() => setIsAppointmentModalOpen(true)}
               >
-                <Calendar className="h-4 w-4" />
-                <span>Ver Consultas</span>
+                <Plus className="h-4 w-4" />
+                <span>Agendar Consulta</span>
               </Button>
               
               <Button 
@@ -107,6 +110,11 @@ export default function QuickActions() {
       <AppointmentModal 
         isOpen={isAppointmentModalOpen}
         onClose={() => setIsAppointmentModalOpen(false)}
+      />
+      
+      <TeleconsultModal 
+        isOpen={isTeleconsultModalOpen}
+        onClose={() => setIsTeleconsultModalOpen(false)}
       />
     </>
   );

@@ -8,6 +8,7 @@ import {
   serial,
   integer,
   boolean,
+  numeric,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -71,7 +72,11 @@ export const appointments = pgTable("appointments", {
   appointmentDate: timestamp("appointment_date").notNull(),
   duration: integer("duration").notNull().default(30), // in minutes
   type: varchar("type", { enum: ["routine", "followup", "emergency", "telemedicine"] }).notNull(),
-  status: varchar("status", { enum: ["scheduled", "confirmed", "completed", "cancelled", "rescheduled"] }).notNull().default("scheduled"),
+  status: varchar("status", { enum: ["scheduled", "confirmed", "completed", "cancelled", "rescheduled", "pending", "accepted"] }).notNull().default("scheduled"),
+  consultationType: varchar("consultation_type", { enum: ["immediate", "scheduled"] }).notNull().default("scheduled"),
+  offeredPrice: numeric("offered_price", { precision: 10, scale: 2 }),
+  acceptedPrice: numeric("accepted_price", { precision: 10, scale: 2 }),
+  symptoms: text("symptoms"),
   notes: text("notes"),
   prescription: text("prescription"),
   diagnosis: text("diagnosis"),
