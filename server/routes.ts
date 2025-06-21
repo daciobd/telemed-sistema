@@ -103,13 +103,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      const appointmentData = insertAppointmentSchema.parse(req.body);
+      // Create a more flexible schema for appointment creation
+      const appointmentSchema = z.object({
+        doctorId: z.number().optional(),
+        patientId: z.number().optional(),
+        appointmentDate: z.union([z.string(), z.date()]).transform(val => 
+          typeof val === 'string' ? new Date(val) : val
+        ),
+        type: z.string().default("routine"),
+        duration: z.number().default(30),
+        status: z.string().default("scheduled"),
+        notes: z.string().optional(),
+      });
       
-      // Validate appointment data based on user role
+      const appointmentData = appointmentSchema.parse(req.body);
+      
+      // Auto-assign patient/doctor based on user role
       if (user.role === 'patient' && user.patient) {
         appointmentData.patientId = user.patient.id;
       } else if (user.role === 'doctor' && user.doctor) {
         appointmentData.doctorId = user.doctor.id;
+      }
+      
+      // Ensure we have both patient and doctor
+      if (!appointmentData.patientId || !appointmentData.doctorId) {
+        return res.status(400).json({ 
+          message: "Tanto paciente quanto médico devem ser especificados" 
+        });
       }
 
       const appointment = await storage.createAppointment(appointmentData);

@@ -90,11 +90,16 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
         throw new Error("Data e hora são obrigatórias");
       }
       
+      // Get user's patient/doctor info for automatic assignment
+      const userProfile = await fetch("/api/auth/user", {
+        credentials: "include"
+      }).then(res => res.json());
+      
       // Create appointment object with proper structure
       const appointmentPayload = {
-        doctorId: data.doctorId || undefined,
-        patientId: data.patientId || undefined,
-        appointmentDate: data.appointmentDate,
+        doctorId: data.doctorId,
+        patientId: data.patientId || userProfile.patient?.id,
+        appointmentDate: new Date(data.appointmentDate).toISOString(),
         type: data.type || "routine",
         duration: data.duration || 30,
         status: "scheduled",
