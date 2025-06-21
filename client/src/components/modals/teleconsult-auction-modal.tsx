@@ -70,6 +70,8 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
   const [currentAppointmentId, setCurrentAppointmentId] = useState<number | null>(null);
   
+  console.log("TeleconsultAuctionModal render - isOpen:", isOpen, "step:", step);
+  
   const form = useForm<TeleconsultFormData>({
     resolver: zodResolver(teleconsultFormSchema),
     defaultValues: {
@@ -686,7 +688,10 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      console.log("Dialog onOpenChange:", open);
+      if (!open) onClose();
+    }}>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">

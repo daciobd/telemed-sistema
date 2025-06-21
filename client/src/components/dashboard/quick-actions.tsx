@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Plus, FileText, Search, Calendar, Users, Video } from "lucide-react";
 import AppointmentModal from "@/components/modals/appointment-modal";
 import TeleconsultAuctionModal from "@/components/modals/teleconsult-auction-modal";
+import SimpleTestModal from "@/components/modals/simple-test-modal";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function QuickActions() {
   const { user } = useAuth();
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [isTeleconsultModalOpen, setIsTeleconsultModalOpen] = useState(false);
+  
+  console.log("QuickActions render - isTeleconsultModalOpen:", isTeleconsultModalOpen);
 
   return (
     <>
@@ -24,7 +27,10 @@ export default function QuickActions() {
             <>
               <Button 
                 className="w-full flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                onClick={() => setIsTeleconsultModalOpen(true)}
+                onClick={() => {
+                  console.log("Teleconsulta button clicked");
+                  setIsTeleconsultModalOpen(true);
+                }}
               >
                 <Video className="h-4 w-4" />
                 <span>Teleconsulta Imediata</span>
@@ -112,7 +118,7 @@ export default function QuickActions() {
         onClose={() => setIsAppointmentModalOpen(false)}
       />
       
-      <TeleconsultAuctionModal 
+      <SimpleTestModal 
         isOpen={isTeleconsultModalOpen}
         onClose={() => setIsTeleconsultModalOpen(false)}
       />
