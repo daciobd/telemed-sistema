@@ -97,8 +97,8 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
       
       // Create appointment object with proper structure
       const appointmentPayload = {
-        doctorId: data.doctorId,
-        patientId: data.patientId || userProfile.patient?.id,
+        doctorId: userProfile.role === 'doctor' ? userProfile.doctor?.id : data.doctorId,
+        patientId: userProfile.role === 'patient' ? userProfile.patient?.id : data.patientId,
         appointmentDate: new Date(data.appointmentDate).toISOString(),
         type: data.type || "routine",
         duration: data.duration || 30,

@@ -159,17 +159,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const appointmentData = appointmentSchema.parse(req.body);
       
-      // Auto-assign patient/doctor based on user role
-      if (user.role === 'patient' && user.patient) {
+      // Auto-assign patient/doctor based on user role if not provided
+      if (user.role === 'patient' && user.patient && !appointmentData.patientId) {
         appointmentData.patientId = user.patient.id;
-      } else if (user.role === 'doctor' && user.doctor) {
+      } else if (user.role === 'doctor' && user.doctor && !appointmentData.doctorId) {
+        appointmentData.doctorId = user.doctor.id;
+      }
+      
+      // For doctors scheduling appointments, use provided patientId and their own doctorId
+      if (user.role === 'doctor' && user.doctor) {
         appointmentData.doctorId = user.doctor.id;
       }
       
       // Ensure we have both patient and doctor
       if (!appointmentData.patientId || !appointmentData.doctorId) {
         return res.status(400).json({ 
-          message: "Tanto paciente quanto médico devem ser especificados" 
+          message: "Tanto paciente quanto médico devem ser especificados",
+          debug: {
+            patientId: appointmentData.patientId,
+            doctorId: appointmentData.doctorId,
+            userRole: user.role,
+            userHasPatient: !!user.patient,
+            userHasDoctor: !!user.doctor
+          }
         });
       }
 
