@@ -343,13 +343,10 @@ export class DatabaseStorage implements IStorage {
     const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
-    const results = await db
+    // Simplificada para evitar erros SQL
+    const appointmentResults = await db
       .select()
       .from(appointments)
-      .leftJoin(patients, eq(appointments.patientId, patients.id))
-      .leftJoin(users, eq(patients.userId, users.id))
-      .leftJoin(doctors, eq(appointments.doctorId, doctors.id))
-      .leftJoin(users, eq(doctors.userId, users.id))
       .where(
         and(
           eq(appointments.doctorId, doctorId),
@@ -359,17 +356,23 @@ export class DatabaseStorage implements IStorage {
       )
       .orderBy(appointments.appointmentDate);
 
-    return results.map(result => ({
-      ...result.appointments,
-      patient: {
-        ...result.patients!,
-        user: result.users!,
-      },
-      doctor: {
-        ...result.doctors!,
-        user: result.users!,
-      },
-    }));
+    const resultsWithDetails = [];
+    for (const appointment of appointmentResults) {
+      if (appointment.patientId && appointment.doctorId) {
+        const patient = await this.getPatientWithUser(appointment.patientId);
+        const doctor = await this.getDoctorWithUser(appointment.doctorId);
+        
+        if (patient && doctor) {
+          resultsWithDetails.push({
+            ...appointment,
+            patient,
+            doctor,
+          } as AppointmentWithDetails);
+        }
+      }
+    }
+
+    return resultsWithDetails;
   }
 
   // Medical record operations
