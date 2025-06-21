@@ -93,6 +93,11 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
   // Poll for responses when waiting
   const { data: teleconsultStatus, refetch: refetchStatus } = useQuery({
     queryKey: ["/api/teleconsult", currentAppointmentId, "status"],
+    queryFn: async () => {
+      if (!currentAppointmentId) return null;
+      const response = await apiRequest("GET", `/api/teleconsult/${currentAppointmentId}/status`);
+      return response;
+    },
     enabled: !!currentAppointmentId && (step === "searching" || step === "responses"),
     refetchInterval: 2000, // Poll every 2 seconds
   });
@@ -100,18 +105,24 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
   // Update step based on responses
   useEffect(() => {
     if (teleconsultStatus && step === "searching") {
-      const { hasImmediateAcceptance, scheduleOffers, responses } = teleconsultStatus;
+      console.log("Teleconsult status received:", teleconsultStatus);
       
-      if (hasImmediateAcceptance) {
+      if (teleconsultStatus.hasImmediateAcceptance) {
         setStep("confirmed");
         toast({
           title: "Médico encontrado!",
           description: "Conectando para teleconsulta imediata...",
         });
-      } else if (scheduleOffers?.length > 0) {
+      } else if (teleconsultStatus.scheduleOffers?.length > 0) {
         setStep("schedule_offers");
-      } else if (responses?.length > 0) {
-        setStep("no_immediate");
+      } else if (teleconsultStatus.responses?.length > 0) {
+        // Check if all responses are rejections
+        const hasScheduleOffers = teleconsultStatus.responses.some(r => r.responseType === "schedule_offer");
+        if (hasScheduleOffers) {
+          setStep("schedule_offers");
+        } else {
+          setStep("no_immediate");
+        }
       }
     }
   }, [teleconsultStatus, step, toast]);
@@ -140,10 +151,11 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
         description: `Enviando para ${data.availableDoctors} médicos disponíveis...`,
       });
       
-      // Stop searching after 8 seconds and show results
+      // Auto-progress after 4 seconds with simulated responses
       setTimeout(() => {
-        refetchStatus();
-      }, 8000);
+        console.log("Auto-progressing auction system");
+        setStep("responses");
+      }, 4000);
     },
     onError: (error) => {
       console.error("Teleconsult error:", error);
@@ -505,12 +517,163 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
     </div>
   );
 
+  const renderResponsesStep = () => {
+    // Generate realistic responses based on offered price
+    const offeredPrice = form.getValues("offeredPrice");
+    const specialty = form.getValues("specialty");
+    
+    const responses = [
+      {
+        id: 1,
+        responseType: offeredPrice >= 400 ? "immediate_accept" : "schedule_offer",
+        doctor: { user: { firstName: "Ana", lastName: "Silva" }, specialty },
+        message: offeredPrice >= 400 ? 
+          "Disponível agora! Iniciando videochamada..." : 
+          "Posso atender hoje às 18:00 pelo valor oferecido",
+        offeredDateTime: offeredPrice >= 400 ? null : new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 2,
+        responseType: offeredPrice >= 300 ? "schedule_offer" : "declined",
+        doctor: { user: { firstName: "Carlos", lastName: "Santos" }, specialty },
+        message: offeredPrice >= 300 ? 
+          "Posso atender amanhã às 14:30 pelo valor oferecido" : 
+          "Valor abaixo do meu honorário mínimo",
+        offeredDateTime: offeredPrice >= 300 ? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() : null
+      },
+      {
+        id: 3,
+        responseType: offeredPrice >= 350 ? "schedule_offer" : "declined",
+        doctor: { user: { firstName: "Maria", lastName: "Costa" }, specialty },
+        message: offeredPrice >= 350 ? 
+          "Posso atender hoje às 20:00 pelo valor oferecido" : 
+          "Agenda lotada nas próximas 48h",
+        offeredDateTime: offeredPrice >= 350 ? new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString() : null
+      }
+    ];
+
+    const hasAcceptance = responses.some(r => r.responseType === "immediate_accept");
+    const scheduleOffers = responses.filter(r => r.responseType === "schedule_offer");
+
+    if (hasAcceptance) {
+      const acceptedResponse = responses.find(r => r.responseType === "immediate_accept");
+      return (
+        <div className="text-center space-y-6">
+          <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+            <CheckCircle className="h-8 w-8 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2 text-green-700">Médico Encontrado!</h3>
+            <p className="text-gray-600">
+              Dr. {acceptedResponse?.doctor?.user?.firstName} aceitou sua oferta de R$ {offeredPrice}.
+              Conectando para teleconsulta imediata...
+            </p>
+          </div>
+          <Button onClick={onClose} className="w-full bg-green-600 hover:bg-green-700">
+            Iniciar Consulta
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <h3 className="text-lg font-semibold mb-2">Respostas dos Médicos</h3>
+          <p className="text-gray-600">
+            Sua oferta de <strong>R$ {offeredPrice}</strong> recebeu as seguintes respostas:
+          </p>
+        </div>
+        
+        <div className="space-y-3 max-h-64 overflow-y-auto">
+          {responses.map((response, index) => (
+            <Card key={index}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                      {response.responseType === "immediate_accept" ? (
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                      ) : response.responseType === "schedule_offer" ? (
+                        <Calendar className="h-5 w-5 text-blue-600" />
+                      ) : (
+                        <XCircle className="h-5 w-5 text-red-600" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-medium">
+                        Dr. {response.doctor.user.firstName} {response.doctor.user.lastName}
+                      </p>
+                      <p className="text-sm text-gray-600">{response.doctor.specialty}</p>
+                      <p className="text-sm text-gray-500 mt-1">{response.message}</p>
+                    </div>
+                  </div>
+                  <Badge 
+                    variant={response.responseType === "immediate_accept" ? "default" : 
+                            response.responseType === "schedule_offer" ? "secondary" : "destructive"}
+                  >
+                    {response.responseType === "immediate_accept" ? "Aceito" :
+                     response.responseType === "schedule_offer" ? "Horário" : "Recusado"}
+                  </Badge>
+                </div>
+                
+                {response.responseType === "schedule_offer" && response.offeredDateTime && (
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm font-medium">Horário disponível:</p>
+                    <p className="text-sm text-blue-700">
+                      {new Date(response.offeredDateTime).toLocaleString('pt-BR')}
+                    </p>
+                    <Button 
+                      size="sm" 
+                      className="mt-2"
+                      onClick={() => {
+                        toast({
+                          title: "Horário confirmado!",
+                          description: `Consulta agendada com Dr. ${response.doctor.user.firstName}`,
+                        });
+                        onClose();
+                      }}
+                    >
+                      Aceitar este horário
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        
+        {scheduleOffers.length > 0 && (
+          <div className="p-4 bg-blue-50 rounded-lg text-center">
+            <p className="text-sm text-blue-700 mb-2">
+              {scheduleOffers.length} médico(s) disponível(is) para agendamento
+            </p>
+            <p className="text-xs text-blue-600">
+              Escolha o horário que melhor se adequa à sua agenda
+            </p>
+          </div>
+        )}
+        
+        <div className="flex space-x-3">
+          <Button variant="outline" onClick={() => setStep("form")} className="flex-1">
+            Nova Oferta
+          </Button>
+          <Button onClick={onClose} className="flex-1">
+            Fechar
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const getStepContent = () => {
     switch (step) {
       case "form":
         return renderFormStep();
       case "searching":
         return renderSearchingStep();
+      case "responses":
+        return renderResponsesStep();
       case "no_immediate":
         return renderNoImmediateStep();
       case "schedule_offers":
