@@ -78,9 +78,21 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
   const createAppointmentMutation = useMutation({
     mutationFn: async (data: AppointmentFormData) => {
       console.log("Form data:", data);
+      
+      // Validate required fields
+      if (!data.doctorId && !data.patientId) {
+        throw new Error("Médico ou paciente deve ser selecionado");
+      }
+      
+      if (!data.appointmentDate) {
+        throw new Error("Data e hora são obrigatórias");
+      }
+      
       const appointmentData = {
         ...data,
         appointmentDate: new Date(data.appointmentDate),
+        duration: data.duration || 30,
+        status: "scheduled",
       };
       
       console.log("Sending appointment data:", appointmentData);
@@ -89,6 +101,7 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/appointments"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/stats"] });
       toast({
         title: "Sucesso",
         description: "Consulta agendada com sucesso!",
@@ -97,6 +110,8 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
       onClose();
     },
     onError: (error) => {
+      console.error("Appointment creation error:", error);
+      
       if (isUnauthorizedError(error)) {
         toast({
           title: "Unauthorized",
@@ -108,15 +123,39 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
         }, 500);
         return;
       }
+      
+      const errorMessage = error instanceof Error ? error.message : "Falha ao agendar consulta";
       toast({
         title: "Erro",
-        description: "Falha ao agendar consulta.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
   });
 
   const onSubmit = (data: AppointmentFormData) => {
+    console.log("Form submission data:", data);
+    console.log("Form errors:", form.formState.errors);
+    
+    // Additional validation
+    if (user?.role === "patient" && !data.doctorId) {
+      toast({
+        title: "Erro de validação",
+        description: "Selecione um médico para continuar",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (user?.role === "doctor" && !data.patientId) {
+      toast({
+        title: "Erro de validação", 
+        description: "Selecione um paciente para continuar",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     createAppointmentMutation.mutate(data);
   };
 
