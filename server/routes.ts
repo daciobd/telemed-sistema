@@ -21,6 +21,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Role switching for testing
+  app.post('/api/auth/switch-role/:role', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { role } = req.params;
+      
+      if (!['patient', 'doctor', 'admin'].includes(role)) {
+        return res.status(400).json({ message: "Invalid role" });
+      }
+
+      // Update user role
+      const updatedUser = await storage.upsertUser({
+        id: userId,
+        email: req.user.claims.email,
+        firstName: req.user.claims.first_name,
+        lastName: req.user.claims.last_name,
+        profileImageUrl: req.user.claims.profile_image_url,
+        role: role as "patient" | "doctor" | "admin"
+      });
+
+      // Create doctor profile if switching to doctor
+      if (role === 'doctor') {
+        try {
+          await storage.createDoctor({
+            userId: userId,
+            specialty: "Clínico Geral",
+            licenseNumber: "CRM-12345",
+            experience: 5
+          });
+        } catch (error) {
+          // Doctor profile might already exist
+        }
+      }
+
+      res.json({ message: `Role switched to ${role}`, user: updatedUser });
+    } catch (error) {
+      console.error("Error switching role:", error);
+      res.status(500).json({ message: "Failed to switch role" });
+    }
+  });
+
   // Dashboard stats
   app.get('/api/dashboard/stats', isAuthenticated, async (req: any, res) => {
     try {

@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Menu, Bell, ChevronDown } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Menu, Bell, ChevronDown, Stethoscope, UserCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +17,30 @@ import {
 
 export default function Header() {
   const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  const switchRoleMutation = useMutation({
+    mutationFn: async (role: string) => {
+      const response = await apiRequest("POST", `/api/auth/switch-role/${role}`, {});
+      return response;
+    },
+    onSuccess: (data: any) => {
+      toast({
+        title: "Papel alterado",
+        description: `Agora você é um ${data.user.role === 'doctor' ? 'médico' : 'paciente'}`,
+      });
+      queryClient.invalidateQueries();
+      window.location.reload();
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro",
+        description: "Não foi possível alterar o papel",
+        variant: "destructive",
+      });
+    },
+  });
   
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -87,7 +114,26 @@ export default function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Configurações</DropdownMenuLabel>
+              <DropdownMenuLabel>Teste de Papéis</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {user?.role !== 'doctor' && (
+                <DropdownMenuItem 
+                  onClick={() => switchRoleMutation.mutate('doctor')}
+                  disabled={switchRoleMutation.isPending}
+                >
+                  <Stethoscope className="mr-2 h-4 w-4" />
+                  Testar como Médico
+                </DropdownMenuItem>
+              )}
+              {user?.role !== 'patient' && (
+                <DropdownMenuItem 
+                  onClick={() => switchRoleMutation.mutate('patient')}
+                  disabled={switchRoleMutation.isPending}
+                >
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  Testar como Paciente
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem>Perfil</DropdownMenuItem>
               <DropdownMenuItem>Preferências</DropdownMenuItem>
