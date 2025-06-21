@@ -47,7 +47,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } else if (user.role === 'patient' && user.patient) {
         const appointments = await storage.getAppointmentsByPatient(user.patient.id);
         const upcomingAppointments = appointments.filter(apt => 
-          new Date(apt.appointmentDate) > new Date() && apt.status !== 'cancelled'
+          apt.appointmentDate && new Date(apt.appointmentDate) > new Date() && apt.status !== 'cancelled'
         );
         
         stats = {
@@ -132,7 +132,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const appointment = await storage.createAppointment(appointmentData);
+      const appointment = await storage.createAppointment({
+        ...appointmentData,
+        type: appointmentData.type as "routine" | "followup" | "emergency" | "telemedicine",
+        status: appointmentData.status as "scheduled" | "confirmed" | "completed" | "cancelled",
+        patientId: appointmentData.patientId!,
+        doctorId: appointmentData.doctorId!
+      });
       const appointmentWithDetails = await storage.getAppointmentWithDetails(appointment.id);
       
       res.status(201).json(appointmentWithDetails);

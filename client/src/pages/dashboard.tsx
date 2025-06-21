@@ -8,6 +8,9 @@ import StatsCards from "@/components/dashboard/stats-cards";
 import AppointmentsList from "@/components/dashboard/appointments-list";
 import QuickActions from "@/components/dashboard/quick-actions";
 import RecentPatients from "@/components/dashboard/recent-patients";
+import DoctorQuickActions from "@/components/dashboard/doctor-quick-actions";
+import DoctorAppointments from "@/components/dashboard/doctor-appointments";
+import DoctorPatients from "@/components/dashboard/doctor-patients";
 
 export default function Dashboard() {
   const { toast } = useToast();
@@ -52,18 +55,42 @@ export default function Dashboard() {
         <div className="flex-1 p-4 lg:p-6 overflow-auto">
           <StatsCards />
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <AppointmentsList />
-            </div>
-            
-            <div className="space-y-6">
-              <QuickActions />
-              <RecentPatients />
-            </div>
-          </div>
+          <DoctorDashboardContent />
         </div>
       </main>
+    </div>
+  );
+}
+
+function DoctorDashboardContent() {
+  const { user } = useAuth();
+  
+  if (user?.role === "doctor") {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <DoctorAppointments />
+        </div>
+        
+        <div className="space-y-6">
+          <DoctorQuickActions />
+          <DoctorPatients />
+        </div>
+      </div>
+    );
+  }
+  
+  // Default patient/admin view
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <AppointmentsList />
+      </div>
+      
+      <div className="space-y-6">
+        <QuickActions />
+        <RecentPatients />
+      </div>
     </div>
   );
 }
