@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Video, Clock, UserCheck, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useLocation } from "wouter";
 
 export default function AppointmentsList() {
+  const [, setLocation] = useLocation();
   const { data: appointments, isLoading } = useQuery({
     queryKey: ["/api/appointments"],
     retry: false,
@@ -38,9 +40,10 @@ export default function AppointmentsList() {
     }
   };
 
-  const upcomingAppointments = appointments?.filter((apt: any) => 
+  const appointmentsArray = Array.isArray(appointments) ? appointments : [];
+  const upcomingAppointments = appointmentsArray.filter((apt: any) => 
     new Date(apt.appointmentDate) > new Date()
-  ).slice(0, 3) || [];
+  ).slice(0, 3);
 
   return (
     <Card className="bg-white shadow-sm border border-gray-100">
@@ -49,7 +52,12 @@ export default function AppointmentsList() {
           <CardTitle className="text-lg font-semibold text-gray-800">
             Próximas Consultas
           </CardTitle>
-          <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-blue-600 hover:text-blue-700"
+            onClick={() => setLocation('/appointments')}
+          >
             Ver todas
           </Button>
         </div>
@@ -91,6 +99,14 @@ export default function AppointmentsList() {
                   <p className="text-sm text-gray-500">
                     {format(new Date(appointment.appointmentDate), "HH:mm - HH:mm", { locale: ptBR })}
                   </p>
+                  {appointment.doctor && (
+                    <button
+                      onClick={() => setLocation(`/appointments?doctorId=${appointment.doctor.id}`)}
+                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                    >
+                      Dr. {appointment.doctor.user?.firstName} {appointment.doctor.user?.lastName}
+                    </button>
+                  )}
                 </div>
                 <div className="flex flex-col items-end space-y-1">
                   {getStatusBadge(appointment.status)}

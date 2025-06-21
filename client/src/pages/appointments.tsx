@@ -4,21 +4,33 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 import Sidebar from "@/components/layout/sidebar";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, User, Video, Plus } from "lucide-react";
+import { Calendar, Clock, User, Video, Plus, X } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
 
 export default function Appointments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<number | null>(null);
+  const [location] = useLocation();
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
+
+  // Extract doctor filter from URL params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const doctorId = params.get('doctorId');
+    if (doctorId) {
+      setSelectedDoctorId(parseInt(doctorId));
+    }
+  }, [location]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -38,6 +50,12 @@ export default function Appointments() {
     queryKey: ["/api/appointments"],
     retry: false,
   });
+
+  // Filter appointments by selected doctor if needed
+  const appointmentsArray = Array.isArray(appointments) ? appointments : [];
+  const filteredAppointments = selectedDoctorId 
+    ? appointmentsArray.filter((apt: any) => apt.doctor?.id === selectedDoctorId)
+    : appointmentsArray;
 
   const updateAppointmentMutation = useMutation({
     mutationFn: async ({ id, ...data }: any) => {
@@ -157,6 +175,24 @@ export default function Appointments() {
             <div>
               <h1 className="text-2xl font-semibold text-gray-900">Agendamentos</h1>
               <p className="text-gray-600">Gerencie suas consultas e horários</p>
+              {selectedDoctorId && (
+                <div className="flex items-center mt-2">
+                  <Badge variant="outline" className="mr-2">
+                    Filtrado por médico
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setSelectedDoctorId(null);
+                      window.history.pushState({}, '', '/appointments');
+                    }}
+                  >
+                    <X className="h-4 w-4 mr-1" />
+                    Remover filtro
+                  </Button>
+                </div>
+              )}
             </div>
             <Button 
               onClick={() => setIsModalOpen(true)}
@@ -186,9 +222,9 @@ export default function Appointments() {
                     </div>
                   ))}
                 </div>
-              ) : appointments && appointments.length > 0 ? (
+              ) : filteredAppointments && filteredAppointments.length > 0 ? (
                 <div className="space-y-4">
-                  {appointments.map((appointment: any) => (
+                  {filteredAppointments.map((appointment: any) => (
                     <div 
                       key={appointment.id}
                       className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
@@ -207,6 +243,17 @@ export default function Appointments() {
                         <p className="text-sm text-gray-500">
                           {format(new Date(appointment.appointmentDate), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
                         </p>
+                        {appointment.doctor && (
+                          <button
+                            onClick={() => {
+                              setSelectedDoctorId(appointment.doctor.id);
+                              window.history.pushState({}, '', `/appointments?doctorId=${appointment.doctor.id}`);
+                            }}
+                            className="text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                          >
+                            Dr. {appointment.doctor.user?.firstName} {appointment.doctor.user?.lastName}
+                          </button>
+                        )}
                         {appointment.notes && (
                           <p className="text-sm text-gray-400 mt-1 truncate">
                             {appointment.notes}
