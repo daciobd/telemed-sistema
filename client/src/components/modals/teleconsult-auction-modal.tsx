@@ -70,7 +70,7 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("");
   const [currentAppointmentId, setCurrentAppointmentId] = useState<number | null>(null);
   
-  console.log("TeleconsultAuctionModal render - isOpen:", isOpen, "step:", step);
+
   
   const form = useForm<TeleconsultFormData>({
     resolver: zodResolver(teleconsultFormSchema),
@@ -98,7 +98,7 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
     queryFn: async () => {
       if (!currentAppointmentId) return null;
       const response = await apiRequest("GET", `/api/teleconsult/${currentAppointmentId}/status`);
-      return response;
+      return response as any;
     },
     enabled: !!currentAppointmentId && (step === "searching" || step === "responses"),
     refetchInterval: 2000, // Poll every 2 seconds
@@ -107,19 +107,20 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
   // Update step based on responses
   useEffect(() => {
     if (teleconsultStatus && step === "searching") {
-      console.log("Teleconsult status received:", teleconsultStatus);
+
       
-      if (teleconsultStatus.hasImmediateAcceptance) {
+      const status = teleconsultStatus as any;
+      if (status.hasImmediateAcceptance) {
         setStep("confirmed");
         toast({
           title: "Médico encontrado!",
           description: "Conectando para teleconsulta imediata...",
         });
-      } else if (teleconsultStatus.scheduleOffers?.length > 0) {
+      } else if (status.scheduleOffers?.length > 0) {
         setStep("schedule_offers");
-      } else if (teleconsultStatus.responses?.length > 0) {
+      } else if (status.responses?.length > 0) {
         // Check if all responses are rejections
-        const hasScheduleOffers = teleconsultStatus.responses.some(r => r.responseType === "schedule_offer");
+        const hasScheduleOffers = status.responses.some((r: any) => r.responseType === "schedule_offer");
         if (hasScheduleOffers) {
           setStep("schedule_offers");
         } else {
@@ -134,7 +135,7 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
       const response = await apiRequest("POST", "/api/teleconsult", data);
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       setCurrentAppointmentId(data.appointment?.id);
       setStep("searching");
       
@@ -689,7 +690,7 @@ export default function TeleconsultAuctionModal({ isOpen, onClose }: Teleconsult
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => {
-      console.log("Dialog onOpenChange:", open);
+
       if (!open) onClose();
     }}>
       <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
