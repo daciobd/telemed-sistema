@@ -39,8 +39,14 @@ interface AppointmentModalProps {
   onClose: () => void;
 }
 
-const appointmentFormSchema = insertAppointmentSchema.extend({
+const appointmentFormSchema = z.object({
+  doctorId: z.number().optional(),
+  patientId: z.number().optional(),
   appointmentDate: z.string().min(1, "Data e hora são obrigatórias"),
+  type: z.string().default("routine"),
+  duration: z.number().default(30),
+  status: z.string().default("scheduled"),
+  notes: z.string().optional(),
 });
 
 type AppointmentFormData = z.infer<typeof appointmentFormSchema>;
@@ -77,27 +83,49 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
 
   const createAppointmentMutation = useMutation({
     mutationFn: async (data: AppointmentFormData) => {
-      console.log("Form data:", data);
+      console.log("Creating appointment with data:", data);
       
-      // Validate required fields
-      if (!data.doctorId && !data.patientId) {
-        throw new Error("Médico ou paciente deve ser selecionado");
-      }
-      
+      // Simple validation
       if (!data.appointmentDate) {
         throw new Error("Data e hora são obrigatórias");
       }
       
-      const appointmentData = {
-        ...data,
-        appointmentDate: new Date(data.appointmentDate),
+      // Create appointment object with proper structure
+      const appointmentPayload = {
+        doctorId: data.doctorId || undefined,
+        patientId: data.patientId || undefined,
+        appointmentDate: data.appointmentDate,
+        type: data.type || "routine",
         duration: data.duration || 30,
         status: "scheduled",
+        notes: data.notes || "",
       };
       
-      console.log("Sending appointment data:", appointmentData);
-      const response = await apiRequest("POST", "/api/appointments", appointmentData);
-      return response;
+      console.log("Sending to API:", appointmentPayload);
+      
+      try {
+        const response = await fetch("/api/appointments", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(appointmentPayload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.text();
+          console.error("API Error:", response.status, errorData);
+          throw new Error(`Erro ${response.status}: ${errorData}`);
+        }
+
+        const result = await response.json();
+        console.log("Success response:", result);
+        return result;
+      } catch (error) {
+        console.error("Request failed:", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/appointments"] });
@@ -134,13 +162,22 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
   });
 
   const onSubmit = (data: AppointmentFormData) => {
-    console.log("Form submission data:", data);
-    console.log("Form errors:", form.formState.errors);
+    console.log("Form submission started");
+    console.log("User role:", user?.role);
+    console.log("Form data:", data);
+    console.log("Form state errors:", form.formState.errors);
     
-    // Additional validation
+    // Prevent multiple submissions
+    if (createAppointmentMutation.isPending) {
+      console.log("Submission already in progress, ignoring");
+      return;
+    }
+    
+    // Role-based validation
     if (user?.role === "patient" && !data.doctorId) {
+      console.log("Patient missing doctor selection");
       toast({
-        title: "Erro de validação",
+        title: "Erro",
         description: "Selecione um médico para continuar",
         variant: "destructive",
       });
@@ -148,14 +185,16 @@ export default function AppointmentModal({ isOpen, onClose }: AppointmentModalPr
     }
     
     if (user?.role === "doctor" && !data.patientId) {
+      console.log("Doctor missing patient selection");
       toast({
-        title: "Erro de validação", 
+        title: "Erro", 
         description: "Selecione um paciente para continuar",
         variant: "destructive",
       });
       return;
     }
     
+    console.log("Validation passed, submitting...");
     createAppointmentMutation.mutate(data);
   };
 
