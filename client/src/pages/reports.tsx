@@ -91,7 +91,7 @@ ${prescriptionStats?.topMedications?.map((med: any) => `- ${med.name}: ${med.cou
       <main className="flex-1 flex flex-col">
         <Header />
         
-        <div className="flex-1 p-4 lg:p-6 overflow-auto space-y-6">
+        <div className="flex-1 p-4 lg:p-6 overflow-auto space-y-6 pt-6">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold">Relatórios Médicos</h1>
