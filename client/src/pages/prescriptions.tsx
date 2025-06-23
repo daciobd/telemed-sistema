@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { FileText, Plus, Search, Calendar, User } from "lucide-react";
-import PrescriptionModal from "@/components/modals/prescription-modal";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -76,6 +75,28 @@ export default function Prescriptions() {
     enabled: user?.role === 'doctor',
   });
 
+  const switchRoleMutation = useMutation({
+    mutationFn: async (role: string) => {
+      await apiRequest(`/api/auth/switch-role/${role}`, "POST");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/prescriptions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/patients"] });
+      toast({
+        title: "Sucesso",
+        description: "Perfil alterado com sucesso!",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Erro",
+        description: "Falha ao alterar perfil",
+        variant: "destructive",
+      });
+    },
+  });
+
   const createPrescriptionMutation = useMutation({
     mutationFn: async (data: any) => {
       await apiRequest("/api/prescriptions", "POST", data);
@@ -118,17 +139,23 @@ export default function Prescriptions() {
       dosage: formData.get('dosage'),
       frequency: formData.get('frequency'),
       duration: formData.get('duration'),
-      instructions: formData.get('instructions'),
+      instructions: formData.get('instructions') || '',
     });
   };
 
-  if (isLoading || !isAuthenticated) {
+  if (isLoading || prescriptionsLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando...</p>
-        </div>
+      <div className="min-h-screen flex bg-neutral-50">
+        <Sidebar />
+        <main className="flex-1 flex flex-col">
+          <Header />
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Carregando...</p>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -152,92 +179,119 @@ export default function Prescriptions() {
               <h1 className="text-2xl font-semibold text-gray-900">Prescrições Médicas</h1>
               <p className="text-gray-600">Gerencie prescrições e medicamentos</p>
             </div>
-            {user?.role === 'doctor' && (
-              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Nova Prescrição
+            <div className="flex items-center gap-3">
+              {user?.role !== 'doctor' && (
+                <Button 
+                  onClick={() => switchRoleMutation.mutate('doctor')}
+                  variant="outline"
+                  disabled={switchRoleMutation.isPending}
+                >
+                  {switchRoleMutation.isPending ? "Alterando..." : "Modo Médico"}
+                </Button>
+              )}
+              {user?.role === 'doctor' && (
+                <>
+                  <Button 
+                    onClick={() => switchRoleMutation.mutate('patient')}
+                    variant="outline"
+                    disabled={switchRoleMutation.isPending}
+                  >
+                    {switchRoleMutation.isPending ? "Alterando..." : "Modo Paciente"}
                   </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>Nova Prescrição Médica</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <Label htmlFor="patient">Paciente</Label>
-                      <Select onValueChange={(value) => setSelectedPatient(parseInt(value))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione um paciente" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {(patients as any[] || []).map((patient: any) => (
-                            <SelectItem key={patient.id} value={patient.id.toString()}>
-                              {patient.user?.firstName} {patient.user?.lastName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="medications">Medicamentos</Label>
-                      <Textarea
-                        name="medications"
-                        placeholder="Liste os medicamentos prescritos..."
-                        required
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="dosage">Dosagem</Label>
-                        <Input
-                          name="dosage"
-                          placeholder="Ex: 500mg"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="frequency">Frequência</Label>
-                        <Input
-                          name="frequency"
-                          placeholder="Ex: 2x ao dia"
-                          required
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="duration">Duração do tratamento</Label>
-                      <Input
-                        name="duration"
-                        placeholder="Ex: 7 dias"
-                        required
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="instructions">Instruções especiais</Label>
-                      <Textarea
-                        name="instructions"
-                        placeholder="Instruções de uso, contraindicações, etc..."
-                      />
-                    </div>
-                    
-                    <div className="flex justify-end space-x-2">
-                      <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
-                        Cancelar
+                  <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Nova Prescrição
                       </Button>
-                      <Button type="submit" disabled={createPrescriptionMutation.isPending}>
-                        {createPrescriptionMutation.isPending ? "Criando..." : "Criar Prescrição"}
-                      </Button>
-                    </div>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            )}
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>Nova Prescrição Médica</DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                          <Label htmlFor="patient">Paciente</Label>
+                          <Select onValueChange={(value) => setSelectedPatient(parseInt(value))}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione um paciente" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {(patients as any[] || []).map((patient: any) => (
+                                <SelectItem key={patient.id} value={patient.id.toString()}>
+                                  {patient.user?.firstName} {patient.user?.lastName}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="medications">Medicamentos</Label>
+                          <Textarea
+                            id="medications"
+                            name="medications"
+                            placeholder="Digite os medicamentos prescritos..."
+                            required
+                            className="min-h-[80px]"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="dosage">Dosagem</Label>
+                            <Input
+                              id="dosage"
+                              name="dosage"
+                              placeholder="Ex: 500mg"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="frequency">Frequência</Label>
+                            <Input
+                              id="frequency"
+                              name="frequency"
+                              placeholder="Ex: 3x ao dia"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="duration">Duração do tratamento</Label>
+                          <Input
+                            id="duration"
+                            name="duration"
+                            placeholder="Ex: 7 dias"
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="instructions">Instruções especiais</Label>
+                          <Textarea
+                            id="instructions"
+                            name="instructions"
+                            placeholder="Instruções adicionais para o paciente..."
+                            className="min-h-[60px]"
+                          />
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-4">
+                          <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+                            Cancelar
+                          </Button>
+                          <Button type="submit" disabled={createPrescriptionMutation.isPending}>
+                            {createPrescriptionMutation.isPending ? "Criando..." : "Criar Prescrição"}
+                          </Button>
+                        </div>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </>
+              )}
+            </div>
           </div>
 
           <div className="mb-6">
@@ -252,89 +306,91 @@ export default function Prescriptions() {
             </div>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Lista de Prescrições</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {prescriptionsLoading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="animate-pulse border rounded-lg p-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
-                        <div className="flex-1 space-y-2">
-                          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                        </div>
-                      </div>
+          {filteredPrescriptions.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <FileText className="h-12 w-12 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  Nenhuma prescrição encontrada
+                </h3>
+                <p className="text-gray-600 text-center mb-4">
+                  {user?.role === 'doctor' 
+                    ? "Você ainda não criou nenhuma prescrição médica."
+                    : "Você ainda não possui prescrições médicas."
+                  }
+                </p>
+                {user?.role === 'doctor' && (
+                  <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Criar primeira prescrição
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filteredPrescriptions.map((prescription) => (
+                <Card key={prescription.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg flex items-center">
+                        <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                        Prescrição #{prescription.id}
+                      </CardTitle>
+                      <Badge variant="secondary">
+                        {format(new Date(prescription.createdAt), "dd/MM/yyyy", { locale: ptBR })}
+                      </Badge>
                     </div>
-                  ))}
-                </div>
-              ) : filteredPrescriptions.length > 0 ? (
-                <div className="space-y-4">
-                  {filteredPrescriptions.map((prescription) => (
-                    <div 
-                      key={prescription.id}
-                      className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
-                    >
-                      <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <FileText className="h-6 w-6 text-green-600" />
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center text-sm text-gray-600">
+                      <User className="h-4 w-4 mr-2" />
+                      <span>
+                        Paciente: {prescription.patient?.user?.firstName} {prescription.patient?.user?.lastName}
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div>
+                        <span className="font-medium text-gray-900">Medicamentos:</span>
+                        <p className="text-sm text-gray-600 mt-1">{prescription.medications}</p>
                       </div>
                       
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-gray-900">
-                          {prescription.patient?.user?.firstName} {prescription.patient?.user?.lastName}
-                        </h4>
-                        <p className="text-sm text-gray-600 mt-1">
-                          <strong>Medicamentos:</strong> {prescription.medications}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          <strong>Dosagem:</strong> {prescription.dosage} | <strong>Frequência:</strong> {prescription.frequency}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          <strong>Duração:</strong> {prescription.duration}
-                        </p>
-                        {prescription.instructions && (
-                          <p className="text-sm text-gray-400 mt-1">
-                            <strong>Instruções:</strong> {prescription.instructions}
-                          </p>
-                        )}
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium text-gray-900">Dosagem:</span>
+                          <p className="text-gray-600">{prescription.dosage}</p>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-900">Frequência:</span>
+                          <p className="text-gray-600">{prescription.frequency}</p>
+                        </div>
                       </div>
                       
-                      <div className="flex flex-col items-end space-y-2">
-                        <Badge className="bg-green-100 text-green-800">
-                          Ativa
-                        </Badge>
-                        <div className="text-sm text-gray-500 flex items-center">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          {format(new Date(prescription.createdAt), "dd/MM/yyyy", { locale: ptBR })}
+                      <div>
+                        <span className="font-medium text-gray-900">Duração:</span>
+                        <p className="text-sm text-gray-600">{prescription.duration}</p>
+                      </div>
+                      
+                      {prescription.instructions && (
+                        <div>
+                          <span className="font-medium text-gray-900">Instruções:</span>
+                          <p className="text-sm text-gray-600 mt-1">{prescription.instructions}</p>
                         </div>
-                        <div className="text-xs text-gray-400 flex items-center">
-                          <User className="h-3 w-3 mr-1" />
-                          Dr. {prescription.doctor?.user?.firstName}
-                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="pt-2 border-t">
+                      <div className="flex items-center text-xs text-gray-500">
+                        <Calendar className="h-3 w-3 mr-1" />
+                        Prescrito por Dr. {prescription.doctor?.user?.firstName} {prescription.doctor?.user?.lastName}
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                  <p>Nenhuma prescrição encontrada</p>
-                  {user?.role === 'doctor' && (
-                    <Button 
-                      onClick={() => setIsModalOpen(true)}
-                      className="mt-4"
-                      variant="outline"
-                    >
-                      Criar primeira prescrição
-                    </Button>
-                  )}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>
