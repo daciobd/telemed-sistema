@@ -23,12 +23,16 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Dashboard} />
+          <Route path="/consultas" component={Appointments} />
           <Route path="/appointments" component={Appointments} />
+          <Route path="/pacientes" component={Patients} />
           <Route path="/patients" component={Patients} />
+          <Route path="/prontuarios" component={MedicalRecords} />
           <Route path="/medical-records" component={MedicalRecords} />
+          <Route path="/prescricoes" component={Prescriptions} />
           <Route path="/prescriptions" component={Prescriptions} />
-          <Route path="/video-consultation" component={VideoConsultation} />
           <Route path="/videoconsultas" component={VideoConsultation} />
+          <Route path="/video-consultation" component={VideoConsultation} />
         </>
       )}
       <Route component={NotFound} />
