@@ -10,6 +10,13 @@ export default function Sidebar() {
   const { user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const getUserRole = () => {
+    if (!user) return "patient";
+    
+    // Use the role field directly from user object
+    return user.role || "patient";
+  };
+
   // Navigation items based on user role
   const navigation = [
     { name: "Dashboard", href: "/", icon: BarChart3, roles: ["patient", "doctor"] },
@@ -28,23 +35,6 @@ export default function Sidebar() {
     const userRole = getUserRole();
     return item.roles.includes(userRole);
   });
-
-  const getUserRole = () => {
-    if (!user) return "patient";
-    
-    // Check if user has doctor profile
-    if (user.doctor) {
-      return "doctor";
-    }
-    
-    // Check if user has patient profile
-    if (user.patient) {
-      return "patient";
-    }
-    
-    // Default role
-    return "patient";
-  };
 
   const handleLogout = () => {
     window.location.href = "/api/logout";
