@@ -43,7 +43,7 @@ export default function DoctorQuickActions() {
       description: "Iniciar videochamada",
       icon: Video,
       color: "bg-orange-500 hover:bg-orange-600",
-      action: () => console.log("Start teleconsultation"),
+      action: () => window.location.href = "/videoconsultas",
     },
   ];
 
