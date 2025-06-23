@@ -31,6 +31,7 @@ export default function VideoCall({
   doctorName, 
   onEndCall 
 }: VideoCallProps) {
+  console.log('VideoCall component rendered with props:', { appointmentId, isDoctor, patientName, doctorName });
   const { user } = useAuth();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -63,15 +64,27 @@ export default function VideoCall({
 
   const initializeVideoCall = async () => {
     try {
+      console.log('Initializing video call...');
+      
+      // Check if getUserMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.error('getUserMedia not supported');
+        setConnectionStatus('disconnected');
+        return;
+      }
+
       // Get user media
+      console.log('Requesting media access...');
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true
       });
       
+      console.log('Media access granted, stream:', stream);
       setLocalStream(stream);
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
+        console.log('Local video set');
       }
 
       // Initialize WebRTC peer connection

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import VideoCall from "@/components/video/video-call";
+import TestVideoCall from "@/components/video/test-video-call";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,12 +29,15 @@ export default function VideoConsultation() {
   });
 
   const startVideoCall = (appointment: any) => {
+    console.log('Starting video call for appointment:', appointment);
     const isDoctor = user?.role === 'doctor';
-    setActiveCall({
+    const callData = {
       appointmentId: appointment.id,
       patientName: isDoctor ? `${appointment.patient.user.firstName} ${appointment.patient.user.lastName}` : undefined,
       doctorName: !isDoctor ? `${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}` : undefined
-    });
+    };
+    console.log('Setting active call data:', callData);
+    setActiveCall(callData);
   };
 
   const endCall = () => {
@@ -45,9 +48,17 @@ export default function VideoConsultation() {
     });
   };
 
+  console.log('Active call state:', activeCall);
+
   if (activeCall) {
+    console.log('Rendering VideoCall component with:', {
+      appointmentId: activeCall.appointmentId,
+      isDoctor: user?.role === 'doctor',
+      patientName: activeCall.patientName,
+      doctorName: activeCall.doctorName
+    });
     return (
-      <VideoCall
+      <TestVideoCall
         appointmentId={activeCall.appointmentId}
         isDoctor={user?.role === 'doctor'}
         patientName={activeCall.patientName}
