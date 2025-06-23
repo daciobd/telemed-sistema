@@ -46,7 +46,7 @@ export default function Sidebar() {
     },
     {
       name: "Videoconsultas",
-      href: "/video-consultation",
+      href: "/videoconsultas",
       icon: Video,
       roles: ["doctor", "patient"]
     },

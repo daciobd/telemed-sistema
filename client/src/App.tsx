@@ -28,6 +28,7 @@ function Router() {
           <Route path="/medical-records" component={MedicalRecords} />
           <Route path="/prescriptions" component={Prescriptions} />
           <Route path="/video-consultation" component={VideoConsultation} />
+          <Route path="/videoconsultas" component={VideoConsultation} />
         </>
       )}
       <Route component={NotFound} />
