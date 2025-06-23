@@ -93,172 +93,177 @@ ${prescriptionStats?.topMedications?.map((med: any) => `- ${med.name}: ${med.cou
         
         <div className="flex-1 p-4 lg:p-6 overflow-auto space-y-6">
           <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Relatórios Médicos</h1>
-          <p className="text-muted-foreground">Análise detalhada da atividade médica</p>
-        </div>
-        <Button onClick={generateReport} className="gap-2">
-          <Download className="h-4 w-4" />
-          Exportar Relatório
-        </Button>
-      </div>
-
-      {/* Filtros */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Filtros de Relatório</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="start-date">Data Inicial</Label>
-              <Input
-                id="start-date"
-                type="date"
-                value={dateRange.start}
-                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
-              />
+              <h1 className="text-3xl font-bold">Relatórios Médicos</h1>
+              <p className="text-muted-foreground">Análise detalhada da atividade médica</p>
             </div>
-            <div>
-              <Label htmlFor="end-date">Data Final</Label>
-              <Input
-                id="end-date"
-                type="date"
-                value={dateRange.end}
-                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
-              />
-            </div>
-            <div>
-              <Label htmlFor="report-type">Tipo de Relatório</Label>
-              <Select value={reportType} onValueChange={setReportType}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="general">Geral</SelectItem>
-                  <SelectItem value="appointments">Consultas</SelectItem>
-                  <SelectItem value="prescriptions">Prescrições</SelectItem>
-                  <SelectItem value="patients">Pacientes</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Button onClick={generateReport} className="gap-2">
+              <Download className="h-4 w-4" />
+              Exportar Relatório
+            </Button>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Cards de Estatísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Consultas</CardTitle>
-            <CalendarDays className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{appointmentStats?.total || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              +{appointmentStats?.growth || 0}% desde o último período
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Prescrições Emitidas</CardTitle>
-            <Pill className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{prescriptionStats?.total || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Média de {prescriptionStats?.averagePerDay || 0} por dia
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pacientes Únicos</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{appointmentStats?.uniquePatients || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Pacientes atendidos no período
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Taxa de Conclusão</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{appointmentStats?.completionRate || 0}%</div>
-            <p className="text-xs text-muted-foreground">
-              Consultas realizadas vs agendadas
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Medicamentos Mais Prescritos */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Medicamentos Mais Prescritos</CardTitle>
-          <CardDescription>Top 10 medicamentos no período selecionado</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {prescriptionStats?.topMedications?.slice(0, 10).map((medication: any, index: number) => (
-              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline">{index + 1}</Badge>
-                  <div>
-                    <p className="font-medium">{medication.name}</p>
-                    <p className="text-sm text-muted-foreground">{medication.dosage}</p>
-                  </div>
+          {/* Filtros */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Filtros de Relatório</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="start-date">Data Inicial</Label>
+                  <Input
+                    id="start-date"
+                    type="date"
+                    value={dateRange.start}
+                    onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                  />
                 </div>
-                <div className="text-right">
-                  <p className="font-bold">{medication.count} prescrições</p>
-                  <p className="text-sm text-muted-foreground">{medication.percentage}% do total</p>
+                <div>
+                  <Label htmlFor="end-date">Data Final</Label>
+                  <Input
+                    id="end-date"
+                    type="date"
+                    value={dateRange.end}
+                    onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="report-type">Tipo de Relatório</Label>
+                  <Select value={reportType} onValueChange={setReportType}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="general">Geral</SelectItem>
+                      <SelectItem value="appointments">Consultas</SelectItem>
+                      <SelectItem value="prescriptions">Prescrições</SelectItem>
+                      <SelectItem value="patients">Pacientes</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            )) || (
-              <p className="text-center text-muted-foreground py-8">
-                Nenhum dado de prescrição disponível para o período selecionado
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
 
-      {/* Resumo de Consultas por Status */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Status das Consultas</CardTitle>
-          <CardDescription>Distribuição por status no período</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-green-600">{appointmentStats?.confirmed || 0}</div>
-              <p className="text-sm text-muted-foreground">Confirmadas</p>
-            </div>
-            <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{appointmentStats?.scheduled || 0}</div>
-              <p className="text-sm text-muted-foreground">Agendadas</p>
-            </div>
-            <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-gray-600">{appointmentStats?.completed || 0}</div>
-              <p className="text-sm text-muted-foreground">Realizadas</p>
-            </div>
-            <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-red-600">{appointmentStats?.cancelled || 0}</div>
-              <p className="text-sm text-muted-foreground">Canceladas</p>
-            </div>
+          {/* Cards de Estatísticas */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total de Consultas</CardTitle>
+                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{appointmentStats?.total || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  +{appointmentStats?.growth || 0}% desde o último período
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Prescrições Emitidas</CardTitle>
+                <Pill className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{prescriptionStats?.total || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  Média de {prescriptionStats?.averagePerDay || 0} por dia
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pacientes Únicos</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{appointmentStats?.uniquePatients || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  Atendidos neste período
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Taxa de Conclusão</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{appointmentStats?.completionRate || 0}%</div>
+                <p className="text-xs text-muted-foreground">
+                  Das consultas agendadas
+                </p>
+              </CardContent>
+            </Card>
           </div>
-        </CardContent>
-      </Card>
+
+          {/* Detalhes dos Relatórios */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Medicamentos Mais Prescritos</CardTitle>
+                <CardDescription>Top 10 medicamentos no período</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {prescriptionStats?.topMedications?.slice(0, 5).map((med: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm font-medium">{med.name}</span>
+                      </div>
+                      <Badge variant="secondary">{med.count} prescrições</Badge>
+                    </div>
+                  )) || (
+                    <p className="text-sm text-muted-foreground">Nenhuma prescrição encontrada</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Status das Consultas</CardTitle>
+                <CardDescription>Distribuição por status no período</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-sm">Confirmadas</span>
+                    </div>
+                    <span className="text-sm font-medium">{appointmentStats?.confirmed || 0}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <span className="text-sm">Agendadas</span>
+                    </div>
+                    <span className="text-sm font-medium">{appointmentStats?.scheduled || 0}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm">Realizadas</span>
+                    </div>
+                    <span className="text-sm font-medium">{appointmentStats?.completed || 0}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span className="text-sm">Canceladas</span>
+                    </div>
+                    <span className="text-sm font-medium">{appointmentStats?.cancelled || 0}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
     </div>
