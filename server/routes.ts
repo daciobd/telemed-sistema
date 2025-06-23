@@ -907,7 +907,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
   
-  // WebSocket server for real-time notifications
+  // WebSocket server for real-time notifications and video calls
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
   
   // Store connected clients with user info
@@ -915,7 +915,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Store video call rooms
   const videoCallRooms = new Map<number, { participants: Map<string, { ws: WebSocket, role: string }> }>();
 
-  function handleJoinVideoCall(ws: WebSocket, data: any) {
+  // Video call handlers
+  const handleJoinVideoCall = (ws: WebSocket, data: any) => {
     const { appointmentId, userId, role } = data;
     
     if (!videoCallRooms.has(appointmentId)) {
@@ -928,7 +929,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     console.log(`User ${userId} (${role}) joined video call for appointment ${appointmentId}`);
     
     // Notify other participants that someone joined
-    for (const [otherUserId, participant] of room.participants.entries()) {
+    room.participants.forEach((participant, otherUserId) => {
       if (otherUserId !== userId && participant.ws.readyState === WebSocket.OPEN) {
         participant.ws.send(JSON.stringify({
           type: 'user-joined',
@@ -936,22 +937,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
           role
         }));
       }
-    }
-  }
+    });
+  };
 
-  function handleWebRTCSignaling(ws: WebSocket, data: any) {
+  const handleWebRTCSignaling = (ws: WebSocket, data: any) => {
     const { appointmentId } = data;
     const room = videoCallRooms.get(appointmentId);
     
     if (room) {
       // Forward signaling message to other participants
-      for (const [userId, participant] of room.participants.entries()) {
+      room.participants.forEach((participant, userId) => {
         if (participant.ws !== ws && participant.ws.readyState === WebSocket.OPEN) {
           participant.ws.send(JSON.stringify(data));
         }
+      });
+    }
+  };
+
+  const handleChatMessage = (ws: WebSocket, data: any) => {
+    const { appointmentId } = data;
+    const room = videoCallRooms.get(appointmentId);
+    
+    if (room) {
+      // Forward chat message to other participants
+      room.participants.forEach((participant, userId) => {
+        if (participant.ws !== ws && participant.ws.readyState === WebSocket.OPEN) {
+          participant.ws.send(JSON.stringify(data));
+        }
+      });
+    }
+  };
+
+  const handleLeaveVideoCall = (ws: WebSocket, data: any) => {
+    const { appointmentId } = data;
+    const room = videoCallRooms.get(appointmentId);
+    
+    if (room) {
+      // Find and remove the user
+      let userIdToRemove: string | null = null;
+      room.participants.forEach((participant, userId) => {
+        if (participant.ws === ws) {
+          userIdToRemove = userId;
+        }
+      });
+      
+      if (userIdToRemove) {
+        room.participants.delete(userIdToRemove);
+        
+        // Notify other participants
+        const removedUserId = userIdToRemove;
+        room.participants.forEach((participant, userId) => {
+          if (participant.ws.readyState === WebSocket.OPEN) {
+            participant.ws.send(JSON.stringify({
+              type: 'user-left',
+              userId: removedUserId
+            }));
+          }
+        });
+        
+        // Clean up empty rooms
+        if (room.participants.size === 0) {
+          videoCallRooms.delete(appointmentId);
+        }
       }
     }
-  }
+  };
   
   wss.on('connection', (ws, req) => {
     console.log('New WebSocket connection');
@@ -970,8 +1020,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }));
         } else if (data.type === 'join-video-call') {
           handleJoinVideoCall(ws, data);
-        } else if (data.type === 'offer' || data.type === 'answer' || data.type === 'ice-candidate') {
+        } else if (data.type === 'webrtc-offer' || data.type === 'webrtc-answer' || data.type === 'webrtc-ice-candidate') {
           handleWebRTCSignaling(ws, data);
+        } else if (data.type === 'chat-message') {
+          handleChatMessage(ws, data);
+        } else if (data.type === 'leave-video-call') {
+          handleLeaveVideoCall(ws, data);
         }
       } catch (error) {
         console.error('WebSocket message error:', error);
@@ -980,54 +1034,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     ws.on('close', () => {
       // Remove client from map when disconnected
-      const entries = Array.from(clients.entries());
-      for (const [userId, client] of entries) {
+      clients.forEach((client, userId) => {
         if (client === ws) {
           clients.delete(userId);
           console.log(`User ${userId} disconnected from WebSocket`);
-          break;
+          
+          // Remove from video call rooms
+          videoCallRooms.forEach((room, appointmentId) => {
+            if (room.participants.has(userId)) {
+              room.participants.delete(userId);
+              
+              // Notify other participants
+              room.participants.forEach((participant, otherUserId) => {
+                if (participant.ws.readyState === WebSocket.OPEN) {
+                  participant.ws.send(JSON.stringify({
+                    type: 'user-left',
+                    userId
+                  }));
+                }
+              });
+              
+              // Clean up empty rooms
+              if (room.participants.size === 0) {
+                videoCallRooms.delete(appointmentId);
+              }
+            }
+          });
         }
-      }
+      });
     });
   });
 
-  function handleJoinVideoCall(ws: WebSocket, data: any) {
-    const { appointmentId, userId, role } = data;
-    
-    if (!videoCallRooms.has(appointmentId)) {
-      videoCallRooms.set(appointmentId, { participants: new Map() });
-    }
-    
-    const room = videoCallRooms.get(appointmentId)!;
-    room.participants.set(userId, { ws, role });
-    
-    console.log(`User ${userId} (${role}) joined video call for appointment ${appointmentId}`);
-    
-    // Notify other participants that someone joined
-    for (const [otherUserId, participant] of room.participants.entries()) {
-      if (otherUserId !== userId && participant.ws.readyState === WebSocket.OPEN) {
-        participant.ws.send(JSON.stringify({
-          type: 'user-joined',
-          userId,
-          role
-        }));
-      }
-    }
-  }
 
-  function handleWebRTCSignaling(ws: WebSocket, data: any) {
-    const { appointmentId } = data;
-    const room = videoCallRooms.get(appointmentId);
-    
-    if (room) {
-      // Forward signaling message to other participants
-      for (const [userId, participant] of room.participants.entries()) {
-        if (participant.ws !== ws && participant.ws.readyState === WebSocket.OPEN) {
-          participant.ws.send(JSON.stringify(data));
-        }
-      }
-    }
-  }
   
   // Function to send notifications to specific users
   app.locals.sendNotification = (userId: string, notification: any) => {

@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import TestVideoCall from "@/components/video/test-video-call";
+import VideoRoom from "@/components/video/video-room";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Video, Clock, User, Phone } from "lucide-react";
+import { Video, Clock, User, Phone, Calendar, Users } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -48,9 +48,8 @@ export default function VideoConsultation() {
 
   if (activeCall) {
     return (
-      <TestVideoCall
+      <VideoRoom
         appointmentId={activeCall.appointmentId}
-        isDoctor={user?.role === 'doctor'}
         patientName={activeCall.patientName}
         doctorName={activeCall.doctorName}
         onEndCall={endCall}

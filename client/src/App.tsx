@@ -17,6 +17,7 @@ import CalendarView from "@/pages/calendar";
 import TeleconsultAuction from "@/pages/teleconsult-auction";
 import AIAssistant from "@/pages/ai-assistant";
 import Configuracoes from "@/pages/configuracoes";
+import TestVideo from "@/pages/test-video";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -48,6 +49,7 @@ function Router() {
           <Route path="/ai-assistant" component={AIAssistant} />
           <Route path="/configuracoes" component={Configuracoes} />
           <Route path="/settings" component={Configuracoes} />
+          <Route path="/test-video" component={TestVideo} />
         </>
       )}
       <Route component={NotFound} />
