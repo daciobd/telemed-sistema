@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut } from "lucide-react";
+import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +43,12 @@ export default function Sidebar() {
       href: "/prescriptions",
       icon: Pill,
       roles: ["doctor", "patient", "admin"]
+    },
+    {
+      name: "Videoconsultas",
+      href: "/video-consultation",
+      icon: Video,
+      roles: ["doctor", "patient"]
     },
   ];
 

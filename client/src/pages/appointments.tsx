@@ -14,13 +14,19 @@ import { Calendar, Clock, User, Video, Plus, X } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
+import VideoCall from "@/components/video/video-call";
 
 export default function Appointments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDoctorId, setSelectedDoctorId] = useState<number | null>(null);
+  const [activeVideoCall, setActiveVideoCall] = useState<{
+    appointmentId: number;
+    patientName?: string;
+    doctorName?: string;
+  } | null>(null);
   const [location] = useLocation();
   const { toast } = useToast();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
 
   // Extract doctor filter from URL params
@@ -158,10 +164,41 @@ export default function Appointments() {
         return "Urgência";
       case "telemedicine":
         return "Teleconsulta";
+      case "teleconsult":
+        return "Teleconsulta";
       default:
         return type;
     }
   };
+
+  const startVideoCall = (appointment: any) => {
+    const isDoctor = user?.role === 'doctor';
+    setActiveVideoCall({
+      appointmentId: appointment.id,
+      patientName: isDoctor ? `${appointment.patient.user.firstName} ${appointment.patient.user.lastName}` : undefined,
+      doctorName: !isDoctor ? `${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}` : undefined
+    });
+  };
+
+  const endVideoCall = () => {
+    setActiveVideoCall(null);
+    toast({
+      title: "Consulta Finalizada",
+      description: "A videochamada foi encerrada com sucesso.",
+    });
+  };
+
+  if (activeVideoCall) {
+    return (
+      <VideoCall
+        appointmentId={activeVideoCall.appointmentId}
+        isDoctor={user?.role === 'doctor'}
+        patientName={activeVideoCall.patientName}
+        doctorName={activeVideoCall.doctorName}
+        onEndCall={endVideoCall}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen flex bg-neutral-50">
@@ -280,7 +317,18 @@ export default function Appointments() {
                             </Button>
                           )}
                           
-                          {appointment.status === "confirmed" && (
+                          {appointment.status === "confirmed" && appointment.type === "teleconsult" && (
+                            <Button
+                              size="sm"
+                              onClick={() => startVideoCall(appointment)}
+                              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                            >
+                              <Video className="h-4 w-4" />
+                              Videochamada
+                            </Button>
+                          )}
+                          
+                          {appointment.status === "confirmed" && appointment.type !== "teleconsult" && (
                             <Button
                               size="sm"
                               variant="outline"

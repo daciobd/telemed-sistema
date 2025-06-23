@@ -11,6 +11,7 @@ import Appointments from "@/pages/appointments";
 import Patients from "@/pages/patients";
 import MedicalRecords from "@/pages/medical-records";
 import Prescriptions from "@/pages/prescriptions";
+import VideoConsultation from "@/pages/video-consultation";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -26,6 +27,7 @@ function Router() {
           <Route path="/patients" component={Patients} />
           <Route path="/medical-records" component={MedicalRecords} />
           <Route path="/prescriptions" component={Prescriptions} />
+          <Route path="/video-consultation" component={VideoConsultation} />
         </>
       )}
       <Route component={NotFound} />

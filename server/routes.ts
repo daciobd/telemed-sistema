@@ -583,6 +583,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Store connected clients with user info
   const clients = new Map<string, WebSocket>();
+  // Store video call rooms
+  const videoCallRooms = new Map<number, { participants: Map<string, { ws: WebSocket, role: string }> }>();
+
+  function handleJoinVideoCall(ws: WebSocket, data: any) {
+    const { appointmentId, userId, role } = data;
+    
+    if (!videoCallRooms.has(appointmentId)) {
+      videoCallRooms.set(appointmentId, { participants: new Map() });
+    }
+    
+    const room = videoCallRooms.get(appointmentId)!;
+    room.participants.set(userId, { ws, role });
+    
+    console.log(`User ${userId} (${role}) joined video call for appointment ${appointmentId}`);
+    
+    // Notify other participants that someone joined
+    for (const [otherUserId, participant] of room.participants.entries()) {
+      if (otherUserId !== userId && participant.ws.readyState === WebSocket.OPEN) {
+        participant.ws.send(JSON.stringify({
+          type: 'user-joined',
+          userId,
+          role
+        }));
+      }
+    }
+  }
+
+  function handleWebRTCSignaling(ws: WebSocket, data: any) {
+    const { appointmentId } = data;
+    const room = videoCallRooms.get(appointmentId);
+    
+    if (room) {
+      // Forward signaling message to other participants
+      for (const [userId, participant] of room.participants.entries()) {
+        if (participant.ws !== ws && participant.ws.readyState === WebSocket.OPEN) {
+          participant.ws.send(JSON.stringify(data));
+        }
+      }
+    }
+  }
   
   wss.on('connection', (ws, req) => {
     console.log('New WebSocket connection');
@@ -599,6 +639,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             type: 'auth_success',
             message: 'Connected successfully'
           }));
+        } else if (data.type === 'join-video-call') {
+          handleJoinVideoCall(ws, data);
+        } else if (data.type === 'offer' || data.type === 'answer' || data.type === 'ice-candidate') {
+          handleWebRTCSignaling(ws, data);
         }
       } catch (error) {
         console.error('WebSocket message error:', error);
@@ -617,6 +661,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
   });
+
+  function handleJoinVideoCall(ws: WebSocket, data: any) {
+    const { appointmentId, userId, role } = data;
+    
+    if (!videoCallRooms.has(appointmentId)) {
+      videoCallRooms.set(appointmentId, { participants: new Map() });
+    }
+    
+    const room = videoCallRooms.get(appointmentId)!;
+    room.participants.set(userId, { ws, role });
+    
+    console.log(`User ${userId} (${role}) joined video call for appointment ${appointmentId}`);
+    
+    // Notify other participants that someone joined
+    for (const [otherUserId, participant] of room.participants.entries()) {
+      if (otherUserId !== userId && participant.ws.readyState === WebSocket.OPEN) {
+        participant.ws.send(JSON.stringify({
+          type: 'user-joined',
+          userId,
+          role
+        }));
+      }
+    }
+  }
+
+  function handleWebRTCSignaling(ws: WebSocket, data: any) {
+    const { appointmentId } = data;
+    const room = videoCallRooms.get(appointmentId);
+    
+    if (room) {
+      // Forward signaling message to other participants
+      for (const [userId, participant] of room.participants.entries()) {
+        if (participant.ws !== ws && participant.ws.readyState === WebSocket.OPEN) {
+          participant.ws.send(JSON.stringify(data));
+        }
+      }
+    }
+  }
   
   // Function to send notifications to specific users
   app.locals.sendNotification = (userId: string, notification: any) => {
