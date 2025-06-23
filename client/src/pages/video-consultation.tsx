@@ -20,12 +20,11 @@ export default function VideoConsultation() {
   } | null>(null);
 
   // Get appointments ready for video consultation
-  const { data: appointments = [] } = useQuery({
+  const { data: appointments = [], isLoading } = useQuery({
     queryKey: ["/api/appointments"],
     select: (data: any[]) => data.filter(appointment => 
       appointment.status === 'confirmed' && 
-      appointment.appointmentType === 'teleconsult' &&
-      new Date(appointment.appointmentDate) <= new Date(Date.now() + 30 * 60 * 1000) // Within next 30 minutes
+      appointment.type === 'teleconsult'
     )
   });
 
@@ -74,18 +73,31 @@ export default function VideoConsultation() {
         </div>
 
         <div className="grid gap-6">
-          {appointments.length === 0 ? (
+          {isLoading ? (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <div className="animate-pulse">
+                  <div className="h-12 w-12 bg-gray-200 rounded mx-auto mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/3 mx-auto mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto"></div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : appointments.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center">
                 <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   Nenhuma videoconsulta disponível
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-4">
                   {user?.role === 'doctor' 
                     ? 'Não há teleconsultas confirmadas para iniciar no momento.'
                     : 'Você não tem consultas online agendadas no momento.'
                   }
+                </p>
+                <p className="text-sm text-gray-500">
+                  Para testar, confirme um agendamento do tipo "teleconsult" na página de agendamentos.
                 </p>
               </CardContent>
             </Card>
