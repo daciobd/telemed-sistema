@@ -141,11 +141,21 @@ export default function Prescriptions() {
       });
       return;
     }
+
+    if (!user?.doctor?.id) {
+      toast({
+        title: "Erro",
+        description: "Perfil de médico não encontrado. Certifique-se de estar no modo médico.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     const formData = new FormData(e.currentTarget);
     
     const prescriptionData = {
       patientId: selectedPatient,
+      doctorId: user?.doctor?.id,
       medications: formData.get('medications'),
       dosage: formData.get('dosage'),
       frequency: formData.get('frequency'),
@@ -155,6 +165,7 @@ export default function Prescriptions() {
     
     console.log("Sending prescription data:", prescriptionData);
     console.log("User role:", user?.role);
+    console.log("Doctor ID:", user?.doctor?.id);
     
     createPrescriptionMutation.mutate(prescriptionData);
   };
