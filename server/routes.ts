@@ -44,18 +44,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create doctor profile if switching to doctor
       if (role === 'doctor') {
         try {
-          await storage.createDoctor({
-            userId: userId,
-            specialty: "Clínico Geral",
-            licenseNumber: "CRM-12345",
-            experience: 5
-          });
+          const existingDoctor = await storage.getDoctorByUserId(userId);
+          if (!existingDoctor) {
+            await storage.createDoctor({
+              userId: userId,
+              specialty: "Clínico Geral",
+              licenseNumber: "CRM-12345",
+              experience: 5
+            });
+          }
         } catch (error) {
-          // Doctor profile might already exist
+          console.error("Error creating doctor profile:", error);
         }
       }
 
-      res.json({ message: `Role switched to ${role}`, user: updatedUser });
+      // Create patient profile if switching to patient
+      if (role === 'patient') {
+        try {
+          const existingPatient = await storage.getPatientByUserId(userId);
+          if (!existingPatient) {
+            await storage.createPatient({
+              userId: userId,
+              dateOfBirth: new Date('1990-01-01'),
+              phone: "(11) 99999-9999",
+              address: "Endereço do paciente",
+              emergencyContact: "Contato de emergência"
+            });
+          }
+        } catch (error) {
+          console.error("Error creating patient profile:", error);
+        }
+      }
+
+      // Get updated user with profile
+      const userWithProfile = await storage.getUserWithProfile(userId);
+      res.json({ message: `Role switched to ${role}`, user: userWithProfile });
     } catch (error) {
       console.error("Error switching role:", error);
       res.status(500).json({ message: "Failed to switch role" });

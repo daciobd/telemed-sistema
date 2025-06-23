@@ -27,10 +27,11 @@ export default function RoleSwitcher() {
       // Refresh the page to update the interface
       window.location.reload();
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error("Role switch error:", error);
       toast({
-        title: "Erro",
-        description: "Não foi possível alterar o papel",
+        title: "Erro na troca de papel",
+        description: error.message || "Não foi possível alterar o papel. Tente novamente.",
         variant: "destructive",
       });
     },
