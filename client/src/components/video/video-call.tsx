@@ -31,7 +31,6 @@ export default function VideoCall({
   doctorName, 
   onEndCall 
 }: VideoCallProps) {
-  console.log('VideoCall component rendered with props:', { appointmentId, isDoctor, patientName, doctorName });
   const { user } = useAuth();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
