@@ -76,7 +76,7 @@ export default function Header({ onMobileMenuToggle }: HeaderProps) {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 px-4 py-3 lg:px-6 sticky top-0 z-50 h-16">
+    <header className="bg-white border-b border-gray-200 px-4 py-3 lg:px-6 fixed top-0 left-0 right-0 z-50 h-16">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Button

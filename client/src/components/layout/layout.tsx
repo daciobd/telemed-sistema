@@ -20,10 +20,10 @@ export default function Layout({ children }: LayoutProps) {
         setIsMobileMenuOpen={setIsMobileMenuOpen} 
       />
       
-      <main className="flex-1 flex flex-col">
-        <Header onMobileMenuToggle={toggleMobileMenu} />
-        
-        <div className="flex-1 overflow-auto pt-16">
+      <Header onMobileMenuToggle={toggleMobileMenu} />
+      
+      <main className="flex-1 flex flex-col pt-16">
+        <div className="flex-1 overflow-auto">
           {children}
         </div>
       </main>
