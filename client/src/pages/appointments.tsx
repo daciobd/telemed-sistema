@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
 import { useLocation } from "wouter";
-// import Layout from "@/components/layout/layout";
+import Layout from "@/components/layout/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -201,38 +201,39 @@ export default function Appointments() {
   }
 
   return (
-    <div className="p-4 lg:p-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Agendamentos</h1>
-          <p className="text-gray-600">Gerencie suas consultas e horários</p>
-          {selectedDoctorId && (
-            <div className="flex items-center mt-2">
-              <Badge variant="outline" className="mr-2">
-                Filtrado por médico
-              </Badge>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => {
-                  setSelectedDoctorId(null);
-                  window.history.pushState({}, '', '/appointments');
-                }}
-              >
-                <X className="h-4 w-4 mr-1" />
-                Remover filtro
-              </Button>
-            </div>
-          )}
+    <Layout>
+      <div className="p-4 lg:p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-900">Agendamentos</h1>
+            <p className="text-gray-600">Gerencie suas consultas e horários</p>
+            {selectedDoctorId && (
+              <div className="flex items-center mt-2">
+                <Badge variant="outline" className="mr-2">
+                  Filtrado por médico
+                </Badge>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setSelectedDoctorId(null);
+                    window.history.pushState({}, '', '/appointments');
+                  }}
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Remover filtro
+                </Button>
+              </div>
+            )}
+          </div>
+          <Button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Nova Consulta
+          </Button>
         </div>
-        <Button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Nova Consulta
-        </Button>
-      </div>
 
       <Card>
             <CardHeader>
@@ -357,6 +358,7 @@ export default function Appointments() {
           </Card>
         
 {/* Appointment Modal temporarily disabled */}
-    </div>
+      </div>
+    </Layout>
   );
 }
