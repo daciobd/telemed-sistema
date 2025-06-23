@@ -99,7 +99,7 @@ export default function Prescriptions() {
 
   const createPrescriptionMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("/api/prescriptions", "POST", data);
+      await apiRequest("POST", "/api/prescriptions", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/prescriptions"] });
