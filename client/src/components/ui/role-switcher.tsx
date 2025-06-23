@@ -18,14 +18,17 @@ export default function RoleSwitcher() {
       return response;
     },
     onSuccess: (data: any) => {
+      const newRole = data?.user?.role || data?.role;
       toast({
         title: "Papel alterado",
-        description: `Agora você é um ${data.user.role === 'doctor' ? 'médico' : 'paciente'}`,
+        description: `Agora você é um ${newRole === 'doctor' ? 'médico' : 'paciente'}`,
       });
       // Invalidate all queries to refresh data
       queryClient.invalidateQueries();
       // Refresh the page to update the interface
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     },
     onError: (error: any) => {
       console.error("Role switch error:", error);
