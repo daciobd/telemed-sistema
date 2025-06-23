@@ -23,7 +23,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1 flex flex-col">
         <Header onMobileMenuToggle={toggleMobileMenu} />
         
-        <div className="flex-1 overflow-auto pt-20">
+        <div className="flex-1 overflow-auto pt-16">
           {children}
         </div>
       </main>
