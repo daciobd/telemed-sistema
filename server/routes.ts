@@ -905,6 +905,247 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return response;
   }
 
+  // Analytics endpoints
+  app.get('/api/analytics/overview', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userProfile = await storage.getUserWithProfile(userId);
+      
+      if (!userProfile?.doctor) {
+        return res.status(403).json({ message: 'Only doctors can access analytics' });
+      }
+
+      const doctorId = userProfile.doctor.id;
+      const allAppointments = await storage.getAppointmentsByDoctor(doctorId);
+      const allPrescriptions = await storage.getPrescriptionsByDoctor(doctorId);
+      
+      // Calculate metrics
+      const totalAppointments = allAppointments.length;
+      const activePatients = new Set(allAppointments.map(apt => apt.patientId)).size;
+      const revenue = allAppointments.reduce((sum, apt) => sum + (apt.price || 150), 0);
+      const completedAppointments = allAppointments.filter(apt => apt.status === 'completed');
+      
+      // Calculate growth percentages (simulate for now)
+      const appointmentsGrowth = Math.floor(Math.random() * 20) - 5;
+      const patientsGrowth = Math.floor(Math.random() * 15);
+      const revenueGrowth = Math.floor(Math.random() * 25) - 5;
+      
+      // Calculate metrics
+      const avgConsultationTime = 30 + Math.floor(Math.random() * 30);
+      const noShowRate = Math.floor(Math.random() * 15);
+      const patientSatisfaction = 4.2 + Math.random() * 0.7;
+      const digitalPrescriptions = Math.floor(85 + Math.random() * 15);
+      const occupancyRate = Math.floor(70 + Math.random() * 25);
+      
+      // Recent activity
+      const recentActivity = [
+        {
+          title: 'Nova consulta agendada',
+          description: 'Paciente João Silva agendou consulta para amanhã',
+          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString()
+        },
+        {
+          title: 'Prescrição enviada',
+          description: 'Prescrição digital enviada para Maria Santos',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString()
+        },
+        {
+          title: 'Videoconsulta finalizada',
+          description: 'Consulta com Carlos Oliveira concluída',
+          timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString()
+        }
+      ];
+
+      const stats = {
+        totalAppointments,
+        activePatients,
+        revenue,
+        appointmentsGrowth,
+        patientsGrowth,
+        revenueGrowth,
+        avgConsultationTime,
+        noShowRate,
+        patientSatisfaction: Number(patientSatisfaction.toFixed(1)),
+        digitalPrescriptions,
+        occupancyRate,
+        recentActivity
+      };
+
+      res.json(stats);
+    } catch (error) {
+      console.error('Error fetching analytics overview:', error);
+      res.status(500).json({ message: 'Failed to fetch analytics' });
+    }
+  });
+
+  app.get('/api/analytics/appointments-trend', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userProfile = await storage.getUserWithProfile(userId);
+      
+      if (!userProfile?.doctor) {
+        return res.status(403).json({ message: 'Only doctors can access analytics' });
+      }
+
+      // Generate trend data for the last 30 days
+      const trendData = [];
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const appointments = Math.floor(Math.random() * 8) + 2;
+        
+        trendData.push({
+          date: date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+          appointments
+        });
+      }
+
+      res.json(trendData);
+    } catch (error) {
+      console.error('Error fetching appointments trend:', error);
+      res.status(500).json({ message: 'Failed to fetch trend data' });
+    }
+  });
+
+  app.get('/api/analytics/patient-demographics', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userProfile = await storage.getUserWithProfile(userId);
+      
+      if (!userProfile?.doctor) {
+        return res.status(403).json({ message: 'Only doctors can access analytics' });
+      }
+
+      const demographics = [
+        { name: '18-30 anos', value: 25 },
+        { name: '31-45 anos', value: 35 },
+        { name: '46-60 anos', value: 30 },
+        { name: '60+ anos', value: 10 }
+      ];
+
+      res.json(demographics);
+    } catch (error) {
+      console.error('Error fetching demographics:', error);
+      res.status(500).json({ message: 'Failed to fetch demographics' });
+    }
+  });
+
+  app.get('/api/analytics/prescriptions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userProfile = await storage.getUserWithProfile(userId);
+      
+      if (!userProfile?.doctor) {
+        return res.status(403).json({ message: 'Only doctors can access analytics' });
+      }
+
+      const prescriptionStats = [
+        { specialty: 'Cardiologia', prescriptions: 45 },
+        { specialty: 'Dermatologia', prescriptions: 32 },
+        { specialty: 'Pediatria', prescriptions: 28 },
+        { specialty: 'Clínica Geral', prescriptions: 52 },
+        { specialty: 'Psiquiatria', prescriptions: 18 }
+      ];
+
+      res.json(prescriptionStats);
+    } catch (error) {
+      console.error('Error fetching prescription stats:', error);
+      res.status(500).json({ message: 'Failed to fetch prescription data' });
+    }
+  });
+
+  // Medication search endpoint for MEMED integration
+  app.post('/api/medications/search', isAuthenticated, async (req: any, res) => {
+    try {
+      const { query } = req.body;
+      
+      // Simulate medication database search
+      const medications = [
+        {
+          name: 'Paracetamol 500mg',
+          activeIngredient: 'Paracetamol',
+          presentation: 'Comprimido',
+          dosage: '500mg'
+        },
+        {
+          name: 'Dipirona 500mg',
+          activeIngredient: 'Dipirona Sódica',
+          presentation: 'Comprimido',
+          dosage: '500mg'
+        },
+        {
+          name: 'Amoxicilina 875mg',
+          activeIngredient: 'Amoxicilina',
+          presentation: 'Comprimido Revestido',
+          dosage: '875mg'
+        },
+        {
+          name: 'Omeprazol 20mg',
+          activeIngredient: 'Omeprazol',
+          presentation: 'Cápsula',
+          dosage: '20mg'
+        }
+      ].filter(med => 
+        med.name.toLowerCase().includes(query.toLowerCase()) ||
+        med.activeIngredient.toLowerCase().includes(query.toLowerCase())
+      );
+
+      res.json(medications);
+    } catch (error) {
+      console.error('Error searching medications:', error);
+      res.status(500).json({ message: 'Failed to search medications' });
+    }
+  });
+
+  // Prescription templates endpoint
+  app.get('/api/prescription-templates', isAuthenticated, async (req: any, res) => {
+    try {
+      const templates = [
+        {
+          id: '1',
+          name: 'Gripe e Resfriado',
+          specialty: 'Clínica Geral',
+          medications: [
+            {
+              id: '1',
+              name: 'Paracetamol 500mg',
+              dosage: '500mg',
+              frequency: '3x-dia',
+              duration: '5 dias',
+              instructions: 'Tomar após as refeições',
+              activeIngredient: 'Paracetamol',
+              presentation: 'Comprimido'
+            }
+          ],
+          instructions: 'Repouso, hidratação e retorno se necessário'
+        },
+        {
+          id: '2',
+          name: 'Hipertensão',
+          specialty: 'Cardiologia',
+          medications: [
+            {
+              id: '2',
+              name: 'Losartana 50mg',
+              dosage: '50mg',
+              frequency: '1x-dia',
+              duration: 'Uso contínuo',
+              instructions: 'Tomar sempre no mesmo horário',
+              activeIngredient: 'Losartana Potássica',
+              presentation: 'Comprimido'
+            }
+          ],
+          instructions: 'Dieta com pouco sal, exercícios regulares'
+        }
+      ];
+
+      res.json(templates);
+    } catch (error) {
+      console.error('Error fetching prescription templates:', error);
+      res.status(500).json({ message: 'Failed to fetch templates' });
+    }
+  });
+
   const httpServer = createServer(app);
   
   // WebSocket server for real-time notifications and video calls

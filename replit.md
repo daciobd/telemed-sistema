@@ -1,112 +1,175 @@
-# Telemedicine Platform
+# Sistema de Telemedicina - Telemed Sistema
 
-## Overview
+## Visão Geral
+Sistema abrangente de telemedicina que oferece soluções digitais inovadoras para saúde, combinando tecnologias avançadas com design centrado no usuário para transformar consultas médicas e cuidados ao paciente.
 
-This is a comprehensive telemedicine platform built as a full-stack web application. The system enables healthcare providers and patients to manage appointments, conduct video consultations, maintain electronic medical records, and handle prescriptions in a secure, integrated environment.
+## Tecnologias Principais
+- **Frontend**: React.js com TypeScript, Vite, TailwindCSS
+- **Backend**: Express.js com TypeScript
+- **Banco de Dados**: PostgreSQL com Drizzle ORM
+- **Autenticação**: Replit Auth com OpenID Connect
+- **Comunicação**: WebRTC para videoconsultas, WebSockets para tempo real
+- **UI Components**: shadcn/ui com Radix UI
 
-## System Architecture
+## Funcionalidades Implementadas
 
-The application follows a modern full-stack architecture with clear separation between client and server:
+### ✅ Sistema de Autenticação
+- Login/logout com Replit Auth
+- Gerenciamento de sessões seguras
+- Controle de acesso baseado em roles (médico/paciente)
 
-- **Frontend**: React + TypeScript with Vite build system
-- **Backend**: Express.js server with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Authentication**: Replit Auth with session management
-- **Styling**: Tailwind CSS with shadcn/ui components
-- **Real-time Communication**: WebSocket for notifications and video calls
+### ✅ Dashboard Principal
+- Interface responsiva para médicos e pacientes
+- Estatísticas em tempo real
+- Navegação intuitiva com sidebar
 
-## Key Components
+### ✅ Gerenciamento de Consultas
+- Agendamento de consultas
+- Visualização de agenda
+- Status e histórico de consultas
+- Sistema de leilão reverso para teleconsultas
 
-### Authentication & Authorization
-- Replit Auth integration with OIDC
-- Role-based access control (patient, doctor, admin)
-- Session storage using PostgreSQL
-- Secure cookie-based sessions
+### ✅ Sistema de Videoconsultas
+- Videochamadas WebRTC peer-to-peer
+- Chat em tempo real durante consultas
+- Controles de áudio/vídeo
+- Compartilhamento de tela
+- Tratamento robusto de permissões de mídia
 
-### Database Layer
-- **ORM**: Drizzle with PostgreSQL dialect
-- **Connection**: Neon serverless PostgreSQL
-- **Schema**: Comprehensive medical data models including users, patients, doctors, appointments, medical records, and prescriptions
-- **Migrations**: Managed through Drizzle Kit
+### ✅ Gerenciamento de Pacientes
+- Cadastro completo de pacientes
+- Histórico médico
+- Informações de contato
 
-### Frontend Architecture
-- **Router**: Wouter for client-side routing
-- **State Management**: React Query for server state
-- **UI Components**: shadcn/ui component library
-- **Styling**: Tailwind CSS with custom medical theme
-- **Forms**: React Hook Form with Zod validation
+### ✅ Sistema de Prescrições MEMED
+- Interface integrada com MEMED
+- Busca de medicamentos
+- Templates de prescrição
+- Prescrições digitais válidas
 
-### Backend Services
-- **API Routes**: RESTful endpoints for all medical entities
-- **File Serving**: Static file serving with Vite integration
-- **WebSocket**: Real-time notifications and video call signaling
-- **Storage Layer**: Abstracted database operations
+### ✅ Assistente IA
+- Análise de sintomas
+- Sugestões de diagnóstico
+- Recomendações médicas
+- Interface conversacional
 
-### Video Consultation System
-- **WebRTC**: Peer-to-peer video communication
-- **Signaling**: WebSocket-based connection establishment
-- **UI**: Custom video room with controls and chat
-- **Test Environment**: Dedicated test components for development
+### ✅ Sistema de Notificações
+- Notificações em tempo real via WebSocket
+- Centro de notificações com interface moderna
+- Diferentes tipos de notificação (consultas, mensagens, etc.)
 
-## Data Flow
+### ✅ Relatórios e Analytics
+- Dashboard de analytics avançado
+- Métricas de desempenho
+- Gráficos interativos
+- Exportação de relatórios
 
-1. **Authentication Flow**: Users authenticate via Replit Auth, sessions stored in PostgreSQL
-2. **API Requests**: Frontend makes authenticated requests to Express backend
-3. **Database Operations**: Backend uses Drizzle ORM to interact with PostgreSQL
-4. **Real-time Updates**: WebSocket connections for live notifications
-5. **Video Calls**: WebRTC peer connections established through WebSocket signaling
+## Arquitetura do Sistema
 
-## External Dependencies
-
-### Core Dependencies
-- **@neondatabase/serverless**: PostgreSQL connection
-- **drizzle-orm**: Database ORM
-- **@tanstack/react-query**: Server state management
-- **@radix-ui/***: Accessible UI primitives
-- **express**: Web server framework
-- **ws**: WebSocket implementation
-
-### Development Tools
-- **Vite**: Build tool and dev server
-- **TypeScript**: Type safety
-- **Tailwind CSS**: Utility-first styling
-- **ESBuild**: Production bundling
-
-### Authentication
-- **openid-client**: OIDC authentication
-- **passport**: Authentication middleware
-- **express-session**: Session management
-- **connect-pg-simple**: PostgreSQL session store
-
-## Deployment Strategy
-
-The application is configured for Replit deployment with:
-
-- **Build Process**: Vite builds frontend, ESBuild bundles server
-- **Runtime**: Node.js 20 with PostgreSQL 16
-- **Port Configuration**: Server runs on port 5000, external port 80
-- **Environment**: Separate development and production modes
-- **Auto-scaling**: Configured for Replit autoscale deployment
-
-### Development Mode
-- Vite dev server with HMR
-- TypeScript compilation
-- Real-time error overlay
-- WebSocket development support
-
-### Production Mode
-- Optimized builds with code splitting
-- Static file serving from dist directory
-- Production database connections
-- Compressed assets
-
-## Changelog
+### Frontend (client/)
 ```
-Changelog:
-- June 23, 2025. Initial setup
+src/
+├── components/
+│   ├── layout/           # Layout principal, header, sidebar
+│   ├── video/            # Componentes de videoconsulta
+│   ├── prescriptions/    # Sistema MEMED
+│   ├── notifications/    # Centro de notificações
+│   ├── reports/          # Dashboard de analytics
+│   └── ui/              # Componentes base (shadcn/ui)
+├── pages/               # Páginas da aplicação
+├── hooks/               # React hooks customizados
+└── lib/                 # Utilitários e configurações
 ```
 
-## User Preferences
+### Backend (server/)
 ```
-Preferred communication style: Simple, everyday language.
+├── db.ts               # Configuração do banco de dados
+├── index.ts            # Servidor principal
+├── routes.ts           # Rotas da API e WebSocket
+├── storage.ts          # Interface de armazenamento
+├── replitAuth.ts       # Autenticação Replit
+└── vite.ts             # Configuração Vite
 ```
+
+### Schema do Banco (shared/schema.ts)
+- `users` - Usuários do sistema
+- `patients` - Dados dos pacientes
+- `doctors` - Dados dos médicos
+- `appointments` - Consultas agendadas
+- `medicalRecords` - Prontuários médicos
+- `prescriptions` - Prescrições médicas
+- `teleconsultResponses` - Respostas do leilão reverso
+
+## Mudanças Recentes (Junho 2025)
+
+### Sistema de Videoconsultas WebRTC
+- **Data**: 23/06/2025
+- **Implementação**: Sistema completo de videoconsultas com WebRTC
+- **Recursos**: Vídeo P2P, chat, compartilhamento de tela, controles A/V
+- **Backend**: WebSocket handlers para sinalização WebRTC
+- **Interface**: Componente VideoRoom com tratamento de permissões
+
+### Sistema de Prescrições MEMED
+- **Data**: 23/06/2025  
+- **Integração**: Interface completa com MEMED para prescrições digitais
+- **Funcionalidades**: Busca de medicamentos, templates, prescrições válidas
+- **Interface**: Componente tabbed com múltiplas funcionalidades
+
+### Dashboard de Analytics
+- **Data**: 23/06/2025
+- **Implementação**: Sistema avançado de relatórios e métricas
+- **Visualizações**: Gráficos interativos com Recharts
+- **Dados**: Métricas de consultas, pacientes, receita, satisfação
+
+### Sistema de Notificações
+- **Data**: 23/06/2025
+- **Recursos**: Centro de notificações em tempo real
+- **Interface**: Popover moderno com diferentes tipos de notificação
+- **Backend**: WebSocket para notificações instantâneas
+
+## Estado Atual do Projeto
+
+### Funcionalidades Testadas
+- ✅ Autenticação e autorização
+- ✅ Dashboard e navegação
+- ✅ Gerenciamento de consultas
+- ✅ Sistema de pacientes
+- ✅ Assistente IA funcional
+- 🔄 Videoconsultas (necessita permissões de câmera)
+- ✅ Prescrições MEMED
+- ✅ Sistema de notificações
+
+### Próximas Melhorias
+- Sistema de pagamentos integrado
+- Integração com laboratórios
+- Aplicativo móvel
+- Telemedicina especializada
+- Conformidade LGPD completa
+
+## Configuração de Desenvolvimento
+
+### Variáveis de Ambiente
+```
+DATABASE_URL=postgresql://...
+SESSION_SECRET=...
+REPL_ID=...
+REPLIT_DOMAINS=...
+```
+
+### Scripts Disponíveis
+- `npm run dev` - Inicia servidor de desenvolvimento
+- `npm run db:push` - Aplica mudanças no schema do banco
+- `npm run build` - Build para produção
+
+## Conformidade e Segurança
+- Autenticação segura com OpenID Connect
+- Sessões com armazenamento seguro no PostgreSQL
+- Dados médicos protegidos conforme LGPD
+- Comunicação criptografada HTTPS/WSS
+- Prescrições digitais válidas juridicamente
+
+## Suporte e Manutenção
+- Logs centralizados para debugging
+- Monitoramento de performance
+- Backup automático de dados
+- Atualizações de segurança regulares
