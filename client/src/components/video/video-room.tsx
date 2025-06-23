@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import MediaPermissions from './media-permissions';
 import { 
   Video, 
   VideoOff, 
@@ -45,6 +46,8 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
+  const [mediaReady, setMediaReady] = useState(false);
+  const [permissionError, setPermissionError] = useState<string | null>(null);
   
   // Chat states
   const [showChat, setShowChat] = useState(false);
@@ -64,7 +67,6 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
 
   useEffect(() => {
     initializeWebSocket();
-    startLocalVideo();
     
     // Start call timer
     const timer = setInterval(() => {
@@ -76,6 +78,22 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       clearInterval(timer);
     };
   }, []);
+
+  const handlePermissionsGranted = (stream: MediaStream) => {
+    localStreamRef.current = stream;
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = stream;
+    }
+    
+    setupPeerConnection();
+    setMediaReady(true);
+    setPermissionError(null);
+  };
+
+  const handlePermissionError = (error: string) => {
+    setPermissionError(error);
+    setMediaReady(false);
+  };
 
   const initializeWebSocket = () => {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -128,29 +146,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     }
   };
 
-  const startLocalVideo = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
-      
-      localStreamRef.current = stream;
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-      
-      setupPeerConnection();
-      
-    } catch (error) {
-      console.error('Error accessing media devices:', error);
-      toast({
-        title: "Erro de Mídia",
-        description: "Não foi possível acessar a câmera ou microfone. Verifique as permissões.",
-        variant: "destructive",
-      });
-    }
-  };
+
 
   const setupPeerConnection = () => {
     const configuration = {
@@ -409,6 +405,16 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     }
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
+
+  // Show permissions screen if media is not ready
+  if (!mediaReady) {
+    return (
+      <MediaPermissions
+        onPermissionsGranted={handlePermissionsGranted}
+        onError={handlePermissionError}
+      />
+    );
+  }
 
   return (
     <div className="h-screen bg-gray-900 flex flex-col">
