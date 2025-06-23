@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import Sidebar from "@/components/layout/sidebar";
-import Header from "@/components/layout/header";
+import Layout from "@/components/layout/layout";
 import StatsCards from "@/components/dashboard/stats-cards";
 import AppointmentsList from "@/components/dashboard/appointments-list";
 import QuickActions from "@/components/dashboard/quick-actions";
@@ -46,19 +45,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen flex bg-neutral-50">
-      <Sidebar />
-      
-      <main className="flex-1 flex flex-col">
-        <Header />
+    <Layout>
+      <div className="p-4 lg:p-6">
+        <StatsCards />
         
-        <div className="flex-1 p-4 lg:p-6 overflow-auto">
-          <StatsCards />
-          
-          <DoctorDashboardContent />
-        </div>
-      </main>
-    </div>
+        <DoctorDashboardContent />
+      </div>
+    </Layout>
   );
 }
 
