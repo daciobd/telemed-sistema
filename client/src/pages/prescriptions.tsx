@@ -121,9 +121,10 @@ export default function Prescriptions() {
         }, 500);
         return;
       }
+      console.error("Prescription creation error:", error);
       toast({
         title: "Erro",
-        description: "Falha ao criar prescrição.",
+        description: error.message || "Falha ao criar prescrição.",
         variant: "destructive",
       });
     },
@@ -131,16 +132,31 @@ export default function Prescriptions() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (!selectedPatient) {
+      toast({
+        title: "Erro",
+        description: "Selecione um paciente antes de criar a prescrição.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const formData = new FormData(e.currentTarget);
     
-    createPrescriptionMutation.mutate({
+    const prescriptionData = {
       patientId: selectedPatient,
       medications: formData.get('medications'),
       dosage: formData.get('dosage'),
       frequency: formData.get('frequency'),
       duration: formData.get('duration'),
       instructions: formData.get('instructions') || '',
-    });
+    };
+    
+    console.log("Sending prescription data:", prescriptionData);
+    console.log("User role:", user?.role);
+    
+    createPrescriptionMutation.mutate(prescriptionData);
   };
 
   if (isLoading || prescriptionsLoading) {
