@@ -67,7 +67,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
 
       {/* Sidebar */}
       <aside className={cn(
-        "w-64 bg-white shadow-lg border-r border-gray-200 h-screen shrink-0 pt-16",
+        "w-64 bg-white shadow-lg border-r border-gray-200 h-screen shrink-0 pt-16 flex flex-col",
         "fixed lg:static inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out lg:translate-x-0",
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
@@ -85,7 +85,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
         </div>
         
         {/* Navigation */}
-        <nav className="p-4">
+        <nav className="p-4 flex-1 overflow-y-auto">
           <div className="space-y-2">
             <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
               Dashboard
@@ -117,15 +117,23 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
               Sistema
             </div>
             
-            <button className="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-sm font-medium transition-colors w-full text-left">
-              <Settings className="h-5 w-5" />
-              <span>Configurações</span>
-            </button>
+            <Link href="/configuracoes">
+              <span className={cn(
+                "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer",
+                location === "/configuracoes"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}>
+                <Settings className="h-5 w-5" />
+                <span>Configurações</span>
+              </span>
+            </Link>
           </div>
         </nav>
         
         {/* User info and logout */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 mt-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
