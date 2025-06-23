@@ -16,6 +16,7 @@ import Reports from "@/pages/reports";
 import CalendarView from "@/pages/calendar";
 import TeleconsultAuction from "@/pages/teleconsult-auction";
 import AIAssistant from "@/pages/ai-assistant";
+import Configuracoes from "@/pages/configuracoes";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -45,6 +46,8 @@ function Router() {
           <Route path="/teleconsult-auction" component={TeleconsultAuction} />
           <Route path="/assistente-ia" component={AIAssistant} />
           <Route path="/ai-assistant" component={AIAssistant} />
+          <Route path="/configuracoes" component={Configuracoes} />
+          <Route path="/settings" component={Configuracoes} />
         </>
       )}
       <Route component={NotFound} />
