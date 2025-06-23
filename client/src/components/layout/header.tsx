@@ -16,7 +16,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import NotificationsPanel from "@/components/ui/notifications-panel";
 
-export default function Header() {
+interface HeaderProps {
+  onMobileMenuToggle?: () => void;
+}
+
+export default function Header({ onMobileMenuToggle }: HeaderProps) {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -79,6 +83,7 @@ export default function Header() {
             variant="ghost"
             size="sm"
             className="lg:hidden"
+            onClick={onMobileMenuToggle}
           >
             <Menu className="h-5 w-5" />
           </Button>

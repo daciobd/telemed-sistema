@@ -5,10 +5,14 @@ import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Vi
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function Sidebar() {
+interface SidebarProps {
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: (open: boolean) => void;
+}
+
+export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: SidebarProps) {
   const [location] = useLocation();
   const { user } = useAuth();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const getUserRole = () => {
     if (!user) return "patient";
