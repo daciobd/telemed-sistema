@@ -576,6 +576,335 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reports API
+  app.get('/api/reports/:type', isAuthenticated, async (req: any, res) => {
+    try {
+      const { type } = req.params;
+      const { start, end } = req.query;
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor' || !user.doctor) {
+        return res.status(403).json({ message: "Only doctors can access reports" });
+      }
+
+      // Mock analytics data based on actual database
+      const appointments = await storage.getAppointmentsByDoctor(user.doctor.id);
+      const prescriptions = await storage.getPrescriptionsByDoctor(user.doctor.id);
+      
+      const reportData = {
+        total: appointments.length,
+        uniquePatients: new Set(appointments.map(a => a.patientId)).size,
+        confirmed: appointments.filter(a => a.status === 'confirmed').length,
+        cancelled: appointments.filter(a => a.status === 'cancelled').length,
+        completed: appointments.filter(a => a.status === 'completed').length,
+        scheduled: appointments.filter(a => a.status === 'scheduled').length,
+        completionRate: Math.round((appointments.filter(a => a.status === 'completed').length / appointments.length) * 100) || 0,
+        growth: Math.floor(Math.random() * 20) + 5 // Mock growth percentage
+      };
+
+      res.json(reportData);
+    } catch (error) {
+      console.error("Error generating report:", error);
+      res.status(500).json({ message: "Failed to generate report" });
+    }
+  });
+
+  app.get('/api/reports/prescriptions/:dateRange?', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor' || !user.doctor) {
+        return res.status(403).json({ message: "Only doctors can access prescription reports" });
+      }
+
+      const prescriptions = await storage.getPrescriptionsByDoctor(user.doctor.id);
+      
+      // Analyze medications
+      const medicationCounts = prescriptions.reduce((acc: any, p: any) => {
+        const med = p.medications.toUpperCase();
+        acc[med] = (acc[med] || 0) + 1;
+        return acc;
+      }, {});
+
+      const topMedications = Object.entries(medicationCounts)
+        .map(([name, count]: [string, any]) => ({
+          name,
+          count,
+          dosage: "Variável",
+          percentage: Math.round((count / prescriptions.length) * 100)
+        }))
+        .sort((a, b) => b.count - a.count);
+
+      const reportData = {
+        total: prescriptions.length,
+        averagePerDay: Math.round(prescriptions.length / 30) || 1,
+        topMedications
+      };
+
+      res.json(reportData);
+    } catch (error) {
+      console.error("Error generating prescription report:", error);
+      res.status(500).json({ message: "Failed to generate prescription report" });
+    }
+  });
+
+  app.get('/api/reports/appointments/:dateRange?', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor' || !user.doctor) {
+        return res.status(403).json({ message: "Only doctors can access appointment reports" });
+      }
+
+      const appointments = await storage.getAppointmentsByDoctor(user.doctor.id);
+      
+      const reportData = {
+        total: appointments.length,
+        uniquePatients: new Set(appointments.map(a => a.patientId)).size,
+        confirmed: appointments.filter(a => a.status === 'confirmed').length,
+        cancelled: appointments.filter(a => a.status === 'cancelled').length,
+        completed: appointments.filter(a => a.status === 'completed').length,
+        scheduled: appointments.filter(a => a.status === 'scheduled').length,
+        completionRate: Math.round((appointments.filter(a => a.status === 'completed').length / appointments.length) * 100) || 0,
+        growth: Math.floor(Math.random() * 15) + 8 // Mock growth data
+      };
+
+      res.json(reportData);
+    } catch (error) {
+      console.error("Error generating appointment report:", error);
+      res.status(500).json({ message: "Failed to generate appointment report" });
+    }
+  });
+
+  // AI Assistant API
+  app.post('/api/ai/analyze', isAuthenticated, async (req: any, res) => {
+    try {
+      const { message, history } = req.body;
+      
+      // Simulate AI analysis with intelligent symptom detection
+      const symptoms = extractSymptoms(message);
+      const urgencyLevel = determineUrgency(message, symptoms);
+      const possibleConditions = suggestConditions(symptoms);
+      const recommendations = generateRecommendations(urgencyLevel, symptoms);
+      
+      const analysis = {
+        symptoms,
+        urgencyLevel,
+        possibleConditions,
+        recommendations
+      };
+
+      const response = generateAIResponse(message, analysis);
+
+      res.json({ response, analysis });
+    } catch (error) {
+      console.error("Error in AI analysis:", error);
+      res.status(500).json({ message: "Failed to analyze symptoms" });
+    }
+  });
+
+  // Teleconsult Auction APIs
+  app.post('/api/teleconsult/request', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const patient = await storage.getPatientByUserId(userId);
+      
+      if (!patient) {
+        return res.status(404).json({ message: "Patient profile not found" });
+      }
+
+      const appointmentData = {
+        ...req.body,
+        patientId: patient.id,
+        status: 'auction'
+      };
+
+      const appointment = await storage.createTeleconsultRequest(appointmentData);
+      res.status(201).json(appointment);
+    } catch (error) {
+      console.error("Error creating teleconsult request:", error);
+      res.status(500).json({ message: "Failed to create teleconsult request" });
+    }
+  });
+
+  app.post('/api/teleconsult/simulate-responses', isAuthenticated, async (req: any, res) => {
+    try {
+      const { appointmentId, offeredPrice, consultationType } = req.body;
+      const doctors = await storage.getAllDoctors();
+      
+      await storage.simulateDoctorResponses(appointmentId, doctors.slice(0, 5), offeredPrice, consultationType);
+      res.json({ message: "Doctor responses simulated" });
+    } catch (error) {
+      console.error("Error simulating doctor responses:", error);
+      res.status(500).json({ message: "Failed to simulate responses" });
+    }
+  });
+
+  app.get('/api/teleconsult/responses/:appointmentId', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.appointmentId);
+      const responses = await storage.getTeleconsultResponses(appointmentId);
+      res.json(responses);
+    } catch (error) {
+      console.error("Error fetching teleconsult responses:", error);
+      res.status(500).json({ message: "Failed to fetch responses" });
+    }
+  });
+
+  app.post('/api/teleconsult/accept/:appointmentId/:responseId', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.appointmentId);
+      const responseId = parseInt(req.params.responseId);
+      
+      const appointment = await storage.acceptDoctorResponse(appointmentId, responseId);
+      res.json(appointment);
+    } catch (error) {
+      console.error("Error accepting doctor response:", error);
+      res.status(500).json({ message: "Failed to accept response" });
+    }
+  });
+
+  // AI Helper Functions
+  function extractSymptoms(message: string): string[] {
+    const symptoms: string[] = [];
+    const lowerMessage = message.toLowerCase();
+    
+    const symptomKeywords = [
+      'dor de cabeça', 'cefaleia', 'enxaqueca',
+      'febre', 'temperatura', 'calafrio',
+      'tosse', 'espirro', 'coriza',
+      'dor no peito', 'falta de ar', 'dispneia',
+      'náusea', 'vômito', 'enjoo',
+      'dor abdominal', 'dor na barriga', 'cólica',
+      'diarréia', 'constipação', 'prisão de ventre',
+      'dor nas costas', 'lombalgia',
+      'dor muscular', 'mialgia',
+      'fadiga', 'cansaço', 'fraqueza',
+      'tontura', 'vertigem', 'mal estar',
+      'dor de garganta', 'garganta inflamada',
+      'coceira', 'prurido', 'alergia'
+    ];
+
+    symptomKeywords.forEach(keyword => {
+      if (lowerMessage.includes(keyword)) {
+        symptoms.push(keyword);
+      }
+    });
+
+    return symptoms;
+  }
+
+  function determineUrgency(message: string, symptoms: string[]): string {
+    const lowerMessage = message.toLowerCase();
+    
+    const emergencyKeywords = ['emergência', 'urgente', 'grave', 'intenso', 'severo', 'muito forte'];
+    const highUrgencyKeywords = ['dor no peito', 'falta de ar', 'vômito', 'febre alta'];
+    const mediumUrgencyKeywords = ['dor', 'febre', 'mal estar'];
+    
+    if (emergencyKeywords.some(keyword => lowerMessage.includes(keyword))) {
+      return 'emergency';
+    }
+    
+    if (highUrgencyKeywords.some(keyword => lowerMessage.includes(keyword))) {
+      return 'high';
+    }
+    
+    if (mediumUrgencyKeywords.some(keyword => lowerMessage.includes(keyword))) {
+      return 'medium';
+    }
+    
+    return 'low';
+  }
+
+  function suggestConditions(symptoms: string[]): string[] {
+    const conditions: string[] = [];
+    
+    if (symptoms.includes('febre') && symptoms.includes('tosse')) {
+      conditions.push('Infecção respiratória', 'Gripe', 'Resfriado');
+    }
+    
+    if (symptoms.includes('dor de cabeça')) {
+      conditions.push('Cefaleia tensional', 'Enxaqueca', 'Sinusite');
+    }
+    
+    if (symptoms.includes('dor abdominal') || symptoms.includes('náusea')) {
+      conditions.push('Gastrite', 'Indigestão', 'Síndrome do intestino irritável');
+    }
+    
+    if (symptoms.includes('dor no peito')) {
+      conditions.push('Ansiedade', 'Refluxo gastroesofágico', 'Problemas cardíacos');
+    }
+    
+    if (conditions.length === 0) {
+      conditions.push('Avaliação médica necessária para diagnóstico preciso');
+    }
+    
+    return conditions;
+  }
+
+  function generateRecommendations(urgency: string, symptoms: string[]): string[] {
+    const recommendations: string[] = [];
+    
+    switch (urgency) {
+      case 'emergency':
+        recommendations.push('Procure atendimento médico de emergência imediatamente');
+        recommendations.push('Dirija-se ao pronto-socorro mais próximo');
+        break;
+      case 'high':
+        recommendations.push('Agende consulta médica o mais breve possível');
+        recommendations.push('Monitore os sintomas de perto');
+        break;
+      case 'medium':
+        recommendations.push('Considere agendar consulta médica em alguns dias');
+        recommendations.push('Mantenha-se hidratado e descanse');
+        break;
+      case 'low':
+        recommendations.push('Monitore os sintomas');
+        recommendations.push('Procure orientação se os sintomas piorarem');
+        break;
+    }
+    
+    if (symptoms.includes('febre')) {
+      recommendations.push('Mantenha-se hidratado e descanse');
+      recommendations.push('Use antitérmicos se necessário');
+    }
+    
+    if (symptoms.includes('tosse')) {
+      recommendations.push('Evite irritantes como fumaça');
+      recommendations.push('Use umidificador se possível');
+    }
+    
+    return recommendations;
+  }
+
+  function generateAIResponse(message: string, analysis: any): string {
+    const { symptoms, urgencyLevel, possibleConditions, recommendations } = analysis;
+    
+    let response = "Analisei seus sintomas e aqui está minha avaliação:\n\n";
+    
+    if (symptoms.length > 0) {
+      response += `Identifiquei os seguintes sintomas: ${symptoms.join(', ')}.\n\n`;
+    }
+    
+    response += `Baseado nas informações fornecidas, classifiquei a urgência como ${urgencyLevel === 'emergency' ? 'emergência' : urgencyLevel === 'high' ? 'alta' : urgencyLevel === 'medium' ? 'média' : 'baixa'}.\n\n`;
+    
+    if (possibleConditions.length > 0) {
+      response += `Algumas condições que podem estar relacionadas aos seus sintomas incluem: ${possibleConditions.join(', ')}.\n\n`;
+    }
+    
+    response += "Minhas recomendações:\n";
+    recommendations.forEach((rec: string, index: number) => {
+      response += `${index + 1}. ${rec}\n`;
+    });
+    
+    response += "\n⚠️ Lembre-se: Esta análise é apenas informativa e não substitui uma consulta médica profissional. Em caso de dúvidas ou agravamento dos sintomas, procure um médico.";
+    
+    return response;
+  }
+
   const httpServer = createServer(app);
   
   // WebSocket server for real-time notifications

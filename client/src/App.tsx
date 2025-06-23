@@ -12,6 +12,10 @@ import Patients from "@/pages/patients";
 import MedicalRecords from "@/pages/medical-records";
 import Prescriptions from "@/pages/prescriptions";
 import VideoConsultation from "@/pages/video-consultation";
+import Reports from "@/pages/reports";
+import CalendarView from "@/pages/calendar";
+import TeleconsultAuction from "@/pages/teleconsult-auction";
+import AIAssistant from "@/pages/ai-assistant";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -33,6 +37,14 @@ function Router() {
           <Route path="/prescriptions" component={Prescriptions} />
           <Route path="/videoconsultas" component={VideoConsultation} />
           <Route path="/video-consultation" component={VideoConsultation} />
+          <Route path="/relatorios" component={Reports} />
+          <Route path="/reports" component={Reports} />
+          <Route path="/agenda" component={CalendarView} />
+          <Route path="/calendar" component={CalendarView} />
+          <Route path="/leilao-teleconsulta" component={TeleconsultAuction} />
+          <Route path="/teleconsult-auction" component={TeleconsultAuction} />
+          <Route path="/assistente-ia" component={AIAssistant} />
+          <Route path="/ai-assistant" component={AIAssistant} />
         </>
       )}
       <Route component={NotFound} />
