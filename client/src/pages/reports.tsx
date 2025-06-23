@@ -9,6 +9,8 @@ import { CalendarDays, FileText, Users, Pill, TrendingUp, Download } from "lucid
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import Sidebar from "@/components/layout/sidebar";
+import Header from "@/components/layout/header";
 
 export default function Reports() {
   const [dateRange, setDateRange] = useState({
@@ -63,22 +65,34 @@ ${prescriptionStats?.topMedications?.map((med: any) => `- ${med.name}: ${med.cou
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-32 bg-gray-200 rounded"></div>
-            ))}
+      <div className="min-h-screen flex bg-neutral-50">
+        <Sidebar />
+        <main className="flex-1 flex flex-col">
+          <Header />
+          <div className="flex-1 p-4 lg:p-6 overflow-auto">
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-32 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="min-h-screen flex bg-neutral-50">
+      <Sidebar />
+      
+      <main className="flex-1 flex flex-col">
+        <Header />
+        
+        <div className="flex-1 p-4 lg:p-6 overflow-auto space-y-6">
+          <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Relatórios Médicos</h1>
           <p className="text-muted-foreground">Análise detalhada da atividade médica</p>
@@ -245,6 +259,8 @@ ${prescriptionStats?.topMedications?.map((med: any) => `- ${med.name}: ${med.cou
           </div>
         </CardContent>
       </Card>
+        </div>
+      </main>
     </div>
   );
 }
