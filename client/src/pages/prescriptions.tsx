@@ -225,17 +225,25 @@ export default function Prescriptions() {
                   >
                     {switchRoleMutation.isPending ? "Alterando..." : "Modo Paciente"}
                   </Button>
-                  <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                    <DialogTrigger asChild>
-                      <Button className="bg-blue-600 hover:bg-blue-700">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Nova Prescrição
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle>Nova Prescrição Médica</DialogTitle>
-                      </DialogHeader>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => window.open('https://memed.com.br/receitas', '_blank')}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Prescrever no MEMED
+                    </Button>
+                    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Prescrição Manual
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle>Nova Prescrição Médica</DialogTitle>
+                        </DialogHeader>
                       <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                           <Label htmlFor="patient">Paciente</Label>
@@ -314,8 +322,9 @@ export default function Prescriptions() {
                           </Button>
                         </div>
                       </form>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </>
               )}
             </div>
