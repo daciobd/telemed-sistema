@@ -173,6 +173,7 @@ export default function Appointments() {
 
   const startVideoCall = (appointment: any) => {
     console.log('Starting video call from appointments page:', appointment);
+    alert('Appointments page: Button clicked! Starting video call...');
     const isDoctor = user?.role === 'doctor';
     const callData = {
       appointmentId: appointment.id,
@@ -180,7 +181,9 @@ export default function Appointments() {
       doctorName: !isDoctor ? `${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}` : undefined
     };
     console.log('Setting active video call:', callData);
+    console.log('Current activeVideoCall state before setting:', activeVideoCall);
     setActiveVideoCall(callData);
+    console.log('setActiveVideoCall called with:', callData);
   };
 
   const endVideoCall = () => {
