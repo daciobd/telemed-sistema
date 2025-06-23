@@ -14,7 +14,7 @@ import { Calendar, Clock, User, Video, Plus, X } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
-import VideoCall from "@/components/video/video-call";
+import TestVideoCall from "@/components/video/test-video-call";
 
 export default function Appointments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -191,7 +191,7 @@ export default function Appointments() {
 
   if (activeVideoCall) {
     return (
-      <VideoCall
+      <TestVideoCall
         appointmentId={activeVideoCall.appointmentId}
         isDoctor={user?.role === 'doctor'}
         patientName={activeVideoCall.patientName}
