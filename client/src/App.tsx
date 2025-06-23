@@ -10,6 +10,7 @@ import Dashboard from "@/pages/dashboard";
 import Appointments from "@/pages/appointments";
 import Patients from "@/pages/patients";
 import MedicalRecords from "@/pages/medical-records";
+import Prescriptions from "@/pages/prescriptions";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -24,6 +25,7 @@ function Router() {
           <Route path="/appointments" component={Appointments} />
           <Route path="/patients" component={Patients} />
           <Route path="/medical-records" component={MedicalRecords} />
+          <Route path="/prescriptions" component={Prescriptions} />
         </>
       )}
       <Route component={NotFound} />

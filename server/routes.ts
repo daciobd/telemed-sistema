@@ -1,8 +1,9 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertAppointmentSchema, insertMedicalRecordSchema, insertPatientSchema, insertDoctorSchema } from "@shared/schema";
+import { insertAppointmentSchema, insertMedicalRecordSchema, insertPatientSchema, insertDoctorSchema, insertPrescriptionSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -493,6 +494,140 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Prescriptions routes
+  app.get('/api/prescriptions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      let prescriptions: any[] = [];
+
+      if (user.role === 'doctor' && user.doctor) {
+        prescriptions = await storage.getPrescriptionsByDoctor(user.doctor.id);
+      } else if (user.role === 'patient' && user.patient) {
+        prescriptions = await storage.getPrescriptionsByPatient(user.patient.id);
+      } else if (user.role === 'admin') {
+        prescriptions = await storage.getAllPrescriptions();
+      }
+
+      res.json(prescriptions);
+    } catch (error) {
+      console.error("Error fetching prescriptions:", error);
+      res.status(500).json({ message: "Failed to fetch prescriptions" });
+    }
+  });
+
+  app.post('/api/prescriptions', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor' || !user.doctor) {
+        return res.status(403).json({ message: "Only doctors can create prescriptions" });
+      }
+
+      const prescriptionData = insertPrescriptionSchema.parse(req.body);
+      prescriptionData.doctorId = user.doctor.id;
+      
+      const prescription = await storage.createPrescription(prescriptionData);
+      
+      // Send notification to patient
+      const patient = await storage.getPatientWithUser(prescriptionData.patientId);
+      if (patient && app.locals.sendNotification) {
+        app.locals.sendNotification(patient.userId, {
+          title: 'Nova Prescrição Médica',
+          message: `Dr. ${user.firstName} prescreveu novos medicamentos para você`,
+          type: 'prescription_created',
+          prescriptionId: prescription.id
+        });
+      }
+      
+      res.status(201).json(prescription);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Validation error", errors: error.errors });
+      }
+      console.error("Error creating prescription:", error);
+      res.status(500).json({ message: "Failed to create prescription" });
+    }
+  });
+
+  app.put('/api/prescriptions/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const prescriptionId = parseInt(req.params.id);
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor' || !user.doctor) {
+        return res.status(403).json({ message: "Only doctors can update prescriptions" });
+      }
+
+      const updateData = req.body;
+      const prescription = await storage.updatePrescription(prescriptionId, updateData);
+      
+      res.json(prescription);
+    } catch (error) {
+      console.error("Error updating prescription:", error);
+      res.status(500).json({ message: "Failed to update prescription" });
+    }
+  });
+
   const httpServer = createServer(app);
+  
+  // WebSocket server for real-time notifications
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+  
+  // Store connected clients with user info
+  const clients = new Map<string, WebSocket>();
+  
+  wss.on('connection', (ws, req) => {
+    console.log('New WebSocket connection');
+    
+    ws.on('message', (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        
+        if (data.type === 'auth' && data.userId) {
+          clients.set(data.userId, ws);
+          console.log(`User ${data.userId} connected via WebSocket`);
+          
+          ws.send(JSON.stringify({
+            type: 'auth_success',
+            message: 'Connected successfully'
+          }));
+        }
+      } catch (error) {
+        console.error('WebSocket message error:', error);
+      }
+    });
+    
+    ws.on('close', () => {
+      // Remove client from map when disconnected
+      const entries = Array.from(clients.entries());
+      for (const [userId, client] of entries) {
+        if (client === ws) {
+          clients.delete(userId);
+          console.log(`User ${userId} disconnected from WebSocket`);
+          break;
+        }
+      }
+    });
+  });
+  
+  // Function to send notifications to specific users
+  app.locals.sendNotification = (userId: string, notification: any) => {
+    const client = clients.get(userId);
+    if (client && client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({
+        type: 'notification',
+        ...notification
+      }));
+    }
+  };
+  
   return httpServer;
 }

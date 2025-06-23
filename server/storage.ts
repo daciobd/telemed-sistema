@@ -5,6 +5,7 @@ import {
   appointments,
   medicalRecords,
   teleconsultResponses,
+  prescriptions,
   type User,
   type UpsertUser,
   type Patient,
@@ -15,6 +16,8 @@ import {
   type InsertAppointment,
   type MedicalRecord,
   type InsertMedicalRecord,
+  type Prescription,
+  type InsertPrescription,
   type UserWithProfile,
   type AppointmentWithDetails,
   type PatientWithUser,
@@ -71,6 +74,15 @@ export interface IStorage {
   deleteMedicalRecord(id: number): Promise<void>;
   getMedicalRecordsByPatient(patientId: number): Promise<MedicalRecord[]>;
   getMedicalRecordsByDoctor(doctorId: number): Promise<MedicalRecord[]>;
+  
+  // Prescription operations
+  createPrescription(prescription: InsertPrescription): Promise<Prescription>;
+  getPrescription(id: number): Promise<Prescription | undefined>;
+  updatePrescription(id: number, prescription: Partial<InsertPrescription>): Promise<Prescription>;
+  deletePrescription(id: number): Promise<void>;
+  getPrescriptionsByPatient(patientId: number): Promise<any[]>;
+  getPrescriptionsByDoctor(doctorId: number): Promise<any[]>;
+  getAllPrescriptions(): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -556,6 +568,103 @@ export class DatabaseStorage implements IStorage {
       .where(eq(teleconsultResponses.id, responseId));
 
     return updatedAppointment;
+  }
+
+  // Prescription operations
+  async createPrescription(prescription: InsertPrescription): Promise<Prescription> {
+    const [created] = await db
+      .insert(prescriptions)
+      .values(prescription)
+      .returning();
+    return created;
+  }
+
+  async getPrescription(id: number): Promise<Prescription | undefined> {
+    const [prescription] = await db
+      .select()
+      .from(prescriptions)
+      .where(eq(prescriptions.id, id));
+    return prescription;
+  }
+
+  async updatePrescription(id: number, prescription: Partial<InsertPrescription>): Promise<Prescription> {
+    const [updated] = await db
+      .update(prescriptions)
+      .set(prescription)
+      .where(eq(prescriptions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deletePrescription(id: number): Promise<void> {
+    await db
+      .delete(prescriptions)
+      .where(eq(prescriptions.id, id));
+  }
+
+  async getPrescriptionsByPatient(patientId: number): Promise<any[]> {
+    const prescriptionsList = await db
+      .select()
+      .from(prescriptions)
+      .where(eq(prescriptions.patientId, patientId))
+      .orderBy(desc(prescriptions.createdAt));
+
+    const result = [];
+    for (const prescription of prescriptionsList) {
+      const patient = await this.getPatientWithUser(prescription.patientId);
+      const doctor = await this.getDoctorWithUser(prescription.doctorId);
+      
+      result.push({
+        ...prescription,
+        patient,
+        doctor
+      });
+    }
+
+    return result;
+  }
+
+  async getPrescriptionsByDoctor(doctorId: number): Promise<any[]> {
+    const prescriptionsList = await db
+      .select()
+      .from(prescriptions)
+      .where(eq(prescriptions.doctorId, doctorId))
+      .orderBy(desc(prescriptions.createdAt));
+
+    const result = [];
+    for (const prescription of prescriptionsList) {
+      const patient = await this.getPatientWithUser(prescription.patientId);
+      const doctor = await this.getDoctorWithUser(prescription.doctorId);
+      
+      result.push({
+        ...prescription,
+        patient,
+        doctor
+      });
+    }
+
+    return result;
+  }
+
+  async getAllPrescriptions(): Promise<any[]> {
+    const prescriptionsList = await db
+      .select()
+      .from(prescriptions)
+      .orderBy(desc(prescriptions.createdAt));
+
+    const result = [];
+    for (const prescription of prescriptionsList) {
+      const patient = await this.getPatientWithUser(prescription.patientId);
+      const doctor = await this.getDoctorWithUser(prescription.doctorId);
+      
+      result.push({
+        ...prescription,
+        patient,
+        doctor
+      });
+    }
+
+    return result;
   }
 }
 

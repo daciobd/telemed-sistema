@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import NotificationsPanel from "@/components/ui/notifications-panel";
 
 export default function Header() {
   const { user } = useAuth();
@@ -94,16 +95,7 @@ export default function Header() {
         
         <div className="flex items-center space-x-4">
           {/* Notifications */}
-          <div className="relative">
-            <Button variant="ghost" size="sm" className="relative">
-              <Bell className="h-5 w-5" />
-              <Badge 
-                className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-red-500 hover:bg-red-500"
-              >
-                3
-              </Badge>
-            </Button>
-          </div>
+          <NotificationsPanel />
           
           {/* Role Selector */}
           <DropdownMenu>

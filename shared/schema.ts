@@ -110,6 +110,20 @@ export const teleconsultResponses = pgTable("teleconsult_responses", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const prescriptions = pgTable("prescriptions", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
+  medications: text("medications").notNull(),
+  dosage: varchar("dosage", { length: 100 }).notNull(),
+  frequency: varchar("frequency", { length: 100 }).notNull(),
+  duration: varchar("duration", { length: 100 }).notNull(),
+  instructions: text("instructions"),
+  status: varchar("status", { enum: ["active", "completed", "cancelled"] }).notNull().default("active"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   patient: one(patients, {
@@ -129,6 +143,7 @@ export const patientsRelations = relations(patients, ({ one, many }) => ({
   }),
   appointments: many(appointments),
   medicalRecords: many(medicalRecords),
+  prescriptions: many(prescriptions),
 }));
 
 export const doctorsRelations = relations(doctors, ({ one, many }) => ({
@@ -138,6 +153,7 @@ export const doctorsRelations = relations(doctors, ({ one, many }) => ({
   }),
   appointments: many(appointments),
   medicalRecords: many(medicalRecords),
+  prescriptions: many(prescriptions),
 }));
 
 export const appointmentsRelations = relations(appointments, ({ one, many }) => ({
@@ -160,6 +176,17 @@ export const teleconsultResponsesRelations = relations(teleconsultResponses, ({ 
   }),
   doctor: one(doctors, {
     fields: [teleconsultResponses.doctorId],
+    references: [doctors.id],
+  }),
+}));
+
+export const prescriptionsRelations = relations(prescriptions, ({ one }) => ({
+  patient: one(patients, {
+    fields: [prescriptions.patientId],
+    references: [patients.id],
+  }),
+  doctor: one(doctors, {
+    fields: [prescriptions.doctorId],
     references: [doctors.id],
   }),
 }));
@@ -209,6 +236,12 @@ export const insertMedicalRecordSchema = createInsertSchema(medicalRecords).omit
   updatedAt: true,
 });
 
+export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type UpsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -220,6 +253,9 @@ export type InsertAppointment = z.infer<typeof insertAppointmentSchema>;
 export type Appointment = typeof appointments.$inferSelect;
 export type InsertMedicalRecord = z.infer<typeof insertMedicalRecordSchema>;
 export type MedicalRecord = typeof medicalRecords.$inferSelect;
+
+export type InsertPrescription = z.infer<typeof insertPrescriptionSchema>;
+export type Prescription = typeof prescriptions.$inferSelect;
 
 // Extended types for API responses
 export type UserWithProfile = User & {
