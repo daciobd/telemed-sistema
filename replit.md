@@ -103,11 +103,12 @@ src/
 ## Mudanças Recentes (Junho 2025)
 
 ### Sistema de Videoconsultas WebRTC
-- **Data**: 23/06/2025
+- **Data**: 24/06/2025
 - **Implementação**: Sistema completo de videoconsultas com WebRTC
 - **Recursos**: Vídeo P2P, chat, compartilhamento de tela, controles A/V
 - **Backend**: WebSocket handlers para sinalização WebRTC
 - **Interface**: Componente VideoRoom com tratamento de permissões
+- **Correções**: Resolvido problema de exibição de vídeo local com debug avançado
 
 ### Sistema de Prescrições MEMED
 - **Data**: 23/06/2025  

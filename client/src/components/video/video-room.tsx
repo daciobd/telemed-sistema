@@ -102,19 +102,45 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
 
   const handlePermissionsGranted = (stream: MediaStream) => {
     console.log('Permissions granted, setting up local stream');
+    console.log('Stream details:', {
+      id: stream.id,
+      active: stream.active,
+      tracks: stream.getTracks().length,
+      videoTracks: stream.getVideoTracks().length
+    });
+    
     localStreamRef.current = stream;
     
-    // Ensure local video element shows the stream
+    // Configure local video element properly
     if (localVideoRef.current) {
-      localVideoRef.current.srcObject = stream;
-      localVideoRef.current.muted = true; // Prevent echo
-      localVideoRef.current.playsInline = true;
-      localVideoRef.current.autoplay = true;
+      const video = localVideoRef.current;
       
-      // Force play if needed
-      localVideoRef.current.play().catch(e => {
-        console.log('Local video autoplay failed:', e);
+      // Add event listeners for debugging
+      video.addEventListener('loadstart', () => console.log('Local video: loadstart'));
+      video.addEventListener('loadedmetadata', () => {
+        console.log(`Local video: metadata loaded (${video.videoWidth}x${video.videoHeight})`);
       });
+      video.addEventListener('canplay', () => console.log('Local video: canplay'));
+      video.addEventListener('playing', () => console.log('Local video: playing'));
+      video.addEventListener('error', (e) => console.error('Local video error:', e));
+      
+      // Set properties
+      video.srcObject = stream;
+      video.muted = true;
+      video.playsInline = true;
+      video.autoplay = true;
+      
+      // Force play
+      setTimeout(async () => {
+        try {
+          await video.play();
+          console.log('Local video play successful');
+        } catch (e) {
+          console.error('Local video play failed:', e);
+        }
+      }, 100);
+    } else {
+      console.error('Local video ref is null!');
     }
     
     setupPeerConnection();
@@ -565,14 +591,17 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         />
         
         {/* Local Video */}
-        <div className="absolute top-4 right-4 w-48 h-36 bg-gray-800 rounded-lg overflow-hidden border-2 border-white/20">
+        <div className="absolute top-4 right-4 w-48 h-36 bg-black rounded-lg overflow-hidden border-2 border-white/20">
           <video
             ref={localVideoRef}
             autoPlay
             playsInline
             muted
-            className="w-full h-full object-cover transform scale-x-[-1]"
-            style={{ transform: 'scaleX(-1)' }}
+            className="w-full h-full object-cover"
+            style={{ 
+              backgroundColor: 'black',
+              transform: 'scaleX(-1)'
+            }}
           />
           {!isVideoEnabled && (
             <div className="absolute inset-0 bg-gray-700 flex items-center justify-center">
@@ -582,6 +611,11 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
           <div className="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">
             Você
           </div>
+          {mediaReady && localStreamRef.current && (
+            <div className="absolute top-2 left-2 text-xs text-green-400 bg-black/50 px-2 py-1 rounded">
+              {localStreamRef.current.active ? 'Ativo' : 'Inativo'}
+            </div>
+          )}
         </div>
 
         {/* Controls */}
