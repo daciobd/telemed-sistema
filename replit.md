@@ -136,7 +136,7 @@ src/
 - ✅ Gerenciamento de consultas
 - ✅ Sistema de pacientes
 - ✅ Assistente IA funcional
-- 🔄 Videoconsultas (necessita permissões de câmera)
+- ✅ Videoconsultas WebRTC completas
 - ✅ Prescrições MEMED
 - ✅ Sistema de notificações
 
