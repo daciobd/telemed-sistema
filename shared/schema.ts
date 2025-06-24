@@ -124,6 +124,72 @@ export const prescriptions = pgTable("prescriptions", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Psychological Assessment for psychiatry consultations
+export const psychologicalAssessments = pgTable("psychological_assessments", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  appointmentId: integer("appointment_id").references(() => appointments.id),
+  
+  // Basic assessment scores
+  anxietyLevel: integer("anxiety_level"), // 1-10 scale
+  depressionLevel: integer("depression_level"), // 1-10 scale
+  stressLevel: integer("stress_level"), // 1-10 scale
+  sleepQuality: integer("sleep_quality"), // 1-10 scale
+  moodStability: integer("mood_stability"), // 1-10 scale
+  
+  // Quick psychological tests results
+  phq9Score: integer("phq9_score"), // Depression screening
+  gad7Score: integer("gad7_score"), // Anxiety screening
+  
+  // Assessment summary
+  riskLevel: varchar("risk_level").default("low"), // low, medium, high, urgent
+  recommendedActions: jsonb("recommended_actions"), // Array of recommendations
+  notes: text("notes"),
+  
+  completedAt: timestamp("completed_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Pre-consultation questionnaire for psychiatry
+export const psychiatryQuestionnaires = pgTable("psychiatry_questionnaires", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  appointmentId: integer("appointment_id").references(() => appointments.id),
+  
+  // Current symptoms and concerns
+  currentSymptoms: jsonb("current_symptoms"), // Array of selected symptoms
+  symptomDuration: varchar("symptom_duration"), // weeks, months, years
+  symptomSeverity: integer("symptom_severity"), // 1-10 scale
+  triggerEvents: text("trigger_events"),
+  
+  // Medical history
+  previousTreatment: boolean("previous_treatment").default(false),
+  currentMedications: jsonb("current_medications"), // Array of medications
+  familyHistory: jsonb("family_history"), // Mental health family history
+  medicalConditions: jsonb("medical_conditions"), // Other medical conditions
+  
+  // Lifestyle factors
+  sleepHours: integer("sleep_hours"),
+  exerciseFrequency: varchar("exercise_frequency"),
+  alcoholUse: varchar("alcohol_use"), // none, occasional, moderate, frequent
+  substanceUse: varchar("substance_use"), // none, occasional, frequent
+  smokingStatus: varchar("smoking_status"), // none, former, current
+  
+  // Social and work factors
+  workStress: integer("work_stress"), // 1-10 scale
+  relationshipStatus: varchar("relationship_status"),
+  supportSystem: integer("support_system"), // 1-10 scale
+  financialStress: integer("financial_stress"), // 1-10 scale
+  
+  // Goals and expectations
+  treatmentGoals: text("treatment_goals"),
+  preferredApproach: varchar("preferred_approach"), // therapy, medication, both
+  concerns: text("concerns"),
+  
+  completedAt: timestamp("completed_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   patient: one(patients, {
@@ -206,6 +272,28 @@ export const medicalRecordsRelations = relations(medicalRecords, ({ one }) => ({
   }),
 }));
 
+export const psychologicalAssessmentsRelations = relations(psychologicalAssessments, ({ one }) => ({
+  patient: one(patients, {
+    fields: [psychologicalAssessments.patientId],
+    references: [patients.id],
+  }),
+  appointment: one(appointments, {
+    fields: [psychologicalAssessments.appointmentId],
+    references: [appointments.id],
+  }),
+}));
+
+export const psychiatryQuestionnairesRelations = relations(psychiatryQuestionnaires, ({ one }) => ({
+  patient: one(patients, {
+    fields: [psychiatryQuestionnaires.patientId],
+    references: [patients.id],
+  }),
+  appointment: one(appointments, {
+    fields: [psychiatryQuestionnaires.appointmentId],
+    references: [appointments.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
@@ -242,6 +330,18 @@ export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({
   updatedAt: true,
 });
 
+export const insertPsychologicalAssessmentSchema = createInsertSchema(psychologicalAssessments).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+});
+
+export const insertPsychiatryQuestionnaireSchema = createInsertSchema(psychiatryQuestionnaires).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+});
+
 // Types
 export type UpsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -256,6 +356,12 @@ export type MedicalRecord = typeof medicalRecords.$inferSelect;
 
 export type InsertPrescription = z.infer<typeof insertPrescriptionSchema>;
 export type Prescription = typeof prescriptions.$inferSelect;
+
+export type InsertPsychologicalAssessment = z.infer<typeof insertPsychologicalAssessmentSchema>;
+export type PsychologicalAssessment = typeof psychologicalAssessments.$inferSelect;
+
+export type InsertPsychiatryQuestionnaire = z.infer<typeof insertPsychiatryQuestionnaireSchema>;
+export type PsychiatryQuestionnaire = typeof psychiatryQuestionnaires.$inferSelect;
 
 // Extended types for API responses
 export type UserWithProfile = User & {

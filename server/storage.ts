@@ -6,6 +6,8 @@ import {
   medicalRecords,
   teleconsultResponses,
   prescriptions,
+  psychologicalAssessments,
+  psychiatryQuestionnaires,
   type User,
   type UpsertUser,
   type Patient,
@@ -18,6 +20,10 @@ import {
   type InsertMedicalRecord,
   type Prescription,
   type InsertPrescription,
+  type PsychologicalAssessment,
+  type InsertPsychologicalAssessment,
+  type PsychiatryQuestionnaire,
+  type InsertPsychiatryQuestionnaire,
   type UserWithProfile,
   type AppointmentWithDetails,
   type PatientWithUser,
@@ -83,6 +89,18 @@ export interface IStorage {
   getPrescriptionsByPatient(patientId: number): Promise<any[]>;
   getPrescriptionsByDoctor(doctorId: number): Promise<any[]>;
   getAllPrescriptions(): Promise<any[]>;
+  
+  // Psychological Assessment operations
+  createPsychologicalAssessment(assessment: InsertPsychologicalAssessment): Promise<PsychologicalAssessment>;
+  getPsychologicalAssessment(id: number): Promise<PsychologicalAssessment | undefined>;
+  getPsychologicalAssessmentByAppointment(appointmentId: number): Promise<PsychologicalAssessment | undefined>;
+  updatePsychologicalAssessment(id: number, assessment: Partial<InsertPsychologicalAssessment>): Promise<PsychologicalAssessment>;
+  
+  // Psychiatry Questionnaire operations
+  createPsychiatryQuestionnaire(questionnaire: InsertPsychiatryQuestionnaire): Promise<PsychiatryQuestionnaire>;
+  getPsychiatryQuestionnaire(id: number): Promise<PsychiatryQuestionnaire | undefined>;
+  getPsychiatryQuestionnaireByAppointment(appointmentId: number): Promise<PsychiatryQuestionnaire | undefined>;
+  updatePsychiatryQuestionnaire(id: number, questionnaire: Partial<InsertPsychiatryQuestionnaire>): Promise<PsychiatryQuestionnaire>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -665,6 +683,73 @@ export class DatabaseStorage implements IStorage {
     }
 
     return result;
+  }
+  // Psychological Assessment operations
+  async createPsychologicalAssessment(assessment: InsertPsychologicalAssessment): Promise<PsychologicalAssessment> {
+    const [newAssessment] = await db
+      .insert(psychologicalAssessments)
+      .values(assessment)
+      .returning();
+    return newAssessment;
+  }
+
+  async getPsychologicalAssessment(id: number): Promise<PsychologicalAssessment | undefined> {
+    const [assessment] = await db
+      .select()
+      .from(psychologicalAssessments)
+      .where(eq(psychologicalAssessments.id, id));
+    return assessment;
+  }
+
+  async getPsychologicalAssessmentByAppointment(appointmentId: number): Promise<PsychologicalAssessment | undefined> {
+    const [assessment] = await db
+      .select()
+      .from(psychologicalAssessments)
+      .where(eq(psychologicalAssessments.appointmentId, appointmentId));
+    return assessment;
+  }
+
+  async updatePsychologicalAssessment(id: number, assessment: Partial<InsertPsychologicalAssessment>): Promise<PsychologicalAssessment> {
+    const [updatedAssessment] = await db
+      .update(psychologicalAssessments)
+      .set(assessment)
+      .where(eq(psychologicalAssessments.id, id))
+      .returning();
+    return updatedAssessment;
+  }
+
+  // Psychiatry Questionnaire operations
+  async createPsychiatryQuestionnaire(questionnaire: InsertPsychiatryQuestionnaire): Promise<PsychiatryQuestionnaire> {
+    const [newQuestionnaire] = await db
+      .insert(psychiatryQuestionnaires)
+      .values(questionnaire)
+      .returning();
+    return newQuestionnaire;
+  }
+
+  async getPsychiatryQuestionnaire(id: number): Promise<PsychiatryQuestionnaire | undefined> {
+    const [questionnaire] = await db
+      .select()
+      .from(psychiatryQuestionnaires)
+      .where(eq(psychiatryQuestionnaires.id, id));
+    return questionnaire;
+  }
+
+  async getPsychiatryQuestionnaireByAppointment(appointmentId: number): Promise<PsychiatryQuestionnaire | undefined> {
+    const [questionnaire] = await db
+      .select()
+      .from(psychiatryQuestionnaires)
+      .where(eq(psychiatryQuestionnaires.appointmentId, appointmentId));
+    return questionnaire;
+  }
+
+  async updatePsychiatryQuestionnaire(id: number, questionnaire: Partial<InsertPsychiatryQuestionnaire>): Promise<PsychiatryQuestionnaire> {
+    const [updatedQuestionnaire] = await db
+      .update(psychiatryQuestionnaires)
+      .set(questionnaire)
+      .where(eq(psychiatryQuestionnaires.id, id))
+      .returning();
+    return updatedQuestionnaire;
   }
 }
 

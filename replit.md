@@ -53,6 +53,13 @@ Sistema abrangente de telemedicina que oferece soluções digitais inovadoras pa
 - Recomendações médicas
 - Interface conversacional
 
+### ✅ Sistema de Psiquiatria Especializado
+- Avaliação psicológica pré-consulta com escalas PHQ-9 e GAD-7
+- Questionário detalhado para consultas psiquiátricas
+- Análise automática de nível de risco (baixo, moderado, alto, urgente)
+- Recomendações personalizadas baseadas na avaliação
+- Interface de preparação pré-consulta especializada
+
 ### ✅ Sistema de Notificações
 - Notificações em tempo real via WebSocket
 - Centro de notificações com interface moderna
@@ -127,6 +134,13 @@ src/
 - **Recursos**: Centro de notificações em tempo real
 - **Interface**: Popover moderno com diferentes tipos de notificação
 - **Backend**: WebSocket para notificações instantâneas
+
+### Sistema de Psiquiatria Especializado
+- **Data**: 24/06/2025
+- **Implementação**: Avaliação psicológica e questionário pré-consulta para psiquiatria
+- **Funcionalidades**: Escalas PHQ-9 e GAD-7, análise de risco, recomendações automáticas
+- **Interface**: Componentes especializados com progress tracking e validação
+- **Backend**: Novas tabelas e APIs para armazenar avaliações e questionários
 
 ## Estado Atual do Projeto
 

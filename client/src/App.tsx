@@ -19,6 +19,9 @@ import AIAssistant from "@/pages/ai-assistant";
 import Configuracoes from "@/pages/configuracoes";
 import TestVideo from "@/pages/test-video";
 import VideoTestSimple from "@/pages/video-test-simple";
+import PsychiatryAssessment from "@/pages/psychiatry-assessment";
+import PsychiatryQuestionnaire from "@/pages/psychiatry-questionnaire";
+import PsychiatryPreConsultation from "@/components/psychiatry/psychiatry-pre-consultation";
 
 
 function Router() {
@@ -53,6 +56,24 @@ function Router() {
           <Route path="/settings" component={Configuracoes} />
           <Route path="/test-video" component={TestVideo} />
           <Route path="/video-test-simple" component={VideoTestSimple} />
+          <Route path="/psychiatry-assessment/:appointmentId" component={({ params }: any) => 
+            <PsychiatryAssessment 
+              appointmentId={parseInt(params.appointmentId)} 
+              onComplete={() => window.history.back()} 
+            />
+          } />
+          <Route path="/psychiatry-questionnaire/:appointmentId" component={({ params }: any) => 
+            <PsychiatryQuestionnaire 
+              appointmentId={parseInt(params.appointmentId)} 
+              onComplete={() => window.history.back()} 
+            />
+          } />
+          <Route path="/psychiatry-consultation/:appointmentId" component={({ params }: any) => 
+            <PsychiatryPreConsultation 
+              appointmentId={parseInt(params.appointmentId)} 
+              onStartConsultation={() => window.location.href = `/videoconsulta/${params.appointmentId}`} 
+            />
+          } />
 
         </>
       )}
