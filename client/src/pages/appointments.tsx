@@ -9,7 +9,8 @@ import Layout from "@/components/layout/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, User, Video, Plus, X } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Calendar, Clock, User, Video, Plus, X, Brain, Info } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
@@ -204,6 +205,17 @@ export default function Appointments() {
   return (
     <Layout>
       <div className="p-4 lg:p-6">
+        {/* Alert para demonstrar psiquiatria */}
+        {user?.role === 'patient' && (
+          <Alert variant="info" className="mb-6">
+            <Brain className="h-4 w-4" />
+            <AlertDescription>
+              <strong>Nova funcionalidade:</strong> Para consultas de psiquiatria, você pode fazer uma preparação pré-consulta 
+              com avaliação psicológica e questionários especializados. Procure pelo card roxo com ícone de cérebro abaixo.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">Agendamentos</h1>
