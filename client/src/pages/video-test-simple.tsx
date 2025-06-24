@@ -22,19 +22,47 @@ export default function VideoTestSimple() {
         audio: true
       });
 
-      console.log('Camera access granted, tracks:', mediaStream.getTracks().length);
+      console.log('Camera access granted!');
+      console.log('Stream tracks:', mediaStream.getTracks().length);
+      console.log('Video tracks:', mediaStream.getVideoTracks().length);
+      console.log('Audio tracks:', mediaStream.getAudioTracks().length);
+      
+      if (mediaStream.getVideoTracks().length > 0) {
+        const videoTrack = mediaStream.getVideoTracks()[0];
+        console.log('Video track settings:', videoTrack.getSettings());
+        console.log('Video track state:', videoTrack.readyState);
+        console.log('Video track enabled:', videoTrack.enabled);
+      }
+
       setStream(mediaStream);
       
       if (videoRef.current) {
+        console.log('Setting video element srcObject');
         videoRef.current.srcObject = mediaStream;
         videoRef.current.muted = true;
         videoRef.current.playsInline = true;
         videoRef.current.autoplay = true;
         
+        // Add event listeners for debugging
+        videoRef.current.onloadstart = () => console.log('Video loadstart');
+        videoRef.current.onloadedmetadata = () => {
+          console.log('Video metadata loaded');
+          console.log('Video dimensions:', videoRef.current?.videoWidth, 'x', videoRef.current?.videoHeight);
+        };
+        videoRef.current.oncanplay = () => console.log('Video can play');
+        videoRef.current.onplaying = () => console.log('Video is playing');
+        videoRef.current.onerror = (e) => console.error('Video error:', e);
+        
         // Force play
-        videoRef.current.play().catch(e => {
-          console.error('Video play failed:', e);
-        });
+        setTimeout(() => {
+          videoRef.current?.play().then(() => {
+            console.log('Video play succeeded');
+          }).catch(e => {
+            console.error('Video play failed:', e);
+          });
+        }, 100);
+      } else {
+        console.error('Video ref is null!');
       }
       
       setError(null);
@@ -122,16 +150,17 @@ export default function VideoTestSimple() {
         {/* Video Display */}
         <div className="bg-gray-800 rounded-lg p-4 min-h-[400px] flex items-center justify-center">
           {stream ? (
-            <div className="relative w-full max-w-2xl">
+            <div className="relative w-full max-w-2xl bg-black rounded-lg">
               <video
                 ref={videoRef}
                 autoPlay
                 playsInline
                 muted
-                className="w-full h-auto rounded-lg transform scale-x-[-1]"
+                controls
+                className="w-full h-auto rounded-lg"
                 style={{ 
-                  transform: 'scaleX(-1)',
-                  maxHeight: '500px'
+                  maxHeight: '500px',
+                  backgroundColor: 'black'
                 }}
               />
               {!isVideoEnabled && (
@@ -139,6 +168,9 @@ export default function VideoTestSimple() {
                   <VideoOff className="h-16 w-16 text-gray-400" />
                 </div>
               )}
+              <div className="absolute top-2 left-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                Stream Status: {stream.active ? 'Ativo' : 'Inativo'}
+              </div>
             </div>
           ) : (
             <div className="text-white text-center">
