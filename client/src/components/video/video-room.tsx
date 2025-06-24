@@ -88,6 +88,17 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     setupPeerConnection();
     setMediaReady(true);
     setPermissionError(null);
+    
+    // Notify server that media is ready
+    setTimeout(() => {
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({
+          type: 'media-ready',
+          appointmentId,
+          userId: user?.id
+        }));
+      }
+    }, 500);
   };
 
   const handlePermissionError = (error: string) => {
@@ -103,12 +114,16 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     
     wsRef.current.onopen = () => {
       console.log('WebSocket connected for video call');
-      wsRef.current?.send(JSON.stringify({
-        type: 'join-video-call',
-        appointmentId,
-        userId: user?.id,
-        role: user?.role || 'patient'
-      }));
+      
+      // Small delay to ensure connection is stable
+      setTimeout(() => {
+        wsRef.current?.send(JSON.stringify({
+          type: 'join-video-call',
+          appointmentId,
+          userId: user?.id,
+          role: user?.role || 'patient'
+        }));
+      }, 100);
     };
     
     wsRef.current.onmessage = async (event) => {
@@ -123,10 +138,16 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   };
 
   const handleWebSocketMessage = async (data: any) => {
+    console.log('WebSocket message received:', data.type);
+    
     switch (data.type) {
       case 'user-joined':
+        console.log('User joined, setting connected status');
         setConnectionStatus('connected');
-        await createOffer();
+        // Only create offer if we have media ready and this is the initiator
+        if (mediaReady && peerConnectionRef.current) {
+          setTimeout(() => createOffer(), 1000); // Small delay to ensure peer is ready
+        }
         break;
       case 'webrtc-offer':
         await handleOffer(data.offer);
@@ -143,16 +164,23 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       case 'user-left':
         handleUserLeft();
         break;
+      case 'room-ready':
+        // New message type to indicate both users are connected
+        console.log('Room is ready for WebRTC');
+        setConnectionStatus('connected');
+        if (mediaReady && peerConnectionRef.current && data.shouldInitiate) {
+          setTimeout(() => createOffer(), 500);
+        }
+        break;
     }
   };
-
-
 
   const setupPeerConnection = () => {
     const configuration = {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
         { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' }
       ]
     };
     
@@ -167,8 +195,30 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     
     // Handle remote stream
     peerConnectionRef.current.ontrack = (event) => {
+      console.log('Remote stream received');
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = event.streams[0];
+      }
+    };
+    
+    // Handle connection state changes
+    peerConnectionRef.current.onconnectionstatechange = () => {
+      const state = peerConnectionRef.current?.connectionState;
+      console.log('Connection state changed:', state);
+      
+      if (state === 'connected') {
+        setConnectionStatus('connected');
+        toast({
+          title: "Conectado!",
+          description: "Videoconsulta iniciada com sucesso",
+        });
+      } else if (state === 'disconnected' || state === 'failed') {
+        setConnectionStatus('disconnected');
+        toast({
+          title: "Conexão perdida",
+          description: "A videoconsulta foi desconectada",
+          variant: "destructive"
+        });
       }
     };
     
@@ -185,10 +235,17 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   };
 
   const createOffer = async () => {
-    if (!peerConnectionRef.current) return;
+    if (!peerConnectionRef.current) {
+      console.log('No peer connection available for offer');
+      return;
+    }
     
     try {
-      const offer = await peerConnectionRef.current.createOffer();
+      console.log('Creating WebRTC offer');
+      const offer = await peerConnectionRef.current.createOffer({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true
+      });
       await peerConnectionRef.current.setLocalDescription(offer);
       
       wsRef.current?.send(JSON.stringify({
@@ -196,8 +253,15 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         appointmentId,
         offer
       }));
+      
+      console.log('WebRTC offer sent');
     } catch (error) {
       console.error('Error creating offer:', error);
+      toast({
+        title: "Erro de conexão",
+        description: "Falha ao iniciar videochamada",
+        variant: "destructive"
+      });
     }
   };
 
@@ -205,7 +269,9 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     if (!peerConnectionRef.current) return;
     
     try {
+      console.log('Handling WebRTC offer');
       await peerConnectionRef.current.setRemoteDescription(offer);
+      
       const answer = await peerConnectionRef.current.createAnswer();
       await peerConnectionRef.current.setLocalDescription(answer);
       
@@ -214,6 +280,8 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         appointmentId,
         answer
       }));
+      
+      console.log('WebRTC answer sent');
     } catch (error) {
       console.error('Error handling offer:', error);
     }
@@ -223,6 +291,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     if (!peerConnectionRef.current) return;
     
     try {
+      console.log('Handling WebRTC answer');
       await peerConnectionRef.current.setRemoteDescription(answer);
     } catch (error) {
       console.error('Error handling answer:', error);
@@ -234,8 +303,9 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     
     try {
       await peerConnectionRef.current.addIceCandidate(candidate);
+      console.log('ICE candidate added');
     } catch (error) {
-      console.error('Error handling ICE candidate:', error);
+      console.error('Error adding ICE candidate:', error);
     }
   };
 
@@ -518,46 +588,47 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
 
         {/* Chat Panel */}
         {showChat && (
-          <div className="absolute top-0 right-0 w-80 h-full bg-white border-l flex flex-col">
+          <div className="absolute right-4 top-4 bottom-4 w-80 bg-white rounded-lg shadow-lg flex flex-col">
             <div className="p-4 border-b">
               <h3 className="font-semibold">Chat da Consulta</h3>
             </div>
             
-            <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {chatMessages.map((msg) => (
-                <div key={msg.id} className={`${msg.userId === user?.id ? 'text-right' : 'text-left'}`}>
-                  <div className={`inline-block p-2 rounded-lg max-w-[80%] ${
-                    msg.userId === user?.id 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-100 text-gray-900'
-                  }`}>
-                    <p className="text-sm">{msg.message}</p>
-                    <p className="text-xs opacity-70 mt-1">
-                      {msg.timestamp.toLocaleTimeString()}
-                    </p>
-                  </div>
+                <div
+                  key={msg.id}
+                  className={`p-2 rounded text-sm ${
+                    msg.userId === user?.id
+                      ? 'bg-blue-100 ml-auto max-w-[80%]'
+                      : 'bg-gray-100 mr-auto max-w-[80%]'
+                  }`}
+                >
+                  <div className="font-medium text-xs text-gray-600">{msg.userName}</div>
+                  <div>{msg.message}</div>
                 </div>
               ))}
             </div>
             
-            <div className="p-4 border-t">
-              <div className="flex gap-2">
-                <Textarea
-                  value={chatMessage}
-                  onChange={(e) => setChatMessage(e.target.value)}
-                  placeholder="Digite sua mensagem..."
-                  className="flex-1 min-h-[40px] max-h-[100px]"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendChatMessage();
-                    }
-                  }}
-                />
-                <Button onClick={sendChatMessage} size="sm">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
+            <div className="p-4 border-t flex gap-2">
+              <Textarea
+                value={chatMessage}
+                onChange={(e) => setChatMessage(e.target.value)}
+                placeholder="Digite sua mensagem..."
+                className="flex-1 min-h-[60px]"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage();
+                  }
+                }}
+              />
+              <Button
+                onClick={sendChatMessage}
+                size="sm"
+                disabled={!chatMessage.trim()}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         )}

@@ -1,75 +1,48 @@
 import { useState } from 'react';
-import VideoRoom from '@/components/video/video-room';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import VideoRoom from '@/components/video/video-room';
 
 export default function TestVideo() {
-  const [isInCall, setIsInCall] = useState(false);
-  const [appointmentId, setAppointmentId] = useState(1);
-  const [patientName, setPatientName] = useState('João Silva');
-  const [doctorName, setDoctorName] = useState('Dr. Maria Santos');
+  const [inCall, setInCall] = useState(false);
+  const [appointmentId] = useState(9); // Using appointment ID 9 from the logs
 
   const startCall = () => {
-    setIsInCall(true);
+    setInCall(true);
   };
 
   const endCall = () => {
-    setIsInCall(false);
+    setInCall(false);
   };
 
-  if (isInCall) {
+  if (inCall) {
     return (
       <VideoRoom
         appointmentId={appointmentId}
-        patientName={patientName}
-        doctorName={doctorName}
+        patientName="Dacio Dutra"
+        doctorName="Dr. Test"
         onEndCall={endCall}
       />
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Teste de Videoconsulta</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="appointmentId">ID da Consulta</Label>
-            <Input
-              id="appointmentId"
-              type="number"
-              value={appointmentId}
-              onChange={(e) => setAppointmentId(Number(e.target.value))}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="patientName">Nome do Paciente</Label>
-            <Input
-              id="patientName"
-              value={patientName}
-              onChange={(e) => setPatientName(e.target.value)}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="doctorName">Nome do Médico</Label>
-            <Input
-              id="doctorName"
-              value={doctorName}
-              onChange={(e) => setDoctorName(e.target.value)}
-            />
-          </div>
-          
-          <Button onClick={startCall} className="w-full">
-            Iniciar Videochamada de Teste
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-4">
+      <div className="max-w-md mx-auto mt-20">
+        <Card>
+          <CardHeader>
+            <CardTitle>Teste de Videoconsulta</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">
+              Teste o sistema de videoconsulta WebRTC.
+            </p>
+            <Button onClick={startCall} className="w-full">
+              Iniciar Videochamada de Teste
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

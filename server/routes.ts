@@ -1154,14 +1154,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Store connected clients with user info
   const clients = new Map<string, WebSocket>();
   // Store video call rooms
-  const videoCallRooms = new Map<number, { participants: Map<string, { ws: WebSocket, role: string }> }>();
+  const videoCallRooms = new Map<number, { 
+    participants: Map<string, { ws: WebSocket, role: string }>, 
+    mediaReady?: Set<string> 
+  }>();
 
   // Video call handlers
   const handleJoinVideoCall = (ws: WebSocket, data: any) => {
     const { appointmentId, userId, role } = data;
     
     if (!videoCallRooms.has(appointmentId)) {
-      videoCallRooms.set(appointmentId, { participants: new Map() });
+      videoCallRooms.set(appointmentId, { 
+        participants: new Map(),
+        mediaReady: new Set()
+      });
     }
     
     const room = videoCallRooms.get(appointmentId)!;
@@ -1179,6 +1185,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }));
       }
     });
+    
+    // If this is the second person joining, prepare for WebRTC
+    if (room.participants.size === 2) {
+      console.log('Two participants in room, checking if ready for WebRTC');
+      checkRoomReadiness(appointmentId);
+    }
+  };
+
+  const handleMediaReady = (ws: WebSocket, data: any) => {
+    const { appointmentId, userId } = data;
+    const room = videoCallRooms.get(appointmentId);
+    
+    if (room) {
+      if (!room.mediaReady) room.mediaReady = new Set();
+      room.mediaReady.add(userId);
+      
+      console.log(`User ${userId} media ready. Total ready: ${room.mediaReady.size}`);
+      
+      // Check if we can start WebRTC
+      checkRoomReadiness(appointmentId);
+    }
+  };
+
+  const checkRoomReadiness = (appointmentId: number) => {
+    const room = videoCallRooms.get(appointmentId);
+    if (!room) return;
+    
+    const participantCount = room.participants.size;
+    const mediaReadyCount = room.mediaReady ? room.mediaReady.size : 0;
+    
+    console.log(`Room ${appointmentId} - Participants: ${participantCount}, Media ready: ${mediaReadyCount}`);
+    
+    // If we have at least 2 participants and at least 1 with media ready, start WebRTC
+    if (participantCount >= 2 && mediaReadyCount >= 1) {
+      console.log('Room ready for WebRTC, notifying participants');
+      
+      let isFirst = true;
+      room.participants.forEach((participant, userId) => {
+        if (participant.ws.readyState === WebSocket.OPEN) {
+          participant.ws.send(JSON.stringify({
+            type: 'room-ready',
+            appointmentId,
+            shouldInitiate: isFirst && room.mediaReady?.has(userId) // First user with media ready should initiate
+          }));
+          isFirst = false;
+        }
+      });
+    }
   };
 
   const handleWebRTCSignaling = (ws: WebSocket, data: any) => {
@@ -1261,6 +1315,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }));
         } else if (data.type === 'join-video-call') {
           handleJoinVideoCall(ws, data);
+        } else if (data.type === 'media-ready') {
+          handleMediaReady(ws, data);
         } else if (data.type === 'webrtc-offer' || data.type === 'webrtc-answer' || data.type === 'webrtc-ice-candidate') {
           handleWebRTCSignaling(ws, data);
         } else if (data.type === 'chat-message') {
