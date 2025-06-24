@@ -408,7 +408,7 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Frequência de exercícios</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione a frequência" />
@@ -432,7 +432,7 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Uso de álcool</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o uso" />
@@ -455,7 +455,7 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status de tabagismo</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o status" />
