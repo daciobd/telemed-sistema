@@ -153,6 +153,7 @@ src/
 - ✅ Videoconsultas WebRTC completas
 - ✅ Prescrições MEMED
 - ✅ Sistema de notificações
+- ✅ Sistema de psiquiatria especializado (usuário encontrou e testou com sucesso)
 
 ### Próximas Melhorias
 - Sistema de pagamentos integrado

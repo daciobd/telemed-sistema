@@ -80,56 +80,64 @@ export default function PsychiatryAssessment({ appointmentId, onComplete }: Psyc
 
   const submitAssessment = useMutation({
     mutationFn: async (data: z.infer<typeof assessmentSchema>) => {
-      // Calculate scores
-      const phq9Score = data.phq9_1 + data.phq9_2 + data.phq9_3 + data.phq9_4 + data.phq9_5 + 
-                       data.phq9_6 + data.phq9_7 + data.phq9_8 + data.phq9_9;
-      const gad7Score = data.gad7_1 + data.gad7_2 + data.gad7_3 + data.gad7_4 + 
-                       data.gad7_5 + data.gad7_6 + data.gad7_7;
-      
-      // Determine risk level
-      let riskLevel = 'low';
-      let recommendedActions = [];
-      
-      if (phq9Score >= 15 || gad7Score >= 15 || data.phq9_9 > 1) {
-        riskLevel = 'high';
-        recommendedActions = [
-          'Consulta prioritária com psiquiatra',
-          'Avaliação de risco de autolesão',
-          'Considerar acompanhamento intensivo'
-        ];
-      } else if (phq9Score >= 10 || gad7Score >= 10) {
-        riskLevel = 'medium';
-        recommendedActions = [
-          'Avaliação detalhada durante consulta',
-          'Considerar psicoterapia',
-          'Monitoramento regular de sintomas'
-        ];
-      } else {
-        recommendedActions = [
-          'Consulta de rotina',
-          'Orientações sobre saúde mental',
-          'Estratégias de autocuidado'
-        ];
-      }
-      
-      const assessmentData = {
-        appointmentId,
-        anxietyLevel: data.anxietyLevel,
-        depressionLevel: data.depressionLevel,
-        stressLevel: data.stressLevel,
-        sleepQuality: data.sleepQuality,
-        moodStability: data.moodStability,
-        phq9Score,
-        gad7Score,
-        riskLevel,
-        recommendedActions,
-        notes: `Avaliação realizada pelo paciente. PHQ-9: ${phq9Score}, GAD-7: ${gad7Score}`
-      };
+      try {
+        // Calculate scores
+        const phq9Score = data.phq9_1 + data.phq9_2 + data.phq9_3 + data.phq9_4 + data.phq9_5 + 
+                         data.phq9_6 + data.phq9_7 + data.phq9_8 + data.phq9_9;
+        const gad7Score = data.gad7_1 + data.gad7_2 + data.gad7_3 + data.gad7_4 + 
+                         data.gad7_5 + data.gad7_6 + data.gad7_7;
+        
+        // Determine risk level
+        let riskLevel = 'low';
+        let recommendedActions = [];
+        
+        if (phq9Score >= 15 || gad7Score >= 15 || data.phq9_9 > 1) {
+          riskLevel = 'high';
+          recommendedActions = [
+            'Consulta prioritária com psiquiatra',
+            'Avaliação de risco de autolesão',
+            'Considerar acompanhamento intensivo'
+          ];
+        } else if (phq9Score >= 10 || gad7Score >= 10) {
+          riskLevel = 'medium';
+          recommendedActions = [
+            'Avaliação detalhada durante consulta',
+            'Considerar psicoterapia',
+            'Monitoramento regular de sintomas'
+          ];
+        } else {
+          recommendedActions = [
+            'Consulta de rotina',
+            'Orientações sobre saúde mental',
+            'Estratégias de autocuidado'
+          ];
+        }
+        
+        const assessmentData = {
+          appointmentId,
+          anxietyLevel: data.anxietyLevel,
+          depressionLevel: data.depressionLevel,
+          stressLevel: data.stressLevel,
+          sleepQuality: data.sleepQuality,
+          moodStability: data.moodStability,
+          phq9Score,
+          gad7Score,
+          riskLevel,
+          recommendedActions,
+          notes: `Avaliação realizada pelo paciente. PHQ-9: ${phq9Score}, GAD-7: ${gad7Score}`
+        };
 
-      return await apiRequest(`/api/psychological-assessments`, {
-        method: 'POST',
-        body: JSON.stringify(assessmentData),
-      });
+        return await apiRequest(`/api/psychological-assessments`, {
+          method: 'POST',
+          body: JSON.stringify(assessmentData),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch (error) {
+        console.error('Error in submitAssessment:', error);
+        throw error;
+      }
     },
     onSuccess: () => {
       toast({
@@ -140,9 +148,10 @@ export default function PsychiatryAssessment({ appointmentId, onComplete }: Psyc
       onComplete();
     },
     onError: (error: any) => {
+      console.error('Assessment submission error:', error);
       toast({
         title: "Erro",
-        description: "Erro ao salvar avaliação. Tente novamente.",
+        description: error?.message || "Erro ao salvar avaliação. Tente novamente.",
         variant: "destructive",
       });
     },
