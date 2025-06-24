@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
 import TestVideoCall from "@/components/video/test-video-call";
+import PsychiatryAppointmentCard from "@/components/appointments/psychiatry-appointment-card";
 
 export default function Appointments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -256,7 +257,20 @@ export default function Appointments() {
                 </div>
               ) : filteredAppointments && filteredAppointments.length > 0 ? (
                 <div className="space-y-4">
-                  {filteredAppointments.map((appointment: any) => (
+                  {filteredAppointments.map((appointment: any) => {
+                    // Check if it's a psychiatry appointment
+                    const isPsychiatry = appointment.specialty === 'psychiatry' || 
+                                       appointment.notes?.toLowerCase().includes('psiquiatria') ||
+                                       appointment.notes?.toLowerCase().includes('psiquiátrica') ||
+                                       appointment.notes?.toLowerCase().includes('mental') ||
+                                       appointment.notes?.toLowerCase().includes('ansiedade') ||
+                                       appointment.notes?.toLowerCase().includes('depressão');
+                    
+                    if (isPsychiatry) {
+                      return <PsychiatryAppointmentCard key={appointment.id} appointment={appointment} isDoctor={user?.role === 'doctor'} />;
+                    }
+                    
+                    return (
                     <div 
                       key={appointment.id}
                       className="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
@@ -339,7 +353,8 @@ export default function Appointments() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-8 text-gray-500">

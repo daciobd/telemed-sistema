@@ -25,10 +25,11 @@ export default function PsychiatryAppointmentCard({ appointment, isDoctor = fals
   const [, setLocation] = useLocation();
 
   const isPsychiatryAppointment = appointment.specialty === 'psychiatry' || 
-                                 appointment.reason?.toLowerCase().includes('psiquiatria') ||
-                                 appointment.reason?.toLowerCase().includes('mental') ||
-                                 appointment.reason?.toLowerCase().includes('ansiedade') ||
-                                 appointment.reason?.toLowerCase().includes('depressão');
+                                 appointment.notes?.toLowerCase().includes('psiquiatria') ||
+                                 appointment.notes?.toLowerCase().includes('psiquiátrica') ||
+                                 appointment.notes?.toLowerCase().includes('mental') ||
+                                 appointment.notes?.toLowerCase().includes('ansiedade') ||
+                                 appointment.notes?.toLowerCase().includes('depressão');
 
   if (!isPsychiatryAppointment) {
     return null; // Don't render for non-psychiatry appointments
