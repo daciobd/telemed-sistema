@@ -210,8 +210,9 @@ export default function Appointments() {
           <Alert variant="info" className="mb-6">
             <Brain className="h-4 w-4" />
             <AlertDescription>
-              <strong>Nova funcionalidade:</strong> Para consultas de psiquiatria, você pode fazer uma preparação pré-consulta 
-              com avaliação psicológica e questionários especializados. Procure pelo card roxo com ícone de cérebro abaixo.
+              <strong>🎯 ENCONTRE O BOTÃO AQUI:</strong> Procure logo abaixo pelo card ROXO com ícone de cérebro 🧠. 
+              O título será "Consulta Psiquiátrica" e terá um botão roxo "Iniciar Preparação". 
+              Esta é a nova funcionalidade de preparação pré-consulta psiquiátrica!
             </AlertDescription>
           </Alert>
         )}

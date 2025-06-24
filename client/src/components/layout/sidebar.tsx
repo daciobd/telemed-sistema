@@ -24,7 +24,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
   // Navigation items based on user role
   const navigation = [
     { name: "Dashboard", href: "/", icon: BarChart3, roles: ["patient", "doctor"] },
-    { name: "Consultas", href: "/consultas", icon: Calendar, roles: ["patient", "doctor"] },
+    { name: "Agendamentos", href: "/appointments", icon: Calendar, roles: ["patient", "doctor"] },
     { name: "Pacientes", href: "/pacientes", icon: Users, roles: ["doctor"] },
     { name: "Prontuários", href: "/prontuarios", icon: FileText, roles: ["patient", "doctor"] },
     { name: "Prescrições", href: "/prescricoes", icon: Pill, roles: ["patient", "doctor"] },
