@@ -1146,6 +1146,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Psychological Assessment routes
+  app.get('/api/appointments/:appointmentId/psychological-assessment', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.appointmentId);
+      const assessment = await storage.getPsychologicalAssessmentByAppointment(appointmentId);
+      res.json(assessment);
+    } catch (error) {
+      console.error("Error fetching psychological assessment:", error);
+      res.status(500).json({ message: "Failed to fetch psychological assessment" });
+    }
+  });
+
+  app.post('/api/psychological-assessments', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || !user.patient) {
+        return res.status(403).json({ message: "Only patients can submit psychological assessments" });
+      }
+
+      const assessmentData = {
+        ...req.body,
+        patientId: user.patient.id
+      };
+
+      const assessment = await storage.createPsychologicalAssessment(assessmentData);
+      res.status(201).json(assessment);
+    } catch (error) {
+      console.error("Error creating psychological assessment:", error);
+      res.status(500).json({ message: "Failed to create psychological assessment" });
+    }
+  });
+
+  // Psychiatry Questionnaire routes
+  app.get('/api/appointments/:appointmentId/psychiatry-questionnaire', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.appointmentId);
+      const questionnaire = await storage.getPsychiatryQuestionnaireByAppointment(appointmentId);
+      res.json(questionnaire);
+    } catch (error) {
+      console.error("Error fetching psychiatry questionnaire:", error);
+      res.status(500).json({ message: "Failed to fetch psychiatry questionnaire" });
+    }
+  });
+
+  app.post('/api/psychiatry-questionnaires', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || !user.patient) {
+        return res.status(403).json({ message: "Only patients can submit psychiatry questionnaires" });
+      }
+
+      const questionnaireData = {
+        ...req.body,
+        patientId: user.patient.id
+      };
+
+      const questionnaire = await storage.createPsychiatryQuestionnaire(questionnaireData);
+      res.status(201).json(questionnaire);
+    } catch (error) {
+      console.error("Error creating psychiatry questionnaire:", error);
+      res.status(500).json({ message: "Failed to create psychiatry questionnaire" });
+    }
+  });
+
   const httpServer = createServer(app);
   
   // WebSocket server for real-time notifications and video calls
