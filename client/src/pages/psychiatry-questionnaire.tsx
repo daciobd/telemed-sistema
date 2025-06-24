@@ -94,15 +94,29 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
 
   const submitQuestionnaire = useMutation({
     mutationFn: async (data: z.infer<typeof questionnaireSchema>) => {
-      const questionnaireData = {
-        appointmentId,
-        ...data,
-      };
+      try {
+        const questionnaireData = {
+          appointmentId,
+          ...data,
+        };
 
-      return await apiRequest(`/api/psychiatry-questionnaires`, {
-        method: 'POST',
-        body: JSON.stringify(questionnaireData),
-      });
+        const response = await fetch('/api/psychiatry-questionnaires', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(questionnaireData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.error('Error in submitQuestionnaire:', error);
+        throw error;
+      }
     },
     onSuccess: () => {
       toast({
@@ -113,9 +127,10 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
       onComplete();
     },
     onError: (error: any) => {
+      console.error('Questionnaire submission error:', error);
       toast({
         title: "Erro",
-        description: "Erro ao salvar questionário. Tente novamente.",
+        description: error?.message || "Erro ao salvar questionário. Tente novamente.",
         variant: "destructive",
       });
     },

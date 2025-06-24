@@ -127,13 +127,19 @@ export default function PsychiatryAssessment({ appointmentId, onComplete }: Psyc
           notes: `Avaliação realizada pelo paciente. PHQ-9: ${phq9Score}, GAD-7: ${gad7Score}`
         };
 
-        return await apiRequest(`/api/psychological-assessments`, {
+        const response = await fetch('/api/psychological-assessments', {
           method: 'POST',
-          body: JSON.stringify(assessmentData),
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify(assessmentData),
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
       } catch (error) {
         console.error('Error in submitAssessment:', error);
         throw error;
