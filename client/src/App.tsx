@@ -18,6 +18,7 @@ import TeleconsultAuction from "@/pages/teleconsult-auction";
 import AIAssistant from "@/pages/ai-assistant";
 import Configuracoes from "@/pages/configuracoes";
 import TestVideo from "@/pages/test-video";
+import VideoTestSimple from "@/pages/video-test-simple";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -50,6 +51,7 @@ function Router() {
           <Route path="/configuracoes" component={Configuracoes} />
           <Route path="/settings" component={Configuracoes} />
           <Route path="/test-video" component={TestVideo} />
+          <Route path="/video-test-simple" component={VideoTestSimple} />
         </>
       )}
       <Route component={NotFound} />

@@ -79,10 +79,42 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     };
   }, []);
 
+  // Debug: Monitor local video ref changes
+  useEffect(() => {
+    if (localVideoRef.current && localStreamRef.current) {
+      console.log('Setting up local video element');
+      const videoEl = localVideoRef.current;
+      
+      videoEl.onloadedmetadata = () => {
+        console.log('Local video metadata loaded');
+        videoEl.play().catch(e => console.log('Local video play failed:', e));
+      };
+      
+      videoEl.onplaying = () => {
+        console.log('Local video is playing');
+      };
+      
+      videoEl.onerror = (e) => {
+        console.error('Local video error:', e);
+      };
+    }
+  }, [mediaReady]);
+
   const handlePermissionsGranted = (stream: MediaStream) => {
+    console.log('Permissions granted, setting up local stream');
     localStreamRef.current = stream;
+    
+    // Ensure local video element shows the stream
     if (localVideoRef.current) {
       localVideoRef.current.srcObject = stream;
+      localVideoRef.current.muted = true; // Prevent echo
+      localVideoRef.current.playsInline = true;
+      localVideoRef.current.autoplay = true;
+      
+      // Force play if needed
+      localVideoRef.current.play().catch(e => {
+        console.log('Local video autoplay failed:', e);
+      });
     }
     
     setupPeerConnection();
@@ -198,6 +230,9 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       console.log('Remote stream received');
       if (remoteVideoRef.current) {
         remoteVideoRef.current.srcObject = event.streams[0];
+        remoteVideoRef.current.play().catch(e => {
+          console.log('Remote video autoplay failed:', e);
+        });
       }
     };
     
@@ -530,19 +565,23 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         />
         
         {/* Local Video */}
-        <div className="absolute top-4 right-4 w-48 h-36 bg-gray-800 rounded-lg overflow-hidden">
+        <div className="absolute top-4 right-4 w-48 h-36 bg-gray-800 rounded-lg overflow-hidden border-2 border-white/20">
           <video
             ref={localVideoRef}
             autoPlay
             playsInline
             muted
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transform scale-x-[-1]"
+            style={{ transform: 'scaleX(-1)' }}
           />
           {!isVideoEnabled && (
             <div className="absolute inset-0 bg-gray-700 flex items-center justify-center">
               <Camera className="h-8 w-8 text-gray-400" />
             </div>
           )}
+          <div className="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">
+            Você
+          </div>
         </div>
 
         {/* Controls */}
