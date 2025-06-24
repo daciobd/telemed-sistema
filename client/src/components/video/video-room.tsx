@@ -79,41 +79,12 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     };
   }, []);
 
-  // Debug: Monitor local video ref changes
+  // Separate effect to handle video element setup when both stream and ref are ready
   useEffect(() => {
-    if (localVideoRef.current && localStreamRef.current) {
-      console.log('Setting up local video element');
-      const videoEl = localVideoRef.current;
-      
-      videoEl.onloadedmetadata = () => {
-        console.log('Local video metadata loaded');
-        videoEl.play().catch(e => console.log('Local video play failed:', e));
-      };
-      
-      videoEl.onplaying = () => {
-        console.log('Local video is playing');
-      };
-      
-      videoEl.onerror = (e) => {
-        console.error('Local video error:', e);
-      };
-    }
-  }, [mediaReady]);
-
-  const handlePermissionsGranted = (stream: MediaStream) => {
-    console.log('Permissions granted, setting up local stream');
-    console.log('Stream details:', {
-      id: stream.id,
-      active: stream.active,
-      tracks: stream.getTracks().length,
-      videoTracks: stream.getVideoTracks().length
-    });
-    
-    localStreamRef.current = stream;
-    
-    // Configure local video element properly
-    if (localVideoRef.current) {
+    if (localStreamRef.current && localVideoRef.current && mediaReady) {
+      console.log('Setting up local video element with existing stream');
       const video = localVideoRef.current;
+      const stream = localStreamRef.current;
       
       // Add event listeners for debugging
       video.addEventListener('loadstart', () => console.log('Local video: loadstart'));
@@ -139,9 +110,19 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
           console.error('Local video play failed:', e);
         }
       }, 100);
-    } else {
-      console.error('Local video ref is null!');
     }
+  }, [mediaReady]);
+
+  const handlePermissionsGranted = (stream: MediaStream) => {
+    console.log('Permissions granted, setting up local stream');
+    console.log('Stream details:', {
+      id: stream.id,
+      active: stream.active,
+      tracks: stream.getTracks().length,
+      videoTracks: stream.getVideoTracks().length
+    });
+    
+    localStreamRef.current = stream;
     
     setupPeerConnection();
     setMediaReady(true);
@@ -158,6 +139,40 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       }
     }, 500);
   };
+
+  // Separate effect to handle video element setup when both stream and ref are ready
+  useEffect(() => {
+    if (localStreamRef.current && localVideoRef.current && mediaReady) {
+      console.log('Setting up local video element with existing stream');
+      const video = localVideoRef.current;
+      const stream = localStreamRef.current;
+      
+      // Add event listeners for debugging
+      video.addEventListener('loadstart', () => console.log('Local video: loadstart'));
+      video.addEventListener('loadedmetadata', () => {
+        console.log(`Local video: metadata loaded (${video.videoWidth}x${video.videoHeight})`);
+      });
+      video.addEventListener('canplay', () => console.log('Local video: canplay'));
+      video.addEventListener('playing', () => console.log('Local video: playing'));
+      video.addEventListener('error', (e) => console.error('Local video error:', e));
+      
+      // Set properties
+      video.srcObject = stream;
+      video.muted = true;
+      video.playsInline = true;
+      video.autoplay = true;
+      
+      // Force play
+      setTimeout(async () => {
+        try {
+          await video.play();
+          console.log('Local video play successful');
+        } catch (e) {
+          console.error('Local video play failed:', e);
+        }
+      }, 100);
+    }
+  }, [mediaReady, localStreamRef.current, localVideoRef.current]);
 
   const handlePermissionError = (error: string) => {
     setPermissionError(error);
