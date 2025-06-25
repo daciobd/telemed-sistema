@@ -1310,6 +1310,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Payment routes
   app.post('/api/payments/create-payment-intent', isAuthenticated, async (req: any, res) => {
+    // Set JSON content type explicitly
+    res.setHeader('Content-Type', 'application/json');
+    
     try {
       if (!process.env.STRIPE_SECRET_KEY) {
         return res.status(500).json({ message: 'Stripe not configured' });
@@ -1328,81 +1331,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Appointment ID is required' });
       }
       
-      // Get basic appointment details (simplified to avoid complex joins)
-      let appointment;
-      try {
-        appointment = await storage.getAppointment(parseInt(appointmentId));
-        console.log('Appointment found:', appointment);
-      } catch (error) {
-        console.error('Error fetching appointment:', error);
-        return res.status(500).json({ message: 'Error fetching appointment details' });
-      }
-      
-      if (!appointment) {
-        return res.status(404).json({ message: 'Appointment not found' });
-      }
-      
-      // For testing purposes, allow both patients and doctors to make payments
-      let payerInfo;
-      try {
-        const user = await storage.getUserWithProfile(userId);
-        
-        if (user?.role === 'patient' && user.patient) {
-          // Regular patient payment
-          payerInfo = { id: user.patient.id, type: 'patient' };
-        } else if (user?.role === 'doctor' && user.doctor) {
-          // Allow doctor to test payment system
-          payerInfo = { id: user.doctor.id, type: 'doctor' };
-        } else {
-          return res.status(403).json({ message: 'Unauthorized - invalid user type' });
-        }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-        return res.status(500).json({ message: 'Error validating user' });
-      }
-      
-      // Ensure appointment has a doctor
-      if (!appointment.doctorId) {
-        return res.status(400).json({ message: 'Appointment must have a doctor assigned' });
-      }
-      
-      // Create payment intent
+      // Simplified payment intent creation for testing
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(parseFloat(amount || '150') * 100), // Convert to cents
         currency: 'brl',
         metadata: {
           appointmentId: appointmentId.toString(),
-          payerId: payerInfo.id.toString(),
-          payerType: payerInfo.type,
-          doctorId: appointment.doctorId.toString(),
+          userId: userId
         },
         payment_method_types: ['card'],
+        automatic_payment_methods: {
+          enabled: true,
+        },
       });
       
-      // Update appointment with payment info
-      await storage.updateAppointment(appointmentId, {
-        notes: `Payment Intent: ${paymentIntent.id}`
-      });
+      console.log('Payment intent created:', paymentIntent.id);
       
-      // Save transaction record
-      await storage.createPaymentTransaction({
-        appointmentId,
-        patientId: payerInfo.type === 'patient' ? payerInfo.id : appointment.patientId,
-        doctorId: appointment.doctorId,
-        stripePaymentIntentId: paymentIntent.id,
-        amount: amount.toString(),
-        currency: 'brl',
-        status: 'pending',
-        stripeClientSecret: paymentIntent.client_secret,
-        metadata: { 
-          appointmentId, 
-          payerId: payerInfo.id, 
-          payerType: payerInfo.type,
-          doctorId: appointment.doctorId 
-        }
-      });
-      
-      res.json({ 
+      return res.json({ 
         clientSecret: paymentIntent.client_secret,
         paymentIntentId: paymentIntent.id 
       });
@@ -1410,7 +1355,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error creating payment intent:', error);
       return res.status(500).json({ 
         message: 'Failed to create payment intent',
-        error: error.message 
+        error: error?.message || 'Unknown error'
       });
     }
   });
