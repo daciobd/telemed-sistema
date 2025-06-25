@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Link, useLocation } from 'wouter';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   Stethoscope, 
   Clock, 
@@ -19,6 +21,45 @@ import {
 } from 'lucide-react';
 
 export default function ImprovedLandingPage() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const handleLogin = () => {
+    window.location.href = '/api/login';
+  };
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      setLocation('/dashboard');
+    } else {
+      handleLogin();
+    }
+  };
+
+  const handleScheduleConsultation = () => {
+    if (isAuthenticated) {
+      setLocation('/appointments');
+    } else {
+      handleLogin();
+    }
+  };
+
+  const handleVideoConsultation = () => {
+    if (isAuthenticated) {
+      setLocation('/teleconsult-workflow');
+    } else {
+      handleLogin();
+    }
+  };
+
+  const handleTestDemo = () => {
+    if (isAuthenticated) {
+      setLocation('/demo-management');
+    } else {
+      handleLogin();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-green-50">
       {/* Enhanced Navigation */}
@@ -32,9 +73,22 @@ export default function ImprovedLandingPage() {
             <a href="#funcionalidades" className="hover:text-teal-200 transition-colors">Funcionalidades</a>
             <a href="#como-funciona" className="hover:text-teal-200 transition-colors">Como Funciona</a>
             <a href="#especialidades" className="hover:text-teal-200 transition-colors">Especialidades</a>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-teal-800">
-              Entrar
-            </Button>
+            {isAuthenticated ? (
+              <Link to="/dashboard">
+                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-teal-800">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-teal-800"
+                onClick={handleLogin}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Carregando...' : 'Entrar'}
+              </Button>
+            )}
           </div>
         </div>
       </nav>
@@ -59,11 +113,22 @@ export default function ImprovedLandingPage() {
               </div>
               
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+                <Button 
+                  size="lg" 
+                  className="bg-teal-600 hover:bg-teal-700"
+                  onClick={handleScheduleConsultation}
+                  disabled={isLoading}
+                >
                   <Calendar className="h-5 w-5 mr-2" />
                   Agendar Consulta
                 </Button>
-                <Button size="lg" variant="outline" className="border-teal-600 text-teal-600 hover:bg-teal-50">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                  onClick={handleVideoConsultation}
+                  disabled={isLoading}
+                >
                   <Video className="h-5 w-5 mr-2" />
                   Teleconsulta Imediata
                 </Button>
@@ -212,6 +277,13 @@ export default function ImprovedLandingPage() {
                   <CheckCircle className="h-4 w-4" />
                   <span>Transparência total de preços</span>
                 </div>
+                <Button 
+                  size="sm" 
+                  className="mt-3 w-full bg-teal-600 hover:bg-teal-700"
+                  onClick={handleVideoConsultation}
+                >
+                  Testar Leilão
+                </Button>
               </CardContent>
             </Card>
 
@@ -238,6 +310,11 @@ export default function ImprovedLandingPage() {
                   <CheckCircle className="h-4 w-4" />
                   <span>Triagem automática 24/7</span>
                 </div>
+                <Link to="/ai-assistant">
+                  <Button size="sm" className="mt-3 w-full bg-purple-600 hover:bg-purple-700">
+                    Testar IA
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -264,6 +341,11 @@ export default function ImprovedLandingPage() {
                   <CheckCircle className="h-4 w-4" />
                   <span>Juridicamente válidas</span>
                 </div>
+                <Link to="/prescriptions">
+                  <Button size="sm" className="mt-3 w-full bg-green-600 hover:bg-green-700">
+                    Ver MEMED
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -429,22 +511,35 @@ export default function ImprovedLandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
             {[
-              { name: "Cardiologia", icon: "❤️", count: 2 },
-              { name: "Dermatologia", icon: "🧴", count: 2 },
-              { name: "Endocrinologia", icon: "🧬", count: 2 },
-              { name: "Neurologia", icon: "🧠", count: 2 },
-              { name: "Psiquiatria", icon: "🧘", count: 2 },
-              { name: "Ortopedia", icon: "🦴", count: 2 },
-              { name: "Pediatria", icon: "👶", count: 2 },
-              { name: "Ginecologia", icon: "🌸", count: 2 },
-              { name: "Urologia", icon: "💧", count: 2 },
-              { name: "Gastro", icon: "🫁", count: 2 }
+              { name: "Cardiologia", icon: "❤️", count: 2, route: "/appointments" },
+              { name: "Dermatologia", icon: "🧴", count: 2, route: "/appointments" },
+              { name: "Endocrinologia", icon: "🧬", count: 2, route: "/appointments" },
+              { name: "Neurologia", icon: "🧠", count: 2, route: "/appointments" },
+              { name: "Psiquiatria", icon: "🧘", count: 2, route: "/psychiatric-evaluation" },
+              { name: "Ortopedia", icon: "🦴", count: 2, route: "/appointments" },
+              { name: "Pediatria", icon: "👶", count: 2, route: "/appointments" },
+              { name: "Ginecologia", icon: "🌸", count: 2, route: "/appointments" },
+              { name: "Urologia", icon: "💧", count: 2, route: "/appointments" },
+              { name: "Gastro", icon: "🫁", count: 2, route: "/appointments" }
             ].map((specialty, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+              <Card 
+                key={index} 
+                className="text-center hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setLocation(specialty.route);
+                  } else {
+                    handleLogin();
+                  }
+                }}
+              >
                 <CardContent className="pt-6">
                   <div className="text-3xl mb-3">{specialty.icon}</div>
                   <h3 className="font-semibold text-gray-900 mb-1">{specialty.name}</h3>
                   <p className="text-sm text-gray-600">{specialty.count} especialistas</p>
+                  <Button size="sm" className="mt-2 w-full" variant="outline">
+                    Consultar
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -527,13 +622,24 @@ export default function ImprovedLandingPage() {
             Acesse nosso sistema completo de telemedicina e teste todas as funcionalidades
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-teal-600 hover:bg-gray-100">
+            <Button 
+              size="lg" 
+              className="bg-white text-teal-600 hover:bg-gray-100"
+              onClick={handleTestDemo}
+              disabled={isLoading}
+            >
               <Calendar className="h-5 w-5 mr-2" />
               Testar Sistema Demo
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-teal-600">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-white hover:bg-white hover:text-teal-600"
+              onClick={handleGetStarted}
+              disabled={isLoading}
+            >
               <ArrowRight className="h-5 w-5 mr-2" />
-              Ver Demonstração
+              {isAuthenticated ? 'Ir ao Dashboard' : 'Começar Agora'}
             </Button>
           </div>
         </div>
@@ -556,20 +662,76 @@ export default function ImprovedLandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Funcionalidades</h4>
               <ul className="space-y-2 text-teal-200">
-                <li>Leilão Reverso</li>
-                <li>Assistente IA</li>
-                <li>VideoConsultas</li>
-                <li>Prescrições MEMED</li>
+                <li>
+                  <button 
+                    onClick={handleVideoConsultation}
+                    className="hover:text-white transition-colors"
+                  >
+                    Leilão Reverso
+                  </button>
+                </li>
+                <li>
+                  <Link to="/ai-assistant" className="hover:text-white transition-colors">
+                    Assistente IA
+                  </Link>
+                </li>
+                <li>
+                  <button 
+                    onClick={handleVideoConsultation}
+                    className="hover:text-white transition-colors"
+                  >
+                    VideoConsultas
+                  </button>
+                </li>
+                <li>
+                  <Link to="/prescriptions" className="hover:text-white transition-colors">
+                    Prescrições MEMED
+                  </Link>
+                </li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Especialidades</h4>
               <ul className="space-y-2 text-teal-200">
-                <li>Cardiologia</li>
-                <li>Psiquiatria</li>
-                <li>Dermatologia</li>
-                <li>Neurologia</li>
+                <li>
+                  <button 
+                    onClick={handleScheduleConsultation}
+                    className="hover:text-white transition-colors"
+                  >
+                    Cardiologia
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      if (isAuthenticated) {
+                        setLocation('/psychiatric-evaluation');
+                      } else {
+                        handleLogin();
+                      }
+                    }}
+                    className="hover:text-white transition-colors"
+                  >
+                    Psiquiatria
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={handleScheduleConsultation}
+                    className="hover:text-white transition-colors"
+                  >
+                    Dermatologia
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={handleScheduleConsultation}
+                    className="hover:text-white transition-colors"
+                  >
+                    Neurologia
+                  </button>
+                </li>
               </ul>
             </div>
             

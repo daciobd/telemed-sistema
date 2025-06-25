@@ -141,8 +141,12 @@ src/
   - **Cards visuais** com gradientes e fotos de tecnologia médica
   - **Depoimentos ilustrados** com avatars de pacientes
   - **Hero section** com imagem do médico e estatísticas flutuantes
+  - **Integração funcional** com autenticação e rotas do sistema
+  - **CTAs conectados** direcionando para páginas específicas
+  - **Navegação inteligente** baseada no status de autenticação
 - **UX/UI**: Design moderno com cards informativos e CTAs otimizados
 - **Visual**: Imagens de alta qualidade da Unsplash focadas em telemedicina
+- **Funcional**: Botões e links conectados às funcionalidades reais
 - **Posicionamento**: Foca nos diferenciais tecnológicos únicos
 - **Conversão**: CTAs direcionados para demo e teste do sistema
 
