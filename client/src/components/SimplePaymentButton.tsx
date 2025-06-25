@@ -48,24 +48,13 @@ export function SimplePaymentButton({ appointmentId, amount = 150 }: SimplePayme
         throw new Error('Failed to create payment intent');
       }
 
-      // Load Stripe and redirect to checkout
-      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY!);
-      
-      if (!stripe) {
-        throw new Error('Stripe failed to load');
-      }
-
-      // Create a simple form for Stripe checkout
-      const { error } = await stripe.confirmPayment({
-        clientSecret,
-        confirmParams: {
-          return_url: `${window.location.origin}/appointments?payment=success`,
-        }
+      // Redirect to existing payment checkout page with client secret
+      const params = new URLSearchParams({
+        appointment: appointmentId.toString(),
+        clientSecret: clientSecret
       });
-
-      if (error) {
-        throw new Error(error.message);
-      }
+      
+      window.location.href = `/payment-checkout?${params.toString()}`;
 
     } catch (error: any) {
       toast({

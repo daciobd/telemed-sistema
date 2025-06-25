@@ -143,9 +143,10 @@ export default function PaymentCheckout() {
   const [appointmentDetails, setAppointmentDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // Get appointment ID from URL params
+  // Get appointment ID and client secret from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const appointmentId = parseInt(urlParams.get('appointment') || '0');
+  const preAuthClientSecret = urlParams.get('clientSecret');
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -162,6 +163,13 @@ export default function PaymentCheckout() {
   }, [isAuthenticated, isLoading, toast]);
 
   useEffect(() => {
+    // If we have a pre-authenticated client secret, use it directly
+    if (preAuthClientSecret) {
+      setClientSecret(preAuthClientSecret);
+      setLoading(false);
+      return;
+    }
+
     if (!appointmentId || isLoading) return;
 
     const fetchAppointmentAndCreatePayment = async () => {
@@ -270,7 +278,7 @@ export default function PaymentCheckout() {
     };
 
     fetchAppointmentAndCreatePayment();
-  }, [appointmentId, isAuthenticated, toast, setLocation]);
+  }, [appointmentId, isAuthenticated, toast, setLocation, preAuthClientSecret]);
 
   if (isLoading || loading) {
     return (
