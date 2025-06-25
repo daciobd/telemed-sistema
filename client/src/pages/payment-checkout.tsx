@@ -205,12 +205,13 @@ export default function PaymentCheckout() {
           return;
         }
         
+        console.error('Payment error:', error);
         toast({
           title: "Erro",
-          description: "Não foi possível carregar os dados da consulta.",
+          description: error.message || "Não foi possível carregar os dados da consulta.",
           variant: "destructive",
         });
-        setLocation('/consultas');
+        setLocation('/appointments');
       } finally {
         setLoading(false);
       }

@@ -1321,8 +1321,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { appointmentId, amount } = req.body;
       const userId = req.user.claims.sub;
       
+      console.log('Payment request:', { appointmentId, amount, userId });
+      
       // Get appointment details
       const appointment = await storage.getAppointmentWithDetails(appointmentId);
+      console.log('Appointment found:', appointment);
+      
       if (!appointment) {
         return res.status(404).json({ message: 'Appointment not found' });
       }
@@ -1391,7 +1395,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error: any) {
       console.error('Error creating payment intent:', error);
-      res.status(500).json({ message: 'Error creating payment intent: ' + error.message });
+      res.status(500).json({ 
+        message: 'Failed to create payment intent',
+        error: error.message 
+      });
+    }
+  });
+
+  // Webhook for payment success
+  app.post('/api/payments/webhook', async (req, res) => {
+    try {
+      const sig = req.headers['stripe-signature'];
+      const event = req.body;
+      
+      if (event.type === 'payment_intent.succeeded') {
+        const paymentIntent = event.data.object;
+        const appointmentId = paymentIntent.metadata.appointmentId;
+        
+        // Update appointment status to paid
+        await storage.updateAppointment(parseInt(appointmentId), {
+          status: 'confirmed',
+          notes: `Payment confirmed: ${paymentIntent.id}`
+        });
+      }
+      
+      res.json({ received: true });
+    } catch (error) {
+      console.error('Webhook error:', error);
+      res.status(400).send('Webhook Error');
     }
   });
 

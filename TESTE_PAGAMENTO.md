@@ -1,23 +1,24 @@
 # 💳 COMO TESTAR O SISTEMA DE PAGAMENTO
 
-## 🎯 CAMINHO COMPLETO PARA TESTE
+## 🎯 STATUS: BOTÕES FUNCIONANDO!
+
+✅ **CONFIRMADO**: Os botões de pagamento estão visíveis e funcionais na página de Agendamentos!
+
+## 📋 CAMINHO PARA TESTE (ATUALIZADO)
 
 ### 1. ACESSE O SISTEMA
-- Vá para: http://localhost:5000
-- Faça login com sua conta
+- Vá para: http://localhost:5000  
+- Faça login (você já está logado como Dr. DACIO DUTRA)
 
-### 2. AGENDE UMA CONSULTA
-- No menu lateral, clique em "Consultas"
-- Clique em "Nova Consulta"
-- Preencha os dados:
-  - Selecione um médico
-  - Escolha data e horário
-  - Confirme o agendamento
+### 2. ENCONTRE O PAGAMENTO
+- No menu lateral, clique em "Agendamentos"
+- Procure pelos botões verdes "💳 Testar Pagamento R$ 150,00"
+- **VISÍVEL EM CADA CONSULTA** conforme sua screenshot
 
-### 3. ACESSE O PAGAMENTO
-- Na lista de consultas, encontre sua consulta agendada
-- Clique no botão "Pagar Consulta" ou ícone de pagamento
-- OU vá diretamente para: `/payment-checkout?appointment=ID_DA_CONSULTA`
+### 3. CLIQUE E TESTE
+- Clique no botão verde de pagamento
+- Será redirecionado para tela de checkout do Stripe
+- Use os dados de cartão de teste abaixo
 
 ### 4. TESTE O PAGAMENTO
 Use estes cartões de teste do Stripe:
