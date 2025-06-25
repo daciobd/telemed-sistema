@@ -49,15 +49,30 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
     setIsProcessing(true);
 
     try {
-      const { error } = await stripe.confirmPayment({
+      console.log('Starting payment confirmation...');
+      console.log('Appointment ID:', appointmentId);
+      console.log('Stripe instance:', !!stripe);
+      console.log('Elements instance:', !!elements);
+      
+      const result = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success?appointment=${appointmentId}`,
         },
       });
 
+      console.log('Payment confirmation result:', result);
+      const { error } = result;
+
       if (error) {
         let errorMessage = error.message;
+        
+        console.log('Payment error details:', {
+          code: error.code,
+          type: error.type,
+          message: error.message,
+          decline_code: error.decline_code
+        });
         
         // Provide more helpful error messages for common test scenarios
         if (error.code === 'card_declined') {
@@ -68,11 +83,13 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
           errorMessage = "CVC incorreto. Use qualquer código de 3 dígitos (ex: 123)";
         } else if (error.code === 'processing_error') {
           errorMessage = "Erro de processamento. Verifique os dados do cartão de teste.";
+        } else if (error.type === 'validation_error') {
+          errorMessage = "Dados do cartão inválidos. Use: 4242 4242 4242 4242, 12/34, 123";
         }
         
         toast({
           title: "Erro no Pagamento",
-          description: errorMessage,
+          description: `${errorMessage} (Código: ${error.code || error.type})`,
           variant: "destructive",
         });
       } else {
