@@ -1327,10 +1327,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: 'Appointment not found' });
       }
       
-      // Verify user is the patient
-      const patient = await storage.getPatientByUserId(userId);
-      if (!patient || appointment.patientId !== patient.id) {
-        return res.status(403).json({ message: 'Unauthorized' });
+      // For testing purposes, allow both patients and doctors to make payments
+      let payerInfo;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (user?.role === 'patient' && user.patient) {
+        // Regular patient payment
+        if (appointment.patientId !== user.patient.id) {
+          return res.status(403).json({ message: 'Unauthorized - not your appointment' });
+        }
+        payerInfo = { id: user.patient.id, type: 'patient' };
+      } else if (user?.role === 'doctor' && user.doctor) {
+        // Allow doctor to test payment system
+        payerInfo = { id: user.doctor.id, type: 'doctor' };
+      } else {
+        return res.status(403).json({ message: 'Unauthorized - invalid user type' });
       }
       
       // Ensure appointment has a doctor
@@ -1344,7 +1355,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         currency: 'brl',
         metadata: {
           appointmentId: appointmentId.toString(),
-          patientId: patient.id.toString(),
+          payerId: payerInfo.id.toString(),
+          payerType: payerInfo.type,
           doctorId: appointment.doctorId.toString(),
         },
         payment_method_types: ['card'],
@@ -1358,14 +1370,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Save transaction record
       await storage.createPaymentTransaction({
         appointmentId,
-        patientId: patient.id,
+        patientId: payerInfo.type === 'patient' ? payerInfo.id : appointment.patientId,
         doctorId: appointment.doctorId,
         stripePaymentIntentId: paymentIntent.id,
         amount: amount.toString(),
         currency: 'brl',
         status: 'pending',
         stripeClientSecret: paymentIntent.client_secret,
-        metadata: { appointmentId, patientId: patient.id, doctorId: appointment.doctorId }
+        metadata: { 
+          appointmentId, 
+          payerId: payerInfo.id, 
+          payerType: payerInfo.type,
+          doctorId: appointment.doctorId 
+        }
       });
       
       res.json({ 

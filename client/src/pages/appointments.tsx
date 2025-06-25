@@ -374,17 +374,15 @@ export default function Appointments() {
                             )}
                           </div>
                           
-                          {/* Botão de Pagamento - sempre visível para pacientes */}
-                          {user?.role === 'patient' && (
-                            <Button
-                              size="sm"
-                              onClick={() => window.location.href = `/payment-checkout?appointment=${appointment.id}`}
-                              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-                            >
-                              <CreditCard className="h-4 w-4" />
-                              Pagar R$ 150,00
-                            </Button>
-                          )}
+                          {/* Botão de Pagamento - visível para todos para teste */}
+                          <Button
+                            size="sm"
+                            onClick={() => window.location.href = `/payment-checkout?appointment=${appointment.id}`}
+                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+                          >
+                            <CreditCard className="h-4 w-4" />
+                            💳 Testar Pagamento R$ 150,00
+                          </Button>
                         </div>
                       </div>
                     </div>
