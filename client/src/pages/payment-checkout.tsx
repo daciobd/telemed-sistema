@@ -57,16 +57,37 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
       });
 
       if (error) {
+        let errorMessage = error.message;
+        
+        // Provide more helpful error messages for common test scenarios
+        if (error.code === 'card_declined') {
+          errorMessage = "Cartão recusado. Para teste, use o cartão 4242 4242 4242 4242";
+        } else if (error.code === 'expired_card') {
+          errorMessage = "Cartão expirado. Use uma data futura (ex: 12/34)";
+        } else if (error.code === 'incorrect_cvc') {
+          errorMessage = "CVC incorreto. Use qualquer código de 3 dígitos (ex: 123)";
+        } else if (error.code === 'processing_error') {
+          errorMessage = "Erro de processamento. Verifique os dados do cartão de teste.";
+        }
+        
         toast({
           title: "Erro no Pagamento",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
+        });
+      } else {
+        // Payment succeeded
+        toast({
+          title: "Pagamento Processado!",
+          description: "Redirecionando para confirmação...",
+          variant: "default",
         });
       }
     } catch (error) {
+      console.error('Payment error:', error);
       toast({
         title: "Erro no Pagamento",
-        description: "Ocorreu um erro inesperado. Tente novamente.",
+        description: "Erro inesperado. Para teste, use: 4242 4242 4242 4242, data futura, CVC 123",
         variant: "destructive",
       });
     } finally {
@@ -113,6 +134,15 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
           <CreditCard className="h-5 w-5 mr-2" />
           Informações de Pagamento
         </h3>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
+          <p className="font-medium text-blue-900 mb-1">Dados para teste:</p>
+          <p className="text-blue-800">
+            <strong>Cartão:</strong> 4242 4242 4242 4242 | 
+            <strong>Data:</strong> 12/34 | 
+            <strong>CVC:</strong> 123
+          </p>
+        </div>
         <PaymentElement 
           options={{
             layout: 'tabs',

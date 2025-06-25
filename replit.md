@@ -153,14 +153,20 @@ src/
   - Webhook para confirmação automática de pagamentos
   - Suporte para cartões de teste e produção
   - Payment Intent sendo criado com sucesso via API
-- **Interface**: Botões verdes "💳 Testar Pagamento R$ 150,00" em cada consulta
+  - Interface de checkout com dados da consulta e médico
+  - Instruções claras para cartões de teste do Stripe
+- **Interface**: Botões verdes "💳 Pagar R$ 150,00" em cada consulta
 - **Resolução de Bugs**: 
   - Corrigido erro "require is not defined" alterando para ES modules
   - Corrigido conflito Stripe "automatic_payment_methods vs payment_method_types"
   - Implementado diagnóstico detalhado para debugging
-- **Teste**: Sistema testado e validado pelo usuário com Payment Intent funcionando
+  - Corrigido página em branco no checkout adicionando endpoint /api/appointments/:id
+  - Corrigido erro "Invalid time value" com tratamento de datas nulas
+  - Adicionado carregamento de dados da consulta via API
+- **Teste**: Sistema testado e validado pelo usuário - checkout exibe corretamente
+- **Cartões de Teste**: 4242 4242 4242 4242, data 12/34, CVC 123
 - **Segurança**: Chaves Stripe configuradas e protegidas
-- **Status**: ✅ FUNCIONANDO - Pronto para uso completo
+- **Status**: ✅ FUNCIONANDO COMPLETAMENTE - Pronto para uso em produção
 
 ## Mudanças Recentes (Junho 2025)
 
