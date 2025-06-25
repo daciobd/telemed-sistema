@@ -137,7 +137,12 @@ src/
   - Showcasing das videoconsultas WebRTC
   - Sistema especializado de psiquiatria em destaque
   - Grid das 10 especialidades médicas disponíveis
+  - **Imagens profissionais** estilo PicDoc com médicos reais
+  - **Cards visuais** com gradientes e fotos de tecnologia médica
+  - **Depoimentos ilustrados** com avatars de pacientes
+  - **Hero section** com imagem do médico e estatísticas flutuantes
 - **UX/UI**: Design moderno com cards informativos e CTAs otimizados
+- **Visual**: Imagens de alta qualidade da Unsplash focadas em telemedicina
 - **Posicionamento**: Foca nos diferenciais tecnológicos únicos
 - **Conversão**: CTAs direcionados para demo e teste do sistema
 

@@ -87,39 +87,90 @@ export default function ImprovedLandingPage() {
             </div>
 
             <div className="relative">
-              <div className="bg-white rounded-2xl p-8 shadow-2xl">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-                      <Heart className="h-6 w-6 text-teal-600" />
-                    </div>
+              {/* Hero Image */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Médico em teleconsulta" 
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 text-white">
+                  <div className="flex items-center gap-3 mb-3">
+                    <img 
+                      src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                      alt="Dr. Carlos Mendes" 
+                      className="w-12 h-12 rounded-full object-cover border-2 border-white"
+                    />
                     <div>
-                      <h3 className="font-semibold text-gray-900">Dr. Carlos Mendes</h3>
-                      <p className="text-gray-600">Cardiologista • 15 anos exp.</p>
+                      <h3 className="font-semibold">Dr. Carlos Mendes</h3>
+                      <p className="text-white/90 text-sm">Cardiologista • 15 anos exp.</p>
                     </div>
-                    <Badge className="bg-green-100 text-green-800 ml-auto">Online</Badge>
+                    <Badge className="bg-green-500 text-white ml-auto">Online</Badge>
                   </div>
                   
-                  <div className="border-l-4 border-teal-200 pl-4">
-                    <p className="text-gray-700">
-                      "Sistema revolucionário que permite flexibilidade total no atendimento. 
-                      Posso aceitar consultas imediatas ou agendar conforme minha disponibilidade."
-                    </p>
-                  </div>
+                  <p className="text-white/95 text-sm italic">
+                    "Sistema revolucionário que permite flexibilidade total no atendimento."
+                  </p>
+                </div>
+              </div>
 
-                  <div className="flex items-center justify-between pt-4">
-                    <div className="flex items-center gap-1">
-                      {[1,2,3,4,5].map(i => (
-                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      ))}
-                      <span className="text-sm text-gray-600 ml-2">4.9/5</span>
-                    </div>
-                    <Button size="sm" className="bg-teal-600 hover:bg-teal-700">
-                      Consultar Agora
-                    </Button>
+              {/* Floating Stats Card */}
+              <div className="absolute -bottom-6 left-6 right-6 bg-white rounded-xl p-4 shadow-lg">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-bold text-teal-600">98%</div>
+                    <div className="text-xs text-gray-600">Satisfação</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-green-600">15min</div>
+                    <div className="text-xs text-gray-600">Atendimento</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-blue-600">24/7</div>
+                    <div className="text-xs text-gray-600">Disponível</div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Technology Showcase */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <h2 className="text-3xl font-bold text-teal-900 mb-6">
+                Tecnologia de Ponta em Telemedicina
+              </h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span>VideoConsultas WebRTC de alta qualidade</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span>Assistente IA para análise de sintomas</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span>Prescrições digitais integradas MEMED</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span>Sistema de leilão reverso transparente</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <img 
+                src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Tecnologia médica avançada" 
+                className="rounded-2xl shadow-xl"
+              />
+              <div className="absolute inset-0 bg-teal-600/10 rounded-2xl" />
             </div>
           </div>
         </div>
@@ -138,11 +189,18 @@ export default function ImprovedLandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="border-teal-100 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-teal-600" />
+            <Card className="border-teal-100 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-32 bg-gradient-to-br from-teal-500 to-teal-600 relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                  alt="Leilão reverso" 
+                  className="w-full h-full object-cover opacity-20"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Zap className="h-8 w-8 text-white" />
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-teal-900">Leilão Reverso Inteligente</CardTitle>
               </CardHeader>
               <CardContent>
@@ -157,11 +215,18 @@ export default function ImprovedLandingPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-purple-100 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Brain className="h-6 w-6 text-purple-600" />
+            <Card className="border-purple-100 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-32 bg-gradient-to-br from-purple-500 to-purple-600 relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                  alt="Assistente IA" 
+                  className="w-full h-full object-cover opacity-20"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Brain className="h-8 w-8 text-white" />
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-purple-900">Assistente IA Médico</CardTitle>
               </CardHeader>
               <CardContent>
@@ -176,11 +241,18 @@ export default function ImprovedLandingPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-green-100 hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="h-6 w-6 text-green-600" />
+            <Card className="border-green-100 hover:shadow-lg transition-shadow overflow-hidden">
+              <div className="h-32 bg-gradient-to-br from-green-500 to-green-600 relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1576671081837-49000212a370?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                  alt="Prescrições digitais" 
+                  className="w-full h-full object-cover opacity-20"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <FileText className="h-8 w-8 text-white" />
                 </div>
+              </div>
+              <CardHeader>
                 <CardTitle className="text-green-900">Prescrições MEMED</CardTitle>
               </CardHeader>
               <CardContent>
@@ -251,6 +323,46 @@ export default function ImprovedLandingPage() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Doctor Testimonial with Image */}
+      <section className="py-16 px-4 bg-gradient-to-r from-teal-600 to-green-600 text-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                  alt="Dra. Ana Silva" 
+                  className="w-16 h-16 rounded-full object-cover border-4 border-white/20"
+                />
+                <div>
+                  <h3 className="text-xl font-semibold">Dra. Ana Silva</h3>
+                  <p className="text-white/80">Cardiologista • São Paulo</p>
+                </div>
+              </div>
+              <blockquote className="text-xl italic mb-6">
+                "O sistema revolucionou minha prática médica. Posso atender pacientes 
+                quando estou disponível, com total autonomia sobre minha agenda. 
+                A tecnologia é impressionante e os pacientes adoram a flexibilidade."
+              </blockquote>
+              <div className="flex items-center gap-1">
+                {[1,2,3,4,5].map(i => (
+                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="ml-2 font-semibold">5.0 • Mais de 500 consultas</span>
+              </div>
+            </div>
+            <div className="relative">
+              <img 
+                src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                alt="Médica em teleconsulta" 
+                className="rounded-2xl shadow-2xl"
+              />
+              <div className="absolute inset-0 bg-white/10 rounded-2xl" />
+            </div>
           </div>
         </div>
       </section>
@@ -340,9 +452,76 @@ export default function ImprovedLandingPage() {
         </div>
       </section>
 
+      {/* Patient Success Stories */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-teal-900 mb-4">Histórias de Sucesso</h2>
+            <p className="text-xl text-gray-600">Pacientes reais, resultados reais</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                  alt="João M." 
+                  className="w-16 h-16 rounded-full mx-auto mb-4 object-cover"
+                />
+                <p className="italic text-gray-600 mb-4">
+                  "Consegui uma consulta cardiológica em 20 minutos. 
+                  O médico foi muito atencioso e recebi a receita digital na hora."
+                </p>
+                <div className="font-semibold text-teal-900">João M.</div>
+                <div className="text-sm text-gray-500">Consulta Cardiológica</div>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1494790108755-2616b612b550?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                  alt="Marina F." 
+                  className="w-16 h-16 rounded-full mx-auto mb-4 object-cover"
+                />
+                <p className="italic text-gray-600 mb-4">
+                  "O sistema de leilão é genial. Defini meu orçamento e 
+                  encontrei um dermatologista experiente pelo preço justo."
+                </p>
+                <div className="font-semibold text-teal-900">Marina F.</div>
+                <div className="text-sm text-gray-500">Consulta Dermatológica</div>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                  alt="Roberto S." 
+                  className="w-16 h-16 rounded-full mx-auto mb-4 object-cover"
+                />
+                <p className="italic text-gray-600 mb-4">
+                  "A avaliação psiquiátrica pré-consulta foi muito útil. 
+                  Chegei na consulta já com meu perfil analisado."
+                </p>
+                <div className="font-semibold text-teal-900">Roberto S.</div>
+                <div className="text-sm text-gray-500">Consulta Psiquiátrica</div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-teal-600 to-green-600 text-white">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-16 px-4 bg-gradient-to-br from-teal-600 via-green-600 to-blue-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <img 
+            src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+            alt="Background" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="text-4xl font-bold mb-4">Pronto para experimentar?</h2>
           <p className="text-xl mb-8 opacity-90">
             Acesse nosso sistema completo de telemedicina e teste todas as funcionalidades
