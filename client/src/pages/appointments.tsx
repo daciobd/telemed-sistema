@@ -209,10 +209,18 @@ export default function Appointments() {
         {user?.role === 'patient' && (
           <Alert variant="info" className="mb-6">
             <Brain className="h-4 w-4" />
-            <AlertDescription>
-              <strong>🎯 ENCONTRE O BOTÃO AQUI:</strong> Procure logo abaixo pelo card ROXO com ícone de cérebro 🧠. 
-              O título será "Consulta Psiquiátrica" e terá um botão roxo "Iniciar Preparação". 
-              Esta é a nova funcionalidade de preparação pré-consulta psiquiátrica!
+            <AlertDescription className="flex items-center justify-between">
+              <div>
+                <strong>Sistema de Psiquiatria Especializado:</strong> Preparação completa com avaliação psicológica, questionário detalhado e entrevista opcional com psicóloga.
+              </div>
+              <Button 
+                onClick={() => window.location.href = '/psychiatry-consultation/12'}
+                className="bg-purple-600 hover:bg-purple-700 ml-4"
+                size="sm"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Acessar Preparação
+              </Button>
             </AlertDescription>
           </Alert>
         )}
