@@ -383,30 +383,23 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
           <div className="space-y-6">
             <h3 className="text-xl font-semibold">Estilo de Vida</h3>
 
-            <FormField
-              control={form.control}
-              name="sleepHours"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantas horas você dorme por noite?</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="1"
-                      max="24"
-                      step="1"
-                      value={field.value?.toString() || ''}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(value ? Number(value) : undefined);
-                      }}
-                      placeholder="Ex: 8"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Quantas horas você dorme por noite?</label>
+              <Input
+                type="number"
+                min={1}
+                max={24}
+                step={1}
+                placeholder="Ex: 8"
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value)) {
+                    form.setValue('sleepHours', value);
+                  }
+                }}
+                className="w-full"
+              />
+            </div>
 
             <FormField
               control={form.control}
