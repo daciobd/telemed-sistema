@@ -84,6 +84,7 @@ function Router() {
             />
           } />
           <Route path="/teleconsult-workflow" component={TeleconsultWorkflowPage} />
+          <Route path="/teleconsultas-psiquiatricas" component={TeleconsultWorkflowPage} />
 
         </>
       )}
