@@ -392,13 +392,18 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
                   <FormControl>
                     <Input
                       type="number"
-                      min={1}
-                      max={24}
-                      value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value) || 8)}
+                      min="1"
+                      max="24"
+                      step="1"
+                      value={field.value?.toString() || ''}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(value ? Number(value) : undefined);
+                      }}
                       placeholder="Ex: 8"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
