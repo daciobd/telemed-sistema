@@ -29,8 +29,18 @@ export default function MedicalRecords() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
+  // Get patient ID from URL parameters if viewing specific patient
+  const urlParams = new URLSearchParams(window.location.search);
+  const patientId = urlParams.get('patient');
+
   const { data: records, isLoading: recordsLoading } = useQuery({
-    queryKey: ["/api/medical-records"],
+    queryKey: patientId ? ["/api/medical-records", "patient", patientId] : ["/api/medical-records"],
+    queryFn: async () => {
+      const url = patientId ? `/api/medical-records/patient/${patientId}` : '/api/medical-records';
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch records');
+      return response.json();
+    },
     retry: false,
   });
 

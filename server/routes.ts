@@ -478,6 +478,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get medical records for a specific patient (for doctors viewing patient records)
+  app.get('/api/medical-records/patient/:patientId', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const patientId = parseInt(req.params.patientId);
+      
+      // Check if user is a doctor (only doctors can view patient records)
+      const doctor = await storage.getDoctorByUserId(userId);
+      if (!doctor) {
+        return res.status(403).json({ message: "Only doctors can view patient records" });
+      }
+      
+      console.log('Doctor', doctor.id, 'viewing records for patient', patientId);
+      const records = await storage.getMedicalRecordsByPatient(patientId);
+      console.log('Found', records.length, 'records for patient', patientId);
+      
+      res.json(records);
+    } catch (error) {
+      console.error("Error fetching patient medical records:", error);
+      res.status(500).json({ message: "Failed to fetch patient medical records" });
+    }
+  });
+
   app.post('/api/medical-records', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
