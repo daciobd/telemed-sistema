@@ -25,7 +25,7 @@ export default function Appointments() {
     patientName?: string;
     doctorName?: string;
   } | null>(null);
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const { user, isAuthenticated, isLoading } = useAuth();
   const queryClient = useQueryClient();
@@ -377,7 +377,9 @@ export default function Appointments() {
                           {/* Botão de Pagamento - visível para todos para teste */}
                           <Button
                             size="sm"
-                            onClick={() => window.location.href = `/payment-checkout?appointment=${appointment.id}`}
+                            onClick={() => {
+                              setLocation(`/payment-checkout?appointment=${appointment.id}`);
+                            }}
                             className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
                             <CreditCard className="h-4 w-4" />

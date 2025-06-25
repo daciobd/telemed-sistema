@@ -174,7 +174,7 @@ export default function PaymentCheckout() {
         const appointment = await appointmentResponse.json();
         setAppointmentDetails(appointment);
 
-        // Create payment intent with better error handling
+        // Create payment intent with robust error handling
         const paymentResponse = await fetch('/api/payments/create-payment-intent', {
           method: 'POST',
           headers: {
@@ -188,27 +188,33 @@ export default function PaymentCheckout() {
           }),
         });
 
-        let paymentData;
-        try {
-          if (!paymentResponse.ok) {
-            // Try to parse as JSON first, then fall back to text
-            let errorMessage;
-            try {
-              const errorJson = await paymentResponse.json();
-              errorMessage = errorJson.message || `HTTP ${paymentResponse.status}`;
-            } catch {
-              const errorText = await paymentResponse.text();
-              errorMessage = errorText.includes('DOCTYPE') ? 'Server returned HTML instead of JSON' : errorText;
-            }
-            throw new Error(errorMessage);
-          }
-          
-          paymentData = await paymentResponse.json();
-          setClientSecret(paymentData.clientSecret);
-        } catch (jsonError) {
-          console.error('Payment JSON parsing error:', jsonError);
-          throw new Error('Failed to process payment response');
+        // Check if response is HTML (authentication redirect)
+        const contentType = paymentResponse.headers.get('content-type');
+        if (contentType?.includes('text/html')) {
+          toast({
+            title: "Sessão Expirada",
+            description: "Redirecionando para login...",
+            variant: "destructive",
+          });
+          setTimeout(() => {
+            window.location.href = "/api/login";
+          }, 1000);
+          return;
         }
+
+        if (!paymentResponse.ok) {
+          let errorMessage = `Erro ${paymentResponse.status}`;
+          try {
+            const errorJson = await paymentResponse.json();
+            errorMessage = errorJson.message || errorMessage;
+          } catch {
+            // If JSON parsing fails, use status code
+          }
+          throw new Error(errorMessage);
+        }
+        
+        const paymentData = await paymentResponse.json();
+        setClientSecret(paymentData.clientSecret);
       } catch (error: any) {
         if (isUnauthorizedError(error)) {
           toast({
