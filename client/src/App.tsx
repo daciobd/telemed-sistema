@@ -22,6 +22,7 @@ import VideoTestSimple from "@/pages/video-test-simple";
 import PsychiatryAssessment from "@/pages/psychiatry-assessment";
 import PsychiatryQuestionnaire from "@/pages/psychiatry-questionnaire";
 import PsychiatryPreConsultation from "@/components/psychiatry/psychiatry-pre-consultation";
+import PsychologistInterviewPage from "@/pages/psychologist-interview";
 
 
 function Router() {
@@ -73,6 +74,11 @@ function Router() {
             <PsychiatryPreConsultation 
               appointmentId={parseInt(params.appointmentId)} 
               onStartConsultation={() => window.location.href = `/videoconsulta/${params.appointmentId}`} 
+            />
+          } />
+          <Route path="/psychologist-interview/:appointmentId" component={({ params }: any) => 
+            <PsychologistInterviewPage 
+              appointmentId={parseInt(params.appointmentId)} 
             />
           } />
 
