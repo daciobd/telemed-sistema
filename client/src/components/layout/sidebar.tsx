@@ -42,8 +42,12 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
   const filteredNavigation = navigation.filter(item => {
     if (!user) return false;
     
-    // Determine user role
-    const userRole = getUserRole();
+    // Determine user role - check both role field and doctor/patient objects
+    let userRole = 'patient'; // default
+    if (user.role === 'doctor' || user.doctor) {
+      userRole = 'doctor';
+    }
+    
     return item.roles.includes(userRole);
   });
 
