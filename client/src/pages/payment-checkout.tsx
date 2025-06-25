@@ -56,6 +56,7 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
       
       const result = await stripe.confirmPayment({
         elements,
+        redirect: 'if_required',
         confirmParams: {
           return_url: `${window.location.origin}/payment-success?appointment=${appointmentId}`,
         },
@@ -93,12 +94,17 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
           variant: "destructive",
         });
       } else {
-        // Payment succeeded
+        // Payment succeeded - handle success without redirect
+        console.log('Payment succeeded!', result);
         toast({
-          title: "Pagamento Processado!",
-          description: "Redirecionando para confirmação...",
-          variant: "default",
+          title: "Pagamento Aprovado!",
+          description: "Pagamento de R$ 150,00 processado com sucesso.",
         });
+        
+        // Redirect manually using useLocation hook
+        setTimeout(() => {
+          setLocation(`/payment-success?appointment=${appointmentId}`);
+        }, 2000);
       }
     } catch (error: any) {
       console.error('Payment error details:', error);
