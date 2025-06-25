@@ -104,9 +104,13 @@ export const teleconsultResponses = pgTable("teleconsult_responses", {
   appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
   doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
   responseType: varchar("response_type", { enum: ["immediate_accept", "schedule_offer", "declined"] }).notNull(),
-  offeredDateTime: timestamp("offered_date_time"), // for schedule offers
+  offeredDateTime: timestamp("offered_date_time"),
+  offeredPrice: numeric("offered_price", { precision: 10, scale: 2 }).notNull(),
   message: text("message"),
   isAccepted: boolean("is_accepted").default(false),
+  consultationPreference: varchar("consultation_preference", { length: 50 }).default("immediate"),
+  requiresPreparation: boolean("requires_preparation").default(false),
+  preparationMessage: text("preparation_message"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

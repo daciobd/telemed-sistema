@@ -72,6 +72,13 @@ export interface IStorage {
   simulateDoctorResponses(appointmentId: number, doctors: any[], offeredPrice: number, consultationType: string): Promise<void>;
   getTeleconsultResponses(appointmentId: number): Promise<any[]>;
   acceptDoctorResponse(appointmentId: number, responseId: number): Promise<Appointment>;
+  createTeleconsultResponse(data: any): Promise<any>;
+  
+  // Consultation workflow operations
+  updateAppointmentWorkflow(appointmentId: number, workflowData: any): Promise<Appointment>;
+  getAppointmentWithWorkflowStatus(appointmentId: number): Promise<any>;
+  getPreparationStatus(appointmentId: number): Promise<any>;
+  advanceConsultationDueToRisk(appointmentId: number): Promise<Appointment>;
   
   // Medical record operations
   createMedicalRecord(record: InsertMedicalRecord): Promise<MedicalRecord>;

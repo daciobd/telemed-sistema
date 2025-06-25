@@ -24,6 +24,7 @@ import PsychiatryQuestionnaire from "@/pages/psychiatry-questionnaire";
 import PsychiatryPreConsultation from "@/components/psychiatry/psychiatry-pre-consultation";
 import PsychologistInterviewPage from "@/pages/psychologist-interview";
 import PsychologistInterviewSimple from "@/pages/psychologist-interview-simple";
+import TeleconsultWorkflowPage from "@/pages/teleconsult-workflow";
 
 
 function Router() {
@@ -82,6 +83,7 @@ function Router() {
               appointmentId={parseInt(params.appointmentId)} 
             />
           } />
+          <Route path="/teleconsult-workflow" component={TeleconsultWorkflowPage} />
 
         </>
       )}

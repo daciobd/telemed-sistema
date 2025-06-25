@@ -109,6 +109,17 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Sistema de Fluxo Flexível para Teleconsultas Psiquiátricas
+- **Data**: 25/06/2025
+- **Implementação**: Fluxo flexível onde psiquiatras podem escolher atendimento imediato ou com preparação
+- **Funcionalidades**: 
+  - Resposta a leilão reverso com preferência de workflow
+  - Interface para psiquiatras escolherem entre imediato ou preparação
+  - Sistema de antecipação automática baseado em risco (PHQ-9 e GAD-7)
+  - Status de workflow em tempo real para pacientes e médicos
+- **Backend**: Novas tabelas e APIs para gerenciar workflow de preparação
+- **Interface**: Componentes especializados para gerenciamento de teleconsultas psiquiátricas
+
 ### Sistema de Videoconsultas WebRTC
 - **Data**: 24/06/2025
 - **Implementação**: Sistema completo de videoconsultas com WebRTC
