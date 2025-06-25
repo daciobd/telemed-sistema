@@ -29,6 +29,7 @@ import DemoManagementPage from "@/pages/demo-management";
 import ImprovedLandingPage from "@/pages/landing-improved";
 import WhatsAppContactPage from "@/pages/whatsapp-contact";
 import MedicalEvaluationPage from "@/pages/medical-evaluation";
+import MedicalEvaluationsView from "@/pages/medical-evaluations-view";
 
 
 function Router() {
@@ -95,6 +96,7 @@ function Router() {
           <Route path="/medical-evaluation/:appointmentId" component={({ params }: any) => 
             <MedicalEvaluationPage appointmentId={parseInt(params.appointmentId)} />
           } />
+          <Route path="/medical-evaluations-view" component={MedicalEvaluationsView} />
 
         </>
       )}

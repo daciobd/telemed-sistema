@@ -1244,6 +1244,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Medical Evaluations
+  app.post('/api/medical-evaluations', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      
+      // Check if user is a patient
+      const patient = await storage.getPatientByUserId(userId);
+      if (!patient) {
+        return res.status(403).json({ message: "Only patients can create evaluations" });
+      }
+
+      const evaluationData = req.body;
+      evaluationData.patientId = patient.id;
+      
+      // Get appointment to verify patient access and get doctor ID
+      const appointment = await storage.getAppointmentWithDetails(evaluationData.appointmentId);
+      if (!appointment || appointment.patientId !== patient.id) {
+        return res.status(403).json({ message: "Unauthorized to evaluate this appointment" });
+      }
+      
+      evaluationData.doctorId = appointment.doctorId;
+      
+      // Check if evaluation already exists
+      const existingEvaluation = await storage.getMedicalEvaluationByAppointment(evaluationData.appointmentId);
+      if (existingEvaluation) {
+        return res.status(400).json({ message: "Evaluation already exists for this appointment" });
+      }
+      
+      const evaluation = await storage.createMedicalEvaluation(evaluationData);
+      res.status(201).json(evaluation);
+    } catch (error) {
+      console.error("Error creating medical evaluation:", error);
+      res.status(500).json({ message: "Failed to create evaluation" });
+    }
+  });
+
+  app.get('/api/medical-evaluations/doctor/:doctorId', isAuthenticated, async (req: any, res) => {
+    try {
+      const doctorId = parseInt(req.params.doctorId);
+      const evaluations = await storage.getMedicalEvaluationsByDoctor(doctorId);
+      res.json(evaluations);
+    } catch (error) {
+      console.error("Error fetching doctor evaluations:", error);
+      res.status(500).json({ message: "Failed to fetch evaluations" });
+    }
+  });
+
+  app.get('/api/medical-evaluations/patient', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const patient = await storage.getPatientByUserId(userId);
+      
+      if (!patient) {
+        return res.status(403).json({ message: "Patient not found" });
+      }
+      
+      const evaluations = await storage.getMedicalEvaluationsByPatient(patient.id);
+      res.json(evaluations);
+    } catch (error) {
+      console.error("Error fetching patient evaluations:", error);
+      res.status(500).json({ message: "Failed to fetch evaluations" });
+    }
+  });
+
   const httpServer = createServer(app);
   
   // WebSocket server for real-time notifications and video calls

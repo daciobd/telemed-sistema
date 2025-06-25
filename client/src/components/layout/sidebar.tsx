@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video, Menu, X, Brain, MessageCircle } from "lucide-react";
+import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video, Menu, X, Brain, MessageCircle, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +34,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Agenda", href: "/agenda", icon: Calendar, roles: ["patient", "doctor"] },
     { name: "Assistente IA", href: "/assistente-ia", icon: Brain, roles: ["patient", "doctor"] },
     { name: "Relatórios", href: "/relatorios", icon: Settings, roles: ["doctor"] },
+    { name: "Avaliações", href: "/medical-evaluations-view", icon: Star, roles: ["doctor"] },
     { name: "Demo Médica", href: "/demo-management", icon: Settings, roles: ["doctor"] },
   ];
 
