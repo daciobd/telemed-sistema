@@ -10,10 +10,16 @@ interface PsychologistInterviewSimpleProps {
 
 export default function PsychologistInterviewSimple({ appointmentId }: PsychologistInterviewSimpleProps) {
   const [, setLocation] = useLocation();
-  const [isScheduled, setIsScheduled] = useState(false);
+  const [isScheduled, setIsScheduled] = useState(() => {
+    // Check if interview was already scheduled
+    return localStorage.getItem(`interview-scheduled-${appointmentId}`) === 'true';
+  });
 
   const scheduleInterview = () => {
     setIsScheduled(true);
+    localStorage.setItem(`interview-scheduled-${appointmentId}`, 'true');
+    // Trigger a custom event to update other components
+    window.dispatchEvent(new CustomEvent('interview-scheduled', { detail: { appointmentId } }));
   };
 
   return (

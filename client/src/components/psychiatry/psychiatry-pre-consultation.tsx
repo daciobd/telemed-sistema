@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -45,19 +45,27 @@ export default function PsychiatryPreConsultation({ appointmentId, onStartConsul
     staleTime: 5 * 60 * 1000,
   });
 
-  // Check if interview is scheduled
-  const { data: interview } = useQuery({
-    queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
-    retry: false,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchInterval: false,
-    staleTime: 5 * 60 * 1000,
+  // Check if interview is scheduled - using localStorage
+  const [isInterviewScheduled, setIsInterviewScheduled] = useState(() => {
+    return localStorage.getItem(`interview-scheduled-${appointmentId}`) === 'true';
   });
+
+  // Listen for interview scheduled events
+  useEffect(() => {
+    const handleInterviewScheduled = (event: CustomEvent) => {
+      if (event.detail.appointmentId === appointmentId) {
+        setIsInterviewScheduled(true);
+      }
+    };
+
+    window.addEventListener('interview-scheduled', handleInterviewScheduled as EventListener);
+    return () => {
+      window.removeEventListener('interview-scheduled', handleInterviewScheduled as EventListener);
+    };
+  }, [appointmentId]);
 
   const isAssessmentCompleted = !!assessment;
   const isQuestionnaireCompleted = !!questionnaire;
-  const isInterviewScheduled = !!interview;
   const allCompleted = isAssessmentCompleted && isQuestionnaireCompleted;
 
   const assessmentProgress = isAssessmentCompleted ? 100 : 0;
