@@ -190,6 +190,33 @@ export const psychiatryQuestionnaires = pgTable("psychiatry_questionnaires", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Pre-consultation interview with psychologist
+export const psychologistInterviews = pgTable("psychologist_interviews", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),
+  psychologistId: integer("psychologist_id").references(() => doctors.id).notNull(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  interviewDate: timestamp("interview_date").notNull(),
+  duration: integer("duration"), // minutes
+  status: varchar("status").default("scheduled"), // scheduled, completed, cancelled
+  psychodynamicSummary: text("psychodynamic_summary"),
+  personalityProfile: text("personality_profile"),
+  copingMechanisms: text("coping_mechanisms"),
+  interpersonalPatterns: text("interpersonal_patterns"),
+  defenseStructures: text("defense_structures"),
+  emotionalRegulation: text("emotional_regulation"),
+  recommendations: text("recommendations"),
+  riskFactors: text("risk_factors"),
+  strengths: text("strengths"),
+  therapeuticAlliance: text("therapeutic_alliance"),
+  transferenceNotes: text("transference_notes"),
+  countertransferenceNotes: text("countertransference_notes"),
+  treatmentRecommendations: text("treatment_recommendations"),
+  urgencyLevel: varchar("urgency_level"), // low, moderate, high, urgent
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   patient: one(patients, {
@@ -342,6 +369,12 @@ export const insertPsychiatryQuestionnaireSchema = createInsertSchema(psychiatry
   completedAt: true,
 });
 
+export const insertPsychologistInterviewSchema = createInsertSchema(psychologistInterviews).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type UpsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -362,6 +395,9 @@ export type PsychologicalAssessment = typeof psychologicalAssessments.$inferSele
 
 export type InsertPsychiatryQuestionnaire = z.infer<typeof insertPsychiatryQuestionnaireSchema>;
 export type PsychiatryQuestionnaire = typeof psychiatryQuestionnaires.$inferSelect;
+
+export type InsertPsychologistInterview = z.infer<typeof insertPsychologistInterviewSchema>;
+export type PsychologistInterview = typeof psychologistInterviews.$inferSelect;
 
 // Extended types for API responses
 export type UserWithProfile = User & {

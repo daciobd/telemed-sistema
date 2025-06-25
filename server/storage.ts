@@ -101,6 +101,14 @@ export interface IStorage {
   getPsychiatryQuestionnaire(id: number): Promise<PsychiatryQuestionnaire | undefined>;
   getPsychiatryQuestionnaireByAppointment(appointmentId: number): Promise<PsychiatryQuestionnaire | undefined>;
   updatePsychiatryQuestionnaire(id: number, questionnaire: Partial<InsertPsychiatryQuestionnaire>): Promise<PsychiatryQuestionnaire>;
+  
+  // Psychologist Interview operations
+  createPsychologistInterview(interview: InsertPsychologistInterview): Promise<PsychologistInterview>;
+  getPsychologistInterview(id: number): Promise<PsychologistInterview | undefined>;
+  getPsychologistInterviewByAppointment(appointmentId: number): Promise<PsychologistInterview | undefined>;
+  updatePsychologistInterview(id: number, interview: Partial<InsertPsychologistInterview>): Promise<PsychologistInterview>;
+  getAvailablePsychologists(): Promise<DoctorWithUser[]>;
+  schedulePsychologistInterview(appointmentId: number, psychologistId: number, interviewDate: Date): Promise<PsychologistInterview>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -750,6 +758,63 @@ export class DatabaseStorage implements IStorage {
       .where(eq(psychiatryQuestionnaires.id, id))
       .returning();
     return updatedQuestionnaire;
+  }
+
+  // Psychologist Interview operations
+  async createPsychologistInterview(interview: InsertPsychologistInterview): Promise<PsychologistInterview> {
+    const [created] = await db
+      .insert(psychologistInterviews)
+      .values(interview)
+      .returning();
+    return created;
+  }
+
+  async getPsychologistInterview(id: number): Promise<PsychologistInterview | undefined> {
+    const [interview] = await db
+      .select()
+      .from(psychologistInterviews)
+      .where(eq(psychologistInterviews.id, id));
+    return interview;
+  }
+
+  async getPsychologistInterviewByAppointment(appointmentId: number): Promise<PsychologistInterview | undefined> {
+    const [interview] = await db
+      .select()
+      .from(psychologistInterviews)
+      .where(eq(psychologistInterviews.appointmentId, appointmentId));
+    return interview;
+  }
+
+  async updatePsychologistInterview(id: number, interview: Partial<InsertPsychologistInterview>): Promise<PsychologistInterview> {
+    const [updated] = await db
+      .update(psychologistInterviews)
+      .set(interview)
+      .where(eq(psychologistInterviews.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getAvailablePsychologists(): Promise<DoctorWithUser[]> {
+    return await db
+      .select()
+      .from(doctors)
+      .innerJoin(users, eq(doctors.userId, users.id))
+      .where(eq(doctors.specialty, "Psicologia"));
+  }
+
+  async schedulePsychologistInterview(appointmentId: number, psychologistId: number, interviewDate: Date): Promise<PsychologistInterview> {
+    const appointment = await this.getAppointment(appointmentId);
+    if (!appointment) throw new Error("Appointment not found");
+
+    const interview = await this.createPsychologistInterview({
+      appointmentId,
+      psychologistId,
+      patientId: appointment.patientId,
+      interviewDate,
+      status: "scheduled",
+    });
+
+    return interview;
   }
 }
 

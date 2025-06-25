@@ -37,8 +37,15 @@ export default function PsychiatryPreConsultation({ appointmentId, onStartConsul
     retry: false,
   });
 
+  // Check if interview is scheduled
+  const { data: interview } = useQuery({
+    queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
+    retry: false,
+  });
+
   const isAssessmentCompleted = !!assessment;
   const isQuestionnaireCompleted = !!questionnaire;
+  const isInterviewScheduled = !!interview;
   const allCompleted = isAssessmentCompleted && isQuestionnaireCompleted;
 
   const assessmentProgress = isAssessmentCompleted ? 100 : 0;

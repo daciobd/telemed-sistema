@@ -153,9 +153,10 @@ src/
 - ✅ Videoconsultas WebRTC completas
 - ✅ Prescrições MEMED
 - ✅ Sistema de notificações
-- ✅ Sistema de psiquiatria especializado (totalmente funcional)
+- ✅ Sistema de psiquiatria especializado com entrevista pré-consulta
 - ✅ Avaliação psicológica PHQ-9 e GAD-7 operacional
 - ✅ Questionário psiquiátrico 100% funcional (dropdowns, sliders e inputs corrigidos)
+- ✅ Sistema de entrevista com psicóloga para avaliação psicodinâmica
 
 ### Próximas Melhorias
 - Sistema de pagamentos integrado
