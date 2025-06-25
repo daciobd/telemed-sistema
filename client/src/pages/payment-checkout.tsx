@@ -163,10 +163,33 @@ export default function PaymentCheckout() {
   }, [isAuthenticated, isLoading, toast]);
 
   useEffect(() => {
+    const fetchAppointmentDetails = async () => {
+      try {
+        const appointmentResponse = await fetch(`/api/appointments/${appointmentId}`, {
+          credentials: 'include',
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (appointmentResponse.ok) {
+          const appointment = await appointmentResponse.json();
+          setAppointmentDetails(appointment);
+        }
+      } catch (error) {
+        console.error('Failed to fetch appointment details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     // If we have a pre-authenticated client secret, use it directly
     if (preAuthClientSecret) {
       setClientSecret(preAuthClientSecret);
-      setLoading(false);
+      // Still need to fetch appointment details for display
+      if (appointmentId) {
+        fetchAppointmentDetails();
+      } else {
+        setLoading(false);
+      }
       return;
     }
 
