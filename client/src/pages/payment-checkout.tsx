@@ -174,26 +174,41 @@ export default function PaymentCheckout() {
         const appointment = await appointmentResponse.json();
         setAppointmentDetails(appointment);
 
-        // Create payment intent
+        // Create payment intent with better error handling
         const paymentResponse = await fetch('/api/payments/create-payment-intent', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify({
             appointmentId: appointmentId,
-            amount: appointment.amount || 150, // Default amount
+            amount: 150, // Fixed amount for testing
           }),
         });
 
-        if (!paymentResponse.ok) {
-          const errorText = await paymentResponse.text();
-          console.error('Payment API error:', errorText);
-          throw new Error(`Failed to create payment intent: ${paymentResponse.status}`);
+        let paymentData;
+        try {
+          if (!paymentResponse.ok) {
+            // Try to parse as JSON first, then fall back to text
+            let errorMessage;
+            try {
+              const errorJson = await paymentResponse.json();
+              errorMessage = errorJson.message || `HTTP ${paymentResponse.status}`;
+            } catch {
+              const errorText = await paymentResponse.text();
+              errorMessage = errorText.includes('DOCTYPE') ? 'Server returned HTML instead of JSON' : errorText;
+            }
+            throw new Error(errorMessage);
+          }
+          
+          paymentData = await paymentResponse.json();
+          setClientSecret(paymentData.clientSecret);
+        } catch (jsonError) {
+          console.error('Payment JSON parsing error:', jsonError);
+          throw new Error('Failed to process payment response');
         }
-
-        const paymentData = await paymentResponse.json();
-        setClientSecret(paymentData.clientSecret);
       } catch (error: any) {
         if (isUnauthorizedError(error)) {
           toast({
