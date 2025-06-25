@@ -11,6 +11,9 @@ interface PsychologistInterviewSummaryProps {
 export default function PsychologistInterviewSummary({ appointmentId }: PsychologistInterviewSummaryProps) {
   const { data: interview, isLoading } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
+    enabled: appointmentId > 0,
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 
   if (isLoading) {

@@ -1,4 +1,4 @@
-import { useParams, useLocation } from 'wouter';
+import { useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,18 +7,26 @@ import { ArrowLeft, Users } from 'lucide-react';
 import PsychologistInterviewScheduler from '@/components/psychiatry/psychologist-interview-scheduler';
 import PsychologistInterviewSummary from '@/components/psychiatry/psychologist-interview-summary';
 
-export default function PsychologistInterviewPage() {
-  const params = useParams();
+interface PsychologistInterviewPageProps {
+  appointmentId: number;
+}
+
+export default function PsychologistInterviewPage({ appointmentId }: PsychologistInterviewPageProps) {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
-  const appointmentId = params.id ? parseInt(params.id) : 0;
 
   const { data: interview, isLoading } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
+    enabled: appointmentId > 0,
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 
   const { data: appointment } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}`],
+    enabled: appointmentId > 0,
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 
   if (isLoading) {
