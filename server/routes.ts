@@ -1308,6 +1308,140 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Payment routes
+  app.post('/api/payments/create-payment-intent', isAuthenticated, async (req: any, res) => {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.status(500).json({ message: 'Stripe not configured' });
+    }
+    
+    try {
+      const Stripe = require('stripe');
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+      
+      const { appointmentId, amount } = req.body;
+      const userId = req.user.claims.sub;
+      
+      // Get appointment details
+      const appointment = await storage.getAppointmentWithDetails(appointmentId);
+      if (!appointment) {
+        return res.status(404).json({ message: 'Appointment not found' });
+      }
+      
+      // Verify user is the patient
+      const patient = await storage.getPatientByUserId(userId);
+      if (!patient || appointment.patientId !== patient.id) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      // Ensure appointment has a doctor
+      if (!appointment.doctorId) {
+        return res.status(400).json({ message: 'Appointment must have a doctor assigned' });
+      }
+      
+      // Create payment intent
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency: 'brl',
+        metadata: {
+          appointmentId: appointmentId.toString(),
+          patientId: patient.id.toString(),
+          doctorId: appointment.doctorId.toString(),
+        },
+        payment_method_types: ['card'],
+      });
+      
+      // Update appointment with payment info
+      await storage.updateAppointment(appointmentId, {
+        notes: `Payment Intent: ${paymentIntent.id}`
+      });
+      
+      // Save transaction record
+      await storage.createPaymentTransaction({
+        appointmentId,
+        patientId: patient.id,
+        doctorId: appointment.doctorId,
+        stripePaymentIntentId: paymentIntent.id,
+        amount: amount.toString(),
+        currency: 'brl',
+        status: 'pending',
+        stripeClientSecret: paymentIntent.client_secret,
+        metadata: { appointmentId, patientId: patient.id, doctorId: appointment.doctorId }
+      });
+      
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id 
+      });
+    } catch (error: any) {
+      console.error('Error creating payment intent:', error);
+      res.status(500).json({ message: 'Error creating payment intent: ' + error.message });
+    }
+  });
+
+  // Financial dashboard for doctors
+  app.get('/api/financial/dashboard/:doctorId', isAuthenticated, async (req: any, res) => {
+    try {
+      const doctorId = parseInt(req.params.doctorId);
+      const userId = req.user.claims.sub;
+      
+      // Verify user is the doctor
+      const doctor = await storage.getDoctorByUserId(userId);
+      if (!doctor || doctor.id !== doctorId) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      // Get financial data
+      const earnings = await storage.getDoctorEarnings(doctorId);
+      const transactions = await storage.getPaymentTransactionsByDoctor(doctorId);
+      
+      // Calculate metrics
+      const totalEarnings = earnings.reduce((sum: number, earning: any) => sum + parseFloat(earning.netAmount), 0);
+      const monthlyEarnings = earnings
+        .filter((earning: any) => new Date(earning.createdAt).getMonth() === new Date().getMonth())
+        .reduce((sum: number, earning: any) => sum + parseFloat(earning.netAmount), 0);
+      
+      const pendingPayments = transactions
+        .filter((t: any) => t.status === 'pending')
+        .reduce((sum: number, t: any) => sum + parseFloat(t.amount), 0);
+      
+      const successfulPayments = transactions.filter((t: any) => t.status === 'succeeded').length;
+      const conversionRate = transactions.length > 0 ? (successfulPayments / transactions.length) * 100 : 0;
+      
+      res.json({
+        totalEarnings,
+        monthlyEarnings,
+        pendingPayments,
+        conversionRate: conversionRate.toFixed(1),
+        monthlyConsultations: earnings.filter((earning: any) => 
+          new Date(earning.createdAt).getMonth() === new Date().getMonth()
+        ).length,
+        pendingCount: transactions.filter((t: any) => t.status === 'pending').length
+      });
+    } catch (error) {
+      console.error('Error fetching financial dashboard:', error);
+      res.status(500).json({ message: 'Failed to fetch financial data' });
+    }
+  });
+
+  app.get('/api/financial/transactions/:doctorId', isAuthenticated, async (req: any, res) => {
+    try {
+      const doctorId = parseInt(req.params.doctorId);
+      const userId = req.user.claims.sub;
+      
+      // Verify user is the doctor
+      const doctor = await storage.getDoctorByUserId(userId);
+      if (!doctor || doctor.id !== doctorId) {
+        return res.status(403).json({ message: 'Unauthorized' });
+      }
+      
+      const transactions = await storage.getPaymentTransactionsByDoctor(doctorId);
+      res.json(transactions);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      res.status(500).json({ message: 'Failed to fetch transactions' });
+    }
+  });
+
   const httpServer = createServer(app);
   
   // WebSocket server for real-time notifications and video calls

@@ -139,6 +139,11 @@ export interface IStorage {
   getMedicalEvaluationsByDoctor(doctorId: number): Promise<any[]>;
   getMedicalEvaluationsByPatient(patientId: number): Promise<any[]>;
   getMedicalEvaluationByAppointment(appointmentId: number): Promise<any | undefined>;
+  
+  // Payment operations
+  createPaymentTransaction(transaction: any): Promise<any>;
+  getPaymentTransactionsByDoctor(doctorId: number): Promise<any[]>;
+  getDoctorEarnings(doctorId: number): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -875,6 +880,32 @@ export class DatabaseStorage implements IStorage {
       .from(medicalEvaluations)
       .where(eq(medicalEvaluations.appointmentId, appointmentId));
     return evaluation;
+  }
+}
+
+  // Payment operations
+  async createPaymentTransaction(transaction: any): Promise<any> {
+    const [result] = await db
+      .insert(paymentTransactions)
+      .values(transaction)
+      .returning();
+    return result;
+  }
+
+  async getPaymentTransactionsByDoctor(doctorId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(paymentTransactions)
+      .where(eq(paymentTransactions.doctorId, doctorId))
+      .orderBy(desc(paymentTransactions.createdAt));
+  }
+
+  async getDoctorEarnings(doctorId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(doctorEarnings)
+      .where(eq(doctorEarnings.doctorId, doctorId))
+      .orderBy(desc(doctorEarnings.createdAt));
   }
 }
 

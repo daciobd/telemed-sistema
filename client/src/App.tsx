@@ -30,6 +30,9 @@ import ImprovedLandingPage from "@/pages/landing-improved";
 import WhatsAppContactPage from "@/pages/whatsapp-contact";
 import MedicalEvaluationPage from "@/pages/medical-evaluation";
 import MedicalEvaluationsView from "@/pages/medical-evaluations-view";
+import PaymentCheckout from "@/pages/payment-checkout";
+import PaymentSuccess from "@/pages/payment-success";
+import FinancialDashboard from "@/pages/financial-dashboard";
 
 
 function Router() {
@@ -97,6 +100,9 @@ function Router() {
             <MedicalEvaluationPage appointmentId={parseInt(params.appointmentId)} />
           } />
           <Route path="/medical-evaluations-view" component={MedicalEvaluationsView} />
+          <Route path="/payment-checkout" component={PaymentCheckout} />
+          <Route path="/payment-success" component={PaymentSuccess} />
+          <Route path="/financial-dashboard" component={FinancialDashboard} />
 
         </>
       )}

@@ -379,6 +379,61 @@ export const psychiatryQuestionnairesRelations = relations(psychiatryQuestionnai
   }),
 }));
 
+// Payment transactions table
+export const paymentTransactions = pgTable("payment_transactions", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").references(() => appointments.id, { onDelete: "cascade" }),
+  patientId: integer("patient_id").references(() => patients.id, { onDelete: "cascade" }),
+  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
+  stripePaymentIntentId: varchar("stripe_payment_intent_id").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency").default("brl"),
+  status: varchar("status").notNull(), // 'pending', 'succeeded', 'failed', 'canceled', 'refunded'
+  paymentMethod: varchar("payment_method"), // 'card', 'pix', etc
+  stripeClientSecret: varchar("stripe_client_secret"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Subscription plans table
+export const subscriptionPlans = pgTable("subscription_plans", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  description: text("description"),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  currency: varchar("currency").default("brl"),
+  interval: varchar("interval").notNull(), // 'month', 'year'
+  stripePriceId: varchar("stripe_price_id"),
+  features: jsonb("features"), // array of features
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Doctor earnings table
+export const doctorEarnings = pgTable("doctor_earnings", {
+  id: serial("id").primaryKey(),
+  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
+  appointmentId: integer("appointment_id").references(() => appointments.id, { onDelete: "cascade" }),
+  transactionId: integer("transaction_id").references(() => paymentTransactions.id, { onDelete: "cascade" }),
+  grossAmount: decimal("gross_amount", { precision: 10, scale: 2 }).notNull(),
+  platformFee: decimal("platform_fee", { precision: 10, scale: 2 }).notNull(),
+  netAmount: decimal("net_amount", { precision: 10, scale: 2 }).notNull(),
+  payoutStatus: varchar("payout_status").default("pending"), // 'pending', 'paid', 'failed'
+  payoutDate: timestamp("payout_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type InsertPaymentTransaction = typeof paymentTransactions.$inferInsert;
+export type PaymentTransaction = typeof paymentTransactions.$inferSelect;
+
+export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
+export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
+
+export type InsertDoctorEarning = typeof doctorEarnings.$inferInsert;
+export type DoctorEarning = typeof doctorEarnings.$inferSelect;
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
