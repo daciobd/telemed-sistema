@@ -147,6 +147,22 @@ export const clinicalExams = pgTable("clinical_exams", {
 });
 
 // Medical referrals to other specialists
+// Medical service evaluations by patients
+export const medicalEvaluations = pgTable("medical_evaluations", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
+  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
+  satisfactionRating: integer("satisfaction_rating").notNull(), // 1-5 scale
+  knowledgeRating: integer("knowledge_rating").notNull(), // 1-5 scale  
+  attentivenessRating: integer("attentiveness_rating").notNull(), // 1-5 scale
+  testimonial: text("testimonial"), // Optional patient testimonial
+  wouldRecommend: boolean("would_recommend").default(true),
+  overallRating: integer("overall_rating").notNull(), // 1-5 scale (calculated average)
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const medicalReferrals = pgTable("medical_referrals", {
   id: serial("id").primaryKey(),
   appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),

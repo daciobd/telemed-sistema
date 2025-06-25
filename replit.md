@@ -84,6 +84,14 @@ Sistema abrangente de telemedicina que oferece soluções digitais inovadoras pa
 - Integração direta com WhatsApp Web/App
 - Avisos de segurança para emergências
 
+### ✅ Sistema de Avaliação do Atendimento Médico
+- Avaliação por estrelas (1-5) em 4 aspectos: satisfação, conhecimento, atenção
+- Campo para depoimento opcional dos pacientes
+- Opção de recomendação do médico
+- Cálculo automático de nota geral
+- Interface intuitiva com feedback visual
+- Prevenção de avaliações duplicadas
+
 ### ✅ Sistema de Demonstração Médica
 - Equipe fictícia com 20 médicos especialistas
 - 50 pacientes com condições médicas variadas

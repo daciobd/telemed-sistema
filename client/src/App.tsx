@@ -28,6 +28,7 @@ import TeleconsultWorkflowPage from "@/pages/teleconsult-workflow";
 import DemoManagementPage from "@/pages/demo-management";
 import ImprovedLandingPage from "@/pages/landing-improved";
 import WhatsAppContactPage from "@/pages/whatsapp-contact";
+import MedicalEvaluationPage from "@/pages/medical-evaluation";
 
 
 function Router() {
@@ -91,6 +92,9 @@ function Router() {
           <Route path="/demo-management" component={DemoManagementPage} />
           <Route path="/landing-improved" component={ImprovedLandingPage} />
           <Route path="/whatsapp-contact" component={WhatsAppContactPage} />
+          <Route path="/medical-evaluation/:appointmentId" component={({ params }: any) => 
+            <MedicalEvaluationPage appointmentId={parseInt(params.appointmentId)} />
+          } />
 
         </>
       )}

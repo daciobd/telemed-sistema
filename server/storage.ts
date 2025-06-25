@@ -34,6 +34,7 @@ import {
   type InsertClinicalExam,
   type MedicalReferral,
   type InsertMedicalReferral,
+  medicalEvaluations,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, lte } from "drizzle-orm";
@@ -132,6 +133,12 @@ export interface IStorage {
   createMedicalReferral(referral: any): Promise<any>;
   getMedicalReferralsByDoctor(doctorId: number): Promise<any[]>;
   getMedicalReferralsByPatient(patientId: number): Promise<any[]>;
+  
+  // Medical evaluation operations
+  createMedicalEvaluation(evaluation: any): Promise<any>;
+  getMedicalEvaluationsByDoctor(doctorId: number): Promise<any[]>;
+  getMedicalEvaluationsByPatient(patientId: number): Promise<any[]>;
+  getMedicalEvaluationByAppointment(appointmentId: number): Promise<any | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -838,6 +845,36 @@ export class DatabaseStorage implements IStorage {
     });
 
     return interview;
+  }
+
+  // Medical evaluation operations
+  async createMedicalEvaluation(evaluation: any): Promise<any> {
+    const [newEvaluation] = await db.insert(medicalEvaluations).values(evaluation).returning();
+    return newEvaluation;
+  }
+
+  async getMedicalEvaluationsByDoctor(doctorId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(medicalEvaluations)
+      .where(eq(medicalEvaluations.doctorId, doctorId))
+      .orderBy(desc(medicalEvaluations.createdAt));
+  }
+
+  async getMedicalEvaluationsByPatient(patientId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(medicalEvaluations)
+      .where(eq(medicalEvaluations.patientId, patientId))
+      .orderBy(desc(medicalEvaluations.createdAt));
+  }
+
+  async getMedicalEvaluationByAppointment(appointmentId: number): Promise<any | undefined> {
+    const [evaluation] = await db
+      .select()
+      .from(medicalEvaluations)
+      .where(eq(medicalEvaluations.appointmentId, appointmentId));
+    return evaluation;
   }
 }
 
