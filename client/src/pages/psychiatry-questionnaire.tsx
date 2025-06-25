@@ -383,23 +383,33 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
           <div className="space-y-6">
             <h3 className="text-xl font-semibold">Estilo de Vida</h3>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Quantas horas você dorme por noite?</label>
-              <Input
-                type="number"
-                min={1}
-                max={24}
-                step={1}
-                placeholder="Ex: 8"
-                onChange={(e) => {
-                  const value = parseInt(e.target.value);
-                  if (!isNaN(value)) {
-                    form.setValue('sleepHours', value);
-                  }
-                }}
-                className="w-full"
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="sleepHours"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantas horas você dorme por noite?</FormLabel>
+                  <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione as horas" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="4">4 horas</SelectItem>
+                      <SelectItem value="5">5 horas</SelectItem>
+                      <SelectItem value="6">6 horas</SelectItem>
+                      <SelectItem value="7">7 horas</SelectItem>
+                      <SelectItem value="8">8 horas</SelectItem>
+                      <SelectItem value="9">9 horas</SelectItem>
+                      <SelectItem value="10">10 horas</SelectItem>
+                      <SelectItem value="11">11 horas</SelectItem>
+                      <SelectItem value="12">12 horas</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -510,7 +520,7 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status de relacionamento</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione o status" />
