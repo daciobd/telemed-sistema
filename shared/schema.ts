@@ -197,7 +197,7 @@ export const psychologistInterviews = pgTable("psychologist_interviews", {
   psychologistId: integer("psychologist_id").references(() => doctors.id).notNull(),
   patientId: integer("patient_id").references(() => patients.id).notNull(),
   interviewDate: timestamp("interview_date").notNull(),
-  duration: integer("duration"), // minutes
+  duration: integer("duration"), // minutes - set by psychologist after interview
   status: varchar("status").default("scheduled"), // scheduled, completed, cancelled
   psychodynamicSummary: text("psychodynamic_summary"),
   personalityProfile: text("personality_profile"),

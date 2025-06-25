@@ -83,8 +83,9 @@ export default function PsychologistInterviewPage() {
                 <div>
                   <h4 className="font-medium mb-2">Objetivo</h4>
                   <p className="text-gray-600">
-                    A psicóloga realizará uma avaliação psicodinâmica completa para criar um resumo 
-                    detalhado que auxiliará o psiquiatra na personalização do seu tratamento.
+                    A psicóloga realizará uma avaliação psicodinâmica personalizada, dedicando o tempo 
+                    necessário (até 60 minutos) para compreender seu caso e criar um resumo detalhado 
+                    que auxiliará o psiquiatra na personalização do seu tratamento.
                   </p>
                 </div>
                 
@@ -118,7 +119,7 @@ export default function PsychologistInterviewPage() {
               <CardContent className="text-sm space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Duração:</span>
-                  <span>60 minutos</span>
+                  <span>Flexível (até 60 min)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Formato:</span>

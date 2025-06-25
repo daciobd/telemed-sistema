@@ -74,7 +74,9 @@ export default function PsychologistInterviewSummary({ appointmentId }: Psycholo
                 <Clock className="h-4 w-4 text-blue-600" />
                 <span className="font-medium text-sm">Duração</span>
               </div>
-              <p className="text-sm text-gray-700">{interview.duration || 60} minutos</p>
+              <p className="text-sm text-gray-700">
+                {interview.duration ? `${interview.duration} minutos` : 'Duração personalizada'}
+              </p>
             </div>
           </div>
 

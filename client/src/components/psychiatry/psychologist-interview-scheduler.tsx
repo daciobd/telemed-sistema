@@ -229,7 +229,8 @@ export default function PsychologistInterviewScheduler({ appointmentId, onComple
           <div className="bg-gray-50 p-4 rounded-lg">
             <h4 className="font-medium text-gray-900 mb-2">Informações Importantes</h4>
             <ul className="text-sm text-gray-700 space-y-1">
-              <li>• Duração: aproximadamente 60 minutos</li>
+              <li>• Duração: flexível (até 60 minutos conforme necessário)</li>
+              <li>• A psicóloga determina o tempo ideal para cada caso</li>
               <li>• Formato: videoconsulta online</li>
               <li>• Realizada antes da consulta psiquiátrica</li>
               <li>• Opcional, mas altamente recomendada</li>
