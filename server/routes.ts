@@ -159,6 +159,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get single appointment with details
+  app.get('/api/appointments/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const appointment = await storage.getAppointmentWithDetails(appointmentId);
+      
+      if (!appointment) {
+        return res.status(404).json({ message: "Appointment not found" });
+      }
+
+      res.json(appointment);
+    } catch (error) {
+      console.error("Error fetching appointment:", error);
+      res.status(500).json({ message: "Failed to fetch appointment" });
+    }
+  });
+
   app.post('/api/appointments', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;

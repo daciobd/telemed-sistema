@@ -29,6 +29,16 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
   const [, setLocation] = useLocation();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Don't render if appointment details are missing critical data
+  if (!appointmentDetails) {
+    return (
+      <div className="text-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Carregando dados da consulta...</p>
+      </div>
+    );
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -80,7 +90,10 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
           <div className="flex justify-between">
             <span className="text-gray-600">Data:</span>
             <span className="font-medium">
-              {format(new Date(appointmentDetails?.appointmentDate), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+              {appointmentDetails?.appointmentDate ? 
+                format(new Date(appointmentDetails.appointmentDate), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR }) :
+                'Carregando...'
+              }
             </span>
           </div>
           <div className="flex justify-between">
@@ -105,8 +118,10 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
             layout: 'tabs',
             defaultValues: {
               billingDetails: {
-                name: appointmentDetails?.patient?.firstName + ' ' + appointmentDetails?.patient?.lastName,
-                email: appointmentDetails?.patient?.email,
+                name: appointmentDetails?.patient?.firstName && appointmentDetails?.patient?.lastName 
+                  ? `${appointmentDetails.patient.firstName} ${appointmentDetails.patient.lastName}`
+                  : '',
+                email: appointmentDetails?.patient?.email || '',
               }
             }
           }}
