@@ -499,14 +499,14 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
                   <FormControl>
                     <div className="space-y-2">
                       <Slider
-                        value={[field.value]}
+                        value={[field.value || 5]}
                         onValueChange={(value) => field.onChange(value[0])}
                         min={1}
                         max={10}
                         step={1}
                       />
                       <div className="text-center text-sm text-gray-600">
-                        Valor atual: {field.value}
+                        Valor atual: {field.value || 5}
                       </div>
                     </div>
                   </FormControl>
@@ -547,14 +547,14 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
                   <FormControl>
                     <div className="space-y-2">
                       <Slider
-                        value={[field.value]}
+                        value={[field.value || 5]}
                         onValueChange={(value) => field.onChange(value[0])}
                         min={1}
                         max={10}
                         step={1}
                       />
                       <div className="text-center text-sm text-gray-600">
-                        Valor atual: {field.value}
+                        Valor atual: {field.value || 5}
                       </div>
                     </div>
                   </FormControl>
@@ -571,14 +571,14 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
                   <FormControl>
                     <div className="space-y-2">
                       <Slider
-                        value={[field.value]}
+                        value={[field.value || 5]}
                         onValueChange={(value) => field.onChange(value[0])}
                         min={1}
                         max={10}
                         step={1}
                       />
                       <div className="text-center text-sm text-gray-600">
-                        Valor atual: {field.value}
+                        Valor atual: {field.value || 5}
                       </div>
                     </div>
                   </FormControl>
