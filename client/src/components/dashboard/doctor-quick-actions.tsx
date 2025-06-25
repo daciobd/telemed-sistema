@@ -19,21 +19,21 @@ export default function DoctorQuickActions() {
   const quickActions = [
     {
       title: "Nova Consulta",
-      description: "Agendar consulta com paciente",
+      description: "Agendar consulta",
       icon: Calendar,
       color: "bg-blue-500 hover:bg-blue-600",
       action: () => setShowAppointmentModal(true),
     },
     {
       title: "Ver Pacientes",
-      description: "Lista de pacientes ativos",
+      description: "Lista de pacientes",
       icon: Users,
       color: "bg-green-500 hover:bg-green-600",
       action: () => window.location.href = "/patients",
     },
     {
       title: "Prontuários",
-      description: "Acessar registros médicos",
+      description: "Registros médicos",
       icon: FileText,
       color: "bg-purple-500 hover:bg-purple-600",
       action: () => window.location.href = "/medical-records",
@@ -62,13 +62,13 @@ export default function DoctorQuickActions() {
               <Button
                 key={index}
                 variant="outline"
-                className={`h-20 flex flex-col items-center justify-center space-y-2 transition-colors ${action.color} text-white border-0`}
+                className={`h-24 flex flex-col items-center justify-center space-y-2 transition-colors ${action.color} text-white border-0 p-3`}
                 onClick={action.action}
               >
-                <action.icon className="h-6 w-6" />
-                <div className="text-center">
-                  <div className="font-medium text-sm">{action.title}</div>
-                  <div className="text-xs opacity-90">{action.description}</div>
+                <action.icon className="h-7 w-7 flex-shrink-0" />
+                <div className="text-center flex-1 flex flex-col justify-center">
+                  <div className="font-medium text-sm leading-tight mb-1">{action.title}</div>
+                  <div className="text-xs opacity-90 leading-tight">{action.description}</div>
                 </div>
               </Button>
             ))}
