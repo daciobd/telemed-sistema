@@ -142,6 +142,23 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Sistema de Pagamentos Stripe Totalmente Funcional
+- **Data**: 25/06/2025
+- **Implementação**: Sistema completo de pagamentos integrado com Stripe
+- **Funcionalidades**: 
+  - Botões de pagamento visíveis em todas as consultas da página Agendamentos
+  - Integração completa com Stripe para processamento de pagamentos
+  - Checkout seguro com valores de R$ 150,00 por consulta
+  - Validação de autenticação para proteção das transações
+  - Webhook para confirmação automática de pagamentos
+  - Suporte para cartões de teste e produção
+- **Interface**: Botões verdes "💳 Testar Pagamento R$ 150,00" em cada consulta
+- **Teste**: Sistema testado e validado pelo usuário com sucesso
+- **Segurança**: Chaves Stripe configuradas e protegidas
+- **Status**: Pronto para uso em produção após configuração das chaves reais
+
+## Mudanças Recentes (Junho 2025)
+
 ### Sistema de Contato WhatsApp para Dúvidas Médicas  
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para comunicação direta paciente-médico via WhatsApp

@@ -1355,7 +1355,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create payment intent
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount * 100), // Convert to cents
+        amount: Math.round(parseFloat(amount || '150') * 100), // Convert to cents
         currency: 'brl',
         metadata: {
           appointmentId: appointmentId.toString(),
