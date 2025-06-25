@@ -137,9 +137,6 @@ export async function createDemoData() {
         email: `${doctor.name.toLowerCase().replace(/\s+/g, '').replace('dr.', '').replace('dra.', '')}@telemeddemo.com`,
         firstName: doctor.name.split(' ')[1] || doctor.name,
         lastName: doctor.name.split(' ').slice(2).join(' ') || '',
-        role: 'doctor',
-        specialty: doctor.specialty,
-        licenseNumber: doctor.crm
       });
       
       // Create doctor profile
@@ -164,7 +161,6 @@ export async function createDemoData() {
         email: `${patient.name.toLowerCase().replace(/\s+/g, '')}@paciente.com`,
         firstName: patient.name.split(' ')[0],
         lastName: patient.name.split(' ').slice(1).join(' '),
-        role: 'patient'
       });
       
       // Create patient profile
