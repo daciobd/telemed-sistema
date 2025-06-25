@@ -160,6 +160,10 @@ src/
 - **Backend**: APIs REST para processamento de registros
 - **Objetivo**: Facilitar onboarding de usuários reais para testes da plataforma
 - **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA USO
+- **Testes**: Ambos formulários testados e validados com sucesso
+- **Pacientes**: Registro automático com ID patient_1_1750888598234
+- **Médicos**: Registro médico ID 1 aguardando aprovação
+- **Landing Page**: Botões "Sou Médico" e "Sou Paciente" funcionais
 
 ### Sistema de Pagamentos Stripe Totalmente Funcional
 - **Data**: 25/06/2025

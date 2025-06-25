@@ -643,7 +643,12 @@ export type DoctorWithUser = Doctor & {
 };
 
 // Registration schemas
-export const insertDoctorRegistrationSchema = createInsertSchema(doctorRegistrations).omit({
+export const insertDoctorRegistrationSchema = createInsertSchema(doctorRegistrations, {
+  dateOfBirth: z.string().min(1, "Data de nascimento é obrigatória"),
+  graduationYear: z.union([z.string(), z.number()]).transform(val => String(val)),
+  yearsOfExperience: z.union([z.string(), z.number()]).transform(val => String(val)),
+  availability: z.string().min(1, "Disponibilidade é obrigatória"),
+}).omit({
   id: true,
   status: true,
   reviewNotes: true,
@@ -653,7 +658,9 @@ export const insertDoctorRegistrationSchema = createInsertSchema(doctorRegistrat
   updatedAt: true,
 });
 
-export const insertPatientRegistrationSchema = createInsertSchema(patientRegistrations).omit({
+export const insertPatientRegistrationSchema = createInsertSchema(patientRegistrations, {
+  dateOfBirth: z.string().min(1, "Data de nascimento é obrigatória"),
+}).omit({
   id: true,
   status: true,
   userId: true,

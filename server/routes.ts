@@ -103,7 +103,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const registrationData = {
         ...validatedData,
         dateOfBirth: new Date(validatedData.dateOfBirth)
-      };
+      } as any;
       
       const result = await storage.createDoctorRegistration(registrationData);
       
@@ -127,11 +127,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertPatientRegistrationSchema.parse(req.body);
       
-      // Convert string date to Date object
+      // Convert string date to Date object for database
       const registrationData = {
         ...validatedData,
         dateOfBirth: new Date(validatedData.dateOfBirth)
-      };
+      } as any;
       
       const result = await storage.createPatientRegistration(registrationData);
       
