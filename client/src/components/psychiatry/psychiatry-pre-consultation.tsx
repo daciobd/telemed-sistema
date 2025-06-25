@@ -166,7 +166,7 @@ export default function PsychiatryPreConsultation({ appointmentId, onStartConsul
         )}
 
         {/* Steps */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-4">
           {/* Psychological Assessment */}
           <Card className={isAssessmentCompleted ? 'border-green-200' : 'border-blue-200'}>
             <CardHeader>
@@ -262,6 +262,69 @@ export default function PsychiatryPreConsultation({ appointmentId, onStartConsul
               )}
             </CardContent>
           </Card>
+
+          {/* Interview Card */}
+          <Card className={isInterviewScheduled ? 'border-green-200' : 'border-purple-200'}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className={`h-6 w-6 ${isInterviewScheduled ? 'text-green-600' : 'text-purple-600'}`} />
+                Entrevista com Psicóloga
+                {isInterviewScheduled && <CheckCircle className="h-5 w-5 text-green-600" />}
+              </CardTitle>
+              <Progress value={isInterviewScheduled ? 100 : 0} className="mt-2" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-600 text-sm">
+                Entrevista opcional com psicóloga para avaliação psicodinâmica. 
+                Cria um resumo detalhado que auxilia o psiquiatra na personalização do tratamento.
+              </p>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-gray-500" />
+                  <span>Duração flexível (até 60 min)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-gray-500" />
+                  <span>Avaliação psicodinâmica</span>
+                </div>
+              </div>
+
+              {isInterviewScheduled ? (
+                <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
+                  <CheckCircle className="h-4 w-4" />
+                  Entrevista agendada
+                </div>
+              ) : (
+                <Button 
+                  onClick={() => setLocation(`/psychologist-interview/${appointmentId}`)}
+                  variant="outline"
+                  className="w-full flex items-center gap-2"
+                  disabled={!isQuestionnaireCompleted}
+                >
+                  Agendar Entrevista (Opcional)
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              )}
+              
+              {isInterviewScheduled && (
+                <Button 
+                  onClick={() => setLocation(`/psychologist-interview/${appointmentId}`)}
+                  variant="outline"
+                  className="w-full flex items-center gap-2"
+                >
+                  Ver Detalhes da Entrevista
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              )}
+              
+              {!isQuestionnaireCompleted && (
+                <p className="text-xs text-gray-500">
+                  Complete o questionário primeiro
+                </p>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Start Consultation */}
@@ -274,8 +337,9 @@ export default function PsychiatryPreConsultation({ appointmentId, onStartConsul
                   <span className="text-lg font-medium">Preparação Concluída!</span>
                 </div>
                 <p className="text-green-700">
-                  Você completou todos os passos preparatórios. 
-                  Agora pode iniciar sua consulta psiquiátrica com informações detalhadas.
+                  Você completou todos os passos preparatórios essenciais. 
+                  {isInterviewScheduled && " Sua entrevista psicodinâmica foi agendada."}
+                  {" "}Agora pode iniciar sua consulta psiquiátrica com informações detalhadas.
                 </p>
                 <Button 
                   onClick={onStartConsultation}
