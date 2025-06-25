@@ -187,7 +187,9 @@ export default function PaymentCheckout() {
         });
 
         if (!paymentResponse.ok) {
-          throw new Error('Failed to create payment intent');
+          const errorText = await paymentResponse.text();
+          console.error('Payment API error:', errorText);
+          throw new Error(`Failed to create payment intent: ${paymentResponse.status}`);
         }
 
         const paymentData = await paymentResponse.json();
