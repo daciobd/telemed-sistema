@@ -166,15 +166,29 @@ export default function PaymentCheckout() {
 
     const fetchAppointmentAndCreatePayment = async () => {
       try {
+        console.log('=== FRONTEND PAYMENT FLOW START ===');
+        console.log('Appointment ID:', appointmentId);
+        console.log('User authenticated:', isAuthenticated);
+        
         // Fetch appointment details
+        console.log('Fetching appointment details...');
         const appointmentResponse = await fetch(`/api/appointments/${appointmentId}`);
+        console.log('Appointment response status:', appointmentResponse.status);
+        
         if (!appointmentResponse.ok) {
           throw new Error('Failed to fetch appointment');
         }
         const appointment = await appointmentResponse.json();
+        console.log('Appointment fetched:', appointment);
         setAppointmentDetails(appointment);
 
         // Create payment intent with robust error handling
+        console.log('Creating payment intent...');
+        console.log('Payment request body:', {
+          appointmentId: appointmentId,
+          amount: 150
+        });
+        
         const paymentResponse = await fetch('/api/payments/create-payment-intent', {
           method: 'POST',
           headers: {
@@ -187,6 +201,8 @@ export default function PaymentCheckout() {
             amount: 150, // Fixed amount for testing
           }),
         });
+        
+        console.log('Payment response received:', paymentResponse);
 
         // Enhanced error handling for authentication and API responses
         const contentType = paymentResponse.headers.get('content-type');

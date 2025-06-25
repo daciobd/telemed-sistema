@@ -32,6 +32,7 @@ import MedicalEvaluationPage from "@/pages/medical-evaluation";
 import MedicalEvaluationsView from "@/pages/medical-evaluations-view";
 import PaymentCheckout from "@/pages/payment-checkout";
 import PaymentSuccess from "@/pages/payment-success";
+import PaymentTest from "@/pages/payment-test";
 import FinancialDashboard from "@/pages/financial-dashboard";
 
 
@@ -101,6 +102,7 @@ function Router() {
           } />
           <Route path="/medical-evaluations-view" component={MedicalEvaluationsView} />
           <Route path="/payment-checkout" component={PaymentCheckout} />
+          <Route path="/payment-test" component={PaymentTest} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/financial-dashboard" component={FinancialDashboard} />
 

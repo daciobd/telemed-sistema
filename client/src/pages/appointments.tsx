@@ -378,7 +378,7 @@ export default function Appointments() {
                           <Button
                             size="sm"
                             onClick={() => {
-                              setLocation(`/payment-checkout?appointment=${appointment.id}`);
+                              setLocation(`/payment-test?appointment=${appointment.id}`);
                             }}
                             className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
                           >
