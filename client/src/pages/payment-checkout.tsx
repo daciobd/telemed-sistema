@@ -162,33 +162,42 @@ export default function PaymentCheckout() {
   }, [isAuthenticated, isLoading, toast]);
 
   useEffect(() => {
-    if (!appointmentId || !isAuthenticated) return;
+    if (!appointmentId || isLoading) return;
 
     const fetchAppointmentAndCreatePayment = async () => {
       try {
-        console.log('=== FRONTEND PAYMENT FLOW START ===');
-        console.log('Appointment ID:', appointmentId);
-        console.log('User authenticated:', isAuthenticated);
+        // Wait for authentication to be properly established
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Verify authentication before proceeding
+        const authCheck = await fetch('/api/auth/user', {
+          credentials: 'include',
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (!authCheck.ok) {
+          toast({
+            title: "Autenticação Necessária",
+            description: "Redirecionando para login...",
+            variant: "destructive",
+          });
+          window.location.href = "/api/login";
+          return;
+        }
         
         // Fetch appointment details
-        console.log('Fetching appointment details...');
-        const appointmentResponse = await fetch(`/api/appointments/${appointmentId}`);
-        console.log('Appointment response status:', appointmentResponse.status);
+        const appointmentResponse = await fetch(`/api/appointments/${appointmentId}`, {
+          credentials: 'include',
+          headers: { 'Accept': 'application/json' }
+        });
         
         if (!appointmentResponse.ok) {
           throw new Error('Failed to fetch appointment');
         }
         const appointment = await appointmentResponse.json();
-        console.log('Appointment fetched:', appointment);
         setAppointmentDetails(appointment);
 
-        // Create payment intent with robust error handling
-        console.log('Creating payment intent...');
-        console.log('Payment request body:', {
-          appointmentId: appointmentId,
-          amount: 150
-        });
-        
+        // Create payment intent with authenticated session
         const paymentResponse = await fetch('/api/payments/create-payment-intent', {
           method: 'POST',
           headers: {
@@ -198,63 +207,32 @@ export default function PaymentCheckout() {
           credentials: 'include',
           body: JSON.stringify({
             appointmentId: appointmentId,
-            amount: 150, // Fixed amount for testing
+            amount: 150,
           }),
         });
-        
-        console.log('Payment response received:', paymentResponse);
 
-        // Enhanced error handling for authentication and API responses
+        // Handle payment API response
         const contentType = paymentResponse.headers.get('content-type');
-        console.log('Payment API response status:', paymentResponse.status);
-        console.log('Payment API content type:', contentType);
         
-        // Check for authentication failure
-        if (paymentResponse.status === 401) {
-          console.log('Authentication failed, redirecting to login');
+        if (paymentResponse.status === 401 || contentType?.includes('text/html')) {
           toast({
             title: "Sessão Expirada",
             description: "Redirecionando para login...",
             variant: "destructive",
           });
-          setTimeout(() => {
-            window.location.href = "/api/login";
-          }, 1000);
-          return;
-        }
-        
-        // Check if response is HTML (authentication redirect)
-        if (contentType?.includes('text/html')) {
-          console.log('Received HTML response instead of JSON');
-          toast({
-            title: "Erro de Autenticação",
-            description: "Redirecionando para login...",
-            variant: "destructive",
-          });
-          setTimeout(() => {
-            window.location.href = "/api/login";
-          }, 1000);
+          window.location.href = "/api/login";
           return;
         }
 
         if (!paymentResponse.ok) {
-          let errorMessage = `Erro ${paymentResponse.status}`;
-          try {
-            const errorJson = await paymentResponse.json();
-            errorMessage = errorJson.message || errorMessage;
-            console.log('Payment API error:', errorJson);
-          } catch (parseError) {
-            console.log('Failed to parse error response:', parseError);
-            // If JSON parsing fails, use status code
-          }
-          throw new Error(errorMessage);
+          const errorText = await paymentResponse.text();
+          throw new Error(`Erro no pagamento: ${paymentResponse.status}`);
         }
         
         const paymentData = await paymentResponse.json();
-        console.log('Payment data received:', paymentData);
         
         if (!paymentData.clientSecret) {
-          throw new Error('Client secret not received from payment API');
+          throw new Error('Falha na criação do pagamento');
         }
         
         setClientSecret(paymentData.clientSecret);
