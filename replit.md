@@ -127,6 +127,20 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Landing Page Aprimorada com Diferenciais Competitivos
+- **Data**: 25/06/2025
+- **Implementação**: Nova landing page que destaca funcionalidades únicas do sistema
+- **Melhorias**: 
+  - Destaque do sistema de leilão reverso inteligente
+  - Seção dedicada ao assistente IA médico
+  - Evidência das prescrições MEMED integradas
+  - Showcasing das videoconsultas WebRTC
+  - Sistema especializado de psiquiatria em destaque
+  - Grid das 10 especialidades médicas disponíveis
+- **UX/UI**: Design moderno com cards informativos e CTAs otimizados
+- **Posicionamento**: Foca nos diferenciais tecnológicos únicos
+- **Conversão**: CTAs direcionados para demo e teste do sistema
+
 ### Sistema de Demonstração Médica e Funcionalidades Clínicas
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para demonstração com equipe médica fictícia

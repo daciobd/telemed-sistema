@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeleMed - Atendimento Médico Especializado</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fffefc;
+      color: #00251a;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #004d40;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    nav .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    header {
+      background: linear-gradient(135deg, #004d40, #1de9b6);
+      color: white;
+      padding: 6rem 2rem 3rem;
+      text-align: center;
+      margin-top: 60px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    header p {
+      margin-top: 0.8rem;
+      font-size: 1.3rem;
+    }
+    section.hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4rem 2rem;
+      background: url('https://images.unsplash.com/photo-1606813909355-d38eec0fbc5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1280&q=80') center/cover no-repeat;
+      color: white;
+    }
+    .hero-text {
+      flex: 1;
+      max-width: 600px;
+      background-color: rgba(0, 77, 64, 0.8);
+      padding: 2rem;
+      border-radius: 8px;
+    }
+    .hero-text h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .hero-text p {
+      font-size: 1.2rem;
+    }
+    .hero-text .cta-button {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      background-color: #1de9b6;
+      color: #004d40;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .hero-image {
+      flex: 1;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .hero-image img {
+      width: 90%;
+      max-width: 450px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    section.features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 3rem 2rem;
+      background-color: #e0f7fa;
+    }
+    .feature {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 300px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .feature h3 {
+      color: #00796b;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .feature p {
+      font-size: 1rem;
+      color: #333;
+    }
+    section#como-funciona {
+      background-color: #ffffff;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    section#como-funciona h2 {
+      color: #004d40;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    .step {
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    section#depoimentos {
+      background-color: #f0f4f4;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    section#depoimentos h2 {
+      color: #004d40;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    .testimonial {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .testimonial strong {
+      display: block;
+      margin-top: 0.5rem;
+      color: #00796b;
+      font-style: normal;
+    }
+    footer {
+      background-color: #004d40;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      font-size: 1rem;
+    }
+    .footer-links {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+    }
+    .footer-links a {
+      color: #b2dfdb;
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">TeleMed</div>
+    <ul>
+      <li><a href="#">Início</a></li>
+      <li><a href="#como-funciona">Como Funciona</a></li>
+      <li><a href="#">Agendar</a></li>
+      <li><a href="#">Entrar</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>TeleMed</h1>
+    <p>Especialistas com experiência. Atendimento que se adapta à sua agenda.</p>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Consulta médica com profissionais de elite</h2>
+      <p>Nosso diferencial é claro: médicos experientes, currículo disponível, e a liberdade de escolher entre atendimento imediato ou agendado, conforme a disponibilidade do especialista.</p>
+      <a href="#" class="cta-button">Agendar agora</a>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1588776814546-ec7aa3c62db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Consulta online">
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <h3>Médicos com +20 anos de experiência</h3>
+      <p>Veja o currículo e trajetória de cada profissional antes de escolher.</p>
+    </div>
+    <div class="feature">
+      <h3>Leilão reverso inteligente</h3>
+      <p>Você define o valor que está disposto a pagar — os médicos avaliam e aceitam ou sugerem agendamento.</p>
+    </div>
+    <div class="feature">
+      <h3>Flexibilidade e comodidade</h3>
+      <p>Se o atendimento não for aceito na hora, você pode agendar com o médico de sua preferência.</p>
+    </div>
+  </section>
+
+  <section id="como-funciona">
+    <h2>Como funciona</h2>
+    <div class="step">1. Você cria sua solicitação e define quanto deseja pagar.</div>
+    <div class="step">2. Os médicos disponíveis visualizam o pedido e podem aceitar ou propor outro horário.</div>
+    <div class="step">3. Você escolhe entre atendimento imediato ou agenda para o melhor horário.</div>
+    <div class="step">4. Após a consulta, você recebe histórico, orientações e receita digital (se necessário).</div>
+  </section>
+
+  <section id="depoimentos">
+    <h2>Depoimentos</h2>
+    <div class="testimonial">
+      “O atendimento foi rápido, profissional e humano. Senti que estava sendo ouvido de verdade.”
+      <strong>– João M., paciente</strong>
+    </div>
+    <div class="testimonial">
+      “É muito bom poder oferecer consultas quando estou disponível, com autonomia para agendar.”
+      <strong>– Dra. Carla S., médica</strong>
+    </div>
+    <div class="testimonial">
+      “Consegui atendimento em menos de 30 minutos e com um especialista experiente. Excelente plataforma.”
+      <strong>– Marina F., paciente</strong>
+    </div>
+  </section>
+
+  <section id="contato" style="background-color: #ffffff; padding: 3rem 2rem; text-align: center;">
+    <h2 style="color: #004d40; font-size: 2rem; margin-bottom: 2rem;">Fale conosco</h2>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdgkmRnvI1fyUWxbONlVYZ4JaBcahTH2ZssRFd2xr2_d-POVw/viewform?embedded=true" width="640" height="959" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 TeleMed - Atendimento médico humanizado e especializado</p>
+    <div class="footer-links">
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Contato</a>
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </footer>
+</body>
+</html>
