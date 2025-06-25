@@ -27,6 +27,7 @@ import PsychologistInterviewSimple from "@/pages/psychologist-interview-simple";
 import TeleconsultWorkflowPage from "@/pages/teleconsult-workflow";
 import DemoManagementPage from "@/pages/demo-management";
 import ImprovedLandingPage from "@/pages/landing-improved";
+import WhatsAppContactPage from "@/pages/whatsapp-contact";
 
 
 function Router() {
@@ -89,6 +90,7 @@ function Router() {
           <Route path="/teleconsultas-psiquiatricas" component={TeleconsultWorkflowPage} />
           <Route path="/demo-management" component={DemoManagementPage} />
           <Route path="/landing-improved" component={ImprovedLandingPage} />
+          <Route path="/whatsapp-contact" component={WhatsAppContactPage} />
 
         </>
       )}

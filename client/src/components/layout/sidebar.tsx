@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video, Menu, X, Brain } from "lucide-react";
+import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video, Menu, X, Brain, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +28,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Teleconsultas Psiquiátricas", href: "/teleconsult-workflow", icon: Brain, roles: ["patient", "doctor"] },
     { name: "Pacientes", href: "/pacientes", icon: Users, roles: ["doctor"] },
     { name: "Prontuários", href: "/prontuarios", icon: FileText, roles: ["patient", "doctor"] },
+    { name: "WhatsApp", href: "/whatsapp-contact", icon: MessageCircle, roles: ["patient", "doctor"] },
     { name: "Prescrições", href: "/prescricoes", icon: Pill, roles: ["patient", "doctor"] },
     { name: "Videoconsultas", href: "/videoconsultas", icon: Video, roles: ["patient", "doctor"] },
     { name: "Agenda", href: "/agenda", icon: Calendar, roles: ["patient", "doctor"] },
