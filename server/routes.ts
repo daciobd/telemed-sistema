@@ -952,7 +952,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Calculate metrics
       const totalAppointments = allAppointments.length;
       const activePatients = new Set(allAppointments.map(apt => apt.patientId)).size;
-      const revenue = allAppointments.reduce((sum, apt) => sum + (apt.price || 150), 0);
+      const revenue = allAppointments.reduce((sum, apt) => sum + 150, 0); // Default consultation fee
       const completedAppointments = allAppointments.filter(apt => apt.status === 'completed');
       
       // Calculate growth percentages (simulate for now)

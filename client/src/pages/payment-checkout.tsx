@@ -13,11 +13,9 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import Layout from "@/components/layout/layout";
 
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error('Missing required Stripe key: VITE_STRIPE_PUBLIC_KEY');
-}
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY 
+  ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
+  : null;
 
 interface CheckoutFormProps {
   appointmentId: number;

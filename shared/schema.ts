@@ -9,6 +9,7 @@ import {
   integer,
   boolean,
   numeric,
+  decimal,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -147,6 +148,23 @@ export const clinicalExams = pgTable("clinical_exams", {
 });
 
 // Medical referrals to other specialists
+export const medicalReferrals = pgTable("medical_referrals", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  referringDoctorId: integer("referring_doctor_id").references(() => doctors.id).notNull(),
+  specialty: varchar("specialty").notNull(),
+  consultationType: varchar("consultation_type").default("presential"), // presential, teleconsult
+  clinicalSummary: text("clinical_summary").notNull(),
+  requestedExams: text("requested_exams"),
+  priority: varchar("priority").default("routine"), // routine, urgent, emergency
+  notes: text("notes"),
+  status: varchar("status").default("pending"), // pending, scheduled, completed, cancelled
+  createdAt: timestamp("created_at").defaultNow(),
+  scheduledFor: timestamp("scheduled_for"),
+  completedAt: timestamp("completed_at"),
+});
+
 // Medical service evaluations by patients
 export const medicalEvaluations = pgTable("medical_evaluations", {
   id: serial("id").primaryKey(),
@@ -163,24 +181,7 @@ export const medicalEvaluations = pgTable("medical_evaluations", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const medicalReferrals = pgTable("medical_referrals", {
-  id: serial("id").primaryKey(),
-  appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),
-  patientId: integer("patient_id").references(() => patients.id).notNull(),
-  referringDoctorId: integer("referring_doctor_id").references(() => doctors.id).notNull(),
-  targetSpecialty: varchar("target_specialty", { length: 100 }).notNull(),
-  targetDoctorId: integer("target_doctor_id").references(() => doctors.id), // Optional - specific doctor
-  consultationType: varchar("consultation_type", { enum: ["presential", "teleconsult"] }).notNull(),
-  priority: varchar("priority", { enum: ["routine", "urgent", "emergency"] }).default("routine"),
-  reason: text("reason").notNull(),
-  clinicalSummary: text("clinical_summary"),
-  requestedExams: text("requested_exams"),
-  status: varchar("status", { enum: ["pending", "scheduled", "completed", "cancelled"] }).default("pending"),
-  scheduledDate: timestamp("scheduled_date"),
-  notes: text("notes"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
+
 
 // Psychological Assessment for psychiatry consultations
 export const psychologicalAssessments = pgTable("psychological_assessments", {
@@ -274,6 +275,8 @@ export const psychologistInterviews = pgTable("psychologist_interviews", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+
 
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
@@ -386,7 +389,7 @@ export const paymentTransactions = pgTable("payment_transactions", {
   patientId: integer("patient_id").references(() => patients.id, { onDelete: "cascade" }),
   doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
   stripePaymentIntentId: varchar("stripe_payment_intent_id").notNull(),
-  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
   currency: varchar("currency").default("brl"),
   status: varchar("status").notNull(), // 'pending', 'succeeded', 'failed', 'canceled', 'refunded'
   paymentMethod: varchar("payment_method"), // 'card', 'pix', etc
@@ -401,7 +404,7 @@ export const subscriptionPlans = pgTable("subscription_plans", {
   id: serial("id").primaryKey(),
   name: varchar("name").notNull(),
   description: text("description"),
-  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
   currency: varchar("currency").default("brl"),
   interval: varchar("interval").notNull(), // 'month', 'year'
   stripePriceId: varchar("stripe_price_id"),
@@ -417,9 +420,9 @@ export const doctorEarnings = pgTable("doctor_earnings", {
   doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
   appointmentId: integer("appointment_id").references(() => appointments.id, { onDelete: "cascade" }),
   transactionId: integer("transaction_id").references(() => paymentTransactions.id, { onDelete: "cascade" }),
-  grossAmount: decimal("gross_amount", { precision: 10, scale: 2 }).notNull(),
-  platformFee: decimal("platform_fee", { precision: 10, scale: 2 }).notNull(),
-  netAmount: decimal("net_amount", { precision: 10, scale: 2 }).notNull(),
+  grossAmount: numeric("gross_amount", { precision: 10, scale: 2 }).notNull(),
+  platformFee: numeric("platform_fee", { precision: 10, scale: 2 }).notNull(),
+  netAmount: numeric("net_amount", { precision: 10, scale: 2 }).notNull(),
   payoutStatus: varchar("payout_status").default("pending"), // 'pending', 'paid', 'failed'
   payoutDate: timestamp("payout_date"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -433,6 +436,12 @@ export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
 
 export type InsertDoctorEarning = typeof doctorEarnings.$inferInsert;
 export type DoctorEarning = typeof doctorEarnings.$inferSelect;
+
+export type InsertClinicalExam = typeof clinicalExams.$inferInsert;
+export type ClinicalExam = typeof clinicalExams.$inferSelect;
+
+export type InsertMedicalReferral = typeof medicalReferrals.$inferInsert;
+export type MedicalReferral = typeof medicalReferrals.$inferSelect;
 
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({

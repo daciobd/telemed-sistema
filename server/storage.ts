@@ -30,11 +30,18 @@ import {
   type DoctorWithUser,
   type PsychologistInterview,
   type InsertPsychologistInterview,
+  clinicalExams,
+  medicalReferrals,
+  medicalEvaluations,
+  paymentTransactions,
+  doctorEarnings,
+  psychologistInterviews,
+  type PaymentTransaction,
+  type InsertPaymentTransaction,
   type ClinicalExam,
   type InsertClinicalExam,
   type MedicalReferral,
   type InsertMedicalReferral,
-  medicalEvaluations,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, lte } from "drizzle-orm";
@@ -881,7 +888,6 @@ export class DatabaseStorage implements IStorage {
       .where(eq(medicalEvaluations.appointmentId, appointmentId));
     return evaluation;
   }
-}
 
   // Payment operations
   async createPaymentTransaction(transaction: any): Promise<any> {
@@ -906,6 +912,102 @@ export class DatabaseStorage implements IStorage {
       .from(doctorEarnings)
       .where(eq(doctorEarnings.doctorId, doctorId))
       .orderBy(desc(doctorEarnings.createdAt));
+  }
+
+  // Clinical exam operations
+  async createClinicalExam(exam: any): Promise<any> {
+    const [result] = await db
+      .insert(clinicalExams)
+      .values(exam)
+      .returning();
+    return result;
+  }
+
+  async getClinicalExamsByDoctor(doctorId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(clinicalExams)
+      .where(eq(clinicalExams.doctorId, doctorId))
+      .orderBy(desc(clinicalExams.createdAt));
+  }
+
+  async getClinicalExamsByPatient(patientId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(clinicalExams)
+      .where(eq(clinicalExams.patientId, patientId))
+      .orderBy(desc(clinicalExams.createdAt));
+  }
+
+  // Medical referral operations
+  async createMedicalReferral(referral: any): Promise<any> {
+    const [result] = await db
+      .insert(medicalReferrals)
+      .values(referral)
+      .returning();
+    return result;
+  }
+
+  async getMedicalReferralsByDoctor(doctorId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(medicalReferrals)
+      .where(eq(medicalReferrals.referringDoctorId, doctorId))
+      .orderBy(desc(medicalReferrals.createdAt));
+  }
+
+  async getMedicalReferralsByPatient(patientId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(medicalReferrals)
+      .where(eq(medicalReferrals.patientId, patientId))
+      .orderBy(desc(medicalReferrals.createdAt));
+  }
+
+  // Teleconsultation workflow operations
+  async createTeleconsultResponse(data: any): Promise<any> {
+    const [result] = await db
+      .insert(teleconsultResponses)
+      .values(data)
+      .returning();
+    return result;
+  }
+
+  async updateAppointmentWorkflow(appointmentId: number, workflowData: any): Promise<Appointment> {
+    const [result] = await db
+      .update(appointments)
+      .set(workflowData)
+      .where(eq(appointments.id, appointmentId))
+      .returning();
+    return result;
+  }
+
+  async getAppointmentWithWorkflowStatus(appointmentId: number): Promise<any> {
+    const [appointment] = await db
+      .select()
+      .from(appointments)
+      .where(eq(appointments.id, appointmentId));
+    return appointment;
+  }
+
+  async getPreparationStatus(appointmentId: number): Promise<any> {
+    const [appointment] = await db
+      .select()
+      .from(appointments)
+      .where(eq(appointments.id, appointmentId));
+    return appointment;
+  }
+
+  async advanceConsultationDueToRisk(appointmentId: number): Promise<Appointment> {
+    const [result] = await db
+      .update(appointments)
+      .set({ 
+        status: "confirmed",
+        notes: "Consultation advanced due to high risk assessment"
+      })
+      .where(eq(appointments.id, appointmentId))
+      .returning();
+    return result;
   }
 }
 
