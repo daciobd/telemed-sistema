@@ -42,6 +42,12 @@ import {
   type InsertClinicalExam,
   type MedicalReferral,
   type InsertMedicalReferral,
+  doctorRegistrations,
+  patientRegistrations,
+  type DoctorRegistration,
+  type InsertDoctorRegistration,
+  type PatientRegistration,
+  type InsertPatientRegistration,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, lte } from "drizzle-orm";
@@ -151,6 +157,13 @@ export interface IStorage {
   createPaymentTransaction(transaction: any): Promise<any>;
   getPaymentTransactionsByDoctor(doctorId: number): Promise<any[]>;
   getDoctorEarnings(doctorId: number): Promise<any[]>;
+  
+  // Registration operations
+  createDoctorRegistration(registration: InsertDoctorRegistration): Promise<DoctorRegistration>;
+  createPatientRegistration(registration: InsertPatientRegistration): Promise<PatientRegistration>;
+  updatePatientRegistration(id: number, updates: Partial<PatientRegistration>): Promise<PatientRegistration>;
+  getDoctorRegistrations(): Promise<DoctorRegistration[]>;
+  getPatientRegistrations(): Promise<PatientRegistration[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1008,6 +1021,46 @@ export class DatabaseStorage implements IStorage {
       .where(eq(appointments.id, appointmentId))
       .returning();
     return result;
+  }
+
+  // Registration operations
+  async createDoctorRegistration(registration: InsertDoctorRegistration): Promise<DoctorRegistration> {
+    const [result] = await db
+      .insert(doctorRegistrations)
+      .values(registration)
+      .returning();
+    return result;
+  }
+
+  async createPatientRegistration(registration: InsertPatientRegistration): Promise<PatientRegistration> {
+    const [result] = await db
+      .insert(patientRegistrations)
+      .values(registration)
+      .returning();
+    return result;
+  }
+
+  async updatePatientRegistration(id: number, updates: Partial<PatientRegistration>): Promise<PatientRegistration> {
+    const [result] = await db
+      .update(patientRegistrations)
+      .set(updates)
+      .where(eq(patientRegistrations.id, id))
+      .returning();
+    return result;
+  }
+
+  async getDoctorRegistrations(): Promise<DoctorRegistration[]> {
+    return await db
+      .select()
+      .from(doctorRegistrations)
+      .orderBy(desc(doctorRegistrations.createdAt));
+  }
+
+  async getPatientRegistrations(): Promise<PatientRegistration[]> {
+    return await db
+      .select()
+      .from(patientRegistrations)
+      .orderBy(desc(patientRegistrations.createdAt));
   }
 }
 

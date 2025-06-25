@@ -49,6 +49,8 @@ export const patients = pgTable("patients", {
   emergencyContact: varchar("emergency_contact"),
   bloodType: varchar("blood_type"),
   allergies: text("allergies"),
+  medications: text("medications"),
+  chronicConditions: text("chronic_conditions"),
   medicalHistory: text("medical_history"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -272,6 +274,104 @@ export const psychologistInterviews = pgTable("psychologist_interviews", {
   countertransferenceNotes: text("countertransference_notes"),
   treatmentRecommendations: text("treatment_recommendations"),
   urgencyLevel: varchar("urgency_level"), // low, moderate, high, urgent
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Doctor registration applications
+export const doctorRegistrations = pgTable("doctor_registrations", {
+  id: serial("id").primaryKey(),
+  
+  // Personal Information
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  email: varchar("email").notNull().unique(),
+  phone: varchar("phone").notNull(),
+  dateOfBirth: timestamp("date_of_birth").notNull(),
+  
+  // Professional Information
+  crm: varchar("crm").notNull(),
+  crmState: varchar("crm_state").notNull(),
+  specialty: varchar("specialty").notNull(),
+  subSpecialty: varchar("sub_specialty"),
+  medicalSchool: varchar("medical_school").notNull(),
+  graduationYear: varchar("graduation_year").notNull(),
+  residency: varchar("residency"),
+  
+  // Experience
+  yearsOfExperience: varchar("years_of_experience").notNull(),
+  currentWorkplace: varchar("current_workplace").notNull(),
+  consultationFee: varchar("consultation_fee").notNull(),
+  
+  // Availability
+  availability: varchar("availability").notNull(),
+  preferredSchedule: varchar("preferred_schedule").notNull(),
+  
+  // Motivation
+  motivation: text("motivation").notNull(),
+  telemedicineExperience: text("telemedicine_experience"),
+  
+  // Application Status
+  status: varchar("status", { enum: ["pending", "approved", "rejected", "interview"] }).default("pending"),
+  reviewNotes: text("review_notes"),
+  reviewedBy: varchar("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Patient registration applications
+export const patientRegistrations = pgTable("patient_registrations", {
+  id: serial("id").primaryKey(),
+  
+  // Personal Information
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  email: varchar("email").notNull().unique(),
+  phone: varchar("phone").notNull(),
+  dateOfBirth: timestamp("date_of_birth").notNull(),
+  cpf: varchar("cpf").notNull(),
+  gender: varchar("gender").notNull(),
+  
+  // Address
+  zipCode: varchar("zip_code").notNull(),
+  address: text("address").notNull(),
+  city: varchar("city").notNull(),
+  state: varchar("state").notNull(),
+  
+  // Emergency Contact
+  emergencyContactName: varchar("emergency_contact_name").notNull(),
+  emergencyContactPhone: varchar("emergency_contact_phone").notNull(),
+  emergencyContactRelation: varchar("emergency_contact_relation").notNull(),
+  
+  // Medical Information
+  bloodType: varchar("blood_type"),
+  allergies: text("allergies"),
+  medications: text("medications"),
+  chronicConditions: text("chronic_conditions"),
+  previousSurgeries: text("previous_surgeries"),
+  familyHistory: text("family_history"),
+  
+  // Lifestyle
+  smoking: varchar("smoking").notNull(),
+  drinking: varchar("drinking").notNull(),
+  exercise: varchar("exercise").notNull(),
+  
+  // Health Insurance
+  hasHealthInsurance: boolean("has_health_insurance").default(false),
+  healthInsuranceName: varchar("health_insurance_name"),
+  healthInsuranceNumber: varchar("health_insurance_number"),
+  
+  // Consents
+  termsAccepted: boolean("terms_accepted").notNull(),
+  privacyAccepted: boolean("privacy_accepted").notNull(),
+  telemedicineConsent: boolean("telemedicine_consent").notNull(),
+  
+  // Registration Status
+  status: varchar("status", { enum: ["pending", "active", "suspended"] }).default("active"),
+  userId: varchar("user_id").references(() => users.id),
+  
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -541,3 +641,29 @@ export type DoctorWithUser = Doctor & {
   user: User;
   appointments?: AppointmentWithDetails[];
 };
+
+// Registration schemas
+export const insertDoctorRegistrationSchema = createInsertSchema(doctorRegistrations).omit({
+  id: true,
+  status: true,
+  reviewNotes: true,
+  reviewedBy: true,
+  reviewedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertPatientRegistrationSchema = createInsertSchema(patientRegistrations).omit({
+  id: true,
+  status: true,
+  userId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Registration types
+export type InsertDoctorRegistration = z.infer<typeof insertDoctorRegistrationSchema>;
+export type DoctorRegistration = typeof doctorRegistrations.$inferSelect;
+
+export type InsertPatientRegistration = z.infer<typeof insertPatientRegistrationSchema>;
+export type PatientRegistration = typeof patientRegistrations.$inferSelect;

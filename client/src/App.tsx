@@ -34,6 +34,9 @@ import PaymentCheckout from "@/pages/payment-checkout";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentTest from "@/pages/payment-test";
 import FinancialDashboard from "@/pages/financial-dashboard";
+import RegisterDoctor from "@/pages/register-doctor";
+import RegisterPatient from "@/pages/register-patient";
+import RegisterSuccess from "@/pages/register-success";
 
 
 function Router() {
@@ -41,6 +44,11 @@ function Router() {
 
   return (
     <Switch>
+      {/* Public registration routes - accessible without authentication */}
+      <Route path="/register-doctor" component={RegisterDoctor} />
+      <Route path="/register-patient" component={RegisterPatient} />
+      <Route path="/register-success" component={RegisterSuccess} />
+      
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
       ) : (

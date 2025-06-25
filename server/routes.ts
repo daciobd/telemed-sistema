@@ -3,7 +3,15 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertAppointmentSchema, insertMedicalRecordSchema, insertPatientSchema, insertDoctorSchema, insertPrescriptionSchema } from "@shared/schema";
+import { 
+  insertAppointmentSchema, 
+  insertMedicalRecordSchema, 
+  insertPatientSchema, 
+  insertDoctorSchema, 
+  insertPrescriptionSchema,
+  insertDoctorRegistrationSchema,
+  insertPatientRegistrationSchema 
+} from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -83,6 +91,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error switching role:", error);
       res.status(500).json({ message: "Failed to switch role" });
+    }
+  });
+
+  // Public registration routes (no authentication required)
+  app.post('/api/register/doctor', async (req, res) => {
+    try {
+      const validatedData = insertDoctorRegistrationSchema.parse(req.body);
+      
+      // Convert string date to Date object
+      const registrationData = {
+        ...validatedData,
+        dateOfBirth: new Date(validatedData.dateOfBirth)
+      };
+      
+      const result = await storage.createDoctorRegistration(registrationData);
+      
+      res.status(201).json({ 
+        message: "Doctor registration submitted successfully",
+        id: result.id 
+      });
+    } catch (error) {
+      console.error("Error creating doctor registration:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors 
+        });
+      }
+      res.status(500).json({ message: "Failed to submit registration" });
+    }
+  });
+
+  app.post('/api/register/patient', async (req, res) => {
+    try {
+      const validatedData = insertPatientRegistrationSchema.parse(req.body);
+      
+      // Convert string date to Date object
+      const registrationData = {
+        ...validatedData,
+        dateOfBirth: new Date(validatedData.dateOfBirth)
+      };
+      
+      const result = await storage.createPatientRegistration(registrationData);
+      
+      // Automatically create user account for patients
+      const userId = `patient_${result.id}_${Date.now()}`;
+      
+      // Create user account
+      const user = await storage.upsertUser({
+        id: userId,
+        email: validatedData.email,
+        firstName: validatedData.firstName,
+        lastName: validatedData.lastName,
+        role: "patient"
+      });
+
+      // Create patient profile
+      const patient = await storage.createPatient({
+        userId: userId,
+        dateOfBirth: new Date(validatedData.dateOfBirth),
+        phone: validatedData.phone,
+        address: `${validatedData.address}, ${validatedData.city} - ${validatedData.state}, ${validatedData.zipCode}`,
+        emergencyContact: `${validatedData.emergencyContactName} - ${validatedData.emergencyContactPhone} (${validatedData.emergencyContactRelation})`,
+        bloodType: validatedData.bloodType || null,
+        allergies: validatedData.allergies || null,
+        medications: validatedData.medications || null,
+        chronicConditions: validatedData.chronicConditions || null
+      });
+
+      // Link patient registration to user
+      await storage.updatePatientRegistration(result.id, { userId });
+      
+      res.status(201).json({ 
+        message: "Patient registration completed successfully",
+        id: result.id,
+        userId: userId
+      });
+    } catch (error) {
+      console.error("Error creating patient registration:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors 
+        });
+      }
+      res.status(500).json({ message: "Failed to complete registration" });
     }
   });
 

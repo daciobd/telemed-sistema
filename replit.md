@@ -142,6 +142,25 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Sistema de Registro de Usuários Completo
+- **Data**: 25/06/2025
+- **Implementação**: Sistema completo de registro para médicos e pacientes FUNCIONANDO
+- **Funcionalidades**: 
+  - Formulário de candidatura para médicos com validação completa
+  - Formulário de cadastro para pacientes com criação automática de conta
+  - Páginas públicas acessíveis sem login para novos usuários
+  - Validação de dados profissionais para médicos (CRM, especialidades, experiência)
+  - Coleta de histórico médico completo para pacientes
+  - Sistema de aprovação para candidaturas médicas
+  - Integração automática com sistema de usuários existente
+  - Página de confirmação diferenciada por tipo de registro
+- **Database**: Novas tabelas doctor_registrations e patient_registrations
+- **Interface**: Formulários responsivos com validação em tempo real
+- **Rotas Públicas**: /register-doctor, /register-patient, /register-success
+- **Backend**: APIs REST para processamento de registros
+- **Objetivo**: Facilitar onboarding de usuários reais para testes da plataforma
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA USO
+
 ### Sistema de Pagamentos Stripe Totalmente Funcional
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo de pagamentos integrado com Stripe FUNCIONANDO

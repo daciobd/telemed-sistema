@@ -1,8 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Calendar, Users, FileText, Shield, Video } from "lucide-react";
+import { Heart, Calendar, Users, FileText, Shield, Video, Stethoscope, UserPlus } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function Landing() {
+  const [, setLocation] = useLocation();
+  
   const handleLogin = () => {
     window.location.href = "/api/login";
   };
@@ -40,7 +43,7 @@ export default function Landing() {
             Plataforma completa para gestão de consultas médicas, prontuários eletrônicos 
             e teleconsultas. Conectando pacientes e profissionais de saúde.
           </p>
-          <div className="mt-10">
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               onClick={handleLogin} 
               size="lg"
@@ -48,6 +51,26 @@ export default function Landing() {
             >
               Acessar Plataforma
             </Button>
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => setLocation('/register-doctor')}
+                variant="outline"
+                size="lg"
+                className="text-lg px-6 py-3 border-blue-600 text-blue-600 hover:bg-blue-50"
+              >
+                <Stethoscope className="h-5 w-5 mr-2" />
+                Sou Médico
+              </Button>
+              <Button 
+                onClick={() => setLocation('/register-patient')}
+                variant="outline"
+                size="lg"
+                className="text-lg px-6 py-3 border-green-600 text-green-600 hover:bg-green-50"
+              >
+                <UserPlus className="h-5 w-5 mr-2" />
+                Sou Paciente
+              </Button>
+            </div>
           </div>
         </div>
 
