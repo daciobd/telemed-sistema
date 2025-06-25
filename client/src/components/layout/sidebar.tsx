@@ -33,6 +33,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Agenda", href: "/agenda", icon: Calendar, roles: ["patient", "doctor"] },
     { name: "Assistente IA", href: "/assistente-ia", icon: Brain, roles: ["patient", "doctor"] },
     { name: "Relatórios", href: "/relatorios", icon: Settings, roles: ["doctor"] },
+    { name: "Demo Médica", href: "/demo-management", icon: Settings, roles: ["doctor"] },
   ];
 
   // Filter navigation based on user role

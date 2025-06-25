@@ -128,6 +128,44 @@ export const prescriptions = pgTable("prescriptions", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Clinical examinations ordered by doctors
+export const clinicalExams = pgTable("clinical_exams", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  doctorId: integer("doctor_id").references(() => doctors.id).notNull(),
+  examType: varchar("exam_type", { length: 100 }).notNull(), // "blood", "urine", "imaging", "cardiac", etc.
+  examName: varchar("exam_name", { length: 200 }).notNull(),
+  priority: varchar("priority", { enum: ["routine", "urgent", "emergency"] }).default("routine"),
+  instructions: text("instructions"),
+  status: varchar("status", { enum: ["ordered", "scheduled", "completed", "cancelled"] }).default("ordered"),
+  results: text("results"),
+  resultDate: timestamp("result_date"),
+  scheduledDate: timestamp("scheduled_date"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Medical referrals to other specialists
+export const medicalReferrals = pgTable("medical_referrals", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  referringDoctorId: integer("referring_doctor_id").references(() => doctors.id).notNull(),
+  targetSpecialty: varchar("target_specialty", { length: 100 }).notNull(),
+  targetDoctorId: integer("target_doctor_id").references(() => doctors.id), // Optional - specific doctor
+  consultationType: varchar("consultation_type", { enum: ["presential", "teleconsult"] }).notNull(),
+  priority: varchar("priority", { enum: ["routine", "urgent", "emergency"] }).default("routine"),
+  reason: text("reason").notNull(),
+  clinicalSummary: text("clinical_summary"),
+  requestedExams: text("requested_exams"),
+  status: varchar("status", { enum: ["pending", "scheduled", "completed", "cancelled"] }).default("pending"),
+  scheduledDate: timestamp("scheduled_date"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Psychological Assessment for psychiatry consultations
 export const psychologicalAssessments = pgTable("psychological_assessments", {
   id: serial("id").primaryKey(),

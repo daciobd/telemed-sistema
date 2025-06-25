@@ -65,6 +65,24 @@ Sistema abrangente de telemedicina que oferece soluções digitais inovadoras pa
 - Centro de notificações com interface moderna
 - Diferentes tipos de notificação (consultas, mensagens, etc.)
 
+### ✅ Sistema de Exames Clínicos
+- Interface categorizada para solicitação de exames
+- Exames de sangue, urina, imagem, cardiológicos e especializados
+- Sistema de prioridades (rotina, urgente, emergência)
+- Instruções de preparo automáticas para cada exame
+
+### ✅ Sistema de Encaminhamentos Médicos
+- Encaminhamento para todas as especialidades disponíveis
+- Opção entre consulta presencial ou teleconsulta
+- Resumo clínico e solicitação de exames
+- Sistema de prioridades e notas complementares
+
+### ✅ Sistema de Demonstração Médica
+- Equipe fictícia com 20 médicos especialistas
+- 50 pacientes com condições médicas variadas
+- 100 consultas distribuídas entre especialidades
+- Interface de gerenciamento para criar/limpar dados demo
+
 ### ✅ Relatórios e Analytics
 - Dashboard de analytics avançado
 - Métricas de desempenho
@@ -108,6 +126,19 @@ src/
 - `teleconsultResponses` - Respostas do leilão reverso
 
 ## Mudanças Recentes (Junho 2025)
+
+### Sistema de Demonstração Médica e Funcionalidades Clínicas
+- **Data**: 25/06/2025
+- **Implementação**: Sistema completo para demonstração com equipe médica fictícia
+- **Funcionalidades**: 
+  - Geração de 2 médicos por especialidade (20 médicos total)
+  - 5 pacientes por médico com condições médicas variadas (50 pacientes)
+  - Sistema de solicitação de exames clínicos com interface categorizada
+  - Sistema de encaminhamentos para especialistas (presencial ou teleconsulta)
+  - Página de gerenciamento de demonstração para médicos
+- **Backend**: Novas tabelas clinical_exams e medical_referrals
+- **Interface**: Modais especializados para seleção de exames e criação de encaminhamentos
+- **Dashboard**: Integração das ações clínicas no dashboard principal dos médicos
 
 ### Sistema de Fluxo Flexível para Teleconsultas Psiquiátricas
 - **Data**: 25/06/2025

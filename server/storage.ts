@@ -28,6 +28,12 @@ import {
   type AppointmentWithDetails,
   type PatientWithUser,
   type DoctorWithUser,
+  type PsychologistInterview,
+  type InsertPsychologistInterview,
+  type ClinicalExam,
+  type InsertClinicalExam,
+  type MedicalReferral,
+  type InsertMedicalReferral,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, gte, lte } from "drizzle-orm";
@@ -116,6 +122,16 @@ export interface IStorage {
   updatePsychologistInterview(id: number, interview: Partial<InsertPsychologistInterview>): Promise<PsychologistInterview>;
   getAvailablePsychologists(): Promise<DoctorWithUser[]>;
   schedulePsychologistInterview(appointmentId: number, psychologistId: number, interviewDate: Date): Promise<PsychologistInterview>;
+  
+  // Clinical exam operations
+  createClinicalExam(exam: any): Promise<any>;
+  getClinicalExamsByDoctor(doctorId: number): Promise<any[]>;
+  getClinicalExamsByPatient(patientId: number): Promise<any[]>;
+  
+  // Medical referral operations
+  createMedicalReferral(referral: any): Promise<any>;
+  getMedicalReferralsByDoctor(doctorId: number): Promise<any[]>;
+  getMedicalReferralsByPatient(patientId: number): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
