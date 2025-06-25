@@ -166,23 +166,31 @@ export default function PaymentCheckout() {
 
     const fetchAppointmentAndCreatePayment = async () => {
       try {
-        // Wait for authentication to be properly established
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Multiple authentication verification attempts with backoff
+        let authVerified = false;
+        let attempts = 0;
+        const maxAttempts = 3;
         
-        // Verify authentication before proceeding
-        const authCheck = await fetch('/api/auth/user', {
-          credentials: 'include',
-          headers: { 'Accept': 'application/json' }
-        });
-        
-        if (!authCheck.ok) {
-          toast({
-            title: "Autenticação Necessária",
-            description: "Redirecionando para login...",
-            variant: "destructive",
+        while (!authVerified && attempts < maxAttempts) {
+          attempts++;
+          await new Promise(resolve => setTimeout(resolve, attempts * 200));
+          
+          const authCheck = await fetch('/api/auth/user', {
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
           });
-          window.location.href = "/api/login";
-          return;
+          
+          if (authCheck.ok) {
+            authVerified = true;
+          } else if (attempts === maxAttempts) {
+            toast({
+              title: "Autenticação Necessária",
+              description: "Redirecionando para login...",
+              variant: "destructive",
+            });
+            window.location.href = "/api/login";
+            return;
+          }
         }
         
         // Fetch appointment details

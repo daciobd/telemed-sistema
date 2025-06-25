@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Calendar, Clock, User, Video, Plus, X, Brain, Info, CreditCard } from "lucide-react";
+import { SimplePaymentButton } from "@/components/SimplePaymentButton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
@@ -374,17 +375,11 @@ export default function Appointments() {
                             )}
                           </div>
                           
-                          {/* Botão de Pagamento - visível para todos para teste */}
-                          <Button
-                            size="sm"
-                            onClick={() => {
-                              setLocation(`/payment-checkout?appointment=${appointment.id}`);
-                            }}
-                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-                          >
-                            <CreditCard className="h-4 w-4" />
-                            💳 Testar Pagamento R$ 150,00
-                          </Button>
+                          {/* Botão de Pagamento Simplificado */}
+                          <SimplePaymentButton 
+                            appointmentId={appointment.id} 
+                            amount={150} 
+                          />
                         </div>
                       </div>
                     </div>
