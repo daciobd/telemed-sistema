@@ -252,12 +252,65 @@ src/
 - ✅ Questionário psiquiátrico 100% funcional (dropdowns, sliders e inputs corrigidos)
 - ✅ Sistema de entrevista com psicóloga para avaliação psicodinâmica
 
-### Próximas Melhorias
-- Sistema de pagamentos integrado
-- Integração com laboratórios
-- Aplicativo móvel
-- Telemedicina especializada
-- Conformidade LGPD completa
+### Próximas Melhorias Prioritárias
+
+#### 🚀 Funcionalidades Core (Alta Prioridade)
+- **Sistema de Pagamentos Integrado**
+  - Gateway de pagamento (Stripe/PagSeguro)
+  - Planos de assinatura para pacientes
+  - Cobrança automática de consultas
+  - Dashboard financeiro para médicos
+
+- **Integração com Laboratórios**
+  - API para laboratórios parceiros
+  - Solicitação e recebimento de resultados
+  - Histórico de exames integrado
+  - Notificações de resultados
+
+- **Sistema de Emergência Médica**
+  - Botão de emergência para pacientes
+  - Triagem automática de urgência
+  - Encaminhamento para hospitais
+  - Histórico de emergências
+
+#### 📱 Expansão de Plataforma (Média Prioridade)
+- **Aplicativo Móvel**
+  - App nativo iOS/Android
+  - Notificações push
+  - Consultas móveis
+  - Offline capability
+
+- **Telemedicina Especializada Avançada**
+  - Dermatologia com análise de imagem
+  - Cardiologia com monitoramento
+  - Pediatria com ferramentas específicas
+  - Psiquiatria com testes avançados
+
+#### 🔒 Conformidade e Segurança (Alta Prioridade)
+- **LGPD Completa**
+  - Consentimento explícito
+  - Portabilidade de dados
+  - Direito ao esquecimento
+  - Auditoria de acesso
+
+- **Certificações Médicas**
+  - Certificação digital ICP-Brasil
+  - Integração com CFM
+  - Validação de CRM automática
+  - Compliance hospitalar
+
+#### 🤖 Inteligência Artificial (Média Prioridade)
+- **IA Diagnóstica Avançada**
+  - Análise de imagem médica
+  - Predição de riscos
+  - Recomendações personalizadas
+  - Machine learning contínuo
+
+- **Chatbot Médico**
+  - Triagem inicial automatizada
+  - Suporte 24/7 para dúvidas
+  - Agendamento por voz
+  - Lembretes inteligentes
 
 ## Configuração de Desenvolvimento
 
