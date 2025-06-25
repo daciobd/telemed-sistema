@@ -100,11 +100,20 @@ function CheckoutForm({ appointmentId, appointmentDetails }: CheckoutFormProps) 
           variant: "default",
         });
       }
-    } catch (error) {
-      console.error('Payment error:', error);
+    } catch (error: any) {
+      console.error('Payment error details:', error);
+      console.error('Error type:', typeof error);
+      console.error('Error message:', error?.message);
+      console.error('Error stack:', error?.stack);
+      
+      let errorMessage = "Erro inesperado no processamento";
+      if (error?.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Erro no Pagamento",
-        description: "Erro inesperado. Para teste, use: 4242 4242 4242 4242, data futura, CVC 123",
+        description: `${errorMessage} | Use cartão teste: 4242 4242 4242 4242`,
         variant: "destructive",
       });
     } finally {
