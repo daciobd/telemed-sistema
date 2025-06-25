@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Calendar, Clock, User, Video, Plus, X, Brain, Info } from "lucide-react";
+import { Calendar, Clock, User, Video, Plus, X, Brain, Info, CreditCard } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import AppointmentModal from "@/components/modals/appointment-modal";
@@ -333,42 +333,56 @@ export default function Appointments() {
                           {getStatusText(appointment.status)}
                         </Badge>
                         
-                        <div className="flex space-x-2">
-                          {appointment.status === "scheduled" && (
-                            <Button
-                              size="sm"
-                              onClick={() => updateAppointmentMutation.mutate({
-                                id: appointment.id,
-                                status: "confirmed"
-                              })}
-                              disabled={updateAppointmentMutation.isPending}
-                            >
-                              Confirmar
-                            </Button>
-                          )}
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex space-x-2">
+                            {appointment.status === "scheduled" && (
+                              <Button
+                                size="sm"
+                                onClick={() => updateAppointmentMutation.mutate({
+                                  id: appointment.id,
+                                  status: "confirmed"
+                                })}
+                                disabled={updateAppointmentMutation.isPending}
+                              >
+                                Confirmar
+                              </Button>
+                            )}
+                            
+                            {appointment.status === "confirmed" && appointment.type === "teleconsult" && (
+                              <Button
+                                size="sm"
+                                onClick={() => startVideoCall(appointment)}
+                                className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                              >
+                                <Video className="h-4 w-4" />
+                                Videochamada
+                              </Button>
+                            )}
+                            
+                            {appointment.status === "confirmed" && appointment.type !== "teleconsult" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => updateAppointmentMutation.mutate({
+                                  id: appointment.id,
+                                  status: "completed"
+                                })}
+                                disabled={updateAppointmentMutation.isPending}
+                              >
+                                Concluir
+                              </Button>
+                            )}
+                          </div>
                           
-                          {appointment.status === "confirmed" && appointment.type === "teleconsult" && (
+                          {/* Botão de Pagamento - sempre visível para pacientes */}
+                          {user?.role === 'patient' && (
                             <Button
                               size="sm"
-                              onClick={() => startVideoCall(appointment)}
-                              className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                              onClick={() => window.location.href = `/payment-checkout?appointment=${appointment.id}`}
+                              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
                             >
-                              <Video className="h-4 w-4" />
-                              Videochamada
-                            </Button>
-                          )}
-                          
-                          {appointment.status === "confirmed" && appointment.type !== "teleconsult" && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateAppointmentMutation.mutate({
-                                id: appointment.id,
-                                status: "completed"
-                              })}
-                              disabled={updateAppointmentMutation.isPending}
-                            >
-                              Concluir
+                              <CreditCard className="h-4 w-4" />
+                              Pagar R$ 150,00
                             </Button>
                           )}
                         </div>

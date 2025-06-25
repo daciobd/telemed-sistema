@@ -233,7 +233,21 @@ export default function PaymentCheckout() {
   }
 
   if (!isAuthenticated || !appointmentId) {
-    return null;
+    return (
+      <Layout>
+        <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-gray-600">Acesso negado ou consulta não encontrada.</p>
+            <Button 
+              onClick={() => setLocation('/appointments')} 
+              className="mt-4"
+            >
+              Voltar para Consultas
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    );
   }
 
   if (!clientSecret) {
