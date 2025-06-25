@@ -116,8 +116,24 @@ export default function MedicalRecords() {
         <div className="flex-1 p-4 lg:p-6 overflow-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-semibold text-gray-900">Prontuários Médicos</h1>
-              <p className="text-gray-600">Registros médicos e histórico de consultas</p>
+              <h1 className="text-2xl font-semibold text-gray-900">
+                {patientId ? 'Prontuário do Paciente' : 'Prontuários Médicos'}
+              </h1>
+              <p className="text-gray-600">
+                {patientId 
+                  ? 'Registros médicos específicos do paciente selecionado'
+                  : 'Registros médicos e histórico de consultas'
+                }
+              </p>
+              {patientId && (
+                <Button 
+                  variant="outline" 
+                  className="mt-4"
+                  onClick={() => window.location.href = '/medical-records'}
+                >
+                  ← Voltar para todos os prontuários
+                </Button>
+              )}
             </div>
           </div>
 

@@ -163,7 +163,14 @@ export default function Patients() {
                         </div>
                         
                         <div className="mt-4 pt-3 border-t border-gray-100">
-                          <Button variant="outline" size="sm" className="w-full">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="w-full"
+                            onClick={() => {
+                              window.location.href = `/medical-records?patient=${patient.id}`;
+                            }}
+                          >
                             Ver Prontuário
                           </Button>
                         </div>
