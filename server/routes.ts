@@ -1310,27 +1310,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Payment routes
   app.post('/api/payments/create-payment-intent', isAuthenticated, async (req: any, res) => {
+    console.log('=== PAYMENT REQUEST START ===');
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    console.log('User:', req.user?.claims);
+    
     // Set JSON content type explicitly
     res.setHeader('Content-Type', 'application/json');
     
     try {
+      console.log('Checking Stripe secret key...');
       if (!process.env.STRIPE_SECRET_KEY) {
+        console.log('ERROR: Stripe secret key not found');
         return res.status(500).json({ message: 'Stripe not configured' });
       }
+      console.log('Stripe secret key found:', process.env.STRIPE_SECRET_KEY.substring(0, 10) + '...');
       
       const Stripe = require('stripe');
+      console.log('Initializing Stripe...');
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
       
       const { appointmentId, amount = '150' } = req.body;
       const userId = req.user.claims.sub;
       
-      console.log('Payment request:', { appointmentId, amount, userId });
+      console.log('Payment request data:', { appointmentId, amount, userId });
       
       // Validate required fields
       if (!appointmentId) {
+        console.log('ERROR: Appointment ID missing');
         return res.status(400).json({ message: 'Appointment ID is required' });
       }
       
+      console.log('Creating payment intent...');
       // Simplified payment intent creation for testing
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(parseFloat(amount || '150') * 100), // Convert to cents
@@ -1345,14 +1356,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
       });
       
-      console.log('Payment intent created:', paymentIntent.id);
+      console.log('Payment intent created successfully:', paymentIntent.id);
+      console.log('Client secret:', paymentIntent.client_secret?.substring(0, 20) + '...');
       
-      return res.json({ 
+      const response = { 
         clientSecret: paymentIntent.client_secret,
         paymentIntentId: paymentIntent.id 
-      });
+      };
+      
+      console.log('Sending response:', response);
+      console.log('=== PAYMENT REQUEST SUCCESS ===');
+      
+      return res.json(response);
     } catch (error: any) {
+      console.log('=== PAYMENT REQUEST ERROR ===');
       console.error('Error creating payment intent:', error);
+      console.error('Error stack:', error.stack);
       return res.status(500).json({ 
         message: 'Failed to create payment intent',
         error: error?.message || 'Unknown error'

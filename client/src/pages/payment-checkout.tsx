@@ -188,11 +188,30 @@ export default function PaymentCheckout() {
           }),
         });
 
-        // Check if response is HTML (authentication redirect)
+        // Enhanced error handling for authentication and API responses
         const contentType = paymentResponse.headers.get('content-type');
-        if (contentType?.includes('text/html')) {
+        console.log('Payment API response status:', paymentResponse.status);
+        console.log('Payment API content type:', contentType);
+        
+        // Check for authentication failure
+        if (paymentResponse.status === 401) {
+          console.log('Authentication failed, redirecting to login');
           toast({
             title: "Sessão Expirada",
+            description: "Redirecionando para login...",
+            variant: "destructive",
+          });
+          setTimeout(() => {
+            window.location.href = "/api/login";
+          }, 1000);
+          return;
+        }
+        
+        // Check if response is HTML (authentication redirect)
+        if (contentType?.includes('text/html')) {
+          console.log('Received HTML response instead of JSON');
+          toast({
+            title: "Erro de Autenticação",
             description: "Redirecionando para login...",
             variant: "destructive",
           });
@@ -207,13 +226,21 @@ export default function PaymentCheckout() {
           try {
             const errorJson = await paymentResponse.json();
             errorMessage = errorJson.message || errorMessage;
-          } catch {
+            console.log('Payment API error:', errorJson);
+          } catch (parseError) {
+            console.log('Failed to parse error response:', parseError);
             // If JSON parsing fails, use status code
           }
           throw new Error(errorMessage);
         }
         
         const paymentData = await paymentResponse.json();
+        console.log('Payment data received:', paymentData);
+        
+        if (!paymentData.clientSecret) {
+          throw new Error('Client secret not received from payment API');
+        }
+        
         setClientSecret(paymentData.clientSecret);
       } catch (error: any) {
         if (isUnauthorizedError(error)) {
