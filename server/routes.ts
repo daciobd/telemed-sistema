@@ -1350,7 +1350,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
           appointmentId: appointmentId.toString(),
           userId: userId
         },
-        payment_method_types: ['card'],
         automatic_payment_methods: {
           enabled: true,
         },
