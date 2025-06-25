@@ -1326,9 +1326,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.log('Stripe secret key found:', process.env.STRIPE_SECRET_KEY.substring(0, 10) + '...');
       
-      const Stripe = require('stripe');
+      const { default: Stripe } = await import('stripe');
       console.log('Initializing Stripe...');
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
       
       const { appointmentId, amount = '150' } = req.body;
       const userId = req.user.claims.sub;
