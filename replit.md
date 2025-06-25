@@ -77,6 +77,13 @@ Sistema abrangente de telemedicina que oferece soluções digitais inovadoras pa
 - Resumo clínico e solicitação de exames
 - Sistema de prioridades e notas complementares
 
+### ✅ Sistema de Contato WhatsApp
+- Interface para pacientes enviarem dúvidas médicas via WhatsApp
+- Seleção de médico específico por especialidade
+- Mensagens pré-formatadas com dados do paciente
+- Integração direta com WhatsApp Web/App
+- Avisos de segurança para emergências
+
 ### ✅ Sistema de Demonstração Médica
 - Equipe fictícia com 20 médicos especialistas
 - 50 pacientes com condições médicas variadas
@@ -126,6 +133,20 @@ src/
 - `teleconsultResponses` - Respostas do leilão reverso
 
 ## Mudanças Recentes (Junho 2025)
+
+### Sistema de Contato WhatsApp para Dúvidas Médicas  
+- **Data**: 25/06/2025
+- **Implementação**: Sistema completo para comunicação direta paciente-médico via WhatsApp
+- **Funcionalidades**: 
+  - Seleção de médico por especialidade
+  - Formulário para dúvidas médicas com limite de caracteres
+  - Geração automática de link WhatsApp com mensagem pré-formatada
+  - Informações de contato dos médicos demo (números fictícios)
+  - Avisos de segurança sobre uso não-emergencial
+  - Interface responsiva integrada ao sistema
+- **UX/UI**: Card dedicado com validações e feedback visual
+- **Integração**: Nova rota `/whatsapp-contact` no menu lateral
+- **Dados**: Telefones WhatsApp adicionados aos médicos demo
 
 ### Landing Page Aprimorada com Diferenciais Competitivos
 - **Data**: 25/06/2025
