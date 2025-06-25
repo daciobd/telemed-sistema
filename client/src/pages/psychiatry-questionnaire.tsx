@@ -490,29 +490,19 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
               <h3 className="text-xl font-semibold">Fatores Sociais</h3>
             </div>
 
-            <FormField
-              control={form.control}
-              name="workStress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nível de estresse no trabalho (1-10)</FormLabel>
-                  <FormControl>
-                    <div className="space-y-2">
-                      <Slider
-                        value={[field.value || 5]}
-                        onValueChange={(value) => field.onChange(value[0])}
-                        min={1}
-                        max={10}
-                        step={1}
-                      />
-                      <div className="text-center text-sm text-gray-600">
-                        Valor atual: {field.value || 5}
-                      </div>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Nível de estresse no trabalho (1-10)</label>
+              <Slider
+                defaultValue={[5]}
+                onValueChange={(value) => form.setValue('workStress', value[0])}
+                min={1}
+                max={10}
+                step={1}
+              />
+              <div className="text-center text-sm text-gray-600">
+                Valor atual: {form.watch('workStress') || 5}
+              </div>
+            </div>
 
             <FormField
               control={form.control}
@@ -538,53 +528,33 @@ export default function PsychiatryQuestionnaire({ appointmentId, onComplete }: P
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="supportSystem"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qualidade do suporte social (1-10)</FormLabel>
-                  <FormControl>
-                    <div className="space-y-2">
-                      <Slider
-                        value={[field.value || 5]}
-                        onValueChange={(value) => field.onChange(value[0])}
-                        min={1}
-                        max={10}
-                        step={1}
-                      />
-                      <div className="text-center text-sm text-gray-600">
-                        Valor atual: {field.value || 5}
-                      </div>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Qualidade do suporte social (1-10)</label>
+              <Slider
+                defaultValue={[5]}
+                onValueChange={(value) => form.setValue('supportSystem', value[0])}
+                min={1}
+                max={10}
+                step={1}
+              />
+              <div className="text-center text-sm text-gray-600">
+                Valor atual: {form.watch('supportSystem') || 5}
+              </div>
+            </div>
 
-            <FormField
-              control={form.control}
-              name="financialStress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nível de estresse financeiro (1-10)</FormLabel>
-                  <FormControl>
-                    <div className="space-y-2">
-                      <Slider
-                        value={[field.value || 5]}
-                        onValueChange={(value) => field.onChange(value[0])}
-                        min={1}
-                        max={10}
-                        step={1}
-                      />
-                      <div className="text-center text-sm text-gray-600">
-                        Valor atual: {field.value || 5}
-                      </div>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Nível de estresse financeiro (1-10)</label>
+              <Slider
+                defaultValue={[5]}
+                onValueChange={(value) => form.setValue('financialStress', value[0])}
+                min={1}
+                max={10}
+                step={1}
+              />
+              <div className="text-center text-sm text-gray-600">
+                Valor atual: {form.watch('financialStress') || 5}
+              </div>
+            </div>
           </div>
         );
 

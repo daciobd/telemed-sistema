@@ -155,7 +155,7 @@ src/
 - ✅ Sistema de notificações
 - ✅ Sistema de psiquiatria especializado (totalmente funcional)
 - ✅ Avaliação psicológica PHQ-9 e GAD-7 operacional
-- ✅ Questionário psiquiátrico 100% funcional (todos os campos corrigidos)
+- ✅ Questionário psiquiátrico 100% funcional (dropdowns, sliders e inputs corrigidos)
 
 ### Próximas Melhorias
 - Sistema de pagamentos integrado
