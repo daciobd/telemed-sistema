@@ -29,18 +29,30 @@ export default function PsychiatryPreConsultation({ appointmentId, onStartConsul
   const { data: assessment } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}/psychological-assessment`],
     retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    staleTime: 5 * 60 * 1000,
   });
 
   // Check if questionnaire is completed
   const { data: questionnaire } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}/psychiatry-questionnaire`],
     retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    staleTime: 5 * 60 * 1000,
   });
 
   // Check if interview is scheduled
   const { data: interview } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
     retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    staleTime: 5 * 60 * 1000,
   });
 
   const isAssessmentCompleted = !!assessment;

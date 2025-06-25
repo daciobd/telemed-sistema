@@ -28,14 +28,20 @@ export default function PsychologistInterviewScheduler({ appointmentId, onComple
     queryKey: ['/api/psychologists'],
     enabled: appointmentId > 0,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { data: existingInterview } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
     enabled: appointmentId > 0,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const scheduleInterview = useMutation({

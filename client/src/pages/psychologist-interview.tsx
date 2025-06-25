@@ -19,14 +19,20 @@ export default function PsychologistInterviewPage({ appointmentId }: Psychologis
     queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
     enabled: appointmentId > 0,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const { data: appointment } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}`],
     enabled: appointmentId > 0,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   if (isLoading) {

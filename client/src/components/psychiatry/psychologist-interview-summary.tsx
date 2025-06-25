@@ -13,7 +13,10 @@ export default function PsychologistInterviewSummary({ appointmentId }: Psycholo
     queryKey: [`/api/appointments/${appointmentId}/psychologist-interview`],
     enabled: appointmentId > 0,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   if (isLoading) {

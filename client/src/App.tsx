@@ -23,6 +23,7 @@ import PsychiatryAssessment from "@/pages/psychiatry-assessment";
 import PsychiatryQuestionnaire from "@/pages/psychiatry-questionnaire";
 import PsychiatryPreConsultation from "@/components/psychiatry/psychiatry-pre-consultation";
 import PsychologistInterviewPage from "@/pages/psychologist-interview";
+import PsychologistInterviewSimple from "@/pages/psychologist-interview-simple";
 
 
 function Router() {
@@ -77,7 +78,7 @@ function Router() {
             />
           } />
           <Route path="/psychologist-interview/:appointmentId" component={({ params }: any) => 
-            <PsychologistInterviewPage 
+            <PsychologistInterviewSimple 
               appointmentId={parseInt(params.appointmentId)} 
             />
           } />
