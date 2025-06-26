@@ -99,6 +99,15 @@ export default function VideoConsultation() {
                 <p className="text-sm text-gray-500">
                   Para testar, confirme um agendamento do tipo "teleconsult" na página de agendamentos.
                 </p>
+                
+                {/* Demo Button for Testing */}
+                <Button 
+                  onClick={() => setActiveCall({ appointmentId: 999, patientName: "Paciente Teste", doctorName: "Dr. Teste" })}
+                  className="mt-4"
+                >
+                  <Video className="h-4 w-4 mr-2" />
+                  Iniciar Consulta Demo (Testar Prontuário)
+                </Button>
               </CardContent>
             </Card>
           ) : (
