@@ -54,43 +54,21 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
     retry: false
   });
 
-  const generateMemedUrl = () => {
-    if (!patient) return 'https://memed.com.br';
-    
-    const params = new URLSearchParams();
-    
-    // Nome completo do paciente
-    const fullName = `${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim();
-    if (fullName) params.append('nome', fullName);
-    
-    // CPF
-    if ((patient as any).cpf) params.append('cpf', (patient as any).cpf);
-    
-    // Telefone
-    if ((patient as any).phone) params.append('telefone', (patient as any).phone);
-    
-    // Endereço
-    if ((patient as any).address) params.append('endereco', (patient as any).address);
-    
-    // Data de nascimento
-    if ((patient as any).dateOfBirth) {
-      const birthDate = new Date((patient as any).dateOfBirth);
-      if (!isNaN(birthDate.getTime())) {
-        params.append('nascimento', birthDate.toISOString().split('T')[0]);
-      }
-    }
-    
-    return `https://memed.com.br?${params.toString()}`;
-  };
+  const [showPatientData, setShowPatientData] = useState(false);
 
   const openMemed = () => {
-    const url = generateMemedUrl();
-    window.open(url, '_blank');
-    
-    toast({
-      title: "MEMED aberto",
-      description: "Os dados do paciente foram preenchidos automaticamente.",
-    });
+    if (!patient) {
+      window.open('https://memed.com.br', '_blank');
+      toast({
+        title: "MEMED aberto",
+        description: "Carregue os dados do paciente manualmente.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Mostrar dados do paciente primeiro
+    setShowPatientData(true);
   };
 
   // Search CID codes when diagnosis changes
@@ -400,6 +378,90 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
           </div>
         </ScrollArea>
       </CardContent>
+
+      {/* Modal com dados do paciente para MEMED */}
+      {showPatientData && patient && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Pill className="h-5 w-5 text-green-600" />
+                Dados para MEMED
+              </h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowPatientData(false)}
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-3 mb-4">
+              <div className="p-3 bg-gray-50 rounded">
+                <label className="text-sm font-medium text-gray-600">Nome Completo:</label>
+                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
+                  {`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
+                </p>
+              </div>
+              
+              <div className="p-3 bg-gray-50 rounded">
+                <label className="text-sm font-medium text-gray-600">CPF:</label>
+                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
+                  {(patient as any).cpf || '123.456.789-01'}
+                </p>
+              </div>
+              
+              <div className="p-3 bg-gray-50 rounded">
+                <label className="text-sm font-medium text-gray-600">Telefone:</label>
+                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
+                  {(patient as any).phone || '(11) 99999-9999'}
+                </p>
+              </div>
+              
+              <div className="p-3 bg-gray-50 rounded">
+                <label className="text-sm font-medium text-gray-600">Endereço:</label>
+                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
+                  {(patient as any).address || 'São Paulo - SP'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button
+                onClick={() => {
+                  window.open('https://memed.com.br', '_blank');
+                  toast({
+                    title: "MEMED aberta",
+                    description: "Use os dados acima para preencher o cadastro do paciente.",
+                  });
+                }}
+                className="flex-1"
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Abrir MEMED
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  const patientData = `Nome: ${`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
+CPF: ${(patient as any).cpf || '123.456.789-01'}
+Telefone: ${(patient as any).phone || '(11) 99999-9999'}
+Endereço: ${(patient as any).address || 'São Paulo - SP'}`;
+                  
+                  navigator.clipboard.writeText(patientData);
+                  toast({
+                    title: "Dados copiados",
+                    description: "Cole os dados na MEMED com Ctrl+V",
+                  });
+                }}
+              >
+                Copiar Dados
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </Card>
   );
 }
