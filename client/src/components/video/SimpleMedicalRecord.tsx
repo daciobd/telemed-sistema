@@ -7,12 +7,26 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Save, FileText, CheckCircle, Search } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Save, FileText, CheckCircle, Search, Pill, ExternalLink } from "lucide-react";
 
 interface SimpleMedicalRecordProps {
   appointmentId: number;
   patientId: number;
   isDoctor: boolean;
+}
+
+interface Patient {
+  id: number;
+  userId: string;
+  dateOfBirth?: string;
+  phone?: string;
+  address?: string;
+  cpf?: string;
+  user?: {
+    firstName?: string;
+    lastName?: string;
+  };
 }
 
 export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor }: SimpleMedicalRecordProps) {
@@ -32,6 +46,52 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
   const [cidResults, setCidResults] = useState<any[]>([]);
   const [showCidDropdown, setShowCidDropdown] = useState(false);
   const [searchingCid, setSearchingCid] = useState(false);
+
+  // Buscar dados do paciente para preenchimento automático do MEMED
+  const { data: patient } = useQuery<Patient>({
+    queryKey: [`/api/patients/${patientId}`],
+    enabled: !!patientId,
+    retry: false
+  });
+
+  const generateMemedUrl = () => {
+    if (!patient) return 'https://memed.com.br';
+    
+    const params = new URLSearchParams();
+    
+    // Nome completo do paciente
+    const fullName = `${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim();
+    if (fullName) params.append('nome', fullName);
+    
+    // CPF
+    if ((patient as any).cpf) params.append('cpf', (patient as any).cpf);
+    
+    // Telefone
+    if ((patient as any).phone) params.append('telefone', (patient as any).phone);
+    
+    // Endereço
+    if ((patient as any).address) params.append('endereco', (patient as any).address);
+    
+    // Data de nascimento
+    if ((patient as any).dateOfBirth) {
+      const birthDate = new Date((patient as any).dateOfBirth);
+      if (!isNaN(birthDate.getTime())) {
+        params.append('nascimento', birthDate.toISOString().split('T')[0]);
+      }
+    }
+    
+    return `https://memed.com.br?${params.toString()}`;
+  };
+
+  const openMemed = () => {
+    const url = generateMemedUrl();
+    window.open(url, '_blank');
+    
+    toast({
+      title: "MEMED aberto",
+      description: "Os dados do paciente foram preenchidos automaticamente.",
+    });
+  };
 
   // Search CID codes when diagnosis changes
   useEffect(() => {
@@ -162,6 +222,16 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
             Prontuário Eletrônico
           </div>
           <div className="flex gap-2">
+            <Button
+              onClick={openMemed}
+              variant="outline"
+              size="sm"
+              className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+            >
+              <Pill className="h-4 w-4 mr-1" />
+              MEMED
+              <ExternalLink className="h-3 w-3 ml-1" />
+            </Button>
             <Button
               onClick={handleSave}
               disabled={saving}
