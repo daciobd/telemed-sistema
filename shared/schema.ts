@@ -46,6 +46,7 @@ export const patients = pgTable("patients", {
   dateOfBirth: timestamp("date_of_birth"),
   phone: varchar("phone"),
   address: text("address"),
+  cpf: varchar("cpf", { length: 14 }),
   emergencyContact: varchar("emergency_contact"),
   bloodType: varchar("blood_type"),
   allergies: text("allergies"),

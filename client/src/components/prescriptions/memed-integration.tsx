@@ -211,9 +211,63 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
   };
 
   const generateMemedLink = () => {
-    // Generate MEMED prescription link
-    const memedUrl = 'https://memed.com.br/prescricao/nova';
+    // Generate MEMED prescription link with patient data
+    let memedUrl = 'https://memed.com.br/prescricao/nova';
+    
+    // Add patient data as URL parameters if available
+    if (patientInfo) {
+      const params = new URLSearchParams();
+      
+      // Patient name
+      if (patientInfo.user?.firstName && patientInfo.user?.lastName) {
+        params.append('paciente_nome', `${patientInfo.user.firstName} ${patientInfo.user.lastName}`);
+      }
+      
+      // CPF
+      if (patientInfo.cpf) {
+        params.append('paciente_cpf', patientInfo.cpf);
+      }
+      
+      // Phone number
+      if (patientInfo.phone) {
+        params.append('paciente_telefone', patientInfo.phone);
+      }
+      
+      // Address
+      if (patientInfo.address) {
+        params.append('paciente_endereco', patientInfo.address);
+      }
+      
+      // City and state (extracted from address if available)
+      if (patientInfo.city) {
+        params.append('paciente_cidade', patientInfo.city);
+      }
+      
+      if (patientInfo.state) {
+        params.append('paciente_estado', patientInfo.state);
+      }
+      
+      // Date of birth
+      if (patientInfo.dateOfBirth) {
+        const birthDate = new Date(patientInfo.dateOfBirth).toLocaleDateString('pt-BR');
+        params.append('paciente_nascimento', birthDate);
+      }
+      
+      // Add parameters to URL if any exist
+      if (params.toString()) {
+        memedUrl += '?' + params.toString();
+      }
+    }
+    
     window.open(memedUrl, '_blank');
+    
+    // Show success message
+    toast({
+      title: "MEMED Aberto",
+      description: patientInfo ? 
+        "Dados do paciente preenchidos automaticamente no MEMED" : 
+        "MEMED aberto - preencha os dados do paciente manualmente",
+    });
   };
 
   return (
@@ -451,6 +505,65 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
         </TabsContent>
 
         <TabsContent value="memed" className="space-y-4">
+          {/* Patient Data Preview for MEMED */}
+          {patientInfo && (
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-green-800">
+                  <User className="h-5 w-5" />
+                  Dados que serão preenchidos automaticamente no MEMED
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Check className="h-4 w-4 text-green-600" />
+                      <span className="font-medium">Nome:</span>
+                      <span>{patientInfo.user?.firstName} {patientInfo.user?.lastName}</span>
+                    </div>
+                    {patientInfo.cpf && (
+                      <div className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-green-600" />
+                        <span className="font-medium">CPF:</span>
+                        <span>{patientInfo.cpf}</span>
+                      </div>
+                    )}
+                    {patientInfo.phone && (
+                      <div className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-green-600" />
+                        <span className="font-medium">Celular:</span>
+                        <span>{patientInfo.phone}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    {patientInfo.address && (
+                      <div className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-green-600" />
+                        <span className="font-medium">Endereço:</span>
+                        <span className="text-xs">{patientInfo.address}</span>
+                      </div>
+                    )}
+                    {patientInfo.dateOfBirth && (
+                      <div className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-green-600" />
+                        <span className="font-medium">Nascimento:</span>
+                        <span>{new Date(patientInfo.dateOfBirth).toLocaleDateString('pt-BR')}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-4 p-3 bg-white rounded-lg border border-green-200">
+                  <p className="text-xs text-green-700">
+                    ✓ Estes dados serão automaticamente inseridos no formulário do MEMED, 
+                    poupando tempo no preenchimento da prescrição.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -463,18 +576,30 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   O MEMED é uma plataforma profissional para prescrições médicas digitais.
-                  Clique no botão abaixo para acessar diretamente o sistema MEMED.
+                  {patientInfo ? 
+                    " Os dados do paciente serão preenchidos automaticamente." : 
+                    " Selecione um paciente para preenchimento automático dos dados."}
                 </AlertDescription>
               </Alert>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium mb-2">Prescrições Digitais</h4>
+                <div className="p-4 border rounded-lg bg-gradient-to-br from-green-50 to-blue-50">
+                  <h4 className="font-medium mb-2 text-green-800">Prescrições Digitais</h4>
                   <p className="text-sm text-gray-600 mb-3">
-                    Crie prescrições digitais válidas juridicamente
+                    {patientInfo ? 
+                      "Dados do paciente preenchidos automaticamente" : 
+                      "Crie prescrições digitais válidas juridicamente"}
                   </p>
-                  <Button variant="outline" size="sm" onClick={generateMemedLink}>
-                    Acessar MEMED
+                  <Button 
+                    size="sm" 
+                    onClick={generateMemedLink}
+                    className={patientInfo ? 
+                      "bg-green-600 hover:bg-green-700 text-white" : 
+                      "bg-blue-600 hover:bg-blue-700 text-white"}
+                  >
+                    {patientInfo ? 
+                      "🚀 Abrir MEMED (dados preenchidos)" : 
+                      "Acessar MEMED"}
                   </Button>
                 </div>
 
