@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useQuery } from '@tanstack/react-query';
 import MediaPermissions from './media-permissions';
+import SimpleMedicalRecord from './SimpleMedicalRecord';
 import { 
   Video, 
   VideoOff, 
@@ -18,7 +20,8 @@ import {
   Camera,
   Settings,
   Send,
-  Clock
+  Clock,
+  FileText
 } from 'lucide-react';
 
 interface VideoRoomProps {
@@ -53,6 +56,15 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   const [showChat, setShowChat] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  
+  // Medical record states
+  const [showMedicalRecord, setShowMedicalRecord] = useState(false);
+
+  // Fetch appointment details to get patient information
+  const { data: appointment } = useQuery({
+    queryKey: [`/api/appointments/${appointmentId}`],
+    enabled: !!appointmentId
+  });
   
   // Refs for video elements
   const localVideoRef = useRef<HTMLVideoElement>(null);
@@ -671,6 +683,17 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
             >
               <MessageSquare className="h-4 w-4" />
             </Button>
+            
+            {user?.role === 'doctor' && (
+              <Button
+                variant={showMedicalRecord ? "default" : "outline"}
+                size="sm"
+                onClick={() => setShowMedicalRecord(!showMedicalRecord)}
+                className="rounded-full"
+              >
+                <FileText className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
 
@@ -718,6 +741,17 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
                 <Send className="h-4 w-4" />
               </Button>
             </div>
+          </div>
+        )}
+
+        {/* Medical Record Panel */}
+        {showMedicalRecord && user?.role === 'doctor' && (
+          <div className="absolute left-4 top-4 bottom-4 w-96 bg-white rounded-lg shadow-lg overflow-hidden">
+            <SimpleMedicalRecord 
+              appointmentId={appointmentId}
+              patientId={1}
+              isDoctor={true}
+            />
           </div>
         )}
       </div>

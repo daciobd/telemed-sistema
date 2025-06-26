@@ -251,6 +251,48 @@ export const psychiatryQuestionnaires = pgTable("psychiatry_questionnaires", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Electronic Medical Records for consultations
+export const consultationRecords = pgTable("consultation_records", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").references(() => appointments.id).notNull(),
+  doctorId: integer("doctor_id").references(() => doctors.id).notNull(),
+  patientId: integer("patient_id").references(() => patients.id).notNull(),
+  
+  // Clinical data
+  chiefComplaint: text("chief_complaint"), // Queixa principal
+  anamnesis: text("anamnesis"), // Anamnese
+  diagnosis: text("diagnosis"), // Hipótese diagnóstica
+  cidCode: varchar("cid_code"), // CID-10 code
+  cidDescription: text("cid_description"), // CID-10 description
+  treatment: text("treatment"), // Conduta
+  
+  // Additional clinical fields
+  physicalExam: text("physical_exam"),
+  vitalSigns: jsonb("vital_signs"), // { bp: "120/80", hr: "72", temp: "36.5" }
+  notes: text("notes"),
+  followUp: text("follow_up"),
+  
+  // Status and timestamps
+  status: varchar("status").default("in_progress"), // in_progress, completed, draft
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// CID-10 codes database for search functionality
+export const cidCodes = pgTable("cid_codes", {
+  id: serial("id").primaryKey(),
+  code: varchar("code").notNull().unique(), // Ex: F32.9
+  category: varchar("category").notNull(), // Ex: F32
+  description: text("description").notNull(), // Ex: Episódio depressivo não especificado
+  shortDescription: varchar("short_description"), // Shorter version for UI
+  keywords: text("keywords"), // Additional search terms
+  chapter: varchar("chapter"), // CID chapter (F00-F99, etc)
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Pre-consultation interview with psychologist
 export const psychologistInterviews = pgTable("psychologist_interviews", {
   id: serial("id").primaryKey(),
@@ -674,3 +716,22 @@ export type DoctorRegistration = typeof doctorRegistrations.$inferSelect;
 
 export type InsertPatientRegistration = z.infer<typeof insertPatientRegistrationSchema>;
 export type PatientRegistration = typeof patientRegistrations.$inferSelect;
+
+// Consultation Records types
+export const insertConsultationRecordSchema = createInsertSchema(consultationRecords).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertConsultationRecord = z.infer<typeof insertConsultationRecordSchema>;
+export type ConsultationRecord = typeof consultationRecords.$inferSelect;
+
+// CID Codes types
+export const insertCidCodeSchema = createInsertSchema(cidCodes).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertCidCode = z.infer<typeof insertCidCodeSchema>;
+export type CidCode = typeof cidCodes.$inferSelect;

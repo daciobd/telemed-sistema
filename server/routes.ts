@@ -180,6 +180,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Consultation Records API
+  app.post('/api/consultation-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor') {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const doctorProfile = await storage.getDoctorByUserId(userId);
+      if (!doctorProfile) {
+        return res.status(404).json({ message: "Doctor profile not found" });
+      }
+
+      const record = await storage.createConsultationRecord({
+        ...req.body,
+        doctorId: doctorProfile.id
+      });
+
+      res.json(record);
+    } catch (error) {
+      console.error("Error creating consultation record:", error);
+      res.status(500).json({ message: "Failed to create consultation record" });
+    }
+  });
+
+  app.put('/api/consultation-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor') {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const recordId = parseInt(req.params.id);
+      const record = await storage.updateConsultationRecord(recordId, req.body);
+
+      res.json(record);
+    } catch (error) {
+      console.error("Error updating consultation record:", error);
+      res.status(500).json({ message: "Failed to update consultation record" });
+    }
+  });
+
+  app.get('/api/consultation-records/appointment/:appointmentId', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const appointmentId = parseInt(req.params.appointmentId);
+      const record = await storage.getConsultationRecordByAppointment(appointmentId);
+
+      if (!record) {
+        return res.status(404).json({ message: "Consultation record not found" });
+      }
+
+      // Verify access - doctor can see their own records, patients can see their own
+      if (user.role === 'doctor') {
+        const doctorProfile = await storage.getDoctorByUserId(userId);
+        if (doctorProfile && record.doctorId !== doctorProfile.id) {
+          return res.status(403).json({ message: "Access denied" });
+        }
+      } else if (user.role === 'patient') {
+        const patientProfile = await storage.getPatientByUserId(userId);
+        if (patientProfile && record.patientId !== patientProfile.id) {
+          return res.status(403).json({ message: "Access denied" });
+        }
+      }
+
+      res.json(record);
+    } catch (error) {
+      console.error("Error fetching consultation record:", error);
+      res.status(500).json({ message: "Failed to fetch consultation record" });
+    }
+  });
+
+  // CID Codes search API
+  app.get('/api/cid-codes/search', isAuthenticated, async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      if (!query || query.length < 2) {
+        return res.json([]);
+      }
+
+      const codes = await storage.searchCidCodes(query, limit);
+      res.json(codes);
+    } catch (error) {
+      console.error("Error searching CID codes:", error);
+      res.status(500).json({ message: "Failed to search CID codes" });
+    }
+  });
+
   // Dashboard stats
   app.get('/api/dashboard/stats', isAuthenticated, async (req: any, res) => {
     try {

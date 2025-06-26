@@ -48,9 +48,15 @@ import {
   type InsertDoctorRegistration,
   type PatientRegistration,
   type InsertPatientRegistration,
+  consultationRecords,
+  cidCodes,
+  type ConsultationRecord,
+  type InsertConsultationRecord,
+  type CidCode,
+  type InsertCidCode,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, gte, lte } from "drizzle-orm";
+import { eq, desc, and, gte, lte, or, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (mandatory for Replit Auth)
@@ -1061,6 +1067,97 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(patientRegistrations)
       .orderBy(desc(patientRegistrations.createdAt));
+  }
+
+  // Consultation Records operations
+  async createConsultationRecord(record: InsertConsultationRecord): Promise<ConsultationRecord> {
+    const [result] = await db
+      .insert(consultationRecords)
+      .values(record)
+      .returning();
+    return result;
+  }
+
+  async updateConsultationRecord(id: number, updates: Partial<ConsultationRecord>): Promise<ConsultationRecord> {
+    const [result] = await db
+      .update(consultationRecords)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(consultationRecords.id, id))
+      .returning();
+    return result;
+  }
+
+  async getConsultationRecordByAppointment(appointmentId: number): Promise<ConsultationRecord | null> {
+    const [record] = await db
+      .select()
+      .from(consultationRecords)
+      .where(eq(consultationRecords.appointmentId, appointmentId));
+    return record || null;
+  }
+
+  async getConsultationRecordsByDoctor(doctorId: number): Promise<ConsultationRecord[]> {
+    return await db
+      .select()
+      .from(consultationRecords)
+      .where(eq(consultationRecords.doctorId, doctorId))
+      .orderBy(desc(consultationRecords.createdAt));
+  }
+
+  async getConsultationRecordsByPatient(patientId: number): Promise<ConsultationRecord[]> {
+    return await db
+      .select()
+      .from(consultationRecords)
+      .where(eq(consultationRecords.patientId, patientId))
+      .orderBy(desc(consultationRecords.createdAt));
+  }
+
+  // CID Codes operations
+  async createCidCode(code: InsertCidCode): Promise<CidCode> {
+    const [result] = await db
+      .insert(cidCodes)
+      .values(code)
+      .returning();
+    return result;
+  }
+
+  async searchCidCodes(query: string, limit: number = 10): Promise<CidCode[]> {
+    const searchTerm = `%${query.toLowerCase()}%`;
+    return await db
+      .select()
+      .from(cidCodes)
+      .where(
+        and(
+          eq(cidCodes.isActive, true),
+          or(
+            sql`LOWER(${cidCodes.code}) LIKE ${searchTerm}`,
+            sql`LOWER(${cidCodes.description}) LIKE ${searchTerm}`,
+            sql`LOWER(${cidCodes.shortDescription}) LIKE ${searchTerm}`,
+            sql`LOWER(${cidCodes.keywords}) LIKE ${searchTerm}`
+          )
+        )
+      )
+      .limit(limit)
+      .orderBy(sql`
+        CASE 
+          WHEN LOWER(${cidCodes.code}) LIKE ${searchTerm} THEN 1
+          WHEN LOWER(${cidCodes.shortDescription}) LIKE ${searchTerm} THEN 2
+          WHEN LOWER(${cidCodes.description}) LIKE ${searchTerm} THEN 3
+          ELSE 4
+        END
+      `);
+  }
+
+  async getCidCodesByCategory(category: string): Promise<CidCode[]> {
+    return await db
+      .select()
+      .from(cidCodes)
+      .where(
+        and(
+          eq(cidCodes.category, category),
+          eq(cidCodes.isActive, true)
+        )
+      )
+      .orderBy(cidCodes.code);
   }
 }
 
