@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video, Menu, X, Brain, MessageCircle, Star, DollarSign } from "lucide-react";
+import { Heart, BarChart3, Calendar, Users, FileText, Pill, Settings, LogOut, Video, Menu, X, Brain, MessageCircle, Star, DollarSign, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +38,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Avaliações", href: "/medical-evaluations-view", icon: Star, roles: ["doctor"] },
     { name: "Financeiro", href: "/financial-dashboard", icon: DollarSign, roles: ["doctor"] },
     { name: "Demo Médica", href: "/demo-management", icon: Settings, roles: ["doctor"] },
+    { name: "Guia de Teste", href: "/guia-medico", icon: BookOpen, roles: ["doctor"] },
   ];
 
   // Filter navigation based on user role

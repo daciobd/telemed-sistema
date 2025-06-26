@@ -38,6 +38,7 @@ import RegisterDoctor from "@/pages/register-doctor";
 import RegisterPatient from "@/pages/register-patient";
 import RegisterSuccess from "@/pages/register-success";
 import DoctorAgendaPage from "@/pages/DoctorAgendaPage";
+import GuiaMedico from "@/pages/guia-medico";
 
 
 function Router() {
@@ -115,6 +116,7 @@ function Router() {
           <Route path="/payment-test" component={PaymentTest} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/financial-dashboard" component={FinancialDashboard} />
+          <Route path="/guia-medico" component={GuiaMedico} />
 
         </>
       )}

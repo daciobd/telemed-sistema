@@ -195,6 +195,24 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Sistema de Guia Médico para Demonstrações
+- **Data**: 26/06/2025
+- **Implementação**: Guia passo a passo completo para demonstração do sistema FUNCIONANDO
+- **Funcionalidades**: 
+  - 10 etapas detalhadas de teste com instruções específicas
+  - Sistema de progresso interativo com checkboxes
+  - Links diretos para cada funcionalidade do sistema
+  - Tempo estimado para cada etapa (total: ~30 min)
+  - Destaque especial para integração MEMED
+  - Modal com dados do paciente prontos para copiar
+  - Botão "Copiar Dados" para facilitar preenchimento na MEMED
+  - Arquivo GUIA_MEDICO_TESTE.md para download
+- **Interface**: Página /guia-medico com design profissional
+- **Navegação**: Menu "Guia de Teste" adicionado ao sidebar para médicos
+- **Objetivo**: Facilitar demonstrações para médicos interessados
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA DEMONSTRAÇÕES
+- **Conteúdo**: Cobre videoconsultas, MEMED, prontuário, pagamentos e todas funcionalidades
+
 ### Sistema de Agenda Médica com Indicadores Visuais
 - **Data**: 26/06/2025
 - **Implementação**: Agenda médica inteligente com indicadores visuais em tempo real FUNCIONANDO
