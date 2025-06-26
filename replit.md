@@ -195,6 +195,24 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Sistema de Agenda Médica com Indicadores Visuais
+- **Data**: 26/06/2025
+- **Implementação**: Agenda médica inteligente com indicadores visuais em tempo real FUNCIONANDO
+- **Funcionalidades**: 
+  - Visualização de consultas do dia com status em tempo real
+  - Ícones piscantes para pacientes aguardando teleconsulta
+  - Estatísticas instantâneas (confirmadas, concluídas, hoje, total)
+  - Navegação direta da videoconsulta para agenda via botão "Agenda"
+  - Filtros automáticos por data (consultas de hoje)
+  - Cards visuais com informações do paciente e status da consulta
+  - Atualização automática a cada 30 segundos
+- **Interface**: Componente DoctorAgenda.tsx com indicadores visuais avançados
+- **Navegação**: Menu "Agenda Médica" adicionado ao sidebar para médicos
+- **Backend**: API endpoint funcionando corretamente com dados em tempo real
+- **Status**: ✅ IMPLEMENTADO E TESTADO COM SUCESSO
+- **Teste**: Agenda fictícia com 10 pacientes criada para validação
+- **Validação**: Sistema aprovado pelo usuário - indicadores visuais funcionando
+
 ### Sistema de Contato WhatsApp para Dúvidas Médicas  
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para comunicação direta paciente-médico via WhatsApp
