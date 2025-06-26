@@ -15,12 +15,18 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useLocation } from "wouter";
 
 export default function DoctorAppointments() {
+  const [, setLocation] = useLocation();
   const { data: appointments = [], isLoading } = useQuery<AppointmentWithDetails[]>({
     queryKey: ["/api/appointments"],
     retry: false,
   });
+
+  const handleStartVideoCall = (appointmentId: number) => {
+    setLocation(`/video-consultation?appointment=${appointmentId}`);
+  };
 
   if (isLoading) {
     return (
@@ -127,7 +133,11 @@ export default function DoctorAppointments() {
                     </Badge>
                     <div className="flex space-x-2">
                       {appointment.type === "telemedicine" ? (
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                        <Button 
+                          size="sm" 
+                          className="bg-green-600 hover:bg-green-700"
+                          onClick={() => handleStartVideoCall(appointment.id)}
+                        >
                           <Video className="h-4 w-4 mr-1" />
                           Iniciar
                         </Button>

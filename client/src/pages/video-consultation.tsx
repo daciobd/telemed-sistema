@@ -19,6 +19,19 @@ export default function VideoConsultation() {
     doctorName?: string;
   } | null>(null);
 
+  // Check URL parameters for appointment ID
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const appointmentId = urlParams.get('appointment');
+    if (appointmentId) {
+      setActiveCall({
+        appointmentId: parseInt(appointmentId),
+        patientName: "Paciente",
+        doctorName: "Médico"
+      });
+    }
+  }, []);
+
   // Get appointments ready for video consultation
   const { data: appointments = [], isLoading } = useQuery({
     queryKey: ["/api/appointments"],
