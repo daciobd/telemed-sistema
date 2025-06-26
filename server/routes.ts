@@ -1198,6 +1198,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Today's appointments for doctor agenda
+  app.get('/api/appointments/today', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.id;
+      const doctor = await storage.getDoctorByUserId(userId);
+      
+      if (!doctor) {
+        return res.status(404).json({ error: 'Doctor not found' });
+      }
+
+      const today = new Date();
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+      const appointments = await storage.getAppointmentsByDateRange(doctor.id, startOfDay, endOfDay);
+      
+      // Enhance appointments with patient data and online status
+      const enhancedAppointments = await Promise.all(
+        appointments.map(async (appointment) => {
+          const patient = await storage.getPatientById(appointment.patientId);
+          
+          // Simulate patient online status (in real system, track via WebSocket)
+          const isPatientOnline = Math.random() > 0.7; // 30% chance online
+          const lastActivity = isPatientOnline ? 'há 2 minutos' : null;
+          
+          // Determine appointment status based on time and current status
+          let status = appointment.status;
+          const appointmentTime = new Date(appointment.appointmentDate);
+          const now = new Date();
+          const timeDiff = appointmentTime.getTime() - now.getTime();
+          
+          // If appointment is within 15 minutes and confirmed, mark as waiting
+          if (status === 'confirmed' && Math.abs(timeDiff) <= 15 * 60 * 1000) {
+            status = 'waiting';
+          }
+          
+          return {
+            ...appointment,
+            patient,
+            status,
+            isPatientOnline,
+            lastActivity,
+            notes: appointment.notes || ''
+          };
+        })
+      );
+
+      res.json(enhancedAppointments);
+    } catch (error) {
+      console.error('Error fetching today appointments:', error);
+      res.status(500).json({ error: 'Failed to fetch today appointments' });
+    }
+  });
+
   // Populate CID codes for demo/testing
   app.post('/api/cid/populate', isAuthenticated, async (req: any, res) => {
     try {

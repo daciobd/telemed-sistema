@@ -21,7 +21,8 @@ import {
   Settings,
   Send,
   Clock,
-  FileText
+  FileText,
+  Calendar
 } from 'lucide-react';
 
 interface VideoRoomProps {
@@ -595,6 +596,15 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
             <Clock className="h-4 w-4" />
             {formatDuration(callDuration)}
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.location.href = '/doctor-agenda'}
+            className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+          >
+            <Calendar className="h-4 w-4" />
+            Agenda
+          </Button>
           <Button
             variant="destructive"
             size="sm"

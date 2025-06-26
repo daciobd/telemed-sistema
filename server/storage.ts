@@ -1138,10 +1138,10 @@ export class DatabaseStorage implements IStorage {
         and(
           eq(cidCodes.isActive, true),
           or(
-            ilike(cidCodes.code, searchTerm),
-            ilike(cidCodes.description, searchTerm),
-            ilike(cidCodes.shortDescription, searchTerm),
-            ilike(cidCodes.keywords, searchTerm)
+            sql`LOWER(${cidCodes.code}) LIKE ${searchTerm}`,
+            sql`LOWER(${cidCodes.description}) LIKE ${searchTerm}`,
+            sql`LOWER(${cidCodes.shortDescription}) LIKE ${searchTerm}`,
+            sql`LOWER(${cidCodes.keywords}) LIKE ${searchTerm}`
           )
         )
       )
@@ -1149,6 +1149,20 @@ export class DatabaseStorage implements IStorage {
       .orderBy(cidCodes.code);
       
     return results;
+  }
+
+  async getAppointmentsByDateRange(doctorId: number, startDate: Date, endDate: Date) {
+    return await db
+      .select()
+      .from(appointments)
+      .where(
+        and(
+          eq(appointments.doctorId, doctorId),
+          gte(appointments.appointmentDate, startDate),
+          lt(appointments.appointmentDate, endDate)
+        )
+      )
+      .orderBy(appointments.appointmentDate);
   }
 
   async searchCidCodes(query: string, limit: number = 10): Promise<CidCode[]> {

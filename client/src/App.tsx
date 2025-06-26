@@ -37,6 +37,7 @@ import FinancialDashboard from "@/pages/financial-dashboard";
 import RegisterDoctor from "@/pages/register-doctor";
 import RegisterPatient from "@/pages/register-patient";
 import RegisterSuccess from "@/pages/register-success";
+import DoctorAgendaPage from "@/pages/DoctorAgendaPage";
 
 
 function Router() {
@@ -65,6 +66,7 @@ function Router() {
           <Route path="/prescriptions" component={Prescriptions} />
           <Route path="/videoconsultas" component={VideoConsultation} />
           <Route path="/video-consultation" component={VideoConsultation} />
+          <Route path="/doctor-agenda" component={DoctorAgendaPage} />
           <Route path="/relatorios" component={Reports} />
           <Route path="/reports" component={Reports} />
           <Route path="/agenda" component={CalendarView} />
