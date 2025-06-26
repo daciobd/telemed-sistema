@@ -1111,6 +1111,14 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(consultationRecords.createdAt));
   }
 
+  async getConsultationRecordsByAppointment(appointmentId: number): Promise<ConsultationRecord[]> {
+    return await db
+      .select()
+      .from(consultationRecords)
+      .where(eq(consultationRecords.appointmentId, appointmentId))
+      .orderBy(desc(consultationRecords.createdAt));
+  }
+
   // CID Codes operations
   async createCidCode(code: InsertCidCode): Promise<CidCode> {
     const [result] = await db

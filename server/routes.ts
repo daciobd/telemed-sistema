@@ -1146,6 +1146,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return response;
   }
 
+  // Consultation Records API
+  app.post('/api/consultation-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const { appointmentId, patientId, chiefComplaint, anamnesis, diagnosis, treatment, physicalExam, notes, status } = req.body;
+      
+      const record = await storage.createConsultationRecord({
+        appointmentId,
+        patientId,
+        doctorId: req.user.id,
+        chiefComplaint: chiefComplaint || '',
+        anamnesis: anamnesis || '',
+        diagnosis: diagnosis || '',
+        treatment: treatment || '',
+        physicalExam: physicalExam || '',
+        notes: notes || '',
+        status: status || 'in_progress'
+      });
+      
+      res.json(record);
+    } catch (error) {
+      console.error('Error creating consultation record:', error);
+      res.status(500).json({ error: 'Failed to create consultation record' });
+    }
+  });
+
+  app.get('/api/consultation-records/:appointmentId', isAuthenticated, async (req: any, res) => {
+    try {
+      const { appointmentId } = req.params;
+      const records = await storage.getConsultationRecordsByAppointment(parseInt(appointmentId));
+      res.json(records);
+    } catch (error) {
+      console.error('Error fetching consultation records:', error);
+      res.status(500).json({ error: 'Failed to fetch consultation records' });
+    }
+  });
+
   // Analytics endpoints
   app.get('/api/analytics/overview', isAuthenticated, async (req: any, res) => {
     try {

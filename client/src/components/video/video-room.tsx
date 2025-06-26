@@ -63,7 +63,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   // Fetch appointment details to get patient information
   const { data: appointment } = useQuery({
     queryKey: [`/api/appointments/${appointmentId}`],
-    enabled: !!appointmentId
+    enabled: !!appointmentId && appointmentId !== 999 // Skip for demo
   });
   
   // Refs for video elements
@@ -640,7 +640,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
           </div>
           {mediaReady && localStreamRef.current && (
             <div className="absolute top-2 left-2 text-xs text-green-400 bg-black/50 px-2 py-1 rounded">
-              {localStreamRef.current.active ? 'Ativo' : 'Inativo'}
+              {localStreamRef.current?.active ? 'Ativo' : 'Inativo'}
             </div>
           )}
         </div>
