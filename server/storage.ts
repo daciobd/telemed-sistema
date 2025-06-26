@@ -1128,6 +1128,29 @@ export class DatabaseStorage implements IStorage {
     return result;
   }
 
+  async searchCidCodes(query: string, limit: number = 10) {
+    const searchTerm = `%${query.toLowerCase()}%`;
+    
+    const results = await db
+      .select()
+      .from(cidCodes)
+      .where(
+        and(
+          eq(cidCodes.isActive, true),
+          or(
+            ilike(cidCodes.code, searchTerm),
+            ilike(cidCodes.description, searchTerm),
+            ilike(cidCodes.shortDescription, searchTerm),
+            ilike(cidCodes.keywords, searchTerm)
+          )
+        )
+      )
+      .limit(limit)
+      .orderBy(cidCodes.code);
+      
+    return results;
+  }
+
   async searchCidCodes(query: string, limit: number = 10): Promise<CidCode[]> {
     const searchTerm = `%${query.toLowerCase()}%`;
     return await db

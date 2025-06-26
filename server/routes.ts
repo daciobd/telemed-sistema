@@ -1182,6 +1182,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // CID-10 Search API
+  app.get('/api/cid/search', isAuthenticated, async (req: any, res) => {
+    try {
+      const { q: query, limit = 10 } = req.query;
+      if (!query || query.trim().length < 2) {
+        return res.json([]);
+      }
+      
+      const results = await storage.searchCidCodes(query.trim(), parseInt(limit));
+      res.json(results);
+    } catch (error) {
+      console.error('Error searching CID codes:', error);
+      res.status(500).json({ error: 'Failed to search CID codes' });
+    }
+  });
+
+  // Populate CID codes for demo/testing
+  app.post('/api/cid/populate', isAuthenticated, async (req: any, res) => {
+    try {
+      const cidCodes = [
+        {
+          code: 'F41.1',
+          description: 'Transtorno de ansiedade generalizada',
+          shortDescription: 'Ansiedade generalizada',
+          category: 'Transtornos mentais e comportamentais',
+          keywords: 'ansiedade generalizada TAG preocupação excessiva',
+          isActive: true
+        },
+        {
+          code: 'F41.0',
+          description: 'Transtorno de pânico [ansiedade paroxística episódica]',
+          shortDescription: 'Transtorno de pânico',
+          category: 'Transtornos mentais e comportamentais',
+          keywords: 'pânico ansiedade paroxística episódica ataque',
+          isActive: true
+        },
+        {
+          code: 'F41.2',
+          description: 'Transtorno misto ansioso e depressivo',
+          shortDescription: 'Ansiedade e depressão mistas',
+          category: 'Transtornos mentais e comportamentais',
+          keywords: 'ansiedade depressão mista ansioso depressivo',
+          isActive: true
+        },
+        {
+          code: 'F40.1',
+          description: 'Fobias sociais',
+          shortDescription: 'Fobia social',
+          category: 'Transtornos mentais e comportamentais',
+          keywords: 'fobia social ansiedade social timidez',
+          isActive: true
+        },
+        {
+          code: 'F32.9',
+          description: 'Episódio depressivo não especificado',
+          shortDescription: 'Depressão não especificada',
+          category: 'Transtornos mentais e comportamentais',
+          keywords: 'depressão episódio depressivo tristeza',
+          isActive: true
+        },
+        {
+          code: 'F43.1',
+          description: 'Estado de estresse pós-traumático',
+          shortDescription: 'TEPT',
+          category: 'Transtornos mentais e comportamentais',
+          keywords: 'estresse pós traumático TEPT trauma',
+          isActive: true
+        }
+      ];
+
+      for (const cidCode of cidCodes) {
+        await storage.createCidCode(cidCode);
+      }
+
+      res.json({ message: 'CID codes populated successfully', count: cidCodes.length });
+    } catch (error) {
+      console.error('Error populating CID codes:', error);
+      res.status(500).json({ error: 'Failed to populate CID codes' });
+    }
+  });
+
   // Analytics endpoints
   app.get('/api/analytics/overview', isAuthenticated, async (req: any, res) => {
     try {

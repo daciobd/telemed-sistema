@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { Save, FileText, CheckCircle } from "lucide-react";
+import { Save, FileText, CheckCircle, Search } from "lucide-react";
 
 interface SimpleMedicalRecordProps {
   appointmentId: number;
@@ -22,11 +22,52 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
     diagnosis: "",
     treatment: "",
     physicalExam: "",
-    notes: ""
+    notes: "",
+    cidCode: "",
+    cidDescription: ""
   });
   
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
+  const [cidResults, setCidResults] = useState<any[]>([]);
+  const [showCidDropdown, setShowCidDropdown] = useState(false);
+  const [searchingCid, setSearchingCid] = useState(false);
+
+  // Search CID codes when diagnosis changes
+  useEffect(() => {
+    const searchTerm = record.diagnosis.trim();
+    if (searchTerm.length >= 2) {
+      const timeoutId = setTimeout(async () => {
+        setSearchingCid(true);
+        try {
+          const response = await fetch(`/api/cid/search?q=${encodeURIComponent(searchTerm)}&limit=5`);
+          if (response.ok) {
+            const results = await response.json();
+            setCidResults(results);
+            setShowCidDropdown(results.length > 0);
+          }
+        } catch (error) {
+          console.error('Error searching CID codes:', error);
+        } finally {
+          setSearchingCid(false);
+        }
+      }, 300);
+      
+      return () => clearTimeout(timeoutId);
+    } else {
+      setCidResults([]);
+      setShowCidDropdown(false);
+    }
+  }, [record.diagnosis]);
+
+  const selectCidCode = (cid: any) => {
+    setRecord(prev => ({
+      ...prev,
+      cidCode: cid.code,
+      cidDescription: cid.description
+    }));
+    setShowCidDropdown(false);
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -176,16 +217,72 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
             <Separator />
 
             {/* Hipótese Diagnóstica */}
-            <div>
+            <div className="relative">
               <Label htmlFor="diagnosis">Hipótese Diagnóstica</Label>
               <Textarea
                 id="diagnosis"
-                placeholder="Hipótese diagnóstica ou diagnóstico definitivo..."
+                placeholder="Digite a hipótese diagnóstica (ex: ansiedade) para buscar códigos CID..."
                 value={record.diagnosis}
                 onChange={(e) => setRecord(prev => ({ ...prev, diagnosis: e.target.value }))}
                 className="mt-1"
                 rows={3}
               />
+              
+              {/* CID Code Dropdown */}
+              {showCidDropdown && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                  {searchingCid ? (
+                    <div className="p-3 text-center text-gray-500">
+                      <Search className="h-4 w-4 animate-spin inline mr-2" />
+                      Buscando códigos CID...
+                    </div>
+                  ) : cidResults.length > 0 ? (
+                    <div className="py-1">
+                      <div className="px-3 py-2 text-xs font-medium text-gray-500 border-b">
+                        Códigos CID-10 encontrados:
+                      </div>
+                      {cidResults.map((cid, index) => (
+                        <button
+                          key={index}
+                          className="w-full px-3 py-2 text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none border-b border-gray-100 last:border-b-0"
+                          onClick={() => selectCidCode(cid)}
+                        >
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="font-medium text-blue-600 text-sm">
+                                {cid.code}
+                              </div>
+                              <div className="text-gray-700 text-sm mt-1">
+                                {cid.shortDescription || cid.description}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )}
+              
+              {/* Selected CID Display */}
+              {record.cidCode && (
+                <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-medium text-blue-800">CID-10: {record.cidCode}</span>
+                      <div className="text-sm text-blue-600 mt-1">{record.cidDescription}</div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setRecord(prev => ({ ...prev, cidCode: "", cidDescription: "" }))}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      Remover
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <Separator />
