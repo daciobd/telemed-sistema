@@ -56,8 +56,9 @@ function Router() {
       <Route path="/register-patient" component={RegisterPatient} />
       <Route path="/register-success" component={RegisterSuccess} />
       
-      {/* Testing route for agenda médica - temporarily public for demo */}
+      {/* Testing routes - temporarily public for demo */}
       <Route path="/agenda-medica" component={DoctorAgendaPage} />
+      <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
@@ -75,6 +76,7 @@ function Router() {
           <Route path="/prescriptions" component={Prescriptions} />
           <Route path="/videoconsultas" component={VideoConsultation} />
           <Route path="/video-consultation" component={VideoConsultation} />
+          <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
           <Route path="/doctor-agenda" component={DoctorAgendaPage} />
           <Route path="/agenda-medica" component={DoctorAgendaPage} />
           <Route path="/relatorios" component={Reports} />

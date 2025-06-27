@@ -9,10 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Video, Clock, User, Phone, Calendar, Users } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useParams } from "wouter";
 
 export default function VideoConsultation() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const params = useParams();
   const [activeCall, setActiveCall] = useState<{
     appointmentId: number;
     patientName?: string;
@@ -21,16 +23,25 @@ export default function VideoConsultation() {
 
   // Check URL parameters for appointment ID
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const appointmentId = urlParams.get('appointment');
+    const appointmentId = params.appointmentId;
     if (appointmentId) {
       setActiveCall({
         appointmentId: parseInt(appointmentId),
         patientName: "Paciente",
         doctorName: "Médico"
       });
+    } else {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlAppointmentId = urlParams.get('appointment');
+      if (urlAppointmentId) {
+        setActiveCall({
+          appointmentId: parseInt(urlAppointmentId),
+          patientName: "Paciente",
+          doctorName: "Médico"
+        });
+      }
     }
-  }, []);
+  }, [params.appointmentId]);
 
   // Get appointments ready for video consultation
   const { data: appointments = [], isLoading } = useQuery({
@@ -48,161 +59,170 @@ export default function VideoConsultation() {
       patientName: isDoctor ? `${appointment.patient.user.firstName} ${appointment.patient.user.lastName}` : undefined,
       doctorName: !isDoctor ? `${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}` : undefined
     };
+    
     setActiveCall(callData);
+    
+    toast({
+      title: "Videoconsulta iniciada",
+      description: "Conectando com o participante...",
+    });
   };
 
-  const endCall = () => {
+  const endVideoCall = () => {
     setActiveCall(null);
     toast({
-      title: "Consulta Finalizada",
-      description: "A videochamada foi encerrada com sucesso.",
+      title: "Videoconsulta encerrada",
+      description: "A consulta foi finalizada com sucesso.",
     });
   };
 
   if (activeCall) {
     return (
-      <VideoRoom
-        appointmentId={activeCall.appointmentId}
-        patientName={activeCall.patientName}
-        doctorName={activeCall.doctorName}
-        onEndCall={endCall}
-      />
+      <div className="min-h-screen bg-gray-50">
+        <VideoRoom
+          appointmentId={activeCall.appointmentId}
+          patientName={activeCall.patientName}
+          doctorName={activeCall.doctorName}
+          onLeave={endVideoCall}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Videoconsultas
-          </h1>
-          <p className="text-gray-600">
-            {user?.role === 'doctor' 
-              ? 'Inicie videochamadas com seus pacientes'
-              : 'Participe de suas consultas online'
-            }
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Videoconsultas</h1>
+          <p className="text-gray-600 mt-2">
+            Realize consultas médicas por videoconferência
           </p>
         </div>
+        <div className="flex items-center space-x-2 text-sm text-gray-500">
+          <Video className="h-4 w-4" />
+          <span>Sistema WebRTC</span>
+        </div>
+      </div>
 
-        <div className="grid gap-6">
-          {isLoading ? (
-            <Card>
-              <CardContent className="p-8 text-center">
-                <div className="animate-pulse">
-                  <div className="h-12 w-12 bg-gray-200 rounded mx-auto mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/3 mx-auto mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto"></div>
-                </div>
+      {isLoading ? (
+        <div className="grid gap-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="animate-pulse">
+              <CardContent className="p-6">
+                <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
               </CardContent>
             </Card>
-          ) : appointments.length === 0 ? (
-            <Card>
-              <CardContent className="p-8 text-center">
-                <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Nenhuma videoconsulta disponível
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {user?.role === 'doctor' 
-                    ? 'Não há teleconsultas confirmadas para iniciar no momento.'
-                    : 'Você não tem consultas online agendadas no momento.'
-                  }
-                </p>
-                <p className="text-sm text-gray-500">
-                  Para testar, confirme um agendamento do tipo "teleconsult" na página de agendamentos.
-                </p>
-                
-                {/* Demo Button for Testing */}
-                <Button 
-                  onClick={() => setActiveCall({ appointmentId: 999, patientName: "Paciente Teste", doctorName: "Dr. Teste" })}
-                  className="mt-4"
-                >
-                  <Video className="h-4 w-4 mr-2" />
-                  Iniciar Consulta Demo (Testar Prontuário)
-                </Button>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4">
-              {appointments.map((appointment: any) => (
-                <Card key={appointment.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">
-                        {user?.role === 'doctor' 
-                          ? `Consulta com ${appointment.patient.user.firstName} ${appointment.patient.user.lastName}`
-                          : `Consulta com Dr. ${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}`
-                        }
-                      </CardTitle>
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
-                        Confirmada
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          <span>
-                            {format(new Date(appointment.appointmentDate), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
-                          </span>
+          ))}
+        </div>
+      ) : appointments.length === 0 ? (
+        <Card>
+          <CardContent className="py-8 text-center">
+            <Video className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Nenhuma consulta disponível
+            </h3>
+            <p className="text-gray-500">
+              Não há consultas confirmadas para videochamada no momento.
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-4">
+          {appointments.map((appointment: any) => {
+            const isDoctor = user?.role === 'doctor';
+            const otherParty = isDoctor ? appointment.patient : appointment.doctor;
+            const appointmentDate = new Date(appointment.appointmentDate);
+
+            return (
+              <Card key={appointment.id} className="hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="p-2 bg-blue-100 rounded-lg">
+                          <User className="h-5 w-5 text-blue-600" />
                         </div>
-                        {appointment.price && (
-                          <div className="flex items-center gap-1">
-                            <span>R$ {appointment.price?.toFixed(2)}</span>
-                          </div>
-                        )}
+                        <div>
+                          <h3 className="font-semibold text-gray-900">
+                            {isDoctor 
+                              ? `${otherParty.user.firstName} ${otherParty.user.lastName}`
+                              : `Dr. ${otherParty.user.firstName} ${otherParty.user.lastName}`
+                            }
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {isDoctor ? 'Paciente' : otherParty.specialty}
+                          </p>
+                        </div>
                       </div>
 
-                      {appointment.reason && (
-                        <div>
-                          <p className="text-sm font-medium text-gray-700 mb-1">Motivo da consulta:</p>
-                          <p className="text-sm text-gray-600">{appointment.reason}</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                          <Calendar className="h-4 w-4" />
+                          <span>{format(appointmentDate, "dd/MM/yyyy", { locale: ptBR })}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                          <Clock className="h-4 w-4" />
+                          <span>{format(appointmentDate, "HH:mm", { locale: ptBR })}</span>
+                        </div>
+                      </div>
+
+                      {appointment.notes && (
+                        <div className="mb-4">
+                          <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                            {appointment.notes}
+                          </p>
                         </div>
                       )}
 
-                      <div className="flex items-center justify-between pt-4 border-t">
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <Video className="h-4 w-4" />
-                          <span>Teleconsulta por vídeo</span>
-                        </div>
-                        
-                        <Button 
-                          onClick={() => startVideoCall(appointment)}
-                          className="flex items-center gap-2"
-                          size="sm"
-                        >
-                          <Phone className="h-4 w-4" />
-                          Iniciar Videochamada
-                        </Button>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">
+                          <Phone className="h-3 w-3 mr-1" />
+                          Teleconsulta
+                        </Badge>
+                        <Badge variant="outline">
+                          {appointment.status === 'confirmed' ? 'Confirmada' : appointment.status}
+                        </Badge>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
 
-        {/* Technical Requirements Notice */}
-        <Card className="mt-8 border-blue-200 bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-blue-900 text-lg">
-              Requisitos Técnicos
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-blue-800">
-            <ul className="space-y-2 text-sm">
-              <li>• Câmera e microfone funcionais</li>
-              <li>• Conexão estável com a internet</li>
-              <li>• Navegador atualizado (Chrome, Firefox, Safari ou Edge)</li>
-              <li>• Ambiente silencioso e com boa iluminação</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+                    <div className="ml-6">
+                      <Button
+                        onClick={() => startVideoCall(appointment)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        <Video className="h-4 w-4 mr-2" />
+                        Iniciar Videoconsulta
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+
+      <Card className="bg-blue-50 border-blue-200">
+        <CardContent className="p-6">
+          <div className="flex items-start space-x-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Users className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-blue-900 mb-2">
+                Como funciona a videoconsulta
+              </h3>
+              <ul className="text-sm text-blue-800 space-y-1">
+                <li>• Clique em "Iniciar Videoconsulta" para conectar</li>
+                <li>• Permita acesso à câmera e microfone quando solicitado</li>
+                <li>• Use o chat integrado para comunicação adicional</li>
+                <li>• Compartilhe sua tela se necessário</li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
