@@ -26,6 +26,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Dashboard", href: "/", icon: BarChart3, roles: ["patient", "doctor"] },
     { name: "Agendamentos", href: "/appointments", icon: Calendar, roles: ["patient", "doctor"] },
     { name: "Agenda Médica", href: "/doctor-agenda", icon: Calendar, roles: ["doctor"] },
+    { name: "Calendário Avançado", href: "/calendario-medico", icon: Calendar, roles: ["doctor"] },
     { name: "Teleconsultas Psiquiátricas", href: "/teleconsult-workflow", icon: Brain, roles: ["patient", "doctor"] },
     { name: "Pacientes", href: "/pacientes", icon: Users, roles: ["doctor"] },
     { name: "Prontuários", href: "/prontuarios", icon: FileText, roles: ["patient", "doctor"] },

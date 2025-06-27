@@ -303,6 +303,26 @@ src/
 - **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA TESTES
 - **Teste Validado**: Sistema preparado para uso com dois dispositivos simultaneamente
 
+### Sistema de Calendário Médico Avançado com Navegação Mensal
+- **Data**: 27/06/2025
+- **Implementação**: Calendário médico inspirado na interface solicitada pelo usuário FUNCIONANDO
+- **Funcionalidades**: 
+  - Visualização de calendário completo com navegação entre meses
+  - Grade de calendário com indicadores visuais de consultas por dia
+  - Lista detalhada de agendamentos para data selecionada
+  - Status coloridos em tempo real (confirmada, aguardando, finalizada, cancelada)
+  - Distinção visual entre consultas presenciais e teleconsultas
+  - Botões de ação diretos (iniciar videochamada, ver detalhes)
+  - Interface de adicionar novos horários disponíveis
+  - Destaque do dia atual e data selecionada
+  - Contadores de consultas por dia
+  - Integração com dados reais do sistema via API
+- **Interface**: Layout split-screen com calendário à esquerda e lista de consultas à direita
+- **Navegação**: Rota `/calendario-medico` adicionada ao menu "Calendário Avançado"
+- **UX/UI**: Design moderno seguindo padrões da imagem de referência fornecida
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - INTERFACE AVANÇADA PRONTA
+- **Integração**: Conectado ao sistema de consultas existente com dados em tempo real
+
 ### Sistema de Demonstração Médica e Funcionalidades Clínicas
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para demonstração com equipe médica fictícia
