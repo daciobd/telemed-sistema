@@ -25,7 +25,8 @@ import {
   Send,
   Clock,
   FileText,
-  Calendar
+  Calendar,
+  FileCheck
 } from 'lucide-react';
 
 interface VideoRoomProps {
@@ -689,15 +690,34 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
             <Clock className="h-4 w-4" />
             {formatDuration(callDuration)}
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.location.href = '/doctor-agenda'}
-            className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
-          >
-            <Calendar className="h-4 w-4" />
-            Agenda
-          </Button>
+          
+          {/* Medical Calendar Button - visible for doctors */}
+          {(user?.role === 'doctor' || (isTestMode && testUser?.role === 'doctor')) && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.href = '/doctor-agenda'}
+              className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+            >
+              <Calendar className="h-4 w-4" />
+              Agenda
+            </Button>
+          )}
+          
+          {/* Finalize Consultation Button - only for doctors */}
+          {(user?.role === 'doctor' || (isTestMode && testUser?.role === 'doctor')) && (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setShowDoctorCompletion(true)}
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+            >
+              <FileText className="h-4 w-4" />
+              Finalizar Consulta
+            </Button>
+          )}
+          
+          {/* End Call Button - for everyone */}
           <Button
             variant="destructive"
             size="sm"
@@ -844,7 +864,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
               </Tooltip>
             </TooltipProvider>
             
-            {user?.role === 'doctor' && (
+            {(user?.role === 'doctor' || (isTestMode && testUser?.role === 'doctor')) && (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -927,7 +947,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       {showDoctorCompletion && (
         <DoctorConsultationCompletion
           appointmentId={appointmentId}
-          patientName={patientName || appointment?.patient?.user?.firstName || 'Paciente'}
+          patientName={patientName || 'Paciente Teste'}
           onComplete={handleDoctorCompletionComplete}
           onCancel={handleCancelCompletion}
         />
@@ -937,7 +957,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       {showPatientFeedback && (
         <PatientConsultationFeedback
           appointmentId={appointmentId}
-          doctorName={doctorName || appointment?.doctor?.user?.firstName || 'Médico'}
+          doctorName={doctorName || 'Dr. Teste'}
           consultationDuration={formatDuration(callDuration)}
           onComplete={handlePatientFeedbackComplete}
           onScheduleNew={() => window.location.href = '/agendamentos'}
