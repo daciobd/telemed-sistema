@@ -72,7 +72,7 @@ export default function DoctorAgenda() {
   };
 
   const startVideoCall = (appointmentId: number) => {
-    window.location.href = `/video-consultation?appointment=${appointmentId}`;
+    window.location.href = `/videoconsulta/${appointmentId}`;
   };
 
   const openMedicalRecord = (appointmentId: number) => {

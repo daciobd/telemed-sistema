@@ -41,7 +41,7 @@ import DoctorAgendaPage from "@/pages/DoctorAgendaPage";
 import GuiaMedico from "@/pages/guia-medico";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
-import { CredentialAuthProvider } from "@/hooks/useCredentialAuth";
+import { CredentialAuthProvider, useCredentialAuth } from "@/hooks/useCredentialAuth";
 
 
 function Router() {
@@ -55,6 +55,9 @@ function Router() {
       <Route path="/register-doctor" component={RegisterDoctor} />
       <Route path="/register-patient" component={RegisterPatient} />
       <Route path="/register-success" component={RegisterSuccess} />
+      
+      {/* Testing route for agenda médica - temporarily public for demo */}
+      <Route path="/agenda-medica" component={DoctorAgendaPage} />
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
@@ -73,6 +76,7 @@ function Router() {
           <Route path="/videoconsultas" component={VideoConsultation} />
           <Route path="/video-consultation" component={VideoConsultation} />
           <Route path="/doctor-agenda" component={DoctorAgendaPage} />
+          <Route path="/agenda-medica" component={DoctorAgendaPage} />
           <Route path="/relatorios" component={Reports} />
           <Route path="/reports" component={Reports} />
           <Route path="/agenda" component={CalendarView} />
