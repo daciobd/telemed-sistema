@@ -1823,6 +1823,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Consultation Records API
+  app.post('/api/consultation-records', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { appointmentId, patientId, ...recordData } = req.body;
+      
+      // Verify user is the doctor for this appointment
+      const doctor = await storage.getDoctorByUserId(userId);
+      if (!doctor) {
+        return res.status(403).json({ message: 'Only doctors can create consultation records' });
+      }
+      
+      const appointment = await storage.getAppointment(appointmentId);
+      if (!appointment || appointment.doctorId !== doctor.id) {
+        return res.status(403).json({ message: 'Unauthorized access to this appointment' });
+      }
+      
+      const consultationRecord = await storage.createConsultationRecord({
+        appointmentId,
+        doctorId: doctor.id,
+        patientId,
+        ...recordData
+      });
+      
+      res.json(consultationRecord);
+    } catch (error) {
+      console.error('Error creating consultation record:', error);
+      res.status(500).json({ message: 'Failed to create consultation record' });
+    }
+  });
+
+  app.get('/api/consultation-records/:appointmentId', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const appointmentId = parseInt(req.params.appointmentId);
+      
+      // Check if user has access to this appointment (doctor or patient)
+      const doctor = await storage.getDoctorByUserId(userId);
+      const patient = await storage.getPatientByUserId(userId);
+      
+      const appointment = await storage.getAppointment(appointmentId);
+      if (!appointment) {
+        return res.status(404).json({ message: 'Appointment not found' });
+      }
+      
+      const hasAccess = (doctor && appointment.doctorId === doctor.id) || 
+                       (patient && appointment.patientId === patient.id);
+      
+      if (!hasAccess) {
+        return res.status(403).json({ message: 'Unauthorized access to this consultation record' });
+      }
+      
+      const consultationRecord = await storage.getConsultationRecordByAppointment(appointmentId);
+      res.json(consultationRecord);
+    } catch (error) {
+      console.error('Error fetching consultation record:', error);
+      res.status(500).json({ message: 'Failed to fetch consultation record' });
+    }
+  });
+
+  app.put('/api/consultation-records/:id', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const recordId = parseInt(req.params.id);
+      const updateData = req.body;
+      
+      // Verify user is the doctor who created this record
+      const doctor = await storage.getDoctorByUserId(userId);
+      if (!doctor) {
+        return res.status(403).json({ message: 'Only doctors can update consultation records' });
+      }
+      
+      const existingRecord = await storage.getConsultationRecord(recordId);
+      if (!existingRecord || existingRecord.doctorId !== doctor.id) {
+        return res.status(403).json({ message: 'Unauthorized access to this consultation record' });
+      }
+      
+      const updatedRecord = await storage.updateConsultationRecord(recordId, updateData);
+      res.json(updatedRecord);
+    } catch (error) {
+      console.error('Error updating consultation record:', error);
+      res.status(500).json({ message: 'Failed to update consultation record' });
+    }
+  });
+
+  // Search CID-10 codes
+  app.get('/api/cid-codes/search', isAuthenticated, async (req: any, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query || query.length < 2) {
+        return res.json([]);
+      }
+      
+      // Mock CID-10 data for demonstration
+      const mockCidCodes = [
+        { code: 'F32.9', description: 'Episódio depressivo não especificado', shortDescription: 'Depressão não especificada' },
+        { code: 'F41.1', description: 'Transtorno de ansiedade generalizada', shortDescription: 'Ansiedade generalizada' },
+        { code: 'F43.0', description: 'Reação aguda ao estresse', shortDescription: 'Estresse agudo' },
+        { code: 'F40.9', description: 'Transtorno fóbico não especificado', shortDescription: 'Fobia não especificada' },
+        { code: 'F42.9', description: 'Transtorno obsessivo-compulsivo não especificado', shortDescription: 'TOC não especificado' },
+        { code: 'Z71.1', description: 'Pessoa consultando em nome de outra', shortDescription: 'Consulta por terceiro' },
+        { code: 'R50.9', description: 'Febre não especificada', shortDescription: 'Febre' },
+        { code: 'K30', description: 'Dispepsia funcional', shortDescription: 'Dispepsia' },
+        { code: 'M79.1', description: 'Mialgia', shortDescription: 'Dor muscular' },
+        { code: 'R51', description: 'Cefaleia', shortDescription: 'Dor de cabeça' }
+      ];
+      
+      const results = mockCidCodes.filter(code => 
+        code.description.toLowerCase().includes(query.toLowerCase()) ||
+        code.shortDescription.toLowerCase().includes(query.toLowerCase()) ||
+        code.code.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      res.json(results.slice(0, 10)); // Limit to 10 results
+    } catch (error) {
+      console.error('Error searching CID codes:', error);
+      res.status(500).json({ message: 'Failed to search CID codes' });
+    }
+  });
+
   const httpServer = createServer(app);
   
   // WebSocket server for real-time notifications and video calls

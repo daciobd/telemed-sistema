@@ -619,13 +619,40 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
 
       {/* Video Area */}
       <div className="flex-1 relative">
-        {/* Remote Video */}
-        <video
-          ref={remoteVideoRef}
-          autoPlay
-          playsInline
-          className="w-full h-full object-cover bg-gray-800"
-        />
+        {/* Remote Video or Simulated Patient */}
+        {connectionStatus === 'connected' && remoteVideoRef.current?.srcObject ? (
+          <video
+            ref={remoteVideoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover bg-gray-800"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-blue-900 to-indigo-900 flex items-center justify-center relative overflow-hidden">
+            {/* Simulated Patient Video */}
+            <div className="absolute inset-0 bg-gray-800">
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="w-80 h-80 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center text-white text-6xl font-bold shadow-2xl animate-pulse">
+                  {patientName ? patientName.charAt(0).toUpperCase() : 'P'}
+                </div>
+              </div>
+            </div>
+            
+            {/* Patient Info Overlay */}
+            <div className="absolute top-4 left-4 bg-black/70 text-white px-4 py-2 rounded-lg">
+              <div className="text-lg font-semibold">{patientName || 'Paciente'}</div>
+              <div className="text-sm text-green-400 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                Conectado - Áudio/Vídeo simulado
+              </div>
+            </div>
+            
+            {/* Connection Status */}
+            <div className="absolute bottom-4 left-4 bg-yellow-500/90 text-white px-3 py-1 rounded-full text-sm">
+              {connectionStatus === 'connecting' ? 'Conectando...' : 'Simulação ativa'}
+            </div>
+          </div>
+        )}
         
         {/* Local Video */}
         <div className="absolute top-4 right-4 w-48 h-36 bg-black rounded-lg overflow-hidden border-2 border-white/20">

@@ -38,7 +38,17 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
     physicalExam: "",
     notes: "",
     cidCode: "",
-    cidDescription: ""
+    cidDescription: "",
+    vitalSigns: {
+      bloodPressure: "",
+      heartRate: "",
+      temperature: "",
+      weight: "",
+      height: ""
+    },
+    medications: "",
+    recommendations: "",
+    followUp: ""
   });
   
   const { toast } = useToast();
@@ -46,6 +56,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
   const [cidResults, setCidResults] = useState<any[]>([]);
   const [showCidDropdown, setShowCidDropdown] = useState(false);
   const [searchingCid, setSearchingCid] = useState(false);
+  const [activeTab, setActiveTab] = useState('anamnese');
 
   // Buscar dados do paciente para preenchimento automático do MEMED
   const { data: patient } = useQuery<Patient>({
@@ -78,7 +89,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
       const timeoutId = setTimeout(async () => {
         setSearchingCid(true);
         try {
-          const response = await fetch(`/api/cid/search?q=${encodeURIComponent(searchTerm)}&limit=5`);
+          const response = await fetch(`/api/cid-codes/search?q=${encodeURIComponent(searchTerm)}`);
           if (response.ok) {
             const results = await response.json();
             setCidResults(results);
@@ -231,12 +242,35 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
         </CardTitle>
       </CardHeader>
       
-      <CardContent>
-        <ScrollArea className="h-96">
-          <div className="space-y-4">
-            {/* Queixa Principal */}
-            <div>
-              <Label htmlFor="chiefComplaint">Queixa Principal</Label>
+      <CardContent className="p-0">
+        {/* Tabs Navigation */}
+        <div className="flex border-b">
+          {[
+            { id: 'anamnese', label: 'Anamnese' },
+            { id: 'exame', label: 'Exame Físico' },
+            { id: 'diagnostico', label: 'Diagnóstico' },
+            { id: 'conduta', label: 'Conduta' }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? 'border-blue-500 text-blue-600 bg-blue-50'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <ScrollArea className="h-96 p-4">
+          {/* Tab Content: Anamnese */}
+          {activeTab === 'anamnese' && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="chiefComplaint">Queixa Principal</Label>
               <Textarea
                 id="chiefComplaint"
                 placeholder="Descreva a queixa principal do paciente..."
@@ -376,6 +410,179 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
               />
             </div>
           </div>
+          )}
+
+          {/* Tab Content: Exame Físico */}
+          {activeTab === 'exame' && (
+            <div className="space-y-4">
+              <div>
+                <Label>Sinais Vitais</Label>
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  <div>
+                    <Label htmlFor="bloodPressure" className="text-xs">Pressão Arterial</Label>
+                    <Input
+                      id="bloodPressure"
+                      placeholder="120/80 mmHg"
+                      value={record.vitalSigns.bloodPressure}
+                      onChange={(e) => setRecord(prev => ({ 
+                        ...prev, 
+                        vitalSigns: { ...prev.vitalSigns, bloodPressure: e.target.value }
+                      }))}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="heartRate" className="text-xs">Freq. Cardíaca</Label>
+                    <Input
+                      id="heartRate"
+                      placeholder="72 bpm"
+                      value={record.vitalSigns.heartRate}
+                      onChange={(e) => setRecord(prev => ({ 
+                        ...prev, 
+                        vitalSigns: { ...prev.vitalSigns, heartRate: e.target.value }
+                      }))}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="temperature" className="text-xs">Temperatura</Label>
+                    <Input
+                      id="temperature"
+                      placeholder="36.5°C"
+                      value={record.vitalSigns.temperature}
+                      onChange={(e) => setRecord(prev => ({ 
+                        ...prev, 
+                        vitalSigns: { ...prev.vitalSigns, temperature: e.target.value }
+                      }))}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="weight" className="text-xs">Peso</Label>
+                    <Input
+                      id="weight"
+                      placeholder="70 kg"
+                      value={record.vitalSigns.weight}
+                      onChange={(e) => setRecord(prev => ({ 
+                        ...prev, 
+                        vitalSigns: { ...prev.vitalSigns, weight: e.target.value }
+                      }))}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <Label htmlFor="physicalExamDetails">Exame Físico Detalhado</Label>
+                <Textarea
+                  id="physicalExamDetails"
+                  placeholder="Achados do exame físico por sistemas..."
+                  value={record.physicalExam}
+                  onChange={(e) => setRecord(prev => ({ ...prev, physicalExam: e.target.value }))}
+                  className="mt-1"
+                  rows={6}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Tab Content: Diagnóstico */}
+          {activeTab === 'diagnostico' && (
+            <div className="space-y-4">
+              <div className="relative">
+                <Label htmlFor="diagnosisMain">Hipótese Diagnóstica Principal</Label>
+                <Textarea
+                  id="diagnosisMain"
+                  placeholder="Digite a hipótese diagnóstica principal..."
+                  value={record.diagnosis}
+                  onChange={(e) => setRecord(prev => ({ ...prev, diagnosis: e.target.value }))}
+                  className="mt-1"
+                  rows={3}
+                />
+                
+                {/* Selected CID Display */}
+                {record.cidCode && (
+                  <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-medium text-blue-800">CID-10: {record.cidCode}</span>
+                        <div className="text-sm text-blue-600 mt-1">{record.cidDescription}</div>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setRecord(prev => ({ ...prev, cidCode: "", cidDescription: "" }))}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        Remover
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Tab Content: Conduta */}
+          {activeTab === 'conduta' && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="treatmentPlan">Plano Terapêutico</Label>
+                <Textarea
+                  id="treatmentPlan"
+                  placeholder="Tratamento prescrito, orientações gerais..."
+                  value={record.treatment}
+                  onChange={(e) => setRecord(prev => ({ ...prev, treatment: e.target.value }))}
+                  className="mt-1"
+                  rows={4}
+                />
+              </div>
+
+              <Separator />
+
+              <div>
+                <Label htmlFor="medicationsList">Medicações Prescritas</Label>
+                <Textarea
+                  id="medicationsList"
+                  placeholder="Lista de medicamentos e posologia..."
+                  value={record.medications}
+                  onChange={(e) => setRecord(prev => ({ ...prev, medications: e.target.value }))}
+                  className="mt-1"
+                  rows={3}
+                />
+              </div>
+
+              <Separator />
+
+              <div>
+                <Label htmlFor="recommendationsList">Recomendações</Label>
+                <Textarea
+                  id="recommendationsList"
+                  placeholder="Orientações sobre dieta, exercícios, cuidados..."
+                  value={record.recommendations}
+                  onChange={(e) => setRecord(prev => ({ ...prev, recommendations: e.target.value }))}
+                  className="mt-1"
+                  rows={3}
+                />
+              </div>
+
+              <Separator />
+
+              <div>
+                <Label htmlFor="followUpPlan">Retorno</Label>
+                <Input
+                  id="followUpPlan"
+                  placeholder="Ex: 30 dias, se necessário, emergência..."
+                  value={record.followUp}
+                  onChange={(e) => setRecord(prev => ({ ...prev, followUp: e.target.value }))}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          )}
         </ScrollArea>
       </CardContent>
 
