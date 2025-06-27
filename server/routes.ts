@@ -13,6 +13,7 @@ import {
   insertPatientRegistrationSchema 
 } from "@shared/schema";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -2051,5 +2052,238 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   };
   
+  // Credential-based authentication routes
+  const credentialAuthSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(6),
+  });
+
+  const registerSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(6),
+    name: z.string().min(2),
+    role: z.enum(["doctor", "patient"]),
+    crm: z.string().optional(),
+    specialty: z.string().optional(),
+    birthDate: z.string().optional(),
+    phone: z.string().optional(),
+  });
+
+  // Register new user with credentials
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      const validatedData = registerSchema.parse(req.body);
+      
+      // Check if email already exists
+      const existingUser = await storage.getUserByEmail(validatedData.email);
+      if (existingUser) {
+        return res.status(400).json({ message: "Email já está em uso" });
+      }
+
+      // Hash password
+      const saltRounds = 12;
+      const passwordHash = await bcrypt.hash(validatedData.password, saltRounds);
+
+      // Create user
+      const userId = `credential_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const user = await storage.upsertUser({
+        id: userId,
+        email: validatedData.email,
+        firstName: validatedData.name.split(' ')[0],
+        lastName: validatedData.name.split(' ').slice(1).join(' ') || '',
+        role: validatedData.role,
+        passwordHash,
+        isEmailVerified: false,
+        specialty: validatedData.specialty,
+        licenseNumber: validatedData.crm,
+      });
+
+      // Create doctor or patient profile
+      if (validatedData.role === 'doctor') {
+        await storage.createDoctor({
+          userId: userId,
+          specialty: validatedData.specialty!,
+          licenseNumber: validatedData.crm!,
+          bio: 'Médico cadastrado no sistema',
+          experience: 'A definir',
+          education: 'A definir',
+          languages: 'Português',
+          consultationFee: 150,
+          rating: 0,
+          availability: [],
+          whatsappNumber: '',
+        });
+      } else {
+        await storage.createPatient({
+          userId: userId,
+          dateOfBirth: validatedData.birthDate ? new Date(validatedData.birthDate) : null,
+          phone: validatedData.phone || '',
+          address: '',
+          cpf: '',
+          emergencyContact: '',
+          medicalHistory: '',
+          allergies: '',
+          medications: '',
+          bloodType: '',
+          weight: '',
+          height: '',
+        });
+      }
+
+      res.status(201).json({ 
+        message: "Usuário criado com sucesso",
+        user: { id: user.id, email: user.email, role: user.role }
+      });
+    } catch (error: any) {
+      console.error("Registration error:", error);
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ message: "Dados inválidos" });
+      }
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
+
+  // Login with credentials
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { email, password } = credentialAuthSchema.parse(req.body);
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user || !user.passwordHash) {
+        return res.status(401).json({ message: "Email ou senha inválidos" });
+      }
+
+      // Verify password
+      const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Email ou senha inválidos" });
+      }
+
+      // Create session
+      if (req.session) {
+        req.session.userId = user.id;
+        req.session.user = {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        };
+      }
+
+      res.json({ 
+        message: "Login realizado com sucesso",
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        }
+      });
+    } catch (error: any) {
+      console.error("Login error:", error);
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ message: "Dados inválidos" });
+      }
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  });
+
+  // Create demo users for quick access
+  app.post('/api/auth/create-demo-users', async (req, res) => {
+    try {
+      const saltRounds = 12;
+      
+      // Demo doctor
+      const doctorPasswordHash = await bcrypt.hash('demo123', saltRounds);
+      const doctorId = 'demo_doctor_001';
+      
+      try {
+        await storage.upsertUser({
+          id: doctorId,
+          email: 'medico@demo.com',
+          firstName: 'Dr. João',
+          lastName: 'Silva',
+          role: 'doctor',
+          passwordHash: doctorPasswordHash,
+          specialty: 'Cardiologia',
+          licenseNumber: '12345/SP',
+          isEmailVerified: true,
+        });
+
+        await storage.createDoctor({
+          userId: doctorId,
+          specialty: 'Cardiologia',
+          licenseNumber: '12345/SP',
+          bio: 'Médico cardiologista com 15 anos de experiência',
+          experience: '15 anos',
+          education: 'USP - Medicina',
+          languages: 'Português, Inglês',
+          consultationFee: 150,
+          rating: 4.8,
+          availability: [],
+          whatsappNumber: '(11) 99999-0001',
+        });
+      } catch (e) {
+        // User might already exist
+      }
+
+      // Demo patient
+      const patientPasswordHash = await bcrypt.hash('demo123', saltRounds);
+      const patientId = 'demo_patient_001';
+      
+      try {
+        await storage.upsertUser({
+          id: patientId,
+          email: 'paciente@demo.com',
+          firstName: 'Maria',
+          lastName: 'Santos',
+          role: 'patient',
+          passwordHash: patientPasswordHash,
+          isEmailVerified: true,
+        });
+
+        await storage.createPatient({
+          userId: patientId,
+          dateOfBirth: new Date('1985-05-15'),
+          phone: '(11) 98765-4321',
+          address: 'Rua das Flores, 123 - São Paulo/SP',
+          cpf: '123.456.789-00',
+          emergencyContact: '(11) 99999-9999',
+          medicalHistory: 'Hipertensão controlada',
+          allergies: 'Nenhuma conhecida',
+          medications: 'Losartana 50mg',
+          bloodType: 'O+',
+          weight: '70kg',
+          height: '1.65m',
+        });
+      } catch (e) {
+        // User might already exist
+      }
+
+      res.json({ message: "Usuários demo criados com sucesso" });
+    } catch (error) {
+      console.error("Error creating demo users:", error);
+      res.status(500).json({ message: "Erro ao criar usuários demo" });
+    }
+  });
+
+  // Logout
+  app.post('/api/auth/logout', (req, res) => {
+    if (req.session) {
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ message: "Erro ao fazer logout" });
+        }
+        res.clearCookie('connect.sid');
+        res.json({ message: "Logout realizado com sucesso" });
+      });
+    } else {
+      res.json({ message: "Logout realizado com sucesso" });
+    }
+  });
+
   return httpServer;
 }

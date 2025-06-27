@@ -39,6 +39,9 @@ import RegisterPatient from "@/pages/register-patient";
 import RegisterSuccess from "@/pages/register-success";
 import DoctorAgendaPage from "@/pages/DoctorAgendaPage";
 import GuiaMedico from "@/pages/guia-medico";
+import LoginPage from "@/pages/login";
+import RegisterPage from "@/pages/register";
+import { CredentialAuthProvider } from "@/hooks/useCredentialAuth";
 
 
 function Router() {
@@ -46,7 +49,9 @@ function Router() {
 
   return (
     <Switch>
-      {/* Public registration routes - accessible without authentication */}
+      {/* Public routes - accessible without authentication */}
+      <Route path="/login" component={LoginPage} />
+      <Route path="/register" component={RegisterPage} />
       <Route path="/register-doctor" component={RegisterDoctor} />
       <Route path="/register-patient" component={RegisterPatient} />
       <Route path="/register-success" component={RegisterSuccess} />
@@ -128,10 +133,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <CredentialAuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </CredentialAuthProvider>
     </QueryClientProvider>
   );
 }

@@ -26,7 +26,7 @@ export const sessions = pgTable(
   (table) => [index("IDX_session_expire").on(table.expire)],
 );
 
-// User storage table for Replit Auth
+// User storage table for Replit Auth + Credentials
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().notNull(),
   email: varchar("email").unique(),
@@ -36,6 +36,8 @@ export const users = pgTable("users", {
   role: varchar("role", { enum: ["patient", "doctor", "admin"] }).notNull().default("patient"),
   specialty: varchar("specialty"), // For doctors
   licenseNumber: varchar("license_number"), // For doctors
+  passwordHash: varchar("password_hash"), // For credential-based auth
+  isEmailVerified: boolean("is_email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
