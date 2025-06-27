@@ -81,10 +81,34 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
   const formatPatientForMemed = (patient: any) => {
     if (!patient) return '';
     
+    const birthDate = patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString('pt-BR') : '';
+    const fullName = `${patient.firstName || ''} ${patient.lastName || ''}`.trim();
+    
+    // Formato compacto para colar no campo "Nome ou CPF" da MEMED
+    let basicData = fullName;
+    if (patient.cpf) {
+      basicData += ` - CPF: ${patient.cpf}`;
+    }
+    if (birthDate) {
+      basicData += ` - Nascimento: ${birthDate}`;
+    }
+    if (patient.phone) {
+      basicData += ` - Tel: ${patient.phone}`;
+    }
+    
+    return basicData;
+  };
+
+  // Format detailed patient data for comprehensive use
+  const formatDetailedPatientData = (patient: any) => {
+    if (!patient) return '';
+    
     const birthDate = patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString('pt-BR') : 'Não informado';
     const age = patient.dateOfBirth ? Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 'Não informado';
     
-    return `Nome: ${patient.firstName || ''} ${patient.lastName || ''}
+    return `DADOS COMPLETOS DO PACIENTE:
+
+Nome: ${patient.firstName || ''} ${patient.lastName || ''}
 CPF: ${patient.cpf || 'Não informado'}
 Data de Nascimento: ${birthDate}
 Idade: ${age} anos
@@ -108,8 +132,18 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
     setCopiedData(formattedData);
     navigator.clipboard.writeText(formattedData);
     toast({
-      title: "Dados copiados!",
-      description: "Os dados do paciente foram copiados para a área de transferência",
+      title: "Dados básicos copiados!",
+      description: "Cole no campo 'Nome ou CPF' da MEMED",
+    });
+  };
+
+  const copyDetailedData = () => {
+    const detailedData = formatDetailedPatientData(patientInfo);
+    setCopiedData(detailedData);
+    navigator.clipboard.writeText(detailedData);
+    toast({
+      title: "Dados completos copiados!",
+      description: "Dados detalhados do paciente copiados",
     });
   };
 
@@ -590,29 +624,44 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex gap-3 mb-4">
-                  <Button 
-                    onClick={openMemedWithData}
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    Abrir MEMED com Dados Preenchidos
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={copyPatientData}
-                    className="border-green-600 text-green-700 hover:bg-green-100"
-                  >
-                    <FileText className="h-4 w-4 mr-2" />
-                    Copiar Dados para Colar
-                  </Button>
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowPatientData(!showPatientData)}
-                  >
-                    {showPatientData ? 'Ocultar' : 'Ver'} Detalhes
-                  </Button>
+                <div className="space-y-3 mb-4">
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={openMemedWithData}
+                      className="bg-green-600 hover:bg-green-700 text-white flex-1"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Abrir MEMED com Dados Preenchidos
+                    </Button>
+                    <Button 
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPatientData(!showPatientData)}
+                    >
+                      {showPatientData ? 'Ocultar' : 'Ver'} Detalhes
+                    </Button>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline"
+                      onClick={copyPatientData}
+                      className="border-blue-600 text-blue-700 hover:bg-blue-50 flex-1"
+                      size="sm"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Copiar Nome + CPF (para campo MEMED)
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={copyDetailedData}
+                      className="border-gray-600 text-gray-700 hover:bg-gray-50 flex-1"
+                      size="sm"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Copiar Dados Completos
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -683,19 +732,63 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
                 )}
 
                 {copiedData && (
-                  <Alert className="mt-4 bg-green-100 border-green-300">
-                    <Check className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">
-                      Dados copiados! Cole no formulário da MEMED usando Ctrl+V
-                    </AlertDescription>
-                  </Alert>
+                  <div className="mt-4 space-y-3">
+                    <Alert className="bg-green-100 border-green-300">
+                      <Check className="h-4 w-4 text-green-600" />
+                      <AlertDescription className="text-green-800">
+                        Dados copiados! Use a área abaixo para verificar ou cole diretamente na MEMED
+                      </AlertDescription>
+                    </Alert>
+                    
+                    <div className="bg-white p-3 rounded border">
+                      <Label className="text-sm font-medium mb-2 block">
+                        Dados formatados para MEMED (clique para selecionar tudo):
+                      </Label>
+                      <Textarea
+                        value={copiedData}
+                        readOnly
+                        className="h-32 text-xs font-mono"
+                        onClick={(e) => e.currentTarget.select()}
+                      />
+                      <div className="flex gap-2 mt-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            navigator.clipboard.writeText(copiedData);
+                            toast({
+                              title: "Copiado novamente!",
+                              description: "Dados prontos para colar na MEMED"
+                            });
+                          }}
+                        >
+                          Copiar Novamente
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => window.open('https://memed.com.br/prescricao', '_blank')}
+                        >
+                          Abrir MEMED em Nova Aba
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 )}
 
-                <div className="mt-4 p-3 bg-white rounded-lg border border-green-200">
-                  <p className="text-xs text-green-700">
-                    ✓ Use "Abrir MEMED com Dados Preenchidos" para pré-carregamento automático
+                <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-xs text-blue-800">
+                    <strong>Como usar com MEMED:</strong>
                     <br />
-                    ✓ Use "Copiar Dados para Colar" se precisar inserir manualmente
+                    1. Clique em "Copiar Nome + CPF (para campo MEMED)" - isso copia dados no formato compacto
+                    <br />
+                    2. Abra MEMED em nova aba e vá para "Gerar Prescrição"
+                    <br />
+                    3. Cole no campo "Nome ou CPF" usando Ctrl+V
+                    <br />
+                    4. A MEMED reconhecerá e preencherá os dados automaticamente
+                    <br />
+                    5. Use "Copiar Dados Completos" se precisar de informações adicionais
                   </p>
                 </div>
               </CardContent>
