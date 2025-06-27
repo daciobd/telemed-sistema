@@ -77,6 +77,18 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
     }
   }, [patientId]);
 
+  // Format patient CPF for MEMED (only CPF for better field distribution)
+  const formatCPFForMemed = (patient: any) => {
+    if (!patient || !patient.cpf) return '';
+    return patient.cpf;
+  };
+
+  // Format patient name for MEMED
+  const formatNameForMemed = (patient: any) => {
+    if (!patient) return '';
+    return `${patient.firstName || ''} ${patient.lastName || ''}`.trim();
+  };
+
   // Format patient data for MEMED
   const formatPatientForMemed = (patient: any) => {
     if (!patient) return '';
@@ -125,6 +137,26 @@ Telefone de Emergência: ${patient.emergencyContactPhone || 'Não informado'}
 Medicamentos em Uso: ${patient.medications || 'Nenhum informado'}
 Alergias: ${patient.allergies || 'Nenhuma informada'}
 Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
+  };
+
+  const copyCPFOnly = () => {
+    const cpf = formatCPFForMemed(patientInfo);
+    setCopiedData(cpf);
+    navigator.clipboard.writeText(cpf);
+    toast({
+      title: "CPF copiado!",
+      description: "Cole no campo 'CPF do paciente' na MEMED",
+    });
+  };
+
+  const copyNameOnly = () => {
+    const name = formatNameForMemed(patientInfo);
+    setCopiedData(name);
+    navigator.clipboard.writeText(name);
+    toast({
+      title: "Nome copiado!",
+      description: "Cole no campo 'Nome completo' na MEMED",
+    });
   };
 
   const copyPatientData = () => {
@@ -641,6 +673,32 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
                       {showPatientData ? 'Ocultar' : 'Ver'} Detalhes
                     </Button>
                   </div>
+
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                    <p className="text-xs text-orange-800 mb-2 font-medium">
+                      🔧 SOLUÇÃO PARA CAMPOS SEPARADOS:
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        variant="outline"
+                        onClick={copyCPFOnly}
+                        className="border-orange-500 text-orange-700 hover:bg-orange-100"
+                        size="sm"
+                      >
+                        <FileText className="h-4 w-4 mr-1" />
+                        Só CPF
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        onClick={copyNameOnly}
+                        className="border-orange-500 text-orange-700 hover:bg-orange-100"
+                        size="sm"
+                      >
+                        <FileText className="h-4 w-4 mr-1" />
+                        Só Nome
+                      </Button>
+                    </div>
+                  </div>
                   
                   <div className="flex gap-2">
                     <Button 
@@ -650,7 +708,7 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
                       size="sm"
                     >
                       <FileText className="h-4 w-4 mr-2" />
-                      Copiar Nome + CPF (para campo MEMED)
+                      Copiar Nome + CPF (campo único)
                     </Button>
                     <Button 
                       variant="outline"
@@ -659,7 +717,7 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
                       size="sm"
                     >
                       <FileText className="h-4 w-4 mr-2" />
-                      Copiar Dados Completos
+                      Dados Completos
                     </Button>
                   </div>
                 </div>
@@ -778,17 +836,24 @@ Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
 
                 <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                   <p className="text-xs text-blue-800">
-                    <strong>Como usar com MEMED:</strong>
+                    <strong>📋 SOLUÇÃO DEFINITIVA PARA MEMED:</strong>
                     <br />
-                    1. Clique em "Copiar Nome + CPF (para campo MEMED)" - isso copia dados no formato compacto
+                    <strong>Opção 1 - Campos Separados (RECOMENDADO):</strong>
                     <br />
-                    2. Abra MEMED em nova aba e vá para "Gerar Prescrição"
+                    1. Clique em "Só CPF" → Cole no campo "CPF do paciente"
                     <br />
-                    3. Cole no campo "Nome ou CPF" usando Ctrl+V
+                    2. Clique em "Só Nome" → Cole no campo "Nome completo do paciente"
                     <br />
-                    4. A MEMED reconhecerá e preencherá os dados automaticamente
+                    3. Preencha os outros campos manualmente
                     <br />
-                    5. Use "Copiar Dados Completos" se precisar de informações adicionais
+                    <br />
+                    <strong>Opção 2 - Campo Único:</strong>
+                    <br />
+                    1. Clique em "Copiar Nome + CPF (campo único)"
+                    <br />
+                    2. Cole no campo "Nome ou CPF" (todos os dados ficarão neste campo)
+                    <br />
+                    3. Corrija manualmente se necessário
                   </p>
                 </div>
               </CardContent>
