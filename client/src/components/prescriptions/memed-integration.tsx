@@ -67,6 +67,8 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
   
   // Patient info
   const [patientInfo, setPatientInfo] = useState<any>(null);
+  const [showPatientData, setShowPatientData] = useState(false);
+  const [copiedData, setCopiedData] = useState('');
   
   useEffect(() => {
     loadTemplates();
@@ -74,6 +76,79 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
       loadPatientInfo();
     }
   }, [patientId]);
+
+  // Format patient data for MEMED
+  const formatPatientForMemed = (patient: any) => {
+    if (!patient) return '';
+    
+    const birthDate = patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString('pt-BR') : 'Não informado';
+    const age = patient.dateOfBirth ? Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 'Não informado';
+    
+    return `Nome: ${patient.firstName || ''} ${patient.lastName || ''}
+CPF: ${patient.cpf || 'Não informado'}
+Data de Nascimento: ${birthDate}
+Idade: ${age} anos
+Telefone: ${patient.phone || 'Não informado'}
+Email: ${patient.email || 'Não informado'}
+Endereço: ${patient.address || 'Não informado'}
+Cidade: ${patient.city || ''} - ${patient.state || ''}
+CEP: ${patient.zipCode || 'Não informado'}
+Sexo: ${patient.gender === 'M' ? 'Masculino' : patient.gender === 'F' ? 'Feminino' : 'Não informado'}
+Plano de Saúde: ${patient.healthInsurance || 'Particular'}
+Número da Carteirinha: ${patient.healthInsuranceNumber || 'Não informado'}
+Contato de Emergência: ${patient.emergencyContactName || 'Não informado'}
+Telefone de Emergência: ${patient.emergencyContactPhone || 'Não informado'}
+Medicamentos em Uso: ${patient.medications || 'Nenhum informado'}
+Alergias: ${patient.allergies || 'Nenhuma informada'}
+Histórico Médico: ${patient.medicalHistory || 'Não informado'}`;
+  };
+
+  const copyPatientData = () => {
+    const formattedData = formatPatientForMemed(patientInfo);
+    setCopiedData(formattedData);
+    navigator.clipboard.writeText(formattedData);
+    toast({
+      title: "Dados copiados!",
+      description: "Os dados do paciente foram copiados para a área de transferência",
+    });
+  };
+
+  const openMemedWithData = () => {
+    if (!patientInfo) {
+      toast({
+        title: "Erro",
+        description: "Dados do paciente não encontrados",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Criar URL da MEMED com dados pré-preenchidos
+    const memedBaseUrl = 'https://memed.com.br/prescricao';
+    const patientData = {
+      nome: `${patientInfo.firstName || ''} ${patientInfo.lastName || ''}`.trim(),
+      cpf: patientInfo.cpf || '',
+      nascimento: patientInfo.dateOfBirth ? new Date(patientInfo.dateOfBirth).toISOString().split('T')[0] : '',
+      telefone: patientInfo.phone || '',
+      email: patientInfo.email || ''
+    };
+
+    // Construir query string com dados do paciente
+    const queryParams = new URLSearchParams();
+    Object.entries(patientData).forEach(([key, value]) => {
+      if (value) queryParams.append(key, value);
+    });
+
+    const memedUrl = `${memedBaseUrl}?${queryParams.toString()}`;
+    
+    // Abrir MEMED em nova aba
+    window.open(memedUrl, '_blank');
+    
+    toast({
+      title: "MEMED aberta",
+      description: "A MEMED foi aberta com os dados do paciente pré-carregados",
+    });
+  };
 
   const loadTemplates = async () => {
     try {
@@ -515,12 +590,37 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                <div className="flex gap-3 mb-4">
+                  <Button 
+                    onClick={openMemedWithData}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Abrir MEMED com Dados Preenchidos
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={copyPatientData}
+                    className="border-green-600 text-green-700 hover:bg-green-100"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Copiar Dados para Colar
+                  </Button>
+                  <Button 
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPatientData(!showPatientData)}
+                  >
+                    {showPatientData ? 'Ocultar' : 'Ver'} Detalhes
+                  </Button>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-green-600" />
                       <span className="font-medium">Nome:</span>
-                      <span>{patientInfo.user?.firstName} {patientInfo.user?.lastName}</span>
+                      <span>{patientInfo.firstName || patientInfo.user?.firstName} {patientInfo.lastName || patientInfo.user?.lastName}</span>
                     </div>
                     {patientInfo.cpf && (
                       <div className="flex items-center gap-2">
@@ -552,12 +652,50 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
                         <span>{new Date(patientInfo.dateOfBirth).toLocaleDateString('pt-BR')}</span>
                       </div>
                     )}
+                    {patientInfo.email && (
+                      <div className="flex items-center gap-2">
+                        <Check className="h-4 w-4 text-green-600" />
+                        <span className="font-medium">Email:</span>
+                        <span className="text-xs">{patientInfo.email}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
+
+                {showPatientData && (
+                  <div className="mt-4 bg-white p-3 rounded border space-y-2">
+                    <h4 className="font-medium text-sm mb-2">Dados Complementares:</h4>
+                    <div className="text-sm space-y-1">
+                      {patientInfo.healthInsurance && (
+                        <div><strong>Plano de Saúde:</strong> {patientInfo.healthInsurance}</div>
+                      )}
+                      {patientInfo.allergies && (
+                        <div><strong>Alergias:</strong> {patientInfo.allergies}</div>
+                      )}
+                      {patientInfo.medications && (
+                        <div><strong>Medicamentos em Uso:</strong> {patientInfo.medications}</div>
+                      )}
+                      {patientInfo.medicalHistory && (
+                        <div><strong>Histórico Médico:</strong> {patientInfo.medicalHistory}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {copiedData && (
+                  <Alert className="mt-4 bg-green-100 border-green-300">
+                    <Check className="h-4 w-4 text-green-600" />
+                    <AlertDescription className="text-green-800">
+                      Dados copiados! Cole no formulário da MEMED usando Ctrl+V
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 <div className="mt-4 p-3 bg-white rounded-lg border border-green-200">
                   <p className="text-xs text-green-700">
-                    ✓ Estes dados serão automaticamente inseridos no formulário do MEMED, 
-                    poupando tempo no preenchimento da prescrição.
+                    ✓ Use "Abrir MEMED com Dados Preenchidos" para pré-carregamento automático
+                    <br />
+                    ✓ Use "Copiar Dados para Colar" se precisar inserir manualmente
                   </p>
                 </div>
               </CardContent>
@@ -592,13 +730,13 @@ export default function MemedIntegration({ patientId, appointmentId, onPrescript
                   </p>
                   <Button 
                     size="sm" 
-                    onClick={generateMemedLink}
+                    onClick={patientInfo ? openMemedWithData : () => window.open('https://memed.com.br', '_blank')}
                     className={patientInfo ? 
                       "bg-green-600 hover:bg-green-700 text-white" : 
                       "bg-blue-600 hover:bg-blue-700 text-white"}
                   >
                     {patientInfo ? 
-                      "🚀 Abrir MEMED (dados preenchidos)" : 
+                      "Abrir MEMED (dados preenchidos)" : 
                       "Acessar MEMED"}
                   </Button>
                 </div>
