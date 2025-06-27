@@ -22,7 +22,10 @@ import {
   AlertCircle,
   User,
   Calendar,
-  Clock
+  Clock,
+  Shield,
+  Copy,
+  MessageCircle
 } from 'lucide-react';
 
 interface MemedIntegrationProps {

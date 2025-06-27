@@ -39,6 +39,7 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Avaliações", href: "/medical-evaluations-view", icon: Star, roles: ["doctor"] },
     { name: "Financeiro", href: "/financial-dashboard", icon: DollarSign, roles: ["doctor"] },
     { name: "Demo Médica", href: "/demo-management", icon: Settings, roles: ["doctor"] },
+    { name: "WhatsApp Institucional", href: "/whatsapp-institucional", icon: MessageCircle, roles: ["doctor"] },
     { name: "Guia de Teste", href: "/guia-medico", icon: BookOpen, roles: ["doctor"] },
   ];
 

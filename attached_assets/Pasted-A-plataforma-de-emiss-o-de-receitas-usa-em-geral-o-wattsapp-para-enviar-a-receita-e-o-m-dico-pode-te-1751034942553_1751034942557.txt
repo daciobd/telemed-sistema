@@ -1,0 +1,135 @@
+A plataforma de emissão de receitas usa em geral o wattsapp para enviar a receita e o médico pode ter acesso ao celular do paciente. Poderíamos usar um celular da plataforma para evitar isso não é?
+
+
+O ChatGPT disse:
+Exatamente — e essa é uma solução inteligente.
+
+✅ Sim, usar um número institucional da plataforma (via WhatsApp Business API ou similar) é uma das melhores formas de:
+Proteger o contato do paciente;
+
+Evitar que o médico tenha acesso direto ao celular do paciente (e assim possa captar esse paciente por fora);
+
+Padronizar o envio de receitas e documentos médicos, mantendo rastreabilidade e identidade da marca TeleMed.
+
+🎯 Como fazer isso funcionar na prática:
+1. Usar um WhatsApp da plataforma (número único institucional)
+O envio de receitas e documentos (PDF com assinatura digital) é feito pelo time da plataforma, ou automaticamente via sistema.
+
+Pode ser configurado com automações básicas: “Olá, [Nome], segue sua receita emitida pelo Dr. Fulano via TeleMed”.
+
+Vantagem:
+O paciente sempre associa o atendimento à marca TeleMed, não ao médico individual.
+
+2. Evitar que o médico envie diretamente
+Na interface do médico (futura ou atual), o botão “emitir receita” gera um PDF que fica disponível apenas para a equipe da plataforma.
+
+A plataforma então envia ao paciente pelo WhatsApp institucional ou por e-mail.
+
+3. Centralizar documentos via Portal do Paciente
+Você pode futuramente criar uma área segura (login com CPF e código por SMS/email) para que o paciente:
+
+Acesse sua receita,
+
+Veja recomendações médicas,
+
+Solicite retorno.
+
+🔐 Benefícios dessa estratégia:
+Garante proteção de dados sensíveis e conformidade com a LGPD.
+
+Reduz drasticamente o risco de “bypass” dos médicos.
+
+Melhora a experiência do paciente, com identidade visual única e confiável.
+
+Cria histórico e rastreamento: você sabe quando e como a receita foi entregue.
+
+🚀 Se quiser dar o próximo passo:
+Posso ajudar você a:
+
+Criar um modelo de protocolo de envio de receitas pela plataforma;
+
+Escolher ferramentas acessíveis para automatizar isso (como Z-API, Twilio, Gupshup);
+
+Preparar o conteúdo da mensagem automática que será enviada ao paciente via WhatsApp.
+
+Você deseja isso?
+
+
+
+
+
+
+
+Você disse:
+Modelo de protocolo 
+
+
+O ChatGPT disse:
+Perfeito. Abaixo está um modelo de protocolo operacional para envio de receitas médicas via plataforma TeleMed, que visa proteger os dados do paciente, evitar contato direto com o médico, e manter a padronização e segurança jurídica do processo:
+
+📋 PROTOCOLO DE ENVIO DE RECEITAS – TELEMED
+1. Objetivo
+Garantir que a emissão e o envio de receitas médicas após as consultas realizadas na TeleMed sigam um fluxo padronizado, seguro e em conformidade com a LGPD, sem exposição de dados pessoais entre médico e paciente.
+
+2. Responsável pelo envio
+A equipe administrativa da TeleMed (ou sistema automatizado via WhatsApp institucional) é a única responsável por enviar receitas e documentos médicos ao paciente.
+
+3. Passo a passo do processo
+3.1 Emissão da receita
+O médico acessa o painel TeleMed e preenche a receita em modelo eletrônico (com campos padronizados).
+
+A receita é gerada em formato PDF, com:
+
+Nome completo do paciente
+
+CID (opcional)
+
+Medicações com posologia
+
+Assinatura digital do médico (ICP-Brasil ou similar)
+
+Data e carimbo eletrônico da TeleMed
+
+O médico não envia diretamente a receita ao paciente.
+
+3.2 Validação e envio
+A equipe da plataforma ou o sistema automatizado recebe o PDF.
+
+O documento é validado quanto a:
+
+Legibilidade
+
+Presença de dados obrigatórios
+
+Assinatura digital válida
+
+Após validação, a receita é enviada ao paciente via WhatsApp institucional da TeleMed (número oficial da plataforma) ou por e-mail cadastrado.
+
+3.3 Mensagem de envio (modelo padrão)
+Olá, [Nome do Paciente]!
+Aqui está sua receita emitida na plataforma TeleMed, referente à consulta realizada com o Dr(a). [Nome do Médico].
+
+📄 [PDF da receita em anexo]
+
+Em caso de dúvidas ou solicitação de retorno, fale conosco por este número ou acesse nosso site.
+
+Atenciosamente,
+Equipe TeleMed.
+
+4. Canal de retorno
+O paciente que tiver dúvidas ou precisar de nova orientação será direcionado de volta à plataforma para solicitar retorno — nunca diretamente ao médico.
+
+Nenhum número pessoal de médico será compartilhado.
+
+5. Armazenamento e histórico
+Todas as receitas ficam armazenadas nos servidores da TeleMed por, no mínimo, 5 anos.
+
+O paciente poderá acessar o histórico pelo portal ou mediante solicitação autenticada.
+
+6. Segurança e LGPD
+Todos os dados são criptografados e enviados via canais seguros.
+
+O paciente autoriza o envio por WhatsApp ao aceitar os termos de uso na adesão à TeleMed.
+
+O médico, ao aderir à plataforma, concorda em não contatar o paciente por canais externos, salvo liberação explícita da administração da plataforma.
+
