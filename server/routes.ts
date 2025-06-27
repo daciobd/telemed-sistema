@@ -2405,5 +2405,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Consultation Reports API (for doctors)
+  app.post('/api/consultation-reports', isAuthenticated, async (req, res) => {
+    try {
+      const reportData = req.body;
+      const consultationReport = await storage.createConsultationReport({
+        appointmentId: reportData.appointmentId,
+        doctorId: reportData.doctorId,
+        technicalIssues: reportData.technicalIssues || null,
+        patientBehaviorIssues: reportData.patientBehaviorIssues || null,
+        diagnosis: reportData.diagnosis || null,
+        treatment: reportData.treatment || null,
+        followUpRequired: reportData.followUpRequired || false,
+        followUpInstructions: reportData.followUpInstructions || null,
+        prescriptionIssued: reportData.prescriptionIssued || false,
+        referralSpecialty: reportData.referralSpecialty || null,
+        referralReason: reportData.referralReason || null,
+        referralUrgency: reportData.referralUrgency || 'routine',
+        additionalNotes: reportData.additionalNotes || null
+      });
+      
+      res.json(consultationReport);
+    } catch (error) {
+      console.error('Error creating consultation report:', error);
+      res.status(500).json({ error: 'Failed to create consultation report' });
+    }
+  });
+
+  // Consultation Feedback API (for patients)
+  app.post('/api/consultation-feedback', isAuthenticated, async (req, res) => {
+    try {
+      const feedbackData = req.body;
+      const consultationFeedback = await storage.createConsultationFeedback({
+        appointmentId: feedbackData.appointmentId,
+        patientId: feedbackData.patientId,
+        hadTechnicalIssues: feedbackData.hadTechnicalIssues || false,
+        technicalIssuesDetails: feedbackData.technicalIssuesDetails || null,
+        audioQuality: feedbackData.audioQuality || null,
+        videoQuality: feedbackData.videoQuality || null,
+        platformEaseOfUse: feedbackData.platformEaseOfUse || null,
+        hadDoctorInteractionIssues: feedbackData.hadDoctorInteractionIssues || false,
+        doctorInteractionDetails: feedbackData.doctorInteractionDetails || null,
+        overallSatisfaction: feedbackData.overallSatisfaction,
+        doctorKnowledge: feedbackData.doctorKnowledge,
+        doctorAttention: feedbackData.doctorAttention,
+        wouldRecommend: feedbackData.wouldRecommend,
+        testimonial: feedbackData.testimonial || null,
+        wantsToReschedule: feedbackData.wantsToReschedule || false,
+        rescheduleReason: feedbackData.rescheduleReason || null,
+        prefersSameDoctorReschedule: feedbackData.prefersSameDoctorReschedule || true
+      });
+      
+      res.json(consultationFeedback);
+    } catch (error) {
+      console.error('Error creating consultation feedback:', error);
+      res.status(500).json({ error: 'Failed to create consultation feedback' });
+    }
+  });
+
+  // Get consultation reports for a specific appointment
+  app.get('/api/appointments/:id/reports', isAuthenticated, async (req, res) => {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const reports = await storage.getConsultationReportsByAppointment(appointmentId);
+      res.json(reports);
+    } catch (error) {
+      console.error('Error fetching consultation reports:', error);
+      res.status(500).json({ error: 'Failed to fetch consultation reports' });
+    }
+  });
+
+  // Get consultation feedback for a specific appointment
+  app.get('/api/appointments/:id/feedback', isAuthenticated, async (req, res) => {
+    try {
+      const appointmentId = parseInt(req.params.id);
+      const feedback = await storage.getConsultationFeedbackByAppointment(appointmentId);
+      res.json(feedback);
+    } catch (error) {
+      console.error('Error fetching consultation feedback:', error);
+      res.status(500).json({ error: 'Failed to fetch consultation feedback' });
+    }
+  });
+
   return httpServer;
 }

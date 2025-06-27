@@ -1289,6 +1289,71 @@ export class DatabaseStorage implements IStorage {
       .where(eq(consultationRecords.patientId, patientId))
       .orderBy(desc(consultationRecords.createdAt));
   }
+
+  // Consultation Reports Methods
+  async createConsultationReport(data: InsertConsultationReport): Promise<SelectConsultationReport> {
+    const result = await db
+      .insert(consultationReports)
+      .values(data)
+      .returning();
+    return result[0];
+  }
+
+  async getConsultationReportsByAppointment(appointmentId: number): Promise<SelectConsultationReport[]> {
+    return await db
+      .select()
+      .from(consultationReports)
+      .where(eq(consultationReports.appointmentId, appointmentId))
+      .orderBy(desc(consultationReports.createdAt));
+  }
+
+  async getConsultationReportsByDoctor(doctorId: string): Promise<SelectConsultationReport[]> {
+    return await db
+      .select()
+      .from(consultationReports)
+      .where(eq(consultationReports.doctorId, doctorId))
+      .orderBy(desc(consultationReports.createdAt));
+  }
+
+  // Consultation Feedback Methods
+  async createConsultationFeedback(data: InsertConsultationFeedback): Promise<SelectConsultationFeedback> {
+    const result = await db
+      .insert(consultationFeedback)
+      .values(data)
+      .returning();
+    return result[0];
+  }
+
+  async getConsultationFeedbackByAppointment(appointmentId: number): Promise<SelectConsultationFeedback[]> {
+    return await db
+      .select()
+      .from(consultationFeedback)
+      .where(eq(consultationFeedback.appointmentId, appointmentId))
+      .orderBy(desc(consultationFeedback.createdAt));
+  }
+
+  async getConsultationFeedbackByPatient(patientId: string): Promise<SelectConsultationFeedback[]> {
+    return await db
+      .select()
+      .from(consultationFeedback)
+      .where(eq(consultationFeedback.patientId, patientId))
+      .orderBy(desc(consultationFeedback.createdAt));
+  }
+
+  async getConsultationFeedbackByDoctor(doctorId: string): Promise<SelectConsultationFeedback[]> {
+    // Get feedback for appointments where this doctor was involved
+    const feedbacks = await db
+      .select({
+        feedback: consultationFeedback,
+        appointment: appointments
+      })
+      .from(consultationFeedback)
+      .innerJoin(appointments, eq(consultationFeedback.appointmentId, appointments.id))
+      .where(eq(appointments.doctorId, parseInt(doctorId)))
+      .orderBy(desc(consultationFeedback.createdAt));
+    
+    return feedbacks.map(f => f.feedback);
+  }
 }
 
 export const storage = new DatabaseStorage();

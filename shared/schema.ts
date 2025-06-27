@@ -421,7 +421,115 @@ export const patientRegistrations = pgTable("patient_registrations", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Consultation Completion Reports - for doctors
+export const consultationReports = pgTable("consultation_reports", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
+  
+  // Main assessment
+  consultationCompleted: boolean("consultation_completed").notNull().default(true),
+  consultationNotes: text("consultation_notes"),
+  
+  // Technical issues
+  hadTechnicalIssues: boolean("had_technical_issues").notNull().default(false),
+  technicalIssuesDetails: text("technical_issues_details"),
+  audioQuality: varchar("audio_quality", { enum: ["excellent", "good", "fair", "poor"] }),
+  videoQuality: varchar("video_quality", { enum: ["excellent", "good", "fair", "poor"] }),
+  connectionStability: varchar("connection_stability", { enum: ["stable", "intermittent", "unstable"] }),
+  
+  // Patient interaction issues
+  hadPatientIssues: boolean("had_patient_issues").notNull().default(false),
+  patientIssuesDetails: text("patient_issues_details"),
+  patientCooperation: varchar("patient_cooperation", { enum: ["excellent", "good", "fair", "poor"] }),
+  
+  // Follow-up recommendations
+  recommendationsType: varchar("recommendations_type", { 
+    enum: ["none", "mental_health_severity", "clinical_complexity", "clinical_inconsistencies"] 
+  }).array(),
+  alertSignals: text("alert_signals"),
+  
+  // Next steps
+  requiresPresentialConsult: boolean("requires_presential_consult").notNull().default(false),
+  requiresContinuityConsult: boolean("requires_continuity_consult").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
 
+// Patient Consultation Feedback
+export const consultationFeedback = pgTable("consultation_feedback", {
+  id: serial("id").primaryKey(),
+  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
+  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  
+  // Technical experience
+  hadTechnicalIssues: boolean("had_technical_issues").notNull().default(false),
+  technicalIssuesDetails: text("technical_issues_details"),
+  audioQuality: varchar("audio_quality", { enum: ["excellent", "good", "fair", "poor"] }),
+  videoQuality: varchar("video_quality", { enum: ["excellent", "good", "fair", "poor"] }),
+  platformEaseOfUse: varchar("platform_ease_of_use", { enum: ["very_easy", "easy", "moderate", "difficult"] }),
+  
+  // Doctor interaction
+  hadDoctorInteractionIssues: boolean("had_doctor_interaction_issues").notNull().default(false),
+  doctorInteractionDetails: text("doctor_interaction_details"),
+  
+  // Overall satisfaction (existing medical evaluation system)
+  overallSatisfaction: integer("overall_satisfaction").notNull(), // 1-5 stars
+  doctorKnowledge: integer("doctor_knowledge").notNull(), // 1-5 stars
+  doctorAttention: integer("doctor_attention").notNull(), // 1-5 stars
+  wouldRecommend: boolean("would_recommend").notNull(),
+  testimonial: text("testimonial"),
+  
+  // Rescheduling preferences
+  wantsToReschedule: boolean("wants_to_reschedule").notNull().default(false),
+  rescheduleReason: text("reschedule_reason"),
+  prefersSameDoctorReschedule: boolean("prefers_same_doctor_reschedule").default(true),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Available slots for rescheduling
+export const availableSlots = pgTable("available_slots", {
+  id: serial("id").primaryKey(),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
+  slotDateTime: timestamp("slot_date_time").notNull(),
+  isAvailable: boolean("is_available").notNull().default(true),
+  consultationType: varchar("consultation_type", { enum: ["presential", "telemedicine"] }).notNull(),
+  duration: integer("duration").notNull().default(30), // minutes
+  price: decimal("price", { precision: 10, scale: 2 }),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Zod schemas for validation
+export const insertConsultationReportSchema = createInsertSchema(consultationReports).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertConsultationFeedbackSchema = createInsertSchema(consultationFeedback).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAvailableSlotSchema = createInsertSchema(availableSlots).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertConsultationReport = z.infer<typeof insertConsultationReportSchema>;
+export type InsertConsultationFeedback = z.infer<typeof insertConsultationFeedbackSchema>;
+export type InsertAvailableSlot = z.infer<typeof insertAvailableSlotSchema>;
+
+export type SelectConsultationReport = typeof consultationReports.$inferSelect;
+export type SelectConsultationFeedback = typeof consultationFeedback.$inferSelect;
+export type SelectAvailableSlot = typeof availableSlots.$inferSelect;
 
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({

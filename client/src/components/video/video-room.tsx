@@ -9,6 +9,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import MediaPermissions from './media-permissions';
 import SimpleMedicalRecord from './SimpleMedicalRecord';
+import DoctorConsultationCompletion from '../consultation/DoctorConsultationCompletion';
+import PatientConsultationFeedback from '../consultation/PatientConsultationFeedback';
 import { 
   Video, 
   VideoOff, 
@@ -67,6 +69,11 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   
   // Medical record states
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
+  
+  // Consultation completion states
+  const [showDoctorCompletion, setShowDoctorCompletion] = useState(false);
+  const [showPatientFeedback, setShowPatientFeedback] = useState(false);
+  const [isConsultationEnding, setIsConsultationEnding] = useState(false);
 
   // Fetch appointment details to get patient information
   const { data: appointment } = useQuery({
@@ -541,25 +548,89 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   };
 
   const endCall = () => {
-    wsRef.current?.send(JSON.stringify({
-      type: 'leave-video-call',
-      appointmentId
-    }));
-    
-    cleanup();
-    if (onEndCall) {
-      onEndCall();
-    } else {
-      // Navegação padrão se onEndCall não estiver definido
-      const currentUser = isTestMode ? testUser : user;
-      if (isTestMode) {
-        window.location.href = '/video-test';
-      } else if (currentUser?.role === 'doctor') {
-        window.location.href = '/doctor-agenda';
-      } else {
-        window.location.href = '/dashboard';
-      }
+    if (isTestMode) {
+      // No modo de teste, encerrar diretamente
+      cleanup();
+      window.location.href = '/video-test';
+      return;
     }
+
+    const currentUser = user;
+    if (!currentUser) return;
+
+    // Iniciar processo de finalização baseado no tipo de usuário
+    setIsConsultationEnding(true);
+    
+    if (currentUser.role === 'doctor') {
+      setShowDoctorCompletion(true);
+    } else {
+      setShowPatientFeedback(true);
+    }
+  };
+
+  const handleDoctorCompletionComplete = async (data: any) => {
+    try {
+      // Enviar relatório do médico para o backend
+      const response = await fetch('/api/consultation-reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appointmentId,
+          doctorId: user?.id,
+          ...data
+        })
+      });
+
+      if (response.ok) {
+        // Marcar consulta como concluída
+        await fetch(`/api/appointments/${appointmentId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'completed' })
+        });
+
+        cleanup();
+        setShowDoctorCompletion(false);
+        window.location.href = '/doctor-agenda';
+      }
+    } catch (error) {
+      console.error('Error saving doctor completion:', error);
+    }
+  };
+
+  const handlePatientFeedbackComplete = async (data: any) => {
+    try {
+      // Enviar feedback do paciente para o backend
+      const response = await fetch('/api/consultation-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appointmentId,
+          patientId: user?.id,
+          ...data
+        })
+      });
+
+      if (response.ok) {
+        cleanup();
+        setShowPatientFeedback(false);
+        
+        if (data.wantsToReschedule) {
+          // Redirecionar para agendamento
+          window.location.href = '/agendamentos';
+        } else {
+          window.location.href = '/dashboard';
+        }
+      }
+    } catch (error) {
+      console.error('Error saving patient feedback:', error);
+    }
+  };
+
+  const handleCancelCompletion = () => {
+    setShowDoctorCompletion(false);
+    setShowPatientFeedback(false);
+    setIsConsultationEnding(false);
   };
 
   const cleanup = () => {
@@ -851,6 +922,27 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
           </div>
         )}
       </div>
+
+      {/* Doctor Consultation Completion Modal */}
+      {showDoctorCompletion && (
+        <DoctorConsultationCompletion
+          appointmentId={appointmentId}
+          patientName={patientName || appointment?.patient?.user?.firstName || 'Paciente'}
+          onComplete={handleDoctorCompletionComplete}
+          onCancel={handleCancelCompletion}
+        />
+      )}
+
+      {/* Patient Consultation Feedback Modal */}
+      {showPatientFeedback && (
+        <PatientConsultationFeedback
+          appointmentId={appointmentId}
+          doctorName={doctorName || appointment?.doctor?.user?.firstName || 'Médico'}
+          consultationDuration={formatDuration(callDuration)}
+          onComplete={handlePatientFeedbackComplete}
+          onScheduleNew={() => window.location.href = '/agendamentos'}
+        />
+      )}
     </div>
   );
 }
