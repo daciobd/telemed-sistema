@@ -72,6 +72,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   
   // Medical record states
   const [showMedicalRecord, setShowMedicalRecord] = useState(false);
+  const [showMemedModal, setShowMemedModal] = useState(false);
   
   // Consultation completion states
   const [showDoctorCompletion, setShowDoctorCompletion] = useState(false);
@@ -992,7 +993,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
                         variant="outline" 
                         size="sm" 
                         className="w-full justify-start"
-                        onClick={() => window.open('https://memed.com.br', '_blank')}
+                        onClick={() => setShowMemedModal(true)}
                       >
                         <Pill className="h-4 w-4 mr-2" />
                         Abrir MEMED
@@ -1040,6 +1041,122 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
           onComplete={handlePatientFeedbackComplete}
           onScheduleNew={() => window.location.href = '/agendamentos'}
         />
+      )}
+
+      {/* MEMED Modal with Patient Data */}
+      {showMemedModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-gray-900">Dados do Paciente - MEMED</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowMemedModal(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </Button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-sm text-blue-700 mb-2">
+                    <strong>Instruções:</strong> Copie os dados abaixo e cole no MEMED para gerar a prescrição.
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => {
+                        const patientData = `Nome: ${patientName || 'Paciente Teste'}
+CPF: 123.456.789-12
+Data de Nascimento: 15/03/1978
+Telefone: (11) 99999-1234
+Endereço: Rua das Flores, 123 - São Paulo/SP
+Alergias: Penicilina
+Medicações Atuais: Losartana 50mg
+Condições: Hipertensão arterial
+Queixa Principal: Dor de cabeça persistente
+Sintomas: Cefaleia há 3 dias
+PA: 140/90 mmHg | FC: 78 bpm | Temp: 36.5°C`;
+                        
+                        navigator.clipboard.writeText(patientData);
+                        toast({
+                          title: "Dados copiados!",
+                          description: "Os dados do paciente foram copiados para a área de transferência.",
+                        });
+                      }}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      📋 Copiar Dados
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => window.open('https://memed.com.br', '_blank')}
+                    >
+                      🌐 Abrir MEMED
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Dados Pessoais</h4>
+                      <div className="bg-gray-50 p-3 rounded text-sm">
+                        <p><strong>Nome:</strong> {patientName || 'Paciente Teste'}</p>
+                        <p><strong>CPF:</strong> 123.456.789-12</p>
+                        <p><strong>Data de Nascimento:</strong> 15/03/1978</p>
+                        <p><strong>Telefone:</strong> (11) 99999-1234</p>
+                        <p><strong>Endereço:</strong> Rua das Flores, 123 - São Paulo/SP</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Histórico Médico</h4>
+                      <div className="bg-gray-50 p-3 rounded text-sm">
+                        <p><strong>Alergias:</strong> Penicilina</p>
+                        <p><strong>Medicações Atuais:</strong> Losartana 50mg</p>
+                        <p><strong>Condições:</strong> Hipertensão arterial</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Consulta Atual</h4>
+                      <div className="bg-gray-50 p-3 rounded text-sm">
+                        <p><strong>Queixa Principal:</strong> Dor de cabeça persistente</p>
+                        <p><strong>Sintomas:</strong> Cefaleia há 3 dias</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-800 mb-2">Sinais Vitais</h4>
+                      <div className="bg-gray-50 p-3 rounded text-sm">
+                        <p><strong>PA:</strong> 140/90 mmHg</p>
+                        <p><strong>FC:</strong> 78 bpm</p>
+                        <p><strong>Temperatura:</strong> 36.5°C</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-amber-800 mb-2">Como usar no MEMED:</h4>
+                  <ol className="text-sm text-amber-700 space-y-1 list-decimal list-inside">
+                    <li>Clique em "Copiar Dados" acima</li>
+                    <li>Abra o MEMED clicando em "Abrir MEMED"</li>
+                    <li>Crie uma nova prescrição</li>
+                    <li>Cole os dados do paciente nos campos correspondentes</li>
+                    <li>Adicione os medicamentos conforme diagnóstico</li>
+                    <li>Gere a prescrição digital</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
