@@ -268,6 +268,20 @@ src/
 - **Posicionamento**: Foca nos diferenciais tecnológicos únicos
 - **Conversão**: CTAs direcionados para demo e teste do sistema
 
+### Sistema de Tooltips para Acessibilidade de Usuários Iniciantes
+- **Data**: 27/06/2025
+- **Implementação**: Sistema completo de tooltips (dicas de ferramentas) em todos os botões FUNCIONANDO
+- **Funcionalidades**: 
+  - Tooltips nos botões de cópia da integração MEMED com instruções claras
+  - Tooltips nos controles de videoconsulta (câmera, microfone, compartilhamento de tela, chat)
+  - Tooltips nos botões principais (abrir MEMED, fechar modais, prontuário)
+  - Instruções específicas para cada funcionalidade em linguagem simples
+  - Melhor experiência para usuários neófitos e médicos iniciantes em telemedicina
+- **UX/UI**: Interface mais intuitiva com hover text explicativo
+- **Objetivo**: Facilitar uso por médicos não familiarizados com tecnologia
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - TESTADO E FUNCIONAL
+- **Cobertura**: MEMED, videoconsultas, prontuário eletrônico e navegação
+
 ### Sistema de Demonstração Médica e Funcionalidades Clínicas
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para demonstração com equipe médica fictícia

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useQuery } from '@tanstack/react-query';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import MediaPermissions from './media-permissions';
 import SimpleMedicalRecord from './SimpleMedicalRecord';
 import { 
@@ -685,51 +686,88 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         {/* Controls */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
           <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 flex items-center gap-2">
-            <Button
-              variant={isVideoEnabled ? "default" : "secondary"}
-              size="sm"
-              onClick={toggleVideo}
-              className="rounded-full"
-            >
-              {isVideoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
-            </Button>
-            
-            <Button
-              variant={isAudioEnabled ? "default" : "secondary"}
-              size="sm"
-              onClick={toggleAudio}
-              className="rounded-full"
-            >
-              {isAudioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
-            </Button>
-            
-            <Button
-              variant={isScreenSharing ? "default" : "outline"}
-              size="sm"
-              onClick={isScreenSharing ? stopScreenShare : startScreenShare}
-              className="rounded-full"
-            >
-              <Monitor className="h-4 w-4" />
-            </Button>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowChat(!showChat)}
-              className="rounded-full"
-            >
-              <MessageSquare className="h-4 w-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={isVideoEnabled ? "default" : "secondary"}
+                    size="sm"
+                    onClick={toggleVideo}
+                    className="rounded-full"
+                  >
+                    {isVideoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isVideoEnabled ? "Desligar câmera" : "Ligar câmera"}</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={isAudioEnabled ? "default" : "secondary"}
+                    size="sm"
+                    onClick={toggleAudio}
+                    className="rounded-full"
+                  >
+                    {isAudioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isAudioEnabled ? "Desligar microfone" : "Ligar microfone"}</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={isScreenSharing ? "default" : "outline"}
+                    size="sm"
+                    onClick={isScreenSharing ? stopScreenShare : startScreenShare}
+                    className="rounded-full"
+                  >
+                    <Monitor className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isScreenSharing ? "Parar compartilhamento de tela" : "Compartilhar tela"}</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowChat(!showChat)}
+                    className="rounded-full"
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{showChat ? "Fechar chat" : "Abrir chat"}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             
             {user?.role === 'doctor' && (
-              <Button
-                variant={showMedicalRecord ? "default" : "outline"}
-                size="sm"
-                onClick={() => setShowMedicalRecord(!showMedicalRecord)}
-                className="rounded-full"
-              >
-                <FileText className="h-4 w-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={showMedicalRecord ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setShowMedicalRecord(!showMedicalRecord)}
+                    className="rounded-full"
+                  >
+                    <FileText className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{showMedicalRecord ? "Fechar prontuário" : "Abrir prontuário"}</p>
+                </TooltipContent>
+              </Tooltip>
             )}
           </div>
         </div>

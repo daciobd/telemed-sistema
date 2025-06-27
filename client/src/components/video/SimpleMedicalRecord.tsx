@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { Save, FileText, CheckCircle, Search, Pill, ExternalLink, User, MapPin, Home, Phone } from "lucide-react";
@@ -657,146 +658,208 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
                     ✕
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 gap-2 mb-3">
-                  <Button 
-                    variant="outline"
-                    onClick={() => {
-                      const name = `${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA';
-                      navigator.clipboard.writeText(name);
-                      toast({
-                        title: "Nome de Registro copiado!",
-                        description: "Clique no 'X' acima para fechar ou continue copiando",
-                      });
-                    }}
-                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
-                    size="sm"
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Nome Registro
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => {
-                      const city = (patient as any).city || 'São Paulo';
-                      navigator.clipboard.writeText(city);
-                      toast({
-                        title: "Cidade copiada!",
-                        description: "Clique no 'X' acima para fechar ou continue copiando",
-                      });
-                    }}
-                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
-                    size="sm"
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Cidade
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => {
-                      const address = (patient as any).address || 'Rua das Flores, 123 - Centro';
-                      navigator.clipboard.writeText(address);
-                      toast({
-                        title: "Endereço copiado!",
-                        description: "Clique no 'X' acima para fechar ou continue copiando",
-                      });
-                    }}
-                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
-                    size="sm"
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Endereço
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => {
-                      const phone = (patient as any).phone || '(11) 99999-9999';
-                      navigator.clipboard.writeText(phone);
-                      toast({
-                        title: "Telefone copiado!",
-                        description: "Clique no 'X' acima para fechar ou continue copiando",
-                      });
-                    }}
-                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
-                    size="sm"
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Telefone
-                  </Button>
-                </div>
+                <TooltipProvider>
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          variant="outline"
+                          onClick={() => {
+                            const name = `${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA';
+                            navigator.clipboard.writeText(name);
+                            toast({
+                              title: "Nome de Registro copiado!",
+                              description: "Clique no 'X' acima para fechar ou continue copiando",
+                            });
+                          }}
+                          className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                          size="sm"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Nome Registro
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Clique para copiar o nome completo do paciente para colar no campo "Nome de Registro" da MEMED</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          variant="outline"
+                          onClick={() => {
+                            const city = (patient as any).city || 'São Paulo';
+                            navigator.clipboard.writeText(city);
+                            toast({
+                              title: "Cidade copiada!",
+                              description: "Clique no 'X' acima para fechar ou continue copiando",
+                            });
+                          }}
+                          className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                          size="sm"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Cidade
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Clique para copiar a cidade do paciente para colar no campo "Cidade" da MEMED</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          variant="outline"
+                          onClick={() => {
+                            const address = (patient as any).address || 'Rua das Flores, 123 - Centro';
+                            navigator.clipboard.writeText(address);
+                            toast({
+                              title: "Endereço copiado!",
+                              description: "Clique no 'X' acima para fechar ou continue copiando",
+                            });
+                          }}
+                          className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                          size="sm"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Endereço
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Clique para copiar o endereço completo do paciente para colar no campo "Endereço" da MEMED</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          variant="outline"
+                          onClick={() => {
+                            const phone = (patient as any).phone || '(11) 99999-9999';
+                            navigator.clipboard.writeText(phone);
+                            toast({
+                              title: "Telefone copiado!",
+                              description: "Clique no 'X' acima para fechar ou continue copiando",
+                            });
+                          }}
+                          className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                          size="sm"
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Telefone
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Clique para copiar o telefone do paciente para colar no campo "Telefone" da MEMED</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </TooltipProvider>
                 
                 {/* Campo opcional */}
                 <div className="border-t pt-2">
                   <p className="text-xs text-gray-600 mb-2">Campo Opcional:</p>
-                  <Button 
-                    variant="outline"
-                    onClick={() => {
-                      const socialName = (patient as any).socialName || '';
-                      if (socialName) {
-                        navigator.clipboard.writeText(socialName);
-                        toast({
-                          title: "Nome Social copiado!",
-                          description: "Clique no 'X' acima para fechar ou continue copiando",
-                        });
-                      } else {
-                        toast({
-                          title: "Nome Social vazio",
-                          description: "Este paciente não possui nome social cadastrado",
-                          variant: "destructive"
-                        });
-                      }
-                    }}
-                    className="border-gray-400 text-gray-600 hover:bg-gray-50"
-                    size="sm"
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Nome Social
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="outline"
+                        onClick={() => {
+                          const socialName = (patient as any).socialName || '';
+                          if (socialName) {
+                            navigator.clipboard.writeText(socialName);
+                            toast({
+                              title: "Nome Social copiado!",
+                              description: "Clique no 'X' acima para fechar ou continue copiando",
+                            });
+                          } else {
+                            toast({
+                              title: "Nome Social vazio",
+                              description: "Este paciente não possui nome social cadastrado",
+                              variant: "destructive"
+                            });
+                          }
+                        }}
+                        className="border-gray-400 text-gray-600 hover:bg-gray-50"
+                        size="sm"
+                      >
+                        <FileText className="h-4 w-4 mr-1" />
+                        Nome Social
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Clique para copiar o nome social do paciente (se houver) para colar no campo "Nome Social" da MEMED</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
 
               {/* Botões principais */}
               <div className="space-y-2">
-                <Button
-                  onClick={() => {
-                    window.open('https://memed.com.br/prescricao', '_blank');
-                    setShowPatientData(false); // Fecha o modal
-                    toast({
-                      title: "MEMED aberta",
-                      description: "Use os dados copiados nos campos corretos.",
-                    });
-                  }}
-                  className="w-full bg-green-600 hover:bg-green-700"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Abrir MEMED e Fechar Modal
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={() => {
+                        window.open('https://memed.com.br/prescricao', '_blank');
+                        setShowPatientData(false); // Fecha o modal
+                        toast({
+                          title: "MEMED aberta",
+                          description: "Use os dados copiados nos campos corretos.",
+                        });
+                      }}
+                      className="w-full bg-green-600 hover:bg-green-700"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Abrir MEMED e Fechar Modal
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Abre o site da MEMED em nova aba e fecha este modal. Use após copiar os dados necessários.</p>
+                  </TooltipContent>
+                </Tooltip>
                 
                 <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      const patientData = `Nome: ${`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          const patientData = `Nome: ${`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
 CPF: ${(patient as any).cpf || '123.456.789-01'}
 Telefone: ${(patient as any).phone || '(11) 99999-9999'}
 Endereço: ${(patient as any).address || 'São Paulo - SP'}`;
-                      
-                      navigator.clipboard.writeText(patientData);
-                      toast({
-                        title: "Dados completos copiados",
-                        description: "Cole os dados na MEMED com Ctrl+V",
-                      });
-                    }}
-                    className="flex-1"
-                  >
-                    Copiar Todos
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowPatientData(false)}
-                    className="flex-1 bg-red-50 hover:bg-red-100 border-red-300 text-red-700"
-                  >
-                    ✕ Fechar
-                  </Button>
+                          
+                          navigator.clipboard.writeText(patientData);
+                          toast({
+                            title: "Dados completos copiados",
+                            description: "Cole os dados na MEMED com Ctrl+V",
+                          });
+                        }}
+                        className="flex-1"
+                      >
+                        Copiar Todos
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Copia todos os dados do paciente em formato de texto para colar diretamente na MEMED</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowPatientData(false)}
+                        className="flex-1 bg-red-50 hover:bg-red-100 border-red-300 text-red-700"
+                      >
+                        ✕ Fechar
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Fecha este modal sem abrir a MEMED. Use se quiser continuar no prontuário.</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
             </div>
