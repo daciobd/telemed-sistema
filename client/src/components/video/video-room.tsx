@@ -1063,33 +1063,9 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
               <div className="space-y-6">
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-sm text-blue-700 mb-2">
-                    <strong>Instruções:</strong> Copie os dados abaixo e cole no MEMED para gerar a prescrição.
+                    <strong>Instruções:</strong> Use os ícones 📋 ao lado de cada dado para copiar individualmente no MEMED.
                   </p>
                   <div className="flex gap-2">
-                    <Button
-                      onClick={() => {
-                        const patientData = `Nome: ${patientName || 'Paciente Teste'}
-CPF: 123.456.789-12
-Data de Nascimento: 15/03/1978
-Telefone: (11) 99999-1234
-Endereço: Rua das Flores, 123 - São Paulo/SP
-Alergias: Penicilina
-Medicações Atuais: Losartana 50mg
-Condições: Hipertensão arterial
-Queixa Principal: Dor de cabeça persistente
-Sintomas: Cefaleia há 3 dias
-PA: 140/90 mmHg | FC: 78 bpm | Temp: 36.5°C`;
-                        
-                        navigator.clipboard.writeText(patientData);
-                        toast({
-                          title: "Dados copiados!",
-                          description: "Os dados do paciente foram copiados para a área de transferência.",
-                        });
-                      }}
-                      className="bg-green-600 hover:bg-green-700"
-                    >
-                      📋 Copiar Dados
-                    </Button>
                     <Button
                       variant="outline"
                       onClick={() => window.open('https://memed.com.br', '_blank')}
@@ -1103,12 +1079,91 @@ PA: 140/90 mmHg | FC: 78 bpm | Temp: 36.5°C`;
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-semibold text-gray-800 mb-2">Dados Pessoais</h4>
-                      <div className="bg-gray-50 p-3 rounded text-sm">
-                        <p><strong>Nome:</strong> {patientName || 'Paciente Teste'}</p>
-                        <p><strong>CPF:</strong> 123.456.789-12</p>
-                        <p><strong>Data de Nascimento:</strong> 15/03/1978</p>
-                        <p><strong>Telefone:</strong> (11) 99999-1234</p>
-                        <p><strong>Endereço:</strong> Rua das Flores, 123 - São Paulo/SP</p>
+                      <div className="bg-gray-50 p-3 rounded text-sm space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span><strong>Nome:</strong> {patientName || 'Paciente Teste'}</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText(patientName || 'Paciente Teste');
+                              toast({ title: "Nome copiado!", duration: 1500 });
+                            }}
+                          >
+                            📋
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span><strong>CPF:</strong> 123.456.789-12</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText('123.456.789-12');
+                              toast({ title: "CPF copiado!", duration: 1500 });
+                            }}
+                          >
+                            📋
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span><strong>Data de Nascimento:</strong> 15/03/1978</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText('15/03/1978');
+                              toast({ title: "Data de nascimento copiada!", duration: 1500 });
+                            }}
+                          >
+                            📋
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span><strong>Telefone:</strong> (11) 99999-1234</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText('(11) 99999-1234');
+                              toast({ title: "Telefone copiado!", duration: 1500 });
+                            }}
+                          >
+                            📋
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span><strong>Endereço:</strong> Rua das Flores, 123</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText('Rua das Flores, 123');
+                              toast({ title: "Endereço copiado!", duration: 1500 });
+                            }}
+                          >
+                            📋
+                          </Button>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span><strong>Cidade:</strong> São Paulo/SP</span>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 w-6 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText('São Paulo/SP');
+                              toast({ title: "Cidade copiada!", duration: 1500 });
+                            }}
+                          >
+                            📋
+                          </Button>
+                        </div>
                       </div>
                     </div>
 
@@ -1145,10 +1200,10 @@ PA: 140/90 mmHg | FC: 78 bpm | Temp: 36.5°C`;
                 <div className="bg-yellow-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-amber-800 mb-2">Como usar no MEMED:</h4>
                   <ol className="text-sm text-amber-700 space-y-1 list-decimal list-inside">
-                    <li>Clique em "Copiar Dados" acima</li>
-                    <li>Abra o MEMED clicando em "Abrir MEMED"</li>
-                    <li>Crie uma nova prescrição</li>
-                    <li>Cole os dados do paciente nos campos correspondentes</li>
+                    <li>Abra o MEMED clicando em "Abrir MEMED" acima</li>
+                    <li>Crie uma nova prescrição no MEMED</li>
+                    <li>Use os ícones 📋 para copiar cada dado individualmente</li>
+                    <li>Cole cada dado no campo correspondente do MEMED</li>
                     <li>Adicione os medicamentos conforme diagnóstico</li>
                     <li>Gere a prescrição digital</li>
                   </ol>
