@@ -307,6 +307,7 @@ src/
 - **Teste Validado**: Sistema preparado para uso com dois dispositivos simultaneamente
 - **Atualização**: Prontuário e finalização de consulta totalmente funcionais no modo teste
 - **Modal MEMED**: Sistema completo com dados do paciente prontos para copiar e instruções detalhadas
+- **Chat Corrigido**: Sistema de chat com logs de debug e prevenção de duplicatas implementado
 
 ### Sistema de Calendário Médico Avançado com Navegação Mensal
 - **Data**: 27/06/2025

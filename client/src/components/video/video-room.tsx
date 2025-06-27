@@ -265,6 +265,7 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         await handleIceCandidate(data.candidate);
         break;
       case 'chat-message':
+        console.log('Received chat message:', data);
         addChatMessage(data);
         break;
       case 'user-left':
@@ -515,9 +516,10 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       type: 'user'
     };
     
+    console.log('Sending chat message:', message);
     setChatMessages(prev => [...prev, message]);
     
-    wsRef.current?.send(JSON.stringify({
+    const wsMessage = {
       type: 'chat-message',
       appointmentId,
       id: message.id,
@@ -525,7 +527,10 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       userName: message.userName,
       message: message.message,
       timestamp: message.timestamp
-    }));
+    };
+    
+    console.log('WebSocket message to send:', wsMessage);
+    wsRef.current?.send(JSON.stringify(wsMessage));
     
     setChatMessage('');
   };
@@ -537,10 +542,16 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       userName: data.userName,
       message: data.message,
       timestamp: new Date(data.timestamp),
-      type: data.type
+      type: data.type || 'user'
     };
     
-    setChatMessages(prev => [...prev, message]);
+    setChatMessages(prev => {
+      // Avoid duplicate messages
+      if (prev.find(m => m.id === message.id)) {
+        return prev;
+      }
+      return [...prev, message];
+    });
   };
 
   const handleUserLeft = () => {
@@ -895,19 +906,29 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
             </div>
             
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
-              {chatMessages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`p-2 rounded text-sm ${
-                    msg.userId === user?.id
-                      ? 'bg-blue-100 ml-auto max-w-[80%]'
-                      : 'bg-gray-100 mr-auto max-w-[80%]'
-                  }`}
-                >
-                  <div className="font-medium text-xs text-gray-600">{msg.userName}</div>
-                  <div>{msg.message}</div>
+              {chatMessages.length === 0 && (
+                <div className="text-center text-gray-500 text-sm py-4">
+                  Nenhuma mensagem ainda. Digite algo para começar a conversa.
                 </div>
-              ))}
+              )}
+              {chatMessages.map((msg) => {
+                const currentUserId = isTestMode ? testUser?.id : user?.id;
+                const isMyMessage = msg.userId === currentUserId;
+                
+                return (
+                  <div
+                    key={msg.id}
+                    className={`p-2 rounded text-sm ${
+                      isMyMessage
+                        ? 'bg-blue-100 ml-auto max-w-[80%]'
+                        : 'bg-gray-100 mr-auto max-w-[80%]'
+                    }`}
+                  >
+                    <div className="font-medium text-xs text-gray-600">{msg.userName}</div>
+                    <div>{msg.message}</div>
+                  </div>
+                );
+              })}
             </div>
             
             <div className="p-4 border-t flex gap-2">
