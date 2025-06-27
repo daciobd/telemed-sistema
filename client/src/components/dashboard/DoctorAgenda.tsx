@@ -129,7 +129,9 @@ export default function DoctorAgenda() {
             </CardContent>
           </Card>
         ) : (
-          (todayAppointments as any[]).filter((apt: any) => isToday(new Date(apt.appointmentDate))).map((appointment: any) => (
+          (todayAppointments as any[]).filter((apt: any) => 
+            apt.status === 'waiting' || isToday(new Date(apt.appointmentDate))
+          ).map((appointment: any) => (
             <Card 
               key={appointment.id}
               className={`transition-all duration-200 hover:shadow-md ${
