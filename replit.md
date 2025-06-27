@@ -292,7 +292,10 @@ src/
   - Chat em tempo real durante as videoconsultas
   - Controles completos de áudio/vídeo para ambos os participantes
   - Compartilhamento de tela funcional
-  - Prontuário eletrônico e MEMED acessíveis durante teste
+  - **Prontuário eletrônico específico para testes** com dados simulados realistas
+  - **Botão "Finalizar Consulta"** exclusivo para médicos no teste
+  - **Sistema de finalização completo** com relatório médico e feedback do paciente
+  - MEMED acessível durante teste
   - ID de consulta personalizável para testes isolados
   - Botão de acesso direto na landing page
 - **UX/UI**: Interface intuitiva com instruções passo a passo
@@ -302,6 +305,7 @@ src/
 - **Objetivo**: Permitir demonstrações realistas da plataforma para médicos e clientes
 - **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA TESTES
 - **Teste Validado**: Sistema preparado para uso com dois dispositivos simultaneamente
+- **Atualização**: Prontuário e finalização de consulta totalmente funcionais no modo teste
 
 ### Sistema de Calendário Médico Avançado com Navegação Mensal
 - **Data**: 27/06/2025

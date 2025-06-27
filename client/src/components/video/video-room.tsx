@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { useQuery } from '@tanstack/react-query';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -26,7 +27,8 @@ import {
   Clock,
   FileText,
   Calendar,
-  FileCheck
+  FileCheck,
+  Pill
 } from 'lucide-react';
 
 interface VideoRoomProps {
@@ -932,13 +934,89 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
         )}
 
         {/* Medical Record Panel */}
-        {showMedicalRecord && user?.role === 'doctor' && (
+        {showMedicalRecord && (user?.role === 'doctor' || (isTestMode && testUser?.role === 'doctor')) && (
           <div className="absolute left-4 top-4 bottom-4 w-96 bg-white rounded-lg shadow-lg overflow-hidden">
-            <SimpleMedicalRecord 
-              appointmentId={appointmentId}
-              patientId={1}
-              isDoctor={true}
-            />
+            {isTestMode ? (
+              <div className="p-6 h-full overflow-y-auto">
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">Prontuário Eletrônico</h3>
+                  <div className="text-sm text-blue-600 bg-blue-50 p-2 rounded">
+                    Modo de teste - Dados simulados
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-2">Dados do Paciente</h4>
+                    <div className="text-sm space-y-1">
+                      <p><strong>Nome:</strong> {patientName || 'Paciente Teste'}</p>
+                      <p><strong>CPF:</strong> ***.***.***-12 (protegido)</p>
+                      <p><strong>Idade:</strong> 45 anos</p>
+                      <p><strong>Telefone:</strong> (11) ****-1234 (protegido)</p>
+                    </div>
+                  </div>
+                  
+                  <hr className="my-4 border-gray-200" />
+                  
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-2">Histórico Médico</h4>
+                    <div className="text-sm space-y-1">
+                      <p><strong>Alergias:</strong> Penicilina</p>
+                      <p><strong>Medicações Atuais:</strong> Losartana 50mg</p>
+                      <p><strong>Condições:</strong> Hipertensão arterial</p>
+                    </div>
+                  </div>
+                  
+                  <hr className="my-4 border-gray-200" />
+                  
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-2">Consulta Atual</h4>
+                    <div className="text-sm space-y-1">
+                      <p><strong>Queixa Principal:</strong> Dor de cabeça persistente</p>
+                      <p><strong>Sintomas:</strong> Cefaleia há 3 dias</p>
+                      <p><strong>Sinais Vitais:</strong></p>
+                      <ul className="ml-4 list-disc">
+                        <li>PA: 140/90 mmHg</li>
+                        <li>FC: 78 bpm</li>
+                        <li>Temp: 36.5°C</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <hr className="my-4 border-gray-200" />
+                  
+                  <div>
+                    <h4 className="font-semibold text-gray-800 mb-2">Ações Disponíveis</h4>
+                    <div className="space-y-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full justify-start"
+                        onClick={() => window.open('https://memed.com.br', '_blank')}
+                      >
+                        <Pill className="h-4 w-4 mr-2" />
+                        Abrir MEMED
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full justify-start"
+                        onClick={() => alert('Função disponível no sistema completo')}
+                      >
+                        <FileText className="h-4 w-4 mr-2" />
+                        Solicitar Exames
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <SimpleMedicalRecord 
+                appointmentId={appointmentId}
+                patientId={1}
+                isDoctor={true}
+              />
+            )}
           </div>
         )}
       </div>
