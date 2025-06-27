@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
-import { Save, FileText, CheckCircle, Search, Pill, ExternalLink } from "lucide-react";
+import { Save, FileText, CheckCircle, Search, Pill, ExternalLink, User, MapPin, Home, Phone } from "lucide-react";
 
 interface SimpleMedicalRecordProps {
   appointmentId: number;
@@ -605,73 +605,141 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
             </div>
             
             <div className="space-y-3 mb-4">
-              <div className="p-3 bg-gray-50 rounded">
-                <label className="text-sm font-medium text-gray-600">Nome Completo:</label>
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                <label className="text-sm font-medium text-blue-800">Nome de Registro (obrigatório MEMED):</label>
                 <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
                   {`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
                 </p>
               </div>
               
               <div className="p-3 bg-gray-50 rounded">
-                <label className="text-sm font-medium text-gray-600">CPF:</label>
+                <label className="text-sm font-medium text-gray-600">Nome Social (opcional MEMED):</label>
                 <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
-                  {(patient as any).cpf || '123.456.789-01'}
+                  {(patient as any).socialName || ''}
                 </p>
               </div>
               
-              <div className="p-3 bg-gray-50 rounded">
-                <label className="text-sm font-medium text-gray-600">Telefone:</label>
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                <label className="text-sm font-medium text-blue-800">Cidade (obrigatório MEMED):</label>
+                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
+                  {(patient as any).city || 'São Paulo'}
+                </p>
+              </div>
+              
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                <label className="text-sm font-medium text-blue-800">Endereço (obrigatório MEMED):</label>
+                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
+                  {(patient as any).address || 'Rua das Flores, 123 - Centro'}
+                </p>
+              </div>
+              
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                <label className="text-sm font-medium text-blue-800">Telefone (obrigatório MEMED):</label>
                 <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
                   {(patient as any).phone || '(11) 99999-9999'}
-                </p>
-              </div>
-              
-              <div className="p-3 bg-gray-50 rounded">
-                <label className="text-sm font-medium text-gray-600">Endereço:</label>
-                <p className="font-mono text-sm bg-white p-2 rounded border mt-1">
-                  {(patient as any).address || 'São Paulo - SP'}
                 </p>
               </div>
             </div>
             
             <div className="space-y-3">
-              {/* Solução para campos separados */}
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                <p className="text-xs text-orange-800 mb-2 font-medium">
-                  🔧 SOLUÇÃO PARA CAMPOS SEPARADOS:
+              {/* Solução completa para MEMED */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-sm text-green-800 mb-3 font-semibold">
+                  📋 COPIAR DADOS PARA MEMED (campos obrigatórios):
                 </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button 
-                    variant="outline"
-                    onClick={() => {
-                      const cpf = (patient as any).cpf || '123.456.789-01';
-                      navigator.clipboard.writeText(cpf);
-                      toast({
-                        title: "CPF copiado!",
-                        description: "Cole no campo 'CPF do paciente' da MEMED",
-                      });
-                    }}
-                    className="border-orange-500 text-orange-700 hover:bg-orange-100"
-                    size="sm"
-                  >
-                    <FileText className="h-4 w-4 mr-1" />
-                    Só CPF
-                  </Button>
+                <div className="grid grid-cols-2 gap-2 mb-3">
                   <Button 
                     variant="outline"
                     onClick={() => {
                       const name = `${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA';
                       navigator.clipboard.writeText(name);
                       toast({
-                        title: "Nome copiado!",
-                        description: "Cole no campo 'Nome completo' da MEMED",
+                        title: "Nome de Registro copiado!",
+                        description: "Cole no campo 'Nome de Registro' da MEMED",
                       });
                     }}
-                    className="border-orange-500 text-orange-700 hover:bg-orange-100"
+                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
                     size="sm"
                   >
                     <FileText className="h-4 w-4 mr-1" />
-                    Só Nome
+                    Nome Registro
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      const city = (patient as any).city || 'São Paulo';
+                      navigator.clipboard.writeText(city);
+                      toast({
+                        title: "Cidade copiada!",
+                        description: "Cole no campo 'Cidade' da MEMED",
+                      });
+                    }}
+                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                    size="sm"
+                  >
+                    <FileText className="h-4 w-4 mr-1" />
+                    Cidade
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      const address = (patient as any).address || 'Rua das Flores, 123 - Centro';
+                      navigator.clipboard.writeText(address);
+                      toast({
+                        title: "Endereço copiado!",
+                        description: "Cole no campo 'Endereço' da MEMED",
+                      });
+                    }}
+                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                    size="sm"
+                  >
+                    <FileText className="h-4 w-4 mr-1" />
+                    Endereço
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      const phone = (patient as any).phone || '(11) 99999-9999';
+                      navigator.clipboard.writeText(phone);
+                      toast({
+                        title: "Telefone copiado!",
+                        description: "Cole no campo 'Telefone' da MEMED",
+                      });
+                    }}
+                    className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                    size="sm"
+                  >
+                    <FileText className="h-4 w-4 mr-1" />
+                    Telefone
+                  </Button>
+                </div>
+                
+                {/* Campo opcional */}
+                <div className="border-t pt-2">
+                  <p className="text-xs text-gray-600 mb-2">Campo Opcional:</p>
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      const socialName = (patient as any).socialName || '';
+                      if (socialName) {
+                        navigator.clipboard.writeText(socialName);
+                        toast({
+                          title: "Nome Social copiado!",
+                          description: "Cole no campo 'Nome Social' da MEMED",
+                        });
+                      } else {
+                        toast({
+                          title: "Nome Social vazio",
+                          description: "Este paciente não possui nome social cadastrado",
+                          variant: "destructive"
+                        });
+                      }
+                    }}
+                    className="border-gray-400 text-gray-600 hover:bg-gray-50"
+                    size="sm"
+                  >
+                    <FileText className="h-4 w-4 mr-1" />
+                    Nome Social
                   </Button>
                 </div>
               </div>
