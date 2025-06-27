@@ -644,9 +644,19 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
             <div className="space-y-3">
               {/* Solução completa para MEMED */}
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-sm text-green-800 mb-3 font-semibold">
-                  📋 COPIAR DADOS PARA MEMED (campos obrigatórios):
-                </p>
+                <div className="flex justify-between items-center mb-3">
+                  <p className="text-sm text-green-800 font-semibold">
+                    📋 COPIAR DADOS PARA MEMED (campos obrigatórios):
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPatientData(false)}
+                    className="text-red-600 hover:bg-red-100 h-6 w-6 p-0"
+                  >
+                    ✕
+                  </Button>
+                </div>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   <Button 
                     variant="outline"
@@ -655,7 +665,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
                       navigator.clipboard.writeText(name);
                       toast({
                         title: "Nome de Registro copiado!",
-                        description: "Cole no campo 'Nome de Registro' da MEMED",
+                        description: "Clique no 'X' acima para fechar ou continue copiando",
                       });
                     }}
                     className="border-blue-500 text-blue-700 hover:bg-blue-50"
@@ -671,7 +681,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
                       navigator.clipboard.writeText(city);
                       toast({
                         title: "Cidade copiada!",
-                        description: "Cole no campo 'Cidade' da MEMED",
+                        description: "Clique no 'X' acima para fechar ou continue copiando",
                       });
                     }}
                     className="border-blue-500 text-blue-700 hover:bg-blue-50"
@@ -687,7 +697,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
                       navigator.clipboard.writeText(address);
                       toast({
                         title: "Endereço copiado!",
-                        description: "Cole no campo 'Endereço' da MEMED",
+                        description: "Clique no 'X' acima para fechar ou continue copiando",
                       });
                     }}
                     className="border-blue-500 text-blue-700 hover:bg-blue-50"
@@ -703,7 +713,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
                       navigator.clipboard.writeText(phone);
                       toast({
                         title: "Telefone copiado!",
-                        description: "Cole no campo 'Telefone' da MEMED",
+                        description: "Clique no 'X' acima para fechar ou continue copiando",
                       });
                     }}
                     className="border-blue-500 text-blue-700 hover:bg-blue-50"
@@ -725,7 +735,7 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
                         navigator.clipboard.writeText(socialName);
                         toast({
                           title: "Nome Social copiado!",
-                          description: "Cole no campo 'Nome Social' da MEMED",
+                          description: "Clique no 'X' acima para fechar ou continue copiando",
                         });
                       } else {
                         toast({
@@ -783,9 +793,9 @@ Endereço: ${(patient as any).address || 'São Paulo - SP'}`;
                   <Button
                     variant="outline"
                     onClick={() => setShowPatientData(false)}
-                    className="flex-1"
+                    className="flex-1 bg-red-50 hover:bg-red-100 border-red-300 text-red-700"
                   >
-                    Fechar
+                    ✕ Fechar
                   </Button>
                 </div>
               </div>
