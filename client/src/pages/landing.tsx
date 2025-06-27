@@ -53,6 +53,15 @@ export default function Landing() {
             </Button>
             <div className="flex gap-3">
               <Button 
+                onClick={() => setLocation('/video-test')}
+                variant="outline"
+                size="lg"
+                className="text-lg px-6 py-3 border-green-600 text-green-600 hover:bg-green-50"
+              >
+                <Video className="h-5 w-5 mr-2" />
+                Testar Videoconsulta
+              </Button>
+              <Button 
                 onClick={() => setLocation('/register-doctor')}
                 variant="outline"
                 size="lg"

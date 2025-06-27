@@ -12,6 +12,7 @@ import Patients from "@/pages/patients";
 import MedicalRecords from "@/pages/medical-records";
 import Prescriptions from "@/pages/prescriptions";
 import VideoConsultation from "@/pages/video-consultation";
+import VideoTestPage from "@/pages/video-test";
 import Reports from "@/pages/reports";
 import CalendarView from "@/pages/calendar";
 import TeleconsultAuction from "@/pages/teleconsult-auction";
@@ -59,6 +60,7 @@ function Router() {
       {/* Testing routes - temporarily public for demo */}
       <Route path="/agenda-medica" component={DoctorAgendaPage} />
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
+      <Route path="/video-test" component={VideoTestPage} />
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />

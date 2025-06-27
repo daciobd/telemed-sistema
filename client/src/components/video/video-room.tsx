@@ -30,7 +30,7 @@ interface VideoRoomProps {
   appointmentId: number;
   patientName?: string;
   doctorName?: string;
-  onEndCall: () => void;
+  onEndCall?: () => void;
 }
 
 interface ChatMessage {
@@ -45,6 +45,12 @@ interface ChatMessage {
 export default function VideoRoom({ appointmentId, patientName, doctorName, onEndCall }: VideoRoomProps) {
   const { user } = useAuth();
   const { toast } = useToast();
+  
+  // Detectar se estamos no modo de teste (URL /video-test)
+  const isTestMode = window.location.pathname === '/video-test';
+  
+  // Para modo de teste, simular um usuário baseado no localStorage
+  const testUser = isTestMode ? JSON.parse(localStorage.getItem('testUser') || '{}') : null;
   
   // Video/Audio states
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -145,10 +151,11 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     // Notify server that media is ready
     setTimeout(() => {
       if (wsRef.current?.readyState === WebSocket.OPEN) {
+        const currentUser = isTestMode ? testUser : user;
         wsRef.current.send(JSON.stringify({
           type: 'media-ready',
           appointmentId,
-          userId: user?.id
+          userId: currentUser?.id
         }));
       }
     }, 500);
@@ -204,11 +211,12 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
       
       // Small delay to ensure connection is stable
       setTimeout(() => {
+        const currentUser = isTestMode ? testUser : user;
         wsRef.current?.send(JSON.stringify({
           type: 'join-video-call',
           appointmentId,
-          userId: user?.id,
-          role: user?.role || 'patient'
+          userId: currentUser?.id,
+          role: currentUser?.role || 'patient'
         }));
       }, 100);
     };
@@ -486,10 +494,11 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
   const sendChatMessage = () => {
     if (!chatMessage.trim()) return;
     
+    const currentUser = isTestMode ? testUser : user;
     const message: ChatMessage = {
       id: Date.now().toString(),
-      userId: user?.id || '',
-      userName: `${user?.firstName} ${user?.lastName}`,
+      userId: currentUser?.id || '',
+      userName: isTestMode ? testUser?.name : `${user?.firstName} ${user?.lastName}`,
       message: chatMessage,
       timestamp: new Date(),
       type: 'user'
@@ -538,7 +547,19 @@ export default function VideoRoom({ appointmentId, patientName, doctorName, onEn
     }));
     
     cleanup();
-    onEndCall();
+    if (onEndCall) {
+      onEndCall();
+    } else {
+      // Navegação padrão se onEndCall não estiver definido
+      const currentUser = isTestMode ? testUser : user;
+      if (isTestMode) {
+        window.location.href = '/video-test';
+      } else if (currentUser?.role === 'doctor') {
+        window.location.href = '/doctor-agenda';
+      } else {
+        window.location.href = '/dashboard';
+      }
+    }
   };
 
   const cleanup = () => {

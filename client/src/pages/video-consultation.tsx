@@ -83,7 +83,7 @@ export default function VideoConsultation() {
           appointmentId={activeCall.appointmentId}
           patientName={activeCall.patientName}
           doctorName={activeCall.doctorName}
-          onLeave={endVideoCall}
+          onEndCall={endVideoCall}
         />
       </div>
     );

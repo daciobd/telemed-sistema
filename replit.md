@@ -282,6 +282,27 @@ src/
 - **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - TESTADO E FUNCIONAL
 - **Cobertura**: MEMED, videoconsultas, prontuário eletrônico e navegação
 
+### Sistema de Teste de Videoconsulta para Duas Pessoas
+- **Data**: 27/06/2025
+- **Implementação**: Sistema completo para testes realistas de videoconsulta entre duas pessoas FUNCIONANDO
+- **Funcionalidades**: 
+  - Página de configuração `/video-test` com seleção de médico/paciente
+  - Suporte para usuários simulados através de localStorage
+  - Sistema WebRTC peer-to-peer funcional entre dois dispositivos diferentes
+  - Chat em tempo real durante as videoconsultas
+  - Controles completos de áudio/vídeo para ambos os participantes
+  - Compartilhamento de tela funcional
+  - Prontuário eletrônico e MEMED acessíveis durante teste
+  - ID de consulta personalizável para testes isolados
+  - Botão de acesso direto na landing page
+- **UX/UI**: Interface intuitiva com instruções passo a passo
+- **Documentação**: Arquivo TESTE_VIDEOCONSULTA_DUAS_PESSOAS.md criado
+- **Navegação**: Botão verde "Testar Videoconsulta" na página inicial
+- **Rota**: `/video-test` público para acesso sem autenticação
+- **Objetivo**: Permitir demonstrações realistas da plataforma para médicos e clientes
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA TESTES
+- **Teste Validado**: Sistema preparado para uso com dois dispositivos simultaneamente
+
 ### Sistema de Demonstração Médica e Funcionalidades Clínicas
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para demonstração com equipe médica fictícia
