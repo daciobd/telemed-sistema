@@ -677,37 +677,49 @@ export default function SimpleMedicalRecord({ appointmentId, patientId, isDoctor
               </div>
 
               {/* Botões principais */}
-              <div className="flex gap-2">
+              <div className="space-y-2">
                 <Button
                   onClick={() => {
-                    window.open('https://memed.com.br', '_blank');
+                    window.open('https://memed.com.br/prescricao', '_blank');
+                    setShowPatientData(false); // Fecha o modal
                     toast({
                       title: "MEMED aberta",
-                      description: "Use os botões acima para copiar dados específicos.",
+                      description: "Use os dados copiados nos campos corretos.",
                     });
                   }}
-                  className="flex-1"
+                  className="w-full bg-green-600 hover:bg-green-700"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  Abrir MEMED
+                  Abrir MEMED e Fechar Modal
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    const patientData = `Nome: ${`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
+                
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const patientData = `Nome: ${`${(patient as any).user?.firstName || ''} ${(patient as any).user?.lastName || ''}`.trim() || 'DACIO DUTRA'}
 CPF: ${(patient as any).cpf || '123.456.789-01'}
 Telefone: ${(patient as any).phone || '(11) 99999-9999'}
 Endereço: ${(patient as any).address || 'São Paulo - SP'}`;
-                    
-                    navigator.clipboard.writeText(patientData);
-                    toast({
-                      title: "Dados completos copiados",
-                      description: "Cole os dados na MEMED com Ctrl+V",
-                    });
-                  }}
-                >
-                  Copiar Todos
-                </Button>
+                      
+                      navigator.clipboard.writeText(patientData);
+                      toast({
+                        title: "Dados completos copiados",
+                        description: "Cole os dados na MEMED com Ctrl+V",
+                      });
+                    }}
+                    className="flex-1"
+                  >
+                    Copiar Todos
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowPatientData(false)}
+                    className="flex-1"
+                  >
+                    Fechar
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
