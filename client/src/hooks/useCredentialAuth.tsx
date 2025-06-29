@@ -13,6 +13,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginAsDemo: (role: string, demoData: any) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -62,6 +63,22 @@ export function CredentialAuthProvider({ children }: { children: ReactNode }) {
     setUser(result.user);
   };
 
+  const loginAsDemo = async (role: string, demoData: any) => {
+    const demoUser = {
+      id: `demo_${role}_${Date.now()}`,
+      role: role,
+      firstName: demoData.name?.split(' ')[0] || 'Demo',
+      lastName: demoData.name?.split(' ').slice(1).join(' ') || 'User',
+      email: 'demo@telemed.com',
+      specialty: demoData.specialty || 'Clínico Geral',
+      profileImageUrl: null,
+      ...demoData
+    };
+    
+    setUser(demoUser);
+    setIsLoading(false);
+  };
+
   const logout = async () => {
     try {
       await fetch('/api/auth/logout', {
@@ -87,6 +104,7 @@ export function CredentialAuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         login,
+        loginAsDemo,
         logout,
         refreshUser,
       }}

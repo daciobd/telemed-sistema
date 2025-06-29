@@ -195,6 +195,27 @@ src/
 
 ## Mudanças Recentes (Junho 2025)
 
+### Sistema Completo de Demonstração para Médicos
+- **Data**: 29/06/2025
+- **Implementação**: Sistema completo de acesso e demonstração para médicos testarem a plataforma FUNCIONANDO
+- **Funcionalidades**: 
+  - Página de demonstração simplificada `/demo-medico` com formulário básico
+  - Login automático como médico demo sem necessidade de aprovação
+  - Guia passo a passo visual com 4 etapas principais de teste
+  - Botão "Demo para Médicos" na landing page para acesso fácil
+  - Sistema de autenticação híbrido suportando login demo
+  - Guia completo para médicos (GUIA_COMPLETO_MEDICOS.md) com instruções detalhadas
+  - Roteiro de demonstração de 30 minutos estruturado
+  - Links diretos para teste de videoconsulta entre duas pessoas
+  - Instruções específicas para MEMED, WhatsApp e todas funcionalidades
+- **Interface**: Formulário simples (Nome, CRM, Especialidade, WhatsApp opcional)
+- **Navegação**: Acesso direto via landing page e URL `/demo-medico`
+- **Objetivo**: Permitir médicos colegas testarem facilmente sem barreiras técnicas
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTO PARA DEMONSTRAÇÕES
+- **Deploy**: Sistema sugerido para deployment na internet para testes reais
+- **Guia**: GUIA_COMPLETO_MEDICOS.md com 30+ páginas de instruções detalhadas
+- **Acesso**: Login demo funcional com dados fictícios para teste seguro
+
 ### Sistema de Guia Médico para Demonstrações
 - **Data**: 26/06/2025
 - **Implementação**: Guia passo a passo completo para demonstração do sistema FUNCIONANDO

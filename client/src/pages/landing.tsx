@@ -185,13 +185,23 @@ export default function Landing() {
             Acesse a plataforma e descubra como a telemedicina pode 
             transformar o atendimento médico.
           </p>
-          <Button 
-            onClick={handleLogin}
-            size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3"
-          >
-            Entrar Agora
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={handleLogin}
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3"
+            >
+              Entrar Agora
+            </Button>
+            <Button 
+              onClick={() => window.location.href = '/demo-medico'}
+              size="lg"
+              variant="outline"
+              className="border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-8 py-3"
+            >
+              Demo para Médicos
+            </Button>
+          </div>
         </div>
       </main>
 

@@ -44,6 +44,7 @@ import MedicalCalendarPage from "@/pages/medical-calendar";
 import InstitutionalWhatsApp from "@/pages/institutional-whatsapp";
 import OfertasTeleconsulta from "@/pages/ofertas-teleconsulta";
 import MedicalNotifications from "@/pages/medical-notifications";
+import DemoMedico from "@/pages/demo-medico";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 import { CredentialAuthProvider, useCredentialAuth } from "@/hooks/useCredentialAuth";
@@ -138,6 +139,7 @@ function Router() {
           <Route path="/whatsapp-institucional" component={InstitutionalWhatsApp} />
           <Route path="/ofertas-teleconsulta" component={OfertasTeleconsulta} />
           <Route path="/notificacoes-medicas" component={MedicalNotifications} />
+          <Route path="/demo-medico" component={DemoMedico} />
 
         </>
       )}
