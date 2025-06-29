@@ -504,6 +504,21 @@ export const availableSlots = pgTable("available_slots", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Notification records for tracking SMS/WhatsApp sent to doctors
+export const notificationRecords = pgTable("notification_records", {
+  id: serial("id").primaryKey(),
+  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
+  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
+  type: varchar("type", { enum: ["teleconsult_offer", "appointment_reminder", "payment_received"] }).notNull(),
+  message: text("message").notNull(),
+  whatsappUrl: text("whatsapp_url"),
+  phoneNumber: varchar("phone_number"),
+  status: varchar("status", { enum: ["sent", "delivered", "failed", "pending"] }).notNull().default("pending"),
+  sentAt: timestamp("sent_at").defaultNow(),
+  deliveredAt: timestamp("delivered_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Zod schemas for validation
 export const insertConsultationReportSchema = createInsertSchema(consultationReports).omit({
   id: true,
@@ -523,13 +538,21 @@ export const insertAvailableSlotSchema = createInsertSchema(availableSlots).omit
   updatedAt: true,
 });
 
+export const insertNotificationRecordSchema = createInsertSchema(notificationRecords).omit({
+  id: true,
+  createdAt: true,
+  sentAt: true,
+});
+
 export type InsertConsultationReport = z.infer<typeof insertConsultationReportSchema>;
 export type InsertConsultationFeedback = z.infer<typeof insertConsultationFeedbackSchema>;
 export type InsertAvailableSlot = z.infer<typeof insertAvailableSlotSchema>;
+export type InsertNotificationRecord = z.infer<typeof insertNotificationRecordSchema>;
 
 export type SelectConsultationReport = typeof consultationReports.$inferSelect;
 export type SelectConsultationFeedback = typeof consultationFeedback.$inferSelect;
 export type SelectAvailableSlot = typeof availableSlots.$inferSelect;
+export type SelectNotificationRecord = typeof notificationRecords.$inferSelect;
 
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({

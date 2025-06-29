@@ -965,7 +965,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       const appointment = await storage.createTeleconsultRequest(appointmentData);
-      res.status(201).json(appointment);
+      
+      // Send notifications to doctors
+      const { notifyDoctorsAboutOffer } = await import('./notifications');
+      const whatsappUrls = await notifyDoctorsAboutOffer(appointment.id);
+      
+      console.log(`Notifications sent to doctors for appointment ${appointment.id}`);
+      console.log('WhatsApp URLs generated:', whatsappUrls);
+      
+      res.status(201).json({ 
+        ...appointment, 
+        notificationsSent: whatsappUrls.length,
+        whatsappUrls 
+      });
     } catch (error) {
       console.error("Error creating teleconsult request:", error);
       res.status(500).json({ message: "Failed to create teleconsult request" });
@@ -993,6 +1005,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching teleconsult responses:", error);
       res.status(500).json({ message: "Failed to fetch responses" });
+    }
+  });
+
+  // Get pending teleconsult offers for notifications
+  app.get('/api/teleconsult/pending-offers', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const doctor = await storage.getDoctorByUserId(userId);
+      
+      if (!doctor) {
+        return res.status(403).json({ message: "Only doctors can view offers" });
+      }
+
+      // Create sample pending offers for demonstration
+      const pendingOffers = [
+        {
+          id: 1,
+          patientName: 'Maria Silva',
+          specialty: doctor.specialty,
+          offeredPrice: 150,
+          symptoms: 'Dor de cabeça persistente há 3 dias',
+          urgency: 'Normal',
+          createdAt: new Date().toISOString(),
+          status: 'auction'
+        },
+        {
+          id: 2,
+          patientName: 'João Santos',
+          specialty: doctor.specialty,
+          offeredPrice: 180,
+          symptoms: 'Dor no peito e falta de ar',
+          urgency: 'Urgente',
+          createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(), // 30 min ago
+          status: 'auction'
+        }
+      ];
+
+      res.json(pendingOffers);
+    } catch (error) {
+      console.error("Error fetching pending offers:", error);
+      res.status(500).json([]);
+    }
+  });
+
+  // Get teleconsult offers for doctors
+  app.get('/api/teleconsult/offers', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const doctor = await storage.getDoctorByUserId(userId);
+      
+      if (!doctor) {
+        return res.status(403).json({ message: "Only doctors can view offers" });
+      }
+
+      // Get all appointments in auction status
+      const appointments = await storage.getAppointments();
+      const offers = appointments
+        .filter(apt => apt.status === 'auction')
+        .map(apt => ({
+          id: apt.id,
+          patientName: 'Paciente Anônimo', // Protected data
+          specialty: apt.specialty || doctor.specialty,
+          offeredPrice: 150, // Standard price
+          symptoms: apt.symptoms || 'Consulta médica',
+          urgency: 'Normal',
+          createdAt: apt.createdAt || new Date().toISOString(),
+          status: apt.status
+        }));
+
+      res.json(offers);
+    } catch (error) {
+      console.error("Error fetching teleconsult offers:", error);
+      res.status(500).json({ message: "Failed to fetch offers" });
+    }
+  });
+
+  // Get doctor's responses to teleconsult offers
+  app.get('/api/teleconsult/my-responses', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const doctor = await storage.getDoctorByUserId(userId);
+      
+      if (!doctor) {
+        return res.status(403).json({ message: "Only doctors can view responses" });
+      }
+
+      const responses = await storage.getTeleconsultResponsesByDoctor(doctor.id);
+      res.json(responses);
+    } catch (error) {
+      console.error("Error fetching doctor responses:", error);
+      res.status(500).json({ message: "Failed to fetch responses" });
+    }
+  });
+
+  // Doctor responds to teleconsult offer
+  app.post('/api/teleconsult/respond', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const doctor = await storage.getDoctorByUserId(userId);
+      
+      if (!doctor) {
+        return res.status(403).json({ message: "Only doctors can respond to offers" });
+      }
+
+      const responseData = {
+        ...req.body,
+        doctorId: doctor.id
+      };
+
+      const response = await storage.createTeleconsultResponse(responseData);
+      res.status(201).json(response);
+    } catch (error) {
+      console.error("Error creating teleconsult response:", error);
+      res.status(500).json({ message: "Failed to submit response" });
     }
   });
 

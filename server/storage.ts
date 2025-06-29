@@ -98,6 +98,8 @@ export interface IStorage {
   updateAppointmentStatus(id: number, status: string): Promise<void>;
   simulateDoctorResponses(appointmentId: number, doctors: any[], offeredPrice: number, consultationType: string): Promise<void>;
   getTeleconsultResponses(appointmentId: number): Promise<any[]>;
+  getTeleconsultResponsesByDoctor(doctorId: number): Promise<any[]>;
+  getAppointmentsBySpecialty(specialty: string): Promise<any[]>;
   acceptDoctorResponse(appointmentId: number, responseId: number): Promise<Appointment>;
   createTeleconsultResponse(data: any): Promise<any>;
   
@@ -1353,6 +1355,54 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(consultationFeedback.createdAt));
     
     return feedbacks.map(f => f.feedback);
+  }
+
+  // Teleconsult notification methods
+  async getTeleconsultResponsesByDoctor(doctorId: number): Promise<any[]> {
+    return await db
+      .select({
+        id: teleconsultResponses.id,
+        appointmentId: teleconsultResponses.appointmentId,
+        acceptedPrice: teleconsultResponses.acceptedPrice,
+        message: teleconsultResponses.message,
+        status: teleconsultResponses.status,
+        createdAt: teleconsultResponses.createdAt,
+        patientName: sql`CONCAT(${users.firstName}, ' ', ${users.lastName})`.as('patientName')
+      })
+      .from(teleconsultResponses)
+      .innerJoin(appointments, eq(teleconsultResponses.appointmentId, appointments.id))
+      .innerJoin(patients, eq(appointments.patientId, patients.id))
+      .innerJoin(users, eq(patients.userId, users.id))
+      .where(eq(teleconsultResponses.doctorId, doctorId))
+      .orderBy(desc(teleconsultResponses.createdAt));
+  }
+
+  async getAppointmentsBySpecialty(specialty: string): Promise<any[]> {
+    return await db
+      .select({
+        id: appointments.id,
+        patientId: appointments.patientId,
+        doctorId: appointments.doctorId,
+        appointmentDate: appointments.appointmentDate,
+        specialty: appointments.specialty,
+        symptoms: appointments.symptoms,
+        offeredPrice: appointments.offeredPrice,
+        urgency: appointments.urgency,
+        status: appointments.status,
+        createdAt: appointments.createdAt,
+        patient: {
+          id: patients.id,
+          user: {
+            firstName: users.firstName,
+            lastName: users.lastName
+          }
+        }
+      })
+      .from(appointments)
+      .leftJoin(patients, eq(appointments.patientId, patients.id))
+      .leftJoin(users, eq(patients.userId, users.id))
+      .where(eq(appointments.specialty, specialty))
+      .orderBy(desc(appointments.createdAt));
   }
 }
 
