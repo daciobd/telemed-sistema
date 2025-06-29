@@ -215,6 +215,7 @@ src/
 - **Deploy**: Sistema sugerido para deployment na internet para testes reais
 - **Guia**: GUIA_COMPLETO_MEDICOS.md com 30+ páginas de instruções detalhadas
 - **Acesso**: Login demo funcional com dados fictícios para teste seguro
+- **Correção de Rota**: Problema de acesso ao `/demo-medico` resolvido - rota movida para seção pública sem autenticação
 
 ### Sistema de Guia Médico para Demonstrações
 - **Data**: 26/06/2025
