@@ -66,6 +66,7 @@ function Router() {
       <Route path="/agenda-medica" component={DoctorAgendaPage} />
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
       <Route path="/video-test" component={VideoTestPage} />
+      <Route path="/demo-medico" component={DemoMedico} />
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
@@ -139,7 +140,6 @@ function Router() {
           <Route path="/whatsapp-institucional" component={InstitutionalWhatsApp} />
           <Route path="/ofertas-teleconsulta" component={OfertasTeleconsulta} />
           <Route path="/notificacoes-medicas" component={MedicalNotifications} />
-          <Route path="/demo-medico" component={DemoMedico} />
 
         </>
       )}
