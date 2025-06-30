@@ -3,27 +3,23 @@ import express from 'express';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware básico
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Logging para debugging
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     port: PORT,
-    version: '2.0.0'
+    version: '3.0.0'
   });
 });
 
-// Landing page principal
 app.get('/', (req, res) => {
   res.send(`<!DOCTYPE html>
 <html lang="pt-BR">
@@ -108,7 +104,6 @@ app.get('/', (req, res) => {
 </html>`);
 });
 
-// Página demo médico com interface CORRIGIDA
 app.get('/demo-medico', (req, res) => {
   res.send(`<!DOCTYPE html>
 <html lang="pt-BR">
@@ -246,57 +241,117 @@ app.get('/demo-medico', (req, res) => {
       color: #2d3748;
       line-height: 1.6;
     }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
   <div class="container" id="mainContainer">
     <a href="/" class="back-link">Voltar à página inicial</a>
     
-    <h1>Demo para Médicos</h1>
-    
-    <form id="demoForm">
-      <div class="form-group">
-        <label for="nome">Nome Completo*</label>
-        <input type="text" id="nome" name="nome" required placeholder="Dr(a). Seu Nome Completo">
-      </div>
+    <div id="formContainer">
+      <h1>Demo para Médicos</h1>
       
-      <div class="form-group">
-        <label for="crm">CRM*</label>
-        <input type="text" id="crm" name="crm" placeholder="Ex: 123456/SP" required>
-      </div>
+      <form id="demoForm">
+        <div class="form-group">
+          <label for="nome">Nome Completo*</label>
+          <input type="text" id="nome" name="nome" required placeholder="Dr(a). Seu Nome Completo">
+        </div>
+        
+        <div class="form-group">
+          <label for="crm">CRM*</label>
+          <input type="text" id="crm" name="crm" placeholder="Ex: 123456/SP" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="especialidade">Especialidade*</label>
+          <select id="especialidade" name="especialidade" required>
+            <option value="">Selecione uma especialidade</option>
+            <option value="Clínico Geral">Clínico Geral</option>
+            <option value="Cardiologia">Cardiologia</option>
+            <option value="Dermatologia">Dermatologia</option>
+            <option value="Endocrinologia">Endocrinologia</option>
+            <option value="Ginecologia">Ginecologia</option>
+            <option value="Neurologia">Neurologia</option>
+            <option value="Ortopedia">Ortopedia</option>
+            <option value="Pediatria">Pediatria</option>
+            <option value="Psiquiatria">Psiquiatria</option>
+            <option value="Urologia">Urologia</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="telefone">WhatsApp (opcional)</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999">
+        </div>
+        
+        <button type="submit" class="btn">Acessar Plataforma Demo</button>
+      </form>
       
-      <div class="form-group">
-        <label for="especialidade">Especialidade*</label>
-        <select id="especialidade" name="especialidade" required>
-          <option value="">Selecione uma especialidade</option>
-          <option value="Clínico Geral">Clínico Geral</option>
-          <option value="Cardiologia">Cardiologia</option>
-          <option value="Dermatologia">Dermatologia</option>
-          <option value="Endocrinologia">Endocrinologia</option>
-          <option value="Ginecologia">Ginecologia</option>
-          <option value="Neurologia">Neurologia</option>
-          <option value="Ortopedia">Ortopedia</option>
-          <option value="Pediatria">Pediatria</option>
-          <option value="Psiquiatria">Psiquiatria</option>
-          <option value="Urologia">Urologia</option>
-        </select>
+      <div class="note">
+        <strong>Guia Rápido:</strong><br>
+        • Videoconsultas WebRTC funcionais<br>
+        • Prescrições MEMED integradas<br>
+        • Sistema de pagamentos Stripe<br>
+        • Prontuário eletrônico completo<br>
+        • Notificações WhatsApp automáticas
       </div>
-      
-      <div class="form-group">
-        <label for="telefone">WhatsApp (opcional)</label>
-        <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999">
+    </div>
+
+    <div id="successContainer" class="hidden">
+      <div class="success-interface">
+        <div class="success-header">
+          <h2 style="color: #22543d; margin-bottom: 15px;">Cadastro Realizado com Sucesso!</h2>
+          <div class="doctor-info" id="doctorInfo">
+          </div>
+        </div>
+        
+        <div class="access-instructions">
+          <h3 style="color: #2d3748; margin-bottom: 15px;">Como Acessar a Plataforma Completa</h3>
+          <div style="text-align: left; line-height: 1.8;">
+            <strong>Passo 1:</strong> Abra uma nova aba do navegador<br>
+            <strong>Passo 2:</strong> Digite na barra de endereço: <code style="background: #f7fafc; padding: 5px 10px; border-radius: 5px; font-weight: bold; color: #e53e3e;">localhost:5000</code><br>
+            <strong>Passo 3:</strong> Pressione Enter para acessar a plataforma<br><br>
+            
+            <div class="highlight-box">
+              IMPORTANTE: A plataforma principal roda localmente na porta 5000
+            </div>
+          </div>
+        </div>
+        
+        <div class="demo-guide">
+          <h3 style="color: #2d3748; margin-bottom: 15px;">Guia de Demonstração (30 min)</h3>
+          <div style="text-align: left; line-height: 1.6;">
+            <strong>Funcionalidades Principais:</strong><br>
+            • Videoconsultas WebRTC com chat em tempo real<br>
+            • Prescrições MEMED integradas e funcionais<br>
+            • Prontuário eletrônico completo com CID-10<br>
+            • Pagamentos Stripe (cartão teste: 4242 4242 4242 4242)<br>
+            • Assistente IA médico com análise de sintomas<br>
+            • Notificações WhatsApp automáticas<br><br>
+            
+            <strong>Roteiro Sugerido:</strong><br>
+            1. Explore o Dashboard médico (5 min)<br>
+            2. Teste videoconsulta com paciente fictício (10 min)<br>
+            3. Use prescrições MEMED com dados de teste (5 min)<br>
+            4. Analise prontuário eletrônico (5 min)<br>
+            5. Teste pagamentos com cartão fictício (5 min)<br><br>
+            
+            <strong>Documentação:</strong><br>
+            • GUIA_COMPLETO_MEDICOS.md - Instruções detalhadas<br>
+            • Sistema com 50+ pacientes simulados para testes seguros
+          </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <button onclick="window.open('http://localhost:5000', '_blank')" class="btn-action">
+            Abrir Plataforma em Nova Aba
+          </button>
+          
+          <a href="/" class="btn-action btn-secondary">
+            Voltar à Página Inicial
+          </a>
+        </div>
       </div>
-      
-      <button type="submit" class="btn">Acessar Plataforma Demo</button>
-    </form>
-    
-    <div class="note">
-      <strong>Guia Rápido:</strong><br>
-      • Videoconsultas WebRTC funcionais<br>
-      • Prescrições MEMED integradas<br>
-      • Sistema de pagamentos Stripe<br>
-      • Prontuário eletrônico completo<br>
-      • Notificações WhatsApp automáticas
     </div>
   </div>
   
@@ -320,77 +375,23 @@ app.get('/demo-medico', (req, res) => {
         timestamp: new Date().toISOString()
       }));
       
-      // Aguardar um momento e então mostrar interface de sucesso
-      setTimeout(() => {
-        const container = document.getElementById('mainContainer');
-        container.innerHTML = `
-        <div class="success-interface">
-          <div class="success-header">
-            <h2 style="color: #22543d; margin-bottom: 15px;">✅ Cadastro Realizado com Sucesso!</h2>
-            <div class="doctor-info">
-              <strong>Dados do Médico:</strong><br>
-              <strong>Nome:</strong> \${nome}<br>
-              <strong>CRM:</strong> \${crm}<br>
-              <strong>Especialidade:</strong> \${especialidade}<br>
-              \${telefone ? '<strong>WhatsApp:</strong> ' + telefone + '<br>' : ''}
-            </div>
-          </div>
-          
-          <div class="access-instructions">
-            <h3 style="color: #2d3748; margin-bottom: 15px;">📋 Como Acessar a Plataforma Completa</h3>
-            <div style="text-align: left; line-height: 1.8;">
-              <strong>Passo 1:</strong> Abra uma nova aba do navegador<br>
-              <strong>Passo 2:</strong> Digite na barra de endereço: <code style="background: #f7fafc; padding: 5px 10px; border-radius: 5px; font-weight: bold; color: #e53e3e;">localhost:5000</code><br>
-              <strong>Passo 3:</strong> Pressione Enter para acessar a plataforma<br><br>
-              
-              <div class="highlight-box">
-                ⚠️ IMPORTANTE: A plataforma principal roda localmente na porta 5000
-              </div>
-            </div>
-          </div>
-          
-          <div class="demo-guide">
-            <h3 style="color: #2d3748; margin-bottom: 15px;">🚀 Guia de Demonstração (30 min)</h3>
-            <div style="text-align: left; line-height: 1.6;">
-              <strong>Funcionalidades Principais:</strong><br>
-              • 📹 Videoconsultas WebRTC com chat em tempo real<br>
-              • 💊 Prescrições MEMED integradas e funcionais<br>
-              • 📋 Prontuário eletrônico completo com CID-10<br>
-              • 💳 Pagamentos Stripe (cartão teste: 4242 4242 4242 4242)<br>
-              • 🤖 Assistente IA médico com análise de sintomas<br>
-              • 📱 Notificações WhatsApp automáticas<br><br>
-              
-              <strong>Roteiro Sugerido:</strong><br>
-              1. Explore o Dashboard médico (5 min)<br>
-              2. Teste videoconsulta com paciente fictício (10 min)<br>
-              3. Use prescrições MEMED com dados de teste (5 min)<br>
-              4. Analise prontuário eletrônico (5 min)<br>
-              5. Teste pagamentos com cartão fictício (5 min)<br><br>
-              
-              <strong>Documentação:</strong><br>
-              • GUIA_COMPLETO_MEDICOS.md - Instruções detalhadas<br>
-              • Sistema com 50+ pacientes simulados para testes seguros
-            </div>
-          </div>
-          
-          <div style="margin-top: 30px;">
-            <button onclick="window.open('http://localhost:5000', '_blank')" class="btn-action">
-              🚀 Abrir Plataforma em Nova Aba
-            </button>
-            
-            <a href="/" class="btn-action btn-secondary">
-              🏠 Voltar à Página Inicial
-            </a>
-          </div>
-        </div>
-      \`;
+      // Atualizar informações do médico
+      const doctorInfo = document.getElementById('doctorInfo');
+      doctorInfo.innerHTML = 
+        '<strong>Nome:</strong> ' + nome + '<br>' +
+        '<strong>CRM:</strong> ' + crm + '<br>' +
+        '<strong>Especialidade:</strong> ' + especialidade + '<br>' +
+        (telefone ? '<strong>WhatsApp:</strong> ' + telefone + '<br>' : '');
+      
+      // Esconder formulário e mostrar sucesso
+      document.getElementById('formContainer').classList.add('hidden');
+      document.getElementById('successContainer').classList.remove('hidden');
     });
   </script>
 </body>
 </html>`);
 });
 
-// Página de documentação
 app.get('/documentacao', (req, res) => {
   res.send(`<!DOCTYPE html>
 <html lang="pt-BR">
@@ -446,15 +447,13 @@ app.get('/documentacao', (req, res) => {
 </html>`);
 });
 
-// 404 handler
 app.use('*', (req, res) => {
   res.status(404).send('404 - Página não encontrada');
 });
 
-// Iniciar servidor
 const port = parseInt(PORT, 10);
 app.listen(port, '0.0.0.0', () => {
-  console.log(\`TeleMed Deploy Server rodando na porta \${port}\`);
-  console.log(\`Acesse: http://0.0.0.0:\${port}\`);
-  console.log(\`Demo: http://0.0.0.0:\${port}/demo-medico\`);
+  console.log(`TeleMed Deploy Server rodando na porta ${port}`);
+  console.log(`Acesse: http://0.0.0.0:${port}`);
+  console.log(`Demo: http://0.0.0.0:${port}/demo-medico`);
 });
