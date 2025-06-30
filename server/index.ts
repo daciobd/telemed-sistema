@@ -1,7 +1,7 @@
 import express from 'express';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -16,89 +16,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-  res.send(`<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TeleMed Sistema - Plataforma de Telemedicina</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .container {
-      background: white;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      max-width: 700px;
-      text-align: center;
-      width: 100%;
-    }
-    h1 { color: #2d3748; font-size: 2.8rem; margin-bottom: 1rem; font-weight: 700; }
-    .subtitle { color: #718096; font-size: 1.3rem; margin-bottom: 2rem; font-weight: 500; }
-    .btn {
-      display: inline-block;
-      background: #4299e1;
-      color: white;
-      padding: 18px 36px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin: 12px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
-    }
-    .btn:hover { 
-      background: #3182ce; 
-      transform: translateY(-2px); 
-      box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
-    }
-    .btn-success { 
-      background: #48bb78; 
-      box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
-    }
-    .btn-success:hover { 
-      background: #38a169; 
-      box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
-    }
-    .status {
-      background: #f0fff4;
-      border: 2px solid #48bb78;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      color: #22543d;
-      font-weight: 600;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="status">
-      🔥 Sistema v7.0.0 ULTRA-FIX - Eliminando Formulário HTML
-    </div>
-    
-    <h1>TeleMed Sistema</h1>
-    <p class="subtitle">Plataforma Completa de Telemedicina</p>
-    
-    <div>
-      <a href="/demo-medico" class="btn btn-success">Demo para Médicos</a>
-      <a href="/documentacao" class="btn">Documentação</a>
-    </div>
-  </div>
-</body>
-</html>`);
-});
+// Rota principal será servida pelo Vite (aplicação React)
 
 app.get('/demo-medico', (req, res) => {
   res.send(`<!DOCTYPE html>
@@ -312,8 +230,8 @@ app.get('/demo-medico', (req, res) => {
       localStorage.setItem('demoDoctor', JSON.stringify(doctorData));
       console.log('✅ v7.0.0 ULTRA-FIX - Dados demo salvos automaticamente');
       
-      // Abrir em nova aba
-      window.open('http://localhost:5000', '_blank');
+      // Abrir plataforma principal React
+      window.open('/', '_blank');
     }
 
     // Auto-salvar dados ao carregar a página
@@ -406,6 +324,7 @@ app.get('/documentacao', (req, res) => {
 
 // IMPORTAR TODAS AS ROTAS EXISTENTES
 import { registerRoutes } from './routes.js';
+import { createDeploymentHandler } from './deployment.js';
 
 registerRoutes(app).then(httpServer => {
   const port = parseInt(PORT.toString(), 10);
