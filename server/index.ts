@@ -53,6 +53,11 @@ app.use((req, res, next) => {
     throw err;
   });
 
+  // Health check route
+  app.get("/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
   // Add a basic catch-all route for deployment
   app.get("*", (req, res) => {
     // Serve a basic HTML page for deployment
@@ -126,15 +131,14 @@ app.use((req, res, next) => {
     }
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
+  // Use environment port or default to 5000
+  const port = parseInt(process.env.PORT || "5000", 10);
   server.listen({
     port,
     host: "0.0.0.0",
-    reusePort: true,
   }, () => {
     log(`serving on port ${port}`);
+    log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    log(`Health check available at: http://localhost:${port}/health`);
   });
 })();
