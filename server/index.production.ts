@@ -1,3 +1,4 @@
+// Production deployment server for TeleMed Sistema
 import express from 'express';
 
 const app = express();
@@ -6,12 +7,17 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     port: PORT,
-    environment: process.env.NODE_ENV || 'production'
+    environment: 'production'
   });
 });
 
@@ -429,7 +435,7 @@ app.use('*', (req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🩺 TeleMed Sistema rodando na porta ${PORT}`);
-  console.log(`🌐 Acesse: http://localhost:${PORT}`);
-  console.log(`📋 Demo: http://localhost:${PORT}/demo-medico`);
-  console.log(`💚 Health: http://localhost:${PORT}/health`);
+  console.log(`🌐 Acesse: http://0.0.0.0:${PORT}`);
+  console.log(`📋 Demo: http://0.0.0.0:${PORT}/demo-medico`);
+  console.log(`💚 Health: http://0.0.0.0:${PORT}/health`);
 });
