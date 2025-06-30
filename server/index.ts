@@ -202,7 +202,7 @@ app.get('/demo-medico', (req, res) => {
     </div>
     
     <div style="text-align: center; margin-top: 40px;">
-      <button onclick="abrirPlataforma()" class="btn-mega">
+      <button onclick="abrirPlataformaPublica()" class="btn-mega">
         🚀 ABRIR PLATAFORMA AGORA
       </button>
       
@@ -242,19 +242,31 @@ app.get('/demo-medico', (req, res) => {
         
         if (response.ok) {
           console.log('✅ Login demo realizado com sucesso');
-          // Aguardar um momento e redirecionar
+          // Detectar URL correta baseada no ambiente
+          const baseUrl = window.location.origin;
+          const targetUrl = baseUrl.includes('replit.app') ? 
+            'https://telemed-consultation-daciobd.replit.app' : 
+            'http://localhost:5000';
+          
+          console.log('🌐 Redirecionando para:', targetUrl);
+          
+          // Redirecionar para a plataforma principal
           setTimeout(() => {
-            window.location.href = '/';
+            window.location.href = targetUrl;
           }, 1000);
         } else {
           console.error('❌ Erro no login demo');
-          // Fallback: abrir em nova aba
-          window.open('/', '_blank');
+          // Fallback: tentar URL pública
+          const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
+          console.log('🔄 Tentando URL pública:', publicUrl);
+          window.open(publicUrl, '_blank');
         }
       } catch (error) {
         console.error('❌ Erro na requisição de login demo:', error);
-        // Fallback: abrir em nova aba
-        window.open('/', '_blank');
+        // Fallback: sempre usar URL pública
+        const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
+        console.log('🔄 Fallback - Abrindo URL pública:', publicUrl);
+        window.open(publicUrl, '_blank');
       }
     }
 
@@ -274,6 +286,13 @@ app.get('/demo-medico', (req, res) => {
       localStorage.setItem('demoDoctor', JSON.stringify(doctorData));
       console.log('✅ Dados demo auto-salvos no localStorage');
     });
+    
+    // Função específica para URL pública do Replit
+    function abrirPlataformaPublica() {
+      console.log('🚀 Abrindo plataforma via URL pública do Replit');
+      const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
+      window.open(publicUrl, '_blank');
+    }
   </script>
 </body>
 </html>`);
