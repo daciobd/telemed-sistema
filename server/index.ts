@@ -181,7 +181,8 @@ app.get('/demo-medico', (req, res) => {
         <strong>Passo 3:</strong> Entre como médico demo e explore todas as funcionalidades<br><br>
         
         <div style="background: #ffd700; padding: 20px; border-radius: 10px; color: #744210; font-weight: 600; margin: 15px 0;">
-          💡 PROBLEMA RESOLVIDO: Sem formulários para travar - Acesso direto!
+          💡 PROBLEMA RESOLVIDO: Sem formulários para travar - Acesso direto!<br>
+          🌐 Use o botão VERDE se o vermelho não funcionar
         </div>
       </div>
     </div>
@@ -206,6 +207,10 @@ app.get('/demo-medico', (req, res) => {
         🚀 ABRIR PLATAFORMA AGORA
       </button>
       
+      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega" style="background: #10b981; margin-left: 15px;">
+        🌐 LINK DIRETO PÚBLICO
+      </a>
+      
       <a href="/" class="btn-mega btn-open">
         ← VOLTAR AO INÍCIO
       </a>
@@ -219,56 +224,7 @@ app.get('/demo-medico', (req, res) => {
   </div>
   
   <script>
-    async function abrirPlataforma() {
-      // Salvar dados do médico demo automaticamente
-      const doctorData = {
-        nome: "Dr. Marcelo Paranagaba", 
-        crm: "123456/SP", 
-        especialidade: "Ginecologia", 
-        telefone: "(11) 99999-9999",
-        timestamp: new Date().toISOString(),
-        autoDemo: true
-      };
-      
-      localStorage.setItem('demoDoctor', JSON.stringify(doctorData));
-      console.log('✅ v7.0.0 ULTRA-FIX - Dados demo salvos automaticamente');
-      
-      // Fazer login demo automático
-      try {
-        const response = await fetch('/api/auth/demo-login', {
-          method: 'GET',
-          credentials: 'include'
-        });
-        
-        if (response.ok) {
-          console.log('✅ Login demo realizado com sucesso');
-          // Detectar URL correta baseada no ambiente
-          const baseUrl = window.location.origin;
-          const targetUrl = baseUrl.includes('replit.app') ? 
-            'https://telemed-consultation-daciobd.replit.app' : 
-            'http://localhost:5000';
-          
-          console.log('🌐 Redirecionando para:', targetUrl);
-          
-          // Redirecionar para a plataforma principal
-          setTimeout(() => {
-            window.location.href = targetUrl;
-          }, 1000);
-        } else {
-          console.error('❌ Erro no login demo');
-          // Fallback: tentar URL pública
-          const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
-          console.log('🔄 Tentando URL pública:', publicUrl);
-          window.open(publicUrl, '_blank');
-        }
-      } catch (error) {
-        console.error('❌ Erro na requisição de login demo:', error);
-        // Fallback: sempre usar URL pública
-        const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
-        console.log('🔄 Fallback - Abrindo URL pública:', publicUrl);
-        window.open(publicUrl, '_blank');
-      }
-    }
+
 
     // Auto-salvar dados ao carregar a página
     document.addEventListener('DOMContentLoaded', function() {
@@ -290,8 +246,30 @@ app.get('/demo-medico', (req, res) => {
     // Função específica para URL pública do Replit
     function abrirPlataformaPublica() {
       console.log('🚀 Abrindo plataforma via URL pública do Replit');
+      
+      // SEMPRE usar URL pública - nunca localhost
       const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
-      window.open(publicUrl, '_blank');
+      
+      console.log('🌐 URL de destino:', publicUrl);
+      console.log('🔧 Forçando abertura em nova aba');
+      
+      // Tentar múltiplas abordagens para garantir que funcione
+      try {
+        // Método 1: window.open
+        const newWindow = window.open(publicUrl, '_blank', 'noopener,noreferrer');
+        
+        if (!newWindow) {
+          // Método 2: Se popup bloqueado, tentar redirecionamento direto
+          console.log('⚠️ Popup bloqueado, tentando redirecionamento direto');
+          window.location.href = publicUrl;
+        } else {
+          console.log('✅ Nova aba aberta com sucesso');
+        }
+      } catch (error) {
+        console.error('❌ Erro ao abrir:', error);
+        // Método 3: Fallback absoluto
+        window.location.href = publicUrl;
+      }
     }
   </script>
 </body>
