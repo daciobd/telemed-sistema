@@ -342,7 +342,7 @@ app.get('/demo-medico', (req, res) => {
       const especialidade = document.getElementById('especialidade').value;
       
       if (!nome || !crm || !especialidade) {
-        alert('⚠️ Por favor, preencha todos os campos obrigatórios para continuar.');
+        alert('Por favor, preencha todos os campos obrigatórios para continuar.');
         return;
       }
       
