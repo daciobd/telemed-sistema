@@ -353,7 +353,7 @@ app.get('/demo-medico', (req, res) => {
         timestamp: new Date().toISOString()
       }));
       
-      // Mostrar confirmação
+      // Mostrar mensagem de sucesso
       const container = document.querySelector('.container');
       const successDiv = document.createElement('div');
       successDiv.className = 'success-message';
@@ -362,17 +362,24 @@ app.get('/demo-medico', (req, res) => {
         <strong>Médico:</strong> \${nome}<br>
         <strong>CRM:</strong> \${crm}<br>
         <strong>Especialidade:</strong> \${especialidade}<br><br>
-        <strong>Próximos Passos:</strong><br>
-        1. A plataforma completa está sendo preparada<br>
-        2. Consulte o GUIA_COMPLETO_MEDICOS.md para instruções<br>
-        3. Use dados fictícios para testes seguros<br><br>
+        <strong>📋 Instruções para Acesso:</strong><br>
+        1. A plataforma principal está rodando localmente<br>
+        2. Acesse: <strong>http://localhost:5000</strong><br>
+        3. Ou aguarde que será redirecionado automaticamente<br><br>
+        <strong>📖 Documentação:</strong><br>
+        • Consulte o GUIA_COMPLETO_MEDICOS.md<br>
+        • Teste todas as funcionalidades com dados fictícios<br>
+        • Duração estimada: 30 minutos<br><br>
         <em>Sistema configurado para demonstração médica!</em>
       \`;
       
       container.appendChild(successDiv);
-      
-      // Scroll para a mensagem
       successDiv.scrollIntoView({ behavior: 'smooth' });
+      
+      // Tentar redirecionar para localhost:5000 após 5 segundos
+      setTimeout(() => {
+        window.open('http://localhost:5000', '_blank');
+      }, 5000);
     });
   </script>
 </body>
