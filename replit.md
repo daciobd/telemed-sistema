@@ -217,27 +217,17 @@ src/
 - **Acesso**: Login demo funcional com dados fictícios para teste seguro
 - **Correção de Rota**: Problema de acesso ao `/demo-medico` resolvido - rota movida para seção pública sem autenticação
 
-### Configuração de Deployment Replit - RESOLVIDO
+### Problema de Deployment Replit - EM RESOLUÇÃO
 - **Data**: 30/06/2025
-- **Problema Resolvido**: Deployment "Not Found" corrigido com servidor standalone
-- **Solução Final Implementada**: 
-  - Servidor standalone `index.js` criado com Express simples
-  - Landing page responsiva com design profissional
-  - Formulário demo médico totalmente funcional
-  - Páginas de documentação integradas
-  - Health check endpoint para monitoramento
-  - Configuração otimizada para ambiente Replit
-- **Arquivos de Deployment**: 
-  - `index.js` - Servidor principal para produção
-  - `deploy.js` - Servidor alternativo (backup)
-  - Configuração automática de porta via PORT env
-- **Status**: ✅ DEPLOYMENT PRONTO - Servidor testado e funcional
-- **URLs Funcionais**:
-  - Landing page: https://telemed-sistema.replit.app/
-  - Demo médico: https://telemed-sistema.replit.app/demo-medico
-  - Documentação: https://telemed-sistema.replit.app/documentacao
-  - Health check: https://telemed-sistema.replit.app/health
-- **Próximo Passo**: Usuário deve executar deployment via interface Replit
+- **Problema**: Deployment persistente "Not Found" apesar de múltiplas tentativas
+- **Causa Identificada**: Conflito entre ES modules (package.json "type": "module") e deployment do Replit
+- **Tentativas Realizadas**: 
+  - Servidor standalone em `dist/index.js` com ES modules
+  - Servidor CommonJS em `main.cjs` 
+  - Múltiplas configurações de porta (3000, 5000)
+  - Diferentes formatos de export/import
+- **Status Atual**: URL https://telemed-sistema.replit.app/demo-medico ainda mostra "Not Found"
+- **Solução em Andamento**: Criação de servidor híbrido compatível com Replit deployment
 
 ### Sistema de Guia Médico para Demonstrações
 - **Data**: 26/06/2025
