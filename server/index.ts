@@ -182,7 +182,12 @@ app.get('/demo-medico', (req, res) => {
         
         <div style="background: #ffd700; padding: 20px; border-radius: 10px; color: #744210; font-weight: 600; margin: 15px 0;">
           💡 PROBLEMA RESOLVIDO: Sem formulários para travar - Acesso direto!<br>
-          🌐 Use o botão VERDE se o vermelho não funcionar
+          🌐 Use o botão VERDE se o vermelho não funcionar<br><br>
+          
+          <strong>Se não vir o botão verde, copie este link:</strong><br>
+          <code style="background: white; padding: 10px; display: block; margin-top: 10px; color: #2563eb; font-size: 14px;">
+          https://telemed-consultation-daciobd.replit.app
+          </code>
         </div>
       </div>
     </div>
@@ -207,7 +212,7 @@ app.get('/demo-medico', (req, res) => {
         🚀 ABRIR PLATAFORMA AGORA
       </button>
       
-      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega" style="background: #10b981; margin-left: 15px;">
+      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega" style="background: #10b981; margin-left: 15px; font-size: 18px; padding: 20px 30px; border: 3px solid #059669;">
         🌐 LINK DIRETO PÚBLICO
       </a>
       
