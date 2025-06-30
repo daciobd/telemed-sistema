@@ -303,16 +303,37 @@ app.get("/demo-medico", (req, res) => {
       } catch (error) {
         log(`Vite setup failed, using static routes: ${error}`);
       }
+    } else {
+      // In production, serve static files
+      app.use(express.static('dist/client', { 
+        fallthrough: true,
+        maxAge: '1y'
+      }));
+      
+      // Catch-all for SPA routing in production
+      app.get('*', (req, res, next) => {
+        // Skip API routes
+        if (req.path.startsWith('/api/')) {
+          return next();
+        }
+        
+        // For other routes, serve the index.html or our static pages
+        if (req.path === '/' || req.path === '/demo-medico') {
+          return next(); // Let our existing handlers take care of these
+        }
+        
+        res.status(404).send('Not Found');
+      });
     }
 
     const port = parseInt(process.env.PORT || "5000", 10);
-    server.listen({
-      port,
-      host: "0.0.0.0",
-    }, () => {
-      log(`TeleMed Sistema serving on port ${port}`);
+    const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+    
+    server.listen(port, host, () => {
+      log(`TeleMed Sistema serving on ${host}:${port}`);
       log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      log(`Demo URL: http://localhost:${port}/demo-medico`);
+      log(`Demo URL: http://${host}:${port}/demo-medico`);
+      log(`Health check: http://${host}:${port}/health`);
     });
   } catch (error) {
     log(`Server startup failed: ${error}`);
