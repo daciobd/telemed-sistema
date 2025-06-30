@@ -353,33 +353,70 @@ app.get('/demo-medico', (req, res) => {
         timestamp: new Date().toISOString()
       }));
       
-      // Mostrar mensagem de sucesso
+      // Remover o formulário e mostrar instruções completas
       const container = document.querySelector('.container');
-      const successDiv = document.createElement('div');
-      successDiv.className = 'success-message';
-      successDiv.innerHTML = \`
-        <strong>✅ Cadastro realizado com sucesso!</strong><br><br>
-        <strong>Médico:</strong> \${nome}<br>
-        <strong>CRM:</strong> \${crm}<br>
-        <strong>Especialidade:</strong> \${especialidade}<br><br>
-        <strong>📋 Instruções para Acesso:</strong><br>
-        1. A plataforma principal está rodando localmente<br>
-        2. Acesse: <strong>http://localhost:5000</strong><br>
-        3. Ou aguarde que será redirecionado automaticamente<br><br>
-        <strong>📖 Documentação:</strong><br>
-        • Consulte o GUIA_COMPLETO_MEDICOS.md<br>
-        • Teste todas as funcionalidades com dados fictícios<br>
-        • Duração estimada: 30 minutos<br><br>
-        <em>Sistema configurado para demonstração médica!</em>
+      container.innerHTML = \`
+        <div style="text-align: center; color: #2d3748;">
+          <div style="background: #f0fff4; border: 2px solid #48bb78; padding: 25px; border-radius: 15px; margin-bottom: 30px;">
+            <h2 style="color: #22543d; margin-bottom: 15px;">✅ Cadastro Realizado com Sucesso!</h2>
+            <div style="text-align: left; background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+              <strong>👨‍⚕️ Dados do Médico:</strong><br>
+              <strong>Nome:</strong> \${nome}<br>
+              <strong>CRM:</strong> \${crm}<br>
+              <strong>Especialidade:</strong> \${especialidade}<br>
+              \${document.getElementById('telefone').value ? '<strong>WhatsApp:</strong> ' + document.getElementById('telefone').value + '<br>' : ''}
+            </div>
+          </div>
+          
+          <div style="background: #e6fffa; border: 2px solid #38b2ac; padding: 25px; border-radius: 15px; margin-bottom: 25px;">
+            <h3 style="color: #2d3748; margin-bottom: 15px;">🚀 Como Acessar a Plataforma Completa</h3>
+            <div style="text-align: left; line-height: 1.6;">
+              <strong>📍 Passo 1:</strong> Abra uma nova aba do navegador<br>
+              <strong>📍 Passo 2:</strong> Digite na barra de endereço: <code style="background: #f7fafc; padding: 3px 8px; border-radius: 5px; font-weight: bold;">localhost:5000</code><br>
+              <strong>📍 Passo 3:</strong> Pressione Enter para acessar a plataforma<br><br>
+              
+              <div style="background: #ffd700; padding: 15px; border-radius: 8px; color: #744210; font-weight: 600;">
+                💡 <strong>Dica Importante:</strong> A plataforma principal roda localmente na porta 5000
+              </div>
+            </div>
+          </div>
+          
+          <div style="background: #f0f4ff; border: 2px solid #4299e1; padding: 25px; border-radius: 15px; margin-bottom: 25px;">
+            <h3 style="color: #2d3748; margin-bottom: 15px;">📋 Guia de Demonstração Completo</h3>
+            <div style="text-align: left; line-height: 1.6;">
+              <strong>🎯 Funcionalidades Principais para Testar:</strong><br>
+              • Videoconsultas WebRTC com chat em tempo real<br>
+              • Prescrições MEMED integradas e funcionais<br>
+              • Prontuário eletrônico completo com CID-10<br>
+              • Sistema de pagamentos Stripe (use cartão de teste 4242...)<br>
+              • Assistente IA médico com análise de sintomas<br>
+              • Avaliação psiquiátrica PHQ-9 e GAD-7<br><br>
+              
+              <strong>⏱️ Roteiro Sugerido (30 minutos):</strong><br>
+              1. Explore o Dashboard médico (5 min)<br>
+              2. Teste videoconsulta com paciente fictício (10 min)<br>
+              3. Use prescrições MEMED com dados de teste (5 min)<br>
+              4. Analise prontuário eletrônico (5 min)<br>
+              5. Teste pagamentos com cartão fictício (5 min)<br><br>
+              
+              <strong>📖 Documentação Técnica:</strong><br>
+              • GUIA_COMPLETO_MEDICOS.md - Instruções detalhadas<br>
+              • Todos os dados são fictícios para testes seguros<br>
+              • Sistema completo com 50+ pacientes simulados
+            </div>
+          </div>
+          
+          <button onclick="window.open('http://localhost:5000', '_blank')" 
+                  style="background: #4299e1; color: white; padding: 15px 30px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 10px;">
+            🚀 Abrir Plataforma em Nova Aba
+          </button>
+          
+          <button onclick="window.location.href='/'" 
+                  style="background: #718096; color: white; padding: 15px 30px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 10px;">
+            ← Voltar à Página Inicial
+          </button>
+        </div>
       \`;
-      
-      container.appendChild(successDiv);
-      successDiv.scrollIntoView({ behavior: 'smooth' });
-      
-      // Tentar redirecionar para localhost:5000 após 5 segundos
-      setTimeout(() => {
-        window.open('http://localhost:5000', '_blank');
-      }, 5000);
     });
   </script>
 </body>
