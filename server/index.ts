@@ -230,8 +230,15 @@ app.get('/demo-medico', (req, res) => {
       localStorage.setItem('demoDoctor', JSON.stringify(doctorData));
       console.log('✅ v7.0.0 ULTRA-FIX - Dados demo salvos automaticamente');
       
-      // Abrir plataforma principal React
-      window.open('/', '_blank');
+      // Detectar se está rodando em localhost ou URL pública
+      const currentDomain = window.location.hostname;
+      if (currentDomain === 'localhost' || currentDomain === '127.0.0.1') {
+        // Ambiente local
+        window.open('/', '_blank');
+      } else {
+        // Ambiente público (Replit)
+        window.open(window.location.origin, '_blank');
+      }
     }
 
     // Auto-salvar dados ao carregar a página
