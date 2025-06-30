@@ -2613,5 +2613,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Setup Vite to serve React app on all other routes
+  if (process.env.NODE_ENV === 'development') {
+    const { setupVite } = await import('./vite.js');
+    await setupVite(app, httpServer);
+  }
+
   return httpServer;
 }

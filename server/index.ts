@@ -16,7 +16,10 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Rota principal será servida pelo Vite (aplicação React)
+// Rota principal redirecionando para demo-medico temporariamente
+app.get('/', (req, res) => {
+  res.redirect('/demo-medico');
+});
 
 app.get('/demo-medico', (req, res) => {
   res.send(`<!DOCTYPE html>
@@ -216,7 +219,7 @@ app.get('/demo-medico', (req, res) => {
   </div>
   
   <script>
-    function abrirPlataforma() {
+    async function abrirPlataforma() {
       // Salvar dados do médico demo automaticamente
       const doctorData = {
         nome: "Dr. Marcelo Paranagaba", 
@@ -230,14 +233,28 @@ app.get('/demo-medico', (req, res) => {
       localStorage.setItem('demoDoctor', JSON.stringify(doctorData));
       console.log('✅ v7.0.0 ULTRA-FIX - Dados demo salvos automaticamente');
       
-      // Detectar se está rodando em localhost ou URL pública
-      const currentDomain = window.location.hostname;
-      if (currentDomain === 'localhost' || currentDomain === '127.0.0.1') {
-        // Ambiente local
+      // Fazer login demo automático
+      try {
+        const response = await fetch('/api/auth/demo-login', {
+          method: 'GET',
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          console.log('✅ Login demo realizado com sucesso');
+          // Aguardar um momento e redirecionar
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1000);
+        } else {
+          console.error('❌ Erro no login demo');
+          // Fallback: abrir em nova aba
+          window.open('/', '_blank');
+        }
+      } catch (error) {
+        console.error('❌ Erro na requisição de login demo:', error);
+        // Fallback: abrir em nova aba
         window.open('/', '_blank');
-      } else {
-        // Ambiente público (Replit)
-        window.open(window.location.origin, '_blank');
       }
     }
 
@@ -332,6 +349,27 @@ app.get('/documentacao', (req, res) => {
 // IMPORTAR TODAS AS ROTAS EXISTENTES
 import { registerRoutes } from './routes.js';
 import { createDeploymentHandler } from './deployment.js';
+
+// Configurar autenticação demo antes das rotas principais
+app.get('/api/auth/demo-login', (req, res) => {
+  // Simular login do médico demo
+  const demoUser = {
+    id: 'demo_doctor_marcelo',
+    email: 'marcelo@demo.com',
+    firstName: 'Marcelo',
+    lastName: 'Paranagaba',
+    role: 'doctor',
+    specialty: 'Ginecologia',
+    licenseNumber: '123456/SP'
+  };
+  
+  if (req.session) {
+    req.session.userId = demoUser.id;
+    req.session.user = demoUser;
+  }
+  
+  res.json({ user: demoUser, message: 'Demo login successful' });
+});
 
 registerRoutes(app).then(httpServer => {
   const port = parseInt(PORT.toString(), 10);
