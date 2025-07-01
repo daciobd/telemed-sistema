@@ -2613,6 +2613,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ROTAS DE REDIRECIONAMENTO FORÇADO PARA RESOLVER CACHE
+  app.get('/demo-medico', (req, res) => {
+    // Força redirecionamento para a página principal
+    const baseUrl = req.protocol + '://' + req.get('host');
+    res.redirect(baseUrl);
+  });
+
+  app.get('/', (req, res) => {
+    // Se não autenticado, mostra página de login simples
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      const html = `
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>TeleMed - Login Necessário</title>
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 20px;
+            }
+            .container {
+              background: white;
+              border-radius: 20px;
+              padding: 40px;
+              box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+              max-width: 500px;
+              text-align: center;
+            }
+            h1 { color: #2d3748; margin-bottom: 20px; }
+            .login-btn {
+              background: #4299e1;
+              color: white;
+              padding: 15px 30px;
+              border-radius: 10px;
+              text-decoration: none;
+              font-weight: 600;
+              display: inline-block;
+              margin: 20px 0;
+            }
+            .instructions {
+              background: #f0fff4;
+              padding: 20px;
+              border-radius: 10px;
+              margin: 20px 0;
+              text-align: left;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>🩺 TeleMed Sistema</h1>
+            <p>Plataforma de Telemedicina Avançada</p>
+            
+            <div class="instructions">
+              <h3>Para acessar a plataforma:</h3>
+              <p>1. Clique no botão abaixo para fazer login</p>
+              <p>2. Use sua conta Replit (gratuita)</p>
+              <p>3. Após o login, acesse todas as funcionalidades</p>
+            </div>
+            
+            <a href="/api/login" class="login-btn">🔑 Fazer Login</a>
+            
+            <div style="margin-top: 20px; font-size: 14px; color: #666;">
+              Não possui conta? <a href="https://replit.com" target="_blank">Crie uma conta gratuita</a>
+            </div>
+          </div>
+        </body>
+        </html>
+      `;
+      return res.send(html);
+    }
+    
+    // Se autenticado, redireciona para a aplicação
+    res.redirect('/dashboard');
+  });
+
   // Vite setup removido para permitir rotas customizadas
 
   return httpServer;
