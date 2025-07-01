@@ -96,9 +96,18 @@ export function createDeploymentHandler() {
             <p class="subtitle">Plataforma Completa de Telemedicina</p>
             
             <div>
-              <a href="/demo-medico" class="btn">Demo para Médicos</a>
+              <a href="/demo-medico" class="btn" style="background: #48bb78;">Demo para Médicos</a>
               <a href="/video-test" class="btn">Teste de Videoconsulta</a>
+              <button onclick="abrirDemoLocal()" class="btn" style="background: #ed8936;">📋 Demo Local</button>
             </div>
+            
+            <script>
+              function abrirDemoLocal() {
+                const url = 'http://localhost:5000';
+                alert('Tentando abrir demo local em: ' + url + '\\n\\nSe não funcionar, verifique se o servidor local está rodando.');
+                window.open(url, '_blank');
+              }
+            </script>
             
             <div class="features">
               <div class="feature">
