@@ -141,15 +141,20 @@ export function createDeploymentHandler() {
     res.send(html);
   });
 
-  // Demo route redirect
+  // Demo route redirect - redireciona diretamente para a plataforma
   app.get("/demo-medico", (req: Request, res: Response) => {
+    res.redirect('https://telemed-consultation-daciobd.replit.app');
+  });
+
+  // Página de acesso direto simples
+  app.get("/acesso-direto", (req: Request, res: Response) => {
     const html = `
       <!DOCTYPE html>
       <html lang="pt-BR">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Demo Médico - TeleMed Sistema</title>
+          <title>Acesso Direto - TeleMed Sistema</title>
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { 
