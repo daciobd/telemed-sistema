@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "path";
 
 export function createDeploymentHandler() {
   const app = express();
@@ -141,9 +142,12 @@ export function createDeploymentHandler() {
     res.send(html);
   });
 
-  // Demo route redirect - redireciona diretamente para a plataforma
+  // Demo route - página de acesso direto
   app.get("/demo-medico", (req: Request, res: Response) => {
-    res.redirect('https://telemed-consultation-daciobd.replit.app');
+    const fs = require('fs');
+    const htmlPath = 'acesso-direto.html';
+    const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+    res.send(htmlContent);
   });
 
   // Página de acesso direto simples

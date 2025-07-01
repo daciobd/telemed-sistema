@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Acesso Direto à Plataforma</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 { 
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .url-box {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 16px;
+            word-break: break-all;
+        }
+        .copy-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .copy-btn:hover {
+            background: #38a169;
+        }
+        .instructions {
+            text-align: left;
+            margin-top: 30px;
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .step {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: #4299e1;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">🏥</div>
+        <h1>TeleMed Sistema</h1>
+        <p style="color: #4a5568; font-size: 18px; margin-bottom: 20px;">
+            Plataforma de Telemedicina Avançada
+        </p>
+        
+        <div class="url-box">
+            <strong>URL da Plataforma:</strong><br>
+            <span id="platform-url">https://telemed-consultation-daciobd.replit.app</span>
+            <br>
+            <button class="copy-btn" onclick="copyUrl()">📋 Copiar URL</button>
+        </div>
+
+        <div class="instructions">
+            <h3 style="color: #2d3748; margin-bottom: 15px;">📋 Como Acessar:</h3>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <strong>Copie a URL acima</strong> clicando no botão "Copiar URL"
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <strong>Abra uma nova aba</strong> no seu navegador (Ctrl+T)
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <strong>Cole a URL</strong> na barra de endereços (Ctrl+V) e pressione Enter
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <strong>Faça login</strong> com sua conta Replit para acessar a plataforma
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 15px; background: #e6fffa; border-radius: 10px;">
+            <p style="color: #234e52; font-size: 14px;">
+                💡 <strong>Dica:</strong> Se tiver problemas para acessar, aguarde alguns segundos e tente novamente. 
+                A plataforma pode estar iniciando.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyUrl() {
+            const url = document.getElementById('platform-url').textContent;
+            navigator.clipboard.writeText(url).then(function() {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ Copiado!';
+                btn.style.background = '#38a169';
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiar URL';
+                    btn.style.background = '#48bb78';
+                }, 2000);
+            }).catch(function() {
+                alert('URL copiada: ' + url);
+            });
+        }
+    </script>
+</body>
+</html>
