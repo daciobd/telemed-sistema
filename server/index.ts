@@ -1,5 +1,6 @@
 import express from 'express';
 import { registerRoutes } from './routes';
+import { setupVite } from './vite';
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '5000', 10);
@@ -29,11 +30,16 @@ async function startServer() {
   try {
     const httpServer = await registerRoutes(app);
     
+    // Setup Vite para servir a aplicação React
+    if (process.env.NODE_ENV === 'development') {
+      await setupVite(app, httpServer);
+    }
+    
     httpServer.listen(PORT, '0.0.0.0', () => {
       console.log('🩺 TeleMed Sistema v8.0.0-CLEAN');
       console.log(`🌐 Servidor rodando na porta ${PORT}`);
       console.log(`🔗 Acesso: http://localhost:${PORT}`);
-      console.log('✅ Sem redirecionamentos problemáticos');
+      console.log('✅ Aplicação React + Backend integrados');
     });
   } catch (error) {
     console.error('❌ Erro ao iniciar servidor:', error);
