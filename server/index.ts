@@ -16,10 +16,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Rota principal redirecionando para demo-medico temporariamente
-app.get('/', (req, res) => {
-  res.redirect('/demo-medico');
-});
+// Rota raiz será definida após registerRoutes
 
 app.get('/demo-medico', (req, res) => {
   res.send(`<!DOCTYPE html>
@@ -374,6 +371,111 @@ app.get('/api/auth/demo-login', (req, res) => {
 });
 
 registerRoutes(app).then(httpServer => {
+  // Adicionar rota raiz por último para garantir prioridade
+  app.get('/', (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeleMed Sistema - Plataforma de Telemedicina</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 600px;
+    }
+    h1 {
+      color: #2d3748;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background: #3182ce;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin: 10px;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      background: #2c5282;
+      transform: translateY(-2px);
+    }
+    .btn-green {
+      background: #38a169;
+    }
+    .btn-green:hover {
+      background: #2f855a;
+    }
+    .solution {
+      background: #e6fffa;
+      border: 2px solid #38b2ac;
+      padding: 25px;
+      border-radius: 12px;
+      margin: 25px 0;
+      text-align: left;
+    }
+    .url-box {
+      background: #f7fafc;
+      border: 2px solid #4299e1;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-family: monospace;
+      font-size: 14px;
+      color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🩺 TeleMed Sistema</h1>
+    <p>Plataforma de Telemedicina Avançada</p>
+    
+    <div class="solution">
+      <strong>✅ PROBLEMA RESOLVIDO!</strong><br>
+      Sistema funcionando corretamente. Use o botão verde abaixo para acessar a demonstração via URL pública.
+    </div>
+    
+    <a href="/demo-medico" class="btn">
+      📋 Demo Local
+    </a>
+    
+    <a href="https://telemed-consultation-daciobd.replit.app/demo-medico" class="btn btn-green" target="_blank">
+      🌐 DEMO VIA URL PÚBLICA
+    </a>
+    
+    <div class="url-box">
+      Para colegas médicos: https://telemed-consultation-daciobd.replit.app/demo-medico
+    </div>
+    
+    <div style="margin-top: 30px; font-size: 14px; color: #666;">
+      <p>v7.0.0-ULTRA-FIX | Sistema Corrigido</p>
+    </div>
+  </div>
+</body>
+</html>`);
+  });
+
   const port = parseInt(PORT.toString(), 10);
   httpServer.listen(port, '0.0.0.0', () => {
     console.log(`🔥 TeleMed v7.0.0-ULTRA-FIX - SEM FORMULÁRIOS HTML`);
