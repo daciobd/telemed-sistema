@@ -217,30 +217,28 @@ src/
 - **Acesso**: Login demo funcional com dados fictícios para teste seguro
 - **Correção de Rota**: Problema de acesso ao `/demo-medico` resolvido - rota movida para seção pública sem autenticação
 
-### Sistema de Deployment Replit CORRIGIDO E FUNCIONAL
-- **Data**: 30/06/2025
-- **Status**: ✅ FUNCIONANDO COMPLETAMENTE - DEPLOYMENT ATIVO
-- **URL Final**: https://telemed-consultation-daciobd.replit.app/demo-medico
-- **Correção Crítica Aplicada**: Botão agora usa função `abrirPlataformaPublica()` que sempre abre a URL pública do Replit
-- **Problema Resolvido**: Eliminado conflito entre localhost e URL pública - sistema agora detecta automaticamente e usa URL correta
-- **Versão**: 7.0.0-ULTRA-FIX com eliminação completa de formulários HTML e acesso direto à demo
-- **Solução Implementada**: 
-  - Servidor ES modules otimizado em `server.mjs` com interface profissional
-  - Landing page responsiva com design moderno e gradientes
-  - Formulário demo médico com validação e experiência aprimorada
-  - Página de documentação técnica completa
-  - Instruções detalhadas pós-cadastro com guia de acesso
-  - Botões funcionais para redirecionamento à plataforma principal
-  - **NOVO**: Função JavaScript dedicada para URL pública garantindo acesso correto
-- **Funcionalidades do Deployment**:
-  - Health check endpoint funcional
-  - Formulário demo com especialidades médicas
-  - Sistema de confirmação visual após cadastro
-  - Instruções claras para acesso localhost:5000
-  - Referência completa à documentação técnica
-  - Design profissional com cores médicas e animations
-  - **NOVO**: Botão com redirecionamento automático para URL pública
-- **Para Médicos Colegas**: URL direta funcionando para compartilhamento com acesso garantido
+### Sistema de Deployment e Conectividade - EM CORREÇÃO
+- **Data**: 01/07/2025
+- **Status**: 🔧 EM RESOLUÇÃO - PROBLEMAS DE CONECTIVIDADE EXTERNA
+- **Problema Identificado**: URLs externas não acessíveis (erro "não é possível acessar este site")
+- **URLs Testadas com Falha**:
+  - `https://telemed-consultation-daciobd.replit.app` - Deployment principal
+  - `https://telemed-consultation-daciobd--5000.prod1a.replit.co/` - Porta 5000
+  - `https://telemed-consultation-daciobd--3000.prod1a.replit.co/` - Porta 3000
+- **Status Interno**: 
+  - Servidor funcionando localmente na porta 3000
+  - Health check respondendo corretamente
+  - Aplicação React + Backend integrados funcionais
+- **Versão Atual**: 8.0.0-CLEAN com servidor recriado sem erros de sintaxe
+- **Correções Aplicadas**:
+  - Arquivo servidor totalmente recriado eliminando corrupção de sintaxe
+  - Porta alterada de 5000 para 3000 para melhor compatibilidade Replit
+  - Sistema de redirecionamento automático implementado
+  - Configuração para escuta em 0.0.0.0 (todas interfaces)
+- **Próximos Passos**: 
+  - Investigar configuração de proxy/DNS do Replit
+  - Testar deployment com configurações alternativas
+  - Verificar configuração de portas e exposição externa
 
 ### Sistema de Guia Médico para Demonstrações
 - **Data**: 26/06/2025
