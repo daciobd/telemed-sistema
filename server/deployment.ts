@@ -97,16 +97,25 @@ export function createDeploymentHandler() {
             <p class="subtitle">Plataforma Completa de Telemedicina</p>
             
             <div>
-              <a href="/demo-medico" class="btn" style="background: #48bb78;">Demo para Médicos</a>
+              <button onclick="acessarPlataforma()" class="btn" style="background: #48bb78;">🩺 Acesso à Plataforma</button>
               <a href="/video-test" class="btn">Teste de Videoconsulta</a>
-              <button onclick="abrirDemoLocal()" class="btn" style="background: #ed8936;">📋 Demo Local</button>
+              <button onclick="mostrarInstrucoes()" class="btn" style="background: #4299e1;">📋 Instruções</button>
             </div>
             
             <script>
-              function abrirDemoLocal() {
-                const url = 'http://localhost:5000';
-                alert('Tentando abrir demo local em: ' + url + '\\n\\nSe não funcionar, verifique se o servidor local está rodando.');
-                window.open(url, '_blank');
+              function acessarPlataforma() {
+                const currentUrl = window.location.origin;
+                alert('🚀 Redirecionando para a plataforma TeleMed...\\n\\nVocê será direcionado para: ' + currentUrl + '\\n\\nFaça login com sua conta Replit para acessar.');
+                window.location.href = currentUrl;
+              }
+
+              function mostrarInstrucoes() {
+                alert('📋 COMO ACESSAR A PLATAFORMA:\\n\\n' +
+                      '1️⃣ Clique em "🩺 Acesso à Plataforma"\\n' +
+                      '2️⃣ Faça login com sua conta Replit\\n' +
+                      '3️⃣ Explore todas as funcionalidades\\n\\n' +
+                      '🔗 URL direta: ' + window.location.origin + '\\n\\n' +
+                      '💡 Dica: Para compartilhar com colegas, envie a URL direta.');
               }
             </script>
             
@@ -130,9 +139,10 @@ export function createDeploymentHandler() {
             </div>
             
             <div class="url-info">
-              <h3>Para seus colegas médicos testarem:</h3>
-              <p><strong>${req.get('host')}/demo-medico</strong></p>
-              <p>Acesso simples com formulário básico</p>
+              <h3>🎯 Para compartilhar com colegas médicos:</h3>
+              <p><strong>URL Direta:</strong> ${req.get('host')}</p>
+              <p>✅ Acesso direto à plataforma completa</p>
+              <p>🔑 Login necessário: Conta Replit (gratuita)</p>
             </div>
           </div>
         </body>
@@ -142,12 +152,11 @@ export function createDeploymentHandler() {
     res.send(html);
   });
 
-  // Demo route - página de acesso direto
+  // Demo route - redireciona direto para a plataforma principal
   app.get("/demo-medico", (req: Request, res: Response) => {
-    const fs = require('fs');
-    const htmlPath = 'acesso-direto.html';
-    const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    res.send(htmlContent);
+    // Remove a barra do final se existir para evitar problemas de redirecionamento
+    const baseUrl = req.protocol + '://' + req.get('host');
+    res.redirect(baseUrl);
   });
 
   // Página de acesso direto simples
