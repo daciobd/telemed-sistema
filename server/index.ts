@@ -253,16 +253,19 @@ app.get('/demo-medico', (req, res) => {
       const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
       
       console.log('🌐 URL de destino:', publicUrl);
-      console.log('🔧 Redirecionamento direto para evitar problemas de popup');
+      console.log('🔧 Forçando abertura em nova aba para evitar conflitos');
       
-      // Redirecionamento direto é mais confiável que popup
+      // Sempre usar window.open em nova aba para evitar problemas de redirecionamento
       try {
-        console.log('✅ Redirecionando para:', publicUrl);
-        window.location.href = publicUrl;
+        const newWindow = window.open(publicUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
+        console.log('✅ Nova aba aberta para:', publicUrl);
+        
+        if (!newWindow) {
+          alert('Por favor, permita popups para este site e tente novamente.\\n\\nOu acesse diretamente: ' + publicUrl);
+        }
       } catch (error) {
-        console.error('❌ Erro ao redirecionar:', error);
-        // Fallback: tentar com window.open
-        window.open(publicUrl, '_blank');
+        console.error('❌ Erro ao abrir nova aba:', error);
+        alert('Acesse diretamente: ' + publicUrl);
       }
     }
   </script>
