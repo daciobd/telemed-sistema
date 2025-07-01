@@ -96,28 +96,19 @@ export function createDeploymentHandler() {
             <h1>🩺 TeleMed Sistema</h1>
             <p class="subtitle">Plataforma Completa de Telemedicina</p>
             
-            <div>
-              <button onclick="acessarPlataforma()" class="btn" style="background: #48bb78;">🩺 Acesso à Plataforma</button>
-              <a href="/video-test" class="btn">Teste de Videoconsulta</a>
-              <button onclick="mostrarInstrucoes()" class="btn" style="background: #4299e1;">📋 Instruções</button>
+            <div style="background: #f0fff4; padding: 30px; border-radius: 15px; margin: 30px 0; border: 3px solid #38b2ac;">
+              <h2 style="color: #22543d; margin-bottom: 20px; font-size: 1.5rem;">🚀 Como Acessar a Plataforma</h2>
+              <div style="text-align: left; line-height: 1.8; color: #2d3748;">
+                <p><strong>1.</strong> Esta é uma plataforma privada que requer login</p>
+                <p><strong>2.</strong> Clique no botão "Log in" no canto superior direito</p>
+                <p><strong>3.</strong> Faça login com sua conta Replit (gratuita)</p>
+                <p><strong>4.</strong> Após o login, explore todas as funcionalidades</p>
+              </div>
+              <div style="background: #e6fffa; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <strong style="color: #234e52;">💡 Não possui conta Replit?</strong><br>
+                <span style="color: #4a5568;">Crie uma conta gratuita em: replit.com</span>
+              </div>
             </div>
-            
-            <script>
-              function acessarPlataforma() {
-                const currentUrl = window.location.origin;
-                alert('🚀 Redirecionando para a plataforma TeleMed...\\n\\nVocê será direcionado para: ' + currentUrl + '\\n\\nFaça login com sua conta Replit para acessar.');
-                window.location.href = currentUrl;
-              }
-
-              function mostrarInstrucoes() {
-                alert('📋 COMO ACESSAR A PLATAFORMA:\\n\\n' +
-                      '1️⃣ Clique em "🩺 Acesso à Plataforma"\\n' +
-                      '2️⃣ Faça login com sua conta Replit\\n' +
-                      '3️⃣ Explore todas as funcionalidades\\n\\n' +
-                      '🔗 URL direta: ' + window.location.origin + '\\n\\n' +
-                      '💡 Dica: Para compartilhar com colegas, envie a URL direta.');
-              }
-            </script>
             
             <div class="features">
               <div class="feature">
