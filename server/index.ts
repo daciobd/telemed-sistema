@@ -205,9 +205,9 @@ app.get('/demo-medico', (req, res) => {
     </div>
     
     <div style="text-align: center; margin-top: 40px;">
-      <button onclick="abrirPlataformaPublica()" class="btn-mega">
+      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega">
         🚀 ABRIR PLATAFORMA AGORA
-      </button>
+      </a>
       
       <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega" style="background: #10b981; margin-left: 15px; font-size: 18px; padding: 20px 30px; border: 3px solid #059669;">
         🌐 LINK DIRETO PÚBLICO
@@ -245,29 +245,7 @@ app.get('/demo-medico', (req, res) => {
       console.log('✅ Dados demo auto-salvos no localStorage');
     });
     
-    // Função específica para URL pública do Replit
-    function abrirPlataformaPublica() {
-      console.log('🚀 Abrindo plataforma via URL pública do Replit');
-      
-      // SEMPRE usar URL pública - nunca localhost
-      const publicUrl = 'https://telemed-consultation-daciobd.replit.app';
-      
-      console.log('🌐 URL de destino:', publicUrl);
-      console.log('🔧 Forçando abertura em nova aba para evitar conflitos');
-      
-      // Sempre usar window.open em nova aba para evitar problemas de redirecionamento
-      try {
-        const newWindow = window.open(publicUrl, '_blank', 'noopener,noreferrer,width=1200,height=800');
-        console.log('✅ Nova aba aberta para:', publicUrl);
-        
-        if (!newWindow) {
-          alert('Por favor, permita popups para este site e tente novamente.\\n\\nOu acesse diretamente: ' + publicUrl);
-        }
-      } catch (error) {
-        console.error('❌ Erro ao abrir nova aba:', error);
-        alert('Acesse diretamente: ' + publicUrl);
-      }
-    }
+    // JavaScript removido - usando links diretos para evitar problemas
   </script>
 </body>
 </html>`);
