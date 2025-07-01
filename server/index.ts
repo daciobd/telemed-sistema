@@ -205,13 +205,14 @@ app.get('/demo-medico', (req, res) => {
     </div>
     
     <div style="text-align: center; margin-top: 40px;">
-      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega">
-        🚀 ABRIR PLATAFORMA AGORA
+      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega" style="background: #10b981; font-size: 20px; padding: 25px 40px; border: 3px solid #059669; text-transform: uppercase; letter-spacing: 1px;">
+        🌐 ACESSE A PLATAFORMA
       </a>
       
-      <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" class="btn-mega" style="background: #10b981; margin-left: 15px; font-size: 18px; padding: 20px 30px; border: 3px solid #059669;">
-        🌐 LINK DIRETO PÚBLICO
-      </a>
+      <div style="margin-top: 20px; padding: 15px; background: #e6fffa; border: 2px solid #38b2ac; border-radius: 10px; font-size: 16px;">
+        <strong>🔗 Link Direto:</strong><br>
+        <code style="background: #1a202c; color: #f7fafc; padding: 8px 15px; border-radius: 8px; font-weight: bold;">https://telemed-consultation-daciobd.replit.app</code>
+      </div>
       
       <a href="/" class="btn-mega btn-open">
         ← VOLTAR AO INÍCIO
