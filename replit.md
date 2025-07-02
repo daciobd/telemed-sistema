@@ -237,10 +237,12 @@ src/
   - ❌ URLs externas permanecem inacessíveis mesmo após deploy
 - **Análise**: Problema parece ser de infraestrutura/rede do Replit, não do código
 - **Impacto**: Impossibilita demonstrações externas para médicos colegas
+- **Status Atual**: Aguardando propagação DNS (30-60 minutos após deploy)
+- **URL para Teste**: https://telemed-consultation-daciobd.replit.app
 - **Próximos Passos**: 
-  - Investigar configurações avançadas de rede do Replit
-  - Considerar plataformas alternativas de deployment
-  - Testar deployment em horários diferentes (pode ser sobrecarga de servidor)
+  - Aguardar propagação DNS global (em andamento)
+  - Testar URL novamente após 30 minutos
+  - Confirmar acesso externo funcionando
 
 ### Sistema de Guia Médico para Demonstrações
 - **Data**: 26/06/2025
