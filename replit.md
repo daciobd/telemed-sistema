@@ -217,28 +217,30 @@ src/
 - **Acesso**: Login demo funcional com dados fictícios para teste seguro
 - **Correção de Rota**: Problema de acesso ao `/demo-medico` resolvido - rota movida para seção pública sem autenticação
 
-### Sistema de Deployment e Conectividade - EM CORREÇÃO
+### Sistema de Deployment - PROBLEMA PERSISTENTE DE CONECTIVIDADE
 - **Data**: 01/07/2025
-- **Status**: 🔧 EM RESOLUÇÃO - PROBLEMAS DE CONECTIVIDADE EXTERNA
-- **Problema Identificado**: URLs externas não acessíveis (erro "não é possível acessar este site")
-- **URLs Testadas com Falha**:
-  - `https://telemed-consultation-daciobd.replit.app` - Deployment principal
-  - `https://telemed-consultation-daciobd--5000.prod1a.replit.co/` - Porta 5000
-  - `https://telemed-consultation-daciobd--3000.prod1a.replit.co/` - Porta 3000
+- **Status**: 🔧 PROBLEMA CRÍTICO - URLS EXTERNAS NÃO ACESSÍVEIS
+- **Problema Confirmado**: Todas URLs externas retornam "não é possível acessar este site"
+- **URLs Testadas com Falha Confirmada**:
+  - `https://telemed-consultation-daciobd.replit.app` - URL oficial do deploy
+  - `https://telemed-consultation-daciobd--5000.prod1a.replit.co/` - Porta 5000 
 - **Status Interno**: 
-  - Servidor funcionando localmente na porta 3000
-  - Health check respondendo corretamente
-  - Aplicação React + Backend integrados funcionais
-- **Versão Atual**: 8.0.0-CLEAN com servidor recriado sem erros de sintaxe
-- **Correções Aplicadas**:
-  - Arquivo servidor totalmente recriado eliminando corrupção de sintaxe
-  - Porta alterada de 5000 para 3000 para melhor compatibilidade Replit
-  - Sistema de redirecionamento automático implementado
-  - Configuração para escuta em 0.0.0.0 (todas interfaces)
+  - Servidor funcionando perfeitamente na porta 5000
+  - Deploy realizado com sucesso (mostrado como "deployed 17 minutes ago")
+  - Aplicação React + Backend 100% funcionais localmente
+- **Versão Atual**: 8.0.0-DEPLOY com servidor na porta 5000
+- **Tentativas de Correção**:
+  - ✅ Redeploy oficial realizado via botão Replit
+  - ✅ Servidor alterado para porta 5000 conforme esperado pelo Replit
+  - ✅ Configuração para escuta em 0.0.0.0 (todas interfaces)
+  - ✅ Health check endpoint funcionando
+  - ❌ URLs externas permanecem inacessíveis mesmo após deploy
+- **Análise**: Problema parece ser de infraestrutura/rede do Replit, não do código
+- **Impacto**: Impossibilita demonstrações externas para médicos colegas
 - **Próximos Passos**: 
-  - Investigar configuração de proxy/DNS do Replit
-  - Testar deployment com configurações alternativas
-  - Verificar configuração de portas e exposição externa
+  - Investigar configurações avançadas de rede do Replit
+  - Considerar plataformas alternativas de deployment
+  - Testar deployment em horários diferentes (pode ser sobrecarga de servidor)
 
 ### Sistema de Guia Médico para Demonstrações
 - **Data**: 26/06/2025
