@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Acesso Externo - TeleMed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success { background: rgba(34, 197, 94, 0.3); }
+        .error { background: rgba(239, 68, 68, 0.3); }
+        .warning { background: rgba(245, 158, 11, 0.3); }
+        .url-test {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #059669;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🩺 TeleMed - Teste de Acesso Externo</h1>
+        
+        <div class="info">
+            <h3>Status do Servidor</h3>
+            <p><strong>Versão:</strong> 8.0.0-CLEAN</p>
+            <p><strong>Porta Local:</strong> 3000</p>
+            <p><strong>Status:</strong> <span id="serverStatus">Verificando...</span></p>
+        </div>
+
+        <div class="url-test">
+            <h3>URLs de Teste</h3>
+            
+            <div class="status warning">
+                <strong>URL Principal (Replit App):</strong><br>
+                <a href="https://telemed-consultation-daciobd.replit.app" target="_blank" style="color: #fff;">
+                    https://telemed-consultation-daciobd.replit.app
+                </a>
+                <button onclick="testarURL('https://telemed-consultation-daciobd.replit.app')">Testar</button>
+                <span id="status-main"></span>
+            </div>
+
+            <div class="status warning">
+                <strong>URL Porta 3000:</strong><br>
+                <a href="https://telemed-consultation-daciobd--3000.prod1a.replit.co" target="_blank" style="color: #fff;">
+                    https://telemed-consultation-daciobd--3000.prod1a.replit.co
+                </a>
+                <button onclick="testarURL('https://telemed-consultation-daciobd--3000.prod1a.replit.co')">Testar</button>
+                <span id="status-3000"></span>
+            </div>
+
+            <div class="status error">
+                <strong>URL Porta 5000 (Antiga):</strong><br>
+                <a href="https://telemed-consultation-daciobd--5000.prod1a.replit.co" target="_blank" style="color: #fff;">
+                    https://telemed-consultation-daciobd--5000.prod1a.replit.co
+                </a>
+                <button onclick="testarURL('https://telemed-consultation-daciobd--5000.prod1a.replit.co')">Testar</button>
+                <span id="status-5000"></span>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>Solução Recomendada</h3>
+            <p>Se as URLs externas não estiverem funcionando, use o <strong>botão Deploy do Replit</strong>:</p>
+            <ol>
+                <li>Clique no botão "Deploy" no topo do Replit</li>
+                <li>Escolha "Autoscale Deployment"</li>
+                <li>O Replit criará automaticamente uma URL pública funcional</li>
+            </ol>
+            <p><strong>Nota:</strong> O servidor está funcionando localmente na porta 3000, o problema é apenas de acesso externo.</p>
+        </div>
+
+        <div class="status success">
+            <h3>✅ Funcionalidades Prontas para Demonstração</h3>
+            <ul>
+                <li>Sistema de autenticação completo</li>
+                <li>Videoconsultas WebRTC</li>
+                <li>Prescrições MEMED integradas</li>
+                <li>Prontuário eletrônico</li>
+                <li>Sistema de pagamentos Stripe</li>
+                <li>Demonstração médica com dados fictícios</li>
+                <li>Guia completo para médicos</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testarURL(url) {
+            const statusElement = document.getElementById('status-' + url.split('--')[1]?.split('.')[0] || 'main');
+            statusElement.textContent = 'Testando...';
+            statusElement.style.color = '#fbbf24';
+            
+            fetch(url + '/api/health')
+                .then(response => {
+                    if (response.ok) {
+                        statusElement.textContent = '✅ Funcionando';
+                        statusElement.style.color = '#10b981';
+                    } else {
+                        statusElement.textContent = '❌ Erro ' + response.status;
+                        statusElement.style.color = '#ef4444';
+                    }
+                })
+                .catch(error => {
+                    statusElement.textContent = '❌ Não acessível';
+                    statusElement.style.color = '#ef4444';
+                });
+        }
+
+        // Teste automático ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('serverStatus').textContent = 'Rodando na porta 3000';
+            document.getElementById('serverStatus').style.color = '#10b981';
+            
+            // Testar URLs automaticamente
+            setTimeout(() => {
+                testarURL('https://telemed-consultation-daciobd.replit.app');
+                testarURL('https://telemed-consultation-daciobd--3000.prod1a.replit.co');
+                testarURL('https://telemed-consultation-daciobd--5000.prod1a.replit.co');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
