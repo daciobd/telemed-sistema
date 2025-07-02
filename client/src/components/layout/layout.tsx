@@ -14,7 +14,7 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen flex bg-neutral-50">
+    <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-blue-50 animate-fade-in">
       <Sidebar 
         isMobileMenuOpen={isMobileMenuOpen} 
         setIsMobileMenuOpen={setIsMobileMenuOpen} 
@@ -23,8 +23,10 @@ export default function Layout({ children }: LayoutProps) {
       <Header onMobileMenuToggle={toggleMobileMenu} />
       
       <main className="flex-1 flex flex-col pt-16">
-        <div className="flex-1 overflow-auto">
-          {children}
+        <div className="flex-1 overflow-auto p-6">
+          <div className="animate-slide-up">
+            {children}
+          </div>
         </div>
       </main>
     </div>

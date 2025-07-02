@@ -11,21 +11,32 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+      </div>
+
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="glass-card border-0 border-b border-white/10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Heart className="h-6 w-6 text-white" />
+            <div className="flex items-center space-x-3 animate-slide-up">
+              <div className="w-12 h-12 bg-gradient-medical rounded-xl flex items-center justify-center shadow-medical">
+                <Heart className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">TeleMed</h1>
-                <p className="text-sm text-gray-500">Sistema</p>
+                <h1 className="text-xl font-bold text-white">TeleMed</h1>
+                <p className="text-sm text-blue-200">Sistema</p>
               </div>
             </div>
-            <Button onClick={handleLogin} className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              onClick={handleLogin} 
+              className="btn-medical hover-glow animate-fade-in"
+              style={{animationDelay: '0.5s'}}
+            >
               Entrar no Sistema
             </Button>
           </div>
@@ -33,51 +44,64 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
-            Sistema de
-            <span className="text-blue-600"> Telemedicina</span>
-          </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-600">
-            Plataforma completa para gestão de consultas médicas, prontuários eletrônicos 
-            e teleconsultas. Conectando pacientes e profissionais de saúde.
-          </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+        <div className="text-center mb-20">
+          {/* Main title with gradient text */}
+          <div className="animate-slide-up">
+            <h1 className="text-5xl font-bold sm:text-6xl md:text-7xl lg:text-8xl leading-tight">
+              <span className="block text-white mb-4">Sistema de</span>
+              <span className="block text-gradient-medical bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent animate-pulse-medical">
+                Telemedicina
+              </span>
+            </h1>
+          </div>
+          
+          {/* Enhanced description */}
+          <div className="animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <p className="mt-8 max-w-3xl mx-auto text-xl text-blue-100 leading-relaxed">
+              Plataforma completa para gestão de consultas médicas, prontuários eletrônicos 
+              e teleconsultas. <span className="text-white font-semibold">Conectando pacientes e profissionais de saúde</span> 
+              com tecnologia de ponta.
+            </p>
+          </div>
+          
+          {/* CTA Buttons with enhanced styling */}
+          <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up" style={{animationDelay: '0.6s'}}>
             <Button 
               onClick={handleLogin} 
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3"
+              className="btn-medical text-xl px-10 py-4 shadow-medical hover-glow group"
             >
-              Acessar Plataforma
+              <span className="group-hover:scale-110 transition-transform">🩺</span>
+              <span className="ml-2">Acessar Plataforma</span>
             </Button>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-4 justify-center">
               <Button 
                 onClick={() => setLocation('/video-test')}
                 variant="outline"
                 size="lg"
-                className="text-lg px-6 py-3 border-green-600 text-green-600 hover:bg-green-50"
+                className="glass-card text-lg px-8 py-4 border-green-400/50 text-green-300 hover:text-green-100 hover:border-green-300 hover-lift group transition-all duration-300"
               >
-                <Video className="h-5 w-5 mr-2" />
-                Testar Videoconsulta
+                <Video className="h-6 w-6 mr-3 group-hover:scale-110 transition-transform" />
+                <span className="font-semibold">Testar Videoconsulta</span>
               </Button>
               <Button 
                 onClick={() => setLocation('/register-doctor')}
                 variant="outline"
                 size="lg"
-                className="text-lg px-6 py-3 border-blue-600 text-blue-600 hover:bg-blue-50"
+                className="glass-card text-lg px-8 py-4 border-blue-400/50 text-blue-300 hover:text-blue-100 hover:border-blue-300 hover-lift group transition-all duration-300"
               >
-                <Stethoscope className="h-5 w-5 mr-2" />
-                Sou Médico
+                <Stethoscope className="h-6 w-6 mr-3 group-hover:scale-110 transition-transform" />
+                <span className="font-semibold">Sou Médico</span>
               </Button>
               <Button 
                 onClick={() => setLocation('/register-patient')}
                 variant="outline"
                 size="lg"
-                className="text-lg px-6 py-3 border-green-600 text-green-600 hover:bg-green-50"
+                className="glass-card text-lg px-8 py-4 border-purple-400/50 text-purple-300 hover:text-purple-100 hover:border-purple-300 hover-lift group transition-all duration-300"
               >
-                <UserPlus className="h-5 w-5 mr-2" />
-                Sou Paciente
+                <UserPlus className="h-6 w-6 mr-3 group-hover:scale-110 transition-transform" />
+                <span className="font-semibold">Sou Paciente</span>
               </Button>
             </div>
           </div>

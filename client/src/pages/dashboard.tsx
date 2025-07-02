@@ -31,10 +31,13 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando...</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center animate-scale-in">
+          <div className="w-16 h-16 bg-gradient-medical rounded-full flex items-center justify-center mb-6 mx-auto animate-pulse-medical">
+            <div className="text-white text-2xl">🩺</div>
+          </div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-medical-blue mx-auto mb-4"></div>
+          <p className="text-neutral-600 font-medium">Carregando TeleMed...</p>
         </div>
       </div>
     );

@@ -14,16 +14,16 @@ export default function StatsCards() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
+          <Card key={i} className="card-enhanced skeleton">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
-                  <div className="h-8 bg-gray-200 rounded w-16"></div>
+                <div className="space-y-3">
+                  <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-20"></div>
+                  <div className="h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-16"></div>
                 </div>
-                <div className="w-12 h-12 bg-gray-200 rounded-lg"></div>
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl"></div>
               </div>
-              <div className="mt-4 h-4 bg-gray-200 rounded w-24"></div>
+              <div className="mt-4 h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-24"></div>
             </CardContent>
           </Card>
         ))}
@@ -128,35 +128,53 @@ export default function StatsCards() {
   const statsCards = getStatsCards();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
       {statsCards.map((stat, index) => {
         const Icon = stat.icon;
         const TrendIcon = stat.trendIcon;
         
         return (
-          <Card key={index} className="bg-white shadow-sm border border-gray-100">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+          <Card 
+            key={index} 
+            className="card-enhanced hover-lift hover-glow group cursor-pointer animate-slide-up"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <CardContent className="p-6 relative overflow-hidden">
+              {/* Gradient overlay effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="flex items-center justify-between relative z-10">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-600 group-hover:text-gray-700 transition-colors">
+                    {stat.title}
+                  </p>
+                  <p className="text-3xl font-bold text-gray-900 group-hover:text-medical-blue transition-colors">
+                    {stat.value}
+                  </p>
                 </div>
-                <div className={`w-12 h-12 ${stat.iconBg} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`h-6 w-6 ${stat.iconColor}`} />
+                
+                <div className={`w-14 h-14 ${stat.iconBg} rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}>
+                  <Icon className={`h-7 w-7 ${stat.iconColor} group-hover:scale-110 transition-transform`} />
                 </div>
               </div>
+              
               {stat.trend && (
-                <div className="mt-4 flex items-center text-sm">
-                  <TrendIcon className={`h-4 w-4 mr-1 ${stat.trend.startsWith('+') ? 'text-green-500' : 'text-red-500'}`} />
-                  <span className={`font-medium ${stat.trend.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
-                    {stat.trend}
-                  </span>
-                  <span className="text-gray-500 ml-1">{stat.trendText}</span>
+                <div className="mt-4 flex items-center text-sm relative z-10">
+                  <div className={`flex items-center px-2 py-1 rounded-full ${stat.trend.startsWith('+') ? 'bg-green-100' : 'bg-red-100'}`}>
+                    <TrendIcon className={`h-4 w-4 mr-1 ${stat.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`} />
+                    <span className={`font-semibold ${stat.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                      {stat.trend}
+                    </span>
+                  </div>
+                  <span className="text-gray-500 ml-2 font-medium">{stat.trendText}</span>
                 </div>
               )}
+              
               {!stat.trend && (
-                <div className="mt-4 flex items-center text-sm">
-                  <span className="text-gray-500">{stat.trendText}</span>
+                <div className="mt-4 flex items-center text-sm relative z-10">
+                  <div className="px-3 py-1 bg-blue-50 rounded-full">
+                    <span className="text-blue-700 font-medium">{stat.trendText}</span>
+                  </div>
                 </div>
               )}
             </CardContent>
