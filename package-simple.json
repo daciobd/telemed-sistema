@@ -1,10 +1,10 @@
 {
   "name": "telemed-sistema",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "echo 'No build needed for simple server'"
+    "start": "node app.js",
+    "build": "echo 'Build complete'"
   },
   "engines": {
     "node": "18.x"
