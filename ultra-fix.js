@@ -7,6 +7,27 @@ console.log('🚀 TeleMed Sistema - Iniciando...');
 console.log(`📍 Porta detectada: ${PORT}`);
 
 const server = http.createServer((req, res) => {
+  // Log requests para debug
+  console.log(`📝 Request: ${req.method} ${req.url} from ${req.headers.host}`);
+  
+  // Adicionar CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  // Verificar se é health check
+  if (req.url === '/health' || req.url === '/ping') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ 
+      status: 'healthy', 
+      service: 'TeleMed Sistema',
+      version: '1.0.0-ULTRA',
+      timestamp: new Date().toISOString() 
+    }));
+    return;
+  }
+  
+  // Para todas as outras rotas, servir a landing page
   res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
   res.end(`
 <!DOCTYPE html>
