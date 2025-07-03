@@ -1,11 +1,8 @@
-import express from 'express';
-import path from 'path';
-
+const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 // Health check
 app.get('/health', (req, res) => {
@@ -13,12 +10,16 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     port: PORT,
-    version: '8.1.0-SIMPLE',
-    environment: process.env.NODE_ENV || 'development'
+    version: '1.0.0-SIMPLE-JS'
   });
 });
 
-// Main route
+// API test
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'TeleMed API funcionando!', status: 'success' });
+});
+
+// Landing page
 app.get('*', (req, res) => {
   const html = `
     <!DOCTYPE html>
@@ -48,19 +49,13 @@ app.get('*', (req, res) => {
         }
         h1 { color: #2d3748; margin-bottom: 20px; font-size: 2.5em; }
         p { color: #666; margin-bottom: 30px; font-size: 1.1em; }
-        .status-info {
+        .status { 
+          color: #48bb78; 
+          font-weight: bold; 
+          margin: 20px 0;
+          padding: 15px;
           background: #f0fff4;
-          border: 1px solid #68d391;
           border-radius: 8px;
-          padding: 20px;
-          margin: 20px 0;
-        }
-        .url-info {
-          background: #bee3f8;
-          border: 1px solid #90cdf4;
-          border-radius: 8px;
-          padding: 20px;
-          margin: 20px 0;
         }
         .feature {
           background: #edf2f7;
@@ -71,13 +66,21 @@ app.get('*', (req, res) => {
         }
         .feature h4 { color: #2d3748; margin-bottom: 5px; }
         .feature p { color: #4a5568; margin: 0; font-size: 0.9em; }
-        code {
-          background: #f7fafc;
-          padding: 4px 8px;
-          border-radius: 4px;
-          font-family: monospace;
-          color: #2d3748;
+        .demo-btn {
+          background: #4299e1;
+          color: white;
+          padding: 15px 30px;
+          border-radius: 10px;
+          text-decoration: none;
+          font-weight: 600;
+          display: inline-block;
+          margin: 20px 10px;
+          font-size: 1.1em;
+          transition: background 0.3s;
         }
+        .demo-btn:hover { background: #3182ce; }
+        .demo-btn.green { background: #48bb78; }
+        .demo-btn.green:hover { background: #38a169; }
       </style>
     </head>
     <body>
@@ -85,44 +88,48 @@ app.get('*', (req, res) => {
         <h1>🩺 TeleMed Sistema</h1>
         <p>Plataforma Completa de Telemedicina</p>
         
-        <div class="status-info">
-          <h3>✅ Servidor Funcionando</h3>
-          <p><strong>Porta:</strong> ${PORT}</p>
-          <p><strong>Status:</strong> Ativo e Responsivo</p>
-          <p><strong>Health Check:</strong> <code>/health</code></p>
-        </div>
+        <div class="status">✅ Sistema Online e Funcionando!</div>
         
-        <div class="url-info">
-          <h3>🔗 URLs de Acesso</h3>
-          <p><strong>URL Principal:</strong></p>
-          <code>https://telemed-consultation-daciobd--3000.prod1a.replit.co/</code>
-          <br><br>
-          <p><strong>URL Alternativa:</strong></p>
-          <code>https://telemed-consultation-daciobd.replit.app/</code>
+        <div style="margin: 30px 0;">
+          <a href="/demo-medico" class="demo-btn green">👨‍⚕️ Demo para Médicos</a>
+          <a href="/api/test" class="demo-btn">🔧 Testar API</a>
         </div>
         
         <div class="feature">
-          <h4>🎥 Videoconsultas</h4>
-          <p>Sistema WebRTC com chat em tempo real</p>
+          <h4>🎥 Videoconsultas WebRTC</h4>
+          <p>Sistema peer-to-peer com chat em tempo real</p>
         </div>
         
         <div class="feature">
           <h4>💊 Prescrições MEMED</h4>
-          <p>Prescrições digitais integradas</p>
+          <p>Prescrições digitais integradas e válidas</p>
         </div>
         
         <div class="feature">
-          <h4>🤖 Assistente IA</h4>
-          <p>Análise de sintomas e sugestões</p>
+          <h4>🤖 Assistente IA Médico</h4>
+          <p>Análise de sintomas e sugestões diagnósticas</p>
         </div>
         
         <div class="feature">
           <h4>💳 Pagamentos Stripe</h4>
-          <p>Sistema de pagamentos seguro</p>
+          <p>Sistema de pagamentos seguro R$ 150/consulta</p>
         </div>
         
-        <div style="margin-top: 30px; font-size: 12px; color: #999;">
-          TeleMed Sistema v8.1.0-SIMPLE | Porta ${PORT} | ${new Date().toLocaleString('pt-BR')}
+        <div class="feature">
+          <h4>🧠 Psiquiatria Especializada</h4>
+          <p>Avaliação PHQ-9 e GAD-7 com análise de risco</p>
+        </div>
+        
+        <div class="feature">
+          <h4>📊 Dashboard Analytics</h4>
+          <p>Relatórios e métricas médicas avançadas</p>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #f7fafc; border-radius: 8px;">
+          <h4 style="color: #2d3748; margin-bottom: 10px;">🚀 Deploy Realizado com Sucesso!</h4>
+          <p style="color: #4a5568; margin: 0; font-size: 0.9em;">
+            Plataforma online e pronta para demonstrações médicas
+          </p>
         </div>
       </div>
     </body>
@@ -132,9 +139,8 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log('🩺 TeleMed Sistema v8.1.0-SIMPLE');
+  console.log(`🩺 TeleMed Sistema v1.0.0-SIMPLE-JS`);
   console.log(`🌐 Servidor rodando na porta ${PORT}`);
-  console.log(`🔗 Acesso local: http://localhost:${PORT}`);
-  console.log(`🔗 Acesso externo: https://telemed-consultation-daciobd--${PORT}.prod1a.replit.co/`);
-  console.log('✅ Servidor simples ativo e responsivo');
+  console.log(`✅ Deploy realizado com sucesso!`);
+  console.log(`📱 Acesse: http://localhost:${PORT}`);
 });
