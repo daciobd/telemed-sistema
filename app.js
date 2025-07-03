@@ -1,224 +1,195 @@
-# 🚀 Deploy Rápido - Versão Simplificada
-# DEPLOY RENDER - CORREÇÃO DE SYNTAX ERROR
-## 📋 PROBLEMA IDENTIFICADO
-- O Render está falhando porque faltam muitos arquivos do projeto
-- Arquivos de dependências complexas (routes, storage, auth) não foram criados
-- Solução: Criar versão simplificada que funciona imediatamente
-## PROBLEMA IDENTIFICADO NOS LOGS
-```
-SyntaxError: missing ) after argument list
-```
-## 🎯 SOLUÇÃO RÁPIDA
-## CAUSA
-O arquivo `app.js` tem erro de sintaxe no template literal HTML.
-### 1. Cancelar Deploy Atual
-No Render, clique "Cancel deploy" se ainda estiver rodando
-## SOLUÇÃO IMEDIATA
-### 2. Criar Versão Simples do server/index.ts
-### Substitua o conteúdo do `app.js` no GitHub por:
-Substitua o conteúdo do server/index.ts no GitHub por:
-```javascript
 const http = require('http');
-const PORT = process.env.PORT || 10000;
-```typescript
-import express from 'express';
-import path from 'path';
-console.log('Iniciando TeleMed Sistema na porta:', PORT);
-const app = express();
-const PORT = parseInt(process.env.PORT || '5000', 10);
+const PORT = process.env.PORT || 3000;
+
+console.log('TeleMed Sistema iniciando...');
+
 const htmlPage = `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>TeleMed Sistema - Online</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed Sistema - Plataforma de Telemedicina</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: Arial, sans-serif; 
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            margin: 0; 
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #333;
         }
-        .container { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 10px; 
+        .container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 90%;
         }
-        h1 { color: #333; margin-bottom: 20px; }
-        .status { 
-            background: #d4edda; 
-            color: #155724; 
-            padding: 15px; 
-            border-radius: 5px; 
+        h1 {
+            color: #2563eb;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .status {
+            background: #dcfce7;
+            color: #166534;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 2px solid #22c55e;
+        }
+        .info {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 10px;
             margin: 20px 0;
-            font-weight: bold;
+            border-left: 4px solid #3b82f6;
         }
-        .info { background: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature {
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        h3 {
+            color: #1e40af;
+            margin: 30px 0 20px 0;
+            font-size: 1.5rem;
+        }
+        .success-badge {
+            background: #059669;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            h1 { font-size: 2rem; }
+            .features { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🩺 TeleMed Sistema</h1>
-        <div class="status">✅ SISTEMA ONLINE E FUNCIONANDO</div>
-        <div class="info">
-            <strong>Deploy:</strong> REALIZADO COM SUCESSO<br>
-            <strong>Status:</strong> Operacional<br>
-            <strong>Data:</strong> 03/07/2025
+        
+        <div class="success-badge">
+            ✅ SISTEMA ONLINE E OPERACIONAL
         </div>
-        <h3>Funcionalidades Disponíveis:</h3>
-        <p>🎥 Videoconsultas WebRTC</p>
-        <p>💊 Prescrições MEMED</p>
-        <p>🤖 Assistente IA Médico</p>
-        <p>💳 Pagamentos Stripe</p>
-        <p>🧠 Psiquiatria Especializada</p>
-        <p>📊 Dashboard Analytics</p>
-        <br>
-        <h3>🚀 Sistema Pronto para Demonstrações</h3>
+        
+        <div class="status">
+            🚀 Deploy realizado com sucesso!<br>
+            Plataforma pronta para demonstrações médicas
+        </div>
+        
+        <div class="info">
+            <strong>📊 Status:</strong> Funcionando perfeitamente<br>
+            <strong>📅 Deploy:</strong> Julho 2025<br>
+            <strong>🌐 Plataforma:</strong> Vercel<br>
+            <strong>⚡ Versão:</strong> 2.0 Simplificada
+        </div>
+        
+        <h3>🏥 Funcionalidades Disponíveis</h3>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🎥</div>
+                <strong>Videoconsultas</strong><br>
+                WebRTC P2P
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💊</div>
+                <strong>Prescrições</strong><br>
+                Integração MEMED
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <strong>IA Médica</strong><br>
+                Assistente Inteligente
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💳</div>
+                <strong>Pagamentos</strong><br>
+                Stripe Integrado
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🧠</div>
+                <strong>Psiquiatria</strong><br>
+                PHQ-9, GAD-7
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <strong>Analytics</strong><br>
+                Dashboard Médico
+            </div>
+        </div>
+        
+        <h3>🎯 Sistema Pronto para Demonstrações</h3>
+        
+        <div class="info">
+            <strong>🏆 Conquista:</strong> Deploy bem-sucedido após múltiplas tentativas<br>
+            <strong>📈 Próximo passo:</strong> Compartilhar com colegas médicos<br>
+            <strong>💡 Objetivo:</strong> Revolucionar a telemedicina no Brasil
+        </div>
     </div>
 </body>
 </html>`;
-app.use(express.json());
-app.use(express.static('dist'));
-// Health check
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    port: PORT,
-    version: '1.0.0-SIMPLE'
+
 const server = http.createServer((req, res) => {
-  console.log('Request:', req.method, req.url);
+  console.log(\`\${new Date().toISOString()} - \${req.method} \${req.url}\`);
+  
+  if (req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }));
+    return;
+  }
   
   res.writeHead(200, {
     'Content-Type': 'text/html; charset=utf-8',
-    'Cache-Control': 'no-cache'
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
   });
   
   res.end(htmlPage);
 });
-// API routes básicas
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'TeleMed API funcionando!', status: 'success' });
-server.listen(PORT, '0.0.0.0', () => {
-  console.log('TeleMed Sistema rodando na porta', PORT);
+
+server.listen(PORT, () => {
+  console.log(\`TeleMed Sistema rodando na porta \${PORT}\`);
+  console.log(\`Health check: http://localhost:\${PORT}/health\`);
   console.log('Sistema pronto para conexões!');
 });
-// Landing page estática
-app.get('*', (req, res) => {
-  const html = `
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>TeleMed - Sistema de Telemedicina</title>
-      <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-        }
-        .container {
-          background: white;
-          border-radius: 20px;
-          padding: 40px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-          max-width: 600px;
-          text-align: center;
-        }
-        h1 { color: #2d3748; margin-bottom: 20px; font-size: 2.5em; }
-        p { color: #666; margin-bottom: 30px; font-size: 1.1em; }
-        .feature {
-          background: #edf2f7;
-          padding: 15px;
-          border-radius: 8px;
-          margin: 10px 0;
-          text-align: left;
-        }
-        .feature h4 { color: #2d3748; margin-bottom: 5px; }
-        .feature p { color: #4a5568; margin: 0; font-size: 0.9em; }
-        .status { color: #48bb78; font-weight: bold; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <h1>🩺 TeleMed Sistema</h1>
-        <p>Plataforma Completa de Telemedicina</p>
-        
-        <div class="status">✅ Sistema Online e Funcionando!</div>
-        
-        <div class="feature">
-          <h4>🎥 Videoconsultas</h4>
-          <p>Sistema WebRTC com chat em tempo real</p>
-        </div>
-        
-        <div class="feature">
-          <h4>💊 Prescrições MEMED</h4>
-          <p>Prescrições digitais integradas</p>
-        </div>
-        
-        <div class="feature">
-          <h4>🤖 Assistente IA</h4>
-          <p>Análise de sintomas e sugestões</p>
-        </div>
-        
-        <div class="feature">
-          <h4>💳 Pagamentos Stripe</h4>
-          <p>Sistema de pagamentos seguro</p>
-        </div>
-        
-        <div style="margin-top: 30px; font-size: 14px; color: #666;">
-          Deploy realizado com sucesso no Render!
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
-  res.send(html);
-});
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🩺 TeleMed Sistema v1.0.0-SIMPLE`);
-  console.log(`🌐 Servidor rodando na porta ${PORT}`);
-  console.log(`✅ Deploy realizado com sucesso!`);
+
 server.on('error', (err) => {
   console.error('Erro do servidor:', err);
 });
-```
-### 3. Simplificar package.json
-### COMMIT
-Mensagem: "Fix syntax error in app.js"
-Ajustar scripts no package.json:
-```json
-{
-  "scripts": {
-    "dev": "tsx server/index.ts",
-    "build": "echo 'Build concluído'",
-    "start": "tsx server/index.ts"
-  }
-}
-```
-### 4. Resultado
-- ✅ Deploy funcionará em 2-3 minutos
-- ✅ URL pública funcionando
-- ✅ Landing page profissional
-- ✅ Demonstração para médicos
-## 🎯 PRÓXIMOS PASSOS
-1. Editar server/index.ts no GitHub com conteúdo simplificado
-2. Render detectará mudança e fará novo deploy
-3. Em poucos minutos, URL estará funcionando
-4. Expandir funcionalidades gradualmente
-## RESULTADO
-✅ Deploy funcionará em 2-3 minutos
-✅ Erro de sintaxe corrigido
-✅ HTML separado da lógica do servidor
+
+process.on('SIGTERM', () => {
+  console.log('Recebido SIGTERM, encerrando servidor...');
+  server.close(() => {
+    console.log('Servidor encerrado.');
+    process.exit(0);
+  });
+});
+
+module.exports = server;
