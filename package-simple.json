@@ -1,16 +1,12 @@
 {
   "name": "telemed-sistema",
   "version": "1.0.0",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2"
+    "build": "echo 'No build needed for simple server'"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "18.x"
   }
 }
