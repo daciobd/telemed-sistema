@@ -1,126 +1,50 @@
-# 🚂 Deploy TeleMed no Railway - Instruções Detalhadas
+# DEPLOY RAILWAY - SOLUÇÃO ALTERNATIVA
 
-## 📋 Checklist de Preparação
-Seu projeto já está pronto com:
-- ✅ `railway.json` - Configuração otimizada
-- ✅ `package.json` - Scripts build/start configurados  
-- ✅ `Dockerfile` - Backup para containerização
-- ✅ Servidor na porta 5000 funcionando
-- ✅ Health check endpoint: `/health`
+## POR QUE RAILWAY
+- Render está com problemas persistentes há horas
+- Railway já está configurado no projeto (`railway.json`)
+- Deploy mais rápido e confiável
+- PostgreSQL incluído gratuitamente
+- $5 de crédito gratuito
 
-## 🎯 Passos para Deploy
+## PASSO A PASSO SIMPLES
 
-### 1. Acessar Railway
+### 1. Acesse Railway
 - Vá para: https://railway.app
-- Clique em **"Login"** 
-- Use GitHub para fazer login
+- Clique "Login with GitHub"
+- Autorize o Railway
 
-### 2. Criar Novo Projeto
-- Clique **"New Project"**
-- Selecione **"Deploy from GitHub repo"**
-- Procure por `telemed-consultation` (seu repositório)
-- Clique **"Deploy Now"**
+### 2. Novo Projeto
+- Clique "New Project"
+- Selecione "Deploy from GitHub repo"
+- Escolha `daciobd/telemed-sistema`
 
-### 3. Adicionar PostgreSQL
-- No dashboard do projeto, clique **"+ New"**
-- Selecione **"Database"** → **"PostgreSQL"**
-- O Railway criará automaticamente uma instância
+### 3. Configuração Automática
+- Railway detectará o `railway.json` automaticamente
+- PostgreSQL será criado automaticamente
+- Build iniciará automaticamente
 
-### 4. Configurar Variáveis de Ambiente
-Clique no serviço da aplicação → **"Variables"** e adicione:
+### 4. Aguarde Deploy
+- Deploy leva 2-3 minutos (muito mais rápido que Render)
+- URL será algo como: `https://telemed-sistema-production.up.railway.app`
 
-```
-DATABASE_URL=${{Postgres.DATABASE_URL}}
-SESSION_SECRET=telemed-railway-secret-2025-production
-STRIPE_SECRET_KEY=sk_test_51... (sua chave)
-VITE_STRIPE_PUBLIC_KEY=pk_test_51... (sua chave pública)
-NODE_ENV=production
-PORT=5000
-REPL_ID=telemed-railway-prod
-REPLIT_DOMAINS=telemed.railway.app
-ISSUER_URL=https://replit.com/oidc
-```
+## VANTAGENS DO RAILWAY
+- Build mais rápido
+- Logs mais claros
+- PostgreSQL incluído
+- SSL automático
+- Domínio personalizado grátis
 
-### 5. Verificar Build
-- O Railway executará automaticamente:
-  - `npm install` (dependências)
-  - `npm run build` (build do projeto)
-  - `npm start` (iniciar servidor)
+## CONFIGURAÇÃO JÁ PRONTA
+O arquivo `railway.json` já está configurado com:
+- Node.js 18
+- Start command correto
+- Health check
+- Environment variables
 
-### 6. Monitorar Deploy
-- Acompanhe logs em tempo real na aba **"Deployments"**
-- Aguarde status **"Success"** (2-3 minutos)
+## RESULTADO ESPERADO
+✅ Deploy em 3 minutos
+✅ Sistema online sem problemas
+✅ URL funcional para demonstrações
 
-### 7. Obter URL Final
-- Na aba **"Settings"** → **"Domains"**
-- Copie a URL gerada: `https://telemed-[hash].up.railway.app`
-
-## 🧪 Testes Pós-Deploy
-
-### URLs para Testar
-1. **Health Check**: `[sua-url]/health`
-2. **Landing Page**: `[sua-url]/`
-3. **Demo Médico**: `[sua-url]/demo-medico`
-4. **Teste Videoconsulta**: `[sua-url]/video-test`
-
-### Verificações
-- ✅ Landing page carrega com design moderno
-- ✅ Botões de navegação funcionam
-- ✅ Login via Replit funciona
-- ✅ Banco de dados conecta corretamente
-
-## 🔧 Solução de Problemas
-
-### Build Falha
-**Problema**: Erro durante `npm run build`
-**Solução**: 
-- Verifique logs detalhados
-- Confirme que todas dependências estão listadas
-- Re-deploy se necessário
-
-### Banco Não Conecta
-**Problema**: Erro de conexão PostgreSQL
-**Solução**:
-- Verifique se `DATABASE_URL` está usando `${{Postgres.DATABASE_URL}}`
-- Confirme que serviço PostgreSQL está ativo
-- Reinicie o deploy
-
-### Aplicação Não Responde
-**Problema**: 502 Bad Gateway
-**Solução**:
-- Confirme que aplicação está escutando na `PORT` correta
-- Verifique health check em `/health`
-- Examine logs de runtime
-
-## 💰 Custos Esperados
-- **Aplicação**: ~$1-3/mês (uso básico)
-- **PostgreSQL**: Incluído no plano
-- **Crédito Gratuito**: $5/mês iniciais
-
-## 🎉 Resultado Final
-
-Após sucesso do deploy:
-- ✅ URL pública funcionando: `https://[hash].up.railway.app`
-- ✅ HTTPS automático com certificado SSL
-- ✅ PostgreSQL configurado e funcionando
-- ✅ Pronto para demonstrações aos médicos
-- ✅ Deploy automático a cada push no GitHub
-
-## 📱 Compartilhamento
-
-Para médicos colegas testarem:
-```
-🩺 TeleMed Sistema - Plataforma de Telemedicina
-
-Acesse: https://[sua-url].up.railway.app
-
-Funcionalidades para testar:
-✓ Demo Médico (sem cadastro): /demo-medico
-✓ Teste Videoconsulta: /video-test  
-✓ Cadastro Médico: /register-doctor
-✓ Sistema completo de teleconsultas
-
-Desenvolvido por: [Seu Nome]
-```
-
-A partir de agora, você terá uma URL funcional para compartilhar com médicos interessados em testar a plataforma!
+Railway é mais confiável que Render para projetos Node.js.
