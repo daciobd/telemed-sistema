@@ -195,6 +195,14 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
+### Deploy Render.com em Progresso - 03/07/2025
+- **Status**: Deploy simplificado em andamento no Render.com
+- **Estratégia**: Arquivo index.js JavaScript puro sem dependências complexas
+- **Correção**: package.json alterado para usar "node index.js" ao invés de TypeScript
+- **Resultado Esperado**: Landing page profissional online em poucos minutos
+- **URL**: Será gerada automaticamente pelo Render após conclusão do build
+- **Objetivo**: Plataforma acessível publicamente para demonstrações médicas
+
 ### Otimização Estética do Frontend - IMPLEMENTADA
 - **Data**: 02/07/2025
 - **Implementação**: Sistema completo de otimização visual e estética FUNCIONANDO
