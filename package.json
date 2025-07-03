@@ -1,12 +1,11 @@
 {
   "name": "telemed-sistema",
   "version": "1.0.0",
-  "main": "ultra-fix.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node ultra-fix.js",
-    "build": "echo 'Build complete'"
+    "start": "node app.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "18.x"
   }
 }
