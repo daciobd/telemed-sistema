@@ -192,5 +192,5 @@ export default function handler(req, res) {
 </body>
 </html>`;
 
-  res.status(200).send(html);
+
 }
