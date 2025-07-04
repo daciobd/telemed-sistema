@@ -2,24 +2,12 @@
   "functions": {
     "api/index.js": {
       "runtime": "@vercel/node@18"
-    },
-    "api/server.js": {
-      "runtime": "@vercel/node@18"
     }
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/server"
-    },
-    {
       "source": "/(.*)",
       "destination": "/api/index"
     }
-  ],
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
-  }
+  ]
 }
