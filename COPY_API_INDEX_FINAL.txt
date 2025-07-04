@@ -128,7 +128,7 @@ export default function handler(req, res) {
         
         <div class="info">
             <strong>📊 Status:</strong> Funcionando perfeitamente<br>
-            <strong>📅 Deploy:</strong> ${new Date().toLocaleDateString('pt-BR')}<br>
+            <strong>📅 Deploy:</strong> Julho 2025<br>
             <strong>🌐 Plataforma:</strong> Vercel Serverless<br>
             <strong>⚡ Versão:</strong> 4.0 Demo
         </div>
