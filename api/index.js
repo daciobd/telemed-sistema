@@ -1,5 +1,8 @@
 export default function handler(req, res) {
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.writeHead(200, { 
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': 'no-cache'
+  });
   
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -8,189 +11,152 @@ export default function handler(req, res) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMed Sistema - Plataforma de Telemedicina</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             min-height: 100vh;
+            margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #333;
-            line-height: 1.6;
+            padding: 20px;
         }
         .container {
             background: white;
-            padding: 3rem 2rem;
+            padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 700px;
-            width: 95%;
-            margin: 20px;
+            max-width: 600px;
+            width: 100%;
         }
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #4f46e5;
-            margin-bottom: 1rem;
+        .logo { 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            color: #4f46e5; 
+            margin-bottom: 20px; 
         }
-        .subtitle {
-            font-size: 1.1rem;
-            color: #6b7280;
-            margin-bottom: 2rem;
+        .subtitle { 
+            color: #6b7280; 
+            margin-bottom: 30px; 
+            font-size: 1.1rem; 
         }
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-            text-align: left;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
         }
         .feature {
             background: #f8fafc;
-            padding: 1.5rem;
+            padding: 20px;
             border-radius: 12px;
             border-left: 4px solid #4f46e5;
+            text-align: left;
         }
-        .feature h3 {
-            color: #1e293b;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+        .feature h3 { 
+            color: #1e293b; 
+            margin-bottom: 8px; 
         }
-        .feature p {
-            color: #64748b;
-            font-size: 0.9rem;
+        .feature p { 
+            color: #64748b; 
+            font-size: 0.9rem; 
+            line-height: 1.5; 
         }
-        .cta-section {
-            margin: 3rem 0 2rem 0;
-            padding: 2rem;
+        .contact-section {
+            margin: 40px 0;
+            padding: 30px;
             background: #f1f5f9;
             border-radius: 12px;
         }
-        .cta-title {
-            font-size: 1.5rem;
-            color: #1e293b;
-            margin-bottom: 1rem;
+        .contact-title { 
+            font-size: 1.5rem; 
+            color: #1e293b; 
+            margin-bottom: 15px; 
         }
-        .contact-buttons {
+        .buttons {
             display: flex;
-            gap: 1rem;
+            gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
+            margin-top: 20px;
         }
         .btn {
             padding: 12px 24px;
-            border: none;
             border-radius: 8px;
-            font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
         }
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: #10b981;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-        .demo-info {
-            background: #ecfdf5;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #d1fae5;
-            margin: 2rem 0;
-        }
-        .demo-info h3 {
-            color: #065f46;
-            margin-bottom: 0.5rem;
-        }
-        .demo-info p {
-            color: #047857;
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background: #4f46e5; color: white; }
+        .btn-secondary { background: #10b981; color: white; }
+        .info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
             font-size: 0.9rem;
+            color: #64748b;
         }
         @media (max-width: 768px) {
-            .container { padding: 2rem 1rem; }
-            .features { grid-template-columns: 1fr; }
-            .contact-buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; max-width: 300px; justify-content: center; }
+            .container { padding: 30px 20px; }
+            .buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 280px; text-align: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">🏥 TeleMed Sistema</div>
-        <p class="subtitle">Plataforma Completa de Telemedicina com Tecnologia Avançada</p>
+        <p class="subtitle">Plataforma Completa de Telemedicina</p>
         
         <div class="features">
             <div class="feature">
                 <h3>🎥 Videoconsultas WebRTC</h3>
-                <p>Sistema completo de videochamadas médicas com chat em tempo real e compartilhamento de tela</p>
+                <p>Sistema completo de videochamadas médicas com chat em tempo real</p>
             </div>
             <div class="feature">
                 <h3>📋 Prescrições MEMED</h3>
-                <p>Integração completa com MEMED para prescrições digitais válidas juridicamente</p>
+                <p>Integração com MEMED para prescrições digitais válidas</p>
             </div>
             <div class="feature">
-                <h3>🤖 Assistente IA Médico</h3>
-                <p>Inteligência artificial para análise de sintomas e sugestões de diagnóstico</p>
+                <h3>🤖 Assistente IA</h3>
+                <p>Inteligência artificial para análise de sintomas</p>
             </div>
             <div class="feature">
                 <h3>💳 Pagamentos Stripe</h3>
-                <p>Sistema completo de pagamentos integrado com processamento seguro</p>
+                <p>Sistema de pagamentos integrado e seguro</p>
             </div>
             <div class="feature">
-                <h3>🧠 Sistema de Psiquiatria</h3>
-                <p>Avaliação psicológica especializada com escalas PHQ-9 e GAD-7</p>
+                <h3>🧠 Sistema Psiquiatria</h3>
+                <p>Avaliação psicológica com escalas PHQ-9 e GAD-7</p>
             </div>
             <div class="feature">
                 <h3>📱 Notificações WhatsApp</h3>
-                <p>Sistema de comunicação direta entre médicos e pacientes</p>
+                <p>Comunicação direta médico-paciente</p>
             </div>
         </div>
 
-        <div class="demo-info">
-            <h3>🎯 Sistema Completo Para Demonstração</h3>
-            <p>Plataforma 100% funcional com dados fictícios para testes de médicos e investidores. Todas as funcionalidades estão operacionais para demonstrações completas.</p>
-        </div>
-
-        <div class="cta-section">
-            <h2 class="cta-title">Interessado em Conhecer o Sistema?</h2>
-            <p>Entre em contato para agendar uma demonstração completa</p>
+        <div class="contact-section">
+            <h2 class="contact-title">Interessado em Conhecer?</h2>
+            <p>Entre em contato para agendar uma demonstração</p>
             
-            <div class="contact-buttons">
-                <a href="mailto:contato@daciobd.com.br?subject=Demonstração TeleMed Sistema&body=Olá, tenho interesse em conhecer o sistema de telemedicina TeleMed. Gostaria de agendar uma demonstração.%0D%0A%0D%0AEspecialidade médica: %0D%0ATelefone: %0D%0AMelhor horário: " 
-                   class="btn btn-primary">
-                    📧 Contato por Email
-                </a>
-                <a href="https://wa.me/5511999998888?text=Olá, vi o sistema TeleMed e tenho interesse em conhecer mais sobre a plataforma de telemedicina. Gostaria de agendar uma demonstração." 
-                   class="btn btn-secondary" target="_blank">
-                    📱 WhatsApp
-                </a>
+            <div class="buttons">
+                <a href="mailto:contato@daciobd.com.br?subject=Demonstração TeleMed&body=Olá, tenho interesse no sistema TeleMed. Gostaria de agendar uma demonstração." 
+                   class="btn btn-primary">📧 Email</a>
+                <a href="https://wa.me/5511999998888?text=Olá, vi o TeleMed e gostaria de conhecer mais sobre a plataforma." 
+                   class="btn btn-secondary" target="_blank">📱 WhatsApp</a>
             </div>
         </div>
 
-        <div style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border-radius: 8px; font-size: 0.9rem; color: #64748b;">
-            <strong>Especialidades Disponíveis:</strong><br>
-            Clínica Geral • Cardiologia • Dermatologia • Psiquiatria • Pediatria • Ginecologia • Neurologia • Ortopedia • Endocrinologia • Oftalmologia
+        <div class="info">
+            <strong>Especialidades:</strong><br>
+            Clínica Geral • Cardiologia • Dermatologia • Psiquiatria • Pediatria • Ginecologia
         </div>
     </div>
 </body>
 </html>`;
 
-
+  res.end(html);
 }
