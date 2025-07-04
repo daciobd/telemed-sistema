@@ -1,5 +1,3 @@
--4
-+8
 {
   "version": 2,
   "functions": {
@@ -7,12 +5,13 @@
       "runtime": "@vercel/node@18"
     }
   },
-  "rewrites": [
   "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/api/index"
       "src": "/(.*)",
       "dest": "/api/index"
     }
-  ]
+  ],
+  "github": {
+    "silent": true
+  }
+}
