@@ -195,19 +195,17 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
-### Deploy Render.com EM PROGRESSO - 03/07/2025 17:00
-- **Status**: 🔄 ERRO DE SINTAXE CORRIGIDO - DEPLOY EM ANDAMENTO
-- **Problema Resolvido**: SyntaxError no template literal HTML do app.js
-- **Solução**: Código JavaScript corrigido com HTML separado em variável
+### Deploy Vercel Serverless - 03/07/2025 19:00
+- **Status**: 🔄 PREPARAÇÃO SERVERLESS FUNCTION COMPLETA
+- **Estratégia**: Migração para serverless functions do Vercel
 - **Progresso Atual**: 
-  - ✅ Erro de sintaxe eliminado
-  - ✅ Node.js v18.20.4 executando corretamente
-  - ✅ Comando "npm start" funcionando
-  - ✅ Arquivo app.js sendo carregado sem erros
-  - 🔄 Aguardando inicialização completa do servidor
-- **Logs Atuais**: "Deploy Rapido - Versao Simplificada" carregando
-- **URL**: https://telemed-sistema.onrender.com (em deploy)
-- **Próximo**: Aguardar conclusão do deploy (2-3 minutos estimados)
+  - ✅ Pasta `api` criada com função serverless
+  - ✅ Arquivo `api/index.js` configurado e testado
+  - ✅ Arquivo `COPY_VERCEL_JSON.txt` preparado para GitHub
+  - ✅ Instruções completas documentadas
+  - 🔄 Aguardando criação do `vercel.json` no GitHub
+- **Solução**: Abordagem serverless elimina problema do diretório `public`
+- **Próximo**: Criar `vercel.json` no GitHub e executar deploy
 
 ### Otimização Estética do Frontend - IMPLEMENTADA
 - **Data**: 02/07/2025
