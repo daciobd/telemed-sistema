@@ -1,12 +1,14 @@
 {
-  "name": "telemed-sistema",
+  "name": "telemed-sistema-vercel",
   "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "build": "echo 'Build complete'"
-  },
+  "description": "TeleMed Sistema - Plataforma de Telemedicina",
+  "main": "api/index.js",
   "engines": {
     "node": "18.x"
-  }
+  },
+  "scripts": {
+    "vercel-build": "echo 'No build required for serverless functions'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }
