@@ -81,6 +81,31 @@ export default function handler(req, res) {
             margin: 20px 0;
             font-weight: 600;
         }
+        .demo-button {
+            background: #3b82f6;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .demo-button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
         @media (max-width: 768px) {
             .container { padding: 40px 20px; }
             h1 { font-size: 2rem; }
@@ -105,7 +130,19 @@ export default function handler(req, res) {
             <strong>📊 Status:</strong> Funcionando perfeitamente<br>
             <strong>📅 Deploy:</strong> Julho 2025<br>
             <strong>🌐 Plataforma:</strong> Vercel Serverless<br>
-            <strong>⚡ Versão:</strong> 3.0 Serverless
+            <strong>⚡ Versão:</strong> 4.0 Demo
+        </div>
+        
+        <div class="demo-section">
+            <h3>🎯 Demonstração para Médicos</h3>
+            <p>Sistema completo de telemedicina com todas as funcionalidades ativas.</p>
+            <p><strong>Acesso para testes:</strong> Entre em contato para credenciais de demonstração</p>
+            <button class="demo-button" onclick="window.open('mailto:contato@telemed.com.br?subject=Demonstração TeleMed Sistema&body=Olá, gostaria de agendar uma demonstração do sistema TeleMed para avaliação.', '_blank')">
+                📧 Solicitar Demonstração
+            </button>
+            <button class="demo-button" onclick="window.open('https://wa.me/5511999998888?text=Olá, gostaria de conhecer o sistema TeleMed para telemedicina', '_blank')">
+                📱 WhatsApp
+            </button>
         </div>
         
         <h3>🏥 Funcionalidades Disponíveis</h3>
@@ -149,6 +186,15 @@ export default function handler(req, res) {
             <strong>🏆 Conquista:</strong> Deploy serverless bem-sucedido<br>
             <strong>📈 Próximo passo:</strong> Compartilhar com colegas médicos<br>
             <strong>💡 Objetivo:</strong> Revolucionar a telemedicina no Brasil
+        </div>
+        
+        <div class="demo-section">
+            <h3>📞 Contato Profissional</h3>
+            <p>Para demonstrações personalizadas e acesso ao sistema completo:</p>
+            <p><strong>Email:</strong> contato@telemed.com.br</p>
+            <p><strong>WhatsApp:</strong> (11) 99999-8888</p>
+            <p><strong>Sistema:</strong> Videoconsultas • MEMED • IA Médica • Pagamentos Stripe</p>
+            <p><strong>Especialidades:</strong> Clínica Geral • Psiquiatria • Cardiologia • Dermatologia</p>
         </div>
     </div>
 </body>
