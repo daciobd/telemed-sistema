@@ -195,18 +195,18 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
-### Deploy Vercel Serverless - SUCESSO COMPLETO - 03/07/2025 19:40
-- **Status**: ✅ DEPLOY REALIZADO COM SUCESSO
-- **Estratégia**: Solução híbrida com serverless functions + diretório public
-- **Implementação Final**: 
-  - ✅ Pasta `api` com função serverless (`api/index.js`)
-  - ✅ Diretório `public` com redirecionamento automático
-  - ✅ Arquivo `vercel.json` configurado corretamente
-  - ✅ Deploy bem-sucedido confirmado pelo Vercel
-  - ✅ URL ativa e funcionando
-- **Solução Técnica**: Diretório public satisfaz requisito do Vercel, função serverless serve conteúdo
-- **Resultado**: Sistema TeleMed acessível publicamente para demonstrações médicas
-- **URL Deploy**: Disponível no painel do Vercel para compartilhamento
+### Deploy Vercel - STATUS PARCIAL - 05/07/2025 20:00
+- **Status**: ⚠️ DEPLOY REALIZADO COM PROBLEMAS DE ROTEAMENTO
+- **Problema**: Deploy com status "Ready" mas erro 404 persistente na URL
+- **Tentativas Realizadas**: 
+  - ✅ Múltiplas configurações de `vercel.json` testadas
+  - ✅ Abordagem serverless functions (`api/index.js`)
+  - ✅ Arquivos estáticos (`public/index.html`)
+  - ✅ Configurações mínimas e complexas
+  - ❌ URL `telemed-sistema.vercel.app` ainda retorna 404
+- **Causa Provável**: Conflito entre estrutura complexa do projeto e requisitos Vercel
+- **Solução Recomendada**: Migração para Railway ou Render para deploy completo
+- **Status Atual**: Sistema 100% funcional em localhost:5000, aguardando deploy alternativo
 
 ### Otimização Estética do Frontend - IMPLEMENTADA
 - **Data**: 02/07/2025
