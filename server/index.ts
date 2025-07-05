@@ -34,15 +34,13 @@ async function startServer() {
     if (process.env.NODE_ENV === 'development') {
       await setupVite(app, httpServer);
     } else {
-      // Em produção, redireciona usuários autenticados para desenvolvimento
+      // Em produção, serve arquivos estáticos e depois fallback para SPA
+      serveStatic(app);
+      
+      // SPA fallback - serve landing page para rotas não-API
       app.get('*', (req, res, next) => {
         if (req.path.startsWith('/api/')) {
           return next(); // Deixa as APIs passarem
-        }
-        
-        // Se usuário está autenticado, redireciona para URL de desenvolvimento
-        if (req.isAuthenticated && req.isAuthenticated()) {
-          return res.redirect('https://telemed-consultation-daciobd--5000.prod1a.replit.co/');
         }
         
         const html = `
