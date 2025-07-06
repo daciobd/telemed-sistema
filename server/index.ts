@@ -151,8 +151,10 @@ async function startServer() {
     httpServer.listen(PORT, '0.0.0.0', () => {
       console.log('🩺 TeleMed Sistema v8.0.0-CLEAN');
       console.log(`🌐 Servidor rodando na porta ${PORT}`);
-      console.log(`🔗 Acesso: http://localhost:${PORT}`);
+      console.log(`🔗 Acesso local: http://localhost:${PORT}`);
+      console.log(`🌍 Acesso externo: configurado para 0.0.0.0:${PORT}`);
       console.log('✅ Aplicação React + Backend integrados');
+      console.log('✅ Pronto para deploy e acesso externo');
     });
   } catch (error) {
     console.error('❌ Erro ao iniciar servidor:', error);
