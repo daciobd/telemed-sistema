@@ -2618,60 +2618,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       console.log('Quick populate demo data requested');
       
-      // Create demo doctor and patients first
-      const demoDoctor = await storage.createDoctor({
-        userId: 'demo-doctor-123',
-        name: 'Dr. Demo Silva',
+      // Create demo users first
+      const timestamp = Date.now();
+      const doctorUserId = 'demo-doctor-' + timestamp;
+      const patientUserId = 'demo-patient-' + timestamp;
+      
+      // Create demo doctor user
+      const doctorUser = await storage.upsertUser({
+        id: doctorUserId,
+        email: 'dr.demo@telemedicina.com',
+        firstName: 'Dr. Demo',
+        lastName: 'Silva',
+        role: 'doctor',
         specialty: 'Clínica Geral',
-        crm: '12345-SP',
-        phone: '11999999999',
-        email: 'demo@telemedicina.com',
-        experience: '10 anos',
-        profileImage: null,
-        bio: 'Médico de demonstração',
-        education: 'Medicina - USP',
-        languages: 'Português',
-        availability: 'Segunda a Sexta',
-        consultationPrice: 150
+        licenseNumber: '12345-SP'
       });
 
+      // Create demo patient user  
+      const patientUser = await storage.upsertUser({
+        id: patientUserId,
+        email: 'joao.demo@email.com',
+        firstName: 'João',
+        lastName: 'Silva',
+        role: 'patient'
+      });
+
+      // Create demo doctor profile
+      const demoDoctor = await storage.createDoctor({
+        userId: doctorUserId,
+        specialty: 'Clínica Geral',
+        licenseNumber: '12345-SP',
+        experience: 10,
+        consultationFee: 15000, // 150.00 in cents
+        availableSlots: ["09:00", "10:00", "11:00", "14:00", "15:00"]
+      });
+
+      // Create demo patient profile
       const demoPatient = await storage.createPatient({
-        userId: 'demo-patient-123',
-        name: 'João Silva',
-        cpf: '12345678901',
+        userId: patientUserId,
+        dateOfBirth: new Date('1980-01-01'),
         phone: '11888888888',
-        email: 'joao@email.com',
-        birthDate: '1980-01-01',
-        address: 'Rua Demo, 123',
-        city: 'São Paulo',
-        state: 'SP',
-        zipCode: '01234567',
-        emergencyContact: 'Maria Silva',
-        emergencyPhone: '11777777777',
-        medicalHistory: 'Sem histórico relevante',
+        address: 'Rua Demo, 123, São Paulo, SP',
+        cpf: '12345678901',
+        emergencyContact: 'Maria Silva - 11777777777',
+        bloodType: 'O+',
         allergies: 'Nenhuma',
         medications: 'Nenhum',
-        insurancePlan: 'Não informado',
-        insuranceNumber: null,
-        bloodType: 'O+',
-        height: 175,
-        weight: 80,
-        notes: 'Paciente de demonstração'
+        chronicConditions: null,
+        medicalHistory: 'Sem histórico relevante'
       });
 
-      // Create realistic medical records
+      // Create realistic medical records using correct schema
       const medicalRecord = await storage.createMedicalRecord({
         patientId: demoPatient.id,
         doctorId: demoDoctor.id,
         appointmentId: null,
+        recordType: 'consultation',
         title: 'Consulta de Rotina - Check-up',
-        description: `Anamnese: Paciente retorna para exames de rotina. Relata estar bem, sem queixas específicas.
+        content: `Anamnese: Paciente retorna para exames de rotina. Relata estar bem, sem queixas específicas.
 
 Exame Físico: Paciente em bom estado geral, corado, hidratado. Sinais vitais normais.
 
 Diagnóstico: Consulta de rotina - estado geral preservado
 
 Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
+        notes: 'Paciente compareceu pontualmente, cooperativo durante consulta.',
         attachments: null
       });
 

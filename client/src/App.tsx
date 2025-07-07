@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
+import { lazy } from "react";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
@@ -38,6 +39,7 @@ import FinancialDashboard from "@/pages/financial-dashboard";
 import RegisterDoctor from "@/pages/register-doctor";
 import RegisterPatient from "@/pages/register-patient";
 import RegisterSuccess from "@/pages/register-success";
+import TestDemo from "@/pages/test-demo";
 import DoctorAgendaPage from "@/pages/DoctorAgendaPage";
 import GuiaMedico from "@/pages/guia-medico";
 import MedicalCalendarPage from "@/pages/medical-calendar";
@@ -67,6 +69,9 @@ function Router() {
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
       <Route path="/video-test" component={VideoTestPage} />
       <Route path="/demo-medico" component={DemoMedico} />
+      <Route path="/test-demo">
+        <TestDemo />
+      </Route>
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
