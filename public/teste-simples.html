@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Simples - TeleMed</title>
+    <meta charset="UTF-8">
+    <style>
+        body { 
+            font-family: Arial; 
+            text-align: center; 
+            background: #2563eb;
+            color: white;
+            padding: 50px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .btn {
+            display: inline-block;
+            padding: 20px 40px;
+            margin: 15px;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+        .btn-green { background: #16a34a; }
+        .btn-purple { background: #9333ea; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .status { 
+            background: rgba(255,255,255,0.2); 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 20px 0; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 TESTE SIMPLES - TELEMED</h1>
+        
+        <div class="status" id="status">
+            <h3>🔄 Verificando conectividade...</h3>
+        </div>
+        
+        <div>
+            <button onclick="testar('/test-demo')" class="btn btn-purple">
+                🧪 TEST DEMO API
+            </button>
+            
+            <button onclick="testar('/medical-records')" class="btn btn-green">
+                📋 MEDICAL RECORDS
+            </button>
+            
+            <button onclick="testar('/')" class="btn">
+                🏠 PÁGINA INICIAL
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>📋 Informações Técnicas:</h3>
+            <p><strong>URL Atual:</strong> <span id="current-url"></span></p>
+            <p><strong>User Agent:</strong> <span id="user-agent"></span></p>
+            <p><strong>Timestamp:</strong> <span id="timestamp"></span></p>
+        </div>
+        
+        <div style="margin-top: 20px; background: rgba(255,255,0,0.2); padding: 20px; border-radius: 10px;">
+            <h4>🚨 Se os botões não funcionarem:</h4>
+            <p>1. Tente usar o Deploy do Replit (botão azul no topo)</p>
+            <p>2. Ou acesse diretamente pelo terminal interno do Replit</p>
+            <p>3. Problema pode ser firewall/proxy corporativo</p>
+        </div>
+    </div>
+    
+    <script>
+        // Informações da página
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('user-agent').textContent = navigator.userAgent;
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        
+        // Função para testar navegação
+        function testar(url) {
+            console.log('🔗 Testando navegação para:', url);
+            document.getElementById('status').innerHTML = '<h3>🔄 Navegando para ' + url + '...</h3>';
+            
+            // Tenta navegar
+            setTimeout(() => {
+                window.location.href = url;
+            }, 500);
+        }
+        
+        // Teste automático de conectividade
+        fetch('/health')
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ Health check OK:', data);
+                document.getElementById('status').innerHTML = 
+                    '<h3>✅ SERVIDOR ONLINE</h3>' +
+                    '<p>Versão: ' + data.version + '</p>' +
+                    '<p>Porta: ' + data.port + '</p>' +
+                    '<p>Status: ' + data.status + '</p>';
+            })
+            .catch(error => {
+                console.error('❌ Health check falhou:', error);
+                document.getElementById('status').innerHTML = 
+                    '<h3>❌ ERRO DE CONEXÃO</h3>' +
+                    '<p>Erro: ' + error.message + '</p>' +
+                    '<p>Tente usar o Deploy do Replit</p>';
+            });
+            
+        console.log('🔥 Página de teste carregada!');
+        console.log('🌐 Testando conectividade...');
+    </script>
+</body>
+</html>
