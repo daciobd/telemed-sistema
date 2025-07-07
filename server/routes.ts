@@ -2840,6 +2840,93 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
     }
   });
 
+  // Test Demo API route
+  app.post('/api/test-demo', async (req, res) => {
+    try {
+      console.log('🧪 Test Demo API called');
+      
+      // Create demo data for testing
+      const demoData = {
+        doctor: {
+          id: 'demo-doctor-1',
+          name: 'Dr. Demo Silva',
+          specialty: 'Clínico Geral',
+          email: 'demo@telemed.com',
+          phone: '(11) 99999-9999'
+        },
+        patient: {
+          id: 'demo-patient-1',
+          name: 'João Demo',
+          age: 35,
+          email: 'joao@demo.com',
+          phone: '(11) 88888-8888'
+        },
+        medicalRecord: {
+          id: 'demo-record-1',
+          patientId: 'demo-patient-1',
+          diagnosis: 'Hipertensão arterial',
+          treatment: 'Medicação anti-hipertensiva',
+          notes: 'Paciente apresenta pressão arterial elevada',
+          createdAt: new Date().toISOString()
+        }
+      };
+
+      res.json({
+        success: true,
+        message: 'Demo data created successfully',
+        data: demoData,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error in test-demo API:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to create demo data',
+        message: error.message
+      });
+    }
+  });
+
+  // Test Medical Records API route
+  app.get('/api/test-medical-records', async (req, res) => {
+    try {
+      console.log('📋 Test Medical Records API called');
+      
+      const mockRecords = [
+        {
+          id: 'record-1',
+          patientName: 'Ana Silva',
+          diagnosis: 'Diabetes Mellitus Tipo 2',
+          treatment: 'Metformina 500mg 2x/dia',
+          date: new Date().toISOString(),
+          doctor: 'Dr. Carlos Santos'
+        },
+        {
+          id: 'record-2', 
+          patientName: 'Pedro Oliveira',
+          diagnosis: 'Hipertensão Arterial',
+          treatment: 'Losartana 50mg 1x/dia',
+          date: new Date().toISOString(),
+          doctor: 'Dr. Maria Costa'
+        }
+      ];
+
+      res.json({
+        success: true,
+        records: mockRecords,
+        count: mockRecords.length,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error in test-medical-records API:', error);
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch medical records',
+        message: error.message
+      });
+    }
+  });
+
   // Vite setup será configurado no index.ts
 
   return httpServer;
