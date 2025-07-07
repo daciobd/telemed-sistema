@@ -69,9 +69,8 @@ function Router() {
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
       <Route path="/video-test" component={VideoTestPage} />
       <Route path="/demo-medico" component={DemoMedico} />
-      <Route path="/test-demo">
-        <TestDemo />
-      </Route>
+      <Route path="/test-demo" component={TestDemo} />
+      <Route path="/medical-records" component={MedicalRecords} />
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />

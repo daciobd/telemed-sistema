@@ -161,8 +161,28 @@ export default function MedicalRecords() {
             </div>
             
             {/* Botão para popular dados rapidamente */}
-            {!patientId && (!records || records.length === 0) && (
-              <div className="text-right">
+            {!patientId && (
+              <div className="text-right space-x-2">
+                <Button 
+                  onClick={() => {
+                    console.log('🧪 TESTING MODAL DIRECTLY');
+                    setSelectedRecord({
+                      id: 999,
+                      title: "Teste Direto do Modal",
+                      description: "Este é um teste direto",
+                      recordType: "consultation",
+                      createdAt: new Date().toISOString(),
+                      patient: { user: { firstName: "Teste", lastName: "Paciente" } }
+                    });
+                    setIsModalOpen(true);
+                    console.log('🧪 MODAL SHOULD BE OPEN NOW');
+                  }}
+                  variant="secondary"
+                  className="mr-2"
+                >
+                  🧪 Teste Modal
+                </Button>
+                
                 <Button 
                   onClick={async () => {
                     try {
@@ -287,17 +307,11 @@ export default function MedicalRecords() {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              console.log('✅ OPENING MODAL for record:', record);
+                            onClick={() => {
+                              console.log('🔥 CLICKING BUTTON - Record:', record);
                               setSelectedRecord(record);
                               setIsModalOpen(true);
-                              // Force the modal to open
-                              setTimeout(() => {
-                                console.log('✅ FORCED MODAL STATE:', { isModalOpen: true, record });
-                                setIsModalOpen(true);
-                              }, 100);
+                              console.log('🔥 STATE SET:', { selectedRecord: record, isModalOpen: true });
                             }}
                           >
                             Ver Detalhes
@@ -329,8 +343,10 @@ export default function MedicalRecords() {
       </main>
 
       {/* Modal de Detalhes do Registro Médico */}
-      {selectedRecord && (
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog open={isModalOpen} onOpenChange={(open) => {
+        console.log('🚨 DIALOG onOpenChange triggered:', { open, currentState: isModalOpen });
+        setIsModalOpen(open);
+      }}>
         <DialogContent className="max-w-4xl max-h-[80vh] p-0">
           <DialogHeader className="p-6 pb-4">
             <div className="flex items-center justify-between">
@@ -349,7 +365,10 @@ export default function MedicalRecords() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => {
+                  console.log('🚨 CLOSING MODAL manually');
+                  setIsModalOpen(false);
+                }}
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -570,7 +589,6 @@ export default function MedicalRecords() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-      )}
     </div>
   );
 }
