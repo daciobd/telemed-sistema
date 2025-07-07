@@ -160,9 +160,8 @@ export default function MedicalRecords() {
               )}
             </div>
             
-            {/* Botão para popular dados rapidamente */}
-            {!patientId && (
-              <div className="text-right space-x-2">
+            {/* Botões de teste sempre visíveis */}
+            <div className="text-right space-x-2">
                 <Button 
                   onClick={() => {
                     console.log('🧪 TESTING MODAL DIRECTLY');
@@ -225,7 +224,6 @@ export default function MedicalRecords() {
                   🚀 Criar Prontuários de Demonstração
                 </Button>
               </div>
-            )}
           </div>
 
           <Card>

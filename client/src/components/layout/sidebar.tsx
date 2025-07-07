@@ -43,6 +43,8 @@ export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }: Sideb
     { name: "Notificações WhatsApp", href: "/notificacoes-medicas", icon: Bell, roles: ["doctor"] },
     { name: "Ofertas Teleconsulta", href: "/ofertas-teleconsulta", icon: MessageCircle, roles: ["doctor"] },
     { name: "Guia de Teste", href: "/guia-medico", icon: BookOpen, roles: ["doctor"] },
+    { name: "🧪 Test Demo", href: "/test-demo", icon: FileText, roles: ["patient", "doctor"] },
+    { name: "📋 Test Records", href: "/medical-records", icon: FileText, roles: ["patient", "doctor"] },
   ];
 
   // Filter navigation based on user role

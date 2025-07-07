@@ -50,6 +50,28 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="p-4 lg:p-6">
+        {/* BOTÕES DE TESTE TEMPORÁRIOS - MUITO VISÍVEIS */}
+        <div className="mb-6 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg">
+          <h3 className="text-lg font-bold text-yellow-800 mb-3">🚨 BOTÕES DE TESTE - PARA DEBUG</h3>
+          <div className="space-x-4">
+            <button 
+              onClick={() => window.location.href = '/test-demo'}
+              className="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-200 text-lg"
+            >
+              🧪 TEST DEMO API
+            </button>
+            <button 
+              onClick={() => window.location.href = '/medical-records'}
+              className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-200 text-lg"
+            >
+              📋 MEDICAL RECORDS
+            </button>
+          </div>
+          <p className="text-yellow-700 text-sm mt-2">
+            Clique nos botões acima para testar as páginas que estavam inacessíveis
+          </p>
+        </div>
+        
         <StatsCards />
         
         <DoctorDashboardContent />
