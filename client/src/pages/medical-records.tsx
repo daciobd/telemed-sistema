@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -7,13 +7,18 @@ import Header from "@/components/layout/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Calendar, User, Stethoscope, Pill, TestTube } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { FileText, Calendar, User, Stethoscope, Pill, TestTube, X } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export default function MedicalRecords() {
   const { toast } = useToast();
   const { isAuthenticated, isLoading } = useAuth();
+  const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -201,7 +206,14 @@ export default function MedicalRecords() {
                             </div>
                           </div>
                           
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              setSelectedRecord(record);
+                              setIsModalOpen(true);
+                            }}
+                          >
                             Ver Detalhes
                           </Button>
                         </div>
@@ -219,6 +231,248 @@ export default function MedicalRecords() {
           </Card>
         </div>
       </main>
+
+      {/* Modal de Detalhes do Registro Médico */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] p-0">
+          <DialogHeader className="p-6 pb-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <DialogTitle className="text-xl font-semibold">
+                  {selectedRecord?.title || 'Detalhes do Registro'}
+                </DialogTitle>
+                <DialogDescription className="mt-1">
+                  {selectedRecord?.recordType && (
+                    <Badge className={getRecordTypeColor(selectedRecord.recordType)}>
+                      {getRecordTypeText(selectedRecord.recordType)}
+                    </Badge>
+                  )}
+                </DialogDescription>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </DialogHeader>
+
+          <ScrollArea className="max-h-[60vh] px-6 pb-6">
+            {selectedRecord && (
+              <div className="space-y-6">
+                {/* Informações Básicas */}
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-3">Informações Gerais</h3>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-500">Data:</span>
+                      <p className="font-medium">
+                        {format(new Date(selectedRecord.createdAt), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                      </p>
+                    </div>
+                    {selectedRecord.patient && (
+                      <div>
+                        <span className="text-gray-500">Paciente:</span>
+                        <p className="font-medium">
+                          {selectedRecord.patient.user?.firstName} {selectedRecord.patient.user?.lastName}
+                        </p>
+                      </div>
+                    )}
+                    {selectedRecord.doctor && (
+                      <div>
+                        <span className="text-gray-500">Médico:</span>
+                        <p className="font-medium">
+                          Dr. {selectedRecord.doctor.user?.firstName} {selectedRecord.doctor.user?.lastName}
+                        </p>
+                      </div>
+                    )}
+                    {selectedRecord.appointment && (
+                      <div>
+                        <span className="text-gray-500">Consulta:</span>
+                        <p className="font-medium">#{selectedRecord.appointment.id}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Descrição/Conteúdo */}
+                {selectedRecord.description && (
+                  <div>
+                    <h3 className="font-medium text-gray-900 mb-3">Descrição</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                        {selectedRecord.description}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Detalhes Médicos */}
+                {(selectedRecord.diagnosis || selectedRecord.treatment || selectedRecord.anamnesis) && (
+                  <>
+                    <Separator />
+                    <div>
+                      <h3 className="font-medium text-gray-900 mb-3">Detalhes Médicos</h3>
+                      <div className="space-y-4">
+                        {selectedRecord.anamnesis && (
+                          <div>
+                            <span className="text-gray-500 text-sm">Anamnese:</span>
+                            <p className="text-sm mt-1 bg-gray-50 p-3 rounded">
+                              {selectedRecord.anamnesis}
+                            </p>
+                          </div>
+                        )}
+                        {selectedRecord.physicalExam && (
+                          <div>
+                            <span className="text-gray-500 text-sm">Exame Físico:</span>
+                            <p className="text-sm mt-1 bg-gray-50 p-3 rounded">
+                              {selectedRecord.physicalExam}
+                            </p>
+                          </div>
+                        )}
+                        {selectedRecord.diagnosis && (
+                          <div>
+                            <span className="text-gray-500 text-sm">Diagnóstico:</span>
+                            <p className="text-sm mt-1 bg-gray-50 p-3 rounded">
+                              {selectedRecord.diagnosis}
+                            </p>
+                          </div>
+                        )}
+                        {selectedRecord.treatment && (
+                          <div>
+                            <span className="text-gray-500 text-sm">Tratamento:</span>
+                            <p className="text-sm mt-1 bg-gray-50 p-3 rounded">
+                              {selectedRecord.treatment}
+                            </p>
+                          </div>
+                        )}
+                        {selectedRecord.cidCode && (
+                          <div>
+                            <span className="text-gray-500 text-sm">CID-10:</span>
+                            <p className="text-sm mt-1">
+                              <Badge variant="secondary">
+                                {selectedRecord.cidCode} - {selectedRecord.cidDescription}
+                              </Badge>
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Sinais Vitais */}
+                {selectedRecord.vitalSigns && Object.keys(selectedRecord.vitalSigns).length > 0 && (
+                  <>
+                    <Separator />
+                    <div>
+                      <h3 className="font-medium text-gray-900 mb-3">Sinais Vitais</h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                        {selectedRecord.vitalSigns.bloodPressure && (
+                          <div className="bg-gray-50 p-3 rounded">
+                            <span className="text-gray-500">Pressão Arterial:</span>
+                            <p className="font-medium">{selectedRecord.vitalSigns.bloodPressure}</p>
+                          </div>
+                        )}
+                        {selectedRecord.vitalSigns.heartRate && (
+                          <div className="bg-gray-50 p-3 rounded">
+                            <span className="text-gray-500">Frequência Cardíaca:</span>
+                            <p className="font-medium">{selectedRecord.vitalSigns.heartRate}</p>
+                          </div>
+                        )}
+                        {selectedRecord.vitalSigns.temperature && (
+                          <div className="bg-gray-50 p-3 rounded">
+                            <span className="text-gray-500">Temperatura:</span>
+                            <p className="font-medium">{selectedRecord.vitalSigns.temperature}</p>
+                          </div>
+                        )}
+                        {selectedRecord.vitalSigns.weight && (
+                          <div className="bg-gray-50 p-3 rounded">
+                            <span className="text-gray-500">Peso:</span>
+                            <p className="font-medium">{selectedRecord.vitalSigns.weight}</p>
+                          </div>
+                        )}
+                        {selectedRecord.vitalSigns.height && (
+                          <div className="bg-gray-50 p-3 rounded">
+                            <span className="text-gray-500">Altura:</span>
+                            <p className="font-medium">{selectedRecord.vitalSigns.height}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Medicações e Recomendações */}
+                {(selectedRecord.medications || selectedRecord.recommendations) && (
+                  <>
+                    <Separator />
+                    <div className="space-y-4">
+                      {selectedRecord.medications && (
+                        <div>
+                          <h3 className="font-medium text-gray-900 mb-2">Medicações</h3>
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                              {selectedRecord.medications}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {selectedRecord.recommendations && (
+                        <div>
+                          <h3 className="font-medium text-gray-900 mb-2">Recomendações</h3>
+                          <div className="bg-gray-50 p-4 rounded-lg">
+                            <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                              {selectedRecord.recommendations}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {/* Notas Adicionais */}
+                {selectedRecord.notes && (
+                  <>
+                    <Separator />
+                    <div>
+                      <h3 className="font-medium text-gray-900 mb-3">Notas Adicionais</h3>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                          {selectedRecord.notes}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Anexos */}
+                {selectedRecord.attachments && selectedRecord.attachments.length > 0 && (
+                  <>
+                    <Separator />
+                    <div>
+                      <h3 className="font-medium text-gray-900 mb-3">Anexos</h3>
+                      <div className="space-y-2">
+                        {selectedRecord.attachments.map((attachment: any, index: number) => (
+                          <div key={index} className="flex items-center space-x-2 p-3 bg-gray-50 rounded">
+                            <FileText className="h-4 w-4 text-gray-400" />
+                            <span className="text-sm">{attachment.filename || `Anexo ${index + 1}`}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
