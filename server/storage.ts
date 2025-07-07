@@ -482,6 +482,28 @@ export class DatabaseStorage implements IStorage {
     return resultsWithDetails;
   }
 
+  // Get all medical records for testing
+  async getAllMedicalRecords(): Promise<MedicalRecordWithPatient[]> {
+    const results = await db
+      .select()
+      .from(medicalRecords)
+      .leftJoin(patients, eq(medicalRecords.patientId, patients.id))
+      .leftJoin(doctors, eq(medicalRecords.doctorId, doctors.id))
+      .leftJoin(users, eq(patients.userId, users.id))
+      .orderBy(desc(medicalRecords.createdAt));
+
+    return results
+      .filter(result => result.patients && result.users)
+      .map(result => ({
+        ...result.medical_records,
+        patient: {
+          ...result.patients!,
+          user: result.users!,
+        },
+        doctor: result.doctors || undefined,
+      }));
+  }
+
   // Medical record operations
   async createMedicalRecord(record: InsertMedicalRecord): Promise<MedicalRecord> {
     const [newRecord] = await db.insert(medicalRecords).values(record).returning();
