@@ -157,6 +157,40 @@ export default function MedicalRecords() {
                 </Button>
               )}
             </div>
+            
+            {/* Botão para popular dados rapidamente */}
+            {!patientId && (!records || records.length === 0) && (
+              <div className="text-right">
+                <Button 
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/medical-records/populate-demo', {
+                        method: 'POST',
+                        credentials: 'include',
+                      });
+                      if (response.ok) {
+                        toast({
+                          title: "Prontuários criados!",
+                          description: "Dados de demonstração adicionados com sucesso",
+                        });
+                        window.location.reload();
+                      } else {
+                        throw new Error('Erro ao criar dados');
+                      }
+                    } catch (error) {
+                      toast({
+                        title: "Erro",
+                        description: "Falha ao criar prontuários de demonstração",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  🚀 Criar Prontuários de Demonstração
+                </Button>
+              </div>
+            )}
           </div>
 
           <Card>
@@ -241,10 +275,9 @@ export default function MedicalRecords() {
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
-                              console.log('Button clicked, record:', record);
+                              console.log('Opening modal for record:', record);
                               setSelectedRecord(record);
                               setIsModalOpen(true);
-                              console.log('Modal should open now');
                             }}
                           >
                             Ver Detalhes
@@ -276,7 +309,8 @@ export default function MedicalRecords() {
       </main>
 
       {/* Modal de Detalhes do Registro Médico */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      {selectedRecord && (
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] p-0">
           <DialogHeader className="p-6 pb-4">
             <div className="flex items-center justify-between">
@@ -516,6 +550,7 @@ export default function MedicalRecords() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
+      )}
     </div>
   );
 }
