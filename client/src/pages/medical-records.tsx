@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { FileText, Calendar, User, Stethoscope, Pill, TestTube, X } from "lucide-react";
+import { FileText, Calendar, User, Stethoscope, Pill, TestTube, X, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -19,6 +19,9 @@ export default function MedicalRecords() {
   const { isAuthenticated, isLoading } = useAuth();
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Debug modal state
+  console.log('Modal state:', { isModalOpen, selectedRecord });
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -38,15 +41,29 @@ export default function MedicalRecords() {
   const urlParams = new URLSearchParams(window.location.search);
   const patientId = urlParams.get('patient');
 
-  const { data: records, isLoading: recordsLoading } = useQuery({
+  const { data: records, isLoading: recordsLoading, error } = useQuery({
     queryKey: patientId ? ["/api/medical-records", "patient", patientId] : ["/api/medical-records"],
     queryFn: async () => {
       const url = patientId ? `/api/medical-records/patient/${patientId}` : '/api/medical-records';
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch records');
-      return response.json();
+      console.log('Fetching medical records from:', url);
+      const response = await fetch(url, {
+        credentials: 'include', // Important for authentication
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error:', errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+      const data = await response.json();
+      console.log('Medical records data:', data);
+      return data;
     },
     retry: false,
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
 
   if (isLoading || !isAuthenticated) {
@@ -163,7 +180,19 @@ export default function MedicalRecords() {
                     </div>
                   ))}
                 </div>
-              ) : records && records.length > 0 ? (
+              ) : error ? (
+                <div className="text-center py-8 text-red-500">
+                  <AlertCircle className="h-12 w-12 mx-auto mb-4" />
+                  <p>Erro ao carregar registros: {error.message}</p>
+                  <Button 
+                    onClick={() => window.location.reload()} 
+                    variant="outline" 
+                    className="mt-4"
+                  >
+                    Tentar Novamente
+                  </Button>
+                </div>
+              ) : records && Array.isArray(records) && records.length > 0 ? (
                 <div className="space-y-4">
                   {records.map((record: any) => (
                     <Card key={record.id} className="hover:shadow-md transition-shadow">
@@ -209,9 +238,13 @@ export default function MedicalRecords() {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              console.log('Button clicked, record:', record);
                               setSelectedRecord(record);
                               setIsModalOpen(true);
+                              console.log('Modal should open now');
                             }}
                           >
                             Ver Detalhes
@@ -225,6 +258,16 @@ export default function MedicalRecords() {
                 <div className="text-center py-8 text-gray-500">
                   <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                   <p>Nenhum registro médico encontrado</p>
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-700 mb-2">
+                      💡 <strong>Para ver prontuários:</strong>
+                    </p>
+                    <p className="text-sm text-blue-600">
+                      1. Vá em <strong>"Configurações"</strong> no menu lateral<br/>
+                      2. Clique em <strong>"Criar Prontuários de Demonstração"</strong><br/>
+                      3. Retorne aqui para ver os dados médicos
+                    </p>
+                  </div>
                 </div>
               )}
             </CardContent>
