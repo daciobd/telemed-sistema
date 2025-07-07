@@ -2613,6 +2613,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Quick fix route without authentication for demo data
+  app.post('/api/demo/quick-populate', async (req, res) => {
+    try {
+      console.log('Quick populate demo data requested');
+      
+      // Create demo doctor and patients first
+      const demoDoctor = await storage.createDoctor({
+        userId: 'demo-doctor-123',
+        name: 'Dr. Demo Silva',
+        specialty: 'Clínica Geral',
+        crm: '12345-SP',
+        phone: '11999999999',
+        email: 'demo@telemedicina.com',
+        experience: '10 anos',
+        profileImage: null,
+        bio: 'Médico de demonstração',
+        education: 'Medicina - USP',
+        languages: 'Português',
+        availability: 'Segunda a Sexta',
+        consultationPrice: 150
+      });
+
+      const demoPatient = await storage.createPatient({
+        userId: 'demo-patient-123',
+        name: 'João Silva',
+        cpf: '12345678901',
+        phone: '11888888888',
+        email: 'joao@email.com',
+        birthDate: '1980-01-01',
+        address: 'Rua Demo, 123',
+        city: 'São Paulo',
+        state: 'SP',
+        zipCode: '01234567',
+        emergencyContact: 'Maria Silva',
+        emergencyPhone: '11777777777',
+        medicalHistory: 'Sem histórico relevante',
+        allergies: 'Nenhuma',
+        medications: 'Nenhum',
+        insurancePlan: 'Não informado',
+        insuranceNumber: null,
+        bloodType: 'O+',
+        height: 175,
+        weight: 80,
+        notes: 'Paciente de demonstração'
+      });
+
+      // Create realistic medical records
+      const medicalRecord = await storage.createMedicalRecord({
+        patientId: demoPatient.id,
+        doctorId: demoDoctor.id,
+        appointmentId: null,
+        title: 'Consulta de Rotina - Check-up',
+        description: `Anamnese: Paciente retorna para exames de rotina. Relata estar bem, sem queixas específicas.
+
+Exame Físico: Paciente em bom estado geral, corado, hidratado. Sinais vitais normais.
+
+Diagnóstico: Consulta de rotina - estado geral preservado
+
+Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
+        attachments: null
+      });
+
+      res.json({
+        message: "Demo data created successfully",
+        doctor: demoDoctor,
+        patient: demoPatient,
+        record: medicalRecord
+      });
+    } catch (error) {
+      console.error('Error creating demo data:', error);
+      res.status(500).json({ error: 'Failed to create demo data' });
+    }
+  });
+
   // Populate medical records with realistic demo data
   app.post('/api/medical-records/populate-demo', isAuthenticated, async (req: any, res) => {
     try {

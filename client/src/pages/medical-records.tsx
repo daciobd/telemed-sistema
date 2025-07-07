@@ -164,20 +164,33 @@ export default function MedicalRecords() {
                 <Button 
                   onClick={async () => {
                     try {
-                      const response = await fetch('/api/medical-records/populate-demo', {
+                      console.log('Attempting to create demo data...');
+                      const response = await fetch('/api/demo/quick-populate', {
                         method: 'POST',
-                        credentials: 'include',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
                       });
+                      
                       if (response.ok) {
+                        const data = await response.json();
+                        console.log('Demo data created:', data);
                         toast({
                           title: "Prontuários criados!",
                           description: "Dados de demonstração adicionados com sucesso",
                         });
-                        window.location.reload();
+                        
+                        // Refresh the page after 1 second
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 1000);
                       } else {
+                        const errorText = await response.text();
+                        console.error('Error response:', errorText);
                         throw new Error('Erro ao criar dados');
                       }
                     } catch (error) {
+                      console.error('Error creating demo data:', error);
                       toast({
                         title: "Erro",
                         description: "Falha ao criar prontuários de demonstração",
