@@ -451,6 +451,23 @@ src/
 - **Interface**: Menu "WhatsApp Institucional" no sidebar dos médicos
 - **Objetivo**: Proteger o modelo de negócio evitando bypass da plataforma pelos médicos
 
+### Sistema de Prontuários Médicos Fictícios para Demonstração - IMPLEMENTADO
+- **Data**: 07/07/2025
+- **Implementação**: Sistema completo de povoamento de prontuários com casos médicos realistas FUNCIONANDO
+- **Problema Resolvido**: Prontuários vazios durante demonstrações médicas
+- **Funcionalidades**: 
+  - API `/api/medical-records/populate-demo` para criação automática de prontuários
+  - 5 casos médicos detalhados: enxaqueca, tosse pós-viral, angina, ansiedade, lombialgia
+  - Dados completos: anamnese, exame físico, diagnóstico, CID-10, tratamento, sinais vitais
+  - Interface em Configurações para médicos popularem dados facilmente
+  - Componente PopulateMedicalRecords.tsx com casos médicos listados
+  - Atualização automática do histórico médico dos pacientes
+- **Interface**: Seção "Dados de Demonstração" nas configurações apenas para médicos
+- **Casos Incluídos**: Neurologia, Clínica Geral, Cardiologia, Psiquiatria, Ortopedia
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - PRONTUÁRIOS POPULADOS COM DADOS REALISTAS
+- **Atualização Guias**: ROTEIRO_MEDICOS_SIMPLES.md atualizado com passo obrigatório
+- **Resultado**: Demonstrações médicas agora têm prontuários completos e profissionais
+
 ### Sistema de Demonstração Médica e Funcionalidades Clínicas
 - **Data**: 25/06/2025
 - **Implementação**: Sistema completo para demonstração com equipe médica fictícia

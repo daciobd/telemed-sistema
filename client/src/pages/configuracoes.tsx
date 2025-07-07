@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Settings, User, Bell, Shield, Database, Palette } from "lucide-react";
+import { PopulateMedicalRecords } from "@/components/PopulateMedicalRecords";
 
 export default function Configuracoes() {
   const { user } = useAuth();
@@ -274,6 +275,24 @@ export default function Configuracoes() {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Dados de Demonstração - Apenas para médicos */}
+        {getUserRole() === 'doctor' && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Database className="h-5 w-5" />
+                Dados de Demonstração
+              </CardTitle>
+              <CardDescription>
+                Popule o sistema com prontuários médicos realistas para demonstração
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PopulateMedicalRecords />
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Informações do Sistema */}

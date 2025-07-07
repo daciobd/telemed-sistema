@@ -6,16 +6,26 @@
 3. **Use:** Sua conta Replit (criar é gratuito)
 4. **Resultado:** Dashboard principal carregado
 
+## ⚠️ PASSO OBRIGATÓRIO PRIMEIRO
+**IMPORTANTE:** Antes de testar pacientes/prontuários, você DEVE popular os dados:
+1. Vá em **"Configurações"** no menu lateral
+2. Role até **"Dados de Demonstração"**  
+3. Clique **"Criar Prontuários de Demonstração"**
+4. Aguarde criação dos casos médicos realistas
+
 ## ROTEIRO SEQUENCIAL (15 MINUTOS)
 
 ### 🏠 DASHBOARD (2 min)
 - Explore a interface principal
 - Observe estatísticas e menu lateral
 
-### 👥 PACIENTES (3 min)
-- **Clique:** "Pacientes" no menu lateral
-- **Abra:** Qualquer paciente da lista
-- **Explore:** Prontuário eletrônico completo
+### 👥 PACIENTES E PRONTUÁRIOS (4 min)
+- **PRIMEIRO:** Vá em "Configurações" no menu lateral
+- **Role até:** "Dados de Demonstração" 
+- **Clique:** "Criar Prontuários de Demonstração"
+- **Aguarde:** Criação dos casos médicos realistas
+- **Depois:** Vá em "Pacientes" no menu lateral
+- **Abra:** Qualquer paciente - agora com prontuário completo
 
 ### 🎥 VIDEOCONSULTA (5 min) ⭐ PRINCIPAL
 - **Clique:** "Videoconsultas" no menu

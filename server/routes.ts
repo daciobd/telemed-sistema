@@ -2613,6 +2613,154 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Populate medical records with realistic demo data
+  app.post('/api/medical-records/populate-demo', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUserWithProfile(userId);
+      
+      if (!user || user.role !== 'doctor') {
+        return res.status(403).json({ message: "Only doctors can populate demo records" });
+      }
+
+      const patients = await storage.getAllPatients();
+      const doctors = await storage.getAllDoctors();
+      
+      if (patients.length === 0 || doctors.length === 0) {
+        return res.status(400).json({ message: "Need patients and doctors in system first" });
+      }
+
+      // Realistic medical cases with detailed records
+      const medicalCases = [
+        {
+          patientIndex: 0,
+          chiefComplaint: "Dor de cabeça persistente há 5 dias, acompanhada de náuseas",
+          anamnesis: "Paciente relata cefaléia de início gradual, caráter pulsátil, localizada em região temporal bilateralmente. Intensidade 7/10. Associada a náuseas e fotofobia. Nega febre. Histórico familiar de enxaqueca (mãe). Uso esporádico de dipirona com melhora parcial.",
+          physicalExam: "Paciente em bom estado geral, corado, hidratado. Sinais vitais: PA 120/80 mmHg, FC 78 bpm, Tax 36.5°C. Exame neurológico: pupilas isocóricas e fotorreagentes, reflexos simétricos e presentes, força muscular preservada, sem sinais meníngeos.",
+          diagnosis: "Enxaqueca sem aura",
+          cidCode: "G43.0",
+          cidDescription: "Enxaqueca sem aura",
+          treatment: "Prescrevo sumatriptano 50mg, 1 comprimido via oral ao início da crise. Profilaxia com propranolol 40mg, 1 comprimido 2x ao dia por 3 meses. Orientações sobre identificação de fatores desencadeantes.",
+          vitalSigns: { bp: "120/80", hr: "78", temp: "36.5", resp: "16" },
+          notes: "Paciente orientado sobre natureza da doença e importância da profilaxia. Retorno em 30 dias para avaliação da resposta ao tratamento.",
+          followUp: "Retorno em 30 dias. Caso apresente mais de 3 crises por mês, considerar ajuste da profilaxia."
+        },
+        {
+          patientIndex: 1,
+          chiefComplaint: "Tosse seca persistente há 2 semanas, pior à noite",
+          anamnesis: "Paciente apresenta tosse seca, irritativa, principalmente no período noturno, prejudicando o sono. Nega febre, dispnéia ou dor torácica. Sem história de tabagismo. Relata que iniciou após quadro gripal há 3 semanas. Trabalha em ambiente climatizado.",
+          physicalExam: "Bom estado geral, afebril, eupnéico em ar ambiente. Ausculta pulmonar: murmúrio vesicular presente bilateralmente, sem ruídos adventícios. Exame cardiovascular normal. Orofaringe discretamente hiperemiada.",
+          diagnosis: "Tosse pós-viral",
+          cidCode: "R05",
+          cidDescription: "Tosse",
+          treatment: "Dextrometorfano 15mg, 1 colher de sopa 3x ao dia por 7 dias. Mel com própolis, 1 colher de sopa antes de dormir. Aumentar ingesta hídrica. Evitar ambientes com ar condicionado direto.",
+          vitalSigns: { bp: "110/70", hr: "72", temp: "36.2", resp: "18" },
+          notes: "Orientado sobre a natureza autolimitada do quadro. Recomendado retorno se persistir por mais de 1 semana ou surgirem novos sintomas.",
+          followUp: "Retorno se não houver melhora em 7-10 dias ou se desenvolver febre/dispnéia."
+        },
+        {
+          patientIndex: 2,
+          chiefComplaint: "Dor no peito do lado esquerdo durante exercícios",
+          anamnesis: "Paciente de 45 anos, sedentário, refere dor precordial durante atividade física moderada. Dor aperta o peito, irradia para braço esquerdo, cede com repouso em 2-3 minutos. Histórico familiar de IAM (pai aos 55 anos). Fumante 20 cigarros/dia há 25 anos.",
+          physicalExam: "Paciente obeso (IMC 32), PA 140/90 mmHg, FC 85 bpm. Ausculta cardíaca: ritmo regular, bulhas normofonéticas, sem sopros. Pulsos periféricos presentes e simétricos. Ausculta pulmonar normal.",
+          diagnosis: "Angina pectoris estável - investigação",
+          cidCode: "I20.9",
+          cidDescription: "Angina pectoris não especificada",
+          treatment: "Solicitado ECG, ecocardiograma e teste ergométrico. Prescrito AAS 100mg/dia, atorvastatina 40mg/dia. Orientações sobre cessação do tabagismo e mudanças no estilo de vida.",
+          vitalSigns: { bp: "140/90", hr: "85", temp: "36.4", resp: "20" },
+          notes: "Paciente orientado sobre fatores de risco cardiovascular. Encaminhado para cardiologista. Controle de peso e exercícios gradualmente.",
+          followUp: "Retorno em 15 dias com exames. Emergência se dor em repouso ou prolongada."
+        },
+        {
+          patientIndex: 3,
+          chiefComplaint: "Ansiedade e palpitações há 3 semanas",
+          anamnesis: "Paciente relata episódios de ansiedade intensa, palpitações, sudorese e sensação de falta de ar. Episódios duram 10-15 minutos, ocorrem 2-3x por semana. Iniciaram após mudança de emprego. Nega uso de substâncias. Sono prejudicado, apetite diminuído.",
+          physicalExam: "Paciente ansiosa, colaborativa. Sinais vitais normais no momento do exame. Exame cardiovascular e pulmonar sem alterações. Tremor fino de extremidades.",
+          diagnosis: "Transtorno de ansiedade generalizada",
+          cidCode: "F41.1",
+          cidDescription: "Transtorno de ansiedade generalizada",
+          treatment: "Sertralina 50mg, 1 comprimido pela manhã. Alprazolam 0,25mg, 1 comprimido em caso de crise (máximo 2x/dia). Técnicas de relaxamento e respiração. Atividade física regular.",
+          vitalSigns: { bp: "115/75", hr: "88", temp: "36.3", resp: "22" },
+          notes: "Paciente orientada sobre transtorno de ansiedade. Recomendado acompanhamento psicológico. Evitar cafeína e estimulantes.",
+          followUp: "Retorno em 15 dias para avaliação da resposta ao tratamento."
+        },
+        {
+          patientIndex: 4,
+          chiefComplaint: "Dor nas costas há 1 semana após carregar peso",
+          anamnesis: "Paciente refere dor lombar aguda após carregar caixa pesada no trabalho. Dor tipo peso, intensidade 8/10, piora com movimentos, melhora parcial com repouso. Irradia para nádega direita. Nega parestesias ou déficit motor.",
+          physicalExam: "Paciente com postura antálgica, marcha normal. Inspeção: sem deformidades visíveis. Palpação: contratura muscular paravertebral L4-L5. Teste de Lasègue negativo. Força e reflexos preservados em MMII.",
+          diagnosis: "Lombialgia aguda mecânica",
+          cidCode: "M54.5",
+          cidDescription: "Dor lombar baixa",
+          treatment: "Ibuprofeno 600mg 8/8h por 7 dias. Ciclobenzaprina 10mg à noite por 5 dias. Aplicação de calor local. Repouso relativo, evitar esforços. Fisioterapia após fase aguda.",
+          vitalSigns: { bp: "125/80", hr: "76", temp: "36.6", resp: "16" },
+          notes: "Orientado sobre mecânica corporal adequada e prevenção de lesões. Retorno se não houver melhora ou surgir irradiação para membros.",
+          followUp: "Retorno em 1 semana. Fisioterapia após melhora da dor aguda."
+        }
+      ];
+
+      let recordsCreated = 0;
+      let consultationRecordsCreated = 0;
+
+      for (const [index, medicalCase] of medicalCases.entries()) {
+        if (index >= patients.length) break;
+        
+        const patient = patients[medicalCase.patientIndex];
+        const doctor = doctors[index % doctors.length];
+
+        // Create a medical record
+        const medicalRecord = await storage.createMedicalRecord({
+          patientId: patient.id,
+          doctorId: doctor.id,
+          recordType: "consultation",
+          title: `Consulta: ${medicalCase.chiefComplaint}`,
+          description: `Anamnese: ${medicalCase.anamnesis}\n\nExame Físico: ${medicalCase.physicalExam}\n\nDiagnóstico: ${medicalCase.diagnosis}\n\nTratamento: ${medicalCase.treatment}`,
+          attachments: null
+        });
+        recordsCreated++;
+
+        // Create detailed consultation record
+        const consultationRecord = await storage.createConsultationRecord({
+          appointmentId: null, // Demo record without specific appointment
+          doctorId: doctor.id,
+          patientId: patient.id,
+          chiefComplaint: medicalCase.chiefComplaint,
+          anamnesis: medicalCase.anamnesis,
+          physicalExam: medicalCase.physicalExam,
+          diagnosis: medicalCase.diagnosis,
+          cidCode: medicalCase.cidCode,
+          cidDescription: medicalCase.cidDescription,
+          treatment: medicalCase.treatment,
+          vitalSigns: medicalCase.vitalSigns,
+          notes: medicalCase.notes,
+          followUp: medicalCase.followUp,
+          status: "completed"
+        });
+        consultationRecordsCreated++;
+
+        // Update patient with relevant medical history
+        const medicalHistory = `${medicalCase.diagnosis} (${new Date().toLocaleDateString('pt-BR')})`;
+        const currentHistory = patient.medicalHistory || "";
+        const updatedHistory = currentHistory ? `${currentHistory}; ${medicalHistory}` : medicalHistory;
+        
+        await storage.updatePatient(patient.id, {
+          medicalHistory: updatedHistory
+        });
+      }
+
+      res.json({
+        message: "Demo medical records populated successfully",
+        recordsCreated,
+        consultationRecordsCreated,
+        casesAdded: medicalCases.length
+      });
+
+    } catch (error) {
+      console.error("Error populating demo medical records:", error);
+      res.status(500).json({ message: "Failed to populate demo medical records" });
+    }
+  });
+
   // Vite setup será configurado no index.ts
 
   return httpServer;
