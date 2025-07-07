@@ -71,6 +71,8 @@ function Router() {
       <Route path="/demo-medico" component={DemoMedico} />
       <Route path="/test-demo" component={TestDemo} />
       <Route path="/medical-records" component={MedicalRecords} />
+      <Route path="/prontuarios" component={MedicalRecords} />
+      <Route path="/diagnostico" component={lazy(() => import('@/pages/diagnostico'))} />
       
       {isLoading || !isAuthenticated ? (
         <Route path="/" component={Landing} />
