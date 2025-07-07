@@ -65,6 +65,28 @@ export default function Landing() {
             </p>
           </div>
           
+          {/* BOTÕES DE TESTE ESPECIAIS */}
+          <div className="mt-8 mb-8 p-6 bg-yellow-400/20 backdrop-blur-sm rounded-lg border border-yellow-300 animate-fade-in">
+            <h3 className="text-2xl font-bold text-yellow-100 mb-4">🧪 ACESSO DIRETO PARA TESTES</h3>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <button
+                onClick={() => window.location.href = "/test-demo"}
+                className="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-200 text-lg"
+              >
+                🧪 TEST DEMO API
+              </button>
+              <button
+                onClick={() => window.location.href = "/medical-records"}
+                className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-200 text-lg"
+              >
+                📋 MEDICAL RECORDS
+              </button>
+            </div>
+            <p className="text-yellow-200 text-sm mt-3">
+              Acesso direto às funcionalidades sem necessidade de login
+            </p>
+          </div>
+
           {/* CTA Buttons with enhanced styling */}
           <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center items-center animate-slide-up" style={{animationDelay: '0.6s'}}>
             <Button 
