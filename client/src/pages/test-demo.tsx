@@ -17,7 +17,7 @@ export default function TestDemo() {
 
     try {
       console.log('Testing demo API...');
-      const response = await fetch('/api/demo/quick-populate', {
+      const response = await fetch('/api/test-demo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
