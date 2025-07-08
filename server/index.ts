@@ -8,6 +8,9 @@ const PORT = parseInt(process.env.PORT || '5000', 10);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Serve static files from public directory
+app.use(express.static('public'));
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
