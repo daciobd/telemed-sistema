@@ -1,0 +1,97 @@
+Aqui está um exemplo seguro e funcional para a rota /api/test-demo-safe e o botão correspondente no frontend.
+
+✅ 1. Código do Backend (server/routes/test-demo-safe.ts)
+Esse código cria dados fictícios (um médico, um paciente, um prontuário) e lida com erros corretamente.
+
+ts
+Copiar
+Editar
+// server/routes/test-demo-safe.ts
+import express from 'express';
+const router = express.Router();
+
+// Substitua pelas suas classes reais de banco de dados (Mongo, Sequelize etc.)
+const fakeDB = {
+  doctors: [],
+  patients: [],
+  records: [],
+};
+
+router.post('/test-demo-safe', async (req, res) => {
+  try {
+    console.log("🔧 [test-demo-safe] Iniciando criação de dados...");
+
+    const doctor = { id: Date.now(), name: "Dr. Demo" };
+    const patient = { id: Date.now() + 1, name: "Patient Demo" };
+    const record = {
+      id: Date.now() + 2,
+      doctorId: doctor.id,
+      patientId: patient.id,
+      notes: "Consulta de demonstração",
+    };
+
+    fakeDB.doctors.push(doctor);
+    fakeDB.patients.push(patient);
+    fakeDB.records.push(record);
+
+    console.log("✅ [test-demo-safe] Dados criados:", {
+      doctor,
+      patient,
+      record,
+    });
+
+    res.status(200).json({ success: true, doctor, patient, record });
+  } catch (error) {
+    console.error("❌ [test-demo-safe] Erro ao criar dados:", error);
+    res.status(500).json({ error: "Erro ao criar dados demo" });
+  }
+});
+
+export default router;
+⚠️ Certifique-se de importar esse router no seu server/index.ts:
+
+ts
+Copiar
+Editar
+import express from 'express';
+import testDemoSafe from './routes/test-demo-safe';
+
+const app = express();
+app.use(express.json());
+
+// Use a rota
+app.use('/api', testDemoSafe);
+
+// Start server...
+✅ 2. Código do Frontend (React ou Vanilla JS)
+Substitua o handler do botão no seu arquivo TestDemoPage.tsx ou JS equivalente:
+
+jsx
+Copiar
+Editar
+<button onClick={handleTestDemoSafe}>Test Demo API (Safe Route)</button>
+js
+Copiar
+Editar
+function handleTestDemoSafe() {
+  fetch("/api/test-demo-safe", { method: "POST" })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("✅ Dados de teste criados:", data);
+      alert("Demo data created with success!");
+    })
+    .catch((error) => {
+      console.error("❌ Erro ao criar dados:", error);
+      alert("Erro ao criar dados demo.");
+    });
+}
+✅ Resultado
+Sem dependência externa sensível (como conexão com MongoDB, se você quiser evitar isso só para o teste).
+
+Com console.log para debug no backend.
+
+Com alert ou tratamento visual simples no frontend.
+
+Compatível com o ambiente Replit.
+
+Se você estiver usando MongoDB ou outro banco real, posso adaptar este exemplo para salvar de verdade usando mongoose ou prisma.

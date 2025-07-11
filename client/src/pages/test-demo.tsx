@@ -16,34 +16,37 @@ export default function TestDemo() {
     setResult(null);
 
     try {
-      console.log('Testing demo API...');
-      const response = await fetch('/api/test-demo-safe', {
+      console.log('🛡️ Testing SAFE demo API endpoint...');
+      
+      // Force cache bypass with timestamp
+      const response = await fetch(`/api/test-demo-safe?t=${Date.now()}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        cache: 'no-cache'
       });
 
-      console.log('API response status:', response.status);
+      console.log('✅ SAFE API response status:', response.status);
       
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`API Error: ${response.status} - ${errorText}`);
+        throw new Error(`Safe API Error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('API response data:', data);
+      console.log('✅ SAFE API response data:', data);
       
       setResult(data);
       toast({
-        title: "✅ Demo Data Created! (Safe Route)",
-        description: "Successfully tested safe demo endpoint - working in production.",
+        title: "✅ Safe Demo API Working!",
+        description: "Safe endpoint tested successfully - production ready!",
       });
     } catch (err: any) {
-      console.error('API test failed:', err);
+      console.error('❌ Safe API test failed:', err);
       setError(err.message);
       toast({
-        title: "❌ API Test Failed",
+        title: "❌ Safe API Test Failed",
         description: err.message,
         variant: "destructive",
       });
@@ -133,7 +136,7 @@ export default function TestDemo() {
               </Button>
 
               <Button
-                onClick={() => window.open('/api/test-demo-safe', '_blank')}
+                onClick={() => window.open(`/api/test-demo-safe?t=${Date.now()}`, '_blank')}
                 variant="secondary"
                 className="w-full"
               >
