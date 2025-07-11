@@ -86,10 +86,10 @@ export default function TestDemo() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            🧪 Demo API Test Page
+            🧪 Demo API Test Page (SAFE ROUTE v2.0)
           </h1>
           <p className="text-gray-600 text-lg">
-            Test and debug the demo data creation API
+            Test the SAFE demo endpoint that bypasses production issues
           </p>
         </div>
 
@@ -116,12 +116,12 @@ export default function TestDemo() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Testing Safe Demo API...
+                    Testing Safe Demo API v2.0...
                   </>
                 ) : (
                   <>
                     <Database className="h-4 w-4 mr-2" />
-                    Test Demo API (Safe Route)
+                    Test Demo API (Safe Route v2.0)
                   </>
                 )}
               </Button>
@@ -135,13 +135,24 @@ export default function TestDemo() {
                 Test Medical Records API
               </Button>
 
-              <Button
-                onClick={() => window.open(`/api/test-demo-safe?t=${Date.now()}`, '_blank')}
-                variant="secondary"
-                className="w-full"
-              >
-                🔗 Test Safe Endpoint Directly
-              </Button>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  onClick={() => window.open(`/api/test-demo-safe?t=${Date.now()}`, '_blank')}
+                  variant="secondary"
+                  className="w-full"
+                  size="sm"
+                >
+                  🔗 Test Direct
+                </Button>
+                <Button
+                  onClick={() => window.location.reload()}
+                  variant="outline"
+                  className="w-full"
+                  size="sm"
+                >
+                  🔄 Force Refresh
+                </Button>
+              </div>
 
               <div className="pt-4">
                 <Button
