@@ -195,22 +195,24 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
-### Deploy Replit - SISTEMA ONLINE E FUNCIONANDO - 08/07/2025 14:00
-- **Status**: ✅ SISTEMA PUBLICAMENTE ACESSÍVEL E OPERACIONAL
+### Deploy Replit - CACHE DEPLOYMENT ISSUE - 11/07/2025 10:15
+- **Status**: ⚠️ SISTEMA FUNCIONAL LOCALMENTE - PROBLEMA DE SINCRONIZAÇÃO DEPLOYMENT
 - **URL Pública**: telemed-consultation-daciobd.replit.app
 - **Situação Atual**: 
-  - ✅ Deploy público funcionando via Replit Deployments
-  - ✅ APIs corrigidas e operacionais: /api/test-demo, /api/test-medical-records
+  - ✅ Todas APIs funcionando 100% localmente na porta 5000
+  - ✅ Frontend corrigido: `/api/test-demo` (POST) e `/api/test-medical-records` (GET)
   - ✅ Health check operacional: `{"status":"healthy","port":5000,"version":"8.0.0-CLEAN"}`
-  - ✅ Frontend/backend integrados com HMR funcionando
-- **Correções Aplicadas**: 
-  - Frontend corrigido de `/api/demo/quick-populate` para `/api/test-demo`
-  - Test Medical Records API implementada
-  - Cache deployment limpo via restart do workflow
-- **Testes Validados**: APIs locais retornando JSON válido com dados demo
-- **Status Atual**: SISTEMA 100% FUNCIONAL E ACESSÍVEL PUBLICAMENTE
-- **Funcionalidades Prontas**: Medical Records, Test Demo, Dashboard, Pagamentos, MEMED, etc.
-- **Deploy Status**: ATIVO E OPERACIONAL
+  - ✅ Nova rota `/api/test-page` para debugging implementada
+  - ❌ Deploy público não sincronizando mudanças do código
+- **APIs Testadas e Funcionais**:
+  - `/api/test-demo` (POST): Retorna dados demo completos em JSON
+  - `/api/test-medical-records` (GET): Retorna registros médicos em JSON  
+  - `/health` (GET): Status healthy confirmado
+  - `/api/test-page` (GET): Página HTML de teste direta
+- **Problema Identificado**: Cache/sincronização do deployment Replit não propagando código
+- **Soluções Tentadas**: Restart múltiplos do workflow, reorganização de middlewares
+- **Status do Código**: ✅ 100% FUNCIONAL E TESTADO LOCALMENTE
+- **Próximo Passo**: Aguardar sincronização automática do deployment ou deploy manual
 
 ### Deploy Railway - BACKUP CONFIGURADO - 05/07/2025 20:30
 - **Status**: ✅ CONFIGURADO COMO ALTERNATIVA
