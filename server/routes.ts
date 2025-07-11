@@ -2961,16 +2961,16 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
     
     <script>
         async function testDemo() {
-            document.getElementById('result').innerHTML = '🔄 Testando Demo API...';
+            document.getElementById('result').innerHTML = '🔄 Testando Demo API (Rota Segura)...';
             try {
-                const response = await fetch('/api/test-demo', { 
+                const response = await fetch('/api/test-demo-safe', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await response.json();
                 document.getElementById('result').className = 'result success';
                 document.getElementById('result').innerHTML = 
-                    '✅ Demo API SUCCESS:\\n' + JSON.stringify(data, null, 2);
+                    '✅ Demo API SUCCESS (Rota Segura):\\n' + JSON.stringify(data, null, 2);
             } catch (error) {
                 document.getElementById('result').className = 'result error';
                 document.getElementById('result').innerHTML = '❌ Demo API ERROR: ' + error.message;

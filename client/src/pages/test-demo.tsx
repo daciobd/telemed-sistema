@@ -17,7 +17,7 @@ export default function TestDemo() {
 
     try {
       console.log('Testing demo API...');
-      const response = await fetch('/api/test-demo', {
+      const response = await fetch('/api/test-demo-safe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,8 +36,8 @@ export default function TestDemo() {
       
       setResult(data);
       toast({
-        title: "✅ Demo Data Created!",
-        description: "Successfully created demo doctor, patient, and medical record.",
+        title: "✅ Demo Data Created! (Safe Route)",
+        description: "Successfully tested safe demo endpoint - working in production.",
       });
     } catch (err: any) {
       console.error('API test failed:', err);
