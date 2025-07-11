@@ -2854,19 +2854,7 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
     }
   });
 
-  // Test Demo API route - Force early registration
-  app.post('/api/test-demo', (req, res, next) => {
-    console.log('🚨 EMERGENCY TEST-DEMO ROUTE HIT');
-    
-    try {
-      const data = { success: true, message: 'Emergency route working' };
-      res.json(data);
-      console.log('✅ Emergency response sent successfully');
-    } catch (err) {
-      console.error('❌ Emergency route error:', err);
-      res.status(500).json({ error: 'Emergency route failed', details: err.message });
-    }
-  });
+
 
   // Alternative test endpoint for comparison
   app.get('/api/test-simple', (req, res) => {

@@ -195,25 +195,26 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
-### Deploy Replit - DEPLOYMENT SYNC RESOLVIDO - DEBUG EM ANDAMENTO - 11/07/2025 10:36
-- **Status**: ✅ DEPLOYMENT SINCRONIZADO - DEBUGGING ERRO DE PRODUÇÃO
+### Deploy Replit - API PERSISTENTE COM ERRO 500 - 11/07/2025 11:20
+- **Status**: ⚠️ DEPLOYMENT FUNCIONANDO - API ESPECÍFICA COM PROBLEMA CRÍTICO
 - **URL Pública**: telemed-consultation-daciobd.replit.app
 - **Situação Atual**: 
-  - ✅ Deploy público FUNCIONANDO - mudanças de código sincronizadas
-  - ✅ Página `/test-demo` carregando corretamente no site público
-  - ✅ APIs locais funcionando 100% na porta 5000
-  - ⚠️ API `/api/test-demo` falhando em produção com erro 500
-  - ✅ Página de teste `/api/test-page` funcionando
-- **Progresso do Debug**:
-  - Erro específico: "Failed to create demo data" no ambiente de produção
-  - Adicionados logs detalhados para identificar causa raiz
-  - Diferença entre ambiente local (funcional) e produção (erro)
-- **APIs Status**:
-  - `/api/test-demo` (POST): ✅ Local OK / ❌ Produção Erro 500
-  - `/api/test-medical-records` (GET): Status a confirmar
-  - `/health` (GET): Status a confirmar
-  - `/api/test-page` (GET): ✅ Funcionando
-- **Próximo Passo**: Identificar diferença entre ambiente local e produção via logs detalhados
+  - ✅ Deploy público 100% sincronizado com código local
+  - ✅ Página `/test-demo` carregando corretamente
+  - ✅ APIs funcionando localmente sem problemas
+  - ❌ API `/api/test-demo` persistentemente falhando em produção (erro 500)
+  - ✅ Outras APIs funcionando (`/health`, `/api/test-page`)
+- **Debug Extensivo Realizado**:
+  - Simplificação total da API (apenas return JSON)
+  - Remoção de async/await, try/catch, lógicas complexas
+  - Reordenação de middleware para prioridade de rota
+  - Múltiplas abordagens de implementação testadas
+- **Conclusão Técnica**: 
+  - Diferença fundamental entre ambiente local e deployment Replit
+  - Possível restrição de runtime ou middleware de produção
+  - API ultra-simples falhando sugere problema de infraestrutura
+- **Status das Outras APIs**: ✅ Todas funcionais exceto `/api/test-demo`
+- **Próximo Passo**: Investigar limitações específicas do ambiente Replit Deployments
 
 ### Deploy Railway - BACKUP CONFIGURADO - 05/07/2025 20:30
 - **Status**: ✅ CONFIGURADO COMO ALTERNATIVA
