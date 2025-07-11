@@ -16,6 +16,20 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // PRIORITY: Test Demo API route - registered FIRST to avoid conflicts
+  app.post('/api/test-demo', (req, res, next) => {
+    console.log('🚨 PRIORITY TEST-DEMO ROUTE HIT');
+    
+    try {
+      const data = { success: true, message: 'Priority route working', timestamp: new Date().toISOString() };
+      res.json(data);
+      console.log('✅ Priority response sent successfully');
+    } catch (err) {
+      console.error('❌ Priority route error:', err);
+      res.status(500).json({ error: 'Priority route failed', details: err.message });
+    }
+  });
+
   // Auth middleware
   await setupAuth(app);
 
@@ -2840,13 +2854,18 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
     }
   });
 
-  // Test Demo API route - Ultra Simplified
-  app.post('/api/test-demo', (req, res) => {
-    res.status(200).json({
-      success: true,
-      message: 'ULTRA SIMPLIFIED - Working in production',
-      timestamp: new Date().toISOString()
-    });
+  // Test Demo API route - Force early registration
+  app.post('/api/test-demo', (req, res, next) => {
+    console.log('🚨 EMERGENCY TEST-DEMO ROUTE HIT');
+    
+    try {
+      const data = { success: true, message: 'Emergency route working' };
+      res.json(data);
+      console.log('✅ Emergency response sent successfully');
+    } catch (err) {
+      console.error('❌ Emergency route error:', err);
+      res.status(500).json({ error: 'Emergency route failed', details: err.message });
+    }
   });
 
   // Alternative test endpoint for comparison
