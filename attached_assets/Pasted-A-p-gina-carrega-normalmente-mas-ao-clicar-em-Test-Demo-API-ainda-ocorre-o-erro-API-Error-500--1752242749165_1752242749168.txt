@@ -1,0 +1,68 @@
+A página carrega normalmente, mas ao clicar em “Test Demo API”, ainda ocorre o erro:
+API Error: 500 - {"error":"Failed to create demo data"}.
+
+Como não tenho acesso direto ao backend pelo link público, aqui está um passo a passo preciso para você revisar o código e resolver ou contornar esse problema, considerando o que já foi diagnosticado.
+
+✅ FOCO: Diagnosticar a /api/test-demo que falha apenas em produção
+📍 1. Localize o arquivo da rota
+Procure no seu projeto por um desses nomes:
+
+routes/testDemo.js
+
+api/test-demo.js
+
+ou em um router central como app.js, server.js, index.js com algo como:
+
+js
+Copiar
+Editar
+app.post('/api/test-demo', async (req, res) => { ... });
+📍 2. Insira logs para entender o ponto da falha
+Modifique o código dessa rota assim:
+
+js
+Copiar
+Editar
+app.post('/api/test-demo', async (req, res) => {
+  try {
+    console.log("Creating demo data...");
+    // Exemplo: criar médico
+    const doctor = await Doctor.create({ name: "Demo Doctor" });
+    console.log("Doctor created:", doctor);
+
+    const patient = await Patient.create({ name: "Demo Patient" });
+    console.log("Patient created:", patient);
+
+    const record = await MedicalRecord.create({
+      doctorId: doctor.id,
+      patientId: patient.id,
+      notes: "Demo notes"
+    });
+    console.log("Record created:", record);
+
+    res.status(200).json({ message: "Demo data created" });
+  } catch (e) {
+    console.error("DEMO ERROR:", e); // <-- Veja o erro real nos logs do Replit
+    res.status(500).json({ error: "Failed to create demo data" });
+  }
+});
+Depois, vá em Console do Replit (no painel lateral) e veja a mensagem exata.
+
+🔍 Diagnóstico provável: Falha por motivo de ambiente restrito
+Possíveis causas comuns no Replit:
+Causa possível	Solução sugerida
+Uso de fs.writeFile	Substitua por solução sem escrita em disco
+Falta de permissão p/ escrita	Verifique se não está tentando gravar fora de /tmp
+mongoose.connect() duplicado	Certifique-se de não reconectar no meio da rota
+Variável de ambiente ausente	Logue process.env para garantir que está setada
+Código com caminho relativo errado	Use path.resolve(__dirname, ...) sempre
+
+✅ Alternativa simples para contornar:
+Se a API /api/test-demo não é essencial para o funcionamento do sistema, desative esse botão em produção, como mencionei antes:
+
+js
+Copiar
+Editar
+if (process.env.NODE_ENV !== 'production') {
+  renderTestDemoButton();
+}

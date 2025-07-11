@@ -16,17 +16,60 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // PRIORITY: Test Demo API route - registered FIRST to avoid conflicts
-  app.post('/api/test-demo', (req, res, next) => {
-    console.log('🚨 PRIORITY TEST-DEMO ROUTE HIT');
+  // PRIORITY: Test Demo API route with comprehensive logging
+  app.post('/api/test-demo', async (req, res) => {
+    console.log('🚨 DEMO API CALLED - Starting comprehensive logging...');
     
     try {
-      const data = { success: true, message: 'Priority route working', timestamp: new Date().toISOString() };
-      res.json(data);
-      console.log('✅ Priority response sent successfully');
-    } catch (err) {
-      console.error('❌ Priority route error:', err);
-      res.status(500).json({ error: 'Priority route failed', details: err.message });
+      // Log 1: Environment check
+      console.log('Environment:', process.env.NODE_ENV);
+      console.log('Database URL exists:', !!process.env.DATABASE_URL);
+      console.log('Request headers:', JSON.stringify(req.headers, null, 2));
+      
+      // Log 2: Basic operations test
+      console.log('Testing basic Date creation...');
+      const testDate = new Date();
+      console.log('Date created successfully:', testDate.toISOString());
+      
+      // Log 3: Object creation test
+      console.log('Testing object creation...');
+      const testObject = {
+        id: 'test-1',
+        name: 'Test Object',
+        created: testDate.toISOString()
+      };
+      console.log('Object created successfully:', JSON.stringify(testObject, null, 2));
+      
+      // Log 4: JSON response preparation
+      console.log('Preparing JSON response...');
+      const responseData = {
+        success: true,
+        message: 'Demo data created successfully with comprehensive logging',
+        timestamp: testDate.toISOString(),
+        environment: process.env.NODE_ENV || 'unknown',
+        data: testObject
+      };
+      console.log('Response prepared:', JSON.stringify(responseData, null, 2));
+      
+      // Log 5: Response sending
+      console.log('Sending response...');
+      res.status(200).json(responseData);
+      console.log('✅ Response sent successfully');
+      
+    } catch (error) {
+      console.error('❌ DEMO ERROR - Complete error details:');
+      console.error('Error message:', error.message);
+      console.error('Error name:', error.name);
+      console.error('Error stack:', error.stack);
+      console.error('Error toString:', error.toString());
+      console.error('Full error object:', JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+      
+      res.status(500).json({
+        error: 'Failed to create demo data',
+        details: error.message,
+        stack: error.stack,
+        name: error.name
+      });
     }
   });
 
@@ -2864,6 +2907,21 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
       environment: process.env.NODE_ENV || 'unknown',
       timestamp: new Date().toISOString()
     });
+  });
+
+  // Safe demo endpoint - fallback version that bypasses potential issues
+  app.post('/api/test-demo-safe', (req, res) => {
+    console.log('🛡️ SAFE DEMO API called');
+    
+    // Ultra-minimal response without any complex operations
+    const response = {
+      success: true,
+      message: 'Safe demo endpoint working',
+      timestamp: Date.now().toString(),
+      environment: 'production-safe'
+    };
+    
+    res.json(response);
   });
 
   // Direct HTML test page as API route

@@ -195,26 +195,26 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
-### Deploy Replit - API PERSISTENTE COM ERRO 500 - 11/07/2025 11:20
-- **Status**: ⚠️ DEPLOYMENT FUNCIONANDO - API ESPECÍFICA COM PROBLEMA CRÍTICO
+### Deploy Replit - DEBUG LOGGING IMPLEMENTADO - 11/07/2025 13:40
+- **Status**: 🔍 DEBUGGING AVANÇADO IMPLEMENTADO - LOGS DETALHADOS ATIVOS
 - **URL Pública**: telemed-consultation-daciobd.replit.app
 - **Situação Atual**: 
   - ✅ Deploy público 100% sincronizado com código local
   - ✅ Página `/test-demo` carregando corretamente
   - ✅ APIs funcionando localmente sem problemas
-  - ❌ API `/api/test-demo` persistentemente falhando em produção (erro 500)
+  - 🔍 API `/api/test-demo` com logging detalhado implementado
   - ✅ Outras APIs funcionando (`/health`, `/api/test-page`)
-- **Debug Extensivo Realizado**:
-  - Simplificação total da API (apenas return JSON)
-  - Remoção de async/await, try/catch, lógicas complexas
-  - Reordenação de middleware para prioridade de rota
-  - Múltiplas abordagens de implementação testadas
-- **Conclusão Técnica**: 
-  - Diferença fundamental entre ambiente local e deployment Replit
-  - Possível restrição de runtime ou middleware de produção
-  - API ultra-simples falhando sugere problema de infraestrutura
-- **Status das Outras APIs**: ✅ Todas funcionais exceto `/api/test-demo`
-- **Próximo Passo**: Investigar limitações específicas do ambiente Replit Deployments
+- **Debug Logging Implementado**:
+  - Logs de environment e database connection
+  - Teste de operações básicas JavaScript (Date, Object)
+  - Logging detalhado de cada step da execução
+  - Error stack completo e propriedades do erro
+  - Endpoint alternativo `/api/test-demo-safe` como fallback
+- **Abordagem Atual**: 
+  - Logging abrangente para identificar exatamente onde falha
+  - Múltiplas camadas de teste (ambiente, JS básico, response)
+  - Endpoint seguro alternativo para comparação
+- **Próximo Passo**: Analisar logs do Console Replit para identificar erro específico
 
 ### Deploy Railway - BACKUP CONFIGURADO - 05/07/2025 20:30
 - **Status**: ✅ CONFIGURADO COMO ALTERNATIVA
