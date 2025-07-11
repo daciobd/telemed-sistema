@@ -2840,63 +2840,23 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
     }
   });
 
-  // Test Demo API route
-  app.post('/api/test-demo', async (req, res) => {
-    try {
-      console.log('🧪 Test Demo API called');
-      console.log('Environment:', process.env.NODE_ENV);
-      console.log('Database URL exists:', !!process.env.DATABASE_URL);
-      console.log('Request headers:', req.headers);
-      console.log('Request body:', req.body);
-      
-      // Test basic JavaScript operations first
-      const testDate = new Date();
-      console.log('Date creation test:', testDate.toISOString());
-      
-      // Create demo data for testing
-      const demoData = {
-        doctor: {
-          id: 'demo-doctor-1',
-          name: 'Dr. Demo Silva',
-          specialty: 'Clínico Geral',
-          email: 'demo@telemed.com',
-          phone: '(11) 99999-9999'
-        },
-        patient: {
-          id: 'demo-patient-1',
-          name: 'João Demo',
-          age: 35,
-          email: 'joao@demo.com',
-          phone: '(11) 88888-8888'
-        },
-        medicalRecord: {
-          id: 'demo-record-1',
-          patientId: 'demo-patient-1',
-          diagnosis: 'Hipertensão arterial',
-          treatment: 'Medicação anti-hipertensiva',
-          notes: 'Paciente apresenta pressão arterial elevada',
-          createdAt: testDate.toISOString()
-        }
-      };
+  // Test Demo API route - Ultra Simplified
+  app.post('/api/test-demo', (req, res) => {
+    res.status(200).json({
+      success: true,
+      message: 'ULTRA SIMPLIFIED - Working in production',
+      timestamp: new Date().toISOString()
+    });
+  });
 
-      res.json({
-        success: true,
-        message: 'Demo data created successfully',
-        data: demoData,
-        timestamp: testDate.toISOString()
-      });
-    } catch (error) {
-      console.error('Error in test-demo API:', error);
-      console.error('Error stack:', error.stack);
-      console.error('Error name:', error.name);
-      res.status(500).json({
-        success: false,
-        error: 'Failed to create demo data',
-        message: error.message || 'Unknown error',
-        stack: error.stack,
-        name: error.name
-      });
-    }
+  // Alternative test endpoint for comparison
+  app.get('/api/test-simple', (req, res) => {
+    res.json({
+      success: true,
+      message: 'Simple test endpoint working',
+      environment: process.env.NODE_ENV || 'unknown',
+      timestamp: new Date().toISOString()
+    });
   });
 
   // Direct HTML test page as API route
