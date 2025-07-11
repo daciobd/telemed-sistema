@@ -195,24 +195,25 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
-### Deploy Replit - CACHE DEPLOYMENT ISSUE - 11/07/2025 10:15
-- **Status**: ⚠️ SISTEMA FUNCIONAL LOCALMENTE - PROBLEMA DE SINCRONIZAÇÃO DEPLOYMENT
+### Deploy Replit - DEPLOYMENT SYNC RESOLVIDO - DEBUG EM ANDAMENTO - 11/07/2025 10:36
+- **Status**: ✅ DEPLOYMENT SINCRONIZADO - DEBUGGING ERRO DE PRODUÇÃO
 - **URL Pública**: telemed-consultation-daciobd.replit.app
 - **Situação Atual**: 
-  - ✅ Todas APIs funcionando 100% localmente na porta 5000
-  - ✅ Frontend corrigido: `/api/test-demo` (POST) e `/api/test-medical-records` (GET)
-  - ✅ Health check operacional: `{"status":"healthy","port":5000,"version":"8.0.0-CLEAN"}`
-  - ✅ Nova rota `/api/test-page` para debugging implementada
-  - ❌ Deploy público não sincronizando mudanças do código
-- **APIs Testadas e Funcionais**:
-  - `/api/test-demo` (POST): Retorna dados demo completos em JSON
-  - `/api/test-medical-records` (GET): Retorna registros médicos em JSON  
-  - `/health` (GET): Status healthy confirmado
-  - `/api/test-page` (GET): Página HTML de teste direta
-- **Problema Identificado**: Cache/sincronização do deployment Replit não propagando código
-- **Soluções Tentadas**: Restart múltiplos do workflow, reorganização de middlewares
-- **Status do Código**: ✅ 100% FUNCIONAL E TESTADO LOCALMENTE
-- **Próximo Passo**: Aguardar sincronização automática do deployment ou deploy manual
+  - ✅ Deploy público FUNCIONANDO - mudanças de código sincronizadas
+  - ✅ Página `/test-demo` carregando corretamente no site público
+  - ✅ APIs locais funcionando 100% na porta 5000
+  - ⚠️ API `/api/test-demo` falhando em produção com erro 500
+  - ✅ Página de teste `/api/test-page` funcionando
+- **Progresso do Debug**:
+  - Erro específico: "Failed to create demo data" no ambiente de produção
+  - Adicionados logs detalhados para identificar causa raiz
+  - Diferença entre ambiente local (funcional) e produção (erro)
+- **APIs Status**:
+  - `/api/test-demo` (POST): ✅ Local OK / ❌ Produção Erro 500
+  - `/api/test-medical-records` (GET): Status a confirmar
+  - `/health` (GET): Status a confirmar
+  - `/api/test-page` (GET): ✅ Funcionando
+- **Próximo Passo**: Identificar diferença entre ambiente local e produção via logs detalhados
 
 ### Deploy Railway - BACKUP CONFIGURADO - 05/07/2025 20:30
 - **Status**: ✅ CONFIGURADO COMO ALTERNATIVA

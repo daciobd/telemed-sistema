@@ -2844,6 +2844,8 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
   app.post('/api/test-demo', async (req, res) => {
     try {
       console.log('🧪 Test Demo API called');
+      console.log('Environment:', process.env.NODE_ENV);
+      console.log('Database URL exists:', !!process.env.DATABASE_URL);
       
       // Create demo data for testing
       const demoData = {
@@ -2879,10 +2881,14 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
       });
     } catch (error) {
       console.error('Error in test-demo API:', error);
+      console.error('Error stack:', error.stack);
+      console.error('Error name:', error.name);
       res.status(500).json({
         success: false,
         error: 'Failed to create demo data',
-        message: error.message
+        message: error.message || 'Unknown error',
+        stack: error.stack,
+        name: error.name
       });
     }
   });

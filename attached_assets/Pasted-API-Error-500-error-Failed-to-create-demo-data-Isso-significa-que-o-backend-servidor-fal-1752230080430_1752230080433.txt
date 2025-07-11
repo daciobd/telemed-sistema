@@ -1,0 +1,51 @@
+API Error: 500 - {"error":"Failed to create demo data"}
+Isso significa que o backend (servidor) falhou ao processar a solicitação. Aqui estão as principais possíveis causas e soluções:
+
+✅ 1. Erro no código da rota da API
+O endpoint chamado por Test Demo API provavelmente está com um erro no backend.
+
+Verifique o arquivo onde a rota /test-demo ou algo semelhante está implementada.
+
+Sugestão:
+
+No Replit, vá até o backend (geralmente um arquivo main.py, server.js, app.py, etc.) e veja o que a função faz ao chamar a criação de dados.
+
+Adicione logs (print, console.log) para depurar e ver onde exatamente falha.
+
+✅ 2. Problema com o banco de dados (DB)
+A criação dos dados de teste (médico, paciente etc.) provavelmente depende de um banco de dados.
+
+Se ele não estiver inicializado, configurado corretamente ou se houver algum problema de conexão, a criação falha.
+
+Sugestão:
+
+Verifique se o banco de dados está conectado corretamente.
+
+Veja se as tabelas/coleções estão sendo criadas antes de adicionar os dados.
+
+Verifique permissões ou credenciais.
+
+✅ 3. Dados inválidos ou em formato errado
+O backend pode estar tentando inserir algo mal formatado (ex: campo null onde não pode).
+
+Pode haver campos obrigatórios faltando.
+
+Sugestão:
+
+Veja o payload sendo enviado no backend ao criar os dados demo.
+
+Tente enviar manualmente esse mesmo JSON para o endpoint usando o Postman ou curl, e veja a resposta detalhada.
+
+✅ 4. Erros silenciosos no código
+Às vezes o erro não é tratado corretamente, e o backend apenas responde com 500 sem detalhes.
+
+Pode ser necessário adicionar try/except (Python) ou try/catch (JavaScript) para capturar melhor o erro real.
+
+Sugestão:
+
+Envolva o bloco de criação de dados com um tratamento de erro que loga e.message ou a stack completa.
+
+✅ 5. Caminho do banco de dados em Replit
+Se você usa SQLite ou arquivos .db, verifique se o caminho usado é acessível no ambiente do Replit.
+
+Ex: usar ./db.sqlite em vez de db.sqlite
