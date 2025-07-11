@@ -2846,6 +2846,12 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
       console.log('🧪 Test Demo API called');
       console.log('Environment:', process.env.NODE_ENV);
       console.log('Database URL exists:', !!process.env.DATABASE_URL);
+      console.log('Request headers:', req.headers);
+      console.log('Request body:', req.body);
+      
+      // Test basic JavaScript operations first
+      const testDate = new Date();
+      console.log('Date creation test:', testDate.toISOString());
       
       // Create demo data for testing
       const demoData = {
@@ -2869,7 +2875,7 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
           diagnosis: 'Hipertensão arterial',
           treatment: 'Medicação anti-hipertensiva',
           notes: 'Paciente apresenta pressão arterial elevada',
-          createdAt: new Date().toISOString()
+          createdAt: testDate.toISOString()
         }
       };
 
@@ -2877,7 +2883,7 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
         success: true,
         message: 'Demo data created successfully',
         data: demoData,
-        timestamp: new Date().toISOString()
+        timestamp: testDate.toISOString()
       });
     } catch (error) {
       console.error('Error in test-demo API:', error);
