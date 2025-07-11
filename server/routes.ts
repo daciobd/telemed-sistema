@@ -2887,6 +2887,98 @@ Tratamento: Orientações gerais de saúde, manter hábitos saudáveis.`,
     }
   });
 
+  // Direct HTML test page as API route
+  app.get('/api/test-page', async (req, res) => {
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test Direct</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f0f8ff; }
+        h1 { color: #2c3e50; }
+        button { 
+            padding: 12px 24px; margin: 10px; background: #007bff; 
+            color: white; border: none; border-radius: 5px; cursor: pointer; 
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        .result { 
+            background: #f8f9fa; padding: 15px; margin: 15px 0; 
+            border-radius: 5px; font-family: monospace; 
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+        }
+        .success { border-left-color: #28a745; background: #d4edda; }
+        .error { border-left-color: #dc3545; background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>🔧 API Test Direct - TeleMed</h1>
+    <p>Teste direto das APIs via route do servidor (bypass cache)</p>
+    
+    <button onclick="testDemo()">🧪 Test Demo API</button>
+    <button onclick="testMedical()">📋 Test Medical Records</button>
+    <button onclick="testHealth()">❤️ Health Check</button>
+    
+    <div id="result" class="result">Clique em um botão para testar...</div>
+    
+    <script>
+        async function testDemo() {
+            document.getElementById('result').innerHTML = '🔄 Testando Demo API...';
+            try {
+                const response = await fetch('/api/test-demo', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                document.getElementById('result').className = 'result success';
+                document.getElementById('result').innerHTML = 
+                    '✅ Demo API SUCCESS:\\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('result').className = 'result error';
+                document.getElementById('result').innerHTML = '❌ Demo API ERROR: ' + error.message;
+            }
+        }
+        
+        async function testMedical() {
+            document.getElementById('result').innerHTML = '🔄 Testando Medical Records API...';
+            try {
+                const response = await fetch('/api/test-medical-records');
+                const data = await response.json();
+                document.getElementById('result').className = 'result success';
+                document.getElementById('result').innerHTML = 
+                    '✅ Medical API SUCCESS:\\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('result').className = 'result error';
+                document.getElementById('result').innerHTML = '❌ Medical API ERROR: ' + error.message;
+            }
+        }
+        
+        async function testHealth() {
+            document.getElementById('result').innerHTML = '🔄 Testando Health API...';
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                document.getElementById('result').className = 'result success';
+                document.getElementById('result').innerHTML = 
+                    '✅ Health API SUCCESS:\\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('result').className = 'result error';
+                document.getElementById('result').innerHTML = '❌ Health API ERROR: ' + error.message;
+            }
+        }
+        
+        console.log('🔥 API Test page carregada via route do servidor!');
+        console.log('URL atual:', window.location.href);
+        console.log('Timestamp:', new Date().toLocaleString());
+    </script>
+</body>
+</html>`;
+    
+    res.set('Content-Type', 'text/html');
+    res.send(html);
+  });
+
   // Test Medical Records API route
   app.get('/api/test-medical-records', async (req, res) => {
     try {
