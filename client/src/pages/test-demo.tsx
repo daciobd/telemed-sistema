@@ -96,12 +96,12 @@ export default function TestDemo() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Database className="h-5 w-5" />
-                Create Demo Data
+                Create Demo Data (Safe Route)
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-gray-600">
-                This will create a demo doctor, patient, and medical record in the database.
+                This will test the safe demo endpoint that bypasses production issues.
               </p>
               
               <Button
@@ -113,12 +113,12 @@ export default function TestDemo() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Creating Demo Data...
+                    Testing Safe Demo API...
                   </>
                 ) : (
                   <>
                     <Database className="h-4 w-4 mr-2" />
-                    Test Demo API
+                    Test Demo API (Safe Route)
                   </>
                 )}
               </Button>
@@ -130,6 +130,14 @@ export default function TestDemo() {
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Test Medical Records API
+              </Button>
+
+              <Button
+                onClick={() => window.open('/api/test-demo-safe', '_blank')}
+                variant="secondary"
+                className="w-full"
+              >
+                🔗 Test Safe Endpoint Directly
               </Button>
 
               <div className="pt-4">
