@@ -26,8 +26,14 @@ export default function OnboardingDemo() {
   // Force welcome modal to show immediately on page load
   useEffect(() => {
     console.log('🎯 OnboardingDemo mounted - setting welcome modal');
+    console.log('🎯 showWelcome state:', showWelcome);
     setShowWelcome(true);
   }, []);
+
+  // Debug showWelcome changes
+  useEffect(() => {
+    console.log('🎯 showWelcome changed to:', showWelcome);
+  }, [showWelcome]);
 
   const tourSteps = [
     { title: 'Bem-vindo ao TeleMed!', description: 'Este é seu dashboard principal onde você pode acessar todas as funcionalidades.' },
@@ -53,6 +59,7 @@ export default function OnboardingDemo() {
   };
 
   const skipTour = () => {
+    console.log('🎯 skipTour called');
     setShowWelcome(false);
     setShowTour(false);
   };
@@ -92,7 +99,9 @@ export default function OnboardingDemo() {
 
       {/* Welcome Modal */}
       {showWelcome && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center"
+             style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999}}>
+          {console.log('🎯 RENDERING WELCOME MODAL')}
           <div className="bg-white rounded-lg p-8 m-4 max-w-lg w-full">
             <div className="text-center">
               <div className="mb-4">
