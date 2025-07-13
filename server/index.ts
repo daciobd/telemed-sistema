@@ -234,8 +234,11 @@ async function startServer() {
     const httpServer = await registerRoutes(app);
     
     // Setup Vite para desenvolvimento ou static para produção
+    console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
+      console.log('🔧 Setting up Vite for development...');
       await setupVite(app, httpServer);
+      console.log('✅ Vite setup complete');
     } else {
       // Em produção, serve arquivos estáticos e depois fallback para SPA
       serveStatic(app);
