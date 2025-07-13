@@ -249,16 +249,33 @@ async function startServer() {
       
       // CRITICAL: SPA fallback for development - deve vir DEPOIS do setupVite
       console.log('🔧 Adding SPA fallback for React Router...');
+      
+      // Fallback para React Router - deve devolver index.html para qualquer rota não-API
+      app.get('*', (req, res, next) => {
+        if (req.path.startsWith('/api/')) {
+          return next(); // Deixa as APIs passarem
+        }
+        
+        // Retorna o index.html para o React Router processar
+        const indexPath = path.join(__dirname, '../client/index.html');
+        console.log('📄 Serving React SPA for:', req.path);
+        res.sendFile(indexPath);
+      });
     } else {
       console.log('🔧 Setting up static file serving for production...');
       // Em produção, serve arquivos estáticos e depois fallback para SPA
       serveStatic(app);
       
-      // SPA fallback - serve landing page para rotas não-API
+      // SPA fallback - DEVE DEVOLVER index.html para React Router funcionar
       app.get('*', (req, res, next) => {
         if (req.path.startsWith('/api/')) {
           return next(); // Deixa as APIs passarem
         }
+        
+        // Retorna o index.html para o React Router processar
+        const indexPath = path.join(__dirname, '../client/dist/index.html');
+        console.log('📄 Serving React SPA for:', req.path);
+        res.sendFile(indexPath);
         
         const html = `
           <!DOCTYPE html>

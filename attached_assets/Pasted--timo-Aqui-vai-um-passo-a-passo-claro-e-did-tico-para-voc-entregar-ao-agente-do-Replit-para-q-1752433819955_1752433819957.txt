@@ -1,0 +1,105 @@
+Ótimo. Aqui vai um passo a passo **claro e didático** para você entregar ao agente do Replit, para que ele finalmente configure isso da forma correta e o React Router funcione no seu deploy.
+
+---
+
+## ✅ PASSO A PASSO PARA CORRIGIR O ROUTING DO REACT NO REPLIT (VITE + EXPRESS)
+
+### 1️⃣ **Verificar ordem correta dos middlewares no `server/index.ts`**
+
+A configuração básica de um servidor Express servindo React com Vite **deve seguir esta ordem**:
+
+```typescript
+// Servir arquivos estáticos PRIMEIRO
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Servir as APIs normalmente
+app.use('/api', apiRouter); 
+
+// Fallback para Vite (React Router SPA)
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+  });
+} else {
+  // Em desenvolvimento o Vite já cuida disso
+  app.use('*', vite.middlewares);
+}
+```
+
+**Por quê?**
+
+* Primeiro, arquivos estáticos (js, css, etc.) precisam carregar.
+* Depois, suas APIs.
+* Por último, qualquer rota desconhecida deve devolver **sempre o index.html** para que o React Router funcione.
+
+---
+
+### 2️⃣ **Verificar se o build do Vite gerou `index.html` na pasta `/public` (ou `/dist`)**
+
+Se estiver usando Vite:
+
+```bash
+npm run build
+```
+
+✅ Confirme que o `index.html` gerado está no local certo.
+Ele precisa estar **na mesma pasta que você apontou no `express.static()`**.
+
+---
+
+### 3️⃣ **Conferir se o React Router está configurado com `BrowserRouter` e não `HashRouter`.**
+
+No seu `App.tsx`:
+
+```tsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/patient-dashboard" element={<Dashboard />} />
+  </Routes>
+</BrowserRouter>
+```
+
+---
+
+### 4️⃣ **Testar no ambiente de produção Replit com as rotas:**
+
+* `/`
+* `/patient-dashboard`
+* `/test-safe.html`
+* `/api/test-demo-safe`
+
+**Todas devem responder conforme esperado:**
+
+* React em `/`
+* Dashboard do React em `/patient-dashboard`
+* HTML estático em `/test-safe.html`
+* JSON da API em `/api/test-demo-safe`
+
+---
+
+## 🚩 **Checklist do que corrigir:**
+
+| Item                                        | Status Esperado |
+| ------------------------------------------- | --------------- |
+| `express.static()` **antes** do Vite        | ✅               |
+| Rota `app.get('*')` devolvendo `index.html` | ✅               |
+| `index.html` no lugar certo após build      | ✅               |
+| React Router com `BrowserRouter`            | ✅               |
+| APIs separadas, funcionando                 | ✅               |
+
+---
+
+## 🚨 **Erros mais comuns que causam esse 404:**
+
+1. Não devolver `index.html` no fallback.
+2. Ordem errada de middlewares.
+3. Build do Vite não sendo usado corretamente.
+4. Uso errado do `HashRouter` ou falta de configuração.
+
+---
+
+Se ele seguir exatamente este roteiro, seu `/patient-dashboard` vai funcionar.
+Me diga se quer que eu escreva essa explicação para ele em inglês, caso ajude.
