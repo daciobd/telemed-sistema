@@ -59,11 +59,12 @@ import { db } from "./db";
 import { eq, desc, and, gte, lte, or, sql } from "drizzle-orm";
 
 export interface IStorage {
-  // User operations (mandatory for Replit Auth)
+  // User operations (mandatory for Replit Auth + Credential Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
   getUserWithProfile(id: string): Promise<UserWithProfile | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  createCredentialUser(user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User>;
   
   // Patient operations
   createPatient(patient: InsertPatient): Promise<Patient>;
@@ -213,6 +214,18 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByEmail(email: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createCredentialUser(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values({
+        ...userData,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
     return user;
   }
 

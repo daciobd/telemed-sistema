@@ -21,11 +21,20 @@ import {
 } from 'lucide-react';
 
 export default function ImprovedLandingPage() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const logout = useLogout();
   const [, setLocation] = useLocation();
 
   const handleLogin = () => {
-    window.location.href = '/api/login';
+    setLocation('/login');
+  };
+
+  const handleRegister = () => {
+    setLocation('/register');
+  };
+
+  const handleLogout = () => {
+    logout.mutate();
   };
 
   const handleGetStarted = () => {
@@ -73,6 +82,44 @@ export default function ImprovedLandingPage() {
             <a href="#funcionalidades" className="hover:text-teal-200 transition-colors">Funcionalidades</a>
             <a href="#como-funciona" className="hover:text-teal-200 transition-colors">Como Funciona</a>
             <a href="#especialidades" className="hover:text-teal-200 transition-colors">Especialidades</a>
+            
+            {/* Authentication Buttons */}
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <span className="text-teal-200">Olá, {user?.firstName}</span>
+                <Button 
+                  onClick={() => setLocation('/dashboard')}
+                  variant="outline" 
+                  className="text-teal-800 border-white hover:bg-white"
+                >
+                  Dashboard
+                </Button>
+                <Button 
+                  onClick={handleLogout}
+                  variant="ghost" 
+                  className="text-white hover:bg-teal-700"
+                >
+                  Sair
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                <Button 
+                  onClick={handleLogin}
+                  variant="ghost" 
+                  className="text-white hover:bg-teal-700"
+                >
+                  Entrar
+                </Button>
+                <Button 
+                  onClick={handleRegister}
+                  variant="outline" 
+                  className="text-teal-800 border-white hover:bg-white"
+                >
+                  Cadastrar
+                </Button>
+              </div>
+            )}
             {isAuthenticated ? (
               <Link to="/dashboard">
                 <Button variant="outline" className="border-white text-white hover:bg-white hover:text-teal-800">

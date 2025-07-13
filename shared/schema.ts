@@ -851,6 +851,53 @@ export type DoctorRegistration = typeof doctorRegistrations.$inferSelect;
 export type InsertPatientRegistration = z.infer<typeof insertPatientRegistrationSchema>;
 export type PatientRegistration = typeof patientRegistrations.$inferSelect;
 
+// Auth schemas for credential-based authentication MVP
+export const insertCredentialUserSchema = createInsertSchema(users, {
+  email: z.string().email("Email inválido"),
+  passwordHash: z.string().min(1, "Hash da senha obrigatório"),
+  role: z.enum(["patient", "doctor", "admin"]),
+  firstName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  lastName: z.string().min(2, "Sobrenome deve ter pelo menos 2 caracteres"),
+}).omit({ 
+  id: true, 
+  createdAt: true, 
+  updatedAt: true,
+  isEmailVerified: true,
+  profileImageUrl: true 
+});
+
+export const loginSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+});
+
+export const registerSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+  confirmPassword: z.string().min(6, "Confirmação de senha obrigatória"),
+  firstName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  lastName: z.string().min(2, "Sobrenome deve ter pelo menos 2 caracteres"),
+  role: z.enum(["patient", "doctor"]),
+  // Doctor-specific fields
+  specialty: z.string().optional(),
+  licenseNumber: z.string().optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Senhas não conferem",
+  path: ["confirmPassword"],
+}).refine((data) => {
+  if (data.role === "doctor") {
+    return data.specialty && data.licenseNumber;
+  }
+  return true;
+}, {
+  message: "Especialidade e número do CRM são obrigatórios para médicos",
+  path: ["specialty"],
+});
+
+export type LoginRequest = z.infer<typeof loginSchema>;
+export type RegisterRequest = z.infer<typeof registerSchema>;
+export type CredentialUser = z.infer<typeof insertCredentialUserSchema>;
+
 // Consultation Records types
 export const insertConsultationRecordSchema = createInsertSchema(consultationRecords).omit({
   id: true,

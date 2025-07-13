@@ -14,8 +14,219 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
+import { 
+  generateToken, 
+  hashPassword, 
+  comparePassword, 
+  requireAuth, 
+  requireRole, 
+  generateUserId,
+  type AuthenticatedRequest 
+} from "./auth";
+import { loginSchema, registerSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // ===============================================
+  // AUTH ROUTES - MVP CREDENTIAL-BASED AUTHENTICATION
+  // ===============================================
+  
+  // Register new user
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      console.log("Register request body:", req.body);
+      const validatedData = registerSchema.parse(req.body);
+      console.log("Validated data:", validatedData);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(validatedData.email);
+      if (existingUser) {
+        return res.status(409).json({ error: "Email já cadastrado" });
+      }
+
+      // Hash password
+      const passwordHash = await hashPassword(validatedData.password);
+
+      // Generate user ID
+      const userId = generateUserId();
+
+      // Create user
+      const newUser = await storage.createCredentialUser({
+        id: userId,
+        email: validatedData.email,
+        firstName: validatedData.firstName,
+        lastName: validatedData.lastName,
+        role: validatedData.role,
+        specialty: validatedData.specialty || null,
+        licenseNumber: validatedData.licenseNumber || null,
+        passwordHash,
+        isEmailVerified: false,
+        profileImageUrl: null,
+      });
+
+      // Create patient or doctor profile
+      if (validatedData.role === "patient") {
+        await storage.createPatient({
+          userId: newUser.id,
+          phone: null,
+          address: null,
+          cpf: null,
+          emergencyContact: null,
+          bloodType: null,
+          allergies: null,
+          medications: null,
+          chronicConditions: null,
+          medicalHistory: null,
+          dateOfBirth: null,
+        });
+      } else if (validatedData.role === "doctor") {
+        await storage.createDoctor({
+          userId: newUser.id,
+          specialty: validatedData.specialty!,
+          licenseNumber: validatedData.licenseNumber!,
+          experience: 0,
+          consultationFee: 15000, // R$ 150.00 in cents
+          availableSlots: null,
+        });
+      }
+
+      // Generate JWT token
+      const token = generateToken({
+        id: newUser.id,
+        email: newUser.email,
+        role: newUser.role,
+        firstName: newUser.firstName || "",
+        lastName: newUser.lastName || "",
+      });
+
+      res.status(201).json({
+        message: "Usuário cadastrado com sucesso",
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          role: newUser.role,
+        },
+        token,
+      });
+
+    } catch (error) {
+      console.error("Registration error:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Dados inválidos", details: error.errors });
+      }
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Login user
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const validatedData = loginSchema.parse(req.body);
+
+      // Find user by email
+      const user = await storage.getUserByEmail(validatedData.email);
+      if (!user || !user.passwordHash) {
+        return res.status(401).json({ error: "Email ou senha incorretos" });
+      }
+
+      // Verify password
+      const isPasswordValid = await comparePassword(validatedData.password, user.passwordHash);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: "Email ou senha incorretos" });
+      }
+
+      // Generate JWT token
+      const token = generateToken({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+      });
+
+      res.json({
+        message: "Login realizado com sucesso",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+        },
+        token,
+      });
+
+    } catch (error) {
+      console.error("Login error:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Dados inválidos", details: error.errors });
+      }
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Get current user (protected route)
+  app.get('/api/auth/me', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userWithProfile = await storage.getUserWithProfile(req.user!.id);
+      if (!userWithProfile) {
+        return res.status(404).json({ error: "Usuário não encontrado" });
+      }
+
+      res.json({
+        user: {
+          id: userWithProfile.id,
+          email: userWithProfile.email,
+          firstName: userWithProfile.firstName,
+          lastName: userWithProfile.lastName,
+          role: userWithProfile.role,
+          specialty: userWithProfile.specialty,
+          licenseNumber: userWithProfile.licenseNumber,
+        },
+        profile: {
+          patient: userWithProfile.patient,
+          doctor: userWithProfile.doctor,
+        },
+      });
+
+    } catch (error) {
+      console.error("Get user error:", error);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  });
+
+  // Logout (client-side only, but we can add token blacklist later)
+  app.post('/api/auth/logout', (req, res) => {
+    res.json({ message: "Logout realizado com sucesso" });
+  });
+
+  // ===============================================
+  // PROTECTED ROUTES EXAMPLES
+  // ===============================================
+  
+  // Example protected route for doctors only
+  app.get('/api/doctor/dashboard', requireAuth, requireRole(['doctor']), async (req: AuthenticatedRequest, res) => {
+    res.json({ 
+      message: "Dashboard do médico", 
+      doctorId: req.user!.id,
+      role: req.user!.role 
+    });
+  });
+
+  // Example protected route for patients only
+  app.get('/api/patient/profile', requireAuth, requireRole(['patient']), async (req: AuthenticatedRequest, res) => {
+    res.json({ 
+      message: "Perfil do paciente", 
+      patientId: req.user!.id,
+      role: req.user!.role 
+    });
+  });
+
+  // ===============================================
+  // EXISTING ROUTES (keeping for backwards compatibility)
+  // ===============================================
+
   // PRIORITY: Test Demo API route with comprehensive logging
   app.post('/api/test-demo', async (req, res) => {
     console.log('🚨 DEMO API CALLED - Starting comprehensive logging...');

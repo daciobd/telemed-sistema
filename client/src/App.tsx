@@ -49,9 +49,9 @@ import OfertasTeleconsulta from "@/pages/ofertas-teleconsulta";
 import MedicalNotifications from "@/pages/medical-notifications";
 import DemoMedico from "@/pages/demo-medico";
 import LoginPage from "@/pages/login";
-import RegisterPage from "@/pages/register";
+import RegisterPage from "@/pages/register"; 
+import PatientDashboard from "@/pages/patient-dashboard";
 import ApiTestPage from "@/pages/api-test";
-import { CredentialAuthProvider, useCredentialAuth } from "@/hooks/useCredentialAuth";
 
 
 function Router() {
