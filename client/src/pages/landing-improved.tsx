@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
+import { AuthButtons } from '@/components/auth/AuthButtons';
 import { 
   Stethoscope, 
   Clock, 
@@ -83,59 +84,7 @@ export default function ImprovedLandingPage() {
             <a href="#como-funciona" className="hover:text-teal-200 transition-colors">Como Funciona</a>
             <a href="#especialidades" className="hover:text-teal-200 transition-colors">Especialidades</a>
             
-            {/* Authentication Buttons */}
-            {isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <span className="text-teal-200">Olá, {user?.firstName}</span>
-                <Button 
-                  onClick={() => setLocation('/dashboard')}
-                  variant="outline" 
-                  className="text-teal-800 border-white hover:bg-white"
-                >
-                  Dashboard
-                </Button>
-                <Button 
-                  onClick={handleLogout}
-                  variant="ghost" 
-                  className="text-white hover:bg-teal-700"
-                >
-                  Sair
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-4">
-                <Button 
-                  onClick={handleLogin}
-                  variant="ghost" 
-                  className="text-white hover:bg-teal-700"
-                >
-                  Entrar
-                </Button>
-                <Button 
-                  onClick={handleRegister}
-                  variant="outline" 
-                  className="text-teal-800 border-white hover:bg-white"
-                >
-                  Cadastrar
-                </Button>
-              </div>
-            )}
-            {isAuthenticated ? (
-              <Link to="/dashboard">
-                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-teal-800">
-                  Dashboard
-                </Button>
-              </Link>
-            ) : (
-              <Button 
-                variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-teal-800"
-                onClick={handleLogin}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Carregando...' : 'Entrar'}
-              </Button>
-            )}
+            <AuthButtons />
           </div>
         </div>
       </nav>
@@ -160,25 +109,65 @@ export default function ImprovedLandingPage() {
               </div>
               
               <div className="flex flex-wrap gap-4">
-                <Button 
-                  size="lg" 
-                  className="bg-teal-600 hover:bg-teal-700"
-                  onClick={handleScheduleConsultation}
-                  disabled={isLoading}
-                >
-                  <Calendar className="h-5 w-5 mr-2" />
-                  Agendar Consulta
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50"
-                  onClick={handleVideoConsultation}
-                  disabled={isLoading}
-                >
-                  <Video className="h-5 w-5 mr-2" />
-                  Teleconsulta Imediata
-                </Button>
+                {!isAuthenticated ? (
+                  <>
+                    <Button 
+                      size="lg" 
+                      className="bg-teal-600 hover:bg-teal-700 text-white"
+                      onClick={handleLogin}
+                    >
+                      🩺 Entrar no Sistema
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                      onClick={handleRegister}
+                    >
+                      📝 Criar Conta
+                    </Button>
+                  </>
+                ) : (
+                  <Button 
+                    size="lg" 
+                    className="bg-teal-600 hover:bg-teal-700 text-white"
+                    onClick={() => setLocation('/dashboard')}
+                  >
+                    🏥 Ir para Dashboard
+                  </Button>
+                )}
+                
+                {isAuthenticated ? (
+                  <>
+                    <Button 
+                      size="lg" 
+                      className="bg-teal-600 hover:bg-teal-700 text-white"
+                      onClick={handleScheduleConsultation}
+                    >
+                      <Calendar className="h-5 w-5 mr-2" />
+                      Agendar Consulta
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                      onClick={handleVideoConsultation}
+                    >
+                      <Video className="h-5 w-5 mr-2" />
+                      Teleconsulta Imediata
+                    </Button>
+                  </>
+                ) : (
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                    onClick={() => setLocation('/video-test')}
+                  >
+                    <Video className="h-5 w-5 mr-2" />
+                    Testar Videoconsulta
+                  </Button>
+                )}
               </div>
 
               {/* Trust Indicators */}
