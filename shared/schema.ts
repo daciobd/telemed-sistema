@@ -38,6 +38,8 @@ export const users = pgTable("users", {
   licenseNumber: varchar("license_number"), // For doctors
   passwordHash: varchar("password_hash"), // For credential-based auth
   isEmailVerified: boolean("is_email_verified").default(false),
+  hasCompletedOnboarding: boolean("has_completed_onboarding").default(false),
+  onboardingStep: integer("onboarding_step").default(0),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

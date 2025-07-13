@@ -65,6 +65,7 @@ export interface IStorage {
   getUserWithProfile(id: string): Promise<UserWithProfile | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createCredentialUser(user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User>;
+  updateUserOnboarding(id: string, onboardingData: { hasCompletedOnboarding?: boolean; onboardingStep?: number }): Promise<void>;
   
   // Patient operations
   createPatient(patient: InsertPatient): Promise<Patient>;
@@ -227,6 +228,16 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  async updateUserOnboarding(id: string, onboardingData: { hasCompletedOnboarding?: boolean; onboardingStep?: number }): Promise<void> {
+    await db
+      .update(users)
+      .set({
+        ...onboardingData,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, id));
   }
 
   // Patient operations

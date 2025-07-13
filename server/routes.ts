@@ -24,6 +24,7 @@ import {
   type AuthenticatedRequest 
 } from "./auth";
 import { loginSchema, registerSchema } from "@shared/schema";
+import onboardingRoutes from "./onboarding-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // ===============================================
@@ -3408,6 +3409,11 @@ Testado em: \${new Date().toLocaleString('pt-BR')}
       });
     }
   });
+
+  // ===============================================
+  // ONBOARDING ROUTES
+  // ===============================================
+  app.use('/api', onboardingRoutes);
 
   // Vite setup será configurado no index.ts
 

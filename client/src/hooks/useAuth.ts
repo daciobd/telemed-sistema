@@ -1,134 +1,48 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "wouter";
-import { 
-  login, 
-  register, 
-  logout, 
-  apiRequest, 
-  isAuthenticated, 
-  getUserData,
-  type AuthUser 
-} from "@/lib/auth";
-import { type LoginRequest, type RegisterRequest } from "@shared/schema";
-import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from 'react';
+
+// Mock auth hook for demonstration
+// In a real implementation, this would connect to your authentication system
+interface User {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  role: 'patient' | 'doctor' | 'admin';
+  hasCompletedOnboarding: boolean;
+  onboardingStep: number;
+}
 
 export function useAuth() {
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Get current user info
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ["/api/auth/me"],
-    queryFn: () => isAuthenticated() ? apiRequest("/api/auth/me") : null,
-    enabled: isAuthenticated(),
-    retry: false,
-  });
+  useEffect(() => {
+    // Simulate auth check
+    const mockUser: User = {
+      id: 'demo-patient-1',
+      email: 'demo@patient.com',
+      firstName: 'João',
+      lastName: 'Silva',
+      role: 'patient',
+      hasCompletedOnboarding: false, // Set to false to trigger onboarding
+      onboardingStep: 0,
+    };
+
+    setTimeout(() => {
+      setUser(mockUser);
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  const logout = () => {
+    setUser(null);
+    // In real implementation, clear tokens, etc.
+  };
 
   return {
-    user: user?.user || getUserData(),
-    profile: user?.profile,
+    user,
     isLoading,
-    isAuthenticated: isAuthenticated(),
-    error,
+    isAuthenticated: !!user,
+    logout,
   };
-}
-
-export function useLogin() {
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: login,
-    onSuccess: (data) => {
-      toast({
-        title: "Login realizado com sucesso",
-        description: `Bem-vindo, ${data.user.firstName}!`,
-      });
-      
-      // Invalidate and refetch user data
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-      
-      // Redirect based on user role
-      if (data.user.role === "doctor") {
-        setLocation("/dashboard");
-      } else if (data.user.role === "patient") {
-        setLocation("/patient-dashboard");
-      } else {
-        setLocation("/");
-      }
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Erro no login",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-}
-
-export function useRegister() {
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: register,
-    onSuccess: (data) => {
-      toast({
-        title: "Cadastro realizado com sucesso",
-        description: `Bem-vindo ao TeleMed, ${data.user.firstName}!`,
-      });
-      
-      // Invalidate and refetch user data
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-      
-      // Redirect based on user role
-      if (data.user.role === "doctor") {
-        setLocation("/dashboard");
-      } else if (data.user.role === "patient") {
-        setLocation("/patient-dashboard");
-      } else {
-        setLocation("/");
-      }
-    },
-    onError: (error: Error) => {
-      toast({
-        title: "Erro no cadastro",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-}
-
-export function useLogout() {
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async () => {
-      // Always clear local state even if server logout fails
-      logout();
-    },
-    onSuccess: () => {
-      toast({
-        title: "Logout realizado",
-        description: "Até logo!",
-      });
-      
-      // Clear all cached data
-      queryClient.clear();
-      
-      // Redirect to home
-      setLocation("/");
-    },
-    onError: () => {
-      // Even if something fails, still logout and redirect
-      queryClient.clear();
-      setLocation("/");
-    },
-  });
 }

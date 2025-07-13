@@ -216,6 +216,35 @@ src/
 - **Impacto**: Base sólida para implementar Feature #1 (autenticação JWT)
 - **Próximo**: Implementar sistema de autenticação JWT sobre infraestrutura validada
 
+### GENTLE ONBOARDING EXPERIENCE IMPLEMENTADO - 13/07/2025 20:15
+- **Status**: ✅ SISTEMA DE ONBOARDING COMPLETO - FUNCIONANDO
+- **Implementação**: Sistema completo de tour guiado para novos usuários
+- **Funcionalidades Implementadas**:
+  - **Welcome Modal**: Modal de boas-vindas com apresentação da plataforma
+  - **Guided Tour**: Tour interativo em 8 etapas mostrando funcionalidades
+  - **Progress Tracking**: Sistema de progresso com persistência no banco
+  - **Dashboard Layout**: Layout responsivo com sidebar e tour integrado
+  - **Patient Dashboard**: Interface completa com cards e ações rápidas
+- **Componentes Criados**:
+  - `WelcomeModal`: Modal inicial com recursos e CTAs
+  - `GuidedTour`: Tour com steps, progress bar e navegação
+  - `DashboardLayout`: Layout principal com menu e tour
+  - `PatientDashboard`: Dashboard com cards funcionais
+  - `useOnboarding`: Hook para gerenciar estado do onboarding
+- **Backend Integração**:
+  - Schema atualizado com `hasCompletedOnboarding` e `onboardingStep`
+  - Rotas API para completion e reset do onboarding
+  - Storage methods para persistir progresso
+- **UX/UI Features**:
+  - Animações suaves e transições
+  - Indicadores visuais de progresso
+  - Design responsivo para mobile
+  - Tooltips e data-tour attributes
+  - Botão "Repetir Tour" para re-experiência
+- **Tour Steps**: Dashboard, Consultas, Pacientes, Prontuário, Prescrições, Videoconsultas, Relatórios, Configurações
+- **Impacto**: Melhora significativa na experiência de novos usuários
+- **Próximo**: Sistema funcionando, pronto para implementar videoconsultas
+
 ### Sistema de Autenticação JWT Implementado - 13/07/2025 17:30
 - **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - FUNCIONANDO
 - **Funcionalidades Implementadas**:
