@@ -68,6 +68,7 @@ function Router() {
       <Route path="/register-success" component={RegisterSuccess} />
       
       {/* Testing routes - temporarily public for demo */}
+      <Route path="/patient-dashboard" component={PatientDashboard} />
       <Route path="/agenda-medica" component={DoctorAgendaPage} />
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
       <Route path="/video-test" component={VideoTestPage} />
@@ -83,7 +84,6 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Dashboard} />
-          <Route path="/patient-dashboard" component={PatientDashboard} />
           <Route path="/consultas" component={Appointments} />
           <Route path="/appointments" component={Appointments} />
           <Route path="/consultas" component={Appointments} />
