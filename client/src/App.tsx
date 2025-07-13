@@ -71,7 +71,7 @@ function Router() {
       <Route path="/register-success" component={RegisterSuccess} />
       
       {/* Testing routes - temporarily public for demo */}
-      <Route path="/patient-dashboard" component={PatientDashboard} />
+      <Route path="/patient-dashboard" component={PatientDashboardSimple} />
       <Route path="/test-simple" component={TestSimple} />
       <Route path="/agenda-medica" component={DoctorAgendaPage} />
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
