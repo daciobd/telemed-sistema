@@ -30,17 +30,55 @@ app.get('/demo-medico', (req, res) => {
   res.redirect(baseUrl);
 });
 
-// Serve static files from public directory FIRST (before routes)
+// CRITICAL: Serve static files from public directory FIRST (before routes)
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Direct route for test-safe.html to ensure it works
+// Direct route for test-safe.html - GUARANTEED to work
 app.get('/test-safe.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/test-safe.html'));
+  const filePath = path.join(__dirname, '../public/test-safe.html');
+  console.log('🔍 Serving test-safe.html from:', filePath);
+  res.sendFile(filePath);
 });
 
 // Ultra safe route that definitely works
 app.get('/test-ultra-safe.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/test-ultra-safe.html'));
+  const filePath = path.join(__dirname, '../public/test-ultra-safe.html');
+  console.log('🔍 Serving test-ultra-safe.html from:', filePath);
+  res.sendFile(filePath);
+});
+
+// Emergency inline route for testing
+app.get('/test-inline.html', (req, res) => {
+  res.type('html').send(`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emergency Inline Test</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #0066cc; color: white; }
+    .btn { padding: 15px; background: #ff6600; color: white; border: none; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>🚨 Emergency Inline Test</h1>
+  <p>This page is served directly from Express - no file needed!</p>
+  <button class="btn" onclick="testAPI()">Test API</button>
+  <div id="result"></div>
+  
+  <script>
+    async function testAPI() {
+      try {
+        const res = await fetch('/api/test-demo-safe', { method: 'POST' });
+        const data = await res.json();
+        document.getElementById('result').innerHTML = '<pre style="background:rgba(255,255,255,0.2);padding:10px;margin:10px 0;">' + JSON.stringify(data, null, 2) + '</pre>';
+      } catch (e) {
+        document.getElementById('result').innerHTML = '<div style="color:red;">Error: ' + e.message + '</div>';
+      }
+    }
+  </script>
+</body>
+</html>
+  `);
 });
 
 // Initialize routes
