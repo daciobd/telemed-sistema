@@ -42,6 +42,7 @@ import RegisterSuccess from "@/pages/register-success";
 import TestDemo from "@/pages/test-demo";
 import DoctorAgendaPage from "@/pages/DoctorAgendaPage";
 import GuiaMedico from "@/pages/guia-medico";
+import GuiaFeedback from "@/pages/guia-feedback";
 import MedicalCalendarPage from "@/pages/medical-calendar";
 import InstitutionalWhatsApp from "@/pages/institutional-whatsapp";
 import OfertasTeleconsulta from "@/pages/ofertas-teleconsulta";
@@ -144,6 +145,7 @@ function Router() {
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/financial-dashboard" component={FinancialDashboard} />
           <Route path="/guia-medico" component={GuiaMedico} />
+          <Route path="/guia-feedback" component={GuiaFeedback} />
           <Route path="/calendario-medico" component={MedicalCalendarPage} />
           <Route path="/whatsapp-institucional" component={InstitutionalWhatsApp} />
           <Route path="/ofertas-teleconsulta" component={OfertasTeleconsulta} />

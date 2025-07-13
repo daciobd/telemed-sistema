@@ -275,14 +275,23 @@ export default function Landing() {
             >
               Entrar Agora
             </Button>
-            <Button 
-              onClick={() => window.location.href = '/demo-medico'}
-              size="lg"
-              variant="outline"
-              className="border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-8 py-3"
-            >
-              Demo para Médicos
-            </Button>
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => window.location.href = '/demo-medico'}
+                size="lg"
+                variant="outline"
+                className="border-blue-600 text-blue-600 hover:bg-blue-50 text-lg px-6 py-3"
+              >
+                Demo para Médicos
+              </Button>
+              <Button 
+                onClick={() => window.location.href = '/guia-feedback'}
+                size="lg"
+                className="bg-green-600 hover:bg-green-700 text-white text-lg px-6 py-3"
+              >
+                📋 Guia de Feedback
+              </Button>
+            </div>
           </div>
         </div>
       </main>
