@@ -73,10 +73,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // SAFE TEST ENDPOINT - From ZIP project
+  // SAFE TEST ENDPOINT - From ZIP project (POST and GET support)
   app.post('/api/test-demo-safe', (req, res) => {
-    console.log("✅ Safe API called successfully.");
-    res.json({ success: true, message: "This is the safe endpoint responding correctly." });
+    console.log("✅ POST /api/test-demo-safe called successfully.");
+    res.json({
+      success: true,
+      message: "Safe demo endpoint working (POST)",
+      timestamp: Date.now(),
+      environment: "production-safe"
+    });
+  });
+
+  // GET version for direct browser testing
+  app.get('/api/test-demo-safe', (req, res) => {
+    console.log("✅ GET /api/test-demo-safe called successfully.");
+    res.json({
+      success: true,
+      message: "Safe demo endpoint working (GET)",
+      timestamp: Date.now(),
+      environment: "production-safe"
+    });
   });
 
   // Auth middleware
