@@ -97,12 +97,31 @@ export default function OnboardingDemo() {
         </div>
       </header>
 
-      {/* Welcome Modal */}
+      {/* Welcome Modal - FORÇA MÁXIMA CSS */}
       {showWelcome && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center"
-             style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999}}>
-          {console.log('🎯 RENDERING WELCOME MODAL')}
-          <div className="bg-white rounded-lg p-8 m-4 max-w-lg w-full">
+        <div 
+          className="fixed inset-0 bg-red-500 bg-opacity-90 z-[9999] flex items-center justify-center"
+          style={{
+            position: 'fixed !important', 
+            top: '0px !important', 
+            left: '0px !important', 
+            right: '0px !important', 
+            bottom: '0px !important', 
+            zIndex: '99999 !important',
+            backgroundColor: 'rgba(255, 0, 0, 0.9) !important',
+            display: 'flex !important'
+          }}>
+          {console.log('🎯 RENDERING WELCOME MODAL - RED BACKGROUND')}
+          <div 
+            className="bg-white rounded-lg p-8 m-4 max-w-lg w-full shadow-2xl"
+            style={{
+              backgroundColor: 'white !important',
+              padding: '32px !important',
+              borderRadius: '8px !important',
+              maxWidth: '500px !important',
+              width: '100% !important',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9) !important'
+            }}>
             <div className="text-center">
               <div className="mb-4">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
