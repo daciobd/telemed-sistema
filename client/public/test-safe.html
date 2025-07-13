@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Safe API - TeleMed</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #059669;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        }
+        #result {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: left;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            border: 2px solid #e2e8f0;
+            min-height: 100px;
+        }
+        .success { border-color: #10b981; background: #ecfdf5; }
+        .error { border-color: #ef4444; background: #fef2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Test Safe API - TeleMed</h1>
+        <p>Teste da API /api/test-demo-safe</p>
+        
+        <button onclick="callApi()">🔥 Testar API Safe</button>
+        <button onclick="clearResult()">🗑️ Limpar</button>
+        
+        <pre id="result">Aguardando teste da API...</pre>
+
+        <div style="margin-top: 2rem; color: #6b7280; font-size: 0.9rem;">
+            <p><strong>Objetivo:</strong> Validar que API e arquivos estáticos funcionam</p>
+            <p><strong>Endpoint:</strong> POST /api/test-demo-safe</p>
+        </div>
+    </div>
+
+    <script>
+        function callApi() {
+            const resultEl = document.getElementById("result");
+            resultEl.textContent = "⏳ Chamando API...";
+            resultEl.className = "";
+            
+            fetch("/api/test-demo-safe", { method: "POST" })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    resultEl.textContent = JSON.stringify(data, null, 2);
+                    resultEl.className = "success";
+                })
+                .catch(err => {
+                    resultEl.textContent = `❌ Erro: ${err.message}`;
+                    resultEl.className = "error";
+                });
+        }
+        
+        function clearResult() {
+            document.getElementById("result").textContent = "Aguardando teste da API...";
+            document.getElementById("result").className = "";
+        }
+    </script>
+</body>
+</html>
