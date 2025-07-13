@@ -56,6 +56,7 @@ import PatientDashboard from "@/pages/patient-dashboard";
 import PatientDashboardSimple from "@/pages/patient-dashboard-simple";
 import TestSimple from "@/pages/test-simple";
 import ApiTestPage from "@/pages/api-test";
+import DebugDashboard from "@/pages/debug-dashboard";
 
 
 function Router() {
@@ -71,7 +72,7 @@ function Router() {
       <Route path="/register-success" component={RegisterSuccess} />
       
       {/* Testing routes - temporarily public for demo */}
-      <Route path="/patient-dashboard" component={PatientDashboardSimple} />
+      <Route path="/patient-dashboard" component={DebugDashboard} />
       <Route path="/test-simple" component={TestSimple} />
       <Route path="/agenda-medica" component={DoctorAgendaPage} />
       <Route path="/videoconsulta/:appointmentId" component={VideoConsultation} />
