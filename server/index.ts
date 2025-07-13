@@ -13,6 +13,12 @@ const PORT = parseInt(process.env.PORT || '5000', 10);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// ✅ CRITICAL: Serve static files FIRST, before any other middleware
+const publicPath = path.join(__dirname, '../client/public');
+console.log('🔧 Configuring static files from:', publicPath);
+app.use(express.static(publicPath));
+console.log('✅ Static files configured successfully');
+
 // Health check with deployment info
 app.get('/health', (req, res) => {
   res.json({
@@ -235,10 +241,7 @@ async function startServer() {
     // Setup Vite para desenvolvimento ou static para produção
     console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
-      console.log('🔧 Setting up static files first...');
-      // CRITICAL: Serve static files BEFORE Vite middleware
-      app.use(express.static(path.join(__dirname, '../client/public')));
-      console.log('✅ Static files configured');
+      // Static files already configured at app startup
       
       console.log('🔧 Setting up Vite for development...');
       await setupVite(app, httpServer);
