@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,10 +21,115 @@ import {
   Stethoscope,
   Shield,
   Settings,
-  BarChart3
+  BarChart3,
+  LogOut,
+  PlayCircle,
+  RefreshCw
 } from "lucide-react";
 import { Link } from 'wouter';
-import DashboardLayout from '@/components/layout/dashboard-layout';
+import { useAuth } from '@/hooks/useAuth';
+
+// Mock DashboardLayout for demo (would normally come from components)
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  const { user, logout } = useAuth();
+  const [showTour, setShowTour] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
+
+  // Simulate onboarding check
+  useEffect(() => {
+    if (user && !user.hasCompletedOnboarding) {
+      const timer = setTimeout(() => setShowTour(true), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [user]);
+
+  const tourSteps = [
+    { target: '[data-tour="dashboard"]', title: 'Bem-vindo ao TeleMed!', description: 'Este é seu dashboard principal onde você pode acessar todas as funcionalidades.' },
+    { target: '[data-tour="appointments"]', title: 'Consultas', description: 'Agende e gerencie suas consultas médicas online.' },
+    { target: '[data-tour="medical-records"]', title: 'Prontuário', description: 'Acesse seu histórico médico completo.' },
+    { target: '[data-tour="prescriptions"]', title: 'Receitas', description: 'Visualize suas prescrições médicas.' },
+    { target: '[data-tour="video-consultation"]', title: 'Videoconsultas', description: 'Realize consultas por vídeo com seus médicos.' },
+    { target: '[data-tour="settings"]', title: 'Configurações', description: 'Personalize sua experiência na plataforma.' }
+  ];
+
+  const nextTourStep = () => {
+    if (tourStep < tourSteps.length - 1) {
+      setTourStep(tourStep + 1);
+    } else {
+      setShowTour(false);
+      // Mark onboarding as complete
+    }
+  };
+
+  const skipTour = () => {
+    setShowTour(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <Stethoscope className="h-8 w-8 text-blue-600 mr-3" />
+              <h1 className="text-2xl font-bold text-gray-900">TeleMed Sistema</h1>
+              <span className="ml-2 text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full">v2.0 Onboarding</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-gray-700">Olá, {user?.firstName || 'Usuário'}</span>
+              <Button 
+                onClick={() => setShowTour(true)}
+                variant="outline"
+                size="sm"
+              >
+                <PlayCircle className="h-4 w-4 mr-2" />
+                Tour
+              </Button>
+              <Button 
+                onClick={logout}
+                variant="outline"
+                size="sm"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sair
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Tour Modal */}
+      {showTour && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 m-4 max-w-md w-full">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-lg font-semibold">{tourSteps[tourStep]?.title}</h3>
+              <span className="text-sm text-gray-500">{tourStep + 1} / {tourSteps.length}</span>
+            </div>
+            <p className="text-gray-600 mb-4">{tourSteps[tourStep]?.description}</p>
+            <div className="mb-4">
+              <Progress value={(tourStep + 1) / tourSteps.length * 100} />
+            </div>
+            <div className="flex justify-between">
+              <Button onClick={skipTour} variant="outline" size="sm">
+                Pular Tour
+              </Button>
+              <Button onClick={nextTourStep} size="sm">
+                {tourStep < tourSteps.length - 1 ? 'Próximo' : 'Concluir'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {children}
+      </main>
+    </div>
+  );
+};
 
 export default function PatientDashboard() {
   // Mock data for demonstration
