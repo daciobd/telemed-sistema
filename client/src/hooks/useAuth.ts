@@ -110,7 +110,7 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: async () => {
-      await apiRequest("/api/auth/logout", { method: "POST" });
+      // Always clear local state even if server logout fails
       logout();
     },
     onSuccess: () => {
@@ -125,16 +125,10 @@ export function useLogout() {
       // Redirect to home
       setLocation("/");
     },
-    onError: (error: Error) => {
-      // Even if the server request fails, we can still logout locally
-      logout();
+    onError: () => {
+      // Even if something fails, still logout and redirect
       queryClient.clear();
       setLocation("/");
-      
-      toast({
-        title: "Logout realizado",
-        description: "Até logo!",
-      });
     },
   });
 }
