@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Estático TeleMed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 { color: #059669; font-size: 2.5rem; margin-bottom: 1rem; }
+        .status { background: #dcfce7; padding: 1.5rem; border-radius: 8px; margin: 2rem 0; }
+        .next-step { background: #fef3c7; padding: 1.5rem; border-radius: 8px; border: 2px solid #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ TeleMed Sistema Funcionando</h1>
+        <p style="font-size: 1.2rem; color: #374151;">
+            Sistema de Telemedicina - Teste de Conectividade
+        </p>
+
+        <div class="status">
+            <h3 style="color: #166534;">Status do Sistema:</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li>✅ Servidor Express: OK</li>
+                <li>✅ Arquivos Estáticos: OK</li>
+                <li>✅ Conectividade: OK</li>
+                <li>⚠️ React Router: Investigando</li>
+            </ul>
+        </div>
+
+        <div class="next-step">
+            <h3 style="color: #92400e;">Diagnóstico</h3>
+            <p style="color: #a16207; margin: 0;">
+                Se você vê esta página, o servidor está funcionando. 
+                O problema está no sistema React/Router.
+            </p>
+        </div>
+
+        <p style="margin-top: 2rem; color: #6b7280;">
+            <strong>URL de Teste:</strong> /test-static.html<br>
+            <strong>Data:</strong> <span id="timestamp"></span>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('pt-BR');
+    </script>
+</body>
+</html>
