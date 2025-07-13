@@ -50,7 +50,7 @@ export default function WhatsAppContactPage() {
     id: 0,
     user: { firstName: "Dr. Equipe", lastName: "Médica" },
     specialty: "Atendimento Geral",
-    phone: "5511999887766" // WhatsApp number
+    phone: "5511999998888" // WhatsApp number
   };
 
   const handleDoctorSelect = (doctorId: string) => {

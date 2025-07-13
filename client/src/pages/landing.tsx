@@ -233,8 +233,10 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => {
-                const message = "Olá! Vi o TeleMed e gostaria de conhecer mais.";
-                const whatsappUrl = `https://wa.me/5511999998888?text=${encodeURIComponent(message)}`;
+                const message = "Olá! Vi o TeleMed e gostaria de conhecer mais sobre a plataforma.";
+                const phone = "5511999998888";
+                const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                console.log("WhatsApp URL gerada:", whatsappUrl);
                 window.open(whatsappUrl, '_blank');
               }}
               size="lg"
