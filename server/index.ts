@@ -1,6 +1,11 @@
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { registerRoutes } from './routes';
 import { setupVite, serveStatic } from './vite';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = parseInt(process.env.PORT || '5000', 10);
@@ -26,16 +31,16 @@ app.get('/demo-medico', (req, res) => {
 });
 
 // Serve static files from public directory FIRST (before routes)
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Direct route for test-safe.html to ensure it works
 app.get('/test-safe.html', (req, res) => {
-  res.sendFile(require('path').join(__dirname, '../public/test-safe.html'));
+  res.sendFile(path.join(__dirname, '../public/test-safe.html'));
 });
 
 // Ultra safe route that definitely works
 app.get('/test-ultra-safe.html', (req, res) => {
-  res.sendFile(require('path').join(__dirname, '../public/test-ultra-safe.html'));
+  res.sendFile(path.join(__dirname, '../public/test-ultra-safe.html'));
 });
 
 // Initialize routes
