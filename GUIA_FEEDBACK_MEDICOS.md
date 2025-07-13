@@ -15,63 +15,72 @@
 
 ---
 
-## 📋 **ROTEIRO DE TESTE ESTRUTURADO**
+## ⚠️ **IMPORTANTE: ESTADO ATUAL DA PLATAFORMA**
+
+### **O que você pode avaliar REALMENTE:**
+- ✅ **Design e interface** - Completamente funcional
+- ✅ **Navegação e usabilidade** - 100% operacional  
+- ✅ **Conceito e proposta** - Totalmente demonstrável
+- ✅ **API básica** - Testável em `/api-test`
+
+### **O que é DEMONSTRAÇÃO CONCEITUAL:**
+- ⚠️ **Videoconsultas** - Interface pronta, funcionalidade em desenvolvimento
+- ⚠️ **MEMED** - Telas criadas, integração real pendente
+- ⚠️ **Pagamentos** - Design completo, processamento em teste
+- ⚠️ **Banco de dados** - Estrutura pronta, dados demo
+
+---
+
+## 📋 **ROTEIRO DE TESTE REALISTA**
 
 ### **FASE 1: Primeiro Acesso (5 minutos)**
 - [ ] Acesse a URL principal
 - [ ] Teste o botão WhatsApp (deve abrir sem erro)
-- [ ] Acesse `/api-test` para verificar conectividade
-- [ ] Entre via "Demo para Médicos"
+- [ ] Acesse `/api-test` para verificar conectividade técnica
+- [ ] Navegue pelo site sem fazer login
 
-**Feedback esperado:** A página carrega? O design é profissional? A navegação é intuitiva?
+**Feedback esperado:** A página carrega rapidamente? O design transmite confiança? A navegação é clara?
 
-### **FASE 2: Dashboard Médico (10 minutos)**
-- [ ] Explore o dashboard principal
-- [ ] Verifique estatísticas e métricas
-- [ ] Navegue pelos menus laterais
-- [ ] Teste responsividade no celular
+### **FASE 2: Interface e Design (10 minutos)**
+- [ ] Explore as páginas principais sem fazer login
+- [ ] Teste a responsividade no celular/tablet
+- [ ] Avalie cores, tipografia e layout geral
+- [ ] Verifique se o site inspira confiança médica
 
-**Feedback esperado:** As informações são úteis? O layout funciona bem no mobile?
+**Feedback esperado:** O design é profissional? Funciona bem no mobile? Transmite credibilidade?
 
-### **FASE 3: Gestão de Pacientes (15 minutos)**
-- [ ] Acesse "Pacientes" no menu
-- [ ] Visualize dados dos pacientes demo
-- [ ] Teste busca e filtros
-- [ ] Explore prontuários eletrônicos
+### **FASE 3: Conceito e Proposta (15 minutos)**
+- [ ] Leia sobre as funcionalidades propostas
+- [ ] Avalie se resolve problemas reais da telemedicina  
+- [ ] Compare mentalmente com soluções que conhece
+- [ ] Considere se usaria na sua prática
 
-**Feedback esperado:** Os dados são organizados de forma clara? Falta alguma informação crítica?
+**Feedback esperado:** A proposta é inovadora? Resolve dores reais? Vale o investimento?
 
-### **FASE 4: Sistema de Consultas (20 minutos)**
-- [ ] Acesse "Consultas" ou "Agendamentos"
-- [ ] Verifique agenda do dia
-- [ ] Teste sistema de pagamentos (Stripe)
-- [ ] Explore histórico de consultas
+### **FASE 4: Navegação e Usabilidade (10 minutos)**
+- [ ] Teste todos os menus e botões públicos
+- [ ] Acesse as páginas de demonstração
+- [ ] Verifique se encontra informações facilmente
+- [ ] Teste formulários básicos (se houver)
 
-**Feedback esperado:** O fluxo de pagamento é claro? As informações são suficientes?
+**Feedback esperado:** É fácil navegar? As informações estão bem organizadas?
 
-### **FASE 5: Videoconsultas WebRTC (15 minutos)**
-- [ ] Inicie uma videoconsulta
-- [ ] Teste câmera, microfone e chat
-- [ ] Experimente compartilhamento de tela
-- [ ] Use `/video-test` para teste com duas pessoas
+### **FASE 5: Demonstrações Conceituais (15 minutos)** 
+⚠️ **ATENÇÃO: Estas são DEMONSTRAÇÕES VISUAIS, não funcionalidades ativas**
+- [ ] Veja as telas de videoconsulta (mockup)
+- [ ] Explore interface de prontuário (demonstração)
+- [ ] Analise sistema de prescrições (conceito)
+- [ ] Avalie dashboard médico (protótipo)
 
-**Feedback esperado:** A qualidade do vídeo é boa? Os controles são intuitivos?
+**Feedback esperado:** As interfaces são intuitivas? O fluxo faz sentido? Que melhorias sugere?
 
-### **FASE 6: Prescrições MEMED (15 minutos)**
-- [ ] Acesse integração MEMED
-- [ ] Teste busca de medicamentos
-- [ ] Experimente templates de prescrição
-- [ ] Copie dados do paciente para MEMED
+### **FASE 6: Teste Técnico (5 minutos)**
+- [ ] Acesse `/api-test` para verificar infraestrutura
+- [ ] Teste o botão "Safe API Test" 
+- [ ] Verifique se aparece resposta JSON verde
+- [ ] Confirme que não há erros técnicos
 
-**Feedback esperado:** A integração facilita seu trabalho? Os dados estão corretos?
-
-### **FASE 7: Funcionalidades Avançadas (20 minutos)**
-- [ ] Teste Assistente IA médico
-- [ ] Explore sistema de psiquiatria (PHQ-9/GAD-7)
-- [ ] Use sistema de exames clínicos
-- [ ] Teste encaminhamentos médicos
-
-**Feedback esperado:** Estas funcionalidades agregam valor real? São precisas?
+**Feedback esperado:** O sistema parece tecnicamente sólido?
 
 ---
 
