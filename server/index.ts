@@ -28,6 +28,16 @@ app.get('/demo-medico', (req, res) => {
 // Serve static files from public directory FIRST (before routes)
 app.use(express.static('public'));
 
+// Direct route for test-safe.html to ensure it works
+app.get('/test-safe.html', (req, res) => {
+  res.sendFile(require('path').join(__dirname, '../public/test-safe.html'));
+});
+
+// Ultra safe route that definitely works
+app.get('/test-ultra-safe.html', (req, res) => {
+  res.sendFile(require('path').join(__dirname, '../public/test-ultra-safe.html'));
+});
+
 // Initialize routes
 async function startServer() {
   try {
