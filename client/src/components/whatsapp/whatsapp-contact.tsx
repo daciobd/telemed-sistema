@@ -27,7 +27,7 @@ export default function WhatsAppContact({
     const baseMessage = `Olá ${doctorName}! Sou ${patientInfo || "um paciente"} da TeleMed. Dúvida: ${message}`;
 
     const encodedMessage = encodeURIComponent(baseMessage);
-    return `https://wa.me/${doctorPhone}?text=${encodedMessage}`;
+    return `https://api.whatsapp.com/send?phone=${doctorPhone}&text=${encodedMessage}&type=phone_number&app_absent=0`;
   };
 
   const handleSendMessage = () => {

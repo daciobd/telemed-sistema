@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, Calendar, Users, FileText, Shield, Video, Stethoscope, UserPlus } from "lucide-react";
 import { useLocation } from "wouter";
 import SafeApiTester from "@/components/SafeApiTester";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -232,22 +233,13 @@ export default function Landing() {
             Entre em contato para agendar uma demonstração
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              onClick={() => {
-                const message = "Olá! Vi o TeleMed e gostaria de conhecer mais sobre a plataforma.";
-                const phone = "5511987654321"; // Número brasileiro real de exemplo
-                const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-                console.log("WhatsApp URL gerada:", whatsappUrl);
-                
-                // Aviso para o usuário sobre número fictício
-                alert("Este é um número fictício para demonstração. Em produção, use seu número real do WhatsApp Business.");
-                window.open(whatsappUrl, '_blank');
-              }}
-              size="lg"
-              className="bg-white text-green-600 hover:bg-green-50 text-lg px-8 py-3 shadow-lg"
+            <WhatsAppButton 
+              phoneNumber="5511987654321"
+              message="Olá! Vi o TeleMed e gostaria de conhecer mais sobre a plataforma."
+              className="bg-white text-green-600 hover:bg-green-50 text-lg px-8 py-3 shadow-lg rounded-lg font-semibold transition-colors duration-200"
             >
-              📱 WhatsApp (Demo)
-            </Button>
+              📱 WhatsApp
+            </WhatsAppButton>
             <Button 
               onClick={() => {
                 window.location.href = 'mailto:contato@telemed.com.br?subject=Demonstração TeleMed';
