@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
+import { CredentialAuthProvider } from "@/hooks/useCredentialAuth";
 import { lazy } from "react";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
