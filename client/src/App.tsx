@@ -49,6 +49,7 @@ import MedicalNotifications from "@/pages/medical-notifications";
 import DemoMedico from "@/pages/demo-medico";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
+import ApiTestPage from "@/pages/api-test";
 import { CredentialAuthProvider, useCredentialAuth } from "@/hooks/useCredentialAuth";
 
 
@@ -70,6 +71,7 @@ function Router() {
       <Route path="/video-test" component={VideoTestPage} />
       <Route path="/demo-medico" component={DemoMedico} />
       <Route path="/test-demo" component={TestDemo} />
+      <Route path="/api-test" component={ApiTestPage} />
       <Route path="/medical-records" component={MedicalRecords} />
       <Route path="/prontuarios" component={MedicalRecords} />
       <Route path="/diagnostico" component={lazy(() => import('@/pages/diagnostico'))} />
