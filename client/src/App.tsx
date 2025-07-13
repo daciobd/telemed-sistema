@@ -83,6 +83,7 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={Dashboard} />
+          <Route path="/patient-dashboard" component={PatientDashboard} />
           <Route path="/consultas" component={Appointments} />
           <Route path="/appointments" component={Appointments} />
           <Route path="/consultas" component={Appointments} />
