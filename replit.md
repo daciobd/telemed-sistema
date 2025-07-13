@@ -212,6 +212,9 @@ src/
   - `/health/test` criado localmente mas 404 em produção
   - `/api/test-demo-safe` funciona local mas 404 em produção
   - `/api/working-test` funciona local mas 404 em produção
+  - **CONFIRMAÇÃO DEFINITIVA**: Teste ZIP do usuário prova que static funciona + API 404
+  - **Local**: `curl /api/test-demo-safe` retorna JSON corretamente
+  - **Produção**: Mesma API retorna 404 Page Not Found
 - **Solução Necessária**: 
   - Deploy manual via Deploy Button do Replit
   - Rebuild completo do projeto
@@ -223,6 +226,10 @@ src/
   - Testado em: 13/07/2025 12:57
 - **Impacto**: Landing page carrega mas botões não funcionam (APIs retornam 404)
 - **Solução**: Deploy manual via interface Replit obrigatório
+- **TESTE ISOLADO CONFIRMOU**: Projeto ZIP mínimo com static + API comprova que:
+  - Infraestrutura Replit: ✅ FUNCIONANDO (HTML carrega)
+  - Sincronização Deploy: ❌ FALHANDO (API 404)
+  - Diagnóstico: PROBLEMA É DE DEPLOY, NÃO DE INFRAESTRUTURA
 
 ### Deploy Railway - BACKUP CONFIGURADO - 05/07/2025 20:30
 - **Status**: ✅ CONFIGURADO COMO ALTERNATIVA
