@@ -23,6 +23,14 @@ export default function OnboardingDemo() {
   const [showTour, setShowTour] = useState(false);
   const [tourStep, setTourStep] = useState(0);
 
+  // Force welcome modal to show immediately
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowWelcome(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const tourSteps = [
     { title: 'Bem-vindo ao TeleMed!', description: 'Este é seu dashboard principal onde você pode acessar todas as funcionalidades.' },
     { title: 'Consultas', description: 'Agende e gerencie suas consultas médicas online.' },
@@ -70,9 +78,10 @@ export default function OnboardingDemo() {
                 onClick={() => setShowTour(true)}
                 variant="outline"
                 size="sm"
+                className="bg-green-50 border-green-300 text-green-700 hover:bg-green-100"
               >
                 <PlayCircle className="h-4 w-4 mr-2" />
-                Repetir Tour
+                ▶️ INICIAR TOUR
               </Button>
               <Button variant="outline" size="sm">
                 <LogOut className="h-4 w-4 mr-2" />
@@ -121,9 +130,9 @@ export default function OnboardingDemo() {
                 <Button onClick={skipTour} variant="outline" className="flex-1">
                   Pular por agora
                 </Button>
-                <Button onClick={startTour} className="flex-1">
+                <Button onClick={startTour} className="flex-1 bg-blue-600 hover:bg-blue-700">
                   <PlayCircle className="w-4 h-4 mr-2" />
-                  Começar Tour
+                  ▶️ COMEÇAR TOUR
                 </Button>
               </div>
             </div>
