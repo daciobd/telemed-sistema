@@ -222,6 +222,39 @@ export default function Landing() {
           </Card>
         </div>
 
+        {/* Contact Section */}
+        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl shadow-xl p-8 text-center text-white mb-8">
+          <h2 className="text-3xl font-bold mb-4">
+            Interessado em Conhecer?
+          </h2>
+          <p className="text-lg mb-8 text-green-100">
+            Entre em contato para agendar uma demonstração
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => {
+                const message = "Olá! Vi o TeleMed e gostaria de conhecer mais.";
+                const whatsappUrl = `https://wa.me/5511999998888?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+              }}
+              size="lg"
+              className="bg-white text-green-600 hover:bg-green-50 text-lg px-8 py-3 shadow-lg"
+            >
+              📱 WhatsApp
+            </Button>
+            <Button 
+              onClick={() => {
+                window.location.href = 'mailto:contato@telemed.com.br?subject=Demonstração TeleMed';
+              }}
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white/10 text-lg px-8 py-3"
+            >
+              📧 Email
+            </Button>
+          </div>
+        </div>
+
         {/* CTA Section */}
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">

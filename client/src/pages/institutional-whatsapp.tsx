@@ -55,7 +55,9 @@ export default function InstitutionalWhatsApp() {
 
   const handleSendMessage = () => {
     // Simula envio via WhatsApp Business API
-    const whatsappUrl = `https://wa.me/55${recipientPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    // Clean phone number and ensure proper format
+    const cleanPhone = recipientPhone.replace(/\D/g, '');
+    const whatsappUrl = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 

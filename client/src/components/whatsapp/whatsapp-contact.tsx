@@ -15,7 +15,7 @@ interface WhatsAppContactProps {
 
 export default function WhatsAppContact({ 
   doctorName = "Dr. Equipe Médica", 
-  doctorPhone = "5511999999999",
+  doctorPhone = "5511999998888",
   patientName = ""
 }: WhatsAppContactProps) {
   const [message, setMessage] = useState("");
@@ -23,15 +23,8 @@ export default function WhatsAppContact({
   const { toast } = useToast();
 
   const generateWhatsAppLink = () => {
-    const baseMessage = `Olá ${doctorName}! 
-
-Sou ${patientInfo || "um paciente"} da plataforma Telemed Sistema.
-
-Tenho uma dúvida médica:
-
-${message}
-
-Aguardo seu retorno. Obrigado!`;
+    // Simplified message for better compatibility
+    const baseMessage = `Olá ${doctorName}! Sou ${patientInfo || "um paciente"} da TeleMed. Dúvida: ${message}`;
 
     const encodedMessage = encodeURIComponent(baseMessage);
     return `https://wa.me/${doctorPhone}?text=${encodedMessage}`;
