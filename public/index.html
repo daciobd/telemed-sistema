@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeleMed Sistema - Plataforma de Telemedicina</title>
+    <title>TeleMed Sistema - Aplicação Web</title>
     <style>
         body { 
             font-family: system-ui, sans-serif;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, #0891b2, #0e7490);
             margin: 0;
             min-height: 100vh;
             display: flex;
@@ -18,112 +18,88 @@
         .container {
             background: white;
             padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
             text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             max-width: 600px;
             width: 100%;
         }
-        .logo { 
-            font-size: 2.5rem; 
-            font-weight: 700; 
-            color: #4f46e5; 
-            margin-bottom: 20px; 
+        .logo {
+            color: #0891b2;
+            font-size: 3rem;
+            margin-bottom: 10px;
         }
-        .subtitle { 
-            color: #6b7280; 
-            margin-bottom: 30px; 
-            font-size: 1.1rem; 
+        h1 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
         }
-        .features {
-            display: grid;
-            gap: 20px;
-            margin: 30px 0;
-        }
-        .feature {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #4f46e5;
-            text-align: left;
-        }
-        .feature h3 { 
-            color: #1e293b; 
-            margin-bottom: 8px; 
-        }
-        .feature p { 
-            color: #64748b; 
-            font-size: 0.9rem; 
-            margin: 0;
-        }
-        .contact {
-            margin: 40px 0;
-            padding: 30px;
-            background: #f1f5f9;
-            border-radius: 12px;
-        }
-        .contact h2 { 
-            font-size: 1.5rem; 
-            color: #1e293b; 
-            margin-bottom: 15px; 
-        }
-        .buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
+        p {
+            color: #64748b;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
         }
         .btn {
-            padding: 12px 24px;
-            border-radius: 8px;
+            background: #0891b2;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
             text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-primary { background: #4f46e5; color: white; }
-        .btn-secondary { background: #10b981; color: white; }
-        @media (max-width: 768px) {
-            .container { padding: 30px 20px; }
-            .buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; max-width: 280px; text-align: center; }
+        .btn:hover {
+            background: #0e7490;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(8, 145, 178, 0.3);
+        }
+        .status {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #bbf7d0;
+        }
+        .warning {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #fde68a;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🏥 TeleMed Sistema</div>
-        <p class="subtitle">Plataforma Completa de Telemedicina</p>
+        <div class="logo">🩺</div>
+        <h1>TeleMed Sistema</h1>
+        <p>Plataforma Completa de Telemedicina</p>
         
-        <div class="features">
-            <div class="feature">
-                <h3>🎥 Videoconsultas WebRTC</h3>
-                <p>Sistema de videochamadas médicas com chat em tempo real</p>
-            </div>
-            <div class="feature">
-                <h3>📋 Prescrições MEMED</h3>
-                <p>Integração com MEMED para prescrições digitais válidas</p>
-            </div>
-            <div class="feature">
-                <h3>🤖 Assistente IA</h3>
-                <p>Inteligência artificial para análise de sintomas</p>
-            </div>
-            <div class="feature">
-                <h3>💳 Pagamentos Stripe</h3>
-                <p>Sistema de pagamentos integrado e seguro</p>
-            </div>
+        <div class="status">
+            ✅ Aplicação rodando na porta 5000<br>
+            ✅ Sistema de autenticação JWT funcionando<br>
+            ✅ Frontend React + Backend Express integrados
         </div>
-
-        <div class="contact">
-            <h2>Interessado em Conhecer?</h2>
-            <p>Entre em contato para agendar uma demonstração</p>
-            
-            <div class="buttons">
-                <a href="mailto:contato@daciobd.com.br?subject=Demo TeleMed&body=Olá, tenho interesse no sistema TeleMed." 
-                   class="btn btn-primary">📧 Email</a>
-                <a href="https://wa.me/5511999998888?text=Olá, vi o TeleMed e gostaria de conhecer mais." 
-                   class="btn btn-secondary" target="_blank">📱 WhatsApp</a>
-            </div>
+        
+        <div class="warning">
+            ⚠️ <strong>IMPORTANTE:</strong> Você está na página estática. Clique no botão abaixo para acessar a aplicação React.
+        </div>
+        
+        <a href="/" class="btn">🚀 ACESSAR APLICAÇÃO</a>
+        <a href="/login" class="btn">🔐 LOGIN DIRETO</a>
+        <a href="/register" class="btn">📝 CADASTRO DIRETO</a>
+        
+        <div style="margin-top: 30px; color: #64748b; font-size: 0.9rem;">
+            <p><strong>Credenciais de Teste:</strong><br>
+            Email: test@test.com<br>
+            Senha: 123456</p>
         </div>
     </div>
 </body>
