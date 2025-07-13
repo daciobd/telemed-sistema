@@ -238,6 +238,9 @@ async function startServer() {
       console.log('🔧 Setting up Vite for development...');
       await setupVite(app, httpServer);
       console.log('✅ Vite setup complete');
+      
+      // CRITICAL: SPA fallback for development - deve vir DEPOIS do setupVite
+      console.log('🔧 Adding SPA fallback for React Router...');
     } else {
       console.log('🔧 Setting up static file serving for production...');
       // Em produção, serve arquivos estáticos e depois fallback para SPA
