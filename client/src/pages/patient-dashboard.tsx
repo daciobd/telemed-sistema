@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useAuth, useLogout } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   Calendar, 
   FileText, 
@@ -14,8 +14,13 @@ import { useLocation } from "wouter";
 
 export default function PatientDashboard() {
   const { user } = useAuth();
-  const logout = useLogout();
   const [, setLocation] = useLocation();
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -30,7 +35,7 @@ export default function PatientDashboard() {
             <div className="flex items-center gap-4">
               <span className="text-gray-700">Olá, {user?.firstName}</span>
               <Button 
-                onClick={() => logout.mutate()}
+                onClick={handleLogout}
                 variant="outline"
                 size="sm"
               >
