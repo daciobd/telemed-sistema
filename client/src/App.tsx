@@ -172,7 +172,6 @@ function App() {
       <CredentialAuthProvider>
         <TooltipProvider>
           <Toaster />
-          <DebugRouter />
           <Router />
         </TooltipProvider>
       </CredentialAuthProvider>
