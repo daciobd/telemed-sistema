@@ -24,6 +24,148 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Diagnostic HTML page served directly from health endpoint
+app.get('/health/test', (req, res) => {
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 TeleMed - Diagnóstico Sistema</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; color: white; padding: 20px;
+        }
+        .container {
+            max-width: 900px; margin: 0 auto;
+            background: rgba(255,255,255,0.1); padding: 40px; border-radius: 20px;
+            backdrop-filter: blur(10px); box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        h1 { text-align: center; margin-bottom: 30px; font-size: 2.5em; }
+        .status { 
+            background: #10b981; padding: 15px 25px; border-radius: 25px; 
+            display: inline-block; margin: 20px 0; font-weight: bold;
+        }
+        .error { background: #ef4444; }
+        .info { 
+            background: rgba(59, 130, 246, 0.2); padding: 20px; border-radius: 10px;
+            margin: 20px 0; border-left: 4px solid #3b82f6;
+        }
+        .btn { 
+            background: #f59e0b; color: white; padding: 15px 30px; border: none;
+            border-radius: 10px; cursor: pointer; font-size: 18px; margin: 10px;
+            transition: all 0.3s; font-weight: bold;
+        }
+        .btn:hover { background: #d97706; transform: translateY(-2px); }
+        .result { 
+            background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;
+            margin: 20px 0; font-family: monospace; white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 TeleMed - Diagnóstico do Sistema</h1>
+        
+        <div class="status">✅ Página servida via /health/test - FUNCIONANDO</div>
+        
+        <div class="info">
+            <h3>📍 Informações do Sistema</h3>
+            <p><strong>Status:</strong> Sistema parcialmente operacional</p>
+            <p><strong>Endpoint funcionando:</strong> /health e /health/test</p>
+            <p><strong>Timestamp:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+            <p><strong>Ambiente:</strong> Replit Production</p>
+            <p><strong>Problema identificado:</strong> Inconsistência entre dev/deploy</p>
+        </div>
+
+        <div class="info">
+            <h3>🚨 Diagnóstico do Problema</h3>
+            <p>O endpoint /health funciona mas /api/* endpoints retornam 404.</p>
+            <p>Isso indica que o Replit está executando uma versão ANTIGA do código.</p>
+            <p>O ambiente de development está atualizado, mas o deployment não.</p>
+        </div>
+
+        <div class="info">
+            <h3>🔗 URLs para Teste</h3>
+            <p><strong>Funcionando:</strong></p>
+            <ul>
+                <li>✅ /health (health check)</li>
+                <li>✅ /health/test (esta página)</li>
+                <li>✅ / (sistema principal)</li>
+            </ul>
+            <p><strong>Com Problema (404):</strong></p>
+            <ul>
+                <li>❌ /api/test-demo-safe</li>
+                <li>❌ /api/working-test</li>
+                <li>❌ /test-safe.html</li>
+            </ul>
+        </div>
+        
+        <button class="btn" onclick="testHealth()">🧪 Testar Health Endpoint</button>
+        <button class="btn" onclick="testProblem()">❌ Testar Endpoint com Problema</button>
+        <button class="btn" onclick="goToMain()">🏠 Sistema Principal</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function testHealth() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<div class="result">⏳ Testando /health...</div>';
+            
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                result.innerHTML = \`<div class="result">
+✅ ENDPOINT /health FUNCIONANDO!
+
+Status: \${response.status}
+Dados:
+\${JSON.stringify(data, null, 2)}
+
+Testado em: \${new Date().toLocaleString('pt-BR')}
+</div>\`;
+            } catch (error) {
+                result.innerHTML = \`<div class="result">❌ Erro: \${error.message}</div>\`;
+            }
+        }
+        
+        async function testProblem() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<div class="result">⏳ Testando /api/test-demo-safe...</div>';
+            
+            try {
+                const response = await fetch('/api/test-demo-safe', { method: 'POST' });
+                const data = await response.text();
+                
+                result.innerHTML = \`<div class="result">
+🔍 RESULTADO DO TESTE PROBLEMÁTICO:
+
+Status: \${response.status}
+Resposta:
+\${data}
+
+Testado em: \${new Date().toLocaleString('pt-BR')}
+</div>\`;
+            } catch (error) {
+                result.innerHTML = \`<div class="result">❌ Erro: \${error.message}</div>\`;
+            }
+        }
+        
+        function goToMain() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>`;
+    
+    res.type('html').send(html);
+});
+
 // Demo medico redirect - sempre redireciona para a plataforma principal
 app.get('/demo-medico', (req, res) => {
   const baseUrl = req.protocol + '://' + req.get('host');
