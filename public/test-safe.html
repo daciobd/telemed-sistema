@@ -1,149 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Safe Demo Test - Direct Access</title>
     <meta charset="UTF-8">
+    <title>Test Safe API</title>
     <style>
         body { 
-            font-family: Arial; 
+            font-family: Arial, sans-serif; 
             padding: 20px; 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            min-height: 100vh;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
             background: rgba(255,255,255,0.1);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 10px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
-        .btn {
-            padding: 15px 30px;
-            margin: 10px;
-            background: #10b981;
+        button {
+            background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 10px;
+            padding: 15px 25px;
+            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: block;
-            width: 100%;
         }
-        .btn:hover { 
-            background: #059669; 
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        button:hover {
+            background: #45a049;
         }
-        .result {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #10b981;
+        pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
             white-space: pre-wrap;
-            font-family: monospace;
-            font-size: 14px;
-            backdrop-filter: blur(5px);
-        }
-        .success { border-left-color: #10b981; }
-        .error { border-left-color: #ef4444; }
-        h1 { 
-            color: white; 
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .status {
-            text-align: center;
-            font-size: 18px;
-            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🛡️ Safe Demo API Test</h1>
-        <div class="status">Direct test bypassing frontend cache - v2.0</div>
+        <h1>🧪 Test Safe API Endpoint</h1>
+        <p>Este é o teste mínimo para verificar se API + Static funcionam no Replit.</p>
         
-        <button class="btn" onclick="testSafeAPI()">
-            🚀 Test Safe Demo API Now
-        </button>
+        <button onclick="callApi()">📡 Call Safe API</button>
         
-        <div id="result"></div>
-        
-        <button class="btn" onclick="testDirectURL()" style="background: #3b82f6; margin-top: 10px;">
-            🔗 Test Direct API URL
-        </button>
-        
-        <div style="margin-top: 30px; text-align: center; opacity: 0.8;">
-            <p>This page directly tests the /api/test-demo-safe endpoint</p>
-            <p>Version: 2.0 - Cache Bypass Active</p>
-        </div>
+        <h3>Resultado:</h3>
+        <pre id="result">Clique no botão para testar a API...</pre>
     </div>
 
     <script>
-        async function testSafeAPI() {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<div class="result">⏳ Testing safe API endpoint...</div>';
+        function callApi() {
+            document.getElementById("result").textContent = "⏳ Chamando API...";
             
-            try {
-                console.log('🛡️ Testing Safe Demo API endpoint...');
-                
-                const response = await fetch('/api/test-demo-safe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    cache: 'no-cache'
+            fetch("/api/test-demo-safe", { method: "POST" })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+                    console.log("✅ API Response:", data);
+                })
+                .catch(err => {
+                    document.getElementById("result").textContent = "❌ Error: " + err.message;
+                    console.error("❌ API Error:", err);
                 });
-                
-                console.log('API Response Status:', response.status);
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log('API Response Data:', data);
-                
-                resultDiv.innerHTML = `
-                    <div class="result success">
-                        ✅ SUCCESS! Safe API Working!
-                        
-                        Response:
-                        ${JSON.stringify(data, null, 2)}
-                        
-                        Status: ${response.status}
-                        Timestamp: ${new Date().toLocaleString()}
-                    </div>
-                `;
-                
-            } catch (error) {
-                console.error('API Test Failed:', error);
-                
-                resultDiv.innerHTML = `
-                    <div class="result error">
-                        ❌ API Test Failed
-                        
-                        Error: ${error.message}
-                        Timestamp: ${new Date().toLocaleString()}
-                    </div>
-                `;
-            }
         }
-        
-        function testDirectURL() {
-            window.open('/api/test-demo-safe', '_blank');
-        }
-        
-        // Auto-test on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(testSafeAPI, 1000);
-        });
     </script>
 </body>
 </html>

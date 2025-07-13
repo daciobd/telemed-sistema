@@ -73,6 +73,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SAFE TEST ENDPOINT - From ZIP project
+  app.post('/api/test-demo-safe', (req, res) => {
+    console.log("✅ Safe API called successfully.");
+    res.json({ success: true, message: "This is the safe endpoint responding correctly." });
+  });
+
   // Auth middleware
   await setupAuth(app);
 
