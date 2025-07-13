@@ -235,6 +235,11 @@ async function startServer() {
     // Setup Vite para desenvolvimento ou static para produção
     console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
+      console.log('🔧 Setting up static files first...');
+      // CRITICAL: Serve static files BEFORE Vite middleware
+      app.use(express.static(path.join(__dirname, '../client/public')));
+      console.log('✅ Static files configured');
+      
       console.log('🔧 Setting up Vite for development...');
       await setupVite(app, httpServer);
       console.log('✅ Vite setup complete');
