@@ -25,13 +25,13 @@ app.get('/demo-medico', (req, res) => {
   res.redirect(baseUrl);
 });
 
+// Serve static files from public directory FIRST (before routes)
+app.use(express.static('public'));
+
 // Initialize routes
 async function startServer() {
   try {
     const httpServer = await registerRoutes(app);
-    
-    // Serve static files from public directory BEFORE Vite middleware
-    app.use(express.static('public'));
     
     // Setup Vite para desenvolvimento ou static para produção
     if (process.env.NODE_ENV === 'development') {

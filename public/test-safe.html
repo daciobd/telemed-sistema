@@ -67,13 +67,17 @@
 <body>
     <div class="container">
         <h1>🛡️ Safe Demo API Test</h1>
-        <div class="status">Direct test bypassing frontend cache</div>
+        <div class="status">Direct test bypassing frontend cache - v2.0</div>
         
         <button class="btn" onclick="testSafeAPI()">
             🚀 Test Safe Demo API Now
         </button>
         
         <div id="result"></div>
+        
+        <button class="btn" onclick="testDirectURL()" style="background: #3b82f6; margin-top: 10px;">
+            🔗 Test Direct API URL
+        </button>
         
         <div style="margin-top: 30px; text-align: center; opacity: 0.8;">
             <p>This page directly tests the /api/test-demo-safe endpoint</p>
@@ -130,6 +134,10 @@
                     </div>
                 `;
             }
+        }
+        
+        function testDirectURL() {
+            window.open('/api/test-demo-safe', '_blank');
         }
         
         // Auto-test on page load
