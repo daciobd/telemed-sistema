@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Calendar, Users, FileText, Shield, Video, Stethoscope, UserPlus } from "lucide-react";
 import { useLocation } from "wouter";
+import SafeApiTester from "@/components/SafeApiTester";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -255,6 +256,11 @@ export default function Landing() {
               📧 Email
             </Button>
           </div>
+        </div>
+
+        {/* Safe API Tester Section */}
+        <div className="mb-8">
+          <SafeApiTester />
         </div>
 
         {/* CTA Section */}

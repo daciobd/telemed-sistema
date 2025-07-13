@@ -1,0 +1,116 @@
+Ótimo! Aqui está um componente React **pronto para ser incluído no seu projeto TeleMed**, que replica exatamente o funcionamento do botão funcional que você testou com sucesso.
+
+---
+
+## ✅ Componente React: `SafeApiTester.tsx`
+
+```tsx
+// SafeApiTester.tsx
+
+import React, { useState } from "react";
+
+const SafeApiTester: React.FC = () => {
+  const [response, setResponse] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleTestApi = async () => {
+    setLoading(true);
+    setError(null);
+    setResponse(null);
+
+    try {
+      const res = await fetch("/api/test-demo-safe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Erro HTTP: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setResponse(JSON.stringify(data, null, 2));
+    } catch (err: any) {
+      setError(err.message || "Erro ao chamar API");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: "2rem", background: "#f0f4ff", borderRadius: "12px" }}>
+      <h2>Teste da API Segura</h2>
+      <button
+        onClick={handleTestApi}
+        style={{
+          background: "#4caf50",
+          color: "white",
+          border: "none",
+          padding: "0.5rem 1rem",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontSize: "1rem",
+        }}
+        disabled={loading}
+      >
+        {loading ? "Testando..." : "📡 Testar /api/test-demo-safe"}
+      </button>
+
+      {response && (
+        <pre style={{ marginTop: "1rem", background: "#e0ffe0", padding: "1rem", borderRadius: "8px" }}>
+          ✅ Resposta:
+          <br />
+          {response}
+        </pre>
+      )}
+
+      {error && (
+        <pre style={{ marginTop: "1rem", background: "#ffe0e0", padding: "1rem", borderRadius: "8px", color: "red" }}>
+          ❌ Erro:
+          <br />
+          {error}
+        </pre>
+      )}
+    </div>
+  );
+};
+
+export default SafeApiTester;
+```
+
+---
+
+## ✅ Como usar:
+
+### 1. Salve o componente em `src/components/SafeApiTester.tsx` ou equivalente.
+
+### 2. Importe e use onde quiser, por exemplo:
+
+```tsx
+import SafeApiTester from './components/SafeApiTester';
+
+function HomePage() {
+  return (
+    <div>
+      <h1>Bem-vindo ao TeleMed</h1>
+      <SafeApiTester />
+    </div>
+  );
+}
+```
+
+---
+
+## 🔍 O que esse componente faz:
+
+* Testa o endpoint `/api/test-demo-safe` via POST.
+* Exibe a resposta formatada em JSON.
+* Mostra erros, se houver.
+* Usa `fetch` nativo — sem dependência externa.
+
+---
+
+Se quiser, posso gerar o mesmo componente usando `axios`, `Tailwind`, ou outra estilização. Deseja alguma dessas variações?
