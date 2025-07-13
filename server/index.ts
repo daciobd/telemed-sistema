@@ -14,9 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // ✅ CRITICAL: Serve static files FIRST, before any other middleware
-const publicPath = path.join(__dirname, '../client/public');
-console.log('🔧 Configuring static files from:', publicPath);
-app.use(express.static(publicPath));
+const staticPath = path.join(__dirname, '../client/dist');
+console.log('🔧 Configuring static files from:', staticPath);
+app.use(express.static(staticPath));
 console.log('✅ Static files configured successfully');
 
 // Health check with deployment info
@@ -257,7 +257,7 @@ async function startServer() {
         }
         
         // Retorna o index.html para o React Router processar
-        const indexPath = path.join(__dirname, '../client/index.html');
+        const indexPath = path.join(__dirname, '../client/dist/index.html');
         console.log('📄 Serving React SPA for:', req.path);
         res.sendFile(indexPath);
       });
