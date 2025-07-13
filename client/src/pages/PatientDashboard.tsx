@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import {
   Calendar,
   FileText,
-  Pills,
+  Pill,
   Video,
   Users,
   Clock,
@@ -238,7 +238,7 @@ export default function PatientDashboard() {
             <CardContent className="p-4">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-purple-100 rounded-lg">
-                  <Pills className="w-6 h-6 text-purple-600" />
+                  <Pill className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-600">Receitas Ativas</p>
@@ -345,7 +345,7 @@ export default function PatientDashboard() {
           <Card className="hover:shadow-lg transition-all duration-200" data-tour="prescriptions">
             <CardHeader className="pb-3">
               <div className="flex items-center space-x-2">
-                <Pills className="w-5 h-5 text-purple-600" />
+                <Pill className="w-5 h-5 text-purple-600" />
                 <CardTitle className="text-lg">Receitas</CardTitle>
               </div>
             </CardHeader>
@@ -366,7 +366,7 @@ export default function PatientDashboard() {
 
               <Link href="/prescriptions">
                 <Button className="w-full" variant="outline">
-                  <Pills className="w-4 h-4 mr-2" />
+                  <Pill className="w-4 h-4 mr-2" />
                   Ver Todas as Receitas
                 </Button>
               </Link>
