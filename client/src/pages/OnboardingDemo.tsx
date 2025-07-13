@@ -23,11 +23,11 @@ export default function OnboardingDemo() {
   const [showTour, setShowTour] = useState(false);
   const [tourStep, setTourStep] = useState(0);
 
-  // Force welcome modal to show immediately
+  // Force welcome modal to show immediately on page load
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowWelcome(true);
-    }, 1000);
+    }, 500); // Show after 0.5 seconds
     return () => clearTimeout(timer);
   }, []);
 
