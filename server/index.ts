@@ -13,11 +13,10 @@ const PORT = parseInt(process.env.PORT || '5000', 10);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// ✅ CRITICAL: Serve static files FIRST, before any other middleware
-const staticPath = path.join(__dirname, '../client/dist');
-console.log('🔧 Configuring static files from:', staticPath);
-app.use(express.static(staticPath));
-console.log('✅ Static files configured successfully');
+// ⚠️ TEMPORARILY DISABLED: Static files to force Vite dev server
+console.log('🔧 Static files disabled - using Vite dev server for latest code');
+// const staticPath = path.join(__dirname, '../client/dist');
+// app.use(express.static(staticPath));
 
 // Health check with deployment info
 app.get('/health', (req, res) => {
