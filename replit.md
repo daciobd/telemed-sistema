@@ -195,6 +195,29 @@ src/
 
 ## Mudanças Recentes (Julho 2025)
 
+### Sistema de Autenticação JWT Implementado - 13/07/2025 17:30
+- **Status**: ✅ IMPLEMENTADO COMPLETAMENTE - FUNCIONANDO
+- **Funcionalidades Implementadas**:
+  - Backend de autenticação JWT com rotas /api/auth/register, /api/auth/login, /api/auth/me
+  - Páginas de login e registro no frontend com formulários validados
+  - Hooks de autenticação (useAuth, useLogout) integrados
+  - Navegação condicional baseada em status de autenticação
+  - Sistema de proteção de rotas funcionando
+  - Dashboard diferenciado para pacientes
+  - Landing page com botões de login/logout
+- **Validação de Funcionamento**:
+  - ✅ Registro de usuários funcionando (pacientes e médicos)
+  - ✅ Login com JWT token funcionando
+  - ✅ Verificação de token via /api/auth/me funcionando
+  - ✅ Frontend integrado com backend de autenticação
+  - ✅ Redirecionamento baseado em autenticação
+- **Usuários de Teste Criados**:
+  - Paciente: test@test.com / 123456
+  - Sistema pronto para receber médicos
+- **Próximo Passo**: Implementar videoconsultas (funcionalidade #2 do MVP)
+
+## Mudanças Recentes (Julho 2025) - Histórico
+
 ### Deploy Replit - PROBLEMA RESOLVIDO - 13/07/2025 13:50
 - **Status**: ✅ PROBLEMA RESOLVIDO - DEPLOY SINCRONIZADO
 - **URL Pública**: telemed-consultation-daciobd.replit.app

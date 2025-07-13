@@ -723,6 +723,7 @@ export type MedicalReferral = typeof medicalReferrals.$inferSelect;
 export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
   updatedAt: true,
+  passwordHash: true,
 });
 
 export const insertPatientSchema = createInsertSchema(patients).omit({
@@ -881,7 +882,10 @@ export const registerSchema = z.object({
   // Doctor-specific fields
   specialty: z.string().optional(),
   licenseNumber: z.string().optional(),
-}).refine((data) => data.password === data.confirmPassword, {
+}).transform((data) => ({
+  ...data,
+  name: `${data.firstName} ${data.lastName}` // Create name field from firstName + lastName
+})).refine((data) => data.password === data.confirmPassword, {
   message: "Senhas não conferem",
   path: ["confirmPassword"],
 }).refine((data) => {
