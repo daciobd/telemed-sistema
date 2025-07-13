@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
+import DebugRouter from "./DebugRouter";
 import { CredentialAuthProvider } from "@/hooks/useCredentialAuth";
 import { lazy } from "react";
 import NotFound from "@/pages/not-found";
@@ -82,7 +83,7 @@ function Router() {
       <Route path="/prontuarios" component={MedicalRecords} />
       <Route path="/diagnostico" component={lazy(() => import('@/pages/diagnostico'))} />
       
-      {isLoading || !isAuthenticated ? (
+      {!isAuthenticated ? (
         <Route path="/" component={ImprovedLandingPage} />
       ) : (
         <>
@@ -169,6 +170,7 @@ function App() {
       <CredentialAuthProvider>
         <TooltipProvider>
           <Toaster />
+          <DebugRouter />
           <Router />
         </TooltipProvider>
       </CredentialAuthProvider>

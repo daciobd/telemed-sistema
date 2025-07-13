@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link, useLocation } from 'wouter';
 import { useAuth } from '@/hooks/useAuth';
+
 import { AuthButtons } from '@/components/auth/AuthButtons';
 import { 
   Stethoscope, 
@@ -22,8 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function ImprovedLandingPage() {
-  const { isAuthenticated, user } = useAuth();
-  const logout = useLogout();
+  const { isAuthenticated, user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
   const handleLogin = () => {
@@ -35,7 +35,9 @@ export default function ImprovedLandingPage() {
   };
 
   const handleLogout = () => {
-    logout.mutate();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.reload();
   };
 
   const handleGetStarted = () => {

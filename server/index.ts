@@ -177,8 +177,7 @@ app.get('/demo-medico', (req, res) => {
   res.redirect(baseUrl);
 });
 
-// CRITICAL: Serve static files from public directory FIRST (before routes)
-app.use(express.static(path.join(__dirname, '../public')));
+// NOTE: Static files moved after Vite setup to avoid interference with React Router
 
 // Direct route for test-safe.html - GUARANTEED to work
 app.get('/test-safe.html', (req, res) => {
@@ -240,6 +239,7 @@ async function startServer() {
       await setupVite(app, httpServer);
       console.log('✅ Vite setup complete');
     } else {
+      console.log('🔧 Setting up static file serving for production...');
       // Em produção, serve arquivos estáticos e depois fallback para SPA
       serveStatic(app);
       
