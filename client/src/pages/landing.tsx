@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, Calendar, Users, FileText, Shield, Video, Stethoscope, UserPlus } from "lucide-react";
 import { useLocation } from "wouter";
 import SafeApiTester from "@/components/SafeApiTester";
-import WhatsAppButton from "@/components/WhatsAppButton";
+// import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Landing() {
   const [, setLocation] = useLocation();
@@ -224,31 +224,29 @@ export default function Landing() {
           </Card>
         </div>
 
-        {/* Contact Section */}
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl shadow-xl p-8 text-center text-white mb-8">
+        {/* Authentication Section */}
+        <div className="bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl shadow-xl p-8 text-center text-white mb-8">
           <h2 className="text-3xl font-bold mb-4">
-            Interessado em Conhecer?
+            Sistema de Autenticação Médica
           </h2>
-          <p className="text-lg mb-8 text-green-100">
-            Entre em contato para agendar uma demonstração
+          <p className="text-lg mb-8 text-teal-100">
+            Acesse sua conta ou crie uma nova para começar
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <WhatsAppButton 
-              phoneNumber="5511987654321"
-              message="Olá! Vi o TeleMed e gostaria de conhecer mais sobre a plataforma."
-              className="bg-white text-green-600 hover:bg-green-50 text-lg px-8 py-3 shadow-lg rounded-lg font-semibold transition-colors duration-200"
-            >
-              📱 WhatsApp
-            </WhatsAppButton>
             <Button 
-              onClick={() => {
-                window.location.href = 'mailto:contato@telemed.com.br?subject=Demonstração TeleMed';
-              }}
+              onClick={() => setLocation('/login')}
+              size="lg"
+              className="bg-white text-teal-600 hover:bg-teal-50 text-lg px-8 py-3 shadow-lg rounded-lg font-semibold transition-colors duration-200"
+            >
+              🩺 Entrar no Sistema
+            </Button>
+            <Button 
+              onClick={() => setLocation('/register')}
               size="lg"
               variant="outline"
               className="border-white text-white hover:bg-white/10 text-lg px-8 py-3"
             >
-              📧 Email
+              📝 Criar Conta
             </Button>
           </div>
         </div>

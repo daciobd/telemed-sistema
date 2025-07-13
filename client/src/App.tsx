@@ -78,7 +78,7 @@ function Router() {
       <Route path="/diagnostico" component={lazy(() => import('@/pages/diagnostico'))} />
       
       {isLoading || !isAuthenticated ? (
-        <Route path="/" component={Landing} />
+        <Route path="/" component={ImprovedLandingPage} />
       ) : (
         <>
           <Route path="/" component={Dashboard} />
