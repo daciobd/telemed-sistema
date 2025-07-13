@@ -13,14 +13,19 @@ const PORT = parseInt(process.env.PORT || '5000', 10);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Health check
+// Health check with deployment info
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     port: PORT,
-    version: '8.0.0-CLEAN',
-    environment: process.env.NODE_ENV || 'development'
+    version: '8.1.0-SYNC-FIX',
+    environment: process.env.NODE_ENV || 'development',
+    deployment_info: {
+      last_updated: '2025-07-13T12:45:00Z',
+      sync_status: 'ATTEMPTING_SYNC',
+      routes_available: ['/health', '/', '/api/auth/user', '/api/users', '/api/patients']
+    }
   });
 });
 

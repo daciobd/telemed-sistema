@@ -216,7 +216,13 @@ src/
   - Deploy manual via Deploy Button do Replit
   - Rebuild completo do projeto
   - Validação pós-deploy de todas as rotas
-- **Status**: AGUARDANDO DEPLOY MANUAL PARA SINCRONIZAÇÃO
+- **Status**: ❌ DEPLOY MANUAL OBRIGATÓRIO - VERSÃO CONFIRMADA DESSINCRONIZADA
+- **Evidência Definitiva**: 
+  - Local: version "8.1.0-SYNC-FIX" 
+  - Produção: version "8.0.0-CLEAN"
+  - Testado em: 13/07/2025 12:57
+- **Impacto**: Landing page carrega mas botões não funcionam (APIs retornam 404)
+- **Solução**: Deploy manual via interface Replit obrigatório
 
 ### Deploy Railway - BACKUP CONFIGURADO - 05/07/2025 20:30
 - **Status**: ✅ CONFIGURADO COMO ALTERNATIVA
