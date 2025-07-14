@@ -174,18 +174,14 @@ console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   res.end(htmlPage);
 });
 
-server.listen(PORT, () => {
-console.log(`TeleMed Sistema rodando na porta ${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/health`);
-  console.log('Sistema pronto para conexões!');
-});
 
+// Configuração principal do servidor (ÚNICA chamada listen)
 server.listen(PORT, () => {
   console.log(`TeleMed Sistema rodando na porta ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
-  console.log('Sistema pronto para conexões!');
 });
 
+// Handlers de erro e encerramento
 server.on('error', (err) => {
   console.error('Erro do servidor:', err);
 });
