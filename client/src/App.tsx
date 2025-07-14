@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import OnboardingDemo from "@/pages/OnboardingDemo";
+import OnboardingFixed from "@/pages/OnboardingFixed";
 import OnboardingSuccess from "@/pages/OnboardingSuccess";
 import PatientJourneyPage from "@/pages/PatientJourneyPage";
 import PatientJourneyDemo from "@/pages/PatientJourneyDemo";
@@ -22,9 +23,10 @@ function App() {
         <div className="min-h-screen bg-background">
           <Switch>
             <Route path="/" component={OnboardingSuccess} />
-            <Route path="/patient-dashboard" component={OnboardingDemo} />
-            <Route path="/dashboard" component={OnboardingDemo} />
+            <Route path="/patient-dashboard" component={OnboardingFixed} />
+            <Route path="/dashboard" component={OnboardingFixed} />
             <Route path="/onboarding-demo" component={OnboardingDemo} />
+            <Route path="/onboarding-fixed" component={OnboardingFixed} />
             <Route path="/success" component={OnboardingSuccess} />
             <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
             <Route path="/patient-journey-demo" component={PatientJourneyDemo} />
