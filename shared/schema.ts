@@ -136,6 +136,68 @@ export const prescriptions = pgTable("prescriptions", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Dynamic Patient Journey Visualization - Core table for tracking patient interactions
+export const patientJourneyEvents = pgTable("patient_journey_events", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  eventType: varchar("event_type", { 
+    enum: ["registration", "appointment_scheduled", "appointment_completed", "prescription_issued", "lab_test_ordered", "lab_result_received", "symptom_reported", "follow_up_scheduled", "treatment_started", "treatment_completed", "emergency_visit", "specialist_referral", "medication_changed", "vital_signs_recorded"]
+  }).notNull(),
+  eventDate: timestamp("event_date").notNull(),
+  appointmentId: integer("appointment_id").references(() => appointments.id),
+  doctorId: integer("doctor_id").references(() => doctors.id),
+  description: text("description"),
+  severity: varchar("severity", { enum: ["low", "medium", "high", "critical"] }).default("medium"),
+  category: varchar("category", { enum: ["administrative", "clinical", "diagnostic", "therapeutic", "preventive", "emergency"] }).notNull(),
+  metadata: jsonb("metadata"), // Additional structured data specific to event type
+  outcome: varchar("outcome", { enum: ["positive", "negative", "neutral", "pending"] }).default("neutral"),
+  tags: jsonb("tags"), // Array of tags for filtering and grouping
+  isVisible: boolean("is_visible").default(true), // For hiding sensitive events
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Patient health metrics tracking for trend visualization
+export const patientHealthMetrics = pgTable("patient_health_metrics", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  journeyEventId: integer("journey_event_id").references(() => patientJourneyEvents.id),
+  metricType: varchar("metric_type", {
+    enum: ["blood_pressure", "heart_rate", "weight", "height", "bmi", "temperature", "oxygen_saturation", "glucose_level", "cholesterol", "pain_level", "mood_score", "sleep_quality", "exercise_minutes", "medication_adherence"]
+  }).notNull(),
+  value: decimal("value", { precision: 10, scale: 2 }).notNull(),
+  unit: varchar("unit", { length: 20 }).notNull(), // mg/dl, mmHg, kg, bpm, etc.
+  normalRangeMin: decimal("normal_range_min", { precision: 10, scale: 2 }),
+  normalRangeMax: decimal("normal_range_max", { precision: 10, scale: 2 }),
+  isNormal: boolean("is_normal").default(true),
+  recordedAt: timestamp("recorded_at").notNull(),
+  recordedBy: varchar("recorded_by", { enum: ["patient", "doctor", "nurse", "device"] }).default("patient"),
+  deviceId: varchar("device_id"), // For IoT device tracking
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Patient journey milestones and goals
+export const patientJourneyMilestones = pgTable("patient_journey_milestones", {
+  id: serial("id").primaryKey(),
+  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  description: text("description"),
+  targetDate: timestamp("target_date"),
+  completedDate: timestamp("completed_date"),
+  milestoneType: varchar("milestone_type", {
+    enum: ["treatment_goal", "recovery_target", "preventive_care", "lifestyle_change", "diagnostic_milestone", "therapeutic_milestone"]
+  }).notNull(),
+  status: varchar("status", { enum: ["planned", "in_progress", "completed", "overdue", "cancelled"] }).default("planned"),
+  priority: varchar("priority", { enum: ["low", "medium", "high", "critical"] }).default("medium"),
+  assignedDoctorId: integer("assigned_doctor_id").references(() => doctors.id),
+  progress: integer("progress").default(0), // 0-100 percentage
+  conditions: jsonb("conditions"), // Conditions that must be met
+  rewards: jsonb("rewards"), // Achievements or benefits upon completion
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Clinical examinations ordered by doctors
 export const clinicalExams = pgTable("clinical_exams", {
   id: serial("id").primaryKey(),
@@ -187,8 +249,6 @@ export const medicalEvaluations = pgTable("medical_evaluations", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
-
-
 
 // Psychological Assessment for psychiatry consultations
 export const psychologicalAssessments = pgTable("psychological_assessments", {
@@ -334,35 +394,29 @@ export const doctorRegistrations = pgTable("doctor_registrations", {
   lastName: varchar("last_name").notNull(),
   email: varchar("email").notNull().unique(),
   phone: varchar("phone").notNull(),
-  dateOfBirth: timestamp("date_of_birth").notNull(),
+  cpf: varchar("cpf").notNull(),
   
   // Professional Information
   crm: varchar("crm").notNull(),
-  crmState: varchar("crm_state").notNull(),
   specialty: varchar("specialty").notNull(),
-  subSpecialty: varchar("sub_specialty"),
+  graduationYear: integer("graduation_year").notNull(),
   medicalSchool: varchar("medical_school").notNull(),
-  graduationYear: varchar("graduation_year").notNull(),
-  residency: varchar("residency"),
   
   // Experience
-  yearsOfExperience: varchar("years_of_experience").notNull(),
+  yearsExperience: integer("years_experience").notNull(),
   currentWorkplace: varchar("current_workplace").notNull(),
-  consultationFee: varchar("consultation_fee").notNull(),
+  telemedicineExperience: boolean("telemedicine_experience").default(false),
   
-  // Availability
-  availability: varchar("availability").notNull(),
-  preferredSchedule: varchar("preferred_schedule").notNull(),
-  
-  // Motivation
-  motivation: text("motivation").notNull(),
-  telemedicineExperience: text("telemedicine_experience"),
+  // Availability and Preferences
+  availableHours: jsonb("available_hours"), // { "monday": ["09:00", "17:00"], ... }
+  preferredConsultationTypes: jsonb("preferred_consultation_types"), // ["routine", "emergency", etc.]
+  consultationFee: numeric("consultation_fee", { precision: 8, scale: 2 }), // Fee per consultation
   
   // Application Status
-  status: varchar("status", { enum: ["pending", "approved", "rejected", "interview"] }).default("pending"),
+  status: varchar("status").default("pending"), // pending, approved, rejected
+  reviewedBy: integer("reviewed_by").references(() => users.id),
   reviewNotes: text("review_notes"),
-  reviewedBy: varchar("reviewed_by"),
-  reviewedAt: timestamp("reviewed_at"),
+  rejectionReason: text("rejection_reason"),
   
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -377,15 +431,15 @@ export const patientRegistrations = pgTable("patient_registrations", {
   lastName: varchar("last_name").notNull(),
   email: varchar("email").notNull().unique(),
   phone: varchar("phone").notNull(),
-  dateOfBirth: timestamp("date_of_birth").notNull(),
   cpf: varchar("cpf").notNull(),
+  dateOfBirth: timestamp("date_of_birth").notNull(),
   gender: varchar("gender").notNull(),
   
   // Address
-  zipCode: varchar("zip_code").notNull(),
   address: text("address").notNull(),
   city: varchar("city").notNull(),
   state: varchar("state").notNull(),
+  zipCode: varchar("zip_code").notNull(),
   
   // Emergency Contact
   emergencyContactName: varchar("emergency_contact_name").notNull(),
@@ -395,169 +449,28 @@ export const patientRegistrations = pgTable("patient_registrations", {
   // Medical Information
   bloodType: varchar("blood_type"),
   allergies: text("allergies"),
-  medications: text("medications"),
   chronicConditions: text("chronic_conditions"),
-  previousSurgeries: text("previous_surgeries"),
-  familyHistory: text("family_history"),
+  currentMedications: text("current_medications"),
+  familyMedicalHistory: text("family_medical_history"),
   
-  // Lifestyle
-  smoking: varchar("smoking").notNull(),
-  drinking: varchar("drinking").notNull(),
-  exercise: varchar("exercise").notNull(),
+  // Insurance
+  hasInsurance: boolean("has_insurance").default(false),
+  insuranceProvider: varchar("insurance_provider"),
+  insuranceNumber: varchar("insurance_number"),
   
-  // Health Insurance
-  hasHealthInsurance: boolean("has_health_insurance").default(false),
-  healthInsuranceName: varchar("health_insurance_name"),
-  healthInsuranceNumber: varchar("health_insurance_number"),
-  
-  // Consents
-  termsAccepted: boolean("terms_accepted").notNull(),
-  privacyAccepted: boolean("privacy_accepted").notNull(),
-  telemedicineConsent: boolean("telemedicine_consent").notNull(),
+  // Account Creation
+  password: varchar("password").notNull(), // Will be hashed
+  agreedToTerms: boolean("agreed_to_terms").default(false),
   
   // Registration Status
-  status: varchar("status", { enum: ["pending", "active", "suspended"] }).default("active"),
-  userId: varchar("user_id").references(() => users.id),
+  status: varchar("status").default("completed"), // completed (auto-approved for patients)
   
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
-
-// Consultation Completion Reports - for doctors
-export const consultationReports = pgTable("consultation_reports", {
-  id: serial("id").primaryKey(),
-  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
-  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
-  
-  // Main assessment
-  consultationCompleted: boolean("consultation_completed").notNull().default(true),
-  consultationNotes: text("consultation_notes"),
-  
-  // Technical issues
-  hadTechnicalIssues: boolean("had_technical_issues").notNull().default(false),
-  technicalIssuesDetails: text("technical_issues_details"),
-  audioQuality: varchar("audio_quality", { enum: ["excellent", "good", "fair", "poor"] }),
-  videoQuality: varchar("video_quality", { enum: ["excellent", "good", "fair", "poor"] }),
-  connectionStability: varchar("connection_stability", { enum: ["stable", "intermittent", "unstable"] }),
-  
-  // Patient interaction issues
-  hadPatientIssues: boolean("had_patient_issues").notNull().default(false),
-  patientIssuesDetails: text("patient_issues_details"),
-  patientCooperation: varchar("patient_cooperation", { enum: ["excellent", "good", "fair", "poor"] }),
-  
-  // Follow-up recommendations
-  recommendationsType: varchar("recommendations_type", { 
-    enum: ["none", "mental_health_severity", "clinical_complexity", "clinical_inconsistencies"] 
-  }).array(),
-  alertSignals: text("alert_signals"),
-  
-  // Next steps
-  requiresPresentialConsult: boolean("requires_presential_consult").notNull().default(false),
-  requiresContinuityConsult: boolean("requires_continuity_consult").notNull().default(false),
-  
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Patient Consultation Feedback
-export const consultationFeedback = pgTable("consultation_feedback", {
-  id: serial("id").primaryKey(),
-  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
-  patientId: integer("patient_id").notNull().references(() => patients.id, { onDelete: "cascade" }),
-  
-  // Technical experience
-  hadTechnicalIssues: boolean("had_technical_issues").notNull().default(false),
-  technicalIssuesDetails: text("technical_issues_details"),
-  audioQuality: varchar("audio_quality", { enum: ["excellent", "good", "fair", "poor"] }),
-  videoQuality: varchar("video_quality", { enum: ["excellent", "good", "fair", "poor"] }),
-  platformEaseOfUse: varchar("platform_ease_of_use", { enum: ["very_easy", "easy", "moderate", "difficult"] }),
-  
-  // Doctor interaction
-  hadDoctorInteractionIssues: boolean("had_doctor_interaction_issues").notNull().default(false),
-  doctorInteractionDetails: text("doctor_interaction_details"),
-  
-  // Overall satisfaction (existing medical evaluation system)
-  overallSatisfaction: integer("overall_satisfaction").notNull(), // 1-5 stars
-  doctorKnowledge: integer("doctor_knowledge").notNull(), // 1-5 stars
-  doctorAttention: integer("doctor_attention").notNull(), // 1-5 stars
-  wouldRecommend: boolean("would_recommend").notNull(),
-  testimonial: text("testimonial"),
-  
-  // Rescheduling preferences
-  wantsToReschedule: boolean("wants_to_reschedule").notNull().default(false),
-  rescheduleReason: text("reschedule_reason"),
-  prefersSameDoctorReschedule: boolean("prefers_same_doctor_reschedule").default(true),
-  
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Available slots for rescheduling
-export const availableSlots = pgTable("available_slots", {
-  id: serial("id").primaryKey(),
-  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
-  slotDateTime: timestamp("slot_date_time").notNull(),
-  isAvailable: boolean("is_available").notNull().default(true),
-  consultationType: varchar("consultation_type", { enum: ["presential", "telemedicine"] }).notNull(),
-  duration: integer("duration").notNull().default(30), // minutes
-  price: decimal("price", { precision: 10, scale: 2 }),
-  
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Notification records for tracking SMS/WhatsApp sent to doctors
-export const notificationRecords = pgTable("notification_records", {
-  id: serial("id").primaryKey(),
-  doctorId: integer("doctor_id").notNull().references(() => doctors.id, { onDelete: "cascade" }),
-  appointmentId: integer("appointment_id").notNull().references(() => appointments.id, { onDelete: "cascade" }),
-  type: varchar("type", { enum: ["teleconsult_offer", "appointment_reminder", "payment_received"] }).notNull(),
-  message: text("message").notNull(),
-  whatsappUrl: text("whatsapp_url"),
-  phoneNumber: varchar("phone_number"),
-  status: varchar("status", { enum: ["sent", "delivered", "failed", "pending"] }).notNull().default("pending"),
-  sentAt: timestamp("sent_at").defaultNow(),
-  deliveredAt: timestamp("delivered_at"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-// Zod schemas for validation
-export const insertConsultationReportSchema = createInsertSchema(consultationReports).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertConsultationFeedbackSchema = createInsertSchema(consultationFeedback).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertAvailableSlotSchema = createInsertSchema(availableSlots).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertNotificationRecordSchema = createInsertSchema(notificationRecords).omit({
-  id: true,
-  createdAt: true,
-  sentAt: true,
-});
-
-export type InsertConsultationReport = z.infer<typeof insertConsultationReportSchema>;
-export type InsertConsultationFeedback = z.infer<typeof insertConsultationFeedbackSchema>;
-export type InsertAvailableSlot = z.infer<typeof insertAvailableSlotSchema>;
-export type InsertNotificationRecord = z.infer<typeof insertNotificationRecordSchema>;
-
-export type SelectConsultationReport = typeof consultationReports.$inferSelect;
-export type SelectConsultationFeedback = typeof consultationFeedback.$inferSelect;
-export type SelectAvailableSlot = typeof availableSlots.$inferSelect;
-export type SelectNotificationRecord = typeof notificationRecords.$inferSelect;
 
 // Relations
-export const usersRelations = relations(users, ({ one }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   patient: one(patients, {
     fields: [users.id],
     references: [patients.userId],
@@ -576,6 +489,9 @@ export const patientsRelations = relations(patients, ({ one, many }) => ({
   appointments: many(appointments),
   medicalRecords: many(medicalRecords),
   prescriptions: many(prescriptions),
+  journeyEvents: many(patientJourneyEvents),
+  healthMetrics: many(patientHealthMetrics),
+  journeyMilestones: many(patientJourneyMilestones),
 }));
 
 export const doctorsRelations = relations(doctors, ({ one, many }) => ({
@@ -599,326 +515,147 @@ export const appointmentsRelations = relations(appointments, ({ one, many }) => 
   }),
   medicalRecords: many(medicalRecords),
   teleconsultResponses: many(teleconsultResponses),
+  journeyEvents: many(patientJourneyEvents),
 }));
 
-export const teleconsultResponsesRelations = relations(teleconsultResponses, ({ one }) => ({
+export const patientJourneyEventsRelations = relations(patientJourneyEvents, ({ one, many }) => ({
+  patient: one(patients, {
+    fields: [patientJourneyEvents.patientId],
+    references: [patients.id],
+  }),
   appointment: one(appointments, {
-    fields: [teleconsultResponses.appointmentId],
+    fields: [patientJourneyEvents.appointmentId],
     references: [appointments.id],
   }),
   doctor: one(doctors, {
-    fields: [teleconsultResponses.doctorId],
+    fields: [patientJourneyEvents.doctorId],
+    references: [doctors.id],
+  }),
+  healthMetrics: many(patientHealthMetrics),
+}));
+
+export const patientHealthMetricsRelations = relations(patientHealthMetrics, ({ one }) => ({
+  patient: one(patients, {
+    fields: [patientHealthMetrics.patientId],
+    references: [patients.id],
+  }),
+  journeyEvent: one(patientJourneyEvents, {
+    fields: [patientHealthMetrics.journeyEventId],
+    references: [patientJourneyEvents.id],
+  }),
+}));
+
+export const patientJourneyMilestonesRelations = relations(patientJourneyMilestones, ({ one }) => ({
+  patient: one(patients, {
+    fields: [patientJourneyMilestones.patientId],
+    references: [patients.id],
+  }),
+  assignedDoctor: one(doctors, {
+    fields: [patientJourneyMilestones.assignedDoctorId],
     references: [doctors.id],
   }),
 }));
-
-export const prescriptionsRelations = relations(prescriptions, ({ one }) => ({
-  patient: one(patients, {
-    fields: [prescriptions.patientId],
-    references: [patients.id],
-  }),
-  doctor: one(doctors, {
-    fields: [prescriptions.doctorId],
-    references: [doctors.id],
-  }),
-}));
-
-export const medicalRecordsRelations = relations(medicalRecords, ({ one }) => ({
-  patient: one(patients, {
-    fields: [medicalRecords.patientId],
-    references: [patients.id],
-  }),
-  doctor: one(doctors, {
-    fields: [medicalRecords.doctorId],
-    references: [doctors.id],
-  }),
-  appointment: one(appointments, {
-    fields: [medicalRecords.appointmentId],
-    references: [appointments.id],
-  }),
-}));
-
-export const psychologicalAssessmentsRelations = relations(psychologicalAssessments, ({ one }) => ({
-  patient: one(patients, {
-    fields: [psychologicalAssessments.patientId],
-    references: [patients.id],
-  }),
-  appointment: one(appointments, {
-    fields: [psychologicalAssessments.appointmentId],
-    references: [appointments.id],
-  }),
-}));
-
-export const psychiatryQuestionnairesRelations = relations(psychiatryQuestionnaires, ({ one }) => ({
-  patient: one(patients, {
-    fields: [psychiatryQuestionnaires.patientId],
-    references: [patients.id],
-  }),
-  appointment: one(appointments, {
-    fields: [psychiatryQuestionnaires.appointmentId],
-    references: [appointments.id],
-  }),
-}));
-
-// Payment transactions table
-export const paymentTransactions = pgTable("payment_transactions", {
-  id: serial("id").primaryKey(),
-  appointmentId: integer("appointment_id").references(() => appointments.id, { onDelete: "cascade" }),
-  patientId: integer("patient_id").references(() => patients.id, { onDelete: "cascade" }),
-  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
-  stripePaymentIntentId: varchar("stripe_payment_intent_id").notNull(),
-  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
-  currency: varchar("currency").default("brl"),
-  status: varchar("status").notNull(), // 'pending', 'succeeded', 'failed', 'canceled', 'refunded'
-  paymentMethod: varchar("payment_method"), // 'card', 'pix', etc
-  stripeClientSecret: varchar("stripe_client_secret"),
-  metadata: jsonb("metadata"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Subscription plans table
-export const subscriptionPlans = pgTable("subscription_plans", {
-  id: serial("id").primaryKey(),
-  name: varchar("name").notNull(),
-  description: text("description"),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-  currency: varchar("currency").default("brl"),
-  interval: varchar("interval").notNull(), // 'month', 'year'
-  stripePriceId: varchar("stripe_price_id"),
-  features: jsonb("features"), // array of features
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Doctor earnings table
-export const doctorEarnings = pgTable("doctor_earnings", {
-  id: serial("id").primaryKey(),
-  doctorId: integer("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
-  appointmentId: integer("appointment_id").references(() => appointments.id, { onDelete: "cascade" }),
-  transactionId: integer("transaction_id").references(() => paymentTransactions.id, { onDelete: "cascade" }),
-  grossAmount: numeric("gross_amount", { precision: 10, scale: 2 }).notNull(),
-  platformFee: numeric("platform_fee", { precision: 10, scale: 2 }).notNull(),
-  netAmount: numeric("net_amount", { precision: 10, scale: 2 }).notNull(),
-  payoutStatus: varchar("payout_status").default("pending"), // 'pending', 'paid', 'failed'
-  payoutDate: timestamp("payout_date"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-export type InsertPaymentTransaction = typeof paymentTransactions.$inferInsert;
-export type PaymentTransaction = typeof paymentTransactions.$inferSelect;
-
-export type InsertSubscriptionPlan = typeof subscriptionPlans.$inferInsert;
-export type SubscriptionPlan = typeof subscriptionPlans.$inferSelect;
-
-export type InsertDoctorEarning = typeof doctorEarnings.$inferInsert;
-export type DoctorEarning = typeof doctorEarnings.$inferSelect;
-
-export type InsertClinicalExam = typeof clinicalExams.$inferInsert;
-export type ClinicalExam = typeof clinicalExams.$inferSelect;
-
-export type InsertMedicalReferral = typeof medicalReferrals.$inferInsert;
-export type MedicalReferral = typeof medicalReferrals.$inferSelect;
-
-// Insert schemas
-export const insertUserSchema = createInsertSchema(users).omit({
-  createdAt: true,
-  updatedAt: true,
-  passwordHash: true,
-});
-
-export const insertPatientSchema = createInsertSchema(patients).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertDoctorSchema = createInsertSchema(doctors).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertAppointmentSchema = createInsertSchema(appointments).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertMedicalRecordSchema = createInsertSchema(medicalRecords).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertPrescriptionSchema = createInsertSchema(prescriptions).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertPsychologicalAssessmentSchema = createInsertSchema(psychologicalAssessments).omit({
-  id: true,
-  createdAt: true,
-  completedAt: true,
-});
-
-export const insertPsychiatryQuestionnaireSchema = createInsertSchema(psychiatryQuestionnaires).omit({
-  id: true,
-  createdAt: true,
-  completedAt: true,
-});
-
-export const insertPsychologistInterviewSchema = createInsertSchema(psychologistInterviews).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
 
 // Types
-export type UpsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
-export type InsertPatient = z.infer<typeof insertPatientSchema>;
+export type UpsertUser = typeof users.$inferInsert;
 export type Patient = typeof patients.$inferSelect;
-export type InsertDoctor = z.infer<typeof insertDoctorSchema>;
+export type InsertPatient = typeof patients.$inferInsert;
 export type Doctor = typeof doctors.$inferSelect;
-export type InsertAppointment = z.infer<typeof insertAppointmentSchema>;
+export type InsertDoctor = typeof doctors.$inferInsert;
 export type Appointment = typeof appointments.$inferSelect;
-export type InsertMedicalRecord = z.infer<typeof insertMedicalRecordSchema>;
+export type InsertAppointment = typeof appointments.$inferInsert;
 export type MedicalRecord = typeof medicalRecords.$inferSelect;
+export type InsertMedicalRecord = typeof medicalRecords.$inferInsert;
+export type PatientJourneyEvent = typeof patientJourneyEvents.$inferSelect;
+export type InsertPatientJourneyEvent = typeof patientJourneyEvents.$inferInsert;
+export type PatientHealthMetric = typeof patientHealthMetrics.$inferSelect;
+export type InsertPatientHealthMetric = typeof patientHealthMetrics.$inferInsert;
+export type PatientJourneyMilestone = typeof patientJourneyMilestones.$inferSelect;
+export type InsertPatientJourneyMilestone = typeof patientJourneyMilestones.$inferInsert;
 
-export type InsertPrescription = z.infer<typeof insertPrescriptionSchema>;
+// Zod schemas for validation
+export const insertUserSchema = createInsertSchema(users);
+export const insertPatientSchema = createInsertSchema(patients);
+export const insertDoctorSchema = createInsertSchema(doctors);
+export const insertAppointmentSchema = createInsertSchema(appointments);
+export const insertMedicalRecordSchema = createInsertSchema(medicalRecords);
+export const insertPatientJourneyEventSchema = createInsertSchema(patientJourneyEvents);
+export const insertPatientHealthMetricSchema = createInsertSchema(patientHealthMetrics);
+export const insertPatientJourneyMilestoneSchema = createInsertSchema(patientJourneyMilestones);
+export const insertDoctorRegistrationSchema = createInsertSchema(doctorRegistrations);
+export const insertPatientRegistrationSchema = createInsertSchema(patientRegistrations);
+export const insertPrescriptionSchema = createInsertSchema(prescriptions);
+export const insertPsychologicalAssessmentSchema = createInsertSchema(psychologicalAssessments);
+export const insertPsychiatryQuestionnaireSchema = createInsertSchema(psychiatryQuestionnaires);
+export const insertClinicalExamSchema = createInsertSchema(clinicalExams);
+export const insertMedicalReferralSchema = createInsertSchema(medicalReferrals);
+export const insertConsultationRecordSchema = createInsertSchema(consultationRecords);
+export const insertCidCodeSchema = createInsertSchema(cidCodes);
+export const insertPsychologistInterviewSchema = createInsertSchema(psychologistInterviews);
+
+// Auth schemas for JWT authentication
+export const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+export const registerSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.string().email(),
+  password: z.string().min(6),
+  role: z.enum(["patient", "doctor"]).default("patient"),
+  specialty: z.string().optional(),
+  licenseNumber: z.string().optional(),
+});
+
+export type InsertUserType = z.infer<typeof insertUserSchema>;
+export type InsertPatientType = z.infer<typeof insertPatientSchema>;
+export type InsertDoctorType = z.infer<typeof insertDoctorSchema>;
+export type InsertAppointmentType = z.infer<typeof insertAppointmentSchema>;
+export type InsertMedicalRecordType = z.infer<typeof insertMedicalRecordSchema>;
+export type InsertPatientJourneyEventType = z.infer<typeof insertPatientJourneyEventSchema>;
+export type InsertPatientHealthMetricType = z.infer<typeof insertPatientHealthMetricSchema>;
+export type InsertPatientJourneyMilestoneType = z.infer<typeof insertPatientJourneyMilestoneSchema>;
+export type DoctorRegistration = typeof doctorRegistrations.$inferSelect;
+export type InsertDoctorRegistration = typeof doctorRegistrations.$inferInsert;
+export type PatientRegistration = typeof patientRegistrations.$inferSelect;
+export type InsertPatientRegistration = typeof patientRegistrations.$inferInsert;
+export type InsertDoctorRegistrationType = z.infer<typeof insertDoctorRegistrationSchema>;
+export type InsertPatientRegistrationType = z.infer<typeof insertPatientRegistrationSchema>;
 export type Prescription = typeof prescriptions.$inferSelect;
-
-export type InsertPsychologicalAssessment = z.infer<typeof insertPsychologicalAssessmentSchema>;
+export type InsertPrescription = typeof prescriptions.$inferInsert;
 export type PsychologicalAssessment = typeof psychologicalAssessments.$inferSelect;
-
-export type InsertPsychiatryQuestionnaire = z.infer<typeof insertPsychiatryQuestionnaireSchema>;
+export type InsertPsychologicalAssessment = typeof psychologicalAssessments.$inferInsert;
 export type PsychiatryQuestionnaire = typeof psychiatryQuestionnaires.$inferSelect;
-
-export type InsertPsychologistInterview = z.infer<typeof insertPsychologistInterviewSchema>;
+export type InsertPsychiatryQuestionnaire = typeof psychiatryQuestionnaires.$inferInsert;
+export type ClinicalExam = typeof clinicalExams.$inferSelect;
+export type InsertClinicalExam = typeof clinicalExams.$inferInsert;
+export type MedicalReferral = typeof medicalReferrals.$inferSelect;
+export type InsertMedicalReferral = typeof medicalReferrals.$inferInsert;
+export type ConsultationRecord = typeof consultationRecords.$inferSelect;
+export type InsertConsultationRecord = typeof consultationRecords.$inferInsert;
+export type CidCode = typeof cidCodes.$inferSelect;
+export type InsertCidCode = typeof cidCodes.$inferInsert;
 export type PsychologistInterview = typeof psychologistInterviews.$inferSelect;
+export type InsertPsychologistInterview = typeof psychologistInterviews.$inferInsert;
 
-// Extended types for API responses
+// Combined types for complex queries
 export type UserWithProfile = User & {
   patient?: Patient;
   doctor?: Doctor;
 };
 
 export type AppointmentWithDetails = Appointment & {
-  patient: Patient & { user: User };
-  doctor: Doctor & { user: User };
+  patient: PatientWithUser;
+  doctor?: DoctorWithUser;
 };
 
 export type PatientWithUser = Patient & {
   user: User;
-  appointments?: AppointmentWithDetails[];
 };
 
 export type DoctorWithUser = Doctor & {
   user: User;
-  appointments?: AppointmentWithDetails[];
 };
-
-// Registration schemas
-export const insertDoctorRegistrationSchema = createInsertSchema(doctorRegistrations, {
-  dateOfBirth: z.string().min(1, "Data de nascimento é obrigatória"),
-  graduationYear: z.union([z.string(), z.number()]).transform(val => String(val)),
-  yearsOfExperience: z.union([z.string(), z.number()]).transform(val => String(val)),
-  availability: z.string().min(1, "Disponibilidade é obrigatória"),
-}).omit({
-  id: true,
-  status: true,
-  reviewNotes: true,
-  reviewedBy: true,
-  reviewedAt: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertPatientRegistrationSchema = createInsertSchema(patientRegistrations, {
-  dateOfBirth: z.string().min(1, "Data de nascimento é obrigatória"),
-}).omit({
-  id: true,
-  status: true,
-  userId: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-// Registration types
-export type InsertDoctorRegistration = z.infer<typeof insertDoctorRegistrationSchema>;
-export type DoctorRegistration = typeof doctorRegistrations.$inferSelect;
-
-export type InsertPatientRegistration = z.infer<typeof insertPatientRegistrationSchema>;
-export type PatientRegistration = typeof patientRegistrations.$inferSelect;
-
-// Auth schemas for credential-based authentication MVP
-export const insertCredentialUserSchema = createInsertSchema(users, {
-  email: z.string().email("Email inválido"),
-  passwordHash: z.string().min(1, "Hash da senha obrigatório"),
-  role: z.enum(["patient", "doctor", "admin"]),
-  firstName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-  lastName: z.string().min(2, "Sobrenome deve ter pelo menos 2 caracteres"),
-}).omit({ 
-  id: true, 
-  createdAt: true, 
-  updatedAt: true,
-  isEmailVerified: true,
-  profileImageUrl: true 
-});
-
-export const loginSchema = z.object({
-  email: z.string().email("Email inválido"),
-  password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-});
-
-export const registerSchema = z.object({
-  email: z.string().email("Email inválido"),
-  password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
-  confirmPassword: z.string().min(6, "Confirmação de senha obrigatória"),
-  firstName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-  lastName: z.string().min(2, "Sobrenome deve ter pelo menos 2 caracteres"),
-  role: z.enum(["patient", "doctor"]),
-  // Doctor-specific fields
-  specialty: z.string().optional(),
-  licenseNumber: z.string().optional(),
-}).transform((data) => ({
-  ...data,
-  name: `${data.firstName} ${data.lastName}` // Create name field from firstName + lastName
-})).refine((data) => data.password === data.confirmPassword, {
-  message: "Senhas não conferem",
-  path: ["confirmPassword"],
-}).refine((data) => {
-  if (data.role === "doctor") {
-    return data.specialty && data.licenseNumber;
-  }
-  return true;
-}, {
-  message: "Especialidade e número do CRM são obrigatórios para médicos",
-  path: ["specialty"],
-});
-
-export type LoginRequest = z.infer<typeof loginSchema>;
-export type RegisterRequest = z.infer<typeof registerSchema>;
-export type CredentialUser = z.infer<typeof insertCredentialUserSchema>;
-
-// Consultation Records types
-export const insertConsultationRecordSchema = createInsertSchema(consultationRecords).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export type InsertConsultationRecord = z.infer<typeof insertConsultationRecordSchema>;
-export type ConsultationRecord = typeof consultationRecords.$inferSelect;
-
-// CID Codes types
-export const insertCidCodeSchema = createInsertSchema(cidCodes).omit({
-  id: true,
-  createdAt: true,
-});
-
-export type InsertCidCode = z.infer<typeof insertCidCodeSchema>;
-export type CidCode = typeof cidCodes.$inferSelect;

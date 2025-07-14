@@ -7,8 +7,8 @@ import { setupVite, serveStatic } from './vite';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 🔧 CORREÇÃO CRÍTICA: Porta compatível com Render e outras plataformas
-const PORT = (process.env.PORT && parseInt(process.env.PORT)) || 10000;
+// 🔧 CORREÇÃO CRÍTICA: Porta compatível com Replit (confirmado funcionando)
+const PORT = (process.env.PORT && parseInt(process.env.PORT)) || 5000;
 
 const app = express();
 

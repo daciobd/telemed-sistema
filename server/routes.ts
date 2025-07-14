@@ -1103,6 +1103,309 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===============================================
+  // PATIENT JOURNEY VISUALIZATION API
+  // ===============================================
+  
+  // Get patient journey events
+  app.get('/api/patient-journey/events/:patientId', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const patientId = parseInt(req.params.patientId);
+      const events = await storage.getPatientJourneyEvents(patientId);
+      res.json(events);
+    } catch (error) {
+      console.error("Error fetching patient journey events:", error);
+      res.status(500).json({ message: "Failed to fetch journey events" });
+    }
+  });
+
+  // Create patient journey event
+  app.post('/api/patient-journey/events', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const eventData = req.body;
+      const event = await storage.createPatientJourneyEvent(eventData);
+      res.status(201).json(event);
+    } catch (error) {
+      console.error("Error creating patient journey event:", error);
+      res.status(500).json({ message: "Failed to create journey event" });
+    }
+  });
+
+  // Get patient health metrics
+  app.get('/api/patient-journey/metrics/:patientId', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const patientId = parseInt(req.params.patientId);
+      const metricType = req.query.type as string | undefined;
+      const metrics = await storage.getPatientHealthMetrics(patientId, metricType);
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error fetching patient health metrics:", error);
+      res.status(500).json({ message: "Failed to fetch health metrics" });
+    }
+  });
+
+  // Create patient health metric
+  app.post('/api/patient-journey/metrics', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const metricData = req.body;
+      const metric = await storage.createPatientHealthMetric(metricData);
+      res.status(201).json(metric);
+    } catch (error) {
+      console.error("Error creating patient health metric:", error);
+      res.status(500).json({ message: "Failed to create health metric" });
+    }
+  });
+
+  // Get patient journey milestones
+  app.get('/api/patient-journey/milestones/:patientId', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const patientId = parseInt(req.params.patientId);
+      const milestones = await storage.getPatientJourneyMilestones(patientId);
+      res.json(milestones);
+    } catch (error) {
+      console.error("Error fetching patient journey milestones:", error);
+      res.status(500).json({ message: "Failed to fetch journey milestones" });
+    }
+  });
+
+  // Create patient journey milestone
+  app.post('/api/patient-journey/milestones', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const milestoneData = req.body;
+      const milestone = await storage.createPatientJourneyMilestone(milestoneData);
+      res.status(201).json(milestone);
+    } catch (error) {
+      console.error("Error creating patient journey milestone:", error);
+      res.status(500).json({ message: "Failed to create journey milestone" });
+    }
+  });
+
+  // Update patient journey milestone
+  app.put('/api/patient-journey/milestones/:id', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updateData = req.body;
+      const milestone = await storage.updatePatientJourneyMilestone(id, updateData);
+      res.json(milestone);
+    } catch (error) {
+      console.error("Error updating patient journey milestone:", error);
+      res.status(500).json({ message: "Failed to update journey milestone" });
+    }
+  });
+
+  // Demo API to populate sample patient journey data
+  app.post('/api/patient-journey/populate-demo/:patientId', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const patientId = parseInt(req.params.patientId);
+      
+      // Create sample journey events
+      const sampleEvents = [
+        {
+          patientId,
+          eventType: "registration",
+          eventDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
+          description: "Patient registered on the platform",
+          severity: "low" as const,
+          category: "administrative" as const,
+          outcome: "positive" as const,
+          metadata: { source: "demo" },
+          tags: ["onboarding", "initial"]
+        },
+        {
+          patientId,
+          eventType: "appointment_scheduled",
+          eventDate: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000), // 25 days ago
+          description: "First consultation scheduled",
+          severity: "low" as const,
+          category: "administrative" as const,
+          outcome: "positive" as const,
+          metadata: { doctorSpecialty: "Clínica Geral" },
+          tags: ["consultation", "first_visit"]
+        },
+        {
+          patientId,
+          eventType: "appointment_completed",
+          eventDate: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000), // 24 days ago
+          description: "Initial consultation completed successfully",
+          severity: "low" as const,
+          category: "clinical" as const,
+          outcome: "positive" as const,
+          metadata: { duration: 45, satisfaction: 5 },
+          tags: ["consultation", "completed"]
+        },
+        {
+          patientId,
+          eventType: "prescription_issued",
+          eventDate: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000), // 24 days ago
+          description: "Medication prescribed for hypertension",
+          severity: "medium" as const,
+          category: "therapeutic" as const,
+          outcome: "positive" as const,
+          metadata: { medications: ["Losartana 50mg", "Hidroclorotiazida 25mg"] },
+          tags: ["medication", "hypertension"]
+        },
+        {
+          patientId,
+          eventType: "lab_test_ordered",
+          eventDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000), // 20 days ago
+          description: "Blood tests ordered for cholesterol and glucose",
+          severity: "medium" as const,
+          category: "diagnostic" as const,
+          outcome: "pending" as const,
+          metadata: { tests: ["Colesterol Total", "Glicemia de Jejum", "Hemograma"] },
+          tags: ["lab_test", "routine"]
+        },
+        {
+          patientId,
+          eventType: "symptom_reported",
+          eventDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
+          description: "Patient reported mild headaches",
+          severity: "medium" as const,
+          category: "clinical" as const,
+          outcome: "neutral" as const,
+          metadata: { intensity: 4, frequency: "ocasional" },
+          tags: ["symptoms", "headache"]
+        },
+        {
+          patientId,
+          eventType: "follow_up_scheduled",
+          eventDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
+          description: "Follow-up appointment scheduled",
+          severity: "low" as const,
+          category: "administrative" as const,
+          outcome: "positive" as const,
+          metadata: { purpose: "medication_review" },
+          tags: ["follow_up", "medication"]
+        }
+      ];
+
+      // Create sample health metrics
+      const sampleMetrics = [
+        {
+          patientId,
+          metricType: "blood_pressure",
+          value: 140,
+          unit: "mmHg (systolic)",
+          normalRangeMin: 90,
+          normalRangeMax: 120,
+          isNormal: false,
+          recordedAt: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000),
+          recordedBy: "doctor" as const,
+          notes: "Slightly elevated, monitoring needed"
+        },
+        {
+          patientId,
+          metricType: "blood_pressure",
+          value: 90,
+          unit: "mmHg (diastolic)",
+          normalRangeMin: 60,
+          normalRangeMax: 80,
+          isNormal: false,
+          recordedAt: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000),
+          recordedBy: "doctor" as const,
+          notes: "Elevated diastolic pressure"
+        },
+        {
+          patientId,
+          metricType: "heart_rate",
+          value: 72,
+          unit: "bpm",
+          normalRangeMin: 60,
+          normalRangeMax: 100,
+          isNormal: true,
+          recordedAt: new Date(Date.now() - 24 * 24 * 60 * 60 * 1000),
+          recordedBy: "doctor" as const,
+          notes: "Normal resting heart rate"
+        },
+        {
+          patientId,
+          metricType: "weight",
+          value: 75.5,
+          unit: "kg",
+          normalRangeMin: 65,
+          normalRangeMax: 80,
+          isNormal: true,
+          recordedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+          recordedBy: "patient" as const,
+          notes: "Weight stable"
+        },
+        {
+          patientId,
+          metricType: "pain_level",
+          value: 3,
+          unit: "scale 0-10",
+          normalRangeMin: 0,
+          normalRangeMax: 2,
+          isNormal: false,
+          recordedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+          recordedBy: "patient" as const,
+          notes: "Mild headache episodes"
+        }
+      ];
+
+      // Create sample milestones
+      const sampleMilestones = [
+        {
+          patientId,
+          title: "Blood Pressure Control",
+          description: "Achieve target blood pressure below 130/80 mmHg",
+          targetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+          milestoneType: "treatment_goal" as const,
+          status: "in_progress" as const,
+          priority: "high" as const,
+          progress: 40
+        },
+        {
+          patientId,
+          title: "Medication Adherence",
+          description: "Take prescribed medications consistently for 90 days",
+          targetDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 days from now
+          milestoneType: "treatment_goal" as const,
+          status: "in_progress" as const,
+          priority: "high" as const,
+          progress: 75
+        },
+        {
+          patientId,
+          title: "Regular Exercise Routine",
+          description: "Establish 30 minutes of daily exercise",
+          targetDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 days from now
+          milestoneType: "lifestyle_change" as const,
+          status: "planned" as const,
+          priority: "medium" as const,
+          progress: 20
+        },
+        {
+          patientId,
+          title: "Follow-up Lab Tests",
+          description: "Complete cholesterol and glucose follow-up tests",
+          targetDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // 15 days from now
+          milestoneType: "diagnostic_milestone" as const,
+          status: "planned" as const,
+          priority: "medium" as const,
+          progress: 0
+        }
+      ];
+
+      // Create all sample data
+      const events = await Promise.all(sampleEvents.map(event => storage.createPatientJourneyEvent(event)));
+      const metrics = await Promise.all(sampleMetrics.map(metric => storage.createPatientHealthMetric(metric)));
+      const milestones = await Promise.all(sampleMilestones.map(milestone => storage.createPatientJourneyMilestone(milestone)));
+
+      res.status(201).json({
+        message: "Sample patient journey data created successfully",
+        created: {
+          events: events.length,
+          metrics: metrics.length,
+          milestones: milestones.length
+        }
+      });
+    } catch (error) {
+      console.error("Error populating demo patient journey data:", error);
+      res.status(500).json({ message: "Failed to populate demo data" });
+    }
+  });
+
   // Reports API
   app.get('/api/reports/:type', isAuthenticated, async (req: any, res) => {
     try {

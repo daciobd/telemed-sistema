@@ -33,11 +33,16 @@ import {
   clinicalExams,
   medicalReferrals,
   medicalEvaluations,
-  paymentTransactions,
-  doctorEarnings,
   psychologistInterviews,
-  type PaymentTransaction,
-  type InsertPaymentTransaction,
+  patientJourneyEvents,
+  patientHealthMetrics,
+  patientJourneyMilestones,
+  type PatientJourneyEvent,
+  type InsertPatientJourneyEvent,
+  type PatientHealthMetric,
+  type InsertPatientHealthMetric,
+  type PatientJourneyMilestone,
+  type InsertPatientJourneyMilestone,
   type ClinicalExam,
   type InsertClinicalExam,
   type MedicalReferral,
@@ -164,10 +169,14 @@ export interface IStorage {
   getMedicalEvaluationsByPatient(patientId: number): Promise<any[]>;
   getMedicalEvaluationByAppointment(appointmentId: number): Promise<any | undefined>;
   
-  // Payment operations
-  createPaymentTransaction(transaction: any): Promise<any>;
-  getPaymentTransactionsByDoctor(doctorId: number): Promise<any[]>;
-  getDoctorEarnings(doctorId: number): Promise<any[]>;
+  // Patient Journey Visualization operations
+  createPatientJourneyEvent(event: InsertPatientJourneyEvent): Promise<PatientJourneyEvent>;
+  getPatientJourneyEvents(patientId: number): Promise<PatientJourneyEvent[]>;
+  createPatientHealthMetric(metric: InsertPatientHealthMetric): Promise<PatientHealthMetric>;
+  getPatientHealthMetrics(patientId: number, metricType?: string): Promise<PatientHealthMetric[]>;
+  createPatientJourneyMilestone(milestone: InsertPatientJourneyMilestone): Promise<PatientJourneyMilestone>;
+  getPatientJourneyMilestones(patientId: number): Promise<PatientJourneyMilestone[]>;
+  updatePatientJourneyMilestone(id: number, updates: Partial<InsertPatientJourneyMilestone>): Promise<PatientJourneyMilestone>;
   
   // Registration operations
   createDoctorRegistration(registration: InsertDoctorRegistration): Promise<DoctorRegistration>;
@@ -962,29 +971,67 @@ export class DatabaseStorage implements IStorage {
     return evaluation;
   }
 
-  // Payment operations
-  async createPaymentTransaction(transaction: any): Promise<any> {
+  // Patient Journey Visualization operations
+  async createPatientJourneyEvent(event: InsertPatientJourneyEvent): Promise<PatientJourneyEvent> {
     const [result] = await db
-      .insert(paymentTransactions)
-      .values(transaction)
+      .insert(patientJourneyEvents)
+      .values(event)
       .returning();
     return result;
   }
 
-  async getPaymentTransactionsByDoctor(doctorId: number): Promise<any[]> {
+  async getPatientJourneyEvents(patientId: number): Promise<PatientJourneyEvent[]> {
     return await db
       .select()
-      .from(paymentTransactions)
-      .where(eq(paymentTransactions.doctorId, doctorId))
-      .orderBy(desc(paymentTransactions.createdAt));
+      .from(patientJourneyEvents)
+      .where(eq(patientJourneyEvents.patientId, patientId))
+      .orderBy(desc(patientJourneyEvents.eventDate));
   }
 
-  async getDoctorEarnings(doctorId: number): Promise<any[]> {
+  async createPatientHealthMetric(metric: InsertPatientHealthMetric): Promise<PatientHealthMetric> {
+    const [result] = await db
+      .insert(patientHealthMetrics)
+      .values(metric)
+      .returning();
+    return result;
+  }
+
+  async getPatientHealthMetrics(patientId: number, metricType?: string): Promise<PatientHealthMetric[]> {
+    const query = db
+      .select()
+      .from(patientHealthMetrics)
+      .where(eq(patientHealthMetrics.patientId, patientId));
+    
+    if (metricType) {
+      query.where(eq(patientHealthMetrics.metricType, metricType as any));
+    }
+    
+    return await query.orderBy(desc(patientHealthMetrics.recordedAt));
+  }
+
+  async createPatientJourneyMilestone(milestone: InsertPatientJourneyMilestone): Promise<PatientJourneyMilestone> {
+    const [result] = await db
+      .insert(patientJourneyMilestones)
+      .values(milestone)
+      .returning();
+    return result;
+  }
+
+  async getPatientJourneyMilestones(patientId: number): Promise<PatientJourneyMilestone[]> {
     return await db
       .select()
-      .from(doctorEarnings)
-      .where(eq(doctorEarnings.doctorId, doctorId))
-      .orderBy(desc(doctorEarnings.createdAt));
+      .from(patientJourneyMilestones)
+      .where(eq(patientJourneyMilestones.patientId, patientId))
+      .orderBy(desc(patientJourneyMilestones.createdAt));
+  }
+
+  async updatePatientJourneyMilestone(id: number, updates: Partial<InsertPatientJourneyMilestone>): Promise<PatientJourneyMilestone> {
+    const [result] = await db
+      .update(patientJourneyMilestones)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(patientJourneyMilestones.id, id))
+      .returning();
+    return result;
   }
 
   // Clinical exam operations
@@ -1449,6 +1496,75 @@ export class DatabaseStorage implements IStorage {
       .leftJoin(users, eq(patients.userId, users.id))
       .where(eq(appointments.specialty, specialty))
       .orderBy(desc(appointments.createdAt));
+  }
+
+  // ===============================================
+  // PATIENT JOURNEY VISUALIZATION METHODS
+  // ===============================================
+
+  async createPatientJourneyEvent(event: InsertPatientJourneyEvent): Promise<PatientJourneyEvent> {
+    const [createdEvent] = await db
+      .insert(patientJourneyEvents)
+      .values(event)
+      .returning();
+    return createdEvent;
+  }
+
+  async getPatientJourneyEvents(patientId: number): Promise<PatientJourneyEvent[]> {
+    return await db
+      .select()
+      .from(patientJourneyEvents)
+      .where(eq(patientJourneyEvents.patientId, patientId))
+      .orderBy(desc(patientJourneyEvents.eventDate));
+  }
+
+  async createPatientHealthMetric(metric: InsertPatientHealthMetric): Promise<PatientHealthMetric> {
+    const [createdMetric] = await db
+      .insert(patientHealthMetrics)
+      .values(metric)
+      .returning();
+    return createdMetric;
+  }
+
+  async getPatientHealthMetrics(patientId: number, metricType?: string): Promise<PatientHealthMetric[]> {
+    let query = db
+      .select()
+      .from(patientHealthMetrics)
+      .where(eq(patientHealthMetrics.patientId, patientId));
+
+    if (metricType && metricType !== "all") {
+      query = query.where(eq(patientHealthMetrics.metricType, metricType));
+    }
+
+    return await query.orderBy(desc(patientHealthMetrics.recordedAt));
+  }
+
+  async createPatientJourneyMilestone(milestone: InsertPatientJourneyMilestone): Promise<PatientJourneyMilestone> {
+    const [createdMilestone] = await db
+      .insert(patientJourneyMilestones)
+      .values(milestone)
+      .returning();
+    return createdMilestone;
+  }
+
+  async getPatientJourneyMilestones(patientId: number): Promise<PatientJourneyMilestone[]> {
+    return await db
+      .select()
+      .from(patientJourneyMilestones)
+      .where(eq(patientJourneyMilestones.patientId, patientId))
+      .orderBy(desc(patientJourneyMilestones.createdAt));
+  }
+
+  async updatePatientJourneyMilestone(
+    id: number, 
+    updates: Partial<InsertPatientJourneyMilestone>
+  ): Promise<PatientJourneyMilestone> {
+    const [updatedMilestone] = await db
+      .update(patientJourneyMilestones)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(patientJourneyMilestones.id, id))
+      .returning();
+    return updatedMilestone;
   }
 }
 
