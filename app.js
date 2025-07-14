@@ -1,6 +1,6 @@
 const http = require('http');
 const PORT = process.env.PORT || 3000;
-
+console.log("[DEBUG] Valor de PORT:", PORT);
 console.log('TeleMed Sistema iniciando...');
 
 const htmlPage = `<!DOCTYPE html>
@@ -177,7 +177,7 @@ console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
 
 // Configuração principal do servidor (ÚNICA chamada listen)
 server.listen(PORT, () => {
-  console.log(`TeleMed Sistema rodando na porta ${PORT}`);
+  console.log("TeleMed Sistema rodando na porta", PORT); // Versão alternativa
   console.log(`Health check: http://localhost:${PORT}/health`);
 });
 
