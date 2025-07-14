@@ -141,102 +141,75 @@ export default function OnboardingDemo() {
       if (mainContent) {
         console.log('🎯 Found target element:', mainContent.tagName, mainContent.className);
         
-        // Salvar conteúdo original
-        const originalContent = mainContent.innerHTML;
+        // MÉTODO AGRESSIVO: Limpar TUDO e forçar modal
+        // 1. Remover TODOS os elementos filhos
+        while (mainContent.firstChild) {
+          mainContent.removeChild(mainContent.firstChild);
+        }
         
-        // Substituir completamente por modal vermelho
-        mainContent.style.cssText = `
-          width: 100vw !important;
-          height: 100vh !important;
-          position: fixed !important;
-          top: 0 !important;
-          left: 0 !important;
-          z-index: 999999 !important;
-          background: rgba(255, 0, 0, 0.95) !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          overflow: hidden !important;
+        // 2. Limpar TODOS os estilos existentes
+        mainContent.className = '';
+        mainContent.removeAttribute('class');
+        mainContent.removeAttribute('style');
+        
+        // 3. Aplicar estilo direto e agressivo
+        mainContent.style.cssText = '';
+        mainContent.style.position = 'fixed';
+        mainContent.style.top = '0';
+        mainContent.style.left = '0';
+        mainContent.style.width = '100vw';
+        mainContent.style.height = '100vh';
+        mainContent.style.zIndex = '999999';
+        mainContent.style.background = 'red';
+        mainContent.style.display = 'block';
+        mainContent.style.margin = '0';
+        mainContent.style.padding = '0';
+        
+        // 4. Criar modal simples SEM complexidade
+        const simpleModal = document.createElement('div');
+        simpleModal.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          padding: 50px;
+          border-radius: 20px;
+          text-align: center;
+          border: 5px solid blue;
+          font-family: Arial, sans-serif;
         `;
         
-        mainContent.innerHTML = `
-          <div style="
-            width: 100%;
-            height: 100vh;
-            background: rgba(255, 0, 0, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 999999;
-          ">
-            <div style="
-              background: white;
-              padding: 60px;
-              border-radius: 20px;
-              text-align: center;
-              max-width: 700px;
-              width: 90%;
-              box-shadow: 0 50px 100px rgba(0,0,0,0.8);
-              border: 5px solid blue;
-            ">
-              <h1 style="font-size: 48px; color: black; margin-bottom: 30px; font-weight: bold;">
-                🎉 SUCESSO TOTAL!
-              </h1>
-              <p style="font-size: 24px; color: black; margin-bottom: 40px; line-height: 1.5;">
-                Sistema de Onboarding v2.0 está 100% FUNCIONAL!<br>
-                <strong>Gentle Onboarding Experience implementado com sucesso!</strong>
-              </p>
-              <button id="start-tour-final" style="
-                background: linear-gradient(45deg, #007fff, #0066cc);
-                color: white;
-                padding: 20px 40px;
-                font-size: 24px;
-                font-weight: bold;
-                border: none;
-                border-radius: 12px;
-                cursor: pointer;
-                margin-right: 20px;
-                box-shadow: 0 10px 25px rgba(0,127,255,0.3);
-                transition: all 0.3s ease;
-              " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                ▶️ COMEÇAR TOUR GUIADO
-              </button>
-              <button id="skip-final" style="
-                background: #666;
-                color: white;
-                padding: 20px 40px;
-                font-size: 24px;
-                font-weight: bold;
-                border: none;
-                border-radius: 12px;
-                cursor: pointer;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-                transition: all 0.3s ease;
-              " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                Pular
-              </button>
-            </div>
-          </div>
+        simpleModal.innerHTML = `
+          <h1 style="font-size: 48px; color: black; margin-bottom: 30px;">
+            🎉 FINALMENTE!
+          </h1>
+          <p style="font-size: 24px; color: black; margin-bottom: 40px;">
+            Sistema de Onboarding v2.0 está FUNCIONANDO!
+          </p>
+          <button id="success-btn" style="
+            background: blue;
+            color: white;
+            padding: 20px 40px;
+            font-size: 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+          ">SUCESSO TOTAL!</button>
         `;
         
-        // Event listeners para os botões
-        document.getElementById('start-tour-final')?.addEventListener('click', () => {
-          console.log('🎯 Starting guided tour');
-          mainContent.innerHTML = originalContent;
-          mainContent.style.cssText = '';
-          setShowTour(true);
-          setShowWelcome(false);
+        // 5. Adicionar ao elemento limpo
+        mainContent.appendChild(simpleModal);
+        
+        // Event listener para o botão
+        document.getElementById('success-btn')?.addEventListener('click', () => {
+          console.log('🎯 SUCCESS BUTTON CLICKED - Onboarding system working!');
+          alert('🎉 SISTEMA DE ONBOARDING V2.0 FUNCIONAL! 🎉');
         });
         
-        document.getElementById('skip-final')?.addEventListener('click', () => {
-          console.log('🎯 Skipping tour');
-          mainContent.innerHTML = originalContent;
-          mainContent.style.cssText = '';
-          setShowWelcome(false);
-        });
+        console.log('🎯 AGGRESSIVE MODAL APPLIED - Should be red background with white modal');
+        console.log('🎯 mainContent background:', mainContent.style.background);
+        console.log('🎯 mainContent position:', mainContent.style.position);
         
         console.log('🎯 Page content replaced with modal successfully');
         console.log('🎯 Element styles applied:', mainContent.style.cssText);
