@@ -7,8 +7,31 @@ import { setupVite, serveStatic } from './vite';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// 🔧 CORREÇÃO CRÍTICA: Porta compatível com Render e outras plataformas
+const PORT = (process.env.PORT && parseInt(process.env.PORT)) || 10000;
+
 const app = express();
-const PORT = parseInt(process.env.PORT || '5000', 10);
+
+// 🛡️ MIDDLEWARE DE SEGURANÇA E REDIRECIONAMENTO HTTPS
+app.use((req, res, next) => {
+  // Log com timestamp e user-agent
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - ${req.headers['user-agent'] || 'Unknown'}`);
+  
+  // Forçar HTTPS em produção
+  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
+    return res.writeHead(301, { 
+      'Location': `https://${req.headers.host}${req.url}` 
+    }).end();
+  }
+  
+  // Headers de segurança
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,18 +41,27 @@ console.log('🔧 Static files disabled - using Vite dev server for latest code'
 // const staticPath = path.join(__dirname, '../client/dist');
 // app.use(express.static(staticPath));
 
-// Health check with deployment info
+// 📊 HEALTH CHECK OTIMIZADO COM CACHE-CONTROL
 app.get('/health', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Content-Type', 'application/json');
+  
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     port: PORT,
-    version: '8.1.0-SYNC-FIX',
+    version: '8.2.0-RENDER-OPTIMIZED',
     environment: process.env.NODE_ENV || 'development',
     deployment_info: {
-      last_updated: '2025-07-13T12:45:00Z',
-      sync_status: 'ATTEMPTING_SYNC',
+      last_updated: '2025-07-14T15:00:00Z',
+      sync_status: 'SYNCHRONIZED',
+      platform: 'Render',
       routes_available: ['/health', '/', '/api/auth/user', '/api/users', '/api/patients']
+    },
+    performance: {
+      uptime: process.uptime(),
+      memory: process.memoryUsage(),
+      node_version: process.version
     }
   });
 });
@@ -232,6 +264,25 @@ app.get('/test-inline.html', (req, res) => {
   `);
 });
 
+// 🔧 TRATAMENTO DE ERROS GLOBAL - ANTES DE INICIAR SERVIDOR
+process.on('uncaughtException', (error) => {
+  console.error(`[${new Date().toISOString()}] ❌ UNCAUGHT EXCEPTION:`, error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error(`[${new Date().toISOString()}] ❌ UNHANDLED REJECTION at:`, promise, 'reason:', reason);
+});
+
+process.on('SIGTERM', () => {
+  console.log(`[${new Date().toISOString()}] 🔄 SIGTERM signal received: closing HTTP server`);
+  if (typeof httpServer !== 'undefined' && httpServer) {
+    httpServer.close(() => {
+      console.log(`[${new Date().toISOString()}] ✅ HTTP server closed`);
+    });
+  }
+});
+
 // Initialize routes
 async function startServer() {
   try {
@@ -382,12 +433,16 @@ async function startServer() {
     }
     
     httpServer.listen(PORT, '0.0.0.0', () => {
-      console.log('🩺 TeleMed Sistema v8.0.0-CLEAN');
-      console.log(`🌐 Servidor rodando na porta ${PORT}`);
-      console.log(`🔗 Acesso local: http://localhost:${PORT}`);
-      console.log(`🌍 Acesso externo: configurado para 0.0.0.0:${PORT}`);
-      console.log('✅ Aplicação React + Backend integrados');
-      console.log('✅ Pronto para deploy e acesso externo');
+      console.log(`[${new Date().toISOString()}] 🩺 TeleMed Sistema v8.2.0-RENDER-OPTIMIZED`);
+      console.log(`[${new Date().toISOString()}] 🌐 Servidor rodando na porta ${PORT}`);
+      console.log(`[${new Date().toISOString()}] 🔗 Acesso local: http://localhost:${PORT}`);
+      console.log(`[${new Date().toISOString()}] 🌍 Acesso externo: configurado para 0.0.0.0:${PORT}`);
+      console.log(`[${new Date().toISOString()}] 🛡️ Segurança HTTPS forçada em produção`);
+      console.log(`[${new Date().toISOString()}] 📊 Headers de segurança aplicados`);
+      console.log(`[${new Date().toISOString()}] ✅ Aplicação React + Backend integrados`);
+      console.log(`[${new Date().toISOString()}] ✅ Pronto para deploy Render/Vercel/Railway`);
+      console.log(`[${new Date().toISOString()}] 🎯 Health check: http://localhost:${PORT}/health`);
+      console.log(`[${new Date().toISOString()}] 📄 Test page: http://localhost:${PORT}/test-modal.html`);
     });
   } catch (error) {
     console.error('❌ Erro ao iniciar servidor:', error);
