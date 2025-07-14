@@ -156,7 +156,7 @@ const htmlPage = `<!DOCTYPE html>
 </html>`;
 
 const server = http.createServer((req, res) => {
-  console.log(\`\${new Date().toISOString()} - \${req.method} \${req.url}\`);
+console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   
   if (req.url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
