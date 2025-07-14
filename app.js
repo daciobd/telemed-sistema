@@ -175,8 +175,8 @@ console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
 });
 
 server.listen(PORT, () => {
-  console.log(\`TeleMed Sistema rodando na porta \${PORT}\`);
-  console.log(\`Health check: http://localhost:\${PORT}/health\`);
+console.log(`TeleMed Sistema rodando na porta ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
   console.log('Sistema pronto para conexões!');
 });
 
