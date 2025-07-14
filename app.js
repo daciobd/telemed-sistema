@@ -188,6 +188,11 @@ process.on('SIGTERM', () => {
   console.log('Recebido SIGTERM, encerrando servidor...');
   server.close(() => {
     console.log('Servidor encerrado.');
+      //server.listen(PORT, () => {
+  console.log(`TeleMed Sistema rodando na porta ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log('Sistema pronto para conexões!');
+});
     process.exit(0);
   });
 });
