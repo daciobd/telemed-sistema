@@ -1,6 +1,9 @@
 const http = require('http');
-const PORT = process.env.PORT || 3000;
-console.log("[DEBUG] Valor de PORT:", PORT);
+const PORT = (process.env.PORT && parseInt(process.env.PORT)) || 10000; // Força uso da porta do Render
+console.log("[DEBUG] Ambiente:", {
+  PORT: process.env.PORT, 
+  NODE_ENV: process.env.NODE_ENV
+});
 console.log('TeleMed Sistema iniciando...');
 
 const htmlPage = `<!DOCTYPE html>
@@ -164,8 +167,9 @@ console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
     return;
   }
   
-  res.writeHead(200, {
+ res.writeHead(200, {
     'Content-Type': 'text/html; charset=utf-8',
+    'X-Powered-By': 'TeleMed API',
     'Cache-Control': 'no-cache, no-store, must-revalidate',
     'Pragma': 'no-cache',
     'Expires': '0'
