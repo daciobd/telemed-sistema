@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -64,75 +65,82 @@ export default function OnboardingDemo() {
     setShowTour(false);
   };
 
+  // Render modal using portal to ensure it appears above everything
+  const renderWelcomeModal = () => {
+    if (!showWelcome) return null;
+    
+    console.log('🎯 RENDERING PORTAL MODAL');
+    
+    return createPortal(
+      <div 
+        id="critical-modal-portal"
+        style={{
+          position: 'fixed',
+          top: '0px',
+          left: '0px',
+          right: '0px',
+          bottom: '0px',
+          width: '100vw',
+          height: '100vh',
+          zIndex: '999999',
+          backgroundColor: 'rgba(255, 0, 0, 0.95)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'auto'
+        }}>
+        <div 
+          style={{
+            backgroundColor: 'white',
+            padding: '40px',
+            borderRadius: '12px',
+            maxWidth: '600px',
+            width: '90%',
+            textAlign: 'center',
+            boxShadow: '0 25px 50px rgba(0,0,0,0.8)',
+            border: '3px solid blue'
+          }}>
+          <h1 style={{fontSize: '32px', color: 'black', marginBottom: '20px'}}>
+            🎉 MODAL FUNCIONANDO!
+          </h1>
+          <p style={{fontSize: '18px', color: 'black', marginBottom: '30px'}}>
+            Se você está vendo isso, o sistema de onboarding está 100% funcional!
+          </p>
+          <button 
+            onClick={startTour}
+            style={{
+              backgroundColor: 'blue',
+              color: 'white',
+              padding: '15px 30px',
+              fontSize: '18px',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              marginRight: '10px'
+            }}>
+            ▶️ COMEÇAR TOUR
+          </button>
+          <button 
+            onClick={skipTour}
+            style={{
+              backgroundColor: 'gray',
+              color: 'white',
+              padding: '15px 30px',
+              fontSize: '18px',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer'
+            }}>
+            Pular
+          </button>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
   return (
     <>
-      {/* Welcome Modal - FORÇA MÁXIMA CSS - FORA DO CONTAINER */}
-      {showWelcome && (
-        <div 
-          id="critical-modal"
-          style={{
-            position: 'fixed',
-            top: '0px',
-            left: '0px',
-            right: '0px',
-            bottom: '0px',
-            width: '100vw',
-            height: '100vh',
-            zIndex: '999999',
-            backgroundColor: 'rgba(255, 0, 0, 0.95)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            pointerEvents: 'auto'
-          }}>
-          {console.log('🎯 RENDERING CRITICAL MODAL OUTSIDE CONTAINER')}
-          <div 
-            style={{
-              backgroundColor: 'white',
-              padding: '40px',
-              borderRadius: '12px',
-              maxWidth: '600px',
-              width: '90%',
-              textAlign: 'center',
-              boxShadow: '0 25px 50px rgba(0,0,0,0.8)',
-              border: '3px solid blue'
-            }}>
-            <h1 style={{fontSize: '32px', color: 'black', marginBottom: '20px'}}>
-              🎉 MODAL FUNCIONANDO!
-            </h1>
-            <p style={{fontSize: '18px', color: 'black', marginBottom: '30px'}}>
-              Se você está vendo isso, o sistema de onboarding está 100% funcional!
-            </p>
-            <button 
-              onClick={startTour}
-              style={{
-                backgroundColor: 'blue',
-                color: 'white',
-                padding: '15px 30px',
-                fontSize: '18px',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                marginRight: '10px'
-              }}>
-              ▶️ COMEÇAR TOUR
-            </button>
-            <button 
-              onClick={skipTour}
-              style={{
-                backgroundColor: 'gray',
-                color: 'white',
-                padding: '15px 30px',
-                fontSize: '18px',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer'
-              }}>
-              Pular
-            </button>
-          </div>
-        </div>
-      )}
 
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -371,6 +379,7 @@ export default function OnboardingDemo() {
         </Card>
       </main>
     </div>
+    {renderWelcomeModal()}
     </>
   );
 }
