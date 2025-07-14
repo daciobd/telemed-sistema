@@ -65,6 +65,75 @@ export default function OnboardingDemo() {
   };
 
   return (
+    <>
+      {/* Welcome Modal - FORÇA MÁXIMA CSS - FORA DO CONTAINER */}
+      {showWelcome && (
+        <div 
+          id="critical-modal"
+          style={{
+            position: 'fixed',
+            top: '0px',
+            left: '0px',
+            right: '0px',
+            bottom: '0px',
+            width: '100vw',
+            height: '100vh',
+            zIndex: '999999',
+            backgroundColor: 'rgba(255, 0, 0, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'auto'
+          }}>
+          {console.log('🎯 RENDERING CRITICAL MODAL OUTSIDE CONTAINER')}
+          <div 
+            style={{
+              backgroundColor: 'white',
+              padding: '40px',
+              borderRadius: '12px',
+              maxWidth: '600px',
+              width: '90%',
+              textAlign: 'center',
+              boxShadow: '0 25px 50px rgba(0,0,0,0.8)',
+              border: '3px solid blue'
+            }}>
+            <h1 style={{fontSize: '32px', color: 'black', marginBottom: '20px'}}>
+              🎉 MODAL FUNCIONANDO!
+            </h1>
+            <p style={{fontSize: '18px', color: 'black', marginBottom: '30px'}}>
+              Se você está vendo isso, o sistema de onboarding está 100% funcional!
+            </p>
+            <button 
+              onClick={startTour}
+              style={{
+                backgroundColor: 'blue',
+                color: 'white',
+                padding: '15px 30px',
+                fontSize: '18px',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                marginRight: '10px'
+              }}>
+              ▶️ COMEÇAR TOUR
+            </button>
+            <button 
+              onClick={skipTour}
+              style={{
+                backgroundColor: 'gray',
+                color: 'white',
+                padding: '15px 30px',
+                fontSize: '18px',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer'
+              }}>
+              Pular
+            </button>
+          </div>
+        </div>
+      )}
+
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
@@ -97,74 +166,7 @@ export default function OnboardingDemo() {
         </div>
       </header>
 
-      {/* Welcome Modal - FORÇA MÁXIMA CSS */}
-      {showWelcome && (
-        <div 
-          className="fixed inset-0 bg-red-500 bg-opacity-90 z-[9999] flex items-center justify-center"
-          style={{
-            position: 'fixed !important', 
-            top: '0px !important', 
-            left: '0px !important', 
-            right: '0px !important', 
-            bottom: '0px !important', 
-            zIndex: '99999 !important',
-            backgroundColor: 'rgba(255, 0, 0, 0.9) !important',
-            display: 'flex !important'
-          }}>
-          {console.log('🎯 RENDERING WELCOME MODAL - RED BACKGROUND')}
-          <div 
-            className="bg-white rounded-lg p-8 m-4 max-w-lg w-full shadow-2xl"
-            style={{
-              backgroundColor: 'white !important',
-              padding: '32px !important',
-              borderRadius: '8px !important',
-              maxWidth: '500px !important',
-              width: '100% !important',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9) !important'
-            }}>
-            <div className="text-center">
-              <div className="mb-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Stethoscope className="w-8 h-8 text-blue-600" />
-                </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Bem-vindo ao TeleMed!</h2>
-                <p className="text-gray-600 mb-6">
-                  Sua plataforma completa de telemedicina. Vamos fazer um tour rápido pelas principais funcionalidades?
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
-                <div className="text-center p-3 bg-blue-50 rounded-lg">
-                  <Video className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                  <p className="font-medium">Videoconsultas</p>
-                </div>
-                <div className="text-center p-3 bg-green-50 rounded-lg">
-                  <FileText className="w-6 h-6 text-green-600 mx-auto mb-2" />
-                  <p className="font-medium">Prontuário Digital</p>
-                </div>
-                <div className="text-center p-3 bg-purple-50 rounded-lg">
-                  <Pill className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-                  <p className="font-medium">Receitas Online</p>
-                </div>
-                <div className="text-center p-3 bg-orange-50 rounded-lg">
-                  <Calendar className="w-6 h-6 text-orange-600 mx-auto mb-2" />
-                  <p className="font-medium">Agendamento</p>
-                </div>
-              </div>
 
-              <div className="flex gap-3">
-                <Button onClick={skipTour} variant="outline" className="flex-1">
-                  Pular por agora
-                </Button>
-                <Button onClick={startTour} className="flex-1 bg-blue-600 hover:bg-blue-700">
-                  <PlayCircle className="w-4 h-4 mr-2" />
-                  ▶️ COMEÇAR TOUR
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Tour Modal */}
       {showTour && (
@@ -369,5 +371,6 @@ export default function OnboardingDemo() {
         </Card>
       </main>
     </div>
+    </>
   );
 }
