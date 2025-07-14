@@ -94,7 +94,21 @@ export default function OnboardingDemo() {
         </div>
       `;
 
+      // Try multiple insertion methods
       document.body.appendChild(modalDiv);
+      
+      // Also try prepending to ensure it's at the very top
+      document.body.insertBefore(modalDiv.cloneNode(true), document.body.firstChild);
+      
+      // Also try adding to HTML element itself
+      const htmlElement = document.documentElement;
+      const clonedModal = modalDiv.cloneNode(true);
+      clonedModal.id = 'direct-modal-html';
+      htmlElement.appendChild(clonedModal);
+      
+      console.log('🎯 Modal added to body, body.firstChild, and html element');
+      console.log('🎯 Body children count:', document.body.children.length);
+      console.log('🎯 Modal in DOM?', document.getElementById('direct-modal') !== null);
 
       // Event listeners
       document.getElementById('start-tour-btn')?.addEventListener('click', () => {
@@ -110,7 +124,11 @@ export default function OnboardingDemo() {
     };
 
     // Criar modal após 1 segundo
-    setTimeout(createDirectModal, 1000);
+    setTimeout(() => {
+      console.log('🎯 Testing browser alert first');
+      alert('TESTE: Se você vê este alert, JavaScript funciona!');
+      createDirectModal();
+    }, 1000);
   }, []);
 
   // Debug showWelcome changes
