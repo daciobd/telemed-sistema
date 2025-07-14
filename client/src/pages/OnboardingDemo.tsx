@@ -127,15 +127,38 @@ export default function OnboardingDemo() {
     setTimeout(() => {
       console.log('🎯 Final strategy: Modifying existing page content');
       
-      // Encontrar o elemento principal da página
-      const mainContent = document.querySelector('.min-h-screen');
+      // MÉTODO 1: Tentar múltiplos seletores
+      const possibleElements = [
+        document.querySelector('.min-h-screen'),
+        document.querySelector('body'),
+        document.querySelector('#root'),
+        document.querySelector('main'),
+        document.getElementById('app')
+      ];
+      
+      const mainContent = possibleElements.find(el => el !== null);
+      
       if (mainContent) {
-        console.log('🎯 Found main content, replacing with modal');
+        console.log('🎯 Found target element:', mainContent.tagName, mainContent.className);
         
         // Salvar conteúdo original
         const originalContent = mainContent.innerHTML;
         
-        // Substituir por modal vermelho
+        // Substituir completamente por modal vermelho
+        mainContent.style.cssText = `
+          width: 100vw !important;
+          height: 100vh !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          z-index: 999999 !important;
+          background: rgba(255, 0, 0, 0.95) !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          overflow: hidden !important;
+        `;
+        
         mainContent.innerHTML = `
           <div style="
             width: 100%;
@@ -203,6 +226,7 @@ export default function OnboardingDemo() {
         document.getElementById('start-tour-final')?.addEventListener('click', () => {
           console.log('🎯 Starting guided tour');
           mainContent.innerHTML = originalContent;
+          mainContent.style.cssText = '';
           setShowTour(true);
           setShowWelcome(false);
         });
@@ -210,12 +234,54 @@ export default function OnboardingDemo() {
         document.getElementById('skip-final')?.addEventListener('click', () => {
           console.log('🎯 Skipping tour');
           mainContent.innerHTML = originalContent;
+          mainContent.style.cssText = '';
           setShowWelcome(false);
         });
         
         console.log('🎯 Page content replaced with modal successfully');
+        console.log('🎯 Element styles applied:', mainContent.style.cssText);
       } else {
-        console.log('🎯 Main content not found');
+        console.log('🎯 No suitable element found, trying body directly');
+        
+        // Fallback: Modificar body diretamente
+        document.body.style.cssText = `
+          background: rgba(255, 0, 0, 0.95) !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          z-index: 999999 !important;
+          overflow: hidden !important;
+        `;
+        
+        // Criar elemento modal sobre o body
+        const modalElement = document.createElement('div');
+        modalElement.innerHTML = `
+          <div style="
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 700px;
+            width: 90%;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            border: 5px solid blue;
+          ">
+            <h1 style="font-size: 48px; color: black; margin-bottom: 30px; font-weight: bold;">
+              🎉 BODY MODIFICATION SUCCESS!
+            </h1>
+            <p style="font-size: 24px; color: black; margin-bottom: 40px; line-height: 1.5;">
+              Sistema de Onboarding v2.0 funcionando via BODY!
+            </p>
+          </div>
+        `;
+        
+        document.body.appendChild(modalElement);
+        console.log('🎯 Body modification applied as fallback');
       }
     }, 2000);
   }, []);
