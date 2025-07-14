@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import OnboardingDemo from "@/pages/OnboardingDemo";
 import OnboardingSuccess from "@/pages/OnboardingSuccess";
 import PatientJourneyPage from "@/pages/PatientJourneyPage";
+import PatientJourneyDemo from "@/pages/PatientJourneyDemo";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/onboarding-demo" component={OnboardingDemo} />
             <Route path="/success" component={OnboardingSuccess} />
             <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
+            <Route path="/patient-journey-demo" component={PatientJourneyDemo} />
             
             {/* 404 fallback */}
             <Route>

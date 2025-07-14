@@ -52,6 +52,10 @@ interface PatientJourneyVisualizationProps {
   patientId: number;
   patientName?: string;
   isDoctor?: boolean;
+  // Allow demo data to be passed in for testing
+  eventsQuery?: any;
+  metricsQuery?: any;
+  milestonesQuery?: any;
 }
 
 const eventTypeColors = {
@@ -87,26 +91,39 @@ const categoryIcons = {
   emergency: Brain
 };
 
-export default function PatientJourneyVisualization({ patientId, patientName, isDoctor = false }: PatientJourneyVisualizationProps) {
+export default function PatientJourneyVisualization({ 
+  patientId, 
+  patientName, 
+  isDoctor = false, 
+  eventsQuery, 
+  metricsQuery, 
+  milestonesQuery 
+}: PatientJourneyVisualizationProps) {
   const [selectedTimeRange, setSelectedTimeRange] = useState("30");
   const [selectedMetricType, setSelectedMetricType] = useState("all");
   const [activeTab, setActiveTab] = useState("timeline");
   const queryClient = useQueryClient();
 
-  const { data: journeyEvents = [], isLoading: eventsLoading } = useQuery({
+  // Use provided demo queries or default API queries
+  const eventsApiQuery = useQuery({
     queryKey: ["/api/patient-journey/events", patientId],
-    enabled: !!patientId,
+    enabled: !!patientId && !eventsQuery,
   });
 
-  const { data: healthMetrics = [], isLoading: metricsLoading } = useQuery({
+  const metricsApiQuery = useQuery({
     queryKey: ["/api/patient-journey/metrics", patientId, selectedMetricType],
-    enabled: !!patientId,
+    enabled: !!patientId && !metricsQuery,
   });
 
-  const { data: milestones = [], isLoading: milestonesLoading } = useQuery({
+  const milestonesApiQuery = useQuery({
     queryKey: ["/api/patient-journey/milestones", patientId],
-    enabled: !!patientId,
+    enabled: !!patientId && !milestonesQuery,
   });
+
+  // Use demo data if provided, otherwise use API data
+  const { data: journeyEvents = [], isLoading: eventsLoading } = eventsQuery || eventsApiQuery;
+  const { data: healthMetrics = [], isLoading: metricsLoading } = metricsQuery || metricsApiQuery;
+  const { data: milestones = [], isLoading: milestonesLoading } = milestonesQuery || milestonesApiQuery;
 
   // Filter data based on selected time range
   const filterByTimeRange = (data: any[], dateField: string) => {
