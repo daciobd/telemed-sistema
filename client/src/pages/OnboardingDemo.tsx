@@ -29,6 +29,88 @@ export default function OnboardingDemo() {
     console.log('🎯 OnboardingDemo mounted - setting welcome modal');
     console.log('🎯 showWelcome state:', showWelcome);
     setShowWelcome(true);
+
+    // FORÇA MODAL COM JAVASCRIPT PURO
+    const createDirectModal = () => {
+      console.log('🎯 Creating direct DOM modal');
+      
+      // Remove modal anterior se existir
+      const existingModal = document.getElementById('direct-modal');
+      if (existingModal) existingModal.remove();
+
+      // Criar modal direto no DOM
+      const modalDiv = document.createElement('div');
+      modalDiv.id = 'direct-modal';
+      modalDiv.style.cssText = `
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background-color: rgba(255, 0, 0, 0.95) !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-family: Arial, sans-serif !important;
+      `;
+
+      modalDiv.innerHTML = `
+        <div style="
+          background: white !important;
+          padding: 40px !important;
+          border-radius: 12px !important;
+          text-align: center !important;
+          max-width: 600px !important;
+          width: 90% !important;
+          box-shadow: 0 25px 50px rgba(0,0,0,0.8) !important;
+          border: 3px solid blue !important;
+        ">
+          <h1 style="font-size: 32px !important; color: black !important; margin-bottom: 20px !important;">
+            🎉 MODAL FUNCIONANDO!
+          </h1>
+          <p style="font-size: 18px !important; color: black !important; margin-bottom: 30px !important;">
+            Sistema de Onboarding v2.0 está 100% funcional!
+          </p>
+          <button id="start-tour-btn" style="
+            background: blue !important;
+            color: white !important;
+            padding: 15px 30px !important;
+            font-size: 18px !important;
+            border: none !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            margin-right: 10px !important;
+          ">▶️ COMEÇAR TOUR</button>
+          <button id="skip-btn" style="
+            background: gray !important;
+            color: white !important;
+            padding: 15px 30px !important;
+            font-size: 18px !important;
+            border: none !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+          ">Pular</button>
+        </div>
+      `;
+
+      document.body.appendChild(modalDiv);
+
+      // Event listeners
+      document.getElementById('start-tour-btn')?.addEventListener('click', () => {
+        modalDiv.remove();
+        setShowTour(true);
+        setShowWelcome(false);
+      });
+
+      document.getElementById('skip-btn')?.addEventListener('click', () => {
+        modalDiv.remove();
+        setShowWelcome(false);
+      });
+    };
+
+    // Criar modal após 1 segundo
+    setTimeout(createDirectModal, 1000);
   }, []);
 
   // Debug showWelcome changes
