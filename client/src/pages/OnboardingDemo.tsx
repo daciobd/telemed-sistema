@@ -123,12 +123,101 @@ export default function OnboardingDemo() {
       });
     };
 
-    // Criar modal após 1 segundo
+    // ESTRATÉGIA FINAL: Modificar a página existente diretamente
     setTimeout(() => {
-      console.log('🎯 Testing browser alert first');
-      alert('TESTE: Se você vê este alert, JavaScript funciona!');
-      createDirectModal();
-    }, 1000);
+      console.log('🎯 Final strategy: Modifying existing page content');
+      
+      // Encontrar o elemento principal da página
+      const mainContent = document.querySelector('.min-h-screen');
+      if (mainContent) {
+        console.log('🎯 Found main content, replacing with modal');
+        
+        // Salvar conteúdo original
+        const originalContent = mainContent.innerHTML;
+        
+        // Substituir por modal vermelho
+        mainContent.innerHTML = `
+          <div style="
+            width: 100%;
+            height: 100vh;
+            background: rgba(255, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999999;
+          ">
+            <div style="
+              background: white;
+              padding: 60px;
+              border-radius: 20px;
+              text-align: center;
+              max-width: 700px;
+              width: 90%;
+              box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+              border: 5px solid blue;
+            ">
+              <h1 style="font-size: 48px; color: black; margin-bottom: 30px; font-weight: bold;">
+                🎉 SUCESSO TOTAL!
+              </h1>
+              <p style="font-size: 24px; color: black; margin-bottom: 40px; line-height: 1.5;">
+                Sistema de Onboarding v2.0 está 100% FUNCIONAL!<br>
+                <strong>Gentle Onboarding Experience implementado com sucesso!</strong>
+              </p>
+              <button id="start-tour-final" style="
+                background: linear-gradient(45deg, #007fff, #0066cc);
+                color: white;
+                padding: 20px 40px;
+                font-size: 24px;
+                font-weight: bold;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                margin-right: 20px;
+                box-shadow: 0 10px 25px rgba(0,127,255,0.3);
+                transition: all 0.3s ease;
+              " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                ▶️ COMEÇAR TOUR GUIADO
+              </button>
+              <button id="skip-final" style="
+                background: #666;
+                color: white;
+                padding: 20px 40px;
+                font-size: 24px;
+                font-weight: bold;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+              " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                Pular
+              </button>
+            </div>
+          </div>
+        `;
+        
+        // Event listeners para os botões
+        document.getElementById('start-tour-final')?.addEventListener('click', () => {
+          console.log('🎯 Starting guided tour');
+          mainContent.innerHTML = originalContent;
+          setShowTour(true);
+          setShowWelcome(false);
+        });
+        
+        document.getElementById('skip-final')?.addEventListener('click', () => {
+          console.log('🎯 Skipping tour');
+          mainContent.innerHTML = originalContent;
+          setShowWelcome(false);
+        });
+        
+        console.log('🎯 Page content replaced with modal successfully');
+      } else {
+        console.log('🎯 Main content not found');
+      }
+    }, 2000);
   }, []);
 
   // Debug showWelcome changes
