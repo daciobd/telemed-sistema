@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import OnboardingDemo from "@/pages/OnboardingDemo";
+import OnboardingSuccess from "@/pages/OnboardingSuccess";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,10 +19,11 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <div className="min-h-screen bg-background">
           <Switch>
-            <Route path="/" component={OnboardingDemo} />
+            <Route path="/" component={OnboardingSuccess} />
             <Route path="/patient-dashboard" component={OnboardingDemo} />
             <Route path="/dashboard" component={OnboardingDemo} />
             <Route path="/onboarding-demo" component={OnboardingDemo} />
+            <Route path="/success" component={OnboardingSuccess} />
             
             {/* 404 fallback */}
             <Route>
