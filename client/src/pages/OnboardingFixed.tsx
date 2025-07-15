@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 
 export default function OnboardingFixed() {
+  const [, setLocation] = useLocation();
   const [showWelcome, setShowWelcome] = useState(true);
   const [showTour, setShowTour] = useState(false);
   const [tourStep, setTourStep] = useState(0);
@@ -92,6 +94,27 @@ export default function OnboardingFixed() {
     setShowTour(false);
   };
 
+  // Navigation functions for buttons
+  const handleNavigateToConsultations = () => {
+    alert('Navegando para Consultas... Em breve sistema completo estará disponível!');
+  };
+
+  const handleNavigateToMedicalRecords = () => {
+    alert('Navegando para Prontuário... Em breve sistema completo estará disponível!');
+  };
+
+  const handleNavigateToPrescriptions = () => {
+    alert('Navegando para Receitas... Em breve sistema completo estará disponível!');
+  };
+
+  const handleNavigateToVideoConsultations = () => {
+    setLocation('/patient-journey-demo');
+  };
+
+  const handleLogout = () => {
+    setLocation('/');
+  };
+
   // Highlight current step element
   useEffect(() => {
     if (showTour && tourSteps[tourStep]?.highlight) {
@@ -142,7 +165,7 @@ export default function OnboardingFixed() {
                 <PlayCircle className="h-4 w-4 mr-2" />
                 Iniciar Tour
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Sair
               </Button>
@@ -287,7 +310,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Agende consultas online com médicos especialistas
               </p>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full" variant="outline" onClick={handleNavigateToConsultations}>
                 <Calendar className="w-4 h-4 mr-2" />
                 Ver Consultas
               </Button>
@@ -305,7 +328,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Acesse seu histórico médico completo
               </p>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full" variant="outline" onClick={handleNavigateToMedicalRecords}>
                 <FileText className="w-4 h-4 mr-2" />
                 Ver Prontuário
               </Button>
@@ -323,7 +346,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Visualize suas prescrições médicas
               </p>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full" variant="outline" onClick={handleNavigateToPrescriptions}>
                 <Pill className="w-4 h-4 mr-2" />
                 Ver Receitas
               </Button>
@@ -341,7 +364,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Consultas por vídeo com médicos
               </p>
-              <Button className="w-full" variant="outline">
+              <Button className="w-full" variant="outline" onClick={handleNavigateToVideoConsultations}>
                 <Video className="w-4 h-4 mr-2" />
                 Iniciar Vídeo
               </Button>
