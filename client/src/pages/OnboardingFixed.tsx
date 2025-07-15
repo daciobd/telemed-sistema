@@ -145,6 +145,13 @@ export default function OnboardingFixed() {
           position: relative !important;
           z-index: 10 !important;
         }
+        
+        /* Ensure buttons remain clickable after tour */
+        .main-feature-button {
+          pointer-events: auto !important;
+          position: relative !important;
+          z-index: 15 !important;
+        }
       `}</style>
 
       {/* Header */}
@@ -290,7 +297,17 @@ export default function OnboardingFixed() {
               </p>
             </div>
             <Button 
-              onClick={() => setTourCompleted(false)} 
+              onClick={() => {
+                console.log('🎯 Começar a usar clicado - resetando sistema tour');
+                setTourCompleted(false);
+                setShowTour(false);
+                setShowWelcome(false);
+                setTourStep(0);
+                // Remove tour highlights
+                document.querySelectorAll('.tour-highlight').forEach(el => {
+                  el.classList.remove('tour-highlight');
+                });
+              }} 
               className="bg-green-600 hover:bg-green-700"
             >
               Começar a usar
@@ -329,7 +346,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Agende consultas online com médicos especialistas
               </p>
-              <Button className="w-full" variant="outline" onClick={handleNavigateToConsultations}>
+              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToConsultations}>
                 <Calendar className="w-4 h-4 mr-2" />
                 Ver Consultas
               </Button>
@@ -347,7 +364,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Acesse seu histórico médico completo
               </p>
-              <Button className="w-full" variant="outline" onClick={handleNavigateToMedicalRecords}>
+              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToMedicalRecords}>
                 <FileText className="w-4 h-4 mr-2" />
                 Ver Prontuário
               </Button>
@@ -365,7 +382,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Visualize suas prescrições médicas
               </p>
-              <Button className="w-full" variant="outline" onClick={handleNavigateToPrescriptions}>
+              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToPrescriptions}>
                 <Pill className="w-4 h-4 mr-2" />
                 Ver Receitas
               </Button>
@@ -383,7 +400,7 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Consultas por vídeo com médicos
               </p>
-              <Button className="w-full" variant="outline" onClick={handleNavigateToVideoConsultations}>
+              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToVideoConsultations}>
                 <Video className="w-4 h-4 mr-2" />
                 Iniciar Vídeo
               </Button>
