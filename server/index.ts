@@ -14,6 +14,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Serve static HTML files from root directory
+app.use(express.static(path.join(__dirname, '..')));
+
 // Security headers
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
