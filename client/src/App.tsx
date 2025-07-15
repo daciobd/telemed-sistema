@@ -7,6 +7,8 @@ import OnboardingFixed from "@/pages/OnboardingFixed";
 import OnboardingSuccess from "@/pages/OnboardingSuccess";
 import PatientJourneyPage from "@/pages/PatientJourneyPage";
 import PatientJourneyDemo from "@/pages/PatientJourneyDemo";
+import LoginPage from "@/pages/LoginPage";
+import DoctorDashboard from "@/pages/DoctorDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +24,9 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <div className="min-h-screen bg-background">
           <Switch>
-            <Route path="/" component={OnboardingSuccess} />
+            <Route path="/" component={LoginPage} />
+            <Route path="/login" component={LoginPage} />
+            <Route path="/doctor-dashboard" component={DoctorDashboard} />
             <Route path="/patient-dashboard" component={OnboardingFixed} />
             <Route path="/dashboard" component={OnboardingFixed} />
             <Route path="/onboarding-demo" component={OnboardingDemo} />
