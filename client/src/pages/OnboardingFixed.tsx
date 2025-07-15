@@ -96,22 +96,29 @@ export default function OnboardingFixed() {
 
   // Navigation functions for buttons
   const handleNavigateToConsultations = () => {
-    alert('Navegando para Consultas... Em breve sistema completo estará disponível!');
+    console.log('🚀 Botão Consultas clicado!');
+    alert('✅ FUNCIONANDO! Navegando para Consultas... Em breve sistema completo estará disponível!');
   };
 
   const handleNavigateToMedicalRecords = () => {
-    alert('Navegando para Prontuário... Em breve sistema completo estará disponível!');
+    console.log('🚀 Botão Prontuário clicado!');
+    alert('✅ FUNCIONANDO! Navegando para Prontuário... Em breve sistema completo estará disponível!');
   };
 
   const handleNavigateToPrescriptions = () => {
-    alert('Navegando para Receitas... Em breve sistema completo estará disponível!');
+    console.log('🚀 Botão Receitas clicado!');
+    alert('✅ FUNCIONANDO! Navegando para Receitas... Em breve sistema completo estará disponível!');
   };
 
   const handleNavigateToVideoConsultations = () => {
+    console.log('🚀 Botão Vídeo clicado!');
+    alert('✅ FUNCIONANDO! Redirecionando para demonstração de videoconsulta...');
     setLocation('/patient-journey-demo');
   };
 
   const handleLogout = () => {
+    console.log('🚀 Botão Sair clicado!');
+    alert('✅ FUNCIONANDO! Saindo do sistema...');
     setLocation('/');
   };
 
@@ -155,6 +162,7 @@ export default function OnboardingFixed() {
               <span className="text-gray-700">Olá, João Silva</span>
               <Button 
                 onClick={() => {
+                  alert('🚀 TESTE: Botão Tour funcionando!');
                   setShowTour(true);
                   setTourStep(0);
                 }}
@@ -164,6 +172,17 @@ export default function OnboardingFixed() {
               >
                 <PlayCircle className="h-4 w-4 mr-2" />
                 Iniciar Tour
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  alert('🚀 TESTE: Botão teste direto funcionando!');
+                  console.log('🚀 TESTE DIRETO: Evento onClick disparado');
+                }}
+                className="bg-green-50 border-green-300 text-green-700 hover:bg-green-100"
+              >
+                🧪 TESTE
               </Button>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
