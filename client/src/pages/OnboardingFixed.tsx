@@ -94,24 +94,32 @@ export default function OnboardingFixed() {
     setShowTour(false);
   };
 
-  // Navigation functions for buttons
-  const handleNavigateToConsultations = () => {
-    console.log('🚀 Botão Consultas clicado!');
+  // Navigation functions for buttons - NOVA IMPLEMENTAÇÃO SEM INTERFERÊNCIA DO TOUR
+  const handleNavigateToConsultations = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🚀 Botão Consultas clicado! Estado do tour:', { showTour, tourCompleted, tourStep });
     alert('✅ FUNCIONANDO! Navegando para Consultas... Em breve sistema completo estará disponível!');
   };
 
-  const handleNavigateToMedicalRecords = () => {
-    console.log('🚀 Botão Prontuário clicado!');
+  const handleNavigateToMedicalRecords = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🚀 Botão Prontuário clicado! Estado do tour:', { showTour, tourCompleted, tourStep });
     alert('✅ FUNCIONANDO! Navegando para Prontuário... Em breve sistema completo estará disponível!');
   };
 
-  const handleNavigateToPrescriptions = () => {
-    console.log('🚀 Botão Receitas clicado!');
+  const handleNavigateToPrescriptions = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🚀 Botão Receitas clicado! Estado do tour:', { showTour, tourCompleted, tourStep });
     alert('✅ FUNCIONANDO! Navegando para Receitas... Em breve sistema completo estará disponível!');
   };
 
-  const handleNavigateToVideoConsultations = () => {
-    console.log('🚀 Botão Vídeo clicado!');
+  const handleNavigateToVideoConsultations = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🚀 Botão Vídeo clicado! Estado do tour:', { showTour, tourCompleted, tourStep });
     alert('✅ FUNCIONANDO! Redirecionando para demonstração de videoconsulta...');
     setLocation('/patient-journey-demo');
   };
@@ -151,6 +159,17 @@ export default function OnboardingFixed() {
           pointer-events: auto !important;
           position: relative !important;
           z-index: 15 !important;
+          cursor: pointer !important;
+        }
+        
+        /* Force button functionality regardless of tour state */
+        .main-feature-button:hover {
+          background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+        
+        /* Disable any tour overlay interference */
+        .main-feature-button * {
+          pointer-events: auto !important;
         }
       `}</style>
 
@@ -346,7 +365,14 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Agende consultas online com médicos especialistas
               </p>
-              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToConsultations}>
+              <Button 
+                className="w-full main-feature-button" 
+                variant="outline" 
+                onClick={handleNavigateToConsultations}
+                onMouseDown={() => console.log('🔥 Mouse DOWN Consultas')}
+                onMouseUp={() => console.log('🔥 Mouse UP Consultas')}
+                style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+              >
                 <Calendar className="w-4 h-4 mr-2" />
                 Ver Consultas
               </Button>
@@ -364,7 +390,14 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Acesse seu histórico médico completo
               </p>
-              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToMedicalRecords}>
+              <Button 
+                className="w-full main-feature-button" 
+                variant="outline" 
+                onClick={handleNavigateToMedicalRecords}
+                onMouseDown={() => console.log('🔥 Mouse DOWN Prontuário')}
+                onMouseUp={() => console.log('🔥 Mouse UP Prontuário')}
+                style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+              >
                 <FileText className="w-4 h-4 mr-2" />
                 Ver Prontuário
               </Button>
@@ -382,7 +415,14 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Visualize suas prescrições médicas
               </p>
-              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToPrescriptions}>
+              <Button 
+                className="w-full main-feature-button" 
+                variant="outline" 
+                onClick={handleNavigateToPrescriptions}
+                onMouseDown={() => console.log('🔥 Mouse DOWN Receitas')}
+                onMouseUp={() => console.log('🔥 Mouse UP Receitas')}
+                style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+              >
                 <Pill className="w-4 h-4 mr-2" />
                 Ver Receitas
               </Button>
@@ -400,7 +440,14 @@ export default function OnboardingFixed() {
               <p className="text-sm text-gray-600 mb-4">
                 Consultas por vídeo com médicos
               </p>
-              <Button className="w-full main-feature-button" variant="outline" onClick={handleNavigateToVideoConsultations}>
+              <Button 
+                className="w-full main-feature-button" 
+                variant="outline" 
+                onClick={handleNavigateToVideoConsultations}
+                onMouseDown={() => console.log('🔥 Mouse DOWN Vídeo')}
+                onMouseUp={() => console.log('🔥 Mouse UP Vídeo')}
+                style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+              >
                 <Video className="w-4 h-4 mr-2" />
                 Iniciar Vídeo
               </Button>
