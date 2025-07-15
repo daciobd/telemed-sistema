@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Direto para Médicos - TeleMed Sistema</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .link-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #2563eb;
+        }
+        .main-link {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        .main-link:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+        .demo-link {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        .demo-link:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(22, 163, 74, 0.3);
+        }
+        .status {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #bbf7d0;
+        }
+        .instructions {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #fde68a;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .step:last-child {
+            border-bottom: none;
+        }
+        .step-number {
+            background: #2563eb;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 Acesso Direto para Médicos - TeleMed Sistema</h1>
+        
+        <div class="status">
+            <strong>✅ Sistema Online e Funcionando!</strong><br>
+            Plataforma de telemedicina pronta para demonstrações médicas
+        </div>
+
+        <div class="link-section">
+            <h3>🚀 LINK PRINCIPAL - Sistema Completo</h3>
+            <p>Acesse o sistema completo de telemedicina:</p>
+            <a href="http://localhost:5000" class="main-link" target="_blank">
+                🔗 ACESSAR SISTEMA TELEMED
+            </a>
+            <p><small>Clique no link acima para acessar o sistema principal</small></p>
+        </div>
+
+        <div class="link-section">
+            <h3>🎯 Acesso Rápido - Demo Médico</h3>
+            <p>Acesso direto ao dashboard médico para demonstrações:</p>
+            <a href="http://localhost:5000/doctor-dashboard" class="demo-link" target="_blank">
+                👨‍⚕️ DASHBOARD MÉDICO
+            </a>
+            <p><small>Acesso direto ao painel do médico</small></p>
+        </div>
+
+        <div class="link-section">
+            <h3>👥 Acesso Paciente</h3>
+            <p>Visualizar a perspectiva do paciente:</p>
+            <a href="http://localhost:5000/patient-dashboard" class="demo-link" target="_blank">
+                🏥 DASHBOARD PACIENTE
+            </a>
+            <p><small>Acesso direto ao painel do paciente</small></p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Como Testar (Passo a Passo)</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Clique no link principal</strong> - Será direcionado para a página de login
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Escolha "Demo"</strong> - Clique na aba "Demo" no formulário de login
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Entrar como Médico</strong> - Clique no botão verde "Entrar como Médico"
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Teste as Funcionalidades</strong> - Explore o dashboard e teste os botões
+            </div>
+        </div>
+
+        <div class="status">
+            <strong>🔥 Sistema Atualizado:</strong><br>
+            • Botões de navegação funcionais<br>
+            • Alertas informativos implementados<br>
+            • Sistema de demonstração ativo<br>
+            • Acesso para médicos e pacientes<br>
+            • Videoconsulta demo disponível
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh da página a cada 30 segundos para manter conexão
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
