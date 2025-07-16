@@ -2,6 +2,7 @@ services:
   - type: web
     name: telemed-pro
     runtime: node
+    rootDir: telemed-v2
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
