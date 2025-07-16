@@ -702,16 +702,16 @@
     <script>
         // 🔗 SISTEMA DE NAVEGAÇÃO HÍBRIDO - TeleMed Pro
         
-        // CONFIGURAÇÃO DOS ENDPOINTS REAIS (CONECTADOS AOS SISTEMAS FUNCIONAIS)
+        // CONFIGURAÇÃO DOS ENDPOINTS REAIS (ATUALIZE COM SUAS URLs)
         const REAL_ENDPOINTS = {
-            patients: '/login',                      // Sistema de pacientes
-            consultations: '/doctor-dashboard',      // Sistema de videoconsultas WebRTC
-            prescriptions: 'https://memed.com.br',   // MEMED oficial
-            schedule: '/login',                      // Sistema de agenda médica
-            reports: '/login',                       // Sistema de relatórios
-            finance: '/login',                       // Dashboard financeiro
-            ai: '/login',                           // Assistente IA
-            settings: '/login'                      // Configurações
+            patients: '/pacientes.html',              // Sua página de pacientes
+            consultations: '/videoconsultas.html',   // Sua página de videoconsultas  
+            prescriptions: '/prescricoes.html',      // Sua integração MEMED
+            schedule: '/agenda.html',                 // Seu sistema de agenda
+            reports: '/relatorios.html',             // Seus relatórios
+            finance: '/financeiro.html',             // Seu dashboard financeiro
+            ai: '/assistente-ia.html',               // Seu assistente IA
+            settings: '/configuracoes.html'          // Suas configurações
         };
 
         // Detectar modo de operação
@@ -906,74 +906,17 @@
             }, 1000);
         });
 
-        // Configurar conexões funcionais diretas para todos os botões
-        document.addEventListener('DOMContentLoaded', function() {
-            // Botão de emergência
-            const emergencyBtn = document.querySelector('.btn-emergency');
-            if (emergencyBtn) {
-                emergencyBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = '/login';
-                });
-            }
-
-            // Botão nova consulta no header
-            const newConsultationBtn = document.querySelector('.btn-primary[data-action="consultations"]');
-            if (newConsultationBtn) {
-                newConsultationBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = '/doctor-dashboard';
-                });
-            }
-
-            // Configurar todos os links da sidebar
-            const sidebarLinks = document.querySelectorAll('.nav-link[data-section]');
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const section = this.getAttribute('data-section');
-                    
-                    if (section === 'consultations') {
-                        window.location.href = '/doctor-dashboard';
-                    } else if (section === 'prescriptions') {
-                        window.open('https://memed.com.br', '_blank');
-                    } else {
-                        window.location.href = '/login';
-                    }
-                });
-            });
-
-            // Configurar ações rápidas
-            const actionButtons = document.querySelectorAll('.action-btn[data-action]');
-            actionButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const action = this.getAttribute('data-action');
-                    
-                    if (action === 'consultations') {
-                        window.location.href = '/doctor-dashboard';
-                    } else if (action === 'prescriptions') {
-                        window.open('https://memed.com.br', '_blank');
-                    } else {
-                        window.location.href = '/login';
-                    }
-                });
-            });
-        });
-
         /* 
-        ✅ CONFIGURAÇÃO COMPLETA - TODAS AS CONEXÕES FUNCIONAIS ATIVAS
+        INSTRUÇÕES DE CONFIGURAÇÃO:
         
-        1. URLs conectadas aos sistemas reais funcionais
-        2. Botões com event listeners diretos
-        3. Videoconsultas → /doctor-dashboard (WebRTC)
-        4. Prescrições → https://memed.com.br (MEMED)
-        5. Outras seções → /login (React)
+        1. SUBSTITUA as URLs em REAL_ENDPOINTS pelas suas páginas reais
+        2. Para modo demo: adicione ?demo=true na URL
+        3. Para modo real: acesse sem parâmetros
+        4. Os links agora funcionam em ambos os modos!
         
-        FUNCIONAMENTO:
-        - Todos os botões conectam aos sistemas funcionais
-        - Navegação direta sem simulações
-        - Interface médica totalmente operacional
+        EXEMPLO DE USO:
+        - Demo: http://localhost:5000/medical-dashboard-pro.html?demo=true
+        - Real: http://localhost:5000/medical-dashboard-pro.html
         */
     </script>
 </body>
