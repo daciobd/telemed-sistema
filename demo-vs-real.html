@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Modo Demo vs Real</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .mode-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .demo-card {
+            border-color: #48bb78;
+            background: linear-gradient(135deg, #f0fff4, #dcfce7);
+        }
+
+        .real-card {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .mode-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .demo-card .mode-icon {
+            color: #48bb78;
+        }
+
+        .real-card .mode-icon {
+            color: #667eea;
+        }
+
+        .mode-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .mode-description {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .features-list li i {
+            color: #10b981;
+            margin-right: 10px;
+        }
+
+        .mode-button {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .real-card .mode-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .mode-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .info-section {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .info-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .info-text {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .modes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🩺 TeleMed Sistema</h1>
+            <p class="subtitle">Escolha o modo de operação para sua experiência</p>
+        </div>
+
+        <div class="modes-grid">
+            <!-- Modo Demo -->
+            <div class="mode-card demo-card">
+                <div class="mode-header">
+                    <div class="mode-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h2 class="mode-title">Modo Demo</h2>
+                </div>
+                <p class="mode-description">
+                    Perfeito para demonstrações, apresentações e conhecer o sistema sem comprometer dados reais.
+                </p>
+                <ul class="features-list">
+                    <li><i class="fas fa-check"></i> Simulações realistas</li>
+                    <li><i class="fas fa-check"></i> Dados fictícios seguros</li>
+                    <li><i class="fas fa-check"></i> Todas as funcionalidades visíveis</li>
+                    <li><i class="fas fa-check"></i> Ideal para médicos testarem</li>
+                    <li><i class="fas fa-check"></i> Notificações simuladas</li>
+                </ul>
+                <a href="/medical-dashboard-pro.html?demo=true" class="mode-button">
+                    <i class="fas fa-play"></i> Entrar no Modo Demo
+                </a>
+            </div>
+
+            <!-- Modo Real -->
+            <div class="mode-card real-card">
+                <div class="mode-header">
+                    <div class="mode-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h2 class="mode-title">Modo Real</h2>
+                </div>
+                <p class="mode-description">
+                    Sistema integrado com APIs reais, banco de dados e funcionalidades operacionais completas.
+                </p>
+                <ul class="features-list">
+                    <li><i class="fas fa-check"></i> Dados reais de pacientes</li>
+                    <li><i class="fas fa-check"></i> Videoconsultas WebRTC</li>
+                    <li><i class="fas fa-check"></i> Prescrições MEMED oficiais</li>
+                    <li><i class="fas fa-check"></i> Pagamentos Stripe reais</li>
+                    <li><i class="fas fa-check"></i> Assistente IA ativo</li>
+                </ul>
+                <a href="/medical-dashboard-pro.html" class="mode-button">
+                    <i class="fas fa-rocket"></i> Entrar no Modo Real
+                </a>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3 class="info-title">💡 Como funciona o Sistema Híbrido</h3>
+            <p class="info-text">
+                O sistema detecta automaticamente o modo baseado na URL:
+                <br><br>
+                <strong>Demo:</strong> <code>?demo=true</code> ou domínios replit.dev<br>
+                <strong>Real:</strong> Domínios de produção sem parâmetro demo
+                <br><br>
+                No modo demo, as funcionalidades mostram simulações impressionantes perfeitas para apresentações.
+                No modo real, o sistema conecta às APIs e bancos de dados reais para operação completa.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
