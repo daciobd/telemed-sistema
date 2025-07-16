@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🩺 TeleMed - Sistema de Telemedicina Profissional</title>
+    <meta name="description" content="Plataforma completa de telemedicina com videoconsultas, prontuários digitais, prescrições MEMED e pagamentos integrados">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+            padding: 48px;
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .tagline {
+            font-size: 22px;
+            color: #334155;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 48px 0;
+        }
+
+        .access-card {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: left;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .access-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-right: 16px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .card-description {
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .card-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .card-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .features-showcase {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 32px;
+            margin: 48px 0;
+        }
+
+        .features-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .feature-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .feature-status {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .system-status {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 32px 0;
+        }
+
+        .status-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .status-text {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .footer {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 2px solid #f1f5f9;
+            color: #64748b;
+        }
+
+        .footer-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 32px 24px;
+            }
+            
+            .logo {
+                font-size: 36px;
+            }
+            
+            .tagline {
+                font-size: 18px;
+            }
+            
+            .access-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <div class="logo">🩺 TeleMed Sistema</div>
+            <div class="tagline">Plataforma Médica Profissional Completa</div>
+            <div class="description">
+                Sistema integrado de telemedicina com videoconsultas WebRTC, prontuários digitais, 
+                prescrições MEMED oficiais, pagamentos Stripe seguros e assistente IA médico
+            </div>
+        </div>
+
+        <div class="system-status">
+            <div class="status-title">✅ Sistema Operacional e Testado</div>
+            <div class="status-text">Todas as funcionalidades médicas ativas e prontas para uso profissional</div>
+        </div>
+
+        <div class="access-grid">
+            <div class="access-card" onclick="window.location.href='/medical-access.html'">
+                <div class="card-header">
+                    <div class="card-icon">👨‍⚕️</div>
+                    <div class="card-title">Acesso Médico</div>
+                </div>
+                <div class="card-description">
+                    Interface completa para profissionais de saúde com todas as funcionalidades 
+                    integradas: videoconsultas, prontuários, prescrições MEMED e dashboard médico
+                </div>
+                <button class="card-button">Acessar Sistema Médico</button>
+            </div>
+
+            <div class="access-card" onclick="window.location.href='/access-test.html'">
+                <div class="card-header">
+                    <div class="card-icon">🔧</div>
+                    <div class="card-title">Teste de Funcionalidades</div>
+                </div>
+                <div class="card-description">
+                    Página de testes técnicos para validar todas as funcionalidades do sistema: 
+                    videochamadas, pagamentos, integrações e performance
+                </div>
+                <button class="card-button">Testar Funcionalidades</button>
+            </div>
+
+            <div class="access-card" onclick="window.location.href='/login'">
+                <div class="card-header">
+                    <div class="card-icon">🚀</div>
+                    <div class="card-title">Sistema Principal</div>
+                </div>
+                <div class="card-description">
+                    Acesso ao sistema completo com autenticação, dashboard personalizado, 
+                    agendamento de consultas e todas as funcionalidades avançadas
+                </div>
+                <button class="card-button">Entrar no Sistema</button>
+            </div>
+        </div>
+
+        <div class="features-showcase">
+            <div class="features-title">Funcionalidades Implementadas e Testadas</div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📹</div>
+                    <div class="feature-name">Videoconsultas</div>
+                    <div class="feature-status">WebRTC P2P</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-name">Prontuários</div>
+                    <div class="feature-status">Digitais</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💊</div>
+                    <div class="feature-name">Prescrições</div>
+                    <div class="feature-status">MEMED Oficial</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💳</div>
+                    <div class="feature-name">Pagamentos</div>
+                    <div class="feature-status">Stripe Seguro</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-name">IA Médica</div>
+                    <div class="feature-status">Diagnóstico</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-name">Analytics</div>
+                    <div class="feature-status">Relatórios</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-title">TeleMed Sistema v8.3.0-PROFESSIONAL</div>
+            <div class="footer-text">
+                Plataforma completa de telemedicina desenvolvida com tecnologias modernas, 
+                integrações oficiais e foco na experiência do profissional de saúde
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Teste de conectividade na inicialização
+        window.addEventListener('load', function() {
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('✅ TeleMed Sistema Online:', data);
+                })
+                .catch(error => {
+                    console.log('⚠️ Verificando conectividade:', error);
+                });
+        });
+
+        // Rastreamento de interações
+        document.addEventListener('click', function(e) {
+            const element = e.target.closest('.access-card');
+            if (element) {
+                const title = element.querySelector('.card-title').textContent;
+                console.log(`🖱️ Acesso selecionado: ${title}`);
+            }
+        });
+    </script>
+</body>
+</html>

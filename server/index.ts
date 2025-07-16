@@ -58,7 +58,14 @@ async function startServer() {
       serveStatic(app);
     }
     
-    // SPA fallback - ONLY for non-API routes
+    // Root route - serve HTML landing page
+    app.get('/', (req, res) => {
+      const indexPath = path.join(__dirname, '../index.html');
+      console.log('📄 Serving HTML landing page for:', req.path);
+      res.sendFile(indexPath);
+    });
+
+    // SPA fallback - ONLY for non-API routes (excluding root)
     app.get('*', (req, res, next) => {
       if (req.path.startsWith('/api/')) {
         return next(); // Let API routes pass through
