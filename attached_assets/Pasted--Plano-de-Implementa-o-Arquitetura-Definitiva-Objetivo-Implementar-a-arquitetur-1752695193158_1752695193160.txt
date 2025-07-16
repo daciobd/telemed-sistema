@@ -1,0 +1,296 @@
+# 📋 Plano de Implementação - Arquitetura Definitiva
+
+## 🎯 **Objetivo**
+Implementar a arquitetura final documentada, com separação clara de ambientes e estrutura profissional para o TeleMed Pro.
+
+## 📅 **Cronograma de Implementação**
+
+### **Fase 1: Estrutura Base (Semana 1)**
+
+#### **Dia 1-2: Reorganização Estrutural**
+```bash
+# 1. Criar nova estrutura Next.js 14
+npx create-next-app@latest telemed-pro-final --typescript --tailwind --eslint --app
+
+# 2. Configurar estrutura de diretórios
+mkdir -p app/{(public),(auth),(dashboard)}
+mkdir -p app/(dashboard)/{doctor,patient,admin}
+mkdir -p app/consultation
+mkdir -p components/{ui,auth,dashboard,medical,video,payments,layout}
+mkdir -p lib/{auth,db,integrations,webrtc,utils,hooks}
+mkdir -p types config docs tests
+
+# 3. Migrar arquivos existentes
+cp public/* telemed-pro-final/public/
+# Adaptar HTMLs para componentes React/TSX
+```
+
+#### **Dia 3-4: Configuração de Ambientes**
+- ✅ Implementar sistema de configuração por ambiente
+- ✅ Criar arquivos `.env` para cada ambiente
+- ✅ Configurar feature flags
+- ✅ Setup de logging estruturado
+- ✅ Configurar middleware de segurança
+
+#### **Dia 5-7: Autenticação e Autorização**
+- ✅ Implementar NextAuth.js
+- ✅ Configurar providers (email/password, Google)
+- ✅ Sistema de roles (doctor, patient, admin)
+- ✅ Middleware de proteção de rotas
+- ✅ Páginas de login/register
+
+### **Fase 2: Funcionalidades Core (Semana 2)**
+
+#### **Dia 1-3: Dashboard e Interface**
+- ✅ Dashboard médico responsivo
+- ✅ Dashboard paciente
+- ✅ Componentes UI base (shadcn/ui)
+- ✅ Sistema de navegação
+- ✅ Layout components
+
+#### **Dia 4-5: Database e APIs**
+- ✅ Schema Drizzle ORM
+- ✅ Conexão PostgreSQL
+- ✅ APIs básicas (users, profile)
+- ✅ Validação com Zod
+- ✅ Error handling
+
+#### **Dia 6-7: Integrações Básicas**
+- ✅ Cliente MEMED (mock em dev)
+- ✅ Cliente Stripe (test mode)
+- ✅ Sistema de logs
+- ✅ Health checks
+
+### **Fase 3: Funcionalidades Avançadas (Semana 3)**
+
+#### **Dia 1-3: Sistema Médico**
+- ✅ Gestão de pacientes
+- ✅ Agendamento de consultas
+- ✅ Formulário de prescrições
+- ✅ Histórico médico
+
+#### **Dia 4-5: Videochamadas**
+- ✅ Interface WebRTC
+- ✅ Salas de videochamada
+- ✅ Chat em tempo real
+- ✅ Controles A/V
+
+#### **Dia 6-7: Pagamentos**
+- ✅ Checkout Stripe
+- ✅ Webhooks
+- ✅ Histórico de pagamentos
+- ✅ Faturamento
+
+### **Fase 4: Integração e Testes (Semana 4)**
+
+#### **Dia 1-2: Integrações Reais**
+- ✅ MEMED API real (staging)
+- ✅ OpenAI integration
+- ✅ Email notifications
+- ✅ Analytics básico
+
+#### **Dia 3-4: Testes e Qualidade**
+- ✅ Testes unitários
+- ✅ Testes E2E
+- ✅ Performance optimization
+- ✅ Security audit
+
+#### **Dia 5-7: Deploy e Documentação**
+- ✅ Deploy staging
+- ✅ Deploy produção
+- ✅ Documentação completa
+- ✅ Guia médicos atualizado
+
+## 🛠️ **Comandos de Implementação**
+
+### **1. Setup Inicial**
+```bash
+# Criar projeto base
+npx create-next-app@latest telemed-pro-final \
+  --typescript \
+  --tailwind \
+  --eslint \
+  --app \
+  --src-dir false
+
+cd telemed-pro-final
+
+# Instalar dependências principais
+npm install @auth/drizzle-adapter \
+  next-auth \
+  drizzle-orm \
+  @neondatabase/serverless \
+  zod \
+  @radix-ui/react-slot \
+  @radix-ui/react-dialog \
+  @radix-ui/react-dropdown-menu \
+  class-variance-authority \
+  clsx \
+  tailwind-merge \
+  lucide-react
+
+# Dependências de desenvolvimento
+npm install -D drizzle-kit \
+  @types/node \
+  eslint-config-next \
+  prettier \
+  @typescript-eslint/eslint-plugin
+```
+
+### **2. Configurar shadcn/ui**
+```bash
+npx shadcn-ui@latest init
+npx shadcn-ui@latest add button
+npx shadcn-ui@latest add input
+npx shadcn-ui@latest add card
+npx shadcn-ui@latest add dialog
+npx shadcn-ui@latest add dropdown-menu
+npx shadcn-ui@latest add tabs
+npx shadcn-ui@latest add calendar
+npx shadcn-ui@latest add form
+```
+
+### **3. Migrar Conteúdo Atual**
+```bash
+# Criar script de migração
+cat > migrate-content.sh << 'EOF'
+#!/bin/bash
+
+# Migrar assets
+cp -r ../telemed-atual/public/* public/
+
+# Converter HTML para TSX
+# (Este processo será manual para cada página)
+
+# Migrar estilos
+mkdir -p app/styles
+cp ../telemed-atual/*.css app/styles/
+
+echo "Migração de conteúdo concluída"
+EOF
+
+chmod +x migrate-content.sh
+./migrate-content.sh
+```
+
+### **4. Setup Database**
+```bash
+# Configurar Drizzle
+cat > drizzle.config.ts << 'EOF'
+import { defineConfig } from "drizzle-kit";
+
+export default defineConfig({
+  schema: "./lib/db/schema.ts",
+  out: "./drizzle",
+  dialect: "postgresql",
+  dbCredentials: {
+    url: process.env.DATABASE_URL!,
+  },
+});
+EOF
+
+# Gerar e executar migrações
+npm run db:generate
+npm run db:migrate
+```
+
+## 📁 **Estrutura de Migração**
+
+### **Páginas HTML → Componentes TSX**
+
+#### **medical-dashboard-pro.html → app/(dashboard)/doctor/page.tsx**
+```tsx
+// app/(dashboard)/doctor/page.tsx
+import { Sidebar } from '@/components/dashboard/sidebar';
+import { Header } from '@/components/dashboard/header';
+import { StatsCards } from '@/components/dashboard/stats-cards';
+import { QuickActions } from '@/components/dashboard/quick-actions';
+import { RecentActivity } from '@/components/dashboard/recent-activity';
+
+export default function DoctorDashboard() {
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar userType="doctor" />
+      <main className="flex-1 p-6">
+        <Header 
+          title="Bem-vindo, Dr. Silva" 
+          subtitle="Terça-feira, 16 de Julho de 2025" 
+        />
+        <StatsCards />
+        <QuickActions />
+        <RecentActivity />
+      </main>
+    </div>
+  );
+}
+```
+
+#### **demo-guide.html → app/(public)/demo/page.tsx**
+```tsx
+// app/(public)/demo/page.tsx
+import { DemoLinks } from '@/components/demo/demo-links';
+import { StepGuide } from '@/components/demo/step-guide';
+import { FeedbackForm } from '@/components/demo/feedback-form';
+
+export default function DemoGuide() {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold text-center">
+          TeleMed Pro - Guia de Demonstração
+        </h1>
+      </header>
+      
+      <DemoLinks />
+      <StepGuide />
+      <FeedbackForm />
+    </div>
+  );
+}
+```
+
+### **CSS → Tailwind Classes**
+```css
+/* Antes (CSS custom) */
+.stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Depois (Tailwind + CVA) */
+const statCardVariants = cva(
+  "bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-lg transition-all hover:shadow-xl"
+);
+```
+
+## 🔄 **Processo de Migração Gradual**
+
+### **Estratégia: Migração Paralela**
+1. **Manter sistema atual** funcionando
+2. **Desenvolver novo sistema** em paralelo
+3. **Migrar página por página**
+4. **Testar cada componente**
+5. **Switch gradual** quando pronto
+
+### **URLs de Transição**
+```
+Sistema Atual (telemed.vercel.app):
+├── /                           # Landing atual
+├── /medical-dashboard-pro.html # Dashboard atual
+└── /demo-guide.html           # Guia atual
+
+Sistema Novo (telemed-v2.vercel.app):
+├── /                          # Nova landing
+├── /dashboard                 # Novo dashboard
+├── /login                     # Nova autenticação
+└── /demo                      # Novo guia
+```
+
+## 📊 **Critérios de Sucesso**
+
+### **Fase 1: Base**
+- ✅ Estrutura Next.js 14 funcionando
+- ✅ Ambientes dev/staging/
