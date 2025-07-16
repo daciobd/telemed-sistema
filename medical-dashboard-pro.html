@@ -789,9 +789,32 @@
                     // Add active class to clicked link
                     this.classList.add('active');
                     
-                    // Show demo message
+                    // Show professional message with redirect
                     const feature = this.textContent.trim();
-                    alert(`🚀 Navegando para: ${feature}\n\n✅ Funcionalidade integrada ao sistema real\n🔗 Backend conectado e funcionando`);
+                    
+                    // Different actions based on feature
+                    if (feature.includes('Videoconsultas')) {
+                        setTimeout(() => window.location.href = '/doctor-dashboard', 500);
+                    } else if (feature.includes('Prescrições')) {
+                        setTimeout(() => window.open('https://memed.com.br', '_blank'), 500);
+                    } else if (feature.includes('Assistente IA')) {
+                        setTimeout(() => window.location.href = '/login', 500);
+                    } else {
+                        setTimeout(() => window.location.href = '/login', 500);
+                    }
+                    
+                    // Show brief loading message
+                    const toast = document.createElement('div');
+                    toast.innerHTML = `<div style="position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; font-weight: 600;">
+                        <i class="fas fa-arrow-right"></i> Acessando ${feature}...
+                    </div>`;
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 2000);
                 });
             });
         });
