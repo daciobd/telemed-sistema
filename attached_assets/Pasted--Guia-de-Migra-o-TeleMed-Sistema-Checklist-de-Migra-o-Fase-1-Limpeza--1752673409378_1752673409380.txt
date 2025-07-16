@@ -1,0 +1,244 @@
+# 🔄 Guia de Migração - TeleMed Sistema
+
+## 📋 **Checklist de Migração**
+
+### **Fase 1: Limpeza e Preparação**
+
+#### ✅ **1. Backup do Projeto Atual**
+```bash
+# Criar backup
+cp -r telemed-sistema telemed-sistema-backup
+
+# Ou usar Git
+git branch backup-old-structure
+git checkout backup-old-structure
+git add .
+git commit -m "Backup: estrutura antiga antes da migração"
+git checkout main
+```
+
+#### ✅ **2. Remover Arquivos Antigos**
+```bash
+# Remover arquivos obsoletos
+rm -rf client/
+rm -rf server/
+rm -rf shared/
+rm -rf dist/
+rm app.js
+rm index.js
+rm ultra-fix.js
+rm server.js
+rm *.old
+rm deploy*.js
+rm emergency.js
+rm backup-server.js
+rm railway.json
+
+# Manter apenas:
+# - .vercelignore (atualizar)
+# - README.md (substituir)
+# - .git/ (manter histórico)
+```
+
+#### ✅ **3. Criar Nova Estrutura**
+```bash
+# Criar diretórios principais
+mkdir -p app/{api,\(auth\),\(dashboard\)}
+mkdir -p components/{ui,auth,dashboard,consultation,landing}
+mkdir -p lib/{auth,db,integrations,webrtc}
+mkdir -p types
+mkdir -p hooks
+mkdir -p public/{images,icons}
+mkdir -p docs
+```
+
+### **Fase 2: Configuração Base**
+
+#### ✅ **4. Instalar Dependências**
+```bash
+# Remover node_modules antigo
+rm -rf node_modules package-lock.json
+
+# Copiar novo package.json (do artifact)
+# Instalar dependências
+npm install
+```
+
+#### ✅ **5. Configurar Arquivos Base**
+- [x] `package.json` ✅ (Created)
+- [x] `next.config.js` ✅ (Created)
+- [x] `tailwind.config.js` ✅ (Created)
+- [x] `tsconfig.json` ✅ (Created)
+- [x] `.env.example` ✅ (Created)
+- [x] `.gitignore` ✅ (Created)
+- [x] `README.md` ✅ (Updated)
+
+#### ✅ **6. Configurar Variáveis de Ambiente**
+```bash
+# Copiar e configurar
+cp .env.example .env.local
+
+# Configurar variáveis essenciais:
+# - DATABASE_URL (Neon PostgreSQL)
+# - NEXTAUTH_SECRET (gerar novo)
+# - NEXTAUTH_URL (https://seu-dominio.vercel.app)
+```
+
+### **Fase 3: Implementação Gradual**
+
+#### 🔄 **7. Landing Page (Prioridade 1)**
+```bash
+# Arquivos necessários:
+# app/page.tsx - Nova landing page
+# app/layout.tsx - Layout principal
+# app/globals.css - Estilos globais
+# components/landing/ - Componentes da landing
+```
+
+#### 🔄 **8. Sistema de Autenticação (Prioridade 2)**
+```bash
+# Arquivos necessários:
+# app/(auth)/login/page.tsx
+# app/(auth)/register/page.tsx
+# app/api/auth/[...nextauth]/route.ts
+# lib/auth/auth.config.ts
+# components/auth/login-form.tsx
+```
+
+#### 🔄 **9. Dashboard Básico (Prioridade 3)**
+```bash
+# Arquivos necessários:
+# app/(dashboard)/patient/page.tsx
+# app/(dashboard)/doctor/page.tsx
+# components/dashboard/sidebar.tsx
+# components/dashboard/header.tsx
+```
+
+### **Fase 4: Funcionalidades Avançadas**
+
+#### 🔄 **10. Database Schema**
+```bash
+# Configurar Drizzle
+# lib/db/schema.ts - Definir tabelas
+# lib/db/index.ts - Conexão
+# drizzle.config.ts - Configuração
+
+# Executar migrações
+npm run db:generate
+npm run db:migrate
+```
+
+#### 🔄 **11. Videochamadas WebRTC**
+```bash
+# Arquivos necessários:
+# app/consultation/[id]/page.tsx
+# components/consultation/video-call.tsx
+# lib/webrtc/peer-connection.ts
+```
+
+#### 🔄 **12. Integrações Externas**
+```bash
+# lib/integrations/memed.ts - API MEMED
+# lib/integrations/stripe.ts - Pagamentos
+# lib/integrations/ai-assistant.ts - IA médica
+```
+
+## 🚀 **Comandos de Migração Rápida**
+
+### **Script de Migração Automática**
+```bash
+#!/bin/bash
+echo "🔄 Iniciando migração TeleMed..."
+
+# Backup
+cp -r . ../telemed-backup
+
+# Limpeza
+rm -rf client server shared dist *.js.old
+
+# Nova estrutura
+mkdir -p app/{api,\(auth\),\(dashboard\)}
+mkdir -p components/{ui,auth,dashboard}
+mkdir -p lib/{auth,db,integrations}
+mkdir -p types hooks public/images
+
+# Dependências
+rm -rf node_modules package-lock.json
+npm install
+
+echo "✅ Migração base concluída!"
+echo "📋 Próximo: Implementar autenticação"
+```
+
+## 📈 **Cronograma Recomendado**
+
+### **Semana 1: Base**
+- [x] Reorganização da estrutura
+- [x] Configuração Next.js 14
+- [ ] Landing page nova
+- [ ] Deploy inicial
+
+### **Semana 2: Autenticação**
+- [ ] NextAuth.js setup
+- [ ] Login/Register forms
+- [ ] Database schema
+- [ ] Proteção de rotas
+
+### **Semana 3: Dashboard**
+- [ ] Interface médico
+- [ ] Interface paciente
+- [ ] Agendamento básico
+- [ ] Perfis de usuário
+
+### **Semana 4: Videochamadas**
+- [ ] WebRTC implementation
+- [ ] UI de videochamada
+- [ ] Chat em tempo real
+- [ ] Testes de qualidade
+
+## ⚠️ **Possíveis Problemas e Soluções**
+
+### **Problema**: Conflitos de dependências
+**Solução**: 
+```bash
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+```
+
+### **Problema**: Erros de TypeScript
+**Solução**: 
+```bash
+npm run type-check
+# Corrigir tipos um por vez
+```
+
+### **Problema**: Build failing
+**Solução**: 
+```bash
+npm run build
+# Verificar logs e corrigir imports
+```
+
+### **Problema**: Deploy não funcionando
+**Solução**: 
+```bash
+# Verificar variáveis de ambiente
+# Verificar build local primeiro
+npm run build && npm start
+```
+
+## 📞 **Suporte Durante Migração**
+
+Se encontrar problemas durante a migração:
+
+1. **Consulte o backup** criado na Fase 1
+2. **Verifique os logs** de erro detalhadamente  
+3. **Compare com a estrutura** de referência
+4. **Documente soluções** encontradas
+
+## 🎯 **Próximo Passo Sugerido**
+
+**Implementar o sistema de autenticação básico** - Este será nosso próximo foco após completar a reorganização da estrutura.
+
+Quer que eu ajude você com alguma fase específica da migração?

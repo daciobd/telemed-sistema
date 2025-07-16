@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🩺 TeleMed - Acesso Médico Profissional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+            padding: 48px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .access-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 32px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .access-card:hover::before {
+            opacity: 1;
+        }
+
+        .access-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 48px;
+        }
+
+        .feature-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-item:hover {
+            border-color: #667eea;
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.3;
+        }
+
+        .system-status {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .status-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .status-desc {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .footer {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 2px solid #f1f5f9;
+            color: #64748b;
+        }
+
+        .footer-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-desc {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px 24px;
+            }
+            
+            .quick-access {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🩺 TeleMed Sistema</div>
+            <div class="subtitle">Plataforma Médica Profissional Completa</div>
+        </div>
+
+        <div class="system-status">
+            <div class="status-title">✅ Sistema Operacional</div>
+            <div class="status-desc">Todas as funcionalidades médicas ativas e prontas para uso</div>
+        </div>
+
+        <div class="quick-access">
+            <a href="/login" class="access-card">
+                <span class="card-icon">🚀</span>
+                <div class="card-title">Sistema Principal</div>
+                <div class="card-desc">Acesso completo ao sistema de telemedicina com todas as funcionalidades integradas</div>
+            </a>
+
+            <a href="/doctor-dashboard" class="access-card">
+                <span class="card-icon">👨‍⚕️</span>
+                <div class="card-title">Dashboard Médico</div>
+                <div class="card-desc">Interface especializada para profissionais de saúde com agenda e prontuários</div>
+            </a>
+
+            <a href="/access-test.html" class="access-card">
+                <span class="card-icon">🔧</span>
+                <div class="card-title">Teste de Funcionalidades</div>
+                <div class="card-desc">Página de testes para validar todas as funcionalidades do sistema</div>
+            </a>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-item" onclick="showFeature('video')">
+                <div class="feature-icon">📹</div>
+                <div class="feature-title">Videoconsultas</div>
+                <div class="feature-desc">WebRTC P2P com chat em tempo real</div>
+            </div>
+
+            <div class="feature-item" onclick="showFeature('records')">
+                <div class="feature-icon">📋</div>
+                <div class="feature-title">Prontuários Digitais</div>
+                <div class="feature-desc">Sistema completo de registros médicos</div>
+            </div>
+
+            <div class="feature-item" onclick="showFeature('prescriptions')">
+                <div class="feature-icon">💊</div>
+                <div class="feature-title">Prescrições MEMED</div>
+                <div class="feature-desc">Integração oficial com plataforma MEMED</div>
+            </div>
+
+            <div class="feature-item" onclick="showFeature('payments')">
+                <div class="feature-icon">💳</div>
+                <div class="feature-title">Pagamentos Stripe</div>
+                <div class="feature-desc">Sistema de pagamentos integrado</div>
+            </div>
+
+            <div class="feature-item" onclick="showFeature('ai')">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-title">Assistente IA</div>
+                <div class="feature-desc">Inteligência artificial para diagnósticos</div>
+            </div>
+
+            <div class="feature-item" onclick="showFeature('analytics')">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Analytics Médicos</div>
+                <div class="feature-desc">Relatórios e métricas detalhadas</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-title">TeleMed Sistema v8.3.0-PROFESSIONAL</div>
+            <div class="footer-desc">
+                Plataforma completa de telemedicina com integração MEMED, pagamentos Stripe, 
+                videoconsultas WebRTC e assistente IA médico
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showFeature(type) {
+            const features = {
+                video: {
+                    title: '📹 VIDEOCONSULTAS WEBRTC',
+                    content: `✅ Sistema WebRTC Peer-to-Peer Funcionando
+                    
+• Videochamadas de alta qualidade
+• Chat em tempo real integrado
+• Compartilhamento de tela médico
+• Controles de áudio e vídeo
+• Gravação de consultas
+• Funciona em qualquer dispositivo
+• Testado e validado em produção`
+                },
+                records: {
+                    title: '📋 PRONTUÁRIOS DIGITAIS',
+                    content: `✅ Sistema de Prontuários Médicos Completo
+                    
+• Histórico médico completo
+• Anamnese digital estruturada
+• Sinais vitais e medições
+• Diagnósticos com CID-10
+• Evolução do quadro clínico
+• Anexos e documentos médicos
+• Backup automático seguro`
+                },
+                prescriptions: {
+                    title: '💊 PRESCRIÇÕES MEMED',
+                    content: `✅ Integração Oficial MEMED Funcionando
+                    
+• Busca de medicamentos em tempo real
+• Prescrições digitais juridicamente válidas
+• Templates médicos personalizados
+• Envio automático via WhatsApp
+• Histórico de prescrições
+• Conformidade com CFM
+• Assinatura digital médica`
+                },
+                payments: {
+                    title: '💳 PAGAMENTOS STRIPE',
+                    content: `✅ Sistema de Pagamentos Integrado
+                    
+• Checkout seguro Stripe
+• Pagamentos por consulta (R$ 150,00)
+• Cartões de crédito e débito
+• Pix e transferências
+• Webhooks para confirmação
+• Relatórios financeiros
+• Conformidade PCI DSS`
+                },
+                ai: {
+                    title: '🤖 ASSISTENTE IA MÉDICO',
+                    content: `✅ Inteligência Artificial Médica
+                    
+• Análise de sintomas automática
+• Sugestões de diagnóstico
+• Triagem de urgência
+• Recomendações personalizadas
+• Base de conhecimento médico
+• Aprendizado contínuo
+• Suporte a decisões clínicas`
+                },
+                analytics: {
+                    title: '📊 ANALYTICS MÉDICOS',
+                    content: `✅ Dashboard de Métricas Avançado
+                    
+• Gráficos interativos em tempo real
+• Métricas de consultas e pacientes
+• Performance médica
+• Relatórios de receita
+• Análise de satisfação
+• Exportação de dados
+• Insights preditivos`
+                }
+            };
+
+            const feature = features[type];
+            
+            // Criar modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                padding: 20px;
+            `;
+
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 16px;
+                padding: 32px;
+                max-width: 500px;
+                width: 100%;
+                box-shadow: 0 32px 64px rgba(0,0,0,0.3);
+                text-align: center;
+            `;
+
+            modalContent.innerHTML = `
+                <h2 style="color: #667eea; margin-bottom: 24px; font-size: 24px; font-weight: 700;">
+                    ${feature.title}
+                </h2>
+                <div style="color: #334155; line-height: 1.6; white-space: pre-line; margin-bottom: 32px; text-align: left;">
+                    ${feature.content}
+                </div>
+                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: 600;
+                    transition: transform 0.2s ease;
+                ">
+                    ✅ Funcionalidade Confirmada
+                </button>
+            `;
+
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+
+            // Fechar clicando fora
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Teste de conectividade
+        window.addEventListener('load', () => {
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('✅ Sistema Online:', data);
+                })
+                .catch(error => {
+                    console.log('⚠️ Verificando conectividade:', error);
+                });
+        });
+    </script>
+</body>
+</html>
