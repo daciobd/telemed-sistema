@@ -1,6 +1,65 @@
-node_modules
-dist
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production builds
+.next/
+out/
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# next.js build output
+.next
+
+# Serverless directories
+.serverless
+
+# DynamoDB Local files
+.dynamodb/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
-server/public
-vite.config.ts.*
-*.tar.gz
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Vercel
+.vercel
+
+# Render
+.render

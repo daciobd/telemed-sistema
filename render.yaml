@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: telemed-pro
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://telemed-pro.onrender.com
+      - key: NEXTAUTH_URL
+        value: https://telemed-pro.onrender.com
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: FEATURE_AI_ASSISTANT
+        value: true
+      - key: FEATURE_VIDEO_CALLS
+        value: true
+    healthCheckPath: /api/health
+    autoDeploy: true
+    
+  - type: pgsql
+    name: telemed-db
+    databaseName: telemed_production
+    databaseUser: telemed_user
+    plan: free
