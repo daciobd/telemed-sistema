@@ -16,6 +16,8 @@ import PatientDashboardUnified from "@/pages/PatientDashboardUnified";
 import DoctorDashboardUnified from "@/pages/DoctorDashboardUnified";
 import LandingPageUnified from "@/pages/LandingPageUnified";
 import MonitoringDashboard from "@/pages/MonitoringDashboard";
+import DashboardMedicalPro from "@/pages/DashboardMedicalPro";
+import LegacyDemoPage from "@/pages/LegacyDemoPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +44,8 @@ function App() {
             {/* Funcionalidades Core */}
             <Route path="/security" component={SecurityPage} />
             <Route path="/monitoring" component={MonitoringDashboard} />
+            <Route path="/medical-pro" component={DashboardMedicalPro} />
+            <Route path="/legacy-demo" component={LegacyDemoPage} />
             <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
             <Route path="/diagnostic" component={DiagnosticPage} />
             

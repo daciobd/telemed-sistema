@@ -18,34 +18,55 @@ Sistema completo de telemedicina que oferece soluções digitais inovadoras para
 - **Autenticação**: Replit Auth com OpenID Connect
 - **Comunicação**: WebRTC para videoconsultas, WebSockets
 
-## 📁 Estrutura do Projeto
+## 🏗️ Arquitetura UX/UI Unificada
+
+O TeleMed utiliza uma **arquitetura híbrida unificada** que combina SPA React moderna com funcionalidades legadas totalmente integradas no fluxo React/Vite.
+
+### 📁 Estrutura do Projeto
 
 ```
 TeleMed-Pro/
-├── client/                 # React frontend
-├── server/                 # Express backend
-├── shared/                 # Tipos compartilhados
-├── public/                 # Arquivos estáticos
-├── docs/                   # Documentação
-├── api/                    # APIs auxiliares
+├── client/                 # Frontend React (SPA Principal)
+│   ├── src/pages/          # Todas as páginas unificadas
+│   ├── src/components/     # Componentes shadcn/ui
+│   └── src/hooks/          # React hooks customizados
+├── server/                 # Backend Express + APIs
+├── shared/                 # Tipos compartilhados TypeScript
+├── docs/                   # Documentação técnica
+│   └── UX_UI_ARCHITECTURE.md  # Arquitetura detalhada
+├── legacy/                 # Arquivos HTML originais (referência)
+│   ├── medical-dashboard-pro.html
+│   └── demo-vs-real.html
 ├── attached_assets/        # Recursos anexados
-├── index.html             # Página principal
-├── medical-dashboard-pro.html  # Dashboard médico
-├── demo-vs-real.html      # Seletor de modo
 └── package.json           # Dependências
 ```
 
-## 🌐 Acesso
+### Componentes Migrados para React
 
-### URLs Principais
-- **Landing Page**: `/`
-- **Dashboard Médico**: `/medical-dashboard-pro.html`
-- **Modo Demo**: `/medical-dashboard-pro.html?demo=true`
-- **Seletor**: `/demo-vs-real.html`
+| Funcionalidade | Rota | Componente | Status |
+|----------------|------|------------|--------|
+| Dashboard Médico Pro | `/medical-pro` | `DashboardMedicalPro.tsx` | ✅ Migrado |
+| Testes e Demos | `/legacy-demo` | `LegacyDemoPage.tsx` | ✅ Migrado |
+| Monitoramento | `/monitoring` | `MonitoringDashboard.tsx` | ✅ Nativo |
+| Segurança LGPD | `/security` | `SecurityPage.tsx` | ✅ Nativo |
 
-### Demonstrações
-- **URL Real**: Conecta aos sistemas funcionais
-- **URL Demo**: Apresentações médicas com mensagens aprimoradas
+**🎯 Resultado**: Todos os arquivos HTML soltos foram integrados ao fluxo React/Vite para máxima consistência e manutenibilidade.
+
+## 🌐 Navegação da Aplicação
+
+### URLs Principais (SPA React)
+- **Landing Page**: `/` - Página inicial unificada
+- **Dashboard Médico**: `/medical-pro` - Interface médica avançada
+- **Dashboards Unificados**: `/doctor-dashboard`, `/patient-dashboard`
+- **Monitoramento**: `/monitoring` - Sistema de monitoramento completo
+- **Testes e Demos**: `/legacy-demo` - Interface de testes migrada
+- **Segurança LGPD**: `/security` - Configurações de privacidade
+
+### Funcionalidades Integradas
+- **Navegação SPA**: Transições fluidas sem reload
+- **Estado Unificado**: React Query para cache consistente
+- **Componentes Reutilizáveis**: shadcn/ui para interface padronizada
+- **TypeScript**: Type safety em toda a aplicação
 
 ## 🔧 Desenvolvimento
 
