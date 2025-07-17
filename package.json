@@ -1,12 +1,28 @@
 {
   "name": "telemed-sistema",
   "version": "1.0.0",
+  "description": "Sistema completo de telemedicina com WebRTC, IA e integrações",
   "main": "app.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "start": "node app.js",
+    "dev": "node app.js",
     "build": "echo 'Build complete'"
   },
- "engines": {
-  "node": ">=20.0.0"
-}
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0"
+  },
+  "keywords": [
+    "telemedicina",
+    "webrtc",
+    "healthcare",
+    "medical",
+    "telemed"
+  ],
+  "author": "TeleMed Sistema",
+  "license": "MIT"
 }
