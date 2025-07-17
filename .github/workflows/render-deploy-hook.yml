@@ -1,0 +1,205 @@
+name: Render Deploy Hook
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+      run_tests:
+        description: 'Run tests after deployment'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_URL }}
+
+jobs:
+  # ===============================================
+  # PRE-DEPLOY BACKUP
+  # ===============================================
+  pre-deploy-backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Create pre-deploy backup
+      run: |
+        chmod +x ./backup-and-rollback.sh
+        ./backup-and-rollback.sh backup
+        echo "✅ Pre-deploy backup created"
+        
+    - name: 📊 Upload backup artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: pre-deploy-backup
+        path: backups/
+        
+  # ===============================================
+  # TRIGGER RENDER DEPLOYMENT
+  # ===============================================
+  trigger-deploy:
+    runs-on: ubuntu-latest
+    needs: pre-deploy-backup
+    
+    outputs:
+      deploy-status: ${{ steps.deploy.outputs.status }}
+    
+    steps:
+    - name: 🚀 Trigger Render Deploy Hook
+      id: deploy
+      run: |
+        echo "🚀 Starting Render deployment for ${{ github.event.inputs.environment }}..."
+        
+        # Determinar qual hook usar baseado no environment
+        if [ "${{ github.event.inputs.environment }}" == "production" ]; then
+          HOOK_URL="${{ secrets.RENDER_PRODUCTION_HOOK }}"
+        else
+          HOOK_URL="${{ secrets.RENDER_STAGING_HOOK }}"
+        fi
+        
+        if [ -z "$HOOK_URL" ]; then
+          echo "❌ Deploy hook not configured for ${{ github.event.inputs.environment }}"
+          echo "status=failed" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
+        # Trigger deployment
+        RESPONSE=$(curl -s -w "%{http_code}" -X POST "$HOOK_URL")
+        HTTP_CODE="${RESPONSE: -3}"
+        RESPONSE_BODY="${RESPONSE%???}"
+        
+        echo "📡 Deploy hook response: $HTTP_CODE"
+        echo "$RESPONSE_BODY"
+        
+        if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
+          echo "✅ Deploy successfully triggered"
+          echo "status=success" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Deploy failed with status: $HTTP_CODE"
+          echo "status=failed" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
+  # ===============================================
+  # WAIT FOR DEPLOYMENT
+  # ===============================================
+  wait-for-deploy:
+    runs-on: ubuntu-latest
+    needs: trigger-deploy
+    if: needs.trigger-deploy.outputs.deploy-status == 'success'
+    
+    steps:
+    - name: ⏳ Wait for deployment to complete
+      run: |
+        echo "⏳ Waiting for Render to complete deployment..."
+        echo "🕒 This usually takes 2-5 minutes..."
+        
+        # Wait for deployment to complete
+        sleep 120
+        
+        echo "✅ Initial wait complete, checking deployment status..."
+        
+  # ===============================================
+  # POST-DEPLOY TESTING
+  # ===============================================
+  post-deploy-test:
+    runs-on: ubuntu-latest
+    needs: [trigger-deploy, wait-for-deploy]
+    if: github.event.inputs.run_tests == 'true' && needs.trigger-deploy.outputs.deploy-status == 'success'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🧪 Test deployed application
+      run: |
+        chmod +x ./test-deployment.sh
+        
+        if [ ! -z "${{ env.DEPLOY_URL }}" ]; then
+          echo "🧪 Testing deployment at: ${{ env.DEPLOY_URL }}"
+          DEPLOY_URL="${{ env.DEPLOY_URL }}" ./test-deployment.sh
+        else
+          echo "⚠️ DEPLOY_URL not configured, skipping tests"
+          exit 1
+        fi
+        
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: post-deploy-test-results
+        path: test-results.json
+        
+  # ===============================================
+  # ROLLBACK ON FAILURE
+  # ===============================================
+  rollback-on-failure:
+    runs-on: ubuntu-latest
+    needs: [trigger-deploy, post-deploy-test]
+    if: failure() && (needs.trigger-deploy.outputs.deploy-status == 'failed' || needs.post-deploy-test.result == 'failure')
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: ⬇️ Download backup
+      uses: actions/download-artifact@v3
+      with:
+        name: pre-deploy-backup
+        path: backups/
+        
+    - name: 🔄 Execute automatic rollback
+      run: |
+        echo "🚨 Deployment failed, initiating automatic rollback..."
+        chmod +x ./backup-and-rollback.sh
+        
+        # List available backups
+        ./backup-and-rollback.sh list
+        
+        # Rollback to previous version
+        ./backup-and-rollback.sh rollback HEAD~1
+        
+        echo "✅ Rollback completed"
+        
+  # ===============================================
+  # NOTIFICATION
+  # ===============================================
+  notify-result:
+    runs-on: ubuntu-latest
+    needs: [trigger-deploy, post-deploy-test, rollback-on-failure]
+    if: always()
+    
+    steps:
+    - name: 📧 Send notification
+      run: |
+        echo "📊 Deployment Summary for ${{ github.event.inputs.environment }}:"
+        echo "================================="
+        
+        if [ "${{ needs.trigger-deploy.outputs.deploy-status }}" == "success" ]; then
+          if [ "${{ needs.post-deploy-test.result }}" == "success" ] || [ "${{ github.event.inputs.run_tests }}" == "false" ]; then
+            echo "✅ Deployment: SUCCESS"
+            echo "✅ Tests: PASSED"
+            echo "🌐 Application: ${{ env.DEPLOY_URL }}"
+          else
+            echo "✅ Deployment: SUCCESS"
+            echo "❌ Tests: FAILED"
+            echo "🔄 Rollback: ${{ needs.rollback-on-failure.result }}"
+          fi
+        else
+          echo "❌ Deployment: FAILED"
+          echo "🔄 Rollback: ${{ needs.rollback-on-failure.result }}"
+        fi
+        
+        echo ""
+        echo "🕒 Deployment Time: $(date)"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo "👤 Triggered by: ${{ github.actor }}"

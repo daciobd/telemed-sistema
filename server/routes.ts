@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import { registerApiStatusRoutes } from "./routes/api-status";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
@@ -28,6 +29,9 @@ import { loginSchema, registerSchema } from "@shared/schema";
 import onboardingRoutes from "./onboarding-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register API status routes for monitoring and CI/CD
+  registerApiStatusRoutes(app);
+  
   // ===============================================
   // AUTH ROUTES - MVP CREDENTIAL-BASED AUTHENTICATION
   // ===============================================

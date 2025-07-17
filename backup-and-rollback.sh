@@ -1,262 +1,335 @@
 #!/bin/bash
 
-# 💾 TeleMed Pro - Backup and Rollback System
-# Este script gerencia backups e rollbacks do deployment
+# ========================================
+# TeleMed Sistema - Backup and Rollback
+# ========================================
+# Sistema de backup e rollback para deploys
+# Permite reverter para versões anteriores em caso de problemas
 
-set -e
+set -e  # Parar em caso de erro
 
+# Cores para output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Configurações
 BACKUP_DIR="backups"
-TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
+MAX_BACKUPS=10
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_NAME="telemed_backup_${TIMESTAMP}"
 
-# Função para mostrar uso
-show_usage() {
-    echo "💾 TeleMed Pro - Backup and Rollback System"
+# Função para mostrar ajuda
+show_help() {
+    echo -e "${BLUE}🔄 TeleMed Sistema - Backup and Rollback${NC}"
+    echo -e "=========================================="
     echo ""
-    echo "Uso:"
-    echo "  $0 backup                    # Criar backup atual"
-    echo "  $0 list                      # Listar backups disponíveis"
-    echo "  $0 restore <backup_name>     # Restaurar backup específico"
-    echo "  $0 rollback                  # Rollback para último backup"
-    echo "  $0 clean                     # Limpar backups antigos"
+    echo -e "${YELLOW}Uso:${NC}"
+    echo -e "  $0 backup              - Criar backup do estado atual"
+    echo -e "  $0 rollback [version]  - Reverter para versão anterior"
+    echo -e "  $0 list                - Listar backups disponíveis"
+    echo -e "  $0 cleanup             - Limpar backups antigos"
+    echo -e "  $0 restore [backup]    - Restaurar backup específico"
     echo ""
-    echo "Exemplos:"
-    echo "  $0 backup"
-    echo "  $0 restore backup_20250716_200530"
-    echo "  $0 rollback"
+    echo -e "${YELLOW}Exemplos:${NC}"
+    echo -e "  $0 backup"
+    echo -e "  $0 rollback HEAD~1"
+    echo -e "  $0 restore telemed_backup_20250717_120000"
+    echo ""
 }
 
-# Função para criar backup
-create_backup() {
-    echo "💾 Criando backup..."
-    
-    # Criar diretório de backups
-    mkdir -p "$BACKUP_DIR"
-    
-    # Nome do backup
-    backup_name="backup_${TIMESTAMP}"
-    backup_path="$BACKUP_DIR/$backup_name"
-    
-    # Criar diretório do backup
-    mkdir -p "$backup_path"
-    
-    # Backup dos arquivos principais
-    echo "📁 Fazendo backup dos arquivos principais..."
-    
-    # Arquivos de configuração
-    cp render.yaml "$backup_path/" 2>/dev/null || true
-    cp .env.example "$backup_path/" 2>/dev/null || true
-    cp .gitignore "$backup_path/" 2>/dev/null || true
-    
-    # Scripts
-    cp *.sh "$backup_path/" 2>/dev/null || true
-    
-    # Diretório telemed-v2 completo
-    if [ -d "telemed-v2" ]; then
-        echo "📦 Fazendo backup do diretório telemed-v2..."
-        cp -r telemed-v2 "$backup_path/"
+# Criar diretório de backup
+create_backup_dir() {
+    if [ ! -d "$BACKUP_DIR" ]; then
+        mkdir -p "$BACKUP_DIR"
+        echo -e "${GREEN}✅ Diretório de backup criado: ${BACKUP_DIR}${NC}"
     fi
+}
+
+# Backup do código fonte
+backup_source() {
+    echo -e "${YELLOW}📦 Criando backup do código fonte...${NC}"
     
-    # Informações do git
-    if [ -d ".git" ]; then
-        echo "🔍 Salvando informações do git..."
-        git log --oneline -10 > "$backup_path/git_history.txt" 2>/dev/null || true
-        git status > "$backup_path/git_status.txt" 2>/dev/null || true
-        git branch > "$backup_path/git_branches.txt" 2>/dev/null || true
-    fi
+    create_backup_dir
     
-    # Criar manifesto do backup
-    echo "📋 Criando manifesto do backup..."
-    cat > "$backup_path/backup_manifest.txt" << EOF
-TeleMed Pro - Backup Manifest
-============================
-
-Backup criado: $(date)
-Timestamp: $TIMESTAMP
-Commit atual: $(git rev-parse HEAD 2>/dev/null || echo "N/A")
-Branch atual: $(git branch --show-current 2>/dev/null || echo "N/A")
-
-Arquivos incluídos:
-$(find "$backup_path" -type f | sort)
-
-Tamanho total: $(du -sh "$backup_path" | cut -f1)
+    # Criar arquivo com informações do backup
+    cat > "${BACKUP_DIR}/${BACKUP_NAME}_info.json" << EOF
+{
+    "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+    "git_commit": "$(git rev-parse HEAD 2>/dev/null || echo 'no-git')",
+    "git_branch": "$(git branch --show-current 2>/dev/null || echo 'no-git')",
+    "node_version": "$(node --version 2>/dev/null || echo 'unknown')",
+    "npm_version": "$(npm --version 2>/dev/null || echo 'unknown')",
+    "backup_type": "source",
+    "description": "Backup automático antes do deploy"
+}
 EOF
-    
-    echo "✅ Backup criado: $backup_name"
-    echo "📁 Localização: $backup_path"
-    echo "📊 Tamanho: $(du -sh "$backup_path" | cut -f1)"
-}
 
-# Função para listar backups
-list_backups() {
-    echo "📋 Backups disponíveis:"
-    echo ""
+    # Backup dos arquivos essenciais
+    echo -e "${YELLOW}📁 Compactando arquivos...${NC}"
     
-    if [ ! -d "$BACKUP_DIR" ] || [ -z "$(ls -A "$BACKUP_DIR" 2>/dev/null)" ]; then
-        echo "   Nenhum backup encontrado."
-        return
+    tar -czf "${BACKUP_DIR}/${BACKUP_NAME}.tar.gz" \
+        --exclude="node_modules" \
+        --exclude="dist" \
+        --exclude="build" \
+        --exclude=".next" \
+        --exclude="backups" \
+        --exclude="*.log" \
+        --exclude=".git" \
+        . 2>/dev/null || true
+    
+    echo -e "${GREEN}✅ Backup criado: ${BACKUP_DIR}/${BACKUP_NAME}.tar.gz${NC}"
+    
+    # Git backup se disponível
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+        echo -e "${YELLOW}🔄 Criando backup Git...${NC}"
+        git bundle create "${BACKUP_DIR}/${BACKUP_NAME}.bundle" --all 2>/dev/null || true
+        echo -e "${GREEN}✅ Git bundle criado${NC}"
     fi
     
-    for backup in "$BACKUP_DIR"/*; do
-        if [ -d "$backup" ]; then
-            backup_name=$(basename "$backup")
-            backup_date=$(echo "$backup_name" | sed 's/backup_//' | sed 's/_/ /')
-            backup_size=$(du -sh "$backup" | cut -f1)
+    return 0
+}
+
+# Backup do banco de dados (se configurado)
+backup_database() {
+    if [ -n "$DATABASE_URL" ]; then
+        echo -e "${YELLOW}🗄️ Fazendo backup do banco de dados...${NC}"
+        
+        # Tentar backup PostgreSQL
+        if command -v pg_dump >/dev/null 2>&1; then
+            pg_dump "$DATABASE_URL" > "${BACKUP_DIR}/${BACKUP_NAME}_database.sql" 2>/dev/null || {
+                echo -e "${YELLOW}⚠️ Backup do banco falhou, continuando...${NC}"
+                return 0
+            }
+            echo -e "${GREEN}✅ Backup do banco criado${NC}"
+        else
+            echo -e "${YELLOW}⚠️ pg_dump não encontrado, pulando backup do banco${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️ DATABASE_URL não configurada, pulando backup do banco${NC}"
+    fi
+}
+
+# Listar backups disponíveis
+list_backups() {
+    echo -e "${BLUE}📋 Backups Disponíveis${NC}"
+    echo -e "======================"
+    
+    if [ ! -d "$BACKUP_DIR" ] || [ -z "$(ls -A $BACKUP_DIR 2>/dev/null)" ]; then
+        echo -e "${YELLOW}⚠️ Nenhum backup encontrado${NC}"
+        return 0
+    fi
+    
+    for info_file in "${BACKUP_DIR}"/*_info.json; do
+        if [ -f "$info_file" ]; then
+            backup_name=$(basename "$info_file" _info.json)
+            timestamp=$(grep '"timestamp"' "$info_file" | cut -d'"' -f4 2>/dev/null || echo "unknown")
+            git_commit=$(grep '"git_commit"' "$info_file" | cut -d'"' -f4 2>/dev/null || echo "unknown")
             
-            echo "   📦 $backup_name"
-            echo "      Data: $backup_date"
-            echo "      Tamanho: $backup_size"
+            echo -e "${GREEN}📦 ${backup_name}${NC}"
+            echo -e "   📅 Data: $timestamp"
+            echo -e "   🔄 Commit: ${git_commit:0:8}"
             
-            # Mostrar informações do manifesto se existir
-            if [ -f "$backup/backup_manifest.txt" ]; then
-                commit=$(grep "Commit atual:" "$backup/backup_manifest.txt" | cut -d: -f2 | xargs)
-                if [ "$commit" != "N/A" ]; then
-                    echo "      Commit: $commit"
-                fi
+            # Verificar se arquivos existem
+            if [ -f "${BACKUP_DIR}/${backup_name}.tar.gz" ]; then
+                size=$(du -h "${BACKUP_DIR}/${backup_name}.tar.gz" | cut -f1)
+                echo -e "   📁 Tamanho: $size"
             fi
+            
             echo ""
         fi
     done
 }
 
-# Função para restaurar backup
+# Restaurar backup específico
 restore_backup() {
-    local backup_name="$1"
+    local backup_name=$1
     
     if [ -z "$backup_name" ]; then
-        echo "❌ Erro: Especifique o nome do backup"
-        echo "Use: $0 list para ver backups disponíveis"
-        exit 1
+        echo -e "${RED}❌ Nome do backup é obrigatório${NC}"
+        echo -e "${YELLOW}Use: $0 list para ver backups disponíveis${NC}"
+        return 1
     fi
     
-    local backup_path="$BACKUP_DIR/$backup_name"
+    local backup_file="${BACKUP_DIR}/${backup_name}.tar.gz"
+    local info_file="${BACKUP_DIR}/${backup_name}_info.json"
     
-    if [ ! -d "$backup_path" ]; then
-        echo "❌ Erro: Backup não encontrado: $backup_name"
-        echo "Use: $0 list para ver backups disponíveis"
-        exit 1
+    if [ ! -f "$backup_file" ]; then
+        echo -e "${RED}❌ Backup não encontrado: $backup_file${NC}"
+        return 1
     fi
     
-    echo "🔄 Restaurando backup: $backup_name"
+    echo -e "${YELLOW}🔄 Restaurando backup: $backup_name${NC}"
     
-    # Confirmar ação
-    read -p "⚠️  Isso irá substituir os arquivos atuais. Continuar? (y/N): " confirm
-    if [ "$confirm" != "y" ]; then
-        echo "❌ Restauração cancelada"
-        exit 1
+    # Mostrar informações do backup
+    if [ -f "$info_file" ]; then
+        echo -e "${BLUE}📋 Informações do Backup:${NC}"
+        cat "$info_file" | grep -E '"timestamp"|"git_commit"|"description"' | sed 's/^/   /'
+        echo ""
+    fi
+    
+    # Confirmar restauração
+    echo -e "${YELLOW}⚠️ Esta operação irá sobrescrever os arquivos atuais.${NC}"
+    echo -e "${YELLOW}Tem certeza? (y/N):${NC} "
+    read -r confirm
+    
+    if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+        echo -e "${YELLOW}❌ Operação cancelada${NC}"
+        return 0
     fi
     
     # Criar backup do estado atual antes de restaurar
-    echo "💾 Criando backup do estado atual..."
-    current_backup="current_before_restore_${TIMESTAMP}"
-    mkdir -p "$BACKUP_DIR/$current_backup"
-    
-    # Backup rápido dos arquivos principais
-    cp render.yaml "$BACKUP_DIR/$current_backup/" 2>/dev/null || true
-    cp .env.example "$BACKUP_DIR/$current_backup/" 2>/dev/null || true
-    cp -r telemed-v2 "$BACKUP_DIR/$current_backup/" 2>/dev/null || true
+    echo -e "${YELLOW}📦 Criando backup de segurança do estado atual...${NC}"
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    SAFETY_BACKUP="safety_backup_${TIMESTAMP}"
+    backup_source_silent "$SAFETY_BACKUP"
     
     # Restaurar arquivos
-    echo "📁 Restaurando arquivos..."
+    echo -e "${YELLOW}📁 Extraindo backup...${NC}"
+    tar -xzf "$backup_file" --exclude="backups" 2>/dev/null || {
+        echo -e "${RED}❌ Falha ao extrair backup${NC}"
+        return 1
+    }
     
-    # Restaurar arquivos de configuração
-    cp "$backup_path/render.yaml" . 2>/dev/null || true
-    cp "$backup_path/.env.example" . 2>/dev/null || true
-    cp "$backup_path/.gitignore" . 2>/dev/null || true
+    # Reinstalar dependências
+    echo -e "${YELLOW}📦 Reinstalando dependências...${NC}"
+    npm ci --prefer-offline --no-audit >/dev/null 2>&1 || {
+        echo -e "${YELLOW}⚠️ Falha ao instalar dependências${NC}"
+    }
     
-    # Restaurar scripts
-    cp "$backup_path"/*.sh . 2>/dev/null || true
-    chmod +x *.sh 2>/dev/null || true
+    echo -e "${GREEN}✅ Backup restaurado com sucesso!${NC}"
+    echo -e "${BLUE}💡 Backup de segurança criado: ${SAFETY_BACKUP}${NC}"
     
-    # Restaurar diretório telemed-v2
-    if [ -d "$backup_path/telemed-v2" ]; then
-        echo "📦 Restaurando diretório telemed-v2..."
-        rm -rf telemed-v2 2>/dev/null || true
-        cp -r "$backup_path/telemed-v2" .
-    fi
-    
-    echo "✅ Backup restaurado com sucesso!"
-    echo "📝 Backup do estado anterior salvo em: $current_backup"
-    echo ""
-    echo "🔄 Próximos passos:"
-    echo "1. Verificar se os arquivos foram restaurados corretamente"
-    echo "2. Fazer commit das alterações:"
-    echo "   git add ."
-    echo "   git commit -m 'restore: backup $backup_name'"
-    echo "3. Fazer push para trigger novo deploy:"
-    echo "   git push origin main"
+    return 0
 }
 
-# Função para rollback para último backup
-rollback() {
-    echo "🔄 Executando rollback para último backup..."
+# Backup silencioso (para uso interno)
+backup_source_silent() {
+    local custom_name=${1:-$BACKUP_NAME}
+    create_backup_dir
     
-    # Encontrar último backup
-    if [ ! -d "$BACKUP_DIR" ]; then
-        echo "❌ Erro: Nenhum backup encontrado"
-        exit 1
-    fi
-    
-    last_backup=$(ls -t "$BACKUP_DIR" | head -n 1)
-    
-    if [ -z "$last_backup" ]; then
-        echo "❌ Erro: Nenhum backup encontrado"
-        exit 1
-    fi
-    
-    echo "📦 Último backup encontrado: $last_backup"
-    restore_backup "$last_backup"
+    cat > "${BACKUP_DIR}/${custom_name}_info.json" << EOF
+{
+    "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+    "git_commit": "$(git rev-parse HEAD 2>/dev/null || echo 'no-git')",
+    "git_branch": "$(git branch --show-current 2>/dev/null || echo 'no-git')",
+    "backup_type": "safety",
+    "description": "Backup de segurança automático"
+}
+EOF
+
+    tar -czf "${BACKUP_DIR}/${custom_name}.tar.gz" \
+        --exclude="node_modules" \
+        --exclude="dist" \
+        --exclude="build" \
+        --exclude=".next" \
+        --exclude="backups" \
+        --exclude="*.log" \
+        --exclude=".git" \
+        . 2>/dev/null || true
 }
 
-# Função para limpar backups antigos
-clean_backups() {
-    echo "🧹 Limpando backups antigos..."
+# Rollback Git
+git_rollback() {
+    local target=${1:-HEAD~1}
+    
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo -e "${RED}❌ Não é um repositório Git${NC}"
+        return 1
+    fi
+    
+    echo -e "${YELLOW}🔄 Fazendo rollback Git para: $target${NC}"
+    
+    # Verificar se o commit existe
+    if ! git rev-parse --verify "$target" >/dev/null 2>&1; then
+        echo -e "${RED}❌ Commit não encontrado: $target${NC}"
+        return 1
+    fi
+    
+    # Criar backup antes do rollback
+    echo -e "${YELLOW}📦 Criando backup antes do rollback...${NC}"
+    backup_source_silent "pre_rollback_${TIMESTAMP}"
+    
+    # Fazer rollback
+    echo -e "${YELLOW}🔄 Executando rollback...${NC}"
+    git reset --hard "$target" || {
+        echo -e "${RED}❌ Falha no rollback Git${NC}"
+        return 1
+    }
+    
+    # Reinstalar dependências
+    echo -e "${YELLOW}📦 Reinstalando dependências...${NC}"
+    npm ci --prefer-offline --no-audit >/dev/null 2>&1 || {
+        echo -e "${YELLOW}⚠️ Falha ao instalar dependências${NC}"
+    }
+    
+    echo -e "${GREEN}✅ Rollback Git concluído!${NC}"
+    return 0
+}
+
+# Limpar backups antigos
+cleanup_backups() {
+    echo -e "${YELLOW}🧹 Limpando backups antigos...${NC}"
     
     if [ ! -d "$BACKUP_DIR" ]; then
-        echo "✅ Nenhum backup para limpar"
-        return
+        echo -e "${YELLOW}⚠️ Diretório de backup não existe${NC}"
+        return 0
     fi
     
-    # Manter apenas os 5 backups mais recentes
-    backup_count=$(ls -1 "$BACKUP_DIR" | wc -l)
+    # Contar backups
+    backup_count=$(ls -1 "${BACKUP_DIR}"/*_info.json 2>/dev/null | wc -l)
     
-    if [ "$backup_count" -le 5 ]; then
-        echo "✅ Apenas $backup_count backups encontrados (mantendo todos)"
-        return
+    if [ "$backup_count" -le "$MAX_BACKUPS" ]; then
+        echo -e "${GREEN}✅ Nenhuma limpeza necessária (${backup_count}/${MAX_BACKUPS})${NC}"
+        return 0
     fi
     
-    echo "📊 Encontrados $backup_count backups (mantendo os 5 mais recentes)"
+    echo -e "${YELLOW}📊 Encontrados ${backup_count} backups (máximo: ${MAX_BACKUPS})${NC}"
     
-    # Listar backups por data (mais antigos primeiro)
-    old_backups=$(ls -t "$BACKUP_DIR" | tail -n +6)
-    
-    for backup in $old_backups; do
-        echo "🗑️  Removendo backup antigo: $backup"
-        rm -rf "$BACKUP_DIR/$backup"
+    # Remover backups mais antigos
+    ls -1t "${BACKUP_DIR}"/*_info.json 2>/dev/null | tail -n +$((MAX_BACKUPS + 1)) | while read -r info_file; do
+        backup_name=$(basename "$info_file" _info.json)
+        echo -e "${YELLOW}🗑️ Removendo: $backup_name${NC}"
+        
+        rm -f "${BACKUP_DIR}/${backup_name}.tar.gz" 2>/dev/null || true
+        rm -f "${BACKUP_DIR}/${backup_name}.bundle" 2>/dev/null || true
+        rm -f "${BACKUP_DIR}/${backup_name}_database.sql" 2>/dev/null || true
+        rm -f "$info_file" 2>/dev/null || true
     done
     
-    echo "✅ Limpeza concluída"
+    echo -e "${GREEN}✅ Limpeza concluída${NC}"
 }
 
 # Função principal
 main() {
     case "$1" in
         "backup")
-            create_backup
+            echo -e "${BLUE}📦 Iniciando backup completo...${NC}"
+            backup_source
+            backup_database
+            cleanup_backups
+            echo -e "${GREEN}🎉 Backup concluído: ${BACKUP_NAME}${NC}"
+            ;;
+        "rollback")
+            git_rollback "$2"
             ;;
         "list")
             list_backups
             ;;
+        "cleanup")
+            cleanup_backups
+            ;;
         "restore")
             restore_backup "$2"
             ;;
-        "rollback")
-            rollback
-            ;;
-        "clean")
-            clean_backups
+        "help"|"--help"|"-h"|"")
+            show_help
             ;;
         *)
-            show_usage
+            echo -e "${RED}❌ Comando inválido: $1${NC}"
+            show_help
             exit 1
             ;;
     esac

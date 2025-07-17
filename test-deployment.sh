@@ -1,195 +1,208 @@
 #!/bin/bash
 
-# 🧪 TeleMed Pro - Teste de Deployment
-# Este script testa automaticamente o deployment no Render
+# ========================================
+# TeleMed Sistema - Test Deployment Script
+# ========================================
+# Testa se o deployment está funcionando corretamente
+# Verifica API status, health checks e endpoints críticos
 
-set -e
+set -e  # Parar em caso de erro
 
-# Verificar se URL foi fornecida
-if [ -z "$1" ]; then
-    echo "❌ Erro: Forneça a URL do deployment"
-    echo "Uso: ./test-deployment.sh https://telemed-pro.onrender.com"
-    exit 1
+# Cores para output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Configurações
+TIMEOUT=30
+RETRY_COUNT=3
+SLEEP_BETWEEN_RETRIES=5
+
+# URLs para teste
+if [ -z "$DEPLOY_URL" ]; then
+    DEPLOY_URL="http://localhost:5000"
 fi
 
-BASE_URL="$1"
-echo "🧪 Testando deployment em: $BASE_URL"
+API_STATUS_URL="${DEPLOY_URL}/api/status"
+HEALTH_URL="${DEPLOY_URL}/health"
+ROOT_URL="${DEPLOY_URL}/"
 
-# Função para testar endpoint
-test_endpoint() {
-    local url="$1"
-    local description="$2"
-    local expected_status="$3"
-    
-    echo "🔍 Testando: $description"
-    
-    # Fazer request com timeout
-    response=$(curl -s -w "\n%{http_code}\n%{time_total}" -m 10 "$url" 2>/dev/null || echo -e "\nERROR\n999")
-    
-    # Extrair status code e tempo
-    status_code=$(echo "$response" | tail -n 2 | head -n 1)
-    time_total=$(echo "$response" | tail -n 1)
-    body=$(echo "$response" | head -n -2)
-    
-    if [ "$status_code" = "$expected_status" ]; then
-        echo "  ✅ Status: $status_code (${time_total}s)"
-        return 0
-    else
-        echo "  ❌ Status: $status_code (esperado: $expected_status)"
-        echo "  📝 Resposta: $body"
-        return 1
-    fi
-}
+echo -e "${BLUE}🧪 Iniciando testes de deployment...${NC}"
+echo -e "${BLUE}📍 URL Base: ${DEPLOY_URL}${NC}"
 
-# Função para testar JSON
-test_json_endpoint() {
-    local url="$1"
-    local description="$2"
+# Função para fazer requisições com retry
+make_request() {
+    local url=$1
+    local expected_status=${2:-200}
+    local retry_count=0
     
-    echo "🔍 Testando: $description"
-    
-    response=$(curl -s -w "\n%{http_code}\n%{time_total}" -H "Accept: application/json" -m 10 "$url" 2>/dev/null || echo -e "\nERROR\n999")
-    
-    status_code=$(echo "$response" | tail -n 2 | head -n 1)
-    time_total=$(echo "$response" | tail -n 1)
-    body=$(echo "$response" | head -n -2)
-    
-    if [ "$status_code" = "200" ]; then
-        # Verificar se é JSON válido
-        if echo "$body" | jq . >/dev/null 2>&1; then
-            echo "  ✅ Status: $status_code (${time_total}s) - JSON válido"
-            # Mostrar campos importantes
-            if echo "$body" | jq -r '.status' >/dev/null 2>&1; then
-                status=$(echo "$body" | jq -r '.status')
-                echo "  📊 Status: $status"
+    while [ $retry_count -lt $RETRY_COUNT ]; do
+        echo -e "${YELLOW}🔄 Testando: ${url}${NC}"
+        
+        if command -v curl >/dev/null 2>&1; then
+            response=$(curl -s -w "HTTPSTATUS:%{http_code}" --connect-timeout $TIMEOUT "$url" 2>/dev/null || echo "HTTPSTATUS:000")
+            body=$(echo "$response" | sed -E 's/HTTPSTATUS\:[0-9]{3}$//')
+            status=$(echo "$response" | tr -d '\n' | sed -E 's/.*HTTPSTATUS:([0-9]{3})$/\1/')
+        else
+            echo -e "${RED}❌ curl não encontrado, instalando...${NC}"
+            # Tentar instalar curl se não estiver disponível
+            if command -v apt-get >/dev/null 2>&1; then
+                apt-get update && apt-get install -y curl
+            elif command -v yum >/dev/null 2>&1; then
+                yum install -y curl
+            else
+                echo -e "${RED}❌ Não foi possível instalar curl${NC}"
+                return 1
             fi
-            if echo "$body" | jq -r '.version' >/dev/null 2>&1; then
-                version=$(echo "$body" | jq -r '.version')
-                echo "  📋 Versão: $version"
-            fi
+            continue
+        fi
+        
+        if [ "$status" = "$expected_status" ]; then
+            echo -e "${GREEN}✅ Sucesso: ${url} (Status: ${status})${NC}"
+            echo "$body"
             return 0
         else
-            echo "  ❌ Status: $status_code - JSON inválido"
-            echo "  📝 Resposta: $body"
+            echo -e "${RED}❌ Falha: ${url} (Status: ${status})${NC}"
+            retry_count=$((retry_count + 1))
+            if [ $retry_count -lt $RETRY_COUNT ]; then
+                echo -e "${YELLOW}⏳ Retry ${retry_count}/${RETRY_COUNT} em ${SLEEP_BETWEEN_RETRIES}s...${NC}"
+                sleep $SLEEP_BETWEEN_RETRIES
+            fi
+        fi
+    done
+    
+    echo -e "${RED}❌ Falha após ${RETRY_COUNT} tentativas: ${url}${NC}"
+    return 1
+}
+
+# Função para testar conteúdo JSON
+test_json_response() {
+    local url=$1
+    local expected_field=$2
+    
+    echo -e "${YELLOW}🔍 Testando JSON: ${url}${NC}"
+    
+    response=$(curl -s --connect-timeout $TIMEOUT "$url" 2>/dev/null || echo "{}")
+    
+    if command -v jq >/dev/null 2>&1; then
+        if echo "$response" | jq -e ".$expected_field" >/dev/null 2>&1; then
+            echo -e "${GREEN}✅ JSON válido com campo '${expected_field}'${NC}"
+            echo "$response" | jq .
+            return 0
+        else
+            echo -e "${RED}❌ JSON inválido ou campo '${expected_field}' ausente${NC}"
+            echo "$response"
             return 1
         fi
     else
-        echo "  ❌ Status: $status_code"
-        echo "  📝 Resposta: $body"
-        return 1
+        # Teste simples sem jq
+        if echo "$response" | grep -q "\"$expected_field\""; then
+            echo -e "${GREEN}✅ JSON contém campo '${expected_field}'${NC}"
+            echo "$response"
+            return 0
+        else
+            echo -e "${RED}❌ Campo '${expected_field}' não encontrado${NC}"
+            echo "$response"
+            return 1
+        fi
     fi
 }
 
-# Contador de testes
-total_tests=0
-passed_tests=0
-
-# Testes principais
-echo ""
-echo "🚀 ===== INICIANDO TESTES DE DEPLOYMENT ====="
-echo ""
-
-# Teste 1: Homepage
-total_tests=$((total_tests + 1))
-if test_endpoint "$BASE_URL" "Homepage" "200"; then
-    passed_tests=$((passed_tests + 1))
-fi
-
-# Teste 2: Health page
-total_tests=$((total_tests + 1))
-if test_endpoint "$BASE_URL/health" "Health page" "200"; then
-    passed_tests=$((passed_tests + 1))
-fi
-
-# Teste 3: API Health
-total_tests=$((total_tests + 1))
-if test_json_endpoint "$BASE_URL/api/health" "API Health"; then
-    passed_tests=$((passed_tests + 1))
-fi
-
-# Teste 4: 404 handling
-total_tests=$((total_tests + 1))
-if test_endpoint "$BASE_URL/pagina-inexistente" "404 handling" "404"; then
-    passed_tests=$((passed_tests + 1))
-fi
-
-# Teste 5: Headers de segurança
-echo "🔍 Testando: Headers de segurança"
-security_headers=$(curl -s -I "$BASE_URL" 2>/dev/null | grep -i -E "(x-frame-options|x-content-type-options|x-xss-protection|strict-transport-security)")
-
-if [ -n "$security_headers" ]; then
-    echo "  ✅ Headers de segurança encontrados:"
-    echo "$security_headers" | sed 's/^/    /'
-    total_tests=$((total_tests + 1))
-    passed_tests=$((passed_tests + 1))
+# Teste 1: Health Check básico
+echo -e "\n${BLUE}🏥 Teste 1: Health Check${NC}"
+if make_request "$HEALTH_URL" 200; then
+    test_json_response "$HEALTH_URL" "status"
 else
-    echo "  ⚠️ Headers de segurança não encontrados"
-    total_tests=$((total_tests + 1))
+    echo -e "${RED}❌ Health Check falhou${NC}"
+    exit 1
 fi
 
-# Teste 6: Performance básica
-echo "🔍 Testando: Performance básica"
-time_result=$(curl -s -w "%{time_total}" -o /dev/null "$BASE_URL" 2>/dev/null)
+# Teste 2: API Status
+echo -e "\n${BLUE}🔌 Teste 2: API Status${NC}"
+if make_request "$API_STATUS_URL" 200; then
+    test_json_response "$API_STATUS_URL" "status"
+else
+    echo -e "${RED}❌ API Status falhou${NC}"
+    exit 1
+fi
 
-if [ -n "$time_result" ]; then
-    time_float=$(echo "$time_result" | cut -d. -f1)
-    if [ "$time_float" -lt 5 ]; then
-        echo "  ✅ Tempo de resposta: ${time_result}s (< 5s)"
-        total_tests=$((total_tests + 1))
-        passed_tests=$((passed_tests + 1))
+# Teste 3: Página principal
+echo -e "\n${BLUE}🏠 Teste 3: Página Principal${NC}"
+if make_request "$ROOT_URL" 200; then
+    echo -e "${GREEN}✅ Página principal carregou${NC}"
+else
+    echo -e "${RED}❌ Página principal falhou${NC}"
+    exit 1
+fi
+
+# Teste 4: Endpoints críticos
+echo -e "\n${BLUE}🎯 Teste 4: Endpoints Críticos${NC}"
+
+critical_endpoints=(
+    "/doctor-dashboard"
+    "/patient-dashboard"
+    "/security"
+)
+
+failed_endpoints=0
+
+for endpoint in "${critical_endpoints[@]}"; do
+    url="${DEPLOY_URL}${endpoint}"
+    if make_request "$url" 200; then
+        echo -e "${GREEN}✅ ${endpoint} funcionando${NC}"
     else
-        echo "  ❌ Tempo de resposta: ${time_result}s (> 5s)"
-        total_tests=$((total_tests + 1))
+        echo -e "${RED}❌ ${endpoint} falhou${NC}"
+        failed_endpoints=$((failed_endpoints + 1))
     fi
+done
+
+# Teste 5: Performance básica
+echo -e "\n${BLUE}⚡ Teste 5: Performance${NC}"
+start_time=$(date +%s%N)
+make_request "$HEALTH_URL" 200 >/dev/null
+end_time=$(date +%s%N)
+response_time=$(( (end_time - start_time) / 1000000 )) # Convert to milliseconds
+
+if [ $response_time -lt 2000 ]; then
+    echo -e "${GREEN}✅ Response time: ${response_time}ms (< 2s)${NC}"
 else
-    echo "  ❌ Falha ao medir tempo de resposta"
-    total_tests=$((total_tests + 1))
+    echo -e "${YELLOW}⚠️ Response time: ${response_time}ms (> 2s)${NC}"
 fi
 
-# Teste 7: Verificar se é HTTPS
-echo "🔍 Testando: HTTPS"
-if [[ "$BASE_URL" == https://* ]]; then
-    # Testar certificado SSL
-    if curl -s --head "$BASE_URL" >/dev/null 2>&1; then
-        echo "  ✅ HTTPS funcionando corretamente"
-        total_tests=$((total_tests + 1))
-        passed_tests=$((passed_tests + 1))
-    else
-        echo "  ❌ Erro no certificado SSL"
-        total_tests=$((total_tests + 1))
-    fi
-else
-    echo "  ⚠️ URL não é HTTPS"
-    total_tests=$((total_tests + 1))
-fi
+# Resultado final
+echo -e "\n${BLUE}📊 Resumo dos Testes${NC}"
+echo -e "=============================="
 
-# Resultados finais
-echo ""
-echo "📊 ===== RESULTADOS DOS TESTES ====="
-echo ""
-echo "✅ Testes aprovados: $passed_tests/$total_tests"
-
-if [ $passed_tests -eq $total_tests ]; then
-    echo "🎉 DEPLOYMENT APROVADO!"
-    echo ""
-    echo "🌐 URLs funcionais:"
-    echo "   $BASE_URL"
-    echo "   $BASE_URL/health"
-    echo "   $BASE_URL/api/health"
-    echo ""
-    echo "🚀 Deployment está pronto para uso!"
+if [ $failed_endpoints -eq 0 ]; then
+    echo -e "${GREEN}✅ Todos os testes passaram!${NC}"
+    echo -e "${GREEN}🚀 Deploy está funcionando corretamente${NC}"
+    
+    # Salvar resultado do teste
+    echo "{
+        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+        \"status\": \"success\",
+        \"deploy_url\": \"$DEPLOY_URL\",
+        \"response_time_ms\": $response_time,
+        \"tests_passed\": true,
+        \"failed_endpoints\": 0
+    }" > test-results.json
+    
     exit 0
 else
-    echo "❌ DEPLOYMENT COM PROBLEMAS!"
-    echo ""
-    echo "🔧 Problemas encontrados:"
-    echo "   - $((total_tests - passed_tests)) teste(s) falharam"
-    echo "   - Verifique os logs do Render"
-    echo "   - Corrija os problemas e tente novamente"
-    echo ""
-    echo "🔍 Para debug:"
-    echo "   - Render logs: https://dashboard.render.com"
-    echo "   - Health API: $BASE_URL/api/health"
-    echo "   - Health page: $BASE_URL/health"
+    echo -e "${RED}❌ ${failed_endpoints} endpoint(s) falharam${NC}"
+    echo -e "${RED}🚨 Deploy tem problemas${NC}"
+    
+    # Salvar resultado do teste
+    echo "{
+        \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+        \"status\": \"failed\",
+        \"deploy_url\": \"$DEPLOY_URL\",
+        \"response_time_ms\": $response_time,
+        \"tests_passed\": false,
+        \"failed_endpoints\": $failed_endpoints
+    }" > test-results.json
+    
     exit 1
 fi

@@ -133,6 +133,36 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes (July 2025)
 
+### AUTOMATIZAÇÃO CI/CD COMPLETA v3.2.0 - 17/07/2025 16:55
+- **Status**: ✅ SISTEMA CI/CD AUTOMATIZADO IMPLEMENTADO
+- **Objetivo**: Automatizar deploys com GitHub Actions e Render Deploy Hooks
+- **Implementação**:
+  - **Scripts de Automação**: test-deployment.sh, prepare-render.sh, backup-and-rollback.sh
+  - **GitHub Actions**: Workflows completos para CI/CD automatizado
+  - **API Status Endpoint**: /api/status para monitoramento automatizado
+  - **CI/CD Master Script**: ci-cd-automation.sh para automação local
+- **Funcionalidades CI/CD**:
+  - **Testes Automatizados**: Health checks, API status, endpoints críticos
+  - **Deploy Automation**: Render deploy hooks integrados
+  - **Backup Automático**: Sistema de backup antes de cada deploy
+  - **Rollback Automático**: Reversão em caso de falha
+  - **Monitoramento**: Performance e health checks contínuos
+- **GitHub Actions Workflows**:
+  - **ci-cd.yml**: Pipeline principal com build, test e deploy
+  - **render-deploy-hook.yml**: Deploy manual com testes pós-deploy
+  - **Ambientes**: Production e staging separados
+  - **Notificações**: Status de deploy e rollback automático
+- **Scripts Incluídos**:
+  - **test-deployment.sh**: Testes comprehensivos da aplicação
+  - **prepare-render.sh**: Preparação e otimização para deploy
+  - **backup-and-rollback.sh**: Sistema completo de backup/restore
+  - **ci-cd-automation.sh**: Script master para automação local
+- **Monitoramento**:
+  - **Health Endpoints**: /health, /api/status, /ready, /live
+  - **Performance Metrics**: Response time, memory usage, uptime
+  - **Service Checks**: Database, session store, static files
+- **Resultado**: ✅ SISTEMA CI/CD AUTOMATIZADO v3.2.0 COMPLETO
+
 ### OTIMIZAÇÃO UX/UI UNIFIED SYSTEM v3.1.0 - 17/07/2025 11:30
 - **Status**: ✅ INTERFACE UNIFICADA IMPLEMENTADA
 - **Objetivo**: Padronizar experiência médico/paciente e eliminar telas genéricas

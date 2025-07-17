@@ -1,0 +1,190 @@
+name: TeleMed Sistema CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20'
+  DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_URL }}
+
+jobs:
+  # ===============================================
+  # BUILD & TEST JOB
+  # ===============================================
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm ci --prefer-offline --no-audit
+      
+    - name: 🔧 Run prepare script
+      run: |
+        chmod +x ./prepare-render.sh
+        ./prepare-render.sh
+        
+    - name: 🔨 Build application
+      run: npm run build
+      
+    - name: 🧪 Start application for testing
+      run: |
+        timeout 30s npm start &
+        APP_PID=$!
+        sleep 10
+        echo "APP_PID=$APP_PID" >> $GITHUB_ENV
+        
+    - name: 🧪 Run deployment tests
+      run: |
+        chmod +x ./test-deployment.sh
+        DEPLOY_URL=http://localhost:5000 ./test-deployment.sh
+        
+    - name: 🛑 Stop test application
+      run: |
+        if [ ! -z "$APP_PID" ]; then
+          kill $APP_PID 2>/dev/null || true
+        fi
+        
+    - name: 📊 Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-node-${{ matrix.node-version }}
+        path: |
+          test-results.json
+          prepare-results.json
+          
+  # ===============================================
+  # SECURITY SCAN JOB
+  # ===============================================
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm ci --prefer-offline --no-audit
+      
+    - name: 🔍 Run npm audit
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+      
+    - name: 🔐 Check for secrets
+      run: |
+        echo "Checking for exposed secrets..."
+        grep -r "sk_test\|sk_live\|password\|secret" . --exclude-dir=node_modules --exclude-dir=.git --exclude="*.yml" --exclude="*.md" || echo "No secrets found"
+        
+  # ===============================================
+  # DEPLOY TO RENDER (Production)
+  # ===============================================
+  deploy-render:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, security-scan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    environment: production
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Trigger Render Deploy
+      run: |
+        echo "🚀 Triggering Render deployment..."
+        
+        # Se tivermos um deploy hook, usar ele
+        if [ ! -z "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          echo "✅ Deploy hook triggered"
+        else
+          echo "⚠️ No deploy hook configured, deployment will be triggered by git push"
+        fi
+        
+    - name: 📦 Create deployment backup
+      run: |
+        chmod +x ./backup-and-rollback.sh
+        ./backup-and-rollback.sh backup
+        
+    - name: ⏳ Wait for deployment
+      run: |
+        echo "⏳ Waiting for deployment to complete..."
+        sleep 60
+        
+    - name: 🧪 Test production deployment
+      run: |
+        chmod +x ./test-deployment.sh
+        
+        # Testar com URL do Render se disponível
+        if [ ! -z "${{ env.DEPLOY_URL }}" ]; then
+          DEPLOY_URL="${{ env.DEPLOY_URL }}" ./test-deployment.sh
+        else
+          echo "⚠️ DEPLOY_URL not configured, skipping production tests"
+        fi
+        
+    - name: 📊 Upload deployment results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: deployment-results
+        path: |
+          test-results.json
+          backups/
+          
+  # ===============================================
+  # ROLLBACK JOB (Manual trigger)
+  # ===============================================
+  rollback:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔄 Execute rollback
+      run: |
+        chmod +x ./backup-and-rollback.sh
+        ./backup-and-rollback.sh rollback HEAD~1
+        
+  # ===============================================
+  # NOTIFICATION JOB
+  # ===============================================
+  notify:
+    runs-on: ubuntu-latest
+    needs: [deploy-render]
+    if: always()
+    
+    steps:
+    - name: 📧 Notify deployment status
+      run: |
+        if [ "${{ needs.deploy-render.result }}" == "success" ]; then
+          echo "✅ Deployment successful!"
+          echo "🌐 Application available at: ${{ env.DEPLOY_URL }}"
+        else
+          echo "❌ Deployment failed!"
+          echo "🔄 Consider running rollback if needed"
+        fi
