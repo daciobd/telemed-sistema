@@ -112,9 +112,9 @@ export default function DoctorDashboard() {
                 <p className="text-sm font-medium text-gray-900">Dr. Carlos Mendes</p>
                 <p className="text-xs text-gray-600">Cardiologista - CRM 123456</p>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => window.location.href = '/security'}>
                 <Settings className="h-4 w-4 mr-2" />
-                Configurações
+                Segurança & LGPD
               </Button>
               <Button variant="outline" size="sm">
                 <LogOut className="h-4 w-4 mr-2" />

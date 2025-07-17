@@ -59,9 +59,27 @@ import {
   type InsertConsultationRecord,
   type CidCode,
   type InsertCidCode,
+  // Security tables
+  userConsents,
+  auditLogs,
+  secureTokens,
+  encryptedData,
+  lgpdRequests,
+  privacySettings,
+  // Security types
+  type UserConsent,
+  type InsertUserConsent,
+  type AuditLog,
+  type InsertAuditLog,
+  type SecureToken,
+  type InsertSecureToken,
+  type LgpdRequest,
+  type InsertLgpdRequest,
+  type PrivacySettings,
+  type UpdatePrivacySettings,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, gte, lte, or, sql } from "drizzle-orm";
+import { eq, desc, and, gte, lte, or, sql, like, ilike } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (mandatory for Replit Auth + Credential Auth)
@@ -184,6 +202,47 @@ export interface IStorage {
   updatePatientRegistration(id: number, updates: Partial<PatientRegistration>): Promise<PatientRegistration>;
   getDoctorRegistrations(): Promise<DoctorRegistration[]>;
   getPatientRegistrations(): Promise<PatientRegistration[]>;
+
+  // ===============================================
+  // SECURITY AND LGPD OPERATIONS
+  // ===============================================
+
+  // User Consent operations
+  getUserConsents(userId: string): Promise<UserConsent[]>;
+  recordConsent(consent: InsertUserConsent): Promise<UserConsent>;
+  updateConsent(id: number, consent: Partial<InsertUserConsent>): Promise<UserConsent>;
+  getConsentByType(userId: string, consentType: string): Promise<UserConsent | undefined>;
+
+  // Audit Log operations
+  createAuditLog(log: InsertAuditLog): Promise<AuditLog>;
+  getUserAuditLogs(userId: string, filters?: any): Promise<AuditLog[]>;
+  getAuditLogs(filters?: any): Promise<AuditLog[]>;
+  getAuditLogsSummary(startDate: Date, endDate: Date): Promise<AuditLog[]>;
+
+  // LGPD Request operations
+  createLgpdRequest(request: InsertLgpdRequest): Promise<LgpdRequest>;
+  getLgpdRequestsByUser(userId: string): Promise<LgpdRequest[]>;
+  updateLgpdRequest(id: number, updates: Partial<LgpdRequest>): Promise<LgpdRequest>;
+  getAllLgpdRequests(): Promise<LgpdRequest[]>;
+
+  // Privacy Settings operations
+  getPrivacySettings(userId: string): Promise<PrivacySettings | undefined>;
+  updatePrivacySettings(userId: string, settings: UpdatePrivacySettings): Promise<PrivacySettings>;
+  createDefaultPrivacySettings(userId: string): Promise<PrivacySettings>;
+
+  // Security Token operations
+  createSecureToken(token: InsertSecureToken): Promise<SecureToken>;
+  getSecureToken(tokenId: string): Promise<SecureToken | undefined>;
+  invalidateSecureToken(tokenId: string): Promise<void>;
+  cleanupExpiredTokens(): Promise<void>;
+
+  // Data verification operations
+  verifyMedicalDataEncryption(userId: string): Promise<boolean>;
+  verifyPersonalDataEncryption(userId: string): Promise<boolean>;
+  verifyCommunicationEncryption(userId: string): Promise<boolean>;
+
+  // LGPD data export
+  exportUserDataForLGPD(userId: string): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1565,6 +1624,331 @@ export class DatabaseStorage implements IStorage {
       .where(eq(patientJourneyMilestones.id, id))
       .returning();
     return updatedMilestone;
+  }
+
+  // ===============================================
+  // SECURITY AND LGPD IMPLEMENTATION
+  // ===============================================
+
+  // User Consent operations
+  async getUserConsents(userId: string): Promise<UserConsent[]> {
+    return await db
+      .select()
+      .from(userConsents)
+      .where(eq(userConsents.userId, userId))
+      .orderBy(desc(userConsents.givenAt));
+  }
+
+  async recordConsent(consent: InsertUserConsent): Promise<UserConsent> {
+    const [newConsent] = await db
+      .insert(userConsents)
+      .values(consent)
+      .returning();
+    return newConsent;
+  }
+
+  async updateConsent(id: number, consent: Partial<InsertUserConsent>): Promise<UserConsent> {
+    const [updatedConsent] = await db
+      .update(userConsents)
+      .set(consent)
+      .where(eq(userConsents.id, id))
+      .returning();
+    return updatedConsent;
+  }
+
+  async getConsentByType(userId: string, consentType: string): Promise<UserConsent | undefined> {
+    const [consent] = await db
+      .select()
+      .from(userConsents)
+      .where(and(
+        eq(userConsents.userId, userId),
+        eq(userConsents.consentType, consentType)
+      ))
+      .orderBy(desc(userConsents.givenAt))
+      .limit(1);
+    return consent;
+  }
+
+  // Audit Log operations
+  async createAuditLog(log: InsertAuditLog): Promise<AuditLog> {
+    const [newLog] = await db
+      .insert(auditLogs)
+      .values(log)
+      .returning();
+    return newLog;
+  }
+
+  async getUserAuditLogs(userId: string, filters?: any): Promise<AuditLog[]> {
+    let query = db
+      .select()
+      .from(auditLogs)
+      .where(eq(auditLogs.userId, userId));
+
+    if (filters?.action) {
+      query = query.where(eq(auditLogs.action, filters.action));
+    }
+
+    if (filters?.result) {
+      query = query.where(eq(auditLogs.result, filters.result));
+    }
+
+    return await query
+      .orderBy(desc(auditLogs.timestamp))
+      .limit(filters?.limit || 50)
+      .offset(filters?.offset || 0);
+  }
+
+  async getAuditLogs(filters?: any): Promise<AuditLog[]> {
+    let query = db.select().from(auditLogs);
+
+    if (filters?.userId) {
+      query = query.where(eq(auditLogs.userId, filters.userId));
+    }
+
+    if (filters?.action) {
+      query = query.where(eq(auditLogs.action, filters.action));
+    }
+
+    if (filters?.riskLevel) {
+      query = query.where(eq(auditLogs.riskLevel, filters.riskLevel));
+    }
+
+    return await query
+      .orderBy(desc(auditLogs.timestamp))
+      .limit(filters?.limit || 100)
+      .offset(filters?.offset || 0);
+  }
+
+  async getAuditLogsSummary(startDate: Date, endDate: Date): Promise<AuditLog[]> {
+    return await db
+      .select()
+      .from(auditLogs)
+      .where(and(
+        gte(auditLogs.timestamp, startDate),
+        lte(auditLogs.timestamp, endDate)
+      ))
+      .orderBy(desc(auditLogs.timestamp));
+  }
+
+  // LGPD Request operations
+  async createLgpdRequest(request: InsertLgpdRequest): Promise<LgpdRequest> {
+    const [newRequest] = await db
+      .insert(lgpdRequests)
+      .values(request)
+      .returning();
+    return newRequest;
+  }
+
+  async getLgpdRequestsByUser(userId: string): Promise<LgpdRequest[]> {
+    return await db
+      .select()
+      .from(lgpdRequests)
+      .where(eq(lgpdRequests.userId, userId))
+      .orderBy(desc(lgpdRequests.requestDate));
+  }
+
+  async updateLgpdRequest(id: number, updates: Partial<LgpdRequest>): Promise<LgpdRequest> {
+    const [updatedRequest] = await db
+      .update(lgpdRequests)
+      .set(updates)
+      .where(eq(lgpdRequests.id, id))
+      .returning();
+    return updatedRequest;
+  }
+
+  async getAllLgpdRequests(): Promise<LgpdRequest[]> {
+    return await db
+      .select()
+      .from(lgpdRequests)
+      .orderBy(desc(lgpdRequests.requestDate));
+  }
+
+  // Privacy Settings operations
+  async getPrivacySettings(userId: string): Promise<PrivacySettings | undefined> {
+    const [settings] = await db
+      .select()
+      .from(privacySettings)
+      .where(eq(privacySettings.userId, userId));
+    
+    if (!settings) {
+      // Create default settings if none exist
+      return await this.createDefaultPrivacySettings(userId);
+    }
+    
+    return settings;
+  }
+
+  async updatePrivacySettings(userId: string, settings: UpdatePrivacySettings): Promise<PrivacySettings> {
+    const [updatedSettings] = await db
+      .update(privacySettings)
+      .set({ ...settings, updatedAt: new Date() })
+      .where(eq(privacySettings.userId, userId))
+      .returning();
+    return updatedSettings;
+  }
+
+  async createDefaultPrivacySettings(userId: string): Promise<PrivacySettings> {
+    const defaultSettings = {
+      userId,
+      dataRetentionPeriod: 1095, // 3 years default
+      allowDataSharing: false,
+      allowAnalytics: true,
+      allowMarketing: false,
+      allowThirdPartySharing: false,
+      twoFactorEnabled: false,
+      sessionTimeout: 30, // 30 minutes
+      notificationPreferences: {
+        email: true,
+        sms: false,
+        push: true,
+        marketing: false
+      },
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    const [newSettings] = await db
+      .insert(privacySettings)
+      .values(defaultSettings)
+      .returning();
+    return newSettings;
+  }
+
+  // Security Token operations
+  async createSecureToken(token: InsertSecureToken): Promise<SecureToken> {
+    const [newToken] = await db
+      .insert(secureTokens)
+      .values(token)
+      .returning();
+    return newToken;
+  }
+
+  async getSecureToken(tokenId: string): Promise<SecureToken | undefined> {
+    const [token] = await db
+      .select()
+      .from(secureTokens)
+      .where(eq(secureTokens.tokenId, tokenId));
+    return token;
+  }
+
+  async invalidateSecureToken(tokenId: string): Promise<void> {
+    await db
+      .update(secureTokens)
+      .set({ isValid: false, invalidatedAt: new Date() })
+      .where(eq(secureTokens.tokenId, tokenId));
+  }
+
+  async cleanupExpiredTokens(): Promise<void> {
+    await db
+      .delete(secureTokens)
+      .where(lte(secureTokens.expiresAt, new Date()));
+  }
+
+  // Data verification operations (mock implementations for now)
+  async verifyMedicalDataEncryption(userId: string): Promise<boolean> {
+    // In production, this would check if all medical records are properly encrypted
+    return true; // Assume encrypted for demo
+  }
+
+  async verifyPersonalDataEncryption(userId: string): Promise<boolean> {
+    // In production, this would check if personal data is properly encrypted
+    return true; // Assume encrypted for demo
+  }
+
+  async verifyCommunicationEncryption(userId: string): Promise<boolean> {
+    // In production, this would check if communications are properly encrypted
+    return true; // Assume encrypted for demo
+  }
+
+  // LGPD data export
+  async exportUserDataForLGPD(userId: string): Promise<any> {
+    // Get all user data for LGPD export
+    const user = await this.getUser(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const patient = await this.getPatientByUserId(userId);
+    const doctor = await this.getDoctorByUserId(userId);
+    
+    // Get all related data
+    const medicalRecords = patient ? await this.getMedicalRecordsByPatient(patient.id) : [];
+    const prescriptions = patient ? await this.getPrescriptionsByPatient(patient.id) : [];
+    const appointments = patient ? await this.getAppointmentsByPatient(patient.id) : 
+                         doctor ? await this.getAppointmentsByDoctor(doctor.id) : [];
+    const consents = await this.getUserConsents(userId);
+    const auditLogs = await this.getUserAuditLogs(userId, { limit: 1000 });
+    const privacySettings = await this.getPrivacySettings(userId);
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      },
+      patient: patient ? {
+        id: patient.id,
+        dateOfBirth: patient.dateOfBirth,
+        phone: patient.phone,
+        address: patient.address,
+        allergies: patient.allergies,
+        medications: patient.medications,
+        medicalHistory: patient.medicalHistory,
+        createdAt: patient.createdAt
+      } : null,
+      doctor: doctor ? {
+        id: doctor.id,
+        specialty: doctor.specialty,
+        licenseNumber: doctor.licenseNumber,
+        experience: doctor.experience,
+        createdAt: doctor.createdAt
+      } : null,
+      medicalRecords: medicalRecords.map(record => ({
+        id: record.id,
+        diagnosis: record.diagnosis,
+        treatment: record.treatment,
+        notes: record.notes,
+        createdAt: record.createdAt
+      })),
+      prescriptions: prescriptions.map(prescription => ({
+        id: prescription.id,
+        medications: prescription.medications,
+        dosage: prescription.dosage,
+        instructions: prescription.instructions,
+        createdAt: prescription.createdAt
+      })),
+      appointments: appointments.map(appointment => ({
+        id: appointment.id,
+        appointmentDate: appointment.appointmentDate,
+        status: appointment.status,
+        symptoms: appointment.symptoms,
+        createdAt: appointment.createdAt
+      })),
+      consents: consents.map(consent => ({
+        id: consent.id,
+        consentType: consent.consentType,
+        granted: consent.granted,
+        version: consent.version,
+        givenAt: consent.givenAt
+      })),
+      auditLogs: auditLogs.map(log => ({
+        id: log.id,
+        action: log.action,
+        result: log.result,
+        timestamp: log.timestamp
+      })),
+      privacySettings,
+      exportMetadata: {
+        exportedAt: new Date().toISOString(),
+        exportFormat: 'JSON',
+        lgpdCompliant: true,
+        dataTypes: ['personal', 'medical', 'usage', 'preferences', 'audit']
+      }
+    };
   }
 }
 

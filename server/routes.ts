@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import securityRoutes from "./security/routes";
 import { 
   insertAppointmentSchema, 
   insertMedicalRecordSchema, 
@@ -2673,6 +2674,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: 'Failed to search CID codes' });
     }
   });
+
+  // Mount security and LGPD routes
+  app.use("/api/security", securityRoutes);
 
   const httpServer = createServer(app);
   

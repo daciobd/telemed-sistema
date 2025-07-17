@@ -11,6 +11,7 @@ import LoginPage from "@/pages/LoginPage";
 import DoctorDashboard from "@/pages/DoctorDashboard";
 import SimpleDashboard from "@/pages/SimpleDashboard";
 import DiagnosticPage from "@/pages/DiagnosticPage";
+import SecurityPage from "@/pages/SecurityPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +39,7 @@ function App() {
             <Route path="/patient-journey-demo" component={PatientJourneyDemo} />
             <Route path="/simple-dashboard" component={SimpleDashboard} />
             <Route path="/diagnostic" component={DiagnosticPage} />
+            <Route path="/security" component={SecurityPage} />
             
             {/* 404 fallback */}
             <Route>

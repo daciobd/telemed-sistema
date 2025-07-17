@@ -10,10 +10,14 @@ import {
   boolean,
   numeric,
   decimal,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
+
+// Import security tables and types
+export * from "./security";
 
 // Session storage table for Replit Auth
 export const sessions = pgTable(
