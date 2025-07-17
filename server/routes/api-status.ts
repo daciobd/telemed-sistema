@@ -1,59 +1,42 @@
 import type { Express } from "express";
+import { healthChecker } from "../monitoring/health-checker";
+import { monitoringService } from "../monitoring/integrations";
 
 // API Status endpoint for automated testing
 export function registerApiStatusRoutes(app: Express) {
-  // Endpoint específico para testes automatizados
+  // Endpoint específico para testes automatizados com sistema avançado de monitoramento
   app.get('/api/status', async (req, res) => {
     try {
-      const startTime = Date.now();
+      const metrics = await healthChecker.runHealthChecks();
       
-      // Informações básicas do sistema
+      // Adicionar informações extras para compatibilidade
       const status = {
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
+        ...metrics,
         version: process.env.npm_package_version || '8.3.0-CLEAN',
         environment: process.env.NODE_ENV || 'development',
         port: process.env.PORT || 5000,
-        
-        // Health checks
-        checks: {
-          database: await checkDatabase(),
-          memory: checkMemory(),
-          disk: checkDisk(),
-          api: true
-        },
-        
-        // Performance metrics
-        performance: {
-          response_time_ms: Date.now() - startTime,
-          memory_usage: process.memoryUsage(),
-          cpu_usage: process.cpuUsage()
-        },
-        
-        // Serviços críticos
-        services: {
-          web_server: true,
-          static_files: checkStaticFiles(),
-          session_store: checkSessionStore(),
-          health_endpoint: true
-        }
       };
       
-      // Calcular status geral
-      const allChecksHealthy = Object.values(status.checks).every(check => check === true);
-      const allServicesHealthy = Object.values(status.services).every(service => service === true);
+      // Status code baseado no status de saúde
+      const statusCode = status.status === 'healthy' ? 200 : 
+                        status.status === 'degraded' ? 503 : 500;
       
-      if (allChecksHealthy && allServicesHealthy) {
-        status.status = 'healthy';
-        res.status(200).json(status);
-      } else {
-        status.status = 'degraded';
-        res.status(503).json(status);
-      }
+      res.status(statusCode).json(status);
       
     } catch (error) {
       console.error('API Status check failed:', error);
+      
+      // Enviar alerta de falha crítica
+      await monitoringService.sendAlert({
+        type: 'critical',
+        title: 'API Status Endpoint Failed',
+        message: `API status endpoint encountered a critical error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        timestamp: new Date().toISOString(),
+        metadata: {
+          error_name: error instanceof Error ? error.name : 'Unknown',
+          stack: error instanceof Error ? error.stack : 'No stack trace'
+        }
+      });
       
       res.status(500).json({
         status: 'unhealthy',
@@ -65,131 +48,126 @@ export function registerApiStatusRoutes(app: Express) {
   });
   
   // Endpoint de health check mais simples
-  app.get('/health', (req, res) => {
-    res.status(200).json({
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      port: process.env.PORT || 5000,
-      version: process.env.npm_package_version || '8.3.0-CLEAN'
-    });
-  });
-  
-  // Endpoint de readiness (para k8s/containers)
-  app.get('/ready', (req, res) => {
-    // Verificações mais rigorosas para readiness
-    const ready = checkReadiness();
-    
-    if (ready) {
+  app.get('/health', async (req, res) => {
+    try {
+      const latestMetrics = healthChecker.getLatestMetrics();
+      
       res.status(200).json({
-        status: 'ready',
-        timestamp: new Date().toISOString()
+        status: latestMetrics?.status || 'healthy',
+        timestamp: new Date().toISOString(),
+        port: process.env.PORT || 5000,
+        version: process.env.npm_package_version || '8.3.0-CLEAN',
+        uptime: process.uptime(),
+        last_check: latestMetrics?.timestamp
       });
-    } else {
-      res.status(503).json({
-        status: 'not_ready',
-        timestamp: new Date().toISOString()
+    } catch (error) {
+      res.status(200).json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        port: process.env.PORT || 5000,
+        version: process.env.npm_package_version || '8.3.0-CLEAN'
       });
     }
   });
   
+  // Endpoint de readiness (para k8s/containers)
+  app.get('/ready', async (req, res) => {
+    try {
+      const latestMetrics = healthChecker.getLatestMetrics();
+      const isReady = latestMetrics?.status === 'healthy' || latestMetrics?.status === 'degraded';
+      
+      res.status(isReady ? 200 : 503).json({
+        status: isReady ? 'ready' : 'not ready',
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      res.status(503).json({
+        status: 'not ready',
+        error: 'Health check failed'
+      });
+    }
+  });
+
   // Endpoint de liveness (para k8s/containers)
   app.get('/live', (req, res) => {
     res.status(200).json({
       status: 'alive',
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime()
+      timestamp: new Date().toISOString()
     });
   });
-}
 
-// Verificar conexão com banco de dados
-async function checkDatabase(): Promise<boolean> {
-  try {
-    // Se tiver DATABASE_URL configurada, tentar uma query simples
-    if (process.env.DATABASE_URL) {
-      // Placeholder - implementar verificação real do banco se necessário
-      return true;
+  // Endpoint para métricas históricas de monitoramento
+  app.get('/api/metrics', async (req, res) => {
+    try {
+      const history = healthChecker.getMetricsHistory();
+      const latest = healthChecker.getLatestMetrics();
+      
+      res.status(200).json({
+        latest: latest,
+        history: history.slice(-24), // Últimas 24 medições (2 horas se cada 5 min)
+        summary: {
+          total_checks: history.length,
+          healthy_percentage: history.length > 0 ? (history.filter(m => m.status === 'healthy').length / history.length * 100).toFixed(2) : '0',
+          average_response_time: history.length > 0 ? (history.reduce((sum, m) => sum + m.performance.response_time_ms, 0) / history.length).toFixed(0) : '0'
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Failed to fetch metrics',
+        timestamp: new Date().toISOString()
+      });
     }
-    return true; // Se não tem banco configurado, considera OK
-  } catch (error) {
-    console.error('Database check failed:', error);
-    return false;
-  }
-}
+  });
 
-// Verificar uso de memória
-function checkMemory(): boolean {
-  try {
-    const memUsage = process.memoryUsage();
-    const totalMem = memUsage.heapTotal;
-    const usedMem = memUsage.heapUsed;
-    
-    // Alerta se usar mais de 90% da heap
-    const memoryPercent = (usedMem / totalMem) * 100;
-    return memoryPercent < 90;
-  } catch (error) {
-    console.error('Memory check failed:', error);
-    return false;
-  }
-}
-
-// Verificar espaço em disco (simplificado)
-function checkDisk(): boolean {
-  try {
-    // Verificação básica - se conseguir executar, considera OK
-    return true;
-  } catch (error) {
-    console.error('Disk check failed:', error);
-    return false;
-  }
-}
-
-// Verificar se arquivos estáticos estão acessíveis
-function checkStaticFiles(): boolean {
-  try {
-    const fs = require('fs');
-    const path = require('path');
-    
-    // Verificar se o diretório dist existe (para build de produção)
-    const distPath = path.join(process.cwd(), 'dist');
-    if (fs.existsSync(distPath)) {
-      return true;
+  // Endpoint para teste de alertas (desenvolvimento)
+  app.post('/api/test-alert', async (req, res) => {
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({ error: 'Not available in production' });
     }
-    
-    // Verificar se estamos em desenvolvimento
-    const clientPath = path.join(process.cwd(), 'client');
-    if (fs.existsSync(clientPath)) {
-      return true;
+
+    try {
+      const { type, title, message } = req.body;
+      
+      await monitoringService.sendAlert({
+        type: type || 'info',
+        title: title || 'Test Alert from TeleMed',
+        message: message || 'This is a test alert to verify monitoring integrations.',
+        timestamp: new Date().toISOString(),
+        metadata: {
+          test: true,
+          environment: process.env.NODE_ENV
+        }
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Test alert sent successfully'
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Failed to send test alert',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
-    
-    return false;
-  } catch (error) {
-    console.error('Static files check failed:', error);
-    return false;
-  }
-}
+  });
 
-// Verificar session store
-function checkSessionStore(): boolean {
-  try {
-    // Se temos SESSION_SECRET, considera que o session store está OK
-    return !!process.env.SESSION_SECRET;
-  } catch (error) {
-    console.error('Session store check failed:', error);
-    return false;
-  }
-}
-
-// Verificar se a aplicação está pronta para receber tráfego
-function checkReadiness(): boolean {
-  try {
-    // Verificações para determinar se a app está pronta
-    const hasRequiredEnv = process.env.NODE_ENV !== undefined;
-    const serverRunning = true; // Se chegou aqui, o servidor está rodando
-    
-    return hasRequiredEnv && serverRunning;
-  } catch (error) {
-    console.error('Readiness check failed:', error);
-    return false;
-  }
+  // Endpoint para configurar monitoramento externo
+  app.post('/api/setup-monitoring', async (req, res) => {
+    try {
+      const baseUrl = req.body.baseUrl || `${req.protocol}://${req.get('host')}`;
+      
+      await monitoringService.setupExternalMonitoring(baseUrl);
+      
+      res.status(200).json({
+        success: true,
+        message: 'External monitoring setup initiated',
+        baseUrl: baseUrl
+      });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Failed to setup external monitoring',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
 }

@@ -15,6 +15,7 @@ import SecurityPage from "@/pages/SecurityPage";
 import PatientDashboardUnified from "@/pages/PatientDashboardUnified";
 import DoctorDashboardUnified from "@/pages/DoctorDashboardUnified";
 import LandingPageUnified from "@/pages/LandingPageUnified";
+import MonitoringDashboard from "@/pages/MonitoringDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,6 +41,7 @@ function App() {
             
             {/* Funcionalidades Core */}
             <Route path="/security" component={SecurityPage} />
+            <Route path="/monitoring" component={MonitoringDashboard} />
             <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
             <Route path="/diagnostic" component={DiagnosticPage} />
             
