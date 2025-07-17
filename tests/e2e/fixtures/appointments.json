@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "patient": "Ana Costa Silva",
+    "patientId": "patient-123",
+    "doctor": "Dr. Marcus Silva",
+    "doctorId": "doctor-456",
+    "date": "2025-07-18",
+    "time": "14:00",
+    "type": "Teleconsulta",
+    "status": "agendado",
+    "symptoms": "Dor de cabeça persistente há 3 dias",
+    "createdAt": "2025-07-17T20:49:21.399Z"
+  },
+  {
+    "id": 2,
+    "patient": "Carlos Mendes",
+    "patientId": "patient-456",
+    "doctor": "Dr. Marcus Silva",
+    "doctorId": "doctor-456",
+    "date": "2025-07-18",
+    "time": "08:00",
+    "type": "Consulta Inicial",
+    "status": "confirmado",
+    "symptoms": "Check-up anual",
+    "createdAt": "2025-07-16T15:30:00.000Z"
+  },
+  {
+    "id": 3,
+    "patient": "Lucia Fernandes",
+    "patientId": "patient-789",
+    "doctor": "Dr. Marcus Silva",
+    "doctorId": "doctor-456",
+    "date": "2025-07-18",
+    "time": "09:30",
+    "type": "Retorno",
+    "status": "confirmado",
+    "symptoms": "Acompanhamento hipertensão",
+    "createdAt": "2025-07-15T10:15:00.000Z"
+  },
+  {
+    "id": 4,
+    "patient": "Roberto Silva",
+    "patientId": "patient-321",
+    "doctor": "Dr. Marcus Silva",
+    "doctorId": "doctor-456",
+    "date": "2025-07-18",
+    "time": "11:00",
+    "type": "Teleconsulta",
+    "status": "pendente",
+    "symptoms": "Dor nas costas",
+    "createdAt": "2025-07-17T14:20:00.000Z"
+  },
+  {
+    "id": 5,
+    "patient": "Sandra Costa",
+    "patientId": "patient-654",
+    "doctor": "Dr. Marcus Silva",
+    "doctorId": "doctor-456",
+    "date": "2025-07-18",
+    "time": "15:30",
+    "type": "Consulta",
+    "status": "confirmado",
+    "symptoms": "Dor abdominal",
+    "createdAt": "2025-07-17T11:45:00.000Z"
+  }
+]

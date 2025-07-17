@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-07-17T20:49:21.399Z",
+  "status": "healthy",
+  "checks": {
+    "database": true,
+    "memory": true,
+    "disk": true,
+    "api_response": true,
+    "static_files": true,
+    "session_store": true
+  },
+  "performance": {
+    "response_time_ms": 1,
+    "memory_usage": {
+      "rss": 430956544,
+      "heapTotal": 112967680,
+      "heapUsed": 73992784,
+      "external": 12465198,
+      "arrayBuffers": 3897421
+    },
+    "cpu_usage": {
+      "user": 2715124,
+      "system": 362239
+    },
+    "uptime": 3600.5
+  },
+  "services": {
+    "web_server": true,
+    "health_endpoint": true,
+    "static_files": true,
+    "session_store": true
+  },
+  "errors": [],
+  "version": "8.3.0-CLEAN",
+  "environment": "development",
+  "port": 5000
+}
