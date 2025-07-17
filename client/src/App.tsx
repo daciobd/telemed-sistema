@@ -12,6 +12,9 @@ import DoctorDashboard from "@/pages/DoctorDashboard";
 import SimpleDashboard from "@/pages/SimpleDashboard";
 import DiagnosticPage from "@/pages/DiagnosticPage";
 import SecurityPage from "@/pages/SecurityPage";
+import PatientDashboardUnified from "@/pages/PatientDashboardUnified";
+import DoctorDashboardUnified from "@/pages/DoctorDashboardUnified";
+import LandingPageUnified from "@/pages/LandingPageUnified";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,19 +30,28 @@ function App() {
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <div className="min-h-screen bg-background">
           <Switch>
-            <Route path="/" component={LoginPage} />
+            <Route path="/" component={LandingPageUnified} />
             <Route path="/login" component={LoginPage} />
-            <Route path="/doctor-dashboard" component={DoctorDashboard} />
-            <Route path="/patient-dashboard" component={OnboardingFixed} />
-            <Route path="/dashboard" component={OnboardingFixed} />
+            <Route path="/landing" component={LandingPageUnified} />
+            {/* Dashboards Unificados */}
+            <Route path="/doctor-dashboard" component={DoctorDashboardUnified} />
+            <Route path="/patient-dashboard" component={PatientDashboardUnified} />
+            <Route path="/dashboard" component={PatientDashboardUnified} />
+            
+            {/* Funcionalidades Core */}
+            <Route path="/security" component={SecurityPage} />
+            <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
+            <Route path="/diagnostic" component={DiagnosticPage} />
+            
+            {/* Dashboards Legados (manter para compatibilidade) */}
+            <Route path="/doctor-dashboard-legacy" component={DoctorDashboard} />
+            <Route path="/simple-dashboard" component={SimpleDashboard} />
+            
+            {/* Demo/Onboarding (manter para desenvolvimento) */}
             <Route path="/onboarding-demo" component={OnboardingDemo} />
             <Route path="/onboarding-fixed" component={OnboardingFixed} />
             <Route path="/success" component={OnboardingSuccess} />
-            <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
             <Route path="/patient-journey-demo" component={PatientJourneyDemo} />
-            <Route path="/simple-dashboard" component={SimpleDashboard} />
-            <Route path="/diagnostic" component={DiagnosticPage} />
-            <Route path="/security" component={SecurityPage} />
             
             {/* 404 fallback */}
             <Route>
