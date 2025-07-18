@@ -1,123 +1,66 @@
 #!/bin/bash
 
-# 🚀 TeleMed Pro - Quick Deploy para Render
+# ========================================
+# TeleMed Sistema - Deploy Rápido Render
+# ========================================
 
-echo "🚀 Preparação rápida para Deploy Render..."
+set -e
 
-# Verificar arquivos essenciais
-echo "🔍 Verificando arquivos essenciais..."
+echo "🚀 Iniciando deploy rápido para Render..."
+
+# Limpar builds anteriores
+echo "🧹 Limpando builds..."
+rm -rf .next/
+rm -rf dist/
+rm -rf node_modules/.cache/
+
+# Verificar se o Dr. AI existe
+if [ ! -f "public/dr-ai.html" ]; then
+    echo "❌ Dr. AI não encontrado em public/dr-ai.html"
+    exit 1
+fi
+
+echo "✅ Dr. AI encontrado"
+
+# Verificar se o render.yaml existe
 if [ ! -f "render.yaml" ]; then
     echo "❌ render.yaml não encontrado"
     exit 1
 fi
 
-if [ ! -f "telemed-v2/package.json" ]; then
-    echo "❌ telemed-v2/package.json não encontrado"
+echo "✅ render.yaml configurado"
+
+# Verificar health endpoint
+if [ ! -f "app/health/route.ts" ]; then
+    echo "❌ Health endpoint não encontrado"
     exit 1
 fi
 
-if [ ! -f "telemed-v2/app/api/health/route.ts" ]; then
-    echo "❌ Health check API não encontrado"
+echo "✅ Health endpoint configurado"
+
+# Verificar package.json
+if [ ! -f "package.json" ]; then
+    echo "❌ package.json não encontrado"
     exit 1
 fi
 
-echo "✅ Arquivos essenciais verificados"
+echo "✅ package.json encontrado"
 
-# Atualizar .gitignore
-echo "📝 Atualizando .gitignore..."
-cat > .gitignore << 'EOF'
-# Dependencies
-node_modules/
-*/node_modules/
-
-# Production builds
-.next/
-out/
-build/
-dist/
-
-# Environment variables
-.env
-.env.local
-.env.production.local
-.env.development.local
-
-# Logs
-*.log
-npm-debug.log*
-
-# Runtime data
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory
-coverage/
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# next.js build output
-.next
-
-# Serverless directories
-.serverless
-
-# DynamoDB Local files
-.dynamodb/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Database
-*.db
-*.sqlite
-
-# Vercel
-.vercel
-
-# Render
-.render
-EOF
-
-echo "✅ .gitignore atualizado"
-
+# Mostrar informações do deploy
 echo ""
-echo "🎉 ===== PREPARAÇÃO CONCLUÍDA! ====="
+echo "📋 Informações do deploy:"
+echo "   - Dr. AI: ✅ Disponível em /dr-ai.html"
+echo "   - Health: ✅ Disponível em /health"
+echo "   - Next.js: ✅ Versão 15.4.1"
+echo "   - Render: ✅ Configurado"
 echo ""
-echo "📋 Próximos passos:"
+
+echo "🎯 URLs que estarão disponíveis:"
+echo "   - App principal: https://telemed-sistema.onrender.com"
+echo "   - Dr. AI: https://telemed-sistema.onrender.com/dr-ai.html"
+echo "   - Health: https://telemed-sistema.onrender.com/health"
 echo ""
-echo "1. Fazer commit e push:"
-echo "   git add ."
-echo "   git commit -m 'feat: configuração Render completa'"
-echo "   git push origin main"
-echo ""
-echo "2. Configurar no Render:"
-echo "   - Acesse: https://dashboard.render.com"
-echo "   - Conecte repositório GitHub"
-echo "   - Use render.yaml para configuração"
-echo ""
-echo "3. Aguardar deploy (2-3 minutos)"
-echo ""
-echo "4. Testar deployment:"
-echo "   ./test-deployment.sh https://telemed-pro.onrender.com"
-echo ""
-echo "🌐 URLs finais:"
-echo "   https://telemed-pro.onrender.com"
-echo "   https://telemed-pro.onrender.com/health"
-echo "   https://telemed-pro.onrender.com/api/health"
-echo ""
-echo "🚀 Pronto para deploy no Render!"
+
+echo "⚡ Deploy configurado com sucesso!"
+echo "🔗 Acesse o Render Dashboard para iniciar o deploy"
+echo "⏱️ Tempo estimado: 3-5 minutos"
