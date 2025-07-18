@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  
-  serverExternalPackages: ['@neondatabase/serverless'],
-  
   images: {
     domains: ['localhost', 'vercel.app', 'replit.app', 'telemed-pro.onrender.com'],
     unoptimized: true,
@@ -17,53 +13,27 @@ const nextConfig = {
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
   },
   
-  // Configurações de headers de segurança
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
-      },
-      {
-        source: '/api/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-        ],
-      },
-    ];
-  },
+
   
-  async rewrites() {
-    return [
-      {
-        source: '/api/auth/:path*',
-        destination: '/api/auth/:path*',
-      },
-    ];
+  // Configurações para evitar problemas de chunk loading
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              maxSize: 244000,
+            },
+          },
+        },
+      };
+    }
+    return config;
   },
 };
 
