@@ -49,6 +49,12 @@ export function Hero() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
+                <Link href="/dr-ai.html" className="bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 border-0">
+                  <Video className="w-4 h-4 mr-2" />
+                  Triagem com IA
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
                 <Link href="/demo">
                   Ver Demonstração
                 </Link>

@@ -65,7 +65,11 @@ export default function DoctorDashboard() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Ferramentas Médicas
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <a href="/dr-ai.html" className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 text-center">
+                <i className="fas fa-robot mb-2 block"></i>
+                Dr. AI
+              </a>
               <button className="bg-teal-600 text-white p-4 rounded-lg hover:bg-teal-700 transition-colors">
                 Prescrições MEMED
               </button>

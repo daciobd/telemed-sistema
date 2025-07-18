@@ -6,6 +6,7 @@ import { Testimonials } from '@/components/layout/testimonials'
 import { CTA } from '@/components/layout/cta'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
+import { DrAIIntegration } from '@/components/dr-ai-integration'
 
 export const metadata: Metadata = {
   title: 'TeleMed Pro - Plataforma de Telemedicina Profissional',
@@ -18,6 +19,14 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        
+        {/* Dr. AI Integration Section */}
+        <section className="py-16 px-4">
+          <div className="container mx-auto max-w-4xl">
+            <DrAIIntegration />
+          </div>
+        </section>
+        
         <Features />
         <Statistics />
         <Testimonials />
