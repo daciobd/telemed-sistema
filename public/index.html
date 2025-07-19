@@ -10,6 +10,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
         .card-hover {
             transition: all 0.3s ease;
@@ -17,6 +19,39 @@
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .max-w-4xl {
+                max-width: 95% !important;
+            }
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            .grid {
+                gap: 1rem !important;
+            }
+            .p-8 {
+                padding: 1.5rem !important;
+            }
+            .text-6xl {
+                font-size: 3rem !important;
+            }
+        }
+        
+        /* Touch Optimization */
+        @media (hover: none) {
+            .card-hover:active {
+                transform: scale(0.98);
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .card-hover {
+                transition: none;
+            }
         }
     </style>
 </head>
@@ -37,7 +72,7 @@
             </div>
 
             <!-- Main Navigation Cards -->
-            <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
                 <!-- Dr. AI Card -->
                 <div class="bg-white rounded-2xl p-8 text-center card-hover cursor-pointer" onclick="window.location.href='/dr-ai.html'">
                     <div class="text-6xl mb-6">🤖</div>

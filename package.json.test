@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "test:critical": "vitest run tests/critical --reporter=verbose",
+    "test:critical:watch": "vitest tests/critical --reporter=verbose",
+    "test:critical:coverage": "vitest run tests/critical --coverage"
+  }
+}
