@@ -47,9 +47,10 @@ async function startServer() {
   try {
     const httpServer = await registerRoutes(app);
     
-    console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
+    const nodeEnv = process.env.NODE_ENV || 'development';
+    console.log('🔧 NODE_ENV:', nodeEnv);
     
-    if (process.env.NODE_ENV === 'development') {
+    if (nodeEnv === 'development') {
       console.log('🔧 Setting up Vite for development...');
       await setupVite(app, httpServer);
       console.log('✅ Vite setup complete');

@@ -24,19 +24,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "client/src/*"
       ],
-      "@/components/*": [
-        "./components/*"
+      "@shared/*": [
+        "shared/*"
       ],
-      "@/lib/*": [
-        "./lib/*"
-      ],
-      "@/types/*": [
-        "./types/*"
-      ],
-      "@/config/*": [
-        "./config/*"
+      "@assets/*": [
+        "attached_assets/*"
       ]
     },
     "target": "ES2017"
