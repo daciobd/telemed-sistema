@@ -1,122 +1,258 @@
-# TeleMed Pro - Sistema de Telemedicina v1.0.0
+# 🩺 TeleMed Sistema
 
-## 🏥 Visão Geral
-Sistema completo de telemedicina que oferece soluções digitais inovadoras para saúde, combinando tecnologias avançadas com design centrado no usuário.
+Uma plataforma completa de telemedicina que conecta médicos e pacientes através de soluções digitais inovadoras.
 
 ## 🚀 Funcionalidades Principais
 
-### ✅ Sistema de Demonstração Médica
-- Dashboard médico profissional com glassmorphism
-- Mensagens aprimoradas para apresentações
-- Modo demo e real com detecção automática
-- Estatísticas realistas e técnicas
+- **🤖 Dr. AI**: Triagem inteligente com assistente médico virtual
+- **💰 Sistema de Lances**: Consultas médicas por valor personalizado  
+- **📊 Dashboard Médico**: Interface profissional para médicos
+- **🔒 Sistema de Segurança**: Conformidade LGPD e auditoria completa
+- **📱 Integração WhatsApp**: Notificações automáticas
+- **💳 Pagamentos Stripe**: Processamento seguro de pagamentos
 
-### ✅ Tecnologias Integradas
-- **Frontend**: React.js com TypeScript, Vite, TailwindCSS
-- **Backend**: Express.js com TypeScript
-- **Banco de Dados**: PostgreSQL com Drizzle ORM
-- **Autenticação**: Replit Auth com OpenID Connect
-- **Comunicação**: WebRTC para videoconsultas, WebSockets
-
-## 🏗️ Arquitetura UX/UI Unificada
-
-O TeleMed utiliza uma **arquitetura híbrida unificada** que combina SPA React moderna com funcionalidades legadas totalmente integradas no fluxo React/Vite.
-
-### 📁 Estrutura do Projeto
+## 🏗️ Arquitetura do Sistema
 
 ```
-TeleMed-Pro/
-├── client/                 # Frontend React (SPA Principal)
-│   ├── src/pages/          # Todas as páginas unificadas
-│   ├── src/components/     # Componentes shadcn/ui
-│   └── src/hooks/          # React hooks customizados
-├── server/                 # Backend Express + APIs
-├── shared/                 # Tipos compartilhados TypeScript
-├── docs/                   # Documentação técnica
-│   └── UX_UI_ARCHITECTURE.md  # Arquitetura detalhada
-├── legacy/                 # Arquivos HTML originais (referência)
-│   ├── medical-dashboard-pro.html
-│   └── demo-vs-real.html
-├── attached_assets/        # Recursos anexados
-└── package.json           # Dependências
+┌─────────────────────────────────────────────────────────────────┐
+│                      TeleMed Sistema                             │
+├─────────────────────────────────────────────────────────────────┤
+│                    Frontend (React + Vite)                     │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────────┐ │
+│  │ Landing     │ │ Dr. AI      │ │ Dashboard Médico            │ │
+│  │ Page        │ │ Chat        │ │ - Consultas                 │ │
+│  └─────────────┘ └─────────────┘ │ - Agendamentos              │ │
+│  ┌─────────────┐ ┌─────────────┐ │ - Prescrições              │ │
+│  │ Sistema de  │ │ Pagamentos  │ │ - Métricas                 │ │
+│  │ Lances      │ │ Stripe      │ └─────────────────────────────┘ │
+│  └─────────────┘ └─────────────┘                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                    Backend (Node.js + Express)                 │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────────┐ │
+│  │ API Routes  │ │ Auth System │ │ Real-time Communication     │ │
+│  │ - /api/*    │ │ - JWT       │ │ - WebSocket                 │ │
+│  │ - Health    │ │ - Sessions  │ │ - WebRTC                    │ │
+│  │ - Security  │ │ - RBAC      │ └─────────────────────────────┘ │
+│  └─────────────┘ └─────────────┘                                 │
+├─────────────────────────────────────────────────────────────────┤
+│                    Database (PostgreSQL)                       │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────────┐ │
+│  │ Users       │ │ Appointments│ │ Medical Records             │ │
+│  │ - Patients  │ │ - Scheduling│ │ - Prescriptions             │ │
+│  │ - Doctors   │ │ - Bidding   │ │ - Consultations             │ │
+│  │ - Roles     │ │ - Status    │ │ - History                   │ │
+│  └─────────────┘ └─────────────┘ └─────────────────────────────┘ │
+├─────────────────────────────────────────────────────────────────┤
+│                    External Integrations                       │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────────────────┐ │
+│  │ WhatsApp    │ │ Stripe      │ │ Monitoring                  │ │
+│  │ Business    │ │ Payments    │ │ - UptimeRobot               │ │
+│  │ API         │ │ Processing  │ │ - StatusCake                │ │
+│  └─────────────┘ └─────────────┘ │ - Slack/Telegram            │ │
+│                                   └─────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Componentes Migrados para React
+## 🛠️ Tecnologias
 
-| Funcionalidade | Rota | Componente | Status |
-|----------------|------|------------|--------|
-| Dashboard Médico Pro | `/medical-pro` | `DashboardMedicalPro.tsx` | ✅ Migrado |
-| Testes e Demos | `/legacy-demo` | `LegacyDemoPage.tsx` | ✅ Migrado |
-| Monitoramento | `/monitoring` | `MonitoringDashboard.tsx` | ✅ Nativo |
-| Segurança LGPD | `/security` | `SecurityPage.tsx` | ✅ Nativo |
+### Frontend
+- **React 18** - Interface de usuário moderna
+- **TypeScript** - Tipagem estática
+- **Vite** - Build tool rápida
+- **Tailwind CSS** - Estilização responsiva
+- **shadcn/ui** - Componentes UI consistentes
+- **Radix UI** - Primitivos acessíveis
 
-**🎯 Resultado**: Todos os arquivos HTML soltos foram integrados ao fluxo React/Vite para máxima consistência e manutenibilidade.
+### Backend  
+- **Node.js** - Runtime JavaScript
+- **Express.js** - Framework web
+- **TypeScript** - Desenvolvimento tipado
+- **Drizzle ORM** - Mapeamento objeto-relacional
+- **WebSocket/WebRTC** - Comunicação em tempo real
 
-## 🌐 Navegação da Aplicação
+### Database
+- **PostgreSQL** - Banco de dados principal
+- **Neon Database** - PostgreSQL gerenciado
 
-### URLs Principais (SPA React)
-- **Landing Page**: `/` - Página inicial unificada
-- **Dashboard Médico**: `/medical-pro` - Interface médica avançada
-- **Dashboards Unificados**: `/doctor-dashboard`, `/patient-dashboard`
-- **Monitoramento**: `/monitoring` - Sistema de monitoramento completo
-- **Testes e Demos**: `/legacy-demo` - Interface de testes migrada
-- **Segurança LGPD**: `/security` - Configurações de privacidade
+## 🚀 Início Rápido
 
-### Funcionalidades Integradas
-- **Navegação SPA**: Transições fluidas sem reload
-- **Estado Unificado**: React Query para cache consistente
-- **Componentes Reutilizáveis**: shadcn/ui para interface padronizada
-- **TypeScript**: Type safety em toda a aplicação
-
-## 🔧 Desenvolvimento
-
-### Instalação
+### 1. Pré-requisitos
 ```bash
+Node.js 18+
+PostgreSQL (ou Neon Database)
+```
+
+### 2. Instalação
+```bash
+# Clone o repositório
+git clone https://github.com/daciobd/telemed-sistema.git
+
+# Entre no diretório  
+cd telemed-sistema
+
+# Instale as dependências
 npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+# Edite o arquivo .env com suas credenciais
 ```
 
-### Execução
+### 3. Configuração do Banco
 ```bash
-npm run dev
+# Execute as migrações
+npm run db:push
+
+# (Opcional) Visualize o banco
+npm run db:studio
 ```
 
-### Build
+### 4. Execução
+```bash
+# Desenvolvimento
+npm run dev
+
+# Produção
+npm run build
+npm start
+```
+
+O sistema estará disponível em `http://localhost:5000`
+
+## 📱 Navegação do Sistema
+
+### Fluxo Principal
+1. **Landing Page** (`/`) - Página inicial com navegação
+2. **Dr. AI** (`/dr-ai.html`) - Triagem inteligente
+3. **Sistema de Lances** (`/consulta-por-valor.html`) - Proposta de valores
+4. **Dashboard Médico** (`/medical-dashboard-pro.html`) - Interface profissional
+
+### URLs da API
+- `/health` - Health check do sistema
+- `/api/status` - Status completo com métricas
+- `/api/appointments/*` - Gerenciamento de consultas
+- `/api/security/*` - Configurações de segurança
+
+## 🔧 Configuração
+
+### Variáveis de Ambiente Essenciais
+```env
+DATABASE_URL="postgresql://user:password@host:5432/database"
+SESSION_SECRET="your-secret-key"
+PORT=5000
+NODE_ENV=development
+```
+
+### Integrações Opcionais
+```env
+# Pagamentos
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_PUBLISHABLE_KEY="pk_test_..."
+
+# Notificações
+WHATSAPP_ACCESS_TOKEN="..."
+SLACK_BOT_TOKEN="xoxb-..."
+TELEGRAM_BOT_TOKEN="..."
+
+# Monitoramento
+UPTIMEROBOT_API_KEY="..."
+STATUSCAKE_API_KEY="..."
+```
+
+## 🧪 Testes
+
+```bash
+# Testes unitários
+npm test
+
+# Testes de integração  
+npm run test:integration
+
+# Testes end-to-end
+npm run test:e2e
+
+# Cobertura de código
+npm run test:coverage
+```
+
+## 📦 Deploy
+
+### Render (Recomendado)
+```bash
+# Configuração automática via render.yaml
+git push origin main
+# Deploy automático configurado
+```
+
+### Vercel
 ```bash
 npm run build
-```
-
-## 📊 Estatísticas do Sistema
-
-### Funcionalidades Demo
-- **Prontuário**: PostgreSQL, 342 pacientes, LGPD compliance
-- **Videoconsultas**: WebRTC P2P, HD 1080p, criptografia end-to-end
-- **Prescrições**: MEMED oficial, 156 prescrições, 98% taxa sucesso
-- **Consultas**: Agenda 24/7, 89 consultas hoje, 94% ocupação
-
-### Performance
-- Interface responsiva e moderna
-- Animações CSS suaves
-- Loading states profissionais
-- Compatibilidade cross-browser
-
-## 🚀 Deploy
-
-### Vercel (Recomendado)
-```bash
 vercel --prod
 ```
 
-### Manual
-1. Build do projeto
-2. Upload para hosting
-3. Configurar variáveis de ambiente
+### Docker
+```bash
+docker build -t telemed-sistema .
+docker run -p 5000:5000 telemed-sistema
+```
 
-## 📞 Suporte
+## 🔐 Segurança e Conformidade
 
-Para demonstrações médicas e feedback:
-- Email: contato@telemed.com.br
-- WhatsApp: (11) 99999-8888
+- **LGPD Compliant** - Gestão completa de consentimento
+- **Auditoria Automática** - Logs de segurança detalhados  
+- **Exportação de Dados** - Conformidade com direitos do usuário
+- **Criptografia** - Dados sensíveis protegidos
+- **Rate Limiting** - Proteção contra abuso
+
+## 📊 Monitoramento
+
+### Health Checks
+- `/health` - Status básico do sistema
+- `/api/status` - Métricas detalhadas
+- `/ready` - Kubernetes readiness probe
+- `/live` - Kubernetes liveness probe
+
+### Métricas Disponíveis
+- Response time
+- Memory usage  
+- Database connectivity
+- External services status
+- User activity analytics
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
 ## 📄 Licença
 
-Copyright © 2025 TeleMed Pro. Todos os direitos reservados.
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 🆘 Suporte
+
+- **Documentação**: [docs/](docs/)
+- **Issues**: [GitHub Issues](https://github.com/daciobd/telemed-sistema/issues)
+- **Email**: suporte@telemed.pro
+
+## 📈 Roadmap
+
+### v3.0 (Q2 2025)
+- [ ] Mobile app (React Native)
+- [ ] IA de diagnóstico avançada
+- [ ] Integração com laboratórios
+- [ ] Telemedicina veterinária
+
+### v2.5 (Q1 2025)  
+- [x] Sistema de monitoramento avançado
+- [x] CI/CD automatizado
+- [x] Conformidade LGPD completa
+- [ ] Multi-idioma (EN, ES)
+
+---
+
+⭐ **TeleMed Sistema** - Transformando o cuidado médico através da tecnologia
+
+Desenvolvido com ❤️ para melhorar a saúde e bem-estar
