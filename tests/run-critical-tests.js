@@ -5,8 +5,8 @@
  * Executes 5 critical test suites for production readiness
  */
 
-const { execSync } = require('child_process');
-const path = require('path');
+import { execSync } from 'child_process';
+import path from 'path';
 
 const TESTS = [
   {
