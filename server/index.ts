@@ -32,6 +32,31 @@ app.use((req, res, next) => {
   next();
 });
 
+// HTML Landing Pages - HIGHEST PRIORITY
+app.get('/', (req, res) => {
+  const indexPath = path.join(__dirname, '../public/index.html');
+  console.log('📄 Serving integrated landing page for:', req.path);
+  res.sendFile(indexPath);
+});
+
+app.get('/dr-ai.html', (req, res) => {
+  const drAiPath = path.join(__dirname, '../public/dr-ai.html');
+  console.log('📄 Serving Dr. AI page for:', req.path);
+  res.sendFile(drAiPath);
+});
+
+app.get('/consulta-por-valor.html', (req, res) => {
+  const bidPath = path.join(__dirname, '../public/consulta-por-valor.html');
+  console.log('📄 Serving bidding system for:', req.path);
+  res.sendFile(bidPath);
+});
+
+app.get('/medical-dashboard-pro.html', (req, res) => {
+  const dashboardPath = path.join(__dirname, '../public/medical-dashboard-pro.html');
+  console.log('📄 Serving medical dashboard for:', req.path);
+  res.sendFile(dashboardPath);
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
@@ -58,31 +83,6 @@ async function startServer() {
       console.log('🔧 Setting up static file serving for production...');
       serveStatic(app);
     }
-    
-    // Specific HTML routes
-    app.get('/', (req, res) => {
-      const indexPath = path.join(__dirname, '../public/index.html');
-      console.log('📄 Serving integrated landing page for:', req.path);
-      res.sendFile(indexPath);
-    });
-
-    app.get('/dr-ai.html', (req, res) => {
-      const drAiPath = path.join(__dirname, '../public/dr-ai.html');
-      console.log('📄 Serving Dr. AI page for:', req.path);
-      res.sendFile(drAiPath);
-    });
-
-    app.get('/consulta-por-valor.html', (req, res) => {
-      const bidPath = path.join(__dirname, '../public/consulta-por-valor.html');
-      console.log('📄 Serving bidding system for:', req.path);
-      res.sendFile(bidPath);
-    });
-
-    app.get('/medical-dashboard-pro.html', (req, res) => {
-      const dashboardPath = path.join(__dirname, '../public/medical-dashboard-pro.html');
-      console.log('📄 Serving medical dashboard for:', req.path);
-      res.sendFile(dashboardPath);
-    });
 
     // SPA fallback - ONLY for non-API routes and non-HTML routes
     app.get('*', (req, res, next) => {
