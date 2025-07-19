@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Lances - Consulta por Valor | TeleMed Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .bid-animation {
+            animation: bidPulse 2s infinite;
+        }
+        @keyframes bidPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .lance-card {
+            transition: all 0.3s ease;
+        }
+        .lance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-gavel text-white text-2xl"></i>
+                    </div>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Sistema de Lances Progressivos</h1>
+                <p class="text-gray-600">Conecte-se com médicos através de lances competitivos para consultas personalizadas</p>
+                <div class="mt-4">
+                    <a href="/" class="text-blue-600 hover:text-blue-800 mr-4">← Voltar ao Início</a>
+                    <a href="/dr-ai.html" class="text-green-600 hover:text-green-800">🤖 Triagem IA</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Auctions -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Consulta Cardiologia -->
+            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Consulta Cardiologia</h3>
+                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Urgente</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Atual:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 180</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-red-600 font-semibold">12:45</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">5</span>
+                    </div>
+                    <div class="mt-4">
+                        <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="185" step="5">
+                        <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teleconsulta Pediatria -->
+            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Teleconsulta Pediatria</h3>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Regular</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Atual:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 150</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-orange-600 font-semibold">25:30</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">3</span>
+                    </div>
+                    <div class="mt-4">
+                        <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="155" step="5">
+                        <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consulta Dermatologia -->
+            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Consulta Dermatologia</h3>
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Agendado</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Atual:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 120</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-green-600 font-semibold">45:15</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">7</span>
+                    </div>
+                    <div class="mt-4">
+                        <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="125" step="5">
+                        <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create New Auction -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                <i class="fas fa-plus-circle text-blue-600 mr-2"></i>
+                Criar Nova Consulta por Lance
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Especialidade Médica</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="">Selecione a especialidade</option>
+                            <option value="cardiologia">Cardiologia</option>
+                            <option value="pediatria">Pediatria</option>
+                            <option value="dermatologia">Dermatologia</option>
+                            <option value="neurologia">Neurologia</option>
+                            <option value="ortopedia">Ortopedia</option>
+                            <option value="ginecologia">Ginecologia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Tipo de Consulta</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="">Selecione o tipo</option>
+                            <option value="presencial">Consulta Presencial</option>
+                            <option value="teleconsulta">Teleconsulta</option>
+                            <option value="urgente">Consulta Urgente</option>
+                            <option value="retorno">Consulta de Retorno</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Lance Inicial (R$)</label>
+                        <input type="number" class="w-full p-3 border rounded-lg" placeholder="100" min="50" step="10">
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Data Preferida</label>
+                        <input type="date" class="w-full p-3 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Horário Preferido</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="">Selecione o horário</option>
+                            <option value="manha">Manhã (8h-12h)</option>
+                            <option value="tarde">Tarde (13h-17h)</option>
+                            <option value="noite">Noite (18h-22h)</option>
+                            <option value="flexivel">Horário Flexível</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Duração do Lance (minutos)</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="30">30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="120">2 horas</option>
+                            <option value="240">4 horas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6">
+                <label class="block text-gray-700 font-semibold mb-2">Descrição dos Sintomas/Necessidades</label>
+                <textarea class="w-full p-3 border rounded-lg h-24" placeholder="Descreva brevemente seus sintomas ou necessidades médicas..."></textarea>
+            </div>
+            <div class="mt-6 text-center">
+                <button class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-rocket mr-2"></i>Iniciar Lance
+                </button>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Como Funciona o Sistema de Lances</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">1. Cadastre sua Necessidade</h3>
+                    <p class="text-gray-600 text-sm">Informe a especialidade, tipo de consulta e valor inicial</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-search text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">2. Médicos Fazem Lances</h3>
+                    <p class="text-gray-600 text-sm">Profissionais qualificados competem pelo melhor valor</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gavel text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">3. Escolha o Melhor</h3>
+                    <p class="text-gray-600 text-sm">Analise perfis e escolha o médico ideal</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-handshake text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">4. Realize a Consulta</h3>
+                    <p class="text-gray-600 text-sm">Agende e realize sua consulta com segurança</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Atualizar contadores de tempo em tempo real
+        function updateTimers() {
+            const timers = document.querySelectorAll('.text-red-600, .text-orange-600, .text-green-600');
+            timers.forEach(timer => {
+                if (timer.textContent.includes(':')) {
+                    const [minutes, seconds] = timer.textContent.split(':').map(Number);
+                    let totalSeconds = minutes * 60 + seconds;
+                    totalSeconds--;
+                    if (totalSeconds >= 0) {
+                        const newMinutes = Math.floor(totalSeconds / 60);
+                        const newSeconds = totalSeconds % 60;
+                        timer.textContent = `${newMinutes}:${newSeconds.toString().padStart(2, '0')}`;
+                    }
+                }
+            });
+        }
+
+        // Atualizar a cada segundo
+        setInterval(updateTimers, 1000);
+
+        // Simular atualizações de lances
+        function updateBids() {
+            const bids = document.querySelectorAll('.bid-animation');
+            bids.forEach(bid => {
+                if (Math.random() > 0.8) { // 20% chance de atualizar
+                    const currentValue = parseInt(bid.textContent.replace('R$ ', ''));
+                    const increase = Math.floor(Math.random() * 20) + 5;
+                    bid.textContent = `R$ ${currentValue + increase}`;
+                }
+            });
+        }
+
+        // Atualizar lances a cada 10 segundos
+        setInterval(updateBids, 10000);
+
+        console.log('💰 Sistema de Lances TeleMed Ativo');
+    </script>
+</body>
+</html>

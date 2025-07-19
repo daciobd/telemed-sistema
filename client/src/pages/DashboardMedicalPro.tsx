@@ -22,7 +22,7 @@ import {
   Calendar as CalendarIcon,
   MessageSquare,
   Video,
-  Prescription,
+  FileText as PrescriptionIcon,
   ChartLine
 } from "lucide-react";
 

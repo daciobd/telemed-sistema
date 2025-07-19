@@ -3,104 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeleMed Sistema - Aplicação Web</title>
+    <title>TeleMed Pro - Plataforma Integrada de Telemedicina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { 
-            font-family: system-ui, sans-serif;
-            background: linear-gradient(135deg, #0891b2, #0e7490);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        .hero-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-        .logo {
-            color: #0891b2;
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        h1 {
-            color: #1e293b;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
-        p {
-            color: #64748b;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-        .btn {
-            background: #0891b2;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-            font-weight: bold;
+        .feature-card {
             transition: all 0.3s ease;
         }
-        .btn:hover {
-            background: #0e7490;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(8, 145, 178, 0.3);
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
-        .status {
-            background: #dcfce7;
-            color: #166534;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #bbf7d0;
+        .stat-counter {
+            animation: countUp 2s ease-out;
         }
-        .warning {
-            background: #fef3c7;
-            color: #92400e;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #fde68a;
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="logo">🩺</div>
-        <h1>TeleMed Sistema</h1>
-        <p>Plataforma Completa de Telemedicina</p>
-        
-        <div class="status">
-            ✅ Aplicação rodando na porta 5000<br>
-            ✅ Sistema de autenticação JWT funcionando<br>
-            ✅ Frontend React + Backend Express integrados
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="container mx-auto px-4 py-20 text-center relative z-10">
+            <div class="floating-icon mb-8">
+                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto backdrop-blur-sm">
+                    <i class="fas fa-heartbeat text-white text-3xl"></i>
+                </div>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                TeleMed <span class="text-blue-200">Pro</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Plataforma Integrada de Telemedicina com IA, Sistema de Lances e Dashboard Profissional
+            </p>
+            
+            <!-- Main Action Buttons -->
+            <div class="flex flex-col md:flex-row gap-6 justify-center items-center mb-12">
+                <a href="/dr-ai.html" class="group bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-green-600 hover:to-emerald-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                    <i class="fas fa-robot mr-3 group-hover:animate-pulse"></i>
+                    🤖 Triagem com IA
+                </a>
+                <a href="/consulta-por-valor.html" class="group bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-purple-600 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                    <i class="fas fa-gavel mr-3 group-hover:animate-pulse"></i>
+                    💰 Consulta por Valor
+                </a>
+                <a href="/medical-dashboard-pro.html" class="group bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                    <i class="fas fa-user-md mr-3 group-hover:animate-pulse"></i>
+                    👨‍⚕️ Dashboard Médico
+                </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
+                <div class="stat-counter">
+                    <div class="text-3xl font-bold">25k+</div>
+                    <div class="text-blue-200">Consultas</div>
+                </div>
+                <div class="stat-counter">
+                    <div class="text-3xl font-bold">1.2k+</div>
+                    <div class="text-blue-200">Médicos</div>
+                </div>
+                <div class="stat-counter">
+                    <div class="text-3xl font-bold">98%</div>
+                    <div class="text-blue-200">Satisfação</div>
+                </div>
+                <div class="stat-counter">
+                    <div class="text-3xl font-bold">24/7</div>
+                    <div class="text-blue-200">Disponível</div>
+                </div>
+            </div>
         </div>
-        
-        <div class="warning">
-            ⚠️ <strong>IMPORTANTE:</strong> Você está na página estática. Clique no botão abaixo para acessar a aplicação React.
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Recursos Integrados</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Três sistemas poderosos trabalhando em conjunto para revolucionar o atendimento médico</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Dr. AI Feature -->
+                <div class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl shadow-lg border border-green-100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Dr. AI - Triagem Inteligente</h3>
+                    <p class="text-gray-600 mb-6">Sistema de inteligência artificial para análise de sintomas e recomendações médicas personalizadas em tempo real.</p>
+                    <ul class="text-gray-600 mb-6 space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Análise de sintomas</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Recomendações personalizadas</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Triagem automática</li>
+                    </ul>
+                    <a href="/dr-ai.html" class="inline-flex items-center text-green-600 font-semibold hover:text-green-700">
+                        Experimentar Agora <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Bidding System Feature -->
+                <div class="feature-card bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl shadow-lg border border-purple-100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-gavel text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Sistema de Lances</h3>
+                    <p class="text-gray-600 mb-6">Conecte-se com médicos através de lances competitivos, garantindo o melhor preço e qualidade para suas consultas.</p>
+                    <ul class="text-gray-600 mb-6 space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-2"></i>Lances em tempo real</li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-2"></i>Melhor custo-benefício</li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-2"></i>Médicos verificados</li>
+                    </ul>
+                    <a href="/consulta-por-valor.html" class="inline-flex items-center text-purple-600 font-semibold hover:text-purple-700">
+                        Ver Lances Ativos <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Medical Dashboard Feature -->
+                <div class="feature-card bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl shadow-lg border border-blue-100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-user-md text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Dashboard Profissional</h3>
+                    <p class="text-gray-600 mb-6">Interface completa para médicos com gestão de consultas, pacientes, receitas e métricas de performance.</p>
+                    <ul class="text-gray-600 mb-6 space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-2"></i>Gestão de consultas</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-2"></i>Histórico de pacientes</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-2"></i>Métricas detalhadas</li>
+                    </ul>
+                    <a href="/medical-dashboard-pro.html" class="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700">
+                        Acessar Dashboard <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        
-        <a href="/" class="btn">🚀 ACESSAR APLICAÇÃO</a>
-        <a href="/login" class="btn">🔐 LOGIN DIRETO</a>
-        <a href="/register" class="btn">📝 CADASTRO DIRETO</a>
-        
-        <div style="margin-top: 30px; color: #64748b; font-size: 0.9rem;">
-            <p><strong>Credenciais de Teste:</strong><br>
-            Email: test@test.com<br>
-            Senha: 123456</p>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Como Funciona</h2>
+                <p class="text-xl text-gray-600">Processo simples e integrado para cuidados médicos completos</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Triagem com IA</h3>
+                    <p class="text-gray-600">Descreva seus sintomas para o Dr. AI e receba uma análise inicial</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Criar Lance</h3>
+                    <p class="text-gray-600">Se necessário, crie um lance para consulta com especialista</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Conectar Médico</h3>
+                    <p class="text-gray-600">Médicos fazem ofertas e você escolhe o melhor profissional</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-2xl font-bold">4</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Consulta Realizada</h3>
+                    <p class="text-gray-600">Realize sua consulta online ou presencial com segurança</p>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Planos e Preços</h2>
+                <p class="text-xl text-gray-600">Escolha o plano ideal para suas necessidades</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Basic Plan -->
+                <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Básico</h3>
+                    <div class="text-4xl font-bold text-gray-800 mb-2">Gratuito</div>
+                    <p class="text-gray-600 mb-6">Para usuários ocasionais</p>
+                    <ul class="text-left text-gray-600 mb-8 space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>3 consultas IA/mês</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Acesso básico ao sistema</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Suporte por email</li>
+                    </ul>
+                    <button class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        Começar Grátis
+                    </button>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-8 text-center text-white relative transform scale-105">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-gray-800 px-4 py-1 rounded-full text-sm font-semibold">
+                        Mais Popular
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Profissional</h3>
+                    <div class="text-4xl font-bold mb-2">R$ 49<span class="text-lg font-normal">/mês</span></div>
+                    <p class="text-blue-100 mb-6">Para uso regular</p>
+                    <ul class="text-left text-blue-100 mb-8 space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check text-blue-200 mr-3"></i>Consultas IA ilimitadas</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-200 mr-3"></i>Sistema de lances premium</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-200 mr-3"></i>Prioridade nos lances</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-200 mr-3"></i>Suporte prioritário</li>
+                    </ul>
+                    <button class="w-full bg-white text-blue-600 py-3 rounded-lg hover:bg-blue-50 transition-colors font-semibold">
+                        Escolher Pro
+                    </button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Empresarial</h3>
+                    <div class="text-4xl font-bold text-gray-800 mb-2">R$ 199<span class="text-lg font-normal">/mês</span></div>
+                    <p class="text-gray-600 mb-6">Para clínicas e hospitais</p>
+                    <ul class="text-left text-gray-600 mb-8 space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Tudo do Pro</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Dashboard médico completo</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>Relatórios avançados</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i>API integração</li>
+                    </ul>
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                        Contatar Vendas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">TeleMed Pro</h3>
+                    <p class="text-gray-400 mb-4">Revolucionando o atendimento médico com tecnologia e inovação.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Produtos</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/dr-ai.html" class="hover:text-white">Dr. AI</a></li>
+                        <li><a href="/consulta-por-valor.html" class="hover:text-white">Sistema de Lances</a></li>
+                        <li><a href="/medical-dashboard-pro.html" class="hover:text-white">Dashboard Médico</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Suporte</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">Central de Ajuda</a></li>
+                        <li><a href="#" class="hover:text-white">Contato</a></li>
+                        <li><a href="#" class="hover:text-white">Termos de Uso</a></li>
+                        <li><a href="#" class="hover:text-white">Privacidade</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center"><i class="fas fa-phone mr-2"></i> (11) 9999-9999</li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2"></i> contato@telemedpro.com</li>
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> São Paulo, SP</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 TeleMed Pro. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-counter');
+            const options = {
+                threshold: 0.5,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target.querySelector('div');
+                        const value = counter.textContent;
+                        let number = value.replace(/[^0-9]/g, '');
+                        if (number) {
+                            let current = 0;
+                            const increment = parseInt(number) / 50;
+                            const timer = setInterval(() => {
+                                current += increment;
+                                if (current >= parseInt(number)) {
+                                    current = parseInt(number);
+                                    clearInterval(timer);
+                                }
+                                counter.textContent = value.replace(number, Math.floor(current));
+                            }, 40);
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, options);
+
+            counters.forEach(counter => observer.observe(counter));
+        }
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            animateCounters();
+            console.log('🚀 TeleMed Pro Platform Loaded');
+        });
+    </script>
 </body>
 </html>
