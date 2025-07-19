@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta por Proposta de Valor - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-size: 2rem;
+        }
+        
+        .back-link {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: opacity 0.3s;
+        }
+        
+        .back-link:hover {
+            opacity: 0.7;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        /* Patient Bidding Interface */
+        .bidding-panel {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            height: fit-content;
+        }
+        
+        .panel-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .panel-content {
+            padding: 2rem;
+        }
+        
+        .urgency-check {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .urgency-check h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .urgency-questions {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .urgency-question {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .urgency-question input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #f59e0b;
+        }
+        
+        .urgency-question label {
+            color: #92400e;
+            font-weight: 500;
+        }
+        
+        .value-selector {
+            margin: 2rem 0;
+        }
+        
+        .value-selector h3 {
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+        
+        .value-options {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .value-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .value-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .value-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        }
+        
+        .value-tier {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tier-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .tier-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .bronze { background: #cd7f32; color: white; }
+        .silver { background: #c0c0c0; color: #333; }
+        .gold { background: #ffd700; color: #333; }
+        .platinum { background: #e5e4e2; color: #333; }
+        .premium { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; }
+        
+        .tier-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .tier-benefits {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .availability-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .available { background: #10b981; }
+        .busy { background: #f59e0b; }
+        .unavailable { background: #ef4444; }
+        
+        .custom-value {
+            margin-top: 1rem;
+        }
+        
+        .custom-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .custom-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        
+        .bid-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .bid-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .bid-button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Doctor Dashboard */
+        .doctor-dashboard {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            height: fit-content;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+        }
+        
+        .doctor-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .status-toggle {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .status-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .status-btn.active {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .queue-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .queue-filters {
+            padding: 1rem;
+            background: #f8fafc;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            color: #4a5568;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .queue-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .queue-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            transition: background 0.3s;
+        }
+        
+        .queue-item:hover {
+            background: #f8fafc;
+        }
+        
+        .queue-item.emergency {
+            border-left: 4px solid #ef4444;
+            background: #fef2f2;
+        }
+        
+        .queue-item.high-value {
+            border-left: 4px solid #ffd700;
+            background: #fffbeb;
+        }
+        
+        .patient-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .patient-details h4 {
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .patient-details p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .bid-info {
+            text-align: right;
+        }
+        
+        .bid-amount {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .wait-time {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        
+        .tier-indicator {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+        
+        .patient-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .attend-now {
+            background: #10b981;
+            color: white;
+        }
+        
+        .attend-now:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .schedule-later {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .schedule-later:hover {
+            background: #4b5563;
+        }
+        
+        .priority-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .priority-emergency { background: #ef4444; }
+        .priority-high { background: #f59e0b; }
+        .priority-medium { background: #10b981; }
+        .priority-low { background: #6b7280; }
+        
+        .revenue-highlight {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem;
+            text-align: center;
+        }
+        
+        .revenue-highlight h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                margin: 1rem auto;
+                padding: 0 15px;
+            }
+            
+            .queue-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .status-toggle, .queue-filters {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .queue-item {
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .availability-indicator.available {
+            animation: pulse 2s infinite;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <h1>
+            <i class="fas fa-coins"></i>
+            Consulta por Proposta de Valor
+        </h1>
+        <p>Faça sua proposta - quanto maior o valor, maior a prioridade</p>
+    </header>
+
+    <div class="container">
+        <!-- Patient Bidding Interface -->
+        <div class="bidding-panel">
+            <div class="panel-header">
+                <h2>💰 Faça Sua Proposta</h2>
+                <p>Sistema inovador: você decide quanto pagar</p>
+            </div>
+            
+            <div class="panel-content">
+                <!-- Urgency Check -->
+                <div class="urgency-check">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Verificação de Urgência</h3>
+                    <div class="urgency-questions">
+                        <div class="urgency-question">
+                            <input type="checkbox" id="suicidal" onchange="checkUrgency()">
+                            <label for="suicidal">Pensamentos de autolesão ou suicídio</label>
+                        </div>
+                        <div class="urgency-question">
+                            <input type="checkbox" id="psychotic" onchange="checkUrgency()">
+                            <label for="psychotic">Sintomas psicóticos ativos</label>
+                        </div>
+                        <div class="urgency-question">
+                            <input type="checkbox" id="panic" onchange="checkUrgency()">
+                            <label for="panic">Crise de pânico severa</label>
+                        </div>
+                        <div class="urgency-question">
+                            <input type="checkbox" id="substances" onchange="checkUrgency()">
+                            <label for="substances">Uso recente de substâncias com risco</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Value Selector -->
+                <div class="value-selector">
+                    <h3>💸 Escolha sua Proposta de Valor</h3>
+                    <div class="value-options">
+                        <div class="value-option" onclick="selectValue('bronze', 149)">
+                            <div class="availability-indicator available"></div>
+                            <div class="value-tier">
+                                <span class="tier-name">Bronze</span>
+                                <span class="tier-badge bronze">BÁSICO</span>
+                            </div>
+                            <div class="tier-price">R$ 149 - 199</div>
+                            <div class="tier-benefits">
+                                • Agendamento 24-48h<br>
+                                • Horário comercial (8h-18h)<br>
+                                • Segunda a sexta-feira
+                            </div>
+                        </div>
+
+                        <div class="value-option" onclick="selectValue('silver', 200)">
+                            <div class="availability-indicator busy"></div>
+                            <div class="value-tier">
+                                <span class="tier-name">Prata</span>
+                                <span class="tier-badge silver">POPULAR</span>
+                            </div>
+                            <div class="tier-price">R$ 200 - 299</div>
+                            <div class="tier-benefits">
+                                • Encaixe em 2-4h<br>
+                                • Horário estendido (7h-20h)<br>
+                                • Segunda a sexta-feira
+                            </div>
+                        </div>
+
+                        <div class="value-option" onclick="selectValue('gold', 300)">
+                            <div class="availability-indicator available"></div>
+                            <div class="value-tier">
+                                <span class="tier-name">Ouro</span>
+                                <span class="tier-badge gold">PREMIUM</span>
+                            </div>
+                            <div class="tier-price">R$ 300 - 399</div>
+                            <div class="tier-benefits">
+                                • Atendimento em até 15 min<br>
+                                • Inclui sábados manhã<br>
+                                • Prioridade alta na fila
+                            </div>
+                        </div>
+
+                        <div class="value-option" onclick="selectValue('platinum', 400)">
+                            <div class="availability-indicator available"></div>
+                            <div class="value-tier">
+                                <span class="tier-name">Platina</span>
+                                <span class="tier-badge platinum">VIP</span>
+                            </div>
+                            <div class="tier-price">R$ 400 - 499</div>
+                            <div class="tier-benefits">
+                                • Atendimento imediato<br>
+                                • Sábados completos<br>
+                                • Prioridade máxima
+                            </div>
+                        </div>
+
+                        <div class="value-option" onclick="selectValue('premium', 500)">
+                            <div class="availability-indicator available"></div>
+                            <div class="value-tier">
+                                <span class="tier-name">Premium</span>
+                                <span class="tier-badge premium">24/7</span>
+                            </div>
+                            <div class="tier-price">R$ 500+</div>
+                            <div class="tier-benefits">
+                                • Atendimento 24/7<br>
+                                • Finais de semana e feriados<br>
+                                • Horários noturnos disponíveis
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="custom-value">
+                        <h4>💡 Ou faça uma proposta personalizada:</h4>
+                        <div class="custom-input">
+                            <span>R$</span>
+                            <input type="number" id="customValue" placeholder="Mínimo R$ 149" min="149" onchange="updateCustomValue()">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bid-button" id="bidButton" onclick="submitBid()" disabled>
+                    Selecione um valor para continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- Doctor Dashboard -->
+        <div class="doctor-dashboard">
+            <div class="dashboard-header">
+                <div class="doctor-status">
+                    <h2>👨‍⚕️ Dashboard Médico</h2>
+                    <div class="status-toggle">
+                        <button class="status-btn active" onclick="setStatus('online')">🟢 Online</button>
+                        <button class="status-btn" onclick="setStatus('busy')">🟡 Ocupado</button>
+                        <button class="status-btn" onclick="setStatus('offline')">🔴 Offline</button>
+                    </div>
+                </div>
+                
+                <div class="queue-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalQueue">9</span>
+                        <span class="stat-label">Na Fila</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="emergencyCount">2</span>
+                        <span class="stat-label">Emergenciais</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="estimatedRevenue">R$ 2.890</span>
+                        <span class="stat-label">Receita Est.</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="avgWait">18min</span>
+                        <span class="stat-label">Tempo Médio</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revenue-highlight">
+                <h4>💰 Potencial de Receita</h4>
+                <p>Com 9 pacientes na fila: <strong>R$ 2.890</strong> em consultas</p>
+                <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 0.5rem;">
+                    Horário noturno e fins de semana: +40% de valor médio
+                </p>
+            </div>
+
+            <div class="queue-filters">
+                <button class="filter-btn active" onclick="filterQueue('all')">Todos (9)</button>
+                <button class="filter-btn" onclick="filterQueue('emergency')">Emergência (2)</button>
+                <button class="filter-btn" onclick="filterQueue('high')">Alto Valor (3)</button>
+                <button class="filter-btn" onclick="filterQueue('medium')">Médio (3)</button>
+                <button class="filter-btn" onclick="filterQueue('low')">Baixo (1)</button>
+            </div>
+
+            <div class="queue-list" id="queueList">
+                <!-- Emergency Cases First (Always Priority) -->
+                <div class="queue-item emergency" data-filter="emergency">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-emergency"></span>Maria Silva (28 anos)</h4>
+                            <p><strong>🚨 EMERGENCIAL:</strong> Ideação suicida ativa</p>
+                            <p><strong>Sintomas:</strong> Depressão severa, isolamento</p>
+                            <p>⏰ Aguardando há: <strong>2 min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">EMERGÊNCIA</div>
+                            <div class="tier-indicator emergency">PRIORIDADE ABSOLUTA</div>
+                            <div class="wait-time">Atender IMEDIATAMENTE</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">🚨 ATENDER AGORA</button>
+                    </div>
+                </div>
+
+                <div class="queue-item emergency" data-filter="emergency">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-emergency"></span>João Santos (45 anos)</h4>
+                            <p><strong>🚨 EMERGENCIAL:</strong> Crise psicótica aguda</p>
+                            <p><strong>Sintomas:</strong> Alucinações, agitação</p>
+                            <p>⏰ Aguardando há: <strong>5 min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">EMERGÊNCIA</div>
+                            <div class="tier-indicator emergency">PRIORIDADE ABSOLUTA</div>
+                            <div class="wait-time">Atender IMEDIATAMENTE</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">🚨 ATENDER AGORA</button>
+                    </div>
+                </div>
+
+                <!-- High Value Bids (Ordered by Value) -->
+                <div class="queue-item high-value" data-filter="high">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-high"></span>Ana Costa (35 anos)</h4>
+                            <p><strong>Motivo:</strong> Ansiedade severa e insônia</p>
+                            <p><strong>Preferência:</strong> Atendimento noturno (22h)</p>
+                            <p>⏰ Aguardando há: <strong>8 min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 650</div>
+                            <div class="tier-indicator premium">PREMIUM 24/7</div>
+                            <div class="wait-time">Horário noturno disponível</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">🌙 Agendar 22h</button>
+                    </div>
+                </div>
+
+                <div class="queue-item high-value" data-filter="high">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-high"></span>Carlos Lima (42 anos)</h4>
+                            <p><strong>Motivo:</strong> Ajuste de medicação antidepressiva</p>
+                            <p><strong>Preferência:</strong> Sábado manhã</p>
+                            <p>⏰ Aguardando há: <strong>15 min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 520</div>
+                            <div class="tier-indicator premium">PREMIUM 24/7</div>
+                            <div class="wait-time">Fins de semana</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">📅 Sábado 9h</button>
+                    </div>
+                </div>
+
+                <div class="queue-item high-value" data-filter="high">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-high"></span>Patricia Oliveira (29 anos)</h4>
+                            <p><strong>Motivo:</strong> Primera consulta - transtorno alimentar</p>
+                            <p><strong>Preferência:</strong> Atendimento em 15 min</p>
+                            <p>⏰ Aguardando há: <strong>12 min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 480</div>
+                            <div class="tier-indicator platinum">PLATINA VIP</div>
+                            <div class="wait-time">Atendimento imediato</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">📅 Agendar</button>
+                    </div>
+                </div>
+
+                <!-- Medium Value Bids -->
+                <div class="queue-item" data-filter="medium">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-medium"></span>Roberto Silva (38 anos)</h4>
+                            <p><strong>Motivo:</strong> Acompanhamento - transtorno bipolar</p>
+                            <p><strong>Preferência:</strong> Horário estendido (até 20h)</p>
+                            <p>⏰ Aguardando há: <strong>45 min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 350</div>
+                            <div class="tier-indicator gold">OURO PREMIUM</div>
+                            <div class="wait-time">Até 15 min</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">📅 Agendar</button>
+                    </div>
+                </div>
+
+                <div class="queue-item" data-filter="medium">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-medium"></span>Luciana Costa (31 anos)</h4>
+                            <p><strong>Motivo:</strong> Síndrome do pânico - retorno</p>
+                            <p><strong>Preferência:</strong> Horário estendido</p>
+                            <p>⏰ Aguardando há: <strong>1h 02min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 320</div>
+                            <div class="tier-indicator gold">OURO PREMIUM</div>
+                            <div class="wait-time">Sábado manhã</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">📅 Agendar</button>
+                    </div>
+                </div>
+
+                <div class="queue-item" data-filter="medium">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-medium"></span>Eduardo Santos (26 anos)</h4>
+                            <p><strong>Motivo:</strong> TDAH - ajuste medicação</p>
+                            <p><strong>Preferência:</strong> Encaixe em 2-4h</p>
+                            <p>⏰ Aguardando há: <strong>1h 18min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 280</div>
+                            <div class="tier-indicator silver">PRATA POPULAR</div>
+                            <div class="wait-time">Horário estendido</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">📅 Agendar</button>
+                    </div>
+                </div>
+
+                <!-- Low Value Bids -->
+                <div class="queue-item" data-filter="low">
+                    <div class="patient-info">
+                        <div class="patient-details">
+                            <h4><span class="priority-indicator priority-low"></span>Fernanda Santos (31 anos)</h4>
+                            <p><strong>Motivo:</strong> Primeira consulta - ansiedade</p>
+                            <p><strong>Preferência:</strong> Horário comercial</p>
+                            <p>⏰ Aguardando há: <strong>2h 20min</strong></p>
+                        </div>
+                        <div class="bid-info">
+                            <div class="bid-amount">R$ 179</div>
+                            <div class="tier-indicator bronze">BRONZE BÁSICO</div>
+                            <div class="wait-time">24-48h</div>
+                        </div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn attend-now">▶️ Atender Agora</button>
+                        <button class="action-btn schedule-later">📅 Agendar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Proposta enviada com sucesso!</span>
+    </div>
+
+    <script>
+        let selectedTier = null;
+        let selectedValue = 0;
+        let isEmergency = false;
+        let currentFilter = 'all';
+
+        function checkUrgency() {
+            const urgencyChecks = ['suicidal', 'psychotic', 'panic', 'substances'];
+            isEmergency = urgencyChecks.some(id => document.getElementById(id).checked);
+            
+            if (isEmergency) {
+                showNotification('🚨 CASO DE EMERGÊNCIA DETECTADO - Você será direcionado imediatamente para atendimento prioritário!', 'emergency');
+                document.getElementById('bidButton').textContent = '🚨 EMERGÊNCIA - Aguarde Contato Imediato';
+                document.getElementById('bidButton').style.background = '#ef4444';
+                document.getElementById('bidButton').disabled = false;
+            } else {
+                document.getElementById('bidButton').textContent = 'Selecione um valor para continuar';
+                document.getElementById('bidButton').style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                updateBidButton();
+            }
+        }
+
+        function selectValue(tier, baseValue) {
+            // Remove previous selection
+            document.querySelectorAll('.value-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            event.currentTarget.classList.add('selected');
+            
+            selectedTier = tier;
+            selectedValue = baseValue;
+            document.getElementById('customValue').value = baseValue;
+            
+            updateBidButton();
+        }
+
+        function updateCustomValue() {
+            const customValue = parseInt(document.getElementById('customValue').value) || 0;
+            if (customValue >= 149) {
+                selectedValue = customValue;
+                
+                // Remove all selections
+                document.querySelectorAll('.value-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                
+                // Determine tier based on value
+                if (customValue < 200) selectedTier = 'bronze';
+                else if (customValue < 300) selectedTier = 'silver';
+                else if (customValue < 400) selectedTier = 'gold';
+                else if (customValue < 500) selectedTier = 'platinum';
+                else selectedTier = 'premium';
+                
+                updateBidButton();
+            }
+        }
+
+        function updateBidButton() {
+            const button = document.getElementById('bidButton');
+            if (selectedValue >= 149) {
+                button.disabled = false;
+                button.textContent = `💰 Fazer Proposta - R$ ${selectedValue}`;
+            } else {
+                button.disabled = true;
+                button.textContent = 'Selecione um valor (mín. R$ 149)';
+            }
+        }
+
+        function submitBid() {
+            if (isEmergency) {
+                showNotification('🚨 EMERGÊNCIA REGISTRADA - Médico notificado imediatamente!', 'emergency');
+                // Simulate adding emergency to queue
+                addToQueue({
+                    name: 'Você (EMERGÊNCIA)',
+                    age: '32 anos',
+                    issue: 'Caso emergencial',
+                    value: 'EMERGÊNCIA',
+                    tier: 'PRIORIDADE ABSOLUTA',
+                    isEmergency: true
+                });
+                return;
+            }
+
+            if (selectedValue < 149) {
+                showNotification('Por favor, selecione um valor mínimo de R$ 149,00', 'error');
+                return;
+            }
+
+            const tierNames = {
+                'bronze': 'Bronze Básico',
+                'silver': 'Prata Popular', 
+                'gold': 'Ouro Premium',
+                'platinum': 'Platina VIP',
+                'premium': 'Premium 24/7'
+            };
+
+            const estimatedTimes = {
+                'bronze': '24-48 horas',
+                'silver': '2-4 horas',
+                'gold': 'até 15 minutos',
+                'platinum': 'imediato quando disponível',
+                'premium': 'atendimento prioritário 24/7'
+            };
+
+            // Add to queue
+            addToQueue({
+                name: 'Você',
+                age: '32 anos',
+                issue: 'Consulta solicitada',
+                value: selectedValue,
+                tier: tierNames[selectedTier],
+                estimatedTime: estimatedTimes[selectedTier]
+            });
+
+            showNotification(`💰 PROPOSTA ENVIADA! R$ ${selectedValue} - ${tierNames[selectedTier]} - Tempo: ${estimatedTimes[selectedTier]}`, 'success');
+        }
+
+        function addToQueue(patient) {
+            // Update queue statistics
+            const currentTotal = parseInt(document.getElementById('totalQueue').textContent);
+            const currentRevenue = parseFloat(document.getElementById('estimatedRevenue').textContent.replace('R$ ', '').replace('.', ''));
+            
+            document.getElementById('totalQueue').textContent = currentTotal + 1;
+            
+            if (patient.isEmergency) {
+                const currentEmergency = parseInt(document.getElementById('emergencyCount').textContent);
+                document.getElementById('emergencyCount').textContent = currentEmergency + 1;
+            } else {
+                document.getElementById('estimatedRevenue').textContent = `R$ ${(currentRevenue + patient.value).toLocaleString()}`;
+            }
+
+            // Add visual feedback
+            const queueList = document.getElementById('queueList');
+            const newItem = document.createElement('div');
+            newItem.className = `queue-item ${patient.isEmergency ? 'emergency' : 'high-value'}`;
+            newItem.style.background = '#e6fffa';
+            newItem.style.border = '2px solid #10b981';
+            
+            newItem.innerHTML = `
+                <div class="patient-info">
+                    <div class="patient-details">
+                        <h4><span class="priority-indicator priority-${patient.isEmergency ? 'emergency' : 'high'}"></span>${patient.name} (${patient.age})</h4>
+                        <p><strong>Motivo:</strong> ${patient.issue}</p>
+                        <p>⏰ Aguardando há: <strong>0 min</strong> 🆕</p>
+                    </div>
+                    <div class="bid-info">
+                        <div class="bid-amount">${patient.isEmergency ? 'EMERGÊNCIA' : 'R$ ' + patient.value}</div>
+                        <div class="tier-indicator ${selectedTier}">${patient.tier}</div>
+                        <div class="wait-time">${patient.estimatedTime || 'Imediato'}</div>
+                    </div>
+                </div>
+                <div class="patient-actions">
+                    <button class="action-btn attend-now">${patient.isEmergency ? '🚨' : '▶️'} Atender Agora</button>
+                    ${!patient.isEmergency ? '<button class="action-btn schedule-later">📅 Agendar</button>' : ''}
+                </div>
+            `;
+
+            if (patient.isEmergency) {
+                queueList.insertBefore(newItem, queueList.firstChild);
+            } else {
+                // Insert based on value priority
+                const emergencyItems = queueList.querySelectorAll('.emergency');
+                if (emergencyItems.length > 0) {
+                    queueList.insertBefore(newItem, emergencyItems[emergencyItems.length - 1].nextSibling);
+                } else {
+                    queueList.insertBefore(newItem, queueList.firstChild);
+                }
+            }
+        }
+
+        function setStatus(status) {
+            // Update status buttons
+            document.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const statusMessages = {
+                'online': 'Médico disponível para atendimentos',
+                'busy': 'Médico em consulta - novos pacientes para fila',
+                'offline': 'Médico offline - apenas agendamentos'
+            };
+            
+            showNotification(statusMessages[status], 'info');
+        }
+
+        function filterQueue(filter) {
+            currentFilter = filter;
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide queue items
+            const items = document.querySelectorAll('.queue-item');
+            items.forEach(item => {
+                if (filter === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    const matchesFilter = item.getAttribute('data-filter') === filter;
+                    item.style.display = matchesFilter ? 'block' : 'none';
+                }
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            
+            // Set notification color based on type
+            const colors = {
+                'success': '#10b981',
+                'error': '#ef4444',
+                'emergency': '#ef4444',
+                'info': '#3b82f6'
+            };
+            
+            notification.style.background = colors[type] || colors.success;
+            notification.classList.add('show');
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        // Simulate real-time updates
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                // Update wait times
+                const waitTimes = document.querySelectorAll('.patient-details p');
+                waitTimes.forEach(time => {
+                    if (time.textContent.includes('Aguardando há:')) {
+                        const match = time.textContent.match(/(\d+)\s*(min|h)/);
+                        if (match) {
+                            let value = parseInt(match[1]);
+                            const unit = match[2];
+                            
+                            if (unit === 'min') {
+                                value += 1;
+                                if (value >= 60) {
+                                    time.innerHTML = time.innerHTML.replace(/\d+\s*min/, '1h 0min');
+                                } else {
+                                    time.innerHTML = time.innerHTML.replace(/\d+\s*min/, value + 'min');
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Update average wait time
+                const avgWait = document.getElementById('avgWait');
+                let currentAvg = parseInt(avgWait.textContent);
+                avgWait.textContent = (currentAvg + 1) + 'min';
+                
+            }, 60000); // Update every minute
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('💰 Sistema de Lances Progressivos carregado!');
+            console.log('📊 Dashboard médico com priorização ativo');
+            console.log('🔢 Faixa de valores: R$ 149 - R$ 500+');
+            
+            simulateRealTimeUpdates();
+        });
+
+        // Emergency button handlers
+        document.querySelectorAll('.attend-now').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const patientName = this.closest('.queue-item').querySelector('h4').textContent;
+                showNotification(`Iniciando atendimento: ${patientName}`, 'info');
+            });
+        });
+
+        // Schedule button handlers
+        document.querySelectorAll('.schedule-later').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const patientName = this.closest('.queue-item').querySelector('h4').textContent;
+                showNotification(`Agendamento marcado: ${patientName}`, 'info');
+            });
+        });
+    </script>
+</body>
+</html>
