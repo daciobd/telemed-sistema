@@ -8,6 +8,14 @@ TeleMed Sistema is a comprehensive telemedicine platform designed to connect doc
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+- **July 19, 2025**: Fixed critical PostCSS configuration issue with Tailwind CSS v4
+  - Created client-specific postcss.config.js with @tailwindcss/postcss plugin
+  - Created client-specific tailwind.config.js with correct paths
+  - Resolved ES module compatibility issues
+  - Application now running successfully on port 5000
+
 ## System Architecture
 
 ### Frontend Architecture

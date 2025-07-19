@@ -1,10 +1,8 @@
-import { Config } from 'tailwindcss'
-
-const config: Config = {
+export default {
   content: [
-    './client/src/**/*.{js,ts,jsx,tsx,mdx}',
-    './client/index.html',
-    './shared/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './index.html',
+    '../shared/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -89,5 +87,3 @@ const config: Config = {
   },
   plugins: [],
 }
-
-export default config
