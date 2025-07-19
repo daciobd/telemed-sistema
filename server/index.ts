@@ -14,8 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Serve static HTML files from root directory
-app.use(express.static(path.join(__dirname, '..')));
+// Serve static HTML files from public directory first
+app.use(express.static(path.join(__dirname, '../public'), { index: false }));
 
 // Security headers
 app.use((req, res, next) => {
@@ -59,17 +59,35 @@ async function startServer() {
       serveStatic(app);
     }
     
-    // Root route - serve HTML landing page
+    // Specific HTML routes
     app.get('/', (req, res) => {
-      const indexPath = path.join(__dirname, '../index.html');
-      console.log('📄 Serving HTML landing page for:', req.path);
+      const indexPath = path.join(__dirname, '../public/index.html');
+      console.log('📄 Serving integrated landing page for:', req.path);
       res.sendFile(indexPath);
     });
 
-    // SPA fallback - ONLY for non-API routes (excluding root)
+    app.get('/dr-ai.html', (req, res) => {
+      const drAiPath = path.join(__dirname, '../public/dr-ai.html');
+      console.log('📄 Serving Dr. AI page for:', req.path);
+      res.sendFile(drAiPath);
+    });
+
+    app.get('/consulta-por-valor.html', (req, res) => {
+      const bidPath = path.join(__dirname, '../public/consulta-por-valor.html');
+      console.log('📄 Serving bidding system for:', req.path);
+      res.sendFile(bidPath);
+    });
+
+    app.get('/medical-dashboard-pro.html', (req, res) => {
+      const dashboardPath = path.join(__dirname, '../public/medical-dashboard-pro.html');
+      console.log('📄 Serving medical dashboard for:', req.path);
+      res.sendFile(dashboardPath);
+    });
+
+    // SPA fallback - ONLY for non-API routes and non-HTML routes
     app.get('*', (req, res, next) => {
-      if (req.path.startsWith('/api/')) {
-        return next(); // Let API routes pass through
+      if (req.path.startsWith('/api/') || req.path.endsWith('.html')) {
+        return next(); // Let API routes and HTML files pass through
       }
       
       // Serve React app index.html for all other routes
