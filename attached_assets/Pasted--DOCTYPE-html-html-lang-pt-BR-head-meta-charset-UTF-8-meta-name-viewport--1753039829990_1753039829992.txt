@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🩺 TeleMed Sistema - Guia de Teste para Médicos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .intro {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border-left: 5px solid #667eea;
+        }
+        
+        .intro h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step {
+            background: #f8fafc;
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
+        }
+        
+        .step-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .step-number {
+            background: rgba(255,255,255,0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-body {
+            padding: 2rem;
+        }
+        
+        .step-body p {
+            margin-bottom: 1rem;
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+        
+        .test-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .test-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .test-link.secondary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .test-link.secondary:hover {
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .test-link.tertiary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .test-link.tertiary:hover {
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .warning-icon {
+            color: #f59e0b;
+            font-size: 1.5rem;
+        }
+        
+        .success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .success-icon {
+            color: #10b981;
+            font-size: 1.5rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature h4 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        
+        .contact {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .contact h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .contact p {
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .video-permission {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .video-permission h4 {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .video-permission p {
+            color: #991b1b;
+            font-size: 0.9rem;
+        }
+        
+        .quick-links {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .quick-links h3 {
+            color: #0c4a6e;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .test-link {
+                display: block;
+                text-align: center;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🩺 TeleMed Sistema</h1>
+            <p><strong>Guia de Teste para Médicos</strong> - Sistema Revolucionário de Telemedicina</p>
+        </div>
+        
+        <div class="content">
+            <div class="intro">
+                <h2>👋 Bem-vindo, Dr(a)!</h2>
+                <p>Este é um sistema <strong>revolucionário</strong> que combina <strong>Inteligência Artificial</strong>, <strong>lances progressivos</strong> por consultas e <strong>videochamadas profissionais</strong>. Siga este guia simples para testar todas as funcionalidades.</p>
+                
+                <div class="success">
+                    <span class="success-icon">✅</span>
+                    <div>
+                        <strong>100% Funcional:</strong> Todos os botões, formulários e videochamadas estão operacionais para teste real.
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-links">
+                <h3>🚀 Links Rápidos - Clique e Teste</h3>
+                <div class="links-grid">
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai.html" class="test-link" target="_blank">
+                        🤖 Dr. AI (Triagem)
+                    </a>
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta-por-valor.html" class="test-link secondary" target="_blank">
+                        💰 Sistema de Lances
+                    </a>
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/medical-dashboard-pro.html" class="test-link tertiary" target="_blank">
+                        👨‍⚕️ Dashboard Médico
+                    </a>
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/test-bid-integration.html" class="test-link" target="_blank">
+                        🔧 Teste Completo
+                    </a>
+                </div>
+            </div>
+
+            <!-- PASSO 1 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>🤖 Teste o Dr. AI (Triagem Inteligente)</h3>
+                        <p>Veja como a IA analisa sintomas e recomenda especialidades</p>
+                    </div>
+                </div>
+                <div class="step-body">
+                    <p><strong>O que faz:</strong> Sistema de IA que conversa com pacientes, analisa sintomas e recomenda especialidades médicas.</p>
+                    
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai.html" class="test-link" target="_blank">
+                        🤖 Testar Dr. AI Agora
+                    </a>
+                    
+                    <div class="warning">
+                        <span class="warning-icon">💡</span>
+                        <div>
+                            <strong>Como testar:</strong> Clique nos botões de sintomas (ex: "Dor de cabeça") ou digite sintomas no chat. A IA responde em tempo real!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 2 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>💰 Sistema de Lances Progressivos (INOVAÇÃO)</h3>
+                        <p>Pacientes fazem propostas de valor - maior valor = maior prioridade</p>
+                    </div>
+                </div>
+                <div class="step-body">
+                    <p><strong>Revolução na medicina:</strong> Pacientes propõem valores (R$ 149-500+). Maior proposta tem prioridade, mas emergências sempre vêm primeiro!</p>
+                    
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta-por-valor.html" class="test-link secondary" target="_blank">
+                        💰 Ver Sistema de Lances
+                    </a>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <h4>🏥 Como Paciente</h4>
+                            <p>Role para baixo, preencha o formulário "Criar Nova Consulta" e veja seu lance na fila</p>
+                        </div>
+                        <div class="feature">
+                            <h4>👨‍⚕️ Como Médico</h4>
+                            <p>Role para a direita, veja a fila ordenada por valor, clique "ATENDER AGORA"</p>
+                        </div>
+                    </div>
+                    
+                    <div class="success">
+                        <span class="success-icon">⚖️</span>
+                        <div>
+                            <strong>Ética preservada:</strong> Emergências médicas têm prioridade ABSOLUTA independente do valor oferecido.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 3 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>👨‍⚕️ Dashboard Médico Profissional</h3>
+                        <p>Interface completa para gestão de consultas e pacientes</p>
+                    </div>
+                </div>
+                <div class="step-body">
+                    <p><strong>Dashboard completo:</strong> Métricas, fila de pacientes, ações rápidas, formulários funcionais.</p>
+                    
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/medical-dashboard-pro.html" class="test-link tertiary" target="_blank">
+                        👨‍⚕️ Acessar Dashboard
+                    </a>
+                    
+                    <div class="warning">
+                        <span class="warning-icon">🔍</span>
+                        <div>
+                            <strong>Teste os botões:</strong> "Iniciar Videoconsulta", "Nova Prescrição", "Cadastrar Paciente" - todos funcionais!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 4 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>🎥 Videoconsulta WebRTC (FUNCIONAL)</h3>
+                        <p>Sistema real de videochamada com chat e prescrições</p>
+                    </div>
+                </div>
+                <div class="step-body">
+                    <p><strong>Videochamada real:</strong> Sistema profissional com acesso à câmera, microfone, chat durante consulta e prescrições digitais.</p>
+                    
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/videoconsulta.html" class="test-link" target="_blank">
+                        🎥 Testar Videoconsulta
+                    </a>
+                    
+                    <div class="video-permission">
+                        <h4>📹 Permissões Necessárias</h4>
+                        <p>O navegador vai pedir acesso à câmera e microfone. <strong>Clique "Permitir"</strong> para testar a videochamada real.</p>
+                    </div>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <h4>🎮 Controles</h4>
+                            <p>Ligar/desligar mic e câmera, gravação, compartilhar tela</p>
+                        </div>
+                        <div class="feature">
+                            <h4>💬 Chat</h4>
+                            <p>Conversa durante a consulta</p>
+                        </div>
+                        <div class="feature">
+                            <h4>📝 Prescrições</h4>
+                            <p>Formulário para prescrever medicamentos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 5 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h3>🔧 Teste Integração Completa</h3>
+                        <p>Fluxo completo: Paciente → Lance → Médico → Videoconsulta</p>
+                    </div>
+                </div>
+                <div class="step-body">
+                    <p><strong>Demonstração completa:</strong> Página especial que testa toda a integração entre sistemas.</p>
+                    
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/test-bid-integration.html" class="test-link" target="_blank">
+                        🔧 Teste Integração Completa
+                    </a>
+                    
+                    <div class="warning">
+                        <span class="warning-icon">🎯</span>
+                        <div>
+                            <strong>Fluxo sugerido:</strong>
+                            <ol style="margin-top: 10px;">
+                                <li>Criar lance de teste</li>
+                                <li>Ir para Dashboard Médico</li>
+                                <li>Ver lance na fila</li>
+                                <li>Aceitar consulta</li>
+                                <li>Videochamada inicia</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIFERENCIAIS -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">🏆</div>
+                    <div>
+                        <h3>Diferenciais Revolucionários</h3>
+                        <p>Por que este sistema é único no mercado</p>
+                    </div>
+                </div>
+                <div class="step-body">
+                    <div class="features">
+                        <div class="feature">
+                            <h4>🤖 IA Médica</h4>
+                            <p>Primeiro sistema com IA para triagem automática em português</p>
+                        </div>
+                        <div class="feature">
+                            <h4>💰 Lances Progressivos</h4>
+                            <p>Modelo inovador: paciente decide quanto vale sua prioridade</p>
+                        </div>
+                        <div class="feature">
+                            <h4>⚖️ Ética Preservada</h4>
+                            <p>Emergências sempre têm prioridade máxima</p>
+                        </div>
+                        <div class="feature">
+                            <h4>🎥 WebRTC Real</h4>
+                            <p>Videochamadas profissionais sem plugins</p>
+                        </div>
+                        <div class="feature">
+                            <h4>📊 Dashboard Pro</h4>
+                            <p>Interface médica completa e intuitiva</p>
+                        </div>
+                        <div class="feature">
+                            <h4>🔗 Integração Total</h4>
+                            <p>Todos os sistemas conectados e funcionais</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact">
+                <h3>💬 Dúvidas ou Feedback?</h3>
+                <p>Este sistema está 100% funcional e pronto para validação médica.</p>
+                <p><strong>Teste à vontade e compartilhe suas impressões!</strong></p>
+                
+                <div style="margin-top: 1.5rem;">
+                    <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/test-bid-integration.html" class="test-link" target="_blank">
+                        🚀 Começar Teste Completo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Analytics simples para rastrear quais botões são mais clicados
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.test-link');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function() {
+                    const linkText = this.textContent.trim();
+                    console.log(`🎯 Médico testou: ${linkText}`);
+                    
+                    // Simular analytics
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'test_click', {
+                            'link_text': linkText,
+                            'user_type': 'medico'
+                        });
+                    }
+                });
+            });
+            
+            console.log('🩺 Guia para médicos carregado!');
+            console.log('📊 Todos os links funcionais');
+            console.log('🎯 Sistema pronto para avaliação médica');
+        });
+    </script>
+</body>
+</html>
