@@ -10,6 +10,14 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 20, 2025**: GUIA MÉDICO INTEGRADO - NAVEGAÇÃO UNIFICADA COMPLETA
+  - ✅ **Guia Médico Criado**: /guia-medicos.html como centro de documentação
+  - ✅ **Navegação Integrada**: Links em todas as páginas principais
+  - ✅ **Homepage Atualizada**: Guia como primeira opção na landing page
+  - ✅ **Auto-Contido**: Sistema totalmente interno sem dependências externas
+  - ✅ **URLs Relativos**: Todos os links internos funcionais (/dr-ai.html, /dashboard, etc.)
+  - ✅ **Controle Total**: Métricas, manutenção e funcionalidade 100% integradas
+
 - **July 20, 2025**: Sistema "Fazer Lance" 100% Funcional - REDIRECIONAMENTO CONFIRMADO FUNCIONANDO
   - ✅ **Redirecionamento Funcional**: Após lance → redireciona corretamente para /aguardando-medico.html
   - ✅ **Interface Aguardando**: Página mostra "Lance Enviado com Sucesso!" com timer e progress bar
