@@ -1,0 +1,7 @@
+FORCE DEPLOY - July 20, 2025 11:46 UTC
+- Sistema de lances com botões ATENDER AGORA funcionais
+- Dashboard médico com todos os modais funcionais  
+- Videoconsulta WebRTC completa
+- Fluxo completo: Dashboard → Lances → Atender → Videoconsulta
+
+CACHE BUST: 1753014396
