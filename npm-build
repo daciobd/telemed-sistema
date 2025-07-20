@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+// This file simulates 'npm run build' for deployment systems that expect it
+
+import { execSync } from 'child_process';
+
+try {
+  console.log('Running build script...');
+  execSync('./scripts/build.sh', { stdio: 'inherit' });
+} catch (error) {
+  console.error('Build failed:', error);
+  process.exit(1);
+}

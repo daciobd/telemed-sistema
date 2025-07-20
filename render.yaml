@@ -2,18 +2,12 @@ services:
   - type: web
     name: telemed-sistema
     env: node
-    region: oregon
-    plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    healthCheckPath: /health
+    buildCommand: node build.js
+    startCommand: node start.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
-      - key: DATABASE_URL
-        generateValue: true
-      - key: NEXTAUTH_SECRET
-        generateValue: true
-    staticPublishPath: ./public
+        fromService:
+          type: web
+          property: port

@@ -1311,7 +1311,7 @@ export class DatabaseStorage implements IStorage {
     return results;
   }
 
-  async getAppointmentsByDateRange(doctorId: number, startDate: Date, endDate: Date) {
+  async getAppointmentsByDoctorAndDateRange(doctorId: number, startDate: Date, endDate: Date) {
     return await db
       .select()
       .from(appointments)
@@ -1325,7 +1325,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(appointments.appointmentDate);
   }
 
-  async searchCidCodes(query: string, limit: number = 10): Promise<CidCode[]> {
+  async searchCidCodesAdvanced(query: string, limit: number = 10): Promise<CidCode[]> {
     const searchTerm = `%${query.toLowerCase()}%`;
     return await db
       .select()
@@ -1365,84 +1365,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(cidCodes.code);
   }
 
-  // Consultation Records methods
-  async createConsultationRecord(data: any): Promise<ConsultationRecord> {
-    const [record] = await db
-      .insert(consultationRecords)
-      .values({
-        appointmentId: data.appointmentId,
-        doctorId: data.doctorId,
-        patientId: data.patientId,
-        chiefComplaint: data.chiefComplaint || null,
-        anamnesis: data.anamnesis || null,
-        diagnosis: data.diagnosis || null,
-        cidCode: data.cidCode || null,
-        cidDescription: data.cidDescription || null,
-        treatment: data.treatment || null,
-        physicalExam: data.physicalExam || null,
-        vitalSigns: data.vitalSigns || null,
-        notes: data.notes || null,
-        followUp: data.followUp || null,
-        status: data.status || 'in_progress'
-      })
-      .returning();
-    return record;
-  }
 
-  async getConsultationRecord(id: number): Promise<ConsultationRecord | null> {
-    const [record] = await db
-      .select()
-      .from(consultationRecords)
-      .where(eq(consultationRecords.id, id));
-    return record || null;
-  }
-
-  async getConsultationRecordByAppointment(appointmentId: number): Promise<ConsultationRecord | null> {
-    const [record] = await db
-      .select()
-      .from(consultationRecords)
-      .where(eq(consultationRecords.appointmentId, appointmentId));
-    return record || null;
-  }
-
-  async updateConsultationRecord(id: number, data: any): Promise<ConsultationRecord> {
-    const [record] = await db
-      .update(consultationRecords)
-      .set({
-        chiefComplaint: data.chiefComplaint,
-        anamnesis: data.anamnesis,
-        diagnosis: data.diagnosis,
-        cidCode: data.cidCode,
-        cidDescription: data.cidDescription,
-        treatment: data.treatment,
-        physicalExam: data.physicalExam,
-        vitalSigns: data.vitalSigns,
-        notes: data.notes,
-        followUp: data.followUp,
-        status: data.status,
-        completedAt: data.status === 'completed' ? new Date() : null,
-        updatedAt: new Date()
-      })
-      .where(eq(consultationRecords.id, id))
-      .returning();
-    return record;
-  }
-
-  async getConsultationRecordsByDoctor(doctorId: number): Promise<ConsultationRecord[]> {
-    return await db
-      .select()
-      .from(consultationRecords)
-      .where(eq(consultationRecords.doctorId, doctorId))
-      .orderBy(desc(consultationRecords.createdAt));
-  }
-
-  async getConsultationRecordsByPatient(patientId: number): Promise<ConsultationRecord[]> {
-    return await db
-      .select()
-      .from(consultationRecords)
-      .where(eq(consultationRecords.patientId, patientId))
-      .orderBy(desc(consultationRecords.createdAt));
-  }
 
   // Consultation Reports Methods
   async createConsultationReport(data: InsertConsultationReport): Promise<SelectConsultationReport> {
@@ -1598,33 +1521,7 @@ export class DatabaseStorage implements IStorage {
     return await query.orderBy(desc(patientHealthMetrics.recordedAt));
   }
 
-  async createPatientJourneyMilestone(milestone: InsertPatientJourneyMilestone): Promise<PatientJourneyMilestone> {
-    const [createdMilestone] = await db
-      .insert(patientJourneyMilestones)
-      .values(milestone)
-      .returning();
-    return createdMilestone;
-  }
 
-  async getPatientJourneyMilestones(patientId: number): Promise<PatientJourneyMilestone[]> {
-    return await db
-      .select()
-      .from(patientJourneyMilestones)
-      .where(eq(patientJourneyMilestones.patientId, patientId))
-      .orderBy(desc(patientJourneyMilestones.createdAt));
-  }
-
-  async updatePatientJourneyMilestone(
-    id: number, 
-    updates: Partial<InsertPatientJourneyMilestone>
-  ): Promise<PatientJourneyMilestone> {
-    const [updatedMilestone] = await db
-      .update(patientJourneyMilestones)
-      .set({ ...updates, updatedAt: new Date() })
-      .where(eq(patientJourneyMilestones.id, id))
-      .returning();
-    return updatedMilestone;
-  }
 
   // ===============================================
   // SECURITY AND LGPD IMPLEMENTATION
