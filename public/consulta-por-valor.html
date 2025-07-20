@@ -487,6 +487,7 @@
         // Função para submeter novo lance do formulário
         function submitNewBid() {
             console.log('🚀 Iniciando submissão de novo lance...');
+            console.log('🔍 Event object:', event);
             
             // Coletar dados do formulário
             const specialty = document.querySelector('select').value;
@@ -578,9 +579,21 @@
                 
                 // Redirect DIRECTLY to waiting page
                 console.log('🔄 REDIRECIONANDO DIRETAMENTE para aguardando...');
+                console.log('🌐 URL atual:', window.location.href);
+                console.log('🎯 Tentando redirecionar para: /aguardando-medico.html');
+                
+                // Try multiple redirect approaches
                 setTimeout(() => {
-                    window.location.href = '/aguardando-medico.html';
-                }, 1500);
+                    console.log('⏰ Executando redirecionamento...');
+                    try {
+                        window.location.href = '/aguardando-medico.html';
+                        console.log('✅ Redirect chamado via href');
+                    } catch (error) {
+                        console.error('❌ Erro no redirect:', error);
+                        // Fallback
+                        window.location.replace('/aguardando-medico.html');
+                    }
+                }, 1000);
                 
                 // Reset form
                 setTimeout(() => {
