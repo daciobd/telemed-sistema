@@ -572,12 +572,15 @@
                 console.log('✅ Lance salvo com sucesso! Total de lances:', existingBids.length);
                 
                 // Success feedback
-                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Criado com Sucesso!';
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Criado! Redirecionando...';
                 button.className = button.className.replace('bg-blue-600', 'bg-green-600');
                 button.style.transform = 'scale(1)';
                 
-                // Show success modal
-                showNewBidSuccessModal(mappedSpecialty, bidAmountNum, randomName);
+                // Redirect DIRECTLY to waiting page
+                console.log('🔄 REDIRECIONANDO DIRETAMENTE para aguardando...');
+                setTimeout(() => {
+                    window.location.href = '/aguardando-medico.html';
+                }, 1500);
                 
                 // Reset form
                 setTimeout(() => {
