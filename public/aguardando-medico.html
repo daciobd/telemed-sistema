@@ -105,6 +105,9 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="simulateAcceptance()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                    <i class="fas fa-robot mr-2"></i>Simular Aceitação (Teste)
+                </button>
                 <button onclick="cancelBid()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
                     <i class="fas fa-times mr-2"></i>Cancelar Lance
                 </button>
@@ -235,8 +238,9 @@
                 }, 3000);
             }
             
-            // Simulate random doctor acceptance after 30 seconds for demo
-            if (waitingTime > 30 && Math.random() < 0.3) {
+            // Simulate random doctor acceptance after 15 seconds for demo (reduced for faster testing)
+            if (waitingTime > 15 && Math.random() < 0.5) {
+                console.log('🎲 Simulando aceitação automática do médico...');
                 acceptBidDemo(latestBid);
             }
         }
@@ -291,6 +295,21 @@
                 
                 showNotification('Status atualizado!', 'info');
             }, 1500);
+        }
+
+        function simulateAcceptance() {
+            console.log('🎭 Simulando aceitação manual do médico...');
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const latestBid = bids[bids.length - 1];
+            
+            if (latestBid && latestBid.status === 'aguardando') {
+                showNotification('Simulando aceitação do médico...', 'info');
+                setTimeout(() => {
+                    acceptBidDemo(latestBid);
+                }, 2000);
+            } else {
+                showNotification('Nenhum lance ativo encontrado para simular aceitação.', 'error');
+            }
         }
 
         function cancelBid() {
