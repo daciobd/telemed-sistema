@@ -617,7 +617,7 @@
                             <em>Médicos podem ver e atender em tempo real.</em>
                         </p>
                         <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button onclick="goToWaitingPage()" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            <button onclick="console.log('Botão clicado!'); document.querySelector('[style*=\\'position: fixed\\']').remove(); window.location.href='/aguardando-medico.html'" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
                                 Entendi ✓
                             </button>
                             <button onclick="window.location.href='/medical-dashboard-pro.html'" style="background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
