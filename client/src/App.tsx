@@ -1,7 +1,8 @@
 import { Switch, Route } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
+import { queryClient } from "@/lib/queryClient";
 import OnboardingDemo from "@/pages/OnboardingDemo";
 import OnboardingFixed from "@/pages/OnboardingFixed";
 import OnboardingSuccess from "@/pages/OnboardingSuccess";
@@ -19,14 +20,6 @@ import MonitoringDashboard from "@/pages/MonitoringDashboard";
 import DashboardMedicalPro from "@/pages/DashboardMedicalPro";
 import LegacyDemoPage from "@/pages/LegacyDemoPage";
 import PatientBiddingPage from "@/pages/PatientBiddingPage";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
-});
 
 function App() {
   return (
