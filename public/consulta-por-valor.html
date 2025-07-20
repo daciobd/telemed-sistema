@@ -65,7 +65,7 @@
                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">5</span>
                     </div>
                     <div class="mt-4">
-                        <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="185" step="5">
+                        <input type="number" placeholder="Seu lance - mínimo R$ 185" class="w-full p-3 border rounded-lg mb-3" min="185" step="5" value="185">
                         <div class="space-y-2">
                             <button onclick="attendPatient('Maria Silva')" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-bold">
                                 🚨 ATENDER AGORA - R$ 300
@@ -98,7 +98,7 @@
                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">3</span>
                     </div>
                     <div class="mt-4">
-                        <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="155" step="5">
+                        <input type="number" placeholder="Seu lance - mínimo R$ 155" class="w-full p-3 border rounded-lg mb-3" min="155" step="5" value="155">
                         <div class="space-y-2">
                             <button onclick="attendPatient('Ana Costa')" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold">
                                 ▶️ Atender Agora - R$ 150
@@ -131,7 +131,7 @@
                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">7</span>
                     </div>
                     <div class="mt-4">
-                        <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="125" step="5">
+                        <input type="number" placeholder="Seu lance - mínimo R$ 125" class="w-full p-3 border rounded-lg mb-3" min="125" step="5" value="125">
                         <div class="space-y-2">
                             <button onclick="scheduleConsultation('João Santos', '22:00')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-bold">
                                 📅 Agendar 22h - R$ 120
@@ -278,15 +278,18 @@
         function submitBid(button, specialty) {
             const inputElement = button.parentElement.parentElement.querySelector('input[type="number"]');
             const bidValue = inputElement.value;
+            const bidValueNum = parseFloat(bidValue);
             
-            if (!bidValue || bidValue <= 0) {
-                alert('⚠️ Por favor, insira um valor válido para o lance!');
+            // Validação mais robusta
+            if (!bidValue || bidValue.trim() === '' || isNaN(bidValueNum) || bidValueNum <= 0) {
+                alert('⚠️ Por favor, insira um valor válido para o lance!\n\nDica: O campo já tem um valor sugerido. Você pode modificá-lo ou usar o valor padrão.');
                 inputElement.focus();
+                inputElement.select(); // Seleciona o texto para facilitar a edição
                 return;
             }
             
-            const minValue = parseInt(inputElement.getAttribute('min'));
-            if (parseInt(bidValue) < minValue) {
+            const minValue = parseInt(inputElement.getAttribute('min')) || 149;
+            if (bidValueNum < minValue) {
                 alert(`⚠️ O lance mínimo para ${specialty} é R$ ${minValue}!`);
                 inputElement.focus();
                 return;
