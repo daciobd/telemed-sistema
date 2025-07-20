@@ -232,7 +232,7 @@
                 <textarea class="w-full p-3 border rounded-lg h-24" placeholder="Descreva brevemente seus sintomas ou necessidades médicas..."></textarea>
             </div>
             <div class="mt-6 text-center">
-                <button class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+                <button onclick="submitNewBid()" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
                     <i class="fas fa-rocket mr-2"></i>Iniciar Lance
                 </button>
             </div>
@@ -484,7 +484,160 @@
         // Atualizar lances a cada 10 segundos
         setInterval(updateBids, 10000);
 
-        console.log('💰 Sistema de Lances TeleMed Ativo - Botões de Atender Funcionais - v1.3 CACHE_BUST_1753014396');
+        // Função para submeter novo lance do formulário
+        function submitNewBid() {
+            console.log('🚀 Iniciando submissão de novo lance...');
+            
+            // Coletar dados do formulário
+            const specialty = document.querySelector('select').value;
+            const consultType = document.querySelectorAll('select')[1].value;
+            const bidAmount = document.querySelector('input[type="number"]').value;
+            const preferredDate = document.querySelector('input[type="date"]').value;
+            const preferredTime = document.querySelectorAll('select')[2].value;
+            const duration = document.querySelectorAll('select')[3].value;
+            const symptoms = document.querySelector('textarea').value;
+            
+            console.log('📋 Dados coletados:', {
+                specialty, consultType, bidAmount, preferredDate, preferredTime, duration, symptoms
+            });
+            
+            // Validação crítica
+            if (!specialty || !consultType || !bidAmount || !symptoms) {
+                alert('⚠️ ERRO: Preencha todos os campos obrigatórios!\n\n' +
+                      '• Especialidade Médica\n' +
+                      '• Tipo de Consulta\n' +
+                      '• Lance Inicial\n' +
+                      '• Descrição dos Sintomas');
+                return;
+            }
+            
+            const bidAmountNum = parseFloat(bidAmount);
+            if (isNaN(bidAmountNum) || bidAmountNum < 50) {
+                alert('⚠️ ERRO: Lance mínimo é R$ 50');
+                return;
+            }
+            
+            // Animação de envio
+            const button = event.target;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processando Lance...';
+            button.style.transform = 'scale(0.95)';
+            
+            // Lista de nomes brasileiros realistas
+            const patientNames = [
+                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
+                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
+                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
+                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha'
+            ];
+            
+            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
+            
+            // Mapear especialidades para formato consistente
+            const specialtyMap = {
+                'cardiologia': 'Cardiologia',
+                'pediatria': 'Pediatria', 
+                'dermatologia': 'Dermatologia',
+                'neurologia': 'Neurologia',
+                'ortopedia': 'Ortopedia',
+                'ginecologia': 'Ginecologia'
+            };
+            
+            const mappedSpecialty = specialtyMap[specialty] || specialty;
+            
+            // Simular processo de envio
+            setTimeout(() => {
+                // Criar objeto de lance completo
+                const newBid = {
+                    id: Date.now(),
+                    specialty: mappedSpecialty,
+                    consultType: consultType,
+                    value: bidAmountNum,
+                    preferredDate: preferredDate,
+                    preferredTime: preferredTime,
+                    duration: duration,
+                    symptoms: symptoms,
+                    status: 'aguardando',
+                    timestamp: new Date().toISOString(),
+                    patient: randomName
+                };
+                
+                console.log('💾 Salvando lance:', newBid);
+                
+                // Salvar no localStorage
+                const existingBids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+                existingBids.push(newBid);
+                localStorage.setItem('telemed_bids', JSON.stringify(existingBids));
+                
+                console.log('✅ Lance salvo com sucesso! Total de lances:', existingBids.length);
+                
+                // Success feedback
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Criado com Sucesso!';
+                button.className = button.className.replace('bg-blue-600', 'bg-green-600');
+                button.style.transform = 'scale(1)';
+                
+                // Show success modal
+                showNewBidSuccessModal(mappedSpecialty, bidAmountNum, randomName);
+                
+                // Reset form
+                setTimeout(() => {
+                    document.querySelector('select').selectedIndex = 0;
+                    document.querySelectorAll('select')[1].selectedIndex = 0;
+                    document.querySelector('input[type="number"]').value = '';
+                    document.querySelector('input[type="date"]').value = '';
+                    document.querySelectorAll('select')[2].selectedIndex = 0;
+                    document.querySelectorAll('select')[3].selectedIndex = 0;
+                    document.querySelector('textarea').value = '';
+                    
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fas fa-rocket mr-2"></i>Iniciar Lance';
+                    button.className = button.className.replace('bg-green-600', 'bg-blue-600');
+                }, 3000);
+                
+            }, 2000);
+        }
+        
+        // Modal de sucesso para novo lance
+        function showNewBidSuccessModal(specialty, bidAmount, patientName) {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
+                        <h3 style="color: #059669; font-size: 24px; margin-bottom: 15px; font-weight: bold;">Lance Criado com Sucesso!</h3>
+                        <div style="background: #f0f9ff; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <p style="color: #374151; margin-bottom: 10px;">
+                                <strong>Paciente:</strong> ${patientName}<br>
+                                <strong>Especialidade:</strong> ${specialty}<br>
+                                <strong>Valor:</strong> R$ ${bidAmount}
+                            </p>
+                        </div>
+                        <p style="color: #6b7280; margin-bottom: 20px;">
+                            <strong>🏥 Seu lance foi adicionado à fila médica!</strong><br>
+                            <em>Médicos podem ver e atender em tempo real.</em>
+                        </p>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                Entendi ✓
+                            </button>
+                            <button onclick="window.location.href='/medical-dashboard-pro.html'" style="background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                Ver Dashboard 👨‍⚕️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Auto-remover após 10 segundos
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.parentElement.removeChild(modal);
+                }
+            }, 10000);
+        }
+
+        console.log('💰 Sistema de Lances TeleMed Ativo - Formulário Integrado - v2.0 CACHE_BUST_' + Date.now());
     </script>
 </body>
 </html>
