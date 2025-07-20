@@ -19,7 +19,9 @@ import {
   MessageSquare,
   Download,
   Star,
-  TrendingUp
+  TrendingUp,
+  Gavel,
+  DollarSign
 } from "lucide-react";
 
 export default function PatientDashboardUnified() {
@@ -85,6 +87,13 @@ export default function PatientDashboardUnified() {
 
   const quickActions = [
     {
+      title: "Fazer Lance",
+      description: "Sistema de leilão - encontre o melhor preço",
+      icon: Gavel,
+      color: "green",
+      action: () => window.location.href = "/patient-bidding"
+    },
+    {
       title: "Agendar Consulta",
       description: "Marque uma nova consulta com especialistas",
       icon: Calendar,
@@ -95,22 +104,15 @@ export default function PatientDashboardUnified() {
       title: "Videoconsulta Rápida",
       description: "Conecte-se rapidamente com um médico online",
       icon: Video,
-      color: "green",
+      color: "purple",
       action: () => window.location.href = "/teleconsult/quick"
     },
     {
       title: "Meu Prontuário",
       description: "Visualize seu histórico médico completo",
       icon: FileText,
-      color: "purple",
-      action: () => window.location.href = "/medical-records"
-    },
-    {
-      title: "Receitas Digitais",
-      description: "Acesse e baixe suas prescrições",
-      icon: Pill,
       color: "orange",
-      action: () => window.location.href = "/prescriptions"
+      action: () => window.location.href = "/medical-records"
     }
   ];
 

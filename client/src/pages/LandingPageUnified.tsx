@@ -119,6 +119,9 @@ export default function LandingPageUnified() {
               <Stethoscope className="mr-2 h-5 w-5" />
               Sou Médico
             </Button>
+            <Button size="lg" variant="secondary" className="px-8 bg-green-600 hover:bg-green-700 text-white border-0" onClick={() => window.location.href = '/patient-bidding'}>
+              💰 Fazer Lance
+            </Button>
           </div>
         </div>
       </section>

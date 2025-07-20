@@ -18,6 +18,7 @@ import LandingPageUnified from "@/pages/LandingPageUnified";
 import MonitoringDashboard from "@/pages/MonitoringDashboard";
 import DashboardMedicalPro from "@/pages/DashboardMedicalPro";
 import LegacyDemoPage from "@/pages/LegacyDemoPage";
+import PatientBiddingPage from "@/pages/PatientBiddingPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,6 +49,8 @@ function App() {
             <Route path="/legacy-demo" component={LegacyDemoPage} />
             <Route path="/patient-journey/:patientId" component={PatientJourneyPage} />
             <Route path="/diagnostic" component={DiagnosticPage} />
+            <Route path="/patient-bidding" component={PatientBiddingPage} />
+            <Route path="/fazer-lance" component={PatientBiddingPage} />
             
             {/* Dashboards Legados (manter para compatibilidade) */}
             <Route path="/doctor-dashboard-legacy" component={DoctorDashboard} />

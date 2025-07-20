@@ -10,6 +10,37 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 20, 2025**: Sistema "Fazer Lance" Implementado Completamente
+  - ✅ **PatientBiddingPage.tsx**: Interface React completa com modal funcional
+    - Modal de lance com validação R$ 149 mínimo
+    - Seleção de especialidade médica (Cardiologia, Pediatria, etc.)
+    - Campo obrigatório para sintomas e descrição
+    - Integração completa com backend API /api/teleconsult
+    - Sistema de countdown em tempo real
+    - Cards de consultas ativas com "Atender Agora" e "Fazer Lance"
+  - ✅ **Componente BidModal.tsx**: Modal reutilizável para lances
+    - Validação frontend completa antes do envio
+    - Feedback visual com toast notifications
+    - Estados de loading durante envio
+    - Suporte a preenchimento automático de valores
+  - ✅ **Integração Dashboard**: Botão "Fazer Lance" no PatientDashboardUnified
+    - Ícone Gavel (martelo de leilão) para identidade visual
+    - Redirecionamento direto para /patient-bidding
+    - Posição de destaque como primeira ação rápida
+  - ✅ **Rotas Implementadas**: 
+    - /patient-bidding → PatientBiddingPage (Sistema principal)
+    - /fazer-lance → PatientBiddingPage (Alias em português)
+  - ✅ **Página de Teste**: /test-bidding.html para validação completa
+    - Modal HTML nativo funcional
+    - Validação completa R$ 149 mínimo
+    - Integração com API real
+    - Feedback visual de sucesso/erro
+  - ✅ **Backend Integration**: Utiliza API existente /api/teleconsult
+    - Mapeamento de especialidades (português → chaves do sistema)
+    - Criação de teleconsult requests
+    - Simulação de respostas médicas
+    - Validação de preços e dados
+
 - **July 20, 2025**: Production Deployment Configuration Complete
   - ✅ **Build System Implemented**: Created complete build configuration with frontend/backend support
     - `build.js` script for automated build process
