@@ -617,8 +617,8 @@
                             <em>Médicos podem ver e atender em tempo real.</em>
                         </p>
                         <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                                Entendi ✓
+                            <button onclick="goToWaitingPage()" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                Aguardar Médico ⏰
                             </button>
                             <button onclick="window.location.href='/medical-dashboard-pro.html'" style="background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
                                 Ver Dashboard 👨‍⚕️
@@ -637,7 +637,19 @@
             }, 10000);
         }
 
-        console.log('💰 Sistema de Lances TeleMed Ativo - Formulário Integrado - v2.0 CACHE_BUST_' + Date.now());
+        // Função para ir para página de aguardando médico
+        function goToWaitingPage() {
+            // Close the modal first
+            const modal = document.querySelector('[style*="position: fixed"]');
+            if (modal && modal.parentElement) {
+                modal.parentElement.removeChild(modal);
+            }
+            
+            console.log('⏰ Redirecionando para página de aguardando médico...');
+            window.location.href = '/aguardando-medico.html';
+        }
+
+        console.log('💰 Sistema de Lances TeleMed Ativo - Fluxo Completo - v2.1 CACHE_BUST_' + Date.now());
     </script>
 </body>
 </html>
