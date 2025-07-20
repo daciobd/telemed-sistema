@@ -2,12 +2,14 @@ services:
   - type: web
     name: telemed-sistema
     env: node
-    buildCommand: node build.js
-    startCommand: node start.js
+    plan: starter
+    buildCommand: node deploy-build.js
+    startCommand: node deploy-start.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         fromService:
           type: web
+          name: telemed-sistema
           property: port

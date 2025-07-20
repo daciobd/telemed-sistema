@@ -1,4 +1,21 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false
+  "version": 2,
+  "builds": [
+    {
+      "src": "deploy-build.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["dist/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "deploy-start.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

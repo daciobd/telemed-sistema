@@ -1,1 +1,1 @@
-web: node build.js && node start.js
+web: node deploy-start.js
