@@ -14,7 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Serve static HTML files from public directory first
+// Serve static files from root and public directory
+app.use(express.static(path.join(__dirname, '..'), { index: false }));
 app.use(express.static(path.join(__dirname, '../public'), { index: false }));
 
 // Security headers
@@ -34,8 +35,8 @@ app.use((req, res, next) => {
 
 // HTML Landing Pages - HIGHEST PRIORITY
 app.get('/', (req, res) => {
-  const indexPath = path.join(__dirname, '../public/index.html');
-  console.log('📄 Serving integrated landing page for:', req.path);
+  const indexPath = path.join(__dirname, '../index.html');
+  console.log('📄 Serving NEW simple landing page for:', req.path);
   res.sendFile(indexPath);
 });
 
