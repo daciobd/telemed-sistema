@@ -70,7 +70,7 @@
                             <button onclick="attendPatient('Maria Silva')" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-bold">
                                 🚨 ATENDER AGORA - R$ 300
                             </button>
-                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <button onclick="submitBid(this, 'Cardiologia')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
                                 <i class="fas fa-gavel mr-2"></i>Fazer Lance
                             </button>
                         </div>
@@ -103,7 +103,7 @@
                             <button onclick="attendPatient('Ana Costa')" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold">
                                 ▶️ Atender Agora - R$ 150
                             </button>
-                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <button onclick="submitBid(this, 'Pediatria')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
                                 <i class="fas fa-gavel mr-2"></i>Fazer Lance
                             </button>
                         </div>
@@ -136,7 +136,7 @@
                             <button onclick="scheduleConsultation('João Santos', '22:00')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-bold">
                                 📅 Agendar 22h - R$ 120
                             </button>
-                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            <button onclick="submitBid(this, 'Dermatologia')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
                                 <i class="fas fa-gavel mr-2"></i>Fazer Lance
                             </button>
                         </div>
@@ -272,6 +272,46 @@
         // Navegação direta para dashboard médico
         function goToDashboard() {
             window.location.href = '/medical-dashboard-pro.html';
+        }
+
+        // Função para submeter lance
+        function submitBid(button, specialty) {
+            const inputElement = button.parentElement.parentElement.querySelector('input[type="number"]');
+            const bidValue = inputElement.value;
+            
+            if (!bidValue || bidValue <= 0) {
+                alert('⚠️ Por favor, insira um valor válido para o lance!');
+                inputElement.focus();
+                return;
+            }
+            
+            const minValue = parseInt(inputElement.getAttribute('min'));
+            if (parseInt(bidValue) < minValue) {
+                alert(`⚠️ O lance mínimo para ${specialty} é R$ ${minValue}!`);
+                inputElement.focus();
+                return;
+            }
+            
+            // Simular envio do lance
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+            
+            setTimeout(() => {
+                alert(`✅ Lance enviado com sucesso!\n\nEspecialidade: ${specialty}\nValor: R$ ${bidValue}\n\nVocê receberá notificação se for selecionado!`);
+                
+                // Reset do botão
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-gavel mr-2"></i>Fazer Lance';
+                
+                // Limpar input
+                inputElement.value = '';
+                
+                // Atualizar valor na tela
+                const currentBidElement = button.parentElement.parentElement.parentElement.querySelector('.bid-animation');
+                if (currentBidElement) {
+                    currentBidElement.textContent = `R$ ${bidValue}`;
+                }
+            }, 2000);
         }
 
         // Atualizar contadores de tempo em tempo real
