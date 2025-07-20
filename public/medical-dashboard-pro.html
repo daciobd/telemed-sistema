@@ -21,6 +21,19 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .success-notification {
+            animation: slideIn 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -72,9 +85,9 @@
             <div class="metric-card bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-600 text-sm">Pacientes Ativos</p>
-                        <p class="text-3xl font-bold text-green-600">245</p>
-                        <p class="text-green-600 text-xs mt-1">↑ +12 esta semana</p>
+                        <p class="text-gray-600 text-sm">Na Fila</p>
+                        <p id="queueCount" class="text-3xl font-bold text-green-600">0</p>
+                        <p class="text-green-600 text-xs mt-1">Aguardando atendimento</p>
                     </div>
                     <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                         <i class="fas fa-users text-green-600 text-xl"></i>
@@ -85,12 +98,12 @@
             <div class="metric-card bg-white rounded-xl shadow-lg p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-600 text-sm">Receita do Mês</p>
-                        <p class="text-3xl font-bold text-purple-600">R$ 18,5k</p>
-                        <p class="text-green-600 text-xs mt-1">↑ +8% vs mês anterior</p>
+                        <p class="text-gray-600 text-sm">Receita Est.</p>
+                        <p id="estimatedRevenue" class="text-3xl font-bold text-purple-600">R$ 0</p>
+                        <p class="text-purple-600 text-xs mt-1">Baseado em lances</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                        <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -114,65 +127,20 @@
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-800">Próximas Consultas</h2>
-                        <button class="text-blue-600 hover:text-blue-700 text-sm font-medium">Ver Todas</button>
+                        <h2 class="text-xl font-bold text-gray-800">Fila de Pacientes</h2>
+                        <div class="flex items-center space-x-2">
+                            <span id="queueCounter" class="text-sm text-gray-600">Na Fila: 0</span>
+                            <button onclick="refreshPatientQueue()" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                <i class="fas fa-sync mr-1"></i>Atualizar
+                            </button>
+                        </div>
                     </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-video text-blue-600"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">Maria Silva</h3>
-                                    <p class="text-gray-600 text-sm">Teleconsulta - Cardiologia</p>
-                                    <p class="text-blue-600 text-sm font-medium">09:00 - 09:30</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Em 15 min</span>
-                                <div class="mt-2">
-                                    <button onclick="startVideoConsultation()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">Iniciar Videoconsulta</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border-l-4 border-gray-400">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-user text-gray-600"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">João Santos</h3>
-                                    <p class="text-gray-600 text-sm">Consulta Presencial - Clínica Geral</p>
-                                    <p class="text-gray-600 text-sm font-medium">10:30 - 11:00</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">Em 1h 15min</span>
-                                <div class="mt-2">
-                                    <button class="text-gray-600 hover:text-gray-700 text-sm">Preparar</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-phone text-green-600"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">Ana Costa</h3>
-                                    <p class="text-gray-600 text-sm">Retorno - Pediatria</p>
-                                    <p class="text-green-600 text-sm font-medium">14:00 - 14:30</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Agendado</span>
-                                <div class="mt-2">
-                                    <button class="text-green-600 hover:text-green-700 text-sm">Ver Histórico</button>
-                                </div>
-                            </div>
+                    <div id="patientQueue" class="space-y-4">
+                        <!-- Patients from bidding system will appear here -->
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-users text-3xl mb-3 opacity-50"></i>
+                            <p class="text-sm">Aguardando novos pacientes...</p>
+                            <p class="text-xs">Lances aparecerão aqui automaticamente</p>
                         </div>
                     </div>
                 </div>
@@ -529,11 +497,17 @@
     </div>
 
     <script>
-        // Load active bids on page load
+        // Load active bids and patient queue on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadActiveBids();
-            // Refresh bids every 10 seconds
-            setInterval(loadActiveBids, 10000);
+            refreshPatientQueue();
+            updateMetrics();
+            // Refresh every 10 seconds
+            setInterval(() => {
+                loadActiveBids();
+                refreshPatientQueue();
+                updateMetrics();
+            }, 10000);
         });
 
         // Function to load and display active bids
@@ -620,6 +594,158 @@
                     loadActiveBids();
                 }
             }
+        }
+
+        // Function to refresh patient queue
+        function refreshPatientQueue() {
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const waitingBids = bids.filter(bid => bid.status === 'aguardando');
+            const container = document.getElementById('patientQueue');
+            
+            if (waitingBids.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-users text-3xl mb-3 opacity-50"></i>
+                        <p class="text-sm">Nenhum paciente na fila</p>
+                        <p class="text-xs">Novos lances aparecerão aqui automaticamente</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = waitingBids.map(bid => {
+                const timeAgo = getTimeAgo(bid.timestamp);
+                const specialtyIcon = getSpecialtyIcon(bid.specialty);
+                const specialtyColor = getSpecialtyColor(bid.specialty);
+                
+                return `
+                    <div class="flex items-center justify-between p-4 ${specialtyColor.bg} rounded-lg border-l-4 ${specialtyColor.border}">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 ${specialtyColor.iconBg} rounded-full flex items-center justify-center">
+                                <i class="fas ${specialtyIcon} ${specialtyColor.icon} text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">${bid.patient}</h3>
+                                <p class="text-gray-600 text-sm">Teleconsulta - ${bid.specialty}</p>
+                                <p class="text-sm font-medium ${specialtyColor.text}">Lance: R$ ${bid.value} • ${timeAgo}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mb-2 block">Aguardando</span>
+                            <button onclick="attendPatient(${bid.id})" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 font-medium">
+                                <i class="fas fa-video mr-2"></i>ATENDER AGORA
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Update queue counter
+            document.getElementById('queueCounter').textContent = `Na Fila: ${waitingBids.length}`;
+        }
+
+        // Function to attend a patient from the main queue
+        function attendPatient(bidId) {
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const bidIndex = bids.findIndex(bid => bid.id === bidId);
+            
+            if (bidIndex !== -1) {
+                const bid = bids[bidIndex];
+                
+                // Show confirmation modal
+                if (confirm(`🩺 ATENDER PACIENTE\n\nPaciente: ${bid.patient}\nEspecialidade: ${bid.specialty}\nValor: R$ ${bid.value}\n\n✅ Confirmar atendimento e iniciar videoconsulta?`)) {
+                    // Update bid status
+                    bids[bidIndex].status = 'atendido';
+                    bids[bidIndex].attendedAt = new Date().toISOString();
+                    localStorage.setItem('telemed_bids', JSON.stringify(bids));
+                    
+                    // Show success feedback
+                    const successDiv = document.createElement('div');
+                    successDiv.innerHTML = `
+                        <div style="position: fixed; top: 20px; right: 20px; background: #059669; color: white; padding: 15px 20px; border-radius: 8px; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: slideIn 0.3s ease-out;">
+                            <div style="display: flex; align-items: center;">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span>Atendimento iniciado! Redirecionando para videoconsulta...</span>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(successDiv);
+                    
+                    // Refresh displays
+                    refreshPatientQueue();
+                    loadActiveBids();
+                    updateMetrics();
+                    
+                    // Redirect to video consultation after delay
+                    setTimeout(() => {
+                        window.location.href = '/videoconsulta.html';
+                    }, 2000);
+                    
+                    setTimeout(() => {
+                        successDiv.remove();
+                    }, 3000);
+                }
+            }
+        }
+
+        // Function to update metrics
+        function updateMetrics() {
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const waitingBids = bids.filter(bid => bid.status === 'aguardando');
+            const totalRevenue = waitingBids.reduce((sum, bid) => sum + parseFloat(bid.value || 0), 0);
+            
+            // Update queue count
+            document.getElementById('queueCount').textContent = waitingBids.length;
+            
+            // Update estimated revenue
+            document.getElementById('estimatedRevenue').textContent = `R$ ${totalRevenue.toFixed(0)}`;
+        }
+
+        // Helper function to get specialty icon
+        function getSpecialtyIcon(specialty) {
+            const icons = {
+                'Cardiologia': 'fa-heartbeat',
+                'Pediatria': 'fa-baby',
+                'Dermatologia': 'fa-hand-paper',
+                'Clínica Geral': 'fa-stethoscope',
+                'Ginecologia': 'fa-female',
+                'Ortopedia': 'fa-bone'
+            };
+            return icons[specialty] || 'fa-user-md';
+        }
+
+        // Helper function to get specialty colors
+        function getSpecialtyColor(specialty) {
+            const colors = {
+                'Cardiologia': {
+                    bg: 'bg-red-50',
+                    border: 'border-red-500',
+                    iconBg: 'bg-red-100',
+                    icon: 'text-red-600',
+                    text: 'text-red-600'
+                },
+                'Pediatria': {
+                    bg: 'bg-blue-50',
+                    border: 'border-blue-500',
+                    iconBg: 'bg-blue-100',
+                    icon: 'text-blue-600',
+                    text: 'text-blue-600'
+                },
+                'Dermatologia': {
+                    bg: 'bg-green-50',
+                    border: 'border-green-500',
+                    iconBg: 'bg-green-100',
+                    icon: 'text-green-600',
+                    text: 'text-green-600'
+                }
+            };
+            return colors[specialty] || {
+                bg: 'bg-gray-50',
+                border: 'border-gray-500',
+                iconBg: 'bg-gray-100',
+                icon: 'text-gray-600',
+                text: 'text-gray-600'
+            };
         }
 
         // Helper function to get time ago

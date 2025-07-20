@@ -422,6 +422,17 @@
         
         // Função para simular atualização no dashboard médico
         function updateMedicalDashboard(specialty, bidValue) {
+            // Lista de nomes brasileiros realistas
+            const patientNames = [
+                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
+                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
+                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
+                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha',
+                'Gabriel Monteiro', 'Bianca Castro', 'Leonardo Torres', 'Adriana Dias', 'Henrique Cardoso'
+            ];
+            
+            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
+            
             // Simular notificação para o dashboard médico
             console.log(`🏥 DASHBOARD MÉDICO ATUALIZADO: Nova consulta ${specialty} - R$ ${bidValue} aguardando`);
             
@@ -433,7 +444,7 @@
                 value: bidValue,
                 status: 'aguardando',
                 timestamp: new Date().toISOString(),
-                patient: 'Paciente ' + Math.floor(Math.random() * 1000)
+                patient: randomName
             });
             localStorage.setItem('telemed_bids', JSON.stringify(bids));
         }

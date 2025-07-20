@@ -113,6 +113,16 @@
                 return;
             }
             
+            // Lista de nomes brasileiros realistas
+            const patientNames = [
+                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
+                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
+                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
+                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha'
+            ];
+            
+            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
+            
             // Create bid object
             const bid = {
                 id: Date.now(),
@@ -120,7 +130,7 @@
                 value: bidValue,
                 status: 'aguardando',
                 timestamp: new Date().toISOString(),
-                patient: 'Paciente Teste ' + Math.floor(Math.random() * 100)
+                patient: randomName
             };
             
             // Save to localStorage
