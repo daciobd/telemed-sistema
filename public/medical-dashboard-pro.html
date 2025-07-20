@@ -182,26 +182,21 @@
             <div class="space-y-6">
                 <!-- Lances Ativos -->
                 <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Lances Ativos</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                            <div>
-                                <p class="font-medium text-gray-800">Cardiologia</p>
-                                <p class="text-sm text-gray-600">Lance: R$ 180</p>
-                            </div>
-                            <span class="text-yellow-600 text-sm font-medium">Lidерando</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                            <div>
-                                <p class="font-medium text-gray-800">Pediatria</p>
-                                <p class="text-sm text-gray-600">Lance: R$ 150</p>
-                            </div>
-                            <span class="text-red-600 text-sm font-medium">Superado</span>
-                        </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Lances Ativos</h3>
+                        <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                     </div>
-                    <button onclick="goToBiddingSystem()" class="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 text-sm font-medium">
-                        Fila de Lances
-                    </button>
+                    <div id="activeBidsContainer" class="space-y-3">
+                        <!-- Bids will be loaded here -->
+                    </div>
+                    <div class="mt-4 space-y-2">
+                        <button onclick="goToBiddingSystem()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 text-sm font-medium">
+                            <i class="fas fa-gavel mr-2"></i>Fila de Lances
+                        </button>
+                        <button onclick="startVideoConsultation()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 text-sm font-medium">
+                            <i class="fas fa-video mr-2"></i>Iniciar Videoconsulta
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Métricas Rápidas -->
@@ -534,6 +529,111 @@
     </div>
 
     <script>
+        // Load active bids on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadActiveBids();
+            // Refresh bids every 10 seconds
+            setInterval(loadActiveBids, 10000);
+        });
+
+        // Function to load and display active bids
+        function loadActiveBids() {
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const container = document.getElementById('activeBidsContainer');
+            
+            if (bids.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-gray-500">
+                        <i class="fas fa-gavel text-2xl mb-2 opacity-50"></i>
+                        <p class="text-sm">Nenhum lance ativo</p>
+                        <p class="text-xs">Lances aparecerão aqui automaticamente</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = bids.map(bid => {
+                const timeAgo = getTimeAgo(bid.timestamp);
+                const statusColor = bid.status === 'aguardando' ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200';
+                const statusText = bid.status === 'aguardando' ? 'Aguardando' : 'Atendido';
+                const statusTextColor = bid.status === 'aguardando' ? 'text-yellow-600' : 'text-green-600';
+                
+                return `
+                    <div class="p-3 ${statusColor} border rounded-lg transition-all hover:shadow-md">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-800">${bid.specialty}</p>
+                                <p class="text-sm text-gray-600">Lance: R$ ${bid.value}</p>
+                                <p class="text-xs text-gray-500">${bid.patient} • ${timeAgo}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-medium ${statusTextColor}">${statusText}</span>
+                                ${bid.status === 'aguardando' ? `
+                                    <button onclick="attendBid(${bid.id})" class="block mt-1 text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700">
+                                        Atender
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Function to attend a bid
+        function attendBid(bidId) {
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const bidIndex = bids.findIndex(bid => bid.id === bidId);
+            
+            if (bidIndex !== -1) {
+                const bid = bids[bidIndex];
+                
+                // Show confirmation modal
+                if (confirm(`Confirma atendimento?\n\nPaciente: ${bid.patient}\nEspecialidade: ${bid.specialty}\nValor: R$ ${bid.value}\n\nIrá para videoconsulta.`)) {
+                    // Update bid status
+                    bids[bidIndex].status = 'atendido';
+                    bids[bidIndex].attendedAt = new Date().toISOString();
+                    localStorage.setItem('telemed_bids', JSON.stringify(bids));
+                    
+                    // Redirect to video consultation
+                    setTimeout(() => {
+                        window.location.href = '/videoconsulta.html';
+                    }, 1000);
+                    
+                    // Show success feedback
+                    const successDiv = document.createElement('div');
+                    successDiv.innerHTML = `
+                        <div style="position: fixed; top: 20px; right: 20px; background: #059669; color: white; padding: 15px 20px; border-radius: 8px; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                            <div style="display: flex; items-center;">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span>Atendimento iniciado! Redirecionando...</span>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(successDiv);
+                    
+                    setTimeout(() => {
+                        successDiv.remove();
+                    }, 3000);
+                    
+                    // Refresh the bids display
+                    loadActiveBids();
+                }
+            }
+        }
+
+        // Helper function to get time ago
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - time) / 1000);
+            
+            if (diffInSeconds < 60) return 'agora';
+            if (diffInSeconds < 3600) return Math.floor(diffInSeconds / 60) + 'min atrás';
+            if (diffInSeconds < 86400) return Math.floor(diffInSeconds / 3600) + 'h atrás';
+            return Math.floor(diffInSeconds / 86400) + 'd atrás';
+        }
+
         // Navigation functions
         function startVideoConsultation() {
             window.location.href = '/videoconsulta.html';

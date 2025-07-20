@@ -64,8 +64,15 @@
                         <span class="text-gray-600">Médicos Interessados:</span>
                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">5</span>
                     </div>
-                    <div class="mt-4">
-                        <input type="number" placeholder="Seu lance - mínimo R$ 185" class="w-full p-3 border rounded-lg mb-3" min="185" step="5" value="185">
+                    <div class="mt-4 bid-section">
+                        <div class="bid-input-wrapper">
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                                <input type="number" placeholder="185" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all" min="185" step="5" value="185">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 185 • Sugestão: R$ 190-200</p>
+                        </div>
                         <div class="space-y-2">
                             <button onclick="attendPatient('Maria Silva')" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-bold">
                                 🚨 ATENDER AGORA - R$ 300
@@ -97,8 +104,15 @@
                         <span class="text-gray-600">Médicos Interessados:</span>
                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">3</span>
                     </div>
-                    <div class="mt-4">
-                        <input type="number" placeholder="Seu lance - mínimo R$ 155" class="w-full p-3 border rounded-lg mb-3" min="155" step="5" value="155">
+                    <div class="mt-4 bid-section">
+                        <div class="bid-input-wrapper">
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                                <input type="number" placeholder="155" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" min="155" step="5" value="155">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 155 • Sugestão: R$ 160-170</p>
+                        </div>
                         <div class="space-y-2">
                             <button onclick="attendPatient('Ana Costa')" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold">
                                 ▶️ Atender Agora - R$ 150
@@ -130,8 +144,15 @@
                         <span class="text-gray-600">Médicos Interessados:</span>
                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">7</span>
                     </div>
-                    <div class="mt-4">
-                        <input type="number" placeholder="Seu lance - mínimo R$ 125" class="w-full p-3 border rounded-lg mb-3" min="125" step="5" value="125">
+                    <div class="mt-4 bid-section">
+                        <div class="bid-input-wrapper">
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                                <input type="number" placeholder="125" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all" min="125" step="5" value="125">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 125 • Sugestão: R$ 130-140</p>
+                        </div>
                         <div class="space-y-2">
                             <button onclick="scheduleConsultation('João Santos', '22:00')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-bold">
                                 📅 Agendar 22h - R$ 120
@@ -274,7 +295,7 @@
             window.location.href = '/medical-dashboard-pro.html';
         }
 
-        // Função para submeter lance
+        // Função para submeter lance com animações e feedback visual
         function submitBid(button, specialty) {
             const inputElement = button.parentElement.parentElement.querySelector('input[type="number"]');
             const bidValue = inputElement.value;
@@ -282,39 +303,139 @@
             
             // Validação mais robusta
             if (!bidValue || bidValue.trim() === '' || isNaN(bidValueNum) || bidValueNum <= 0) {
-                alert('⚠️ Por favor, insira um valor válido para o lance!\n\nDica: O campo já tem um valor sugerido. Você pode modificá-lo ou usar o valor padrão.');
-                inputElement.focus();
-                inputElement.select(); // Seleciona o texto para facilitar a edição
+                showErrorFeedback(inputElement, 'Por favor, insira um valor válido!');
                 return;
             }
             
             const minValue = parseInt(inputElement.getAttribute('min')) || 149;
             if (bidValueNum < minValue) {
-                alert(`⚠️ O lance mínimo para ${specialty} é R$ ${minValue}!`);
-                inputElement.focus();
+                showErrorFeedback(inputElement, `Lance mínimo: R$ ${minValue}`);
                 return;
             }
             
-            // Simular envio do lance
+            // Animação de envio
             button.disabled = true;
+            button.style.transform = 'scale(0.95)';
             button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
             
+            // Simular processo de lance
             setTimeout(() => {
-                alert(`✅ Lance enviado com sucesso!\n\nEspecialidade: ${specialty}\nValor: R$ ${bidValue}\n\nVocê receberá notificação se for selecionado!`);
+                // Sucesso visual
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Enviado!';
+                button.className = button.className.replace('bg-green-600', 'bg-green-500');
                 
-                // Reset do botão
-                button.disabled = false;
-                button.innerHTML = '<i class="fas fa-gavel mr-2"></i>Fazer Lance';
+                // Notificação de sucesso melhorada
+                showSuccessModal(specialty, bidValue);
                 
-                // Limpar input
-                inputElement.value = '';
-                
-                // Atualizar valor na tela
+                // Atualizar valor na tela com animação
                 const currentBidElement = button.parentElement.parentElement.parentElement.querySelector('.bid-animation');
                 if (currentBidElement) {
+                    currentBidElement.style.transform = 'scale(1.1)';
+                    currentBidElement.style.color = '#059669';
                     currentBidElement.textContent = `R$ ${bidValue}`;
+                    
+                    setTimeout(() => {
+                        currentBidElement.style.transform = 'scale(1)';
+                    }, 300);
                 }
-            }, 2000);
+                
+                // Simular atualização no dashboard médico
+                updateMedicalDashboard(specialty, bidValue);
+                
+                // Reset do botão após sucesso
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.style.transform = 'scale(1)';
+                    button.innerHTML = '<i class="fas fa-gavel mr-2"></i>Novo Lance';
+                    button.className = button.className.replace('bg-green-500', 'bg-blue-600');
+                }, 3000);
+                
+            }, 1500);
+        }
+        
+        // Função para mostrar feedback de erro
+        function showErrorFeedback(inputElement, message) {
+            inputElement.style.borderColor = '#ef4444';
+            inputElement.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+            
+            // Criar tooltip de erro
+            const tooltip = document.createElement('div');
+            tooltip.className = 'error-tooltip';
+            tooltip.textContent = message;
+            tooltip.style.cssText = `
+                position: absolute; 
+                background: #ef4444; 
+                color: white; 
+                padding: 8px 12px; 
+                border-radius: 6px; 
+                font-size: 12px; 
+                top: -40px; 
+                left: 50%; 
+                transform: translateX(-50%); 
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            `;
+            
+            inputElement.parentElement.style.position = 'relative';
+            inputElement.parentElement.appendChild(tooltip);
+            inputElement.focus();
+            inputElement.select();
+            
+            // Remover feedback após 3 segundos
+            setTimeout(() => {
+                inputElement.style.borderColor = '#d1d5db';
+                inputElement.style.boxShadow = '';
+                if (tooltip.parentElement) {
+                    tooltip.parentElement.removeChild(tooltip);
+                }
+            }, 3000);
+        }
+        
+        // Função para mostrar modal de sucesso
+        function showSuccessModal(specialty, bidValue) {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
+                        <h3 style="color: #059669; font-size: 24px; margin-bottom: 15px; font-weight: bold;">Lance Enviado!</h3>
+                        <p style="color: #6b7280; margin-bottom: 20px;">
+                            <strong>Especialidade:</strong> ${specialty}<br>
+                            <strong>Valor:</strong> R$ ${bidValue}<br><br>
+                            <em>Você receberá notificação se for selecionado!</em>
+                        </p>
+                        <button onclick="this.parentElement.parentElement.remove()" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            Entendi ✓
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Auto-remover após 5 segundos
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.parentElement.removeChild(modal);
+                }
+            }, 5000);
+        }
+        
+        // Função para simular atualização no dashboard médico
+        function updateMedicalDashboard(specialty, bidValue) {
+            // Simular notificação para o dashboard médico
+            console.log(`🏥 DASHBOARD MÉDICO ATUALIZADO: Nova consulta ${specialty} - R$ ${bidValue} aguardando`);
+            
+            // Simular localStorage para persistir dados entre páginas
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            bids.push({
+                id: Date.now(),
+                specialty: specialty,
+                value: bidValue,
+                status: 'aguardando',
+                timestamp: new Date().toISOString(),
+                patient: 'Paciente ' + Math.floor(Math.random() * 1000)
+            });
+            localStorage.setItem('telemed_bids', JSON.stringify(bids));
         }
 
         // Atualizar contadores de tempo em tempo real
