@@ -37,6 +37,7 @@
                 <p class="text-gray-600">Conecte-se com médicos através de lances competitivos para consultas personalizadas</p>
                 <div class="mt-4">
                     <a href="/" class="text-blue-600 hover:text-blue-800 mr-4">← Voltar ao Início</a>
+                    <a href="/medical-dashboard-pro.html" class="text-purple-600 hover:text-purple-800 mr-4">👨‍⚕️ Dashboard Médico</a>
                     <a href="/dr-ai.html" class="text-green-600 hover:text-green-800">🤖 Triagem IA</a>
                 </div>
             </div>
@@ -65,9 +66,14 @@
                     </div>
                     <div class="mt-4">
                         <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="185" step="5">
-                        <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
-                            <i class="fas fa-gavel mr-2"></i>Fazer Lance
-                        </button>
+                        <div class="space-y-2">
+                            <button onclick="attendPatient('Maria Silva')" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-bold">
+                                🚨 ATENDER AGORA - R$ 300
+                            </button>
+                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,9 +99,14 @@
                     </div>
                     <div class="mt-4">
                         <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="155" step="5">
-                        <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
-                            <i class="fas fa-gavel mr-2"></i>Fazer Lance
-                        </button>
+                        <div class="space-y-2">
+                            <button onclick="attendPatient('Ana Costa')" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold">
+                                ▶️ Atender Agora - R$ 150
+                            </button>
+                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,9 +132,14 @@
                     </div>
                     <div class="mt-4">
                         <input type="number" placeholder="Seu lance (R$)" class="w-full p-3 border rounded-lg mb-3" min="125" step="5">
-                        <button class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
-                            <i class="fas fa-gavel mr-2"></i>Fazer Lance
-                        </button>
+                        <div class="space-y-2">
+                            <button onclick="scheduleConsultation('João Santos', '22:00')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-bold">
+                                📅 Agendar 22h - R$ 120
+                            </button>
+                            <button class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -238,6 +254,26 @@
     </div>
 
     <script>
+        // Funções de navegação para consultas
+        function attendPatient(patientName) {
+            alert(`✅ Atendimento aceito!\n\nPaciente: ${patientName}\nRedirecionando para videoconsulta...`);
+            setTimeout(() => {
+                window.location.href = '/videoconsulta.html';
+            }, 1500);
+        }
+
+        function scheduleConsultation(patientName, time) {
+            alert(`📅 Consulta agendada!\n\nPaciente: ${patientName}\nHorário: ${time}\nRedirecionando para videoconsulta...`);
+            setTimeout(() => {
+                window.location.href = '/videoconsulta.html';
+            }, 1500);
+        }
+
+        // Navegação direta para dashboard médico
+        function goToDashboard() {
+            window.location.href = '/medical-dashboard-pro.html';
+        }
+
         // Atualizar contadores de tempo em tempo real
         function updateTimers() {
             const timers = document.querySelectorAll('.text-red-600, .text-orange-600, .text-green-600');
@@ -273,7 +309,7 @@
         // Atualizar lances a cada 10 segundos
         setInterval(updateBids, 10000);
 
-        console.log('💰 Sistema de Lances TeleMed Ativo');
+        console.log('💰 Sistema de Lances TeleMed Ativo - Botões de Atender Funcionais');
     </script>
 </body>
 </html>
