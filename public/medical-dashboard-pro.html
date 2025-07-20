@@ -512,19 +512,27 @@
 
         // Function to load and display active bids
         function loadActiveBids() {
+            console.log('🔍 DEBUG: Carregando lances ativos...');
             const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            console.log('🔍 DEBUG: Lances encontrados:', bids);
             const container = document.getElementById('activeBidsContainer');
             
             if (bids.length === 0) {
+                console.log('🔍 DEBUG: Nenhum lance encontrado - mostrando placeholder');
                 container.innerHTML = `
                     <div class="text-center py-6 text-gray-500">
                         <i class="fas fa-gavel text-2xl mb-2 opacity-50"></i>
                         <p class="text-sm">Nenhum lance ativo</p>
                         <p class="text-xs">Lances aparecerão aqui automaticamente</p>
+                        <button onclick="debugLocalStorage()" class="mt-3 px-4 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">
+                            🔍 Debug localStorage
+                        </button>
                     </div>
                 `;
                 return;
             }
+            
+            console.log('🔍 DEBUG: Renderizando', bids.length, 'lances');
 
             container.innerHTML = bids.map(bid => {
                 const timeAgo = getTimeAgo(bid.timestamp);
@@ -928,6 +936,29 @@
             
             console.log('👨‍⚕️ Dashboard Médico PRO Funcional Carregado - Todos os botões ativos - v1.3 CACHE_BUST_1753014396');
         });
+
+        function debugLocalStorage() {
+            console.log('🔍 DEBUG: All localStorage keys:', Object.keys(localStorage));
+            console.log('🔍 DEBUG: telemed_bids value:', localStorage.getItem('telemed_bids'));
+            
+            // Create a test bid to verify functionality
+            const testBid = {
+                id: Date.now(),
+                specialty: 'TESTE DEBUG',
+                value: '999',
+                status: 'aguardando',
+                timestamp: new Date().toISOString(),
+                patient: 'Paciente Teste',
+                consultType: 'Teleconsulta'
+            };
+            
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            bids.push(testBid);
+            localStorage.setItem('telemed_bids', JSON.stringify(bids));
+            
+            console.log('🔍 DEBUG: Added test bid, refreshing...');
+            loadActiveBids();
+        }
 
         setInterval(updateTimes, 60000); // Update every minute
     </script>
