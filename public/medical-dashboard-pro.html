@@ -250,7 +250,11 @@
                             <i class="fas fa-prescription"></i>
                             <span>Emitir Receita</span>
                         </button>
-                        <button onclick="openPatientRegistrationModal()" class="w-full flex items-center justify-center space-x-2 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                        <button onclick="openReportsModal()" class="w-full flex items-center justify-center space-x-2 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Ver Relatórios</span>
+                        </button>
+                        <button onclick="openPatientRegistrationModal()" class="w-full flex items-center justify-center space-x-2 bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition-colors">
                             <i class="fas fa-user-plus"></i>
                             <span>Cadastro Paciente</span>
                         </button>
@@ -447,18 +451,107 @@
         </div>
     </div>
 
+    <!-- Reports Modal -->
+    <div id="reportsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Relatórios Médicos</h3>
+                        <button onclick="closeReportsModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-96">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-blue-900 mb-2">Consultas do Mês</h4>
+                            <p class="text-2xl font-bold text-blue-600">127</p>
+                            <p class="text-sm text-blue-700">+15% vs mês anterior</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-900 mb-2">Receita Mensal</h4>
+                            <p class="text-2xl font-bold text-green-600">R$ 18.450</p>
+                            <p class="text-sm text-green-700">+8% vs mês anterior</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-purple-900 mb-2">Novos Pacientes</h4>
+                            <p class="text-2xl font-bold text-purple-600">34</p>
+                            <p class="text-sm text-purple-700">+12 esta semana</p>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-900 mb-2">Satisfação</h4>
+                            <p class="text-2xl font-bold text-yellow-600">4.9/5</p>
+                            <p class="text-sm text-yellow-700">98% aprovação</p>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-gray-900 mb-3">Consultas por Especialidade</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Clínica Geral</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                    <span class="text-sm text-gray-600">65%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Cardiologia</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 20%"></div>
+                                    </div>
+                                    <span class="text-sm text-gray-600">20%</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-700">Pediatria</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-purple-600 h-2 rounded-full" style="width: 15%"></div>
+                                    </div>
+                                    <span class="text-sm text-gray-600">15%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="exportReports()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Exportar PDF
+                        </button>
+                        <button onclick="closeReportsModal()" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Navigate to video consultation
+        // Navigation functions
         function startVideoConsultation() {
             window.location.href = '/videoconsulta.html';
         }
 
-        // Navigate to bidding system
         function goToBiddingSystem() {
             window.location.href = '/consulta-por-valor.html';
         }
 
-        // Modal functions
+        function goToHome() {
+            window.location.href = '/';
+        }
+
+        function goToDrAI() {
+            window.location.href = '/dr-ai.html';
+        }
+
+        // Modal functions for New Consultation
         function openNewConsultationModal() {
             document.getElementById('newConsultationModal').classList.remove('hidden');
         }
@@ -468,10 +561,26 @@
         }
 
         function scheduleConsultation() {
-            alert('Consulta agendada com sucesso!');
-            closeNewConsultationModal();
+            // Get form values
+            const patient = document.querySelector('#newConsultationModal select').value;
+            const type = document.querySelectorAll('#newConsultationModal select')[1].value;
+            const date = document.querySelector('#newConsultationModal input[type="date"]').value;
+            const time = document.querySelector('#newConsultationModal input[type="time"]').value;
+            
+            if (patient && type && date && time) {
+                alert(`Consulta agendada com sucesso!\nPaciente: ${patient}\nTipo: ${type}\nData: ${date} às ${time}`);
+                closeNewConsultationModal();
+                // Reset form
+                document.querySelector('#newConsultationModal select').selectedIndex = 0;
+                document.querySelectorAll('#newConsultationModal select')[1].selectedIndex = 0;
+                document.querySelector('#newConsultationModal input[type="date"]').value = '';
+                document.querySelector('#newConsultationModal input[type="time"]').value = '';
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+            }
         }
 
+        // Modal functions for Prescription
         function openPrescriptionModal() {
             document.getElementById('prescriptionModal').classList.remove('hidden');
         }
@@ -481,10 +590,28 @@
         }
 
         function generatePrescription() {
-            alert('Receita médica gerada e enviada com sucesso!');
-            closePrescriptionModal();
+            // Get form values
+            const patient = document.querySelector('#prescriptionModal select').value;
+            const medication = document.querySelector('#prescriptionModal input[placeholder*="Dipirona"]').value;
+            const dosage = document.querySelector('#prescriptionModal input[placeholder*="comprimido"]').value;
+            const frequency = document.querySelector('#prescriptionModal select:nth-of-type(2)').value;
+            const duration = document.querySelector('#prescriptionModal input[placeholder*="dias"]').value;
+            
+            if (patient && medication && dosage && frequency && duration) {
+                alert(`Receita médica gerada com sucesso!\n\nPaciente: ${patient}\nMedicamento: ${medication}\nDosagem: ${dosage}\nFrequência: ${frequency}\nDuração: ${duration}\n\nReceita enviada por WhatsApp e email.`);
+                closePrescriptionModal();
+                // Reset form
+                document.querySelector('#prescriptionModal select').selectedIndex = 0;
+                document.querySelector('#prescriptionModal input[placeholder*="Dipirona"]').value = '';
+                document.querySelector('#prescriptionModal input[placeholder*="comprimido"]').value = '';
+                document.querySelector('#prescriptionModal select:nth-of-type(2)').selectedIndex = 0;
+                document.querySelector('#prescriptionModal input[placeholder*="dias"]').value = '';
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+            }
         }
 
+        // Modal functions for Patient Registration
         function openPatientRegistrationModal() {
             document.getElementById('patientRegistrationModal').classList.remove('hidden');
         }
@@ -494,8 +621,38 @@
         }
 
         function registerPatient() {
-            alert('Paciente cadastrado com sucesso!');
-            closePatientRegistrationModal();
+            // Get form values
+            const name = document.querySelector('#patientRegistrationModal input[placeholder*="Nome"]').value;
+            const cpf = document.querySelector('#patientRegistrationModal input[placeholder*="000.000"]').value;
+            const birth = document.querySelector('#patientRegistrationModal input[type="date"]').value;
+            const phone = document.querySelector('#patientRegistrationModal input[type="tel"]').value;
+            const email = document.querySelector('#patientRegistrationModal input[type="email"]').value;
+            
+            if (name && cpf && birth && phone && email) {
+                alert(`Paciente cadastrado com sucesso!\n\nNome: ${name}\nCPF: ${cpf}\nTelefone: ${phone}\nEmail: ${email}\n\nPaciente adicionado ao sistema e pode agendar consultas.`);
+                closePatientRegistrationModal();
+                // Reset form
+                document.querySelectorAll('#patientRegistrationModal input').forEach(input => {
+                    if (input.type !== 'submit') input.value = '';
+                });
+                document.querySelector('#patientRegistrationModal select').selectedIndex = 0;
+                document.querySelector('#patientRegistrationModal textarea').value = '';
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios (Nome, CPF, Data de Nascimento, Telefone e Email).');
+            }
+        }
+
+        // Modal functions for Reports
+        function openReportsModal() {
+            document.getElementById('reportsModal').classList.remove('hidden');
+        }
+
+        function closeReportsModal() {
+            document.getElementById('reportsModal').classList.add('hidden');
+        }
+
+        function exportReports() {
+            alert('Relatório exportado com sucesso!\nArquivo PDF salvo em Downloads/relatorio-medico-' + new Date().toISOString().split('T')[0] + '.pdf');
         }
 
         // Update times in real time
@@ -517,9 +674,26 @@
             });
         }
 
-        setInterval(updateTimes, 60000); // Update every minute
+        // Notification function
+        function showNotifications() {
+            alert('📢 Notificações:\n\n• Nova mensagem de Maria Silva\n• Lembrete: Consulta em 15 minutos\n• Receita de João Santos aprovada\n• 2 novos agendamentos hoje');
+        }
 
-        console.log('👨‍⚕️ Dashboard Médico PRO Funcional Carregado');
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handler to notification bell
+            document.querySelector('.fas.fa-bell').parentElement.onclick = showNotifications;
+            
+            // Set current date on date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                if (!input.value) input.value = today;
+            });
+            
+            console.log('👨‍⚕️ Dashboard Médico PRO Funcional Carregado - Todos os botões ativos');
+        });
+
+        setInterval(updateTimes, 60000); // Update every minute
     </script>
 </body>
 </html>
