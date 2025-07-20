@@ -3,9 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeleMed Sistema - Telemedicina Profissional</title>
-    <meta name="description" content="Plataforma completa de telemedicina com videoconsultas, prontuários digitais e sistema de lances inovador">
-    <style>
+    <title>TeleMed - Consultas Médicas Online</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>TeleMed Sistema</h1>
+            <nav>
+                <a href="/">Início</a>
+                <a href="/dr-ai.html">Dr. AI</a>
+                <a href="/consulta-por-valor.html">Sistema de Lances</a>
+                <a href="/guia-medicos.html">Para Médicos</a>
+                <a href="/medical-dashboard-pro.html">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Consultas médicas de forma simples e revolucionária</h2>
+            <p>Sistema completo com IA médica, lances inovadores, videoconsultas WebRTC e prescrições MEMED. Prático, seguro e funcional.</p>
+            <a href="/dr-ai.html" class="btn">Teste o Dr. AI</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h3>Por que usar o TeleMed Sistema?</h3>
+            <div class="cards">
+                <div class="card">
+                    <h4>🤖 Dr. AI Inteligente</h4>
+                    <p>Triagem automática com IA conversacional que analisa sintomas e determina especialidade necessária.</p>
+                </div>
+                <div class="card">
+                    <h4>💰 Sistema de Lances</h4>
+                    <p>Inovação única: pacientes fazem propostas de valor para priorizar atendimento de forma ética.</p>
+                </div>
+                <div class="card">
+                    <h4>🎥 Videoconsultas WebRTC</h4>
+                    <p>Sistema profissional P2P com chat, anotações médicas e prescrições MEMED integradas.</p>
+                </div>
+                <div class="card">
+                    <h4>👨‍⚕️ Dashboard Médico PRO</h4>
+                    <p>Interface completa com lances ativos, métricas em tempo real e fluxo médico otimizado.</p>
+                </div>
+                <div class="card">
+                    <h4>💊 Prescrições MEMED</h4>
+                    <p>Integração oficial com MEMED para prescrições digitais válidas e envio automático.</p>
+                </div>
+                <div class="card">
+                    <h4>🔒 100% Seguro</h4>
+                    <p>LGPD compliant, criptografia end-to-end e sistema de backup automático.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" style="background-color: #f0f0ff;">
+        <div class="container">
+            <h3>Sistema 100% Funcional</h3>
+            <div class="cards">
+                <div class="card">
+                    <h4>✅ Teste Completo</h4>
+                    <p><a href="/test-bid-integration.html" class="btn" style="margin-top: 10px;">Testar Integração</a></p>
+                </div>
+                <div class="card">
+                    <h4>✅ Fluxo Paciente</h4>
+                    <p><a href="/consulta-por-valor.html" class="btn" style="margin-top: 10px;">Fazer Lance</a></p>
+                </div>
+                <div class="card">
+                    <h4>✅ Videoconsulta</h4>
+                    <p><a href="/videoconsulta.html" class="btn" style="margin-top: 10px;">Testar WebRTC</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 TeleMed Sistema v8.3.0 - Plataforma Profissional de Telemedicina</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth navigation and loading
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🩺 TeleMed Sistema - Versão Simples Carregada');
+            
+            // Track clicks
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.startsWith('/')) {
+                        console.log(`🎯 Navegação: ${href}`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
         * {
             margin: 0;
             padding: 0;
