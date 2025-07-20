@@ -132,7 +132,7 @@
                             <div class="text-right">
                                 <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Em 15 min</span>
                                 <div class="mt-2">
-                                    <button class="text-blue-600 hover:text-blue-700 text-sm">Iniciar</button>
+                                    <button onclick="startVideoConsultation()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">Iniciar Videoconsulta</button>
                                 </div>
                             </div>
                         </div>
@@ -199,8 +199,8 @@
                             <span class="text-red-600 text-sm font-medium">Superado</span>
                         </div>
                     </div>
-                    <button class="w-full mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium">
-                        Ver Todos os Lances
+                    <button onclick="goToBiddingSystem()" class="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 text-sm font-medium">
+                        Fila de Lances
                     </button>
                 </div>
 
@@ -242,17 +242,204 @@
                 <div class="bg-white rounded-xl shadow-lg p-6">
                     <h3 class="text-lg font-bold text-gray-800 mb-4">Ações Rápidas</h3>
                     <div class="space-y-3">
-                        <button class="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <button onclick="openNewConsultationModal()" class="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
                             <i class="fas fa-plus"></i>
                             <span>Nova Consulta</span>
                         </button>
-                        <button class="w-full flex items-center justify-center space-x-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
+                        <button onclick="openPrescriptionModal()" class="w-full flex items-center justify-center space-x-2 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors">
                             <i class="fas fa-prescription"></i>
                             <span>Emitir Receita</span>
                         </button>
-                        <button class="w-full flex items-center justify-center space-x-2 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Relatórios</span>
+                        <button onclick="openPatientRegistrationModal()" class="w-full flex items-center justify-center space-x-2 bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Cadastro Paciente</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Consultation Modal -->
+    <div id="newConsultationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Nova Consulta</h3>
+                        <button onclick="closeNewConsultationModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Paciente</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option>Maria Silva</option>
+                                <option>João Santos</option>
+                                <option>Ana Costa</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Consulta</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option>Videoconsulta</option>
+                                <option>Consulta Presencial</option>
+                                <option>Retorno</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data</label>
+                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Horário</label>
+                            <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeNewConsultationModal()" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button onclick="scheduleConsultation()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Agendar Consulta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prescription Modal -->
+    <div id="prescriptionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Emitir Receita Médica</h3>
+                        <button onclick="closePrescriptionModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-96">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Paciente</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option>Maria Silva</option>
+                                <option>João Santos</option>
+                                <option>Ana Costa</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Medicamento</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Ex: Dipirona 500mg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dosagem</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Ex: 1 comprimido">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Frequência</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <option>A cada 4 horas</option>
+                                    <option>A cada 6 horas</option>
+                                    <option>A cada 8 horas</option>
+                                    <option>A cada 12 horas</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duração</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Ex: 7 dias">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closePrescriptionModal()" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button onclick="generatePrescription()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            Gerar Receita
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Registration Modal -->
+    <div id="patientRegistrationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Cadastro de Paciente</h3>
+                        <button onclick="closePatientRegistrationModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-96">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Nome do paciente">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">CPF</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="000.000.000-00">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento</label>
+                                <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sexo</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <option>Feminino</option>
+                                    <option>Masculino</option>
+                                    <option>Outro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                                <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="(11) 99999-9999">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="email@exemplo.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Endereço</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Endereço completo">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Observações Médicas</label>
+                            <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Alergias, histórico médico, etc..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closePatientRegistrationModal()" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button onclick="registerPatient()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                            Cadastrar Paciente
                         </button>
                     </div>
                 </div>
@@ -261,7 +448,57 @@
     </div>
 
     <script>
-        // Atualizar horários em tempo real
+        // Navigate to video consultation
+        function startVideoConsultation() {
+            window.location.href = '/videoconsulta.html';
+        }
+
+        // Navigate to bidding system
+        function goToBiddingSystem() {
+            window.location.href = '/consulta-por-valor.html';
+        }
+
+        // Modal functions
+        function openNewConsultationModal() {
+            document.getElementById('newConsultationModal').classList.remove('hidden');
+        }
+
+        function closeNewConsultationModal() {
+            document.getElementById('newConsultationModal').classList.add('hidden');
+        }
+
+        function scheduleConsultation() {
+            alert('Consulta agendada com sucesso!');
+            closeNewConsultationModal();
+        }
+
+        function openPrescriptionModal() {
+            document.getElementById('prescriptionModal').classList.remove('hidden');
+        }
+
+        function closePrescriptionModal() {
+            document.getElementById('prescriptionModal').classList.add('hidden');
+        }
+
+        function generatePrescription() {
+            alert('Receita médica gerada e enviada com sucesso!');
+            closePrescriptionModal();
+        }
+
+        function openPatientRegistrationModal() {
+            document.getElementById('patientRegistrationModal').classList.remove('hidden');
+        }
+
+        function closePatientRegistrationModal() {
+            document.getElementById('patientRegistrationModal').classList.add('hidden');
+        }
+
+        function registerPatient() {
+            alert('Paciente cadastrado com sucesso!');
+            closePatientRegistrationModal();
+        }
+
+        // Update times in real time
         function updateTimes() {
             const now = new Date();
             const elements = document.querySelectorAll('[data-time]');
@@ -280,9 +517,9 @@
             });
         }
 
-        setInterval(updateTimes, 60000); // Atualizar a cada minuto
+        setInterval(updateTimes, 60000); // Update every minute
 
-        console.log('👨‍⚕️ Dashboard Médico PRO Carregado');
+        console.log('👨‍⚕️ Dashboard Médico PRO Funcional Carregado');
     </script>
 </body>
 </html>

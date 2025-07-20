@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Videoconsulta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .video-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .video-element {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .chat-message {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .prescription-form {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <button onclick="window.history.back()" class="mr-4 p-2 rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-arrow-left text-gray-600"></i>
+                    </button>
+                    <div class="flex items-center">
+                        <i class="fas fa-video text-blue-600 text-xl mr-3"></i>
+                        <h1 class="text-xl font-semibold text-gray-900">Videoconsulta</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-600">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
+                            Conectado
+                        </span>
+                    </div>
+                    <button onclick="endConsultation()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                        Encerrar Consulta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Patient Info Bar -->
+        <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-user text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-900">Maria Silva</h2>
+                        <p class="text-sm text-gray-600">35 anos • Consulta: R$ 300,00</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-600">Iniciada às</p>
+                    <p class="text-sm font-medium text-gray-900" id="startTime"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Video Area -->
+            <div class="lg:col-span-2 space-y-4">
+                <!-- Doctor Video (Main) -->
+                <div class="video-container aspect-video relative">
+                    <video id="doctorVideo" class="video-element" autoplay muted playsinline></video>
+                    <div class="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                        Você (Dr. João)
+                    </div>
+                    <div class="absolute bottom-4 right-4 flex space-x-2">
+                        <button id="toggleMic" onclick="toggleMicrophone()" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="toggleCamera" onclick="toggleCamera()" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full">
+                            <i class="fas fa-video"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Patient Video -->
+                <div class="video-container aspect-video relative">
+                    <video id="patientVideo" class="video-element" autoplay playsinline></video>
+                    <div class="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
+                        Maria Silva (Paciente)
+                    </div>
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                            <i class="fas fa-circle text-xs mr-1"></i>
+                            Online
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="space-y-6">
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-lg shadow-sm border p-4">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
+                    <div class="space-y-3">
+                        <button onclick="openNotesModal()" class="w-full flex items-center px-4 py-3 bg-blue-50 hover:bg-blue-100 rounded-lg text-blue-700 font-medium">
+                            <i class="fas fa-notes-medical mr-3"></i>
+                            Anotações Médicas
+                        </button>
+                        <button onclick="openPrescriptionModal()" class="w-full flex items-center px-4 py-3 bg-green-50 hover:bg-green-100 rounded-lg text-green-700 font-medium">
+                            <i class="fas fa-prescription mr-3"></i>
+                            Receita Médica
+                        </button>
+                        <button onclick="shareScreen()" class="w-full flex items-center px-4 py-3 bg-purple-50 hover:bg-purple-100 rounded-lg text-purple-700 font-medium">
+                            <i class="fas fa-desktop mr-3"></i>
+                            Compartilhar Tela
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat -->
+                <div class="bg-white rounded-lg shadow-sm border">
+                    <div class="p-4 border-b">
+                        <h3 class="text-lg font-semibold text-gray-900">Chat da Consulta</h3>
+                    </div>
+                    <div id="chatMessages" class="h-64 overflow-y-auto p-4 space-y-3">
+                        <div class="chat-message">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-user-md text-blue-600 text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Dr. João</p>
+                                    <p class="text-sm bg-blue-50 rounded-lg p-2 mt-1">Olá Maria! Como está se sentindo hoje?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-message">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                    <i class="fas fa-user text-green-600 text-xs"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Maria Silva</p>
+                                    <p class="text-sm bg-gray-50 rounded-lg p-2 mt-1">Olá doutor! Estou bem, obrigada. Gostaria de conversar sobre os sintomas que mencionei.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t">
+                        <div class="flex space-x-2">
+                            <input 
+                                type="text" 
+                                id="chatInput" 
+                                placeholder="Digite sua mensagem..." 
+                                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                onkeypress="handleChatKeyPress(event)"
+                            >
+                            <button onclick="sendChatMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Notes Modal -->
+    <div id="notesModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Anotações Médicas - Maria Silva</h3>
+                        <button onclick="closeNotesModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto max-h-96">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sintomas Relatados</label>
+                            <textarea 
+                                id="symptoms" 
+                                rows="3" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Descreva os sintomas relatados pelo paciente..."
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Diagnóstico Preliminar</label>
+                            <textarea 
+                                id="diagnosis" 
+                                rows="3" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Diagnóstico preliminar..."
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Recomendações</label>
+                            <textarea 
+                                id="recommendations" 
+                                rows="3" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Recomendações e orientações..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeNotesModal()" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button onclick="saveNotes()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Salvar Anotações
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prescription Modal -->
+    <div id="prescriptionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Receita Médica - Maria Silva</h3>
+                        <button onclick="closePrescriptionModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 overflow-y-auto prescription-form">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Medicamento</label>
+                                <input 
+                                    type="text" 
+                                    id="medicationName" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Ex: Dipirona 500mg"
+                                >
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dosagem</label>
+                                <input 
+                                    type="text" 
+                                    id="dosage" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Ex: 1 comprimido"
+                                >
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Frequência</label>
+                                <select id="frequency" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Selecione a frequência</option>
+                                    <option value="4h">A cada 4 horas</option>
+                                    <option value="6h">A cada 6 horas</option>
+                                    <option value="8h">A cada 8 horas</option>
+                                    <option value="12h">A cada 12 horas</option>
+                                    <option value="24h">A cada 24 horas</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Duração</label>
+                                <input 
+                                    type="text" 
+                                    id="duration" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Ex: 7 dias"
+                                >
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Instruções Especiais</label>
+                            <textarea 
+                                id="instructions" 
+                                rows="3" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                placeholder="Instruções adicionais para o paciente..."
+                            ></textarea>
+                        </div>
+                        <div id="medicationList" class="space-y-3"></div>
+                        <button onclick="addMedication()" class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600">
+                            <i class="fas fa-plus mr-2"></i>
+                            Adicionar Medicamento
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closePrescriptionModal()" class="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button onclick="savePrescription()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            Gerar Receita
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let localStream = null;
+        let remoteStream = null;
+        let peerConnection = null;
+        let isMicOn = true;
+        let isCameraOn = true;
+        let medications = [];
+
+        // Initialize WebRTC
+        async function initializeWebRTC() {
+            try {
+                // Get user media
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+                
+                // Display local video
+                document.getElementById('doctorVideo').srcObject = localStream;
+                
+                // Simulate patient video (for demo purposes)
+                simulatePatientVideo();
+                
+                console.log('WebRTC initialized successfully');
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+                alert('Erro ao acessar câmera/microfone. Verifique as permissões.');
+            }
+        }
+
+        function simulatePatientVideo() {
+            // Create a canvas to simulate patient video
+            const canvas = document.createElement('canvas');
+            canvas.width = 640;
+            canvas.height = 480;
+            const ctx = canvas.getContext('2d');
+            
+            // Simple animation for demo
+            function drawFrame() {
+                ctx.fillStyle = '#2563eb';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = 'white';
+                ctx.font = '24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Maria Silva', canvas.width/2, canvas.height/2 - 20);
+                ctx.fillText('(Simulação de Vídeo)', canvas.width/2, canvas.height/2 + 20);
+                
+                requestAnimationFrame(drawFrame);
+            }
+            drawFrame();
+            
+            const stream = canvas.captureStream(30);
+            document.getElementById('patientVideo').srcObject = stream;
+        }
+
+        function toggleMicrophone() {
+            if (localStream) {
+                const audioTrack = localStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    isMicOn = !isMicOn;
+                    audioTrack.enabled = isMicOn;
+                    
+                    const button = document.getElementById('toggleMic');
+                    if (isMicOn) {
+                        button.innerHTML = '<i class="fas fa-microphone"></i>';
+                        button.className = 'bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full';
+                    } else {
+                        button.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                        button.className = 'bg-red-600 hover:bg-red-700 text-white p-3 rounded-full';
+                    }
+                }
+            }
+        }
+
+        function toggleCamera() {
+            if (localStream) {
+                const videoTrack = localStream.getVideoTracks()[0];
+                if (videoTrack) {
+                    isCameraOn = !isCameraOn;
+                    videoTrack.enabled = isCameraOn;
+                    
+                    const button = document.getElementById('toggleCamera');
+                    if (isCameraOn) {
+                        button.innerHTML = '<i class="fas fa-video"></i>';
+                        button.className = 'bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full';
+                    } else {
+                        button.innerHTML = '<i class="fas fa-video-slash"></i>';
+                        button.className = 'bg-red-600 hover:bg-red-700 text-white p-3 rounded-full';
+                    }
+                }
+            }
+        }
+
+        function shareScreen() {
+            if (navigator.mediaDevices.getDisplayMedia) {
+                navigator.mediaDevices.getDisplayMedia({ video: true })
+                    .then(stream => {
+                        document.getElementById('doctorVideo').srcObject = stream;
+                        alert('Compartilhamento de tela iniciado!');
+                    })
+                    .catch(err => {
+                        console.error('Erro ao compartilhar tela:', err);
+                    });
+            } else {
+                alert('Compartilhamento de tela não suportado neste navegador');
+            }
+        }
+
+        // Chat functions
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addChatMessage('Dr. João', message, 'doctor');
+                input.value = '';
+                
+                // Simulate patient response after 2 seconds
+                setTimeout(() => {
+                    const responses = [
+                        'Entendi, doutor.',
+                        'Obrigada pela explicação.',
+                        'Vou seguir suas orientações.',
+                        'Posso fazer uma pergunta?',
+                        'Isso faz sentido.'
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addChatMessage('Maria Silva', randomResponse, 'patient');
+                }, 2000);
+            }
+        }
+
+        function addChatMessage(sender, message, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            const iconClass = type === 'doctor' ? 'fa-user-md' : 'fa-user';
+            const bgColor = type === 'doctor' ? 'bg-blue-100' : 'bg-green-100';
+            const textColor = type === 'doctor' ? 'text-blue-600' : 'text-green-600';
+            const messageBg = type === 'doctor' ? 'bg-blue-50' : 'bg-gray-50';
+            
+            messageDiv.innerHTML = `
+                <div class="flex items-start">
+                    <div class="w-8 h-8 ${bgColor} rounded-full flex items-center justify-center mr-2">
+                        <i class="fas ${iconClass} ${textColor} text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">${sender}</p>
+                        <p class="text-sm ${messageBg} rounded-lg p-2 mt-1">${message}</p>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        // Modal functions
+        function openNotesModal() {
+            document.getElementById('notesModal').classList.remove('hidden');
+        }
+
+        function closeNotesModal() {
+            document.getElementById('notesModal').classList.add('hidden');
+        }
+
+        function saveNotes() {
+            const symptoms = document.getElementById('symptoms').value;
+            const diagnosis = document.getElementById('diagnosis').value;
+            const recommendations = document.getElementById('recommendations').value;
+            
+            if (symptoms || diagnosis || recommendations) {
+                alert('Anotações médicas salvas com sucesso!');
+                addChatMessage('Sistema', 'Anotações médicas foram salvas no prontuário.', 'doctor');
+                closeNotesModal();
+            } else {
+                alert('Por favor, preencha pelo menos um campo.');
+            }
+        }
+
+        function openPrescriptionModal() {
+            document.getElementById('prescriptionModal').classList.remove('hidden');
+        }
+
+        function closePrescriptionModal() {
+            document.getElementById('prescriptionModal').classList.add('hidden');
+        }
+
+        function addMedication() {
+            const name = document.getElementById('medicationName').value;
+            const dosage = document.getElementById('dosage').value;
+            const frequency = document.getElementById('frequency').value;
+            const duration = document.getElementById('duration').value;
+            const instructions = document.getElementById('instructions').value;
+            
+            if (name && dosage && frequency && duration) {
+                medications.push({
+                    name, dosage, frequency, duration, instructions
+                });
+                
+                updateMedicationList();
+                clearMedicationForm();
+            } else {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+            }
+        }
+
+        function updateMedicationList() {
+            const list = document.getElementById('medicationList');
+            list.innerHTML = '';
+            
+            medications.forEach((med, index) => {
+                const medDiv = document.createElement('div');
+                medDiv.className = 'bg-gray-50 p-3 rounded-lg border';
+                medDiv.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900">${med.name}</h4>
+                            <p class="text-sm text-gray-600">${med.dosage} - ${med.frequency} por ${med.duration}</p>
+                            ${med.instructions ? `<p class="text-sm text-gray-500 mt-1">${med.instructions}</p>` : ''}
+                        </div>
+                        <button onclick="removeMedication(${index})" class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(medDiv);
+            });
+        }
+
+        function removeMedication(index) {
+            medications.splice(index, 1);
+            updateMedicationList();
+        }
+
+        function clearMedicationForm() {
+            document.getElementById('medicationName').value = '';
+            document.getElementById('dosage').value = '';
+            document.getElementById('frequency').value = '';
+            document.getElementById('duration').value = '';
+            document.getElementById('instructions').value = '';
+        }
+
+        function savePrescription() {
+            if (medications.length > 0) {
+                alert('Receita médica gerada com sucesso!');
+                addChatMessage('Sistema', `Receita médica com ${medications.length} medicamento(s) foi enviada ao paciente.`, 'doctor');
+                closePrescriptionModal();
+                medications = [];
+                updateMedicationList();
+            } else {
+                alert('Adicione pelo menos um medicamento à receita.');
+            }
+        }
+
+        function endConsultation() {
+            if (confirm('Tem certeza que deseja encerrar a consulta?')) {
+                if (localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                }
+                alert('Consulta encerrada com sucesso!');
+                window.location.href = '/medical-dashboard-pro.html';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeWebRTC();
+            
+            // Set start time
+            const now = new Date();
+            document.getElementById('startTime').textContent = now.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        });
+    </script>
+</body>
+</html>
