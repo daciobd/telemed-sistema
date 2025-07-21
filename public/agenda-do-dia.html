@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda do Dia - Dashboard Médico</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .current-date {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            margin-top: 1rem;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Stats Cards */
+        .stats-section {
+            padding: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.scheduled {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        
+        .stat-icon.completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .stat-icon.pending {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .stat-icon.revenue {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* Schedule */
+        .schedule-section {
+            padding: 0 2rem 2rem;
+        }
+        
+        .schedule-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .schedule-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .time-filter {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .time-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .time-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .time-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        /* Appointment List */
+        .appointments {
+            background: white;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .appointment-item {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 2rem;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        
+        .appointment-item:hover {
+            background: #f8fafc;
+        }
+        
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+        
+        .appointment-time {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: #f0f9ff;
+            border-radius: 15px;
+            min-width: 100px;
+        }
+        
+        .time-hour {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1e40af;
+        }
+        
+        .time-duration {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .appointment-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .patient-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .appointment-type {
+            color: #667eea;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .appointment-notes {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .appointment-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-scheduled {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-cancelled {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        
+        .appointment-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 140px;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .action-btn.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .action-btn.success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .action-btn.secondary {
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            background: white;
+            margin: 2rem;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .quick-action-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .quick-action-btn.emergency {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .quick-action-btn.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-bar, .stats-section, .schedule-section {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .schedule-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .appointment-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .appointment-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .time-filter {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>
+            <i class="fas fa-calendar-day"></i>
+            Agenda do Dia
+        </h1>
+        <p>Gerencie suas consultas e compromissos médicos diários</p>
+        <div class="current-date" id="currentDate"></div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <a href="/medical-dashboard-pro.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <div style="color: #6b7280; font-size: 0.9rem;">
+            <i class="fas fa-sync-alt"></i> Atualizado automaticamente
+        </div>
+    </nav>
+    
+    <!-- Statistics -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon scheduled">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-number" id="scheduledCount">8</div>
+                <div class="stat-label">Consultas Agendadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon completed">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number" id="completedCount">3</div>
+                <div class="stat-label">Concluídas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number" id="pendingCount">5</div>
+                <div class="stat-label">Pendentes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-number" id="revenueToday">R$ 1.850</div>
+                <div class="stat-label">Receita do Dia</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Schedule -->
+    <section class="schedule-section">
+        <div class="schedule-header">
+            <h2 class="schedule-title">
+                <i class="fas fa-list-ul"></i>
+                Cronograma de Hoje
+            </h2>
+            <div class="time-filter">
+                <button class="time-btn active" onclick="filterByTime('all')">Todos</button>
+                <button class="time-btn" onclick="filterByTime('morning')">Manhã</button>
+                <button class="time-btn" onclick="filterByTime('afternoon')">Tarde</button>
+                <button class="time-btn" onclick="filterByTime('evening')">Noite</button>
+            </div>
+        </div>
+        
+        <div class="appointments" id="appointmentsList">
+            <!-- Appointments will be loaded here -->
+        </div>
+    </section>
+    
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <h2 class="schedule-title">
+            <i class="fas fa-bolt"></i>
+            Ações Rápidas
+        </h2>
+        <div class="actions-grid">
+            <a href="/videoconsulta.html" class="quick-action-btn">
+                <i class="fas fa-video"></i>
+                Nova Videoconsulta
+            </a>
+            <button class="quick-action-btn success" onclick="markAllCompleted()">
+                <i class="fas fa-check-double"></i>
+                Marcar Concluídas
+            </button>
+            <a href="/fila-pacientes-medico.html" class="quick-action-btn emergency">
+                <i class="fas fa-users-medical"></i>
+                Ver Fila de Pacientes
+            </a>
+            <button class="quick-action-btn" onclick="addNewAppointment()">
+                <i class="fas fa-plus"></i>
+                Agendar Consulta
+            </button>
+        </div>
+    </section>
+
+    <script>
+        // Sample appointments data
+        const appointments = [
+            {
+                id: 1,
+                time: '08:00',
+                duration: '30 min',
+                patient: 'Maria Silva',
+                type: 'Consulta de Rotina',
+                notes: 'Paciente com hipertensão controlada',
+                status: 'completed',
+                period: 'morning'
+            },
+            {
+                id: 2,
+                time: '08:30',
+                duration: '45 min',
+                patient: 'João Santos',
+                type: 'Cardiologia',
+                notes: 'Revisão de exames cardiológicos',
+                status: 'completed',
+                period: 'morning'
+            },
+            {
+                id: 3,
+                time: '09:30',
+                duration: '30 min',
+                patient: 'Ana Costa',
+                type: 'Pediatria',
+                notes: 'Consulta de acompanhamento - 5 anos',
+                status: 'completed',
+                period: 'morning'
+            },
+            {
+                id: 4,
+                time: '10:00',
+                duration: '30 min',
+                patient: 'Carlos Oliveira',
+                type: 'Clínica Geral',
+                notes: 'Primeira consulta - sintomas gripais',
+                status: 'scheduled',
+                period: 'morning'
+            },
+            {
+                id: 5,
+                time: '10:30',
+                duration: '60 min',
+                patient: 'Beatriz Lima',
+                type: 'Psiquiatria',
+                notes: 'Acompanhamento psiquiátrico mensal',
+                status: 'scheduled',
+                period: 'morning'
+            },
+            {
+                id: 6,
+                time: '14:00',
+                duration: '30 min',
+                patient: 'Pedro Rocha',
+                type: 'Dermatologia',
+                notes: 'Avaliação de lesão cutânea',
+                status: 'pending',
+                period: 'afternoon'
+            },
+            {
+                id: 7,
+                time: '14:30',
+                duration: '45 min',
+                patient: 'Lucia Fernandes',
+                type: 'Ginecologia',
+                notes: 'Consulta preventiva anual',
+                status: 'pending',
+                period: 'afternoon'
+            },
+            {
+                id: 8,
+                time: '15:30',
+                duration: '30 min',
+                patient: 'Roberto Silva',
+                type: 'Ortopedia',
+                notes: 'Dor no joelho após atividade física',
+                status: 'pending',
+                period: 'afternoon'
+            },
+            {
+                id: 9,
+                time: '16:00',
+                duration: '30 min',
+                patient: 'Carmen Torres',
+                type: 'Clínica Geral',
+                notes: 'Renovação de receitas',
+                status: 'pending',
+                period: 'afternoon'
+            },
+            {
+                id: 10,
+                time: '19:00',
+                duration: '45 min',
+                patient: 'Eduardo Mendes',
+                type: 'Neurologia',
+                notes: 'Acompanhamento de enxaqueca',
+                status: 'pending',
+                period: 'evening'
+            }
+        ];
+
+        let filteredAppointments = [...appointments];
+        let currentFilter = 'all';
+
+        function formatCurrentDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return now.toLocaleDateString('pt-BR', options);
+        }
+
+        function updateStats() {
+            const scheduled = filteredAppointments.filter(apt => apt.status === 'scheduled').length;
+            const completed = filteredAppointments.filter(apt => apt.status === 'completed').length;
+            const pending = filteredAppointments.filter(apt => apt.status === 'pending').length;
+            
+            document.getElementById('scheduledCount').textContent = scheduled;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        function renderAppointments() {
+            const container = document.getElementById('appointmentsList');
+            
+            if (filteredAppointments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3>Nenhuma consulta encontrada</h3>
+                        <p>Não há consultas agendadas para este período</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredAppointments.map(apt => `
+                <div class="appointment-item">
+                    <div class="appointment-time">
+                        <div class="time-hour">${apt.time}</div>
+                        <div class="time-duration">${apt.duration}</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="patient-name">${apt.patient}</div>
+                        <div class="appointment-type">${apt.type}</div>
+                        <div class="appointment-notes">${apt.notes}</div>
+                    </div>
+                    <div class="appointment-status status-${apt.status}">
+                        <i class="fas fa-${getStatusIcon(apt.status)}"></i>
+                        ${getStatusText(apt.status)}
+                    </div>
+                    <div class="appointment-actions">
+                        ${getActionButtons(apt)}
+                    </div>
+                </div>
+            `).join('');
+            
+            updateStats();
+        }
+
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'completed': return 'check-circle';
+                case 'scheduled': return 'calendar-check';
+                case 'pending': return 'clock';
+                case 'cancelled': return 'times-circle';
+                default: return 'question-circle';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'completed': return 'Concluída';
+                case 'scheduled': return 'Agendada';
+                case 'pending': return 'Pendente';
+                case 'cancelled': return 'Cancelada';
+                default: return 'Indefinido';
+            }
+        }
+
+        function getActionButtons(apt) {
+            if (apt.status === 'completed') {
+                return `
+                    <button class="action-btn secondary" onclick="viewDetails(${apt.id})">
+                        <i class="fas fa-eye"></i> Ver Detalhes
+                    </button>
+                `;
+            } else if (apt.status === 'scheduled') {
+                return `
+                    <a href="/videoconsulta.html" class="action-btn primary">
+                        <i class="fas fa-video"></i> Iniciar
+                    </a>
+                    <button class="action-btn secondary" onclick="reschedule(${apt.id})">
+                        <i class="fas fa-calendar-alt"></i> Reagendar
+                    </button>
+                `;
+            } else {
+                return `
+                    <button class="action-btn success" onclick="markCompleted(${apt.id})">
+                        <i class="fas fa-check"></i> Concluir
+                    </button>
+                    <button class="action-btn secondary" onclick="reschedule(${apt.id})">
+                        <i class="fas fa-calendar-alt"></i> Reagendar
+                    </button>
+                `;
+            }
+        }
+
+        function filterByTime(period) {
+            currentFilter = period;
+            
+            // Update active button
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (period === 'all') {
+                filteredAppointments = [...appointments];
+            } else {
+                filteredAppointments = appointments.filter(apt => apt.period === period);
+            }
+            
+            renderAppointments();
+        }
+
+        function markCompleted(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment && confirm(`Marcar consulta de ${appointment.patient} como concluída?`)) {
+                appointment.status = 'completed';
+                
+                // Re-filter if needed
+                if (currentFilter === 'all') {
+                    filteredAppointments = [...appointments];
+                } else {
+                    filteredAppointments = appointments.filter(apt => apt.period === currentFilter);
+                }
+                
+                renderAppointments();
+                alert('Consulta marcada como concluída!');
+            }
+        }
+
+        function markAllCompleted() {
+            if (confirm('Marcar todas as consultas pendentes como concluídas?')) {
+                appointments.forEach(apt => {
+                    if (apt.status === 'pending' || apt.status === 'scheduled') {
+                        apt.status = 'completed';
+                    }
+                });
+                
+                // Re-filter if needed
+                if (currentFilter === 'all') {
+                    filteredAppointments = [...appointments];
+                } else {
+                    filteredAppointments = appointments.filter(apt => apt.period === currentFilter);
+                }
+                
+                renderAppointments();
+                alert('Todas as consultas foram marcadas como concluídas!');
+            }
+        }
+
+        function reschedule(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment) {
+                alert(`Reagendamento de ${appointment.patient} será implementado em breve`);
+            }
+        }
+
+        function viewDetails(id) {
+            const appointment = appointments.find(apt => apt.id === id);
+            if (appointment) {
+                alert(`Detalhes da Consulta:\n\nPaciente: ${appointment.patient}\nTipo: ${appointment.type}\nHorário: ${appointment.time}\nDuração: ${appointment.duration}\nObservações: ${appointment.notes}\nStatus: ${getStatusText(appointment.status)}`);
+            }
+        }
+
+        function addNewAppointment() {
+            alert('Formulário de novo agendamento será implementado em breve');
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📅 Agenda do Dia carregada');
+            
+            // Set current date
+            document.getElementById('currentDate').textContent = formatCurrentDate();
+            
+            // Render appointments
+            renderAppointments();
+            
+            console.log('✅ Sistema de agenda inicializado com 10 consultas de exemplo');
+        });
+    </script>
+</body>
+</html>
