@@ -71,10 +71,6 @@
             cursor: pointer;
         }
         
-        .notifications i {
-            font-size: 1.2rem;
-        }
-        
         .notification-badge {
             position: absolute;
             top: -5px;
@@ -134,23 +130,6 @@
             transform: translateX(0);
         }
         
-        .sidebar-header {
-            padding: 2rem 1.5rem 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .sidebar-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 0.5rem;
-        }
-        
-        .sidebar-subtitle {
-            font-size: 0.9rem;
-            color: #4a5568;
-        }
-        
         .sidebar-nav {
             padding: 1rem 0;
         }
@@ -177,7 +156,6 @@
             text-decoration: none;
             transition: all 0.3s;
             border-left: 3px solid transparent;
-            position: relative;
         }
         
         .nav-item:hover, .nav-item.active {
@@ -232,16 +210,6 @@
             border-radius: 20px;
             margin-bottom: 2rem;
             box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
-        }
-        
-        .welcome-card h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .welcome-card p {
-            opacity: 0.9;
-            font-size: 1.1rem;
         }
         
         /* Stats Grid */
@@ -313,14 +281,7 @@
         .stat-trend {
             font-size: 0.8rem;
             font-weight: 600;
-        }
-        
-        .stat-trend.up {
             color: #10b981;
-        }
-        
-        .stat-trend.down {
-            color: #ef4444;
         }
         
         /* Quick Actions */
@@ -395,14 +356,7 @@
             visibility: visible;
         }
         
-        /* Recent Activity */
-        .recent-activity {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-        
+        /* Activity List */
         .activity-list {
             display: flex;
             flex-direction: column;
@@ -436,14 +390,6 @@
         
         .activity-icon.consultation {
             background: #3b82f6;
-        }
-        
-        .activity-icon.prescription {
-            background: #10b981;
-        }
-        
-        .activity-icon.emergency {
-            background: #ef4444;
         }
         
         .activity-content {
@@ -539,11 +485,6 @@
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-title">Dashboard Médico</div>
-            <div class="sidebar-subtitle">Gestão Completa de Consultas</div>
-        </div>
-        
         <div class="sidebar-nav">
             <!-- Main Section -->
             <div class="nav-section">
@@ -665,7 +606,7 @@
                     <div class="stat-icon patients">
                         <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-trend up">+12%</div>
+                    <div class="stat-trend">+12%</div>
                 </div>
                 <div class="stat-number">42</div>
                 <div class="stat-label">Pacientes Ativos</div>
@@ -676,7 +617,7 @@
                     <div class="stat-icon consultations">
                         <i class="fas fa-video"></i>
                     </div>
-                    <div class="stat-trend up">+8%</div>
+                    <div class="stat-trend">+8%</div>
                 </div>
                 <div class="stat-number">8</div>
                 <div class="stat-label">Consultas Hoje</div>
@@ -687,7 +628,7 @@
                     <div class="stat-icon revenue">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
-                    <div class="stat-trend up">+25%</div>
+                    <div class="stat-trend">+25%</div>
                 </div>
                 <div class="stat-number">R$ 2.890</div>
                 <div class="stat-label">Receita Estimada</div>
@@ -698,7 +639,7 @@
                     <div class="stat-icon rating">
                         <i class="fas fa-star"></i>
                     </div>
-                    <div class="stat-trend up">+0.1</div>
+                    <div class="stat-trend">+0.1</div>
                 </div>
                 <div class="stat-number">4.9</div>
                 <div class="stat-label">Avaliação Média</div>
@@ -728,48 +669,6 @@
                     <i class="fas fa-user-plus"></i>
                     Cadastrar Paciente
                 </button>
-            </div>
-        </div>
-
-        <!-- Recent Activity -->
-        <div class="recent-activity">
-            <h2 class="section-title">
-                <i class="fas fa-clock"></i>
-                Atividades Recentes
-            </h2>
-            <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-icon consultation">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Consulta finalizada</div>
-                        <div class="activity-description">Maria Silva - Cardiologia (R$ 350)</div>
-                    </div>
-                    <div class="activity-time">10:30</div>
-                </div>
-                
-                <div class="activity-item">
-                    <div class="activity-icon prescription">
-                        <i class="fas fa-prescription"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Prescrição enviada</div>
-                        <div class="activity-description">João Santos - Alprazolam 0,5mg</div>
-                    </div>
-                    <div class="activity-time">09:45</div>
-                </div>
-                
-                <div class="activity-item">
-                    <div class="activity-icon emergency">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">Emergência atendida</div>
-                        <div class="activity-description">Ana Costa - Crise psicótica aguda</div>
-                    </div>
-                    <div class="activity-time">08:20</div>
-                </div>
             </div>
         </div>
     </main>
@@ -829,142 +728,128 @@
             alert('Modal de cadastro de paciente será aberto aqui');
         }
 
-        // Update stats with live data simulation
-        function updateLiveStats() {
-            const consultationsToday = document.querySelector('.stat-card:nth-child(2) .stat-number');
-            const revenue = document.querySelector('.stat-card:nth-child(3) .stat-number');
-            
-            // Simulate real-time updates
-            setInterval(() => {
-                const currentConsultations = parseInt(consultationsToday.textContent);
-                const currentRevenue = parseInt(revenue.textContent.replace('R$ ', '').replace('.', ''));
-                
-                // Small random changes
-                if (Math.random() < 0.1) { // 10% chance
-                    consultationsToday.textContent = Math.min(12, currentConsultations + 1);
-                    revenue.textContent = `R$ ${(currentRevenue + 250).toLocaleString('pt-BR')}`;
-                }
-            }, 30000); // Every 30 seconds
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('👨‍⚕️ Dashboard Médico Avançado carregado!');
-            console.log('🍔 Menu hamburger lateral funcional');
-            console.log('📱 Responsivo para todos os dispositivos');
-            console.log('⚡ Navegação otimizada');
-            
-            updateLiveStats();
-        });
-    </script>
-</body>
-</html>
-        // Sistema integrado de lances
+        // Sistema integrado de lances - CORRIGIDO
         function loadActiveBids() {
-            const bids = JSON.parse(localStorage.getItem('activeBids') || '[]');
-            const activeBidsSection = document.querySelector('.quick-actions');
-            
-            // Adiciona seção de lances ativos se não existir
-            if (!document.getElementById('activeBidsSection')) {
+            try {
+                const bids = JSON.parse(localStorage.getItem('activeBids') || '[]');
+                console.log('🎯 Carregando lances:', bids.length);
+                
+                // Remove seção existente se houver
+                const existingSection = document.getElementById('activeBidsSection');
+                if (existingSection) {
+                    existingSection.remove();
+                }
+                
+                if (bids.length === 0) {
+                    console.log('📭 Nenhum lance ativo');
+                    return;
+                }
+                
+                // Cria nova seção de lances ativos
                 const bidSection = document.createElement('div');
                 bidSection.id = 'activeBidsSection';
                 bidSection.className = 'quick-actions';
+                bidSection.style.marginTop = '2rem';
+                
                 bidSection.innerHTML = `
                     <h2 class="section-title">
                         <i class="fas fa-gavel"></i>
                         Lances Ativos
-                        <span id="activeBidsIndicator" class="notification-badge" style="display: none; margin-left: 10px;">0</span>
+                        <span class="notification-badge" style="margin-left: 10px;">${bids.length}</span>
                     </h2>
-                    <div id="activeBidsList" class="activity-list">
-                        <div class="activity-item" style="text-align: center; padding: 2rem; color: #6b7280;">
-                            <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                            <div>Aguardando novos lances de pacientes...</div>
-                        </div>
+                    <div class="activity-list">
+                        ${bids.map(bid => `
+                            <div class="activity-item">
+                                <div class="activity-icon consultation">
+                                    <i class="fas fa-user-injured"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">${bid.patientName || 'Paciente'}</div>
+                                    <div class="activity-description">${bid.specialty || 'Clínica Geral'} - R$ ${bid.bidAmount || '0'}</div>
+                                    <div class="activity-description" style="font-size: 0.8rem; color: #059669;">${bid.symptoms || 'Sem sintomas informados'}</div>
+                                </div>
+                                <div class="activity-time">
+                                    <button class="action-btn success" style="padding: 8px 16px; font-size: 0.8rem; margin-bottom: 0.5rem;" onclick="acceptBid('${bid.id}')">
+                                        <i class="fas fa-check"></i> Atender
+                                    </button>
+                                    <div style="font-size: 0.8rem; color: #6b7280;">${new Date(bid.timestamp || Date.now()).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</div>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 `;
-                activeBidsSection.parentNode.insertBefore(bidSection, activeBidsSection);
+                
+                // Insere a seção após a seção de ações rápidas
+                const quickActions = document.querySelector('.quick-actions');
+                if (quickActions && quickActions.parentNode) {
+                    quickActions.parentNode.insertBefore(bidSection, quickActions.nextSibling);
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar lances:', error);
             }
-            
-            const bidsList = document.getElementById('activeBidsList');
-            const indicator = document.getElementById('activeBidsIndicator');
-            
-            if (bids.length === 0) {
-                bidsList.innerHTML = `
-                    <div class="activity-item" style="text-align: center; padding: 2rem; color: #6b7280;">
-                        <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <div>Aguardando novos lances de pacientes...</div>
-                    </div>
-                `;
-                indicator.style.display = 'none';
-                return;
-            }
-            
-            indicator.style.display = 'inline-block';
-            indicator.textContent = bids.length;
-            
-            bidsList.innerHTML = bids.map(bid => `
-                <div class="activity-item">
-                    <div class="activity-icon consultation">
-                        <i class="fas fa-user-injured"></i>
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">${bid.patientName}</div>
-                        <div class="activity-description">${bid.specialty} - R$ ${bid.bidAmount}</div>
-                        <div class="activity-description" style="font-size: 0.8rem; color: #059669;">${bid.symptoms}</div>
-                    </div>
-                    <div class="activity-time">
-                        <button class="action-btn success" style="padding: 8px 16px; font-size: 0.8rem; margin-bottom: 0.5rem;" onclick="acceptBid('${bid.id}')">
-                            <i class="fas fa-check"></i> Atender
-                        </button>
-                        <div style="font-size: 0.8rem; color: #6b7280;">${new Date(bid.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</div>
-                    </div>
-                </div>
-            `).join('');
         }
         
         function acceptBid(bidId) {
-            const bids = JSON.parse(localStorage.getItem('activeBids') || '[]');
-            const bidIndex = bids.findIndex(bid => bid.id === bidId);
-            
-            if (bidIndex !== -1) {
-                const acceptedBid = bids[bidIndex];
+            try {
+                const bids = JSON.parse(localStorage.getItem('activeBids') || '[]');
+                const bidIndex = bids.findIndex(bid => bid.id === bidId);
                 
-                if (confirm(`Confirmar atendimento de ${acceptedBid.patientName} por R$ ${acceptedBid.bidAmount}?`)) {
-                    bids.splice(bidIndex, 1);
-                    localStorage.setItem('activeBids', JSON.stringify(bids));
+                if (bidIndex !== -1) {
+                    const acceptedBid = bids[bidIndex];
                     
-                    const acceptedBids = JSON.parse(localStorage.getItem('acceptedBids') || '[]');
-                    acceptedBids.push({
-                        ...acceptedBid,
-                        acceptedAt: new Date().toISOString(),
-                        doctorName: 'Dr. João Silva',
-                        status: 'aceito'
-                    });
-                    localStorage.setItem('acceptedBids', JSON.stringify(acceptedBids));
-                    
-                    alert('Lance aceito! Redirecionando para videoconsulta...');
-                    loadActiveBids();
-                    
-                    setTimeout(() => {
-                        window.location.href = '/videoconsulta.html';
-                    }, 1500);
+                    if (confirm(`Confirmar atendimento de ${acceptedBid.patientName || 'Paciente'} por R$ ${acceptedBid.bidAmount || '0'}?`)) {
+                        // Remove da lista de lances ativos
+                        bids.splice(bidIndex, 1);
+                        localStorage.setItem('activeBids', JSON.stringify(bids));
+                        
+                        // Adiciona à lista de aceitos
+                        const acceptedBids = JSON.parse(localStorage.getItem('acceptedBids') || '[]');
+                        acceptedBids.push({
+                            ...acceptedBid,
+                            acceptedAt: new Date().toISOString(),
+                            doctorName: 'Dr. João Silva',
+                            status: 'aceito'
+                        });
+                        localStorage.setItem('acceptedBids', JSON.stringify(acceptedBids));
+                        
+                        console.log('✅ Lance aceito:', acceptedBid);
+                        alert('Lance aceito! Redirecionando para videoconsulta...');
+                        
+                        // Recarrega a lista
+                        loadActiveBids();
+                        
+                        // Redireciona
+                        setTimeout(() => {
+                            window.location.href = '/videoconsulta.html';
+                        }, 1500);
+                    }
                 }
+            } catch (error) {
+                console.error('❌ Erro ao aceitar lance:', error);
+                alert('Erro ao aceitar lance. Tente novamente.');
             }
         }
 
-        // Enhanced initialization
+        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('👨‍⚕️ Dashboard Médico com Sidebar Lateral FUNCIONANDO!');
+            console.log('👨‍⚕️ Dashboard Médico com Sidebar Lateral CARREGADO!');
             console.log('🍔 Menu hamburger lateral implementado');
             console.log('📱 Responsivo desktop/mobile completo');
             console.log('⚡ Navegação categorizada por seções');
             console.log('🎯 Sistema de lances integrado');
             
-            // Carrega lances ativos na inicialização
-            loadActiveBids();
+            // Carrega lances após um pequeno delay
+            setTimeout(() => {
+                loadActiveBids();
+                console.log('✅ Sistema de lances inicializado');
+            }, 1000);
             
             // Atualiza lances a cada 10 segundos
-            setInterval(loadActiveBids, 10000);
+            setInterval(() => {
+                console.log('🔄 Atualizando lances...');
+                loadActiveBids();
+            }, 10000);
         });
     </script>
 </body>
