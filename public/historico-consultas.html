@@ -56,50 +56,181 @@
             transform: translateY(-2px);
         }
         
+        /* Content */
         .content {
             padding: 2rem;
-            text-align: center;
         }
         
-        .placeholder {
+        /* Search and Filters */
+        .search-section {
             background: white;
-            padding: 4rem 2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
             border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            max-width: 600px;
-            margin: 0 auto;
         }
         
-        .placeholder i {
-            font-size: 4rem;
-            color: #667eea;
-            margin-bottom: 2rem;
-        }
-        
-        .placeholder h2 {
-            color: #2d3748;
-            margin-bottom: 1rem;
-        }
-        
-        .placeholder p {
-            color: #6b7280;
-            margin-bottom: 2rem;
-        }
-        
-        .action-btns {
+        .search-bar {
             display: flex;
             gap: 1rem;
-            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
             flex-wrap: wrap;
         }
         
-        .action-btn {
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+        
+        /* Stats Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.total {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        
+        .stat-icon.completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .stat-icon.cancelled {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .stat-icon.revenue {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* Consultation History List */
+        .history-list {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .list-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            padding: 1rem 2rem;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .list-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .export-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
             border: none;
+            padding: 0.75rem 1.5rem;
             border-radius: 10px;
-            text-decoration: none;
+            cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
             display: flex;
@@ -107,13 +238,202 @@
             gap: 8px;
         }
         
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        .export-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .consultation-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .consultation-item {
+            padding: 2rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 2rem;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        
+        .consultation-item:hover {
+            background: #f8fafc;
+        }
+        
+        .consultation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .consultation-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 15px;
+            min-width: 100px;
+        }
+        
+        .date-day {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e40af;
+        }
+        
+        .date-month {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .consultation-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .patient-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .consultation-details {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .detail-item i {
+            color: #667eea;
+        }
+        
+        .consultation-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-cancelled {
+            background: #fecaca;
+            color: #991b1b;
+        }
+        
+        .status-emergency {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .consultation-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 140px;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         
         .action-btn.success {
             background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .action-btn.success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .action-btn.secondary {
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .consultation-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .consultation-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -130,22 +450,433 @@
         </a>
     </nav>
     
+    <!-- Content -->
     <div class="content">
-        <div class="placeholder">
-            <i class="fas fa-file-medical-alt"></i>
-            <h2>Histórico de Consultas</h2>
-            <p>Funcionalidade em desenvolvimento. Em breve você poderá visualizar todo o histórico de consultas realizadas.</p>
-            <div class="action-btns">
-                <a href="/agenda-do-dia.html" class="action-btn">
-                    <i class="fas fa-calendar-day"></i>
-                    Ver Agenda do Dia
-                </a>
-                <a href="/videoconsulta.html" class="action-btn success">
-                    <i class="fas fa-video"></i>
-                    Nova Consulta
-                </a>
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Buscar por nome do paciente, diagnóstico ou CRM..." id="searchInput">
+                <button class="search-btn" onclick="searchConsultations()">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
             </div>
-        </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Data:</label>
+                    <button class="filter-btn active" onclick="filterByDate('all')">Todas</button>
+                    <button class="filter-btn" onclick="filterByDate('today')">Hoje</button>
+                    <button class="filter-btn" onclick="filterByDate('week')">Esta Semana</button>
+                    <button class="filter-btn" onclick="filterByDate('month')">Este Mês</button>
+                </div>
+                <div class="filter-group">
+                    <label>Especialidade:</label>
+                    <button class="filter-btn active" onclick="filterBySpecialty('all')">Todas</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('cardiologia')">Cardiologia</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('pediatria')">Pediatria</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('geral')">Clínica Geral</button>
+                </div>
+                <div class="filter-group">
+                    <label>Status:</label>
+                    <button class="filter-btn active" onclick="filterByStatus('all')">Todos</button>
+                    <button class="filter-btn" onclick="filterByStatus('completed')">Concluídas</button>
+                    <button class="filter-btn" onclick="filterByStatus('cancelled')">Canceladas</button>
+                    <button class="filter-btn" onclick="filterByStatus('emergency')">Emergências</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-number" id="totalConsultations">156</div>
+                <div class="stat-label">Total de Consultas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon completed">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number" id="completedConsultations">142</div>
+                <div class="stat-label">Concluídas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon cancelled">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-number" id="cancelledConsultations">14</div>
+                <div class="stat-label">Canceladas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-number" id="totalRevenue">R$ 28.450</div>
+                <div class="stat-label">Receita Total</div>
+            </div>
+        </section>
+
+        <!-- Consultation History -->
+        <section class="history-list">
+            <div class="list-header">
+                <h2 class="list-title">
+                    <i class="fas fa-history"></i>
+                    Histórico de Consultas
+                </h2>
+                <button class="export-btn" onclick="exportHistory()">
+                    <i class="fas fa-download"></i>
+                    Exportar PDF
+                </button>
+            </div>
+            
+            <div class="consultation-list" id="consultationList">
+                <!-- Consultations will be loaded here -->
+            </div>
+        </section>
     </div>
+
+    <script>
+        // Sample consultation history data
+        const consultationHistory = [
+            {
+                id: 1,
+                patient: 'Maria Silva',
+                date: '2025-07-21',
+                time: '14:30',
+                specialty: 'cardiologia',
+                diagnosis: 'Hipertensão controlada',
+                prescription: 'Enalapril 10mg',
+                value: 320,
+                status: 'completed',
+                duration: '45min',
+                type: 'online'
+            },
+            {
+                id: 2,
+                patient: 'João Santos',
+                date: '2025-07-21',
+                time: '10:15',
+                specialty: 'geral',
+                diagnosis: 'Gripe viral',
+                prescription: 'Paracetamol, Repouso',
+                value: 180,
+                status: 'completed',
+                duration: '30min',
+                type: 'online'
+            },
+            {
+                id: 3,
+                patient: 'Ana Costa',
+                date: '2025-07-20',
+                time: '16:45',
+                specialty: 'pediatria',
+                diagnosis: 'Febre infantil',
+                prescription: 'Dipirona infantil',
+                value: 250,
+                status: 'completed',
+                duration: '35min',
+                type: 'online'
+            },
+            {
+                id: 4,
+                patient: 'Carlos Oliveira',
+                date: '2025-07-20',
+                time: '09:00',
+                specialty: 'cardiologia',
+                diagnosis: 'Emergência - Dor no peito',
+                prescription: 'Encaminhamento hospitalar',
+                value: 450,
+                status: 'emergency',
+                duration: '60min',
+                type: 'online'
+            },
+            {
+                id: 5,
+                patient: 'Beatriz Lima',
+                date: '2025-07-19',
+                time: '11:20',
+                specialty: 'geral',
+                diagnosis: 'Enxaqueca crônica',
+                prescription: 'Sumatriptana, Naproxeno',
+                value: 280,
+                status: 'completed',
+                duration: '40min',
+                type: 'online'
+            },
+            {
+                id: 6,
+                patient: 'Pedro Rocha',
+                date: '2025-07-19',
+                time: '15:30',
+                specialty: 'geral',
+                diagnosis: 'Check-up preventivo',
+                prescription: 'Exames laboratoriais',
+                value: 200,
+                status: 'completed',
+                duration: '25min',
+                type: 'online'
+            },
+            {
+                id: 7,
+                patient: 'Lucia Fernandes',
+                date: '2025-07-18',
+                time: '13:45',
+                specialty: 'geral',
+                diagnosis: 'Consulta cancelada',
+                prescription: '-',
+                value: 0,
+                status: 'cancelled',
+                duration: '0min',
+                type: 'online'
+            },
+            {
+                id: 8,
+                patient: 'Roberto Silva',
+                date: '2025-07-18',
+                time: '08:30',
+                specialty: 'geral',
+                diagnosis: 'Renovação de receitas',
+                prescription: 'Losartana, Metformina',
+                value: 160,
+                status: 'completed',
+                duration: '20min',
+                type: 'online'
+            }
+        ];
+
+        let filteredConsultations = [...consultationHistory];
+        let currentFilters = {
+            date: 'all',
+            specialty: 'all',
+            status: 'all',
+            search: ''
+        };
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            return { day, month };
+        }
+
+        function renderConsultations() {
+            const container = document.getElementById('consultationList');
+            
+            if (filteredConsultations.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3>Nenhuma consulta encontrada</h3>
+                        <p>Ajuste os filtros para ver mais resultados</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredConsultations.map(consultation => {
+                const { day, month } = formatDate(consultation.date);
+                
+                return `
+                    <div class="consultation-item">
+                        <div class="consultation-date">
+                            <div class="date-day">${day}</div>
+                            <div class="date-month">${month}</div>
+                        </div>
+                        <div class="consultation-info">
+                            <div class="patient-name">${consultation.patient}</div>
+                            <div class="consultation-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${consultation.time}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-stethoscope"></i>
+                                    <span>${capitalize(consultation.specialty)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>R$ ${consultation.value}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-video"></i>
+                                    <span>${consultation.duration}</span>
+                                </div>
+                            </div>
+                            <div style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">
+                                <strong>Diagnóstico:</strong> ${consultation.diagnosis}
+                                <br>
+                                <strong>Prescrição:</strong> ${consultation.prescription}
+                            </div>
+                        </div>
+                        <div class="consultation-status status-${consultation.status}">
+                            ${getStatusIcon(consultation.status)}
+                            ${getStatusText(consultation.status)}
+                        </div>
+                        <div class="consultation-actions">
+                            <button class="action-btn primary" onclick="viewDetails(${consultation.id})">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                            <button class="action-btn success" onclick="downloadReport(${consultation.id})">
+                                <i class="fas fa-download"></i> Relatório
+                            </button>
+                            <button class="action-btn secondary" onclick="repeatPrescription(${consultation.id})">
+                                <i class="fas fa-redo"></i> Repetir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'completed': return '<i class="fas fa-check-circle"></i>';
+                case 'cancelled': return '<i class="fas fa-times-circle"></i>';
+                case 'emergency': return '<i class="fas fa-exclamation-triangle"></i>';
+                default: return '<i class="fas fa-question-circle"></i>';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'completed': return 'Concluída';
+                case 'cancelled': return 'Cancelada';
+                case 'emergency': return 'Emergência';
+                default: return 'Desconhecido';
+            }
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function filterByDate(period) {
+            currentFilters.date = period;
+            updateActiveFilter('filterByDate', period);
+            applyFilters();
+        }
+
+        function filterBySpecialty(specialty) {
+            currentFilters.specialty = specialty;
+            updateActiveFilter('filterBySpecialty', specialty);
+            applyFilters();
+        }
+
+        function filterByStatus(status) {
+            currentFilters.status = status;
+            updateActiveFilter('filterByStatus', status);
+            applyFilters();
+        }
+
+        function updateActiveFilter(filterType, value) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.onclick && btn.onclick.toString().includes(filterType)) {
+                    btn.classList.remove('active');
+                }
+            });
+            event.target.classList.add('active');
+        }
+
+        function searchConsultations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            currentFilters.search = searchTerm;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const today = new Date();
+            const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const oneMonthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+            filteredConsultations = consultationHistory.filter(consultation => {
+                // Date filter
+                const consultationDate = new Date(consultation.date);
+                let dateMatch = true;
+                
+                if (currentFilters.date === 'today') {
+                    dateMatch = consultationDate.toDateString() === today.toDateString();
+                } else if (currentFilters.date === 'week') {
+                    dateMatch = consultationDate >= oneWeekAgo;
+                } else if (currentFilters.date === 'month') {
+                    dateMatch = consultationDate >= oneMonthAgo;
+                }
+
+                // Specialty filter
+                const specialtyMatch = currentFilters.specialty === 'all' || 
+                                     consultation.specialty === currentFilters.specialty;
+
+                // Status filter
+                const statusMatch = currentFilters.status === 'all' || 
+                                   consultation.status === currentFilters.status;
+
+                // Search filter
+                const searchMatch = currentFilters.search === '' ||
+                                   consultation.patient.toLowerCase().includes(currentFilters.search) ||
+                                   consultation.diagnosis.toLowerCase().includes(currentFilters.search) ||
+                                   consultation.prescription.toLowerCase().includes(currentFilters.search);
+
+                return dateMatch && specialtyMatch && statusMatch && searchMatch;
+            });
+
+            renderConsultations();
+            updateStats();
+        }
+
+        function updateStats() {
+            const total = filteredConsultations.length;
+            const completed = filteredConsultations.filter(c => c.status === 'completed').length;
+            const cancelled = filteredConsultations.filter(c => c.status === 'cancelled').length;
+            const totalRevenue = filteredConsultations
+                .filter(c => c.status === 'completed')
+                .reduce((sum, c) => sum + c.value, 0);
+
+            document.getElementById('totalConsultations').textContent = total;
+            document.getElementById('completedConsultations').textContent = completed;
+            document.getElementById('cancelledConsultations').textContent = cancelled;
+            document.getElementById('totalRevenue').textContent = `R$ ${totalRevenue.toLocaleString()}`;
+        }
+
+        function viewDetails(consultationId) {
+            const consultation = consultationHistory.find(c => c.id === consultationId);
+            if (consultation) {
+                alert(`Detalhes da Consulta:\n\nPaciente: ${consultation.patient}\nData: ${consultation.date} às ${consultation.time}\nEspecialidade: ${capitalize(consultation.specialty)}\nDiagnóstico: ${consultation.diagnosis}\nPrescrição: ${consultation.prescription}\nValor: R$ ${consultation.value}\nDuração: ${consultation.duration}\nStatus: ${getStatusText(consultation.status)}`);
+            }
+        }
+
+        function downloadReport(consultationId) {
+            const consultation = consultationHistory.find(c => c.id === consultationId);
+            if (consultation) {
+                alert(`Relatório da consulta de ${consultation.patient} será baixado em breve`);
+            }
+        }
+
+        function repeatPrescription(consultationId) {
+            const consultation = consultationHistory.find(c => c.id === consultationId);
+            if (consultation && consultation.status === 'completed') {
+                alert(`Nova prescrição baseada na consulta anterior:\n\nPaciente: ${consultation.patient}\nPrescrição Original: ${consultation.prescription}\n\nSistema de prescrições será implementado em breve.`);
+            }
+        }
+
+        function exportHistory() {
+            alert('Exportação de histórico em PDF será implementada em breve');
+        }
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchConsultations();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📚 Histórico de Consultas carregado');
+            renderConsultations();
+            updateStats();
+            console.log('✅ Sistema de histórico inicializado com', consultationHistory.length, 'consultas');
+        });
+    </script>
 </body>
 </html>

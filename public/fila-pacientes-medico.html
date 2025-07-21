@@ -17,7 +17,7 @@
         
         /* Header */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -27,6 +27,10 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
         
         .header p {
@@ -45,7 +49,7 @@
         }
         
         .back-btn {
-            background: #667eea;
+            background: #ef4444;
             color: white;
             padding: 0.75rem 1.5rem;
             border: none;
@@ -59,66 +63,9 @@
         }
         
         .back-btn:hover {
-            background: #5a67d8;
+            background: #dc2626;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        /* Filters */
-        .filters {
-            background: white;
-            padding: 1.5rem 2rem;
-            margin: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-        
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            align-items: end;
-        }
-        
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .filter-group label {
-            font-weight: 600;
-            color: #4a5568;
-            font-size: 0.9rem;
-        }
-        
-        .filter-select, .filter-input {
-            padding: 0.75rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        .filter-select:focus, .filter-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .filter-btn {
-            background: #10b981;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
         }
         
         /* Stats */
@@ -126,20 +73,20 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin: 0 2rem 2rem;
+            padding: 2rem;
         }
         
         .stat-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
+            padding: 2rem;
+            border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             text-align: center;
             transition: transform 0.3s;
         }
         
         .stat-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
         }
         
         .stat-icon {
@@ -154,24 +101,24 @@
             color: white;
         }
         
-        .stat-icon.waiting {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-        
-        .stat-icon.priority {
+        .stat-icon.emergency {
             background: linear-gradient(135deg, #ef4444, #dc2626);
         }
         
-        .stat-icon.revenue {
-            background: linear-gradient(135deg, #10b981, #059669);
+        .stat-icon.high-value {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
         }
         
-        .stat-icon.average {
+        .stat-icon.regular {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
         }
         
+        .stat-icon.total {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
         .stat-number {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #2d3748;
             margin-bottom: 0.5rem;
@@ -179,63 +126,105 @@
         
         .stat-label {
             color: #6b7280;
-            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 2rem;
+            margin: 0 2rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .filter-btn.active {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        .filter-btn:hover {
+            border-color: #ef4444;
         }
         
         /* Patient Queue */
         .patient-queue {
+            background: white;
             margin: 0 2rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
         }
         
         .queue-header {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px 15px 0 0;
-            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .queue-title {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: #2d3748;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         
-        .refresh-btn {
-            background: #667eea;
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+        .auto-refresh {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            opacity: 0.9;
         }
         
-        .refresh-btn:hover {
-            background: #5a67d8;
+        .refresh-indicator {
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
         
         .patient-list {
-            background: white;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-height: 600px;
+            overflow-y: auto;
         }
         
         .patient-item {
-            padding: 1.5rem;
+            padding: 2rem;
             border-bottom: 1px solid #f1f5f9;
             display: grid;
             grid-template-columns: auto 1fr auto auto;
-            gap: 1.5rem;
+            gap: 2rem;
             align-items: center;
             transition: background 0.3s;
         }
@@ -248,76 +237,96 @@
             border-bottom: none;
         }
         
-        .priority-badge {
-            width: 12px;
+        .priority-indicator {
+            width: 60px;
             height: 60px;
-            border-radius: 6px;
-            margin-right: 1rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
         }
         
-        .priority-badge.emergency {
-            background: linear-gradient(to bottom, #ef4444, #dc2626);
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        .priority-emergency {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            animation: urgentPulse 1s infinite;
         }
         
-        .priority-badge.high {
-            background: linear-gradient(to bottom, #f59e0b, #d97706);
+        .priority-high {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
         }
         
-        .priority-badge.normal {
-            background: linear-gradient(to bottom, #10b981, #059669);
+        .priority-regular {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        
+        @keyframes urgentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         .patient-info {
             display: flex;
             flex-direction: column;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
         
         .patient-name {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #2d3748;
         }
         
-        .patient-specialty {
-            color: #667eea;
-            font-weight: 500;
+        .patient-details {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
         
-        .patient-symptoms {
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
             color: #6b7280;
             font-size: 0.9rem;
         }
         
-        .patient-details {
-            text-align: center;
-        }
-        
-        .patient-value {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #10b981;
-            margin-bottom: 0.25rem;
+        .detail-item i {
+            color: #ef4444;
         }
         
         .waiting-time {
-            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .time-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .time-label {
             color: #6b7280;
+            font-size: 0.8rem;
         }
         
         .patient-actions {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            min-width: 140px;
+            min-width: 150px;
         }
         
         .action-btn {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -326,7 +335,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
         }
         
         .action-btn.primary {
@@ -335,68 +344,53 @@
         }
         
         .action-btn.primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
         }
         
         .action-btn.secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .action-btn.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .action-btn.info {
             background: #f1f5f9;
             color: #4a5568;
             border: 1px solid #e2e8f0;
         }
         
-        .action-btn.secondary:hover {
+        .action-btn.info:hover {
             background: #e2e8f0;
-        }
-        
-        .action-btn.emergency {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-        
-        .action-btn.emergency:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
         
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             color: #6b7280;
         }
         
         .empty-state i {
             font-size: 4rem;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
             opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #4a5568;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
-            .header {
-                padding: 1.5rem;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .nav-bar {
-                padding: 1rem;
-            }
-            
-            .filters, .patient-queue {
-                margin: 1rem;
-            }
-            
-            .filters-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats {
-                margin: 0 1rem 1rem;
-                grid-template-columns: repeat(2, 1fr);
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
             }
             
             .patient-item {
@@ -415,8 +409,11 @@
 <body>
     <!-- Header -->
     <header class="header">
-        <h1><i class="fas fa-users-medical"></i> Fila de Pacientes</h1>
-        <p>Gerencie pacientes aguardando atendimento médico</p>
+        <h1>
+            <i class="fas fa-users-medical"></i>
+            Fila de Pacientes
+        </h1>
+        <p>Gerencie a fila de atendimento médico com priorização inteligente</p>
     </header>
     
     <!-- Navigation -->
@@ -426,75 +423,57 @@
             Voltar ao Dashboard
         </a>
         <div style="color: #6b7280; font-size: 0.9rem;">
-            <i class="fas fa-clock"></i> Atualizado em tempo real
+            <i class="fas fa-sync-alt"></i> Atualizado a cada 30 segundos
         </div>
     </nav>
-    
-    <!-- Filters -->
-    <section class="filters">
-        <div class="filters-grid">
-            <div class="filter-group">
-                <label for="specialtyFilter">Especialidade</label>
-                <select id="specialtyFilter" class="filter-select">
-                    <option value="">Todas as especialidades</option>
-                    <option value="cardiologia">Cardiologia</option>
-                    <option value="pediatria">Pediatria</option>
-                    <option value="dermatologia">Dermatologia</option>
-                    <option value="psiquiatria">Psiquiatria</option>
-                    <option value="clinica-geral">Clínica Geral</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="priorityFilter">Prioridade</label>
-                <select id="priorityFilter" class="filter-select">
-                    <option value="">Todas as prioridades</option>
-                    <option value="emergency">Emergência</option>
-                    <option value="high">Alta</option>
-                    <option value="normal">Normal</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="valueFilter">Valor Mínimo</label>
-                <input type="number" id="valueFilter" class="filter-input" placeholder="R$ 0" min="0">
-            </div>
-            <div class="filter-group">
-                <label>&nbsp;</label>
-                <button class="filter-btn" onclick="applyFilters()">
-                    <i class="fas fa-filter"></i> Filtrar
-                </button>
-            </div>
-        </div>
-    </section>
     
     <!-- Statistics -->
     <section class="stats">
         <div class="stat-card">
-            <div class="stat-icon waiting">
-                <i class="fas fa-clock"></i>
-            </div>
-            <div class="stat-number" id="waitingCount">0</div>
-            <div class="stat-label">Pacientes Aguardando</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon priority">
+            <div class="stat-icon emergency">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <div class="stat-number" id="emergencyCount">0</div>
+            <div class="stat-number" id="emergencyCount">2</div>
             <div class="stat-label">Emergências</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon revenue">
+            <div class="stat-icon high-value">
                 <i class="fas fa-dollar-sign"></i>
             </div>
-            <div class="stat-number" id="totalRevenue">R$ 0</div>
-            <div class="stat-label">Receita Potencial</div>
+            <div class="stat-number" id="highValueCount">3</div>
+            <div class="stat-label">Alto Valor</div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon average">
-                <i class="fas fa-chart-line"></i>
+            <div class="stat-icon regular">
+                <i class="fas fa-user-clock"></i>
             </div>
-            <div class="stat-number" id="averageValue">R$ 0</div>
-            <div class="stat-label">Valor Médio</div>
+            <div class="stat-number" id="regularCount">4</div>
+            <div class="stat-label">Regulares</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-number" id="totalCount">9</div>
+            <div class="stat-label">Total na Fila</div>
+        </div>
+    </section>
+    
+    <!-- Filters -->
+    <section class="filters">
+        <div class="filter-group">
+            <label for="priorityFilter">Prioridade:</label>
+            <button class="filter-btn active" onclick="filterByPriority('all')">Todos</button>
+            <button class="filter-btn" onclick="filterByPriority('emergency')">Emergência</button>
+            <button class="filter-btn" onclick="filterByPriority('high')">Alto Valor</button>
+            <button class="filter-btn" onclick="filterByPriority('regular')">Regular</button>
+        </div>
+        <div class="filter-group">
+            <label for="specialtyFilter">Especialidade:</label>
+            <button class="filter-btn active" onclick="filterBySpecialty('all')">Todas</button>
+            <button class="filter-btn" onclick="filterBySpecialty('cardiologia')">Cardiologia</button>
+            <button class="filter-btn" onclick="filterBySpecialty('pediatria')">Pediatria</button>
+            <button class="filter-btn" onclick="filterBySpecialty('geral')">Clínica Geral</button>
         </div>
     </section>
     
@@ -502,207 +481,309 @@
     <section class="patient-queue">
         <div class="queue-header">
             <h2 class="queue-title">
-                <i class="fas fa-list-ul"></i>
+                <i class="fas fa-list-ol"></i>
                 Fila de Atendimento
             </h2>
-            <button class="refresh-btn" onclick="loadPatientQueue()">
-                <i class="fas fa-sync-alt"></i>
-                Atualizar
-            </button>
-        </div>
-        <div class="patient-list" id="patientList">
-            <div class="empty-state">
-                <i class="fas fa-user-clock"></i>
-                <h3>Nenhum paciente na fila</h3>
-                <p>Aguardando novos pacientes solicitarem consultas</p>
+            <div class="auto-refresh">
+                <div class="refresh-indicator"></div>
+                <span>Atualização automática</span>
             </div>
+        </div>
+        
+        <div class="patient-list" id="patientList">
+            <!-- Patients will be loaded here -->
         </div>
     </section>
 
     <script>
-        let currentPatients = [];
-        let filteredPatients = [];
-
-        function getPriorityLevel(symptoms, bidAmount) {
-            const emergencyKeywords = ['dor no peito', 'falta de ar', 'emergência', 'urgente', 'grave'];
-            const symptomsLower = symptoms.toLowerCase();
-            
-            if (emergencyKeywords.some(keyword => symptomsLower.includes(keyword))) {
-                return 'emergency';
+        // Sample patient queue data
+        const patientQueue = [
+            {
+                id: 1,
+                name: 'Maria da Silva',
+                priority: 'emergency',
+                specialty: 'cardiologia',
+                symptoms: 'Dor no peito intensa',
+                bidValue: 400,
+                age: 65,
+                waitingTime: '00:15',
+                urgencyLevel: 'ALTA'
+            },
+            {
+                id: 2,
+                name: 'Carlos Oliveira',
+                priority: 'emergency',
+                specialty: 'geral',
+                symptoms: 'Febre alta e dificuldade respiratória',
+                bidValue: 350,
+                age: 45,
+                waitingTime: '00:08',
+                urgencyLevel: 'ALTA'
+            },
+            {
+                id: 3,
+                name: 'Ana Costa',
+                priority: 'high',
+                specialty: 'pediatria',
+                symptoms: 'Criança com febre persistente',
+                bidValue: 320,
+                age: 8,
+                waitingTime: '00:25',
+                urgencyLevel: 'MÉDIA'
+            },
+            {
+                id: 4,
+                name: 'João Santos',
+                priority: 'high',
+                specialty: 'cardiologia',
+                symptoms: 'Histórico cardíaco - consulta preventiva',
+                bidValue: 300,
+                age: 58,
+                waitingTime: '00:35',
+                urgencyLevel: 'MÉDIA'
+            },
+            {
+                id: 5,
+                name: 'Beatriz Lima',
+                priority: 'high',
+                specialty: 'geral',
+                symptoms: 'Enxaqueca crônica',
+                bidValue: 280,
+                age: 32,
+                waitingTime: '00:42',
+                urgencyLevel: 'MÉDIA'
+            },
+            {
+                id: 6,
+                name: 'Pedro Rocha',
+                priority: 'regular',
+                specialty: 'geral',
+                symptoms: 'Check-up de rotina',
+                bidValue: 180,
+                age: 28,
+                waitingTime: '01:15',
+                urgencyLevel: 'BAIXA'
+            },
+            {
+                id: 7,
+                name: 'Lucia Fernandes',
+                priority: 'regular',
+                specialty: 'geral',
+                symptoms: 'Consulta preventiva',
+                bidValue: 160,
+                age: 41,
+                waitingTime: '01:30',
+                urgencyLevel: 'BAIXA'
+            },
+            {
+                id: 8,
+                name: 'Roberto Silva',
+                priority: 'regular',
+                specialty: 'geral',
+                symptoms: 'Renovação de receitas',
+                bidValue: 150,
+                age: 52,
+                waitingTime: '01:45',
+                urgencyLevel: 'BAIXA'
+            },
+            {
+                id: 9,
+                name: 'Carmen Torres',
+                priority: 'regular',
+                specialty: 'geral',
+                symptoms: 'Dor nas costas',
+                bidValue: 140,
+                age: 38,
+                waitingTime: '02:10',
+                urgencyLevel: 'BAIXA'
             }
-            
-            if (bidAmount >= 300) {
-                return 'high';
-            }
-            
-            return 'normal';
-        }
+        ];
 
-        function calculateWaitingTime(timestamp) {
-            const now = new Date();
-            const start = new Date(timestamp);
-            const diff = Math.floor((now - start) / 1000 / 60); // minutes
-            
-            if (diff < 1) return 'Agora mesmo';
-            if (diff < 60) return `${diff} min`;
-            const hours = Math.floor(diff / 60);
-            const mins = diff % 60;
-            return `${hours}h ${mins}min`;
-        }
-
-        function loadPatientQueue() {
-            try {
-                const activeBids = JSON.parse(localStorage.getItem('activeBids') || '[]');
-                console.log('📋 Carregando fila de pacientes:', activeBids.length);
-                
-                // Adiciona prioridade e ordena
-                currentPatients = activeBids.map(bid => ({
-                    ...bid,
-                    priority: getPriorityLevel(bid.symptoms || '', bid.bidAmount || 0),
-                    waitingTime: calculateWaitingTime(bid.timestamp || Date.now())
-                })).sort((a, b) => {
-                    // Ordem: emergência > alta > normal, depois por valor
-                    const priorityOrder = { emergency: 3, high: 2, normal: 1 };
-                    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
-                        return priorityOrder[b.priority] - priorityOrder[a.priority];
-                    }
-                    return (b.bidAmount || 0) - (a.bidAmount || 0);
-                });
-                
-                filteredPatients = [...currentPatients];
-                updateStats();
-                renderPatientList();
-                
-            } catch (error) {
-                console.error('❌ Erro ao carregar fila:', error);
-            }
-        }
+        let filteredQueue = [...patientQueue];
+        let currentPriorityFilter = 'all';
+        let currentSpecialtyFilter = 'all';
 
         function updateStats() {
-            const waiting = filteredPatients.length;
-            const emergency = filteredPatients.filter(p => p.priority === 'emergency').length;
-            const totalRevenue = filteredPatients.reduce((sum, p) => sum + (p.bidAmount || 0), 0);
-            const averageValue = waiting > 0 ? Math.round(totalRevenue / waiting) : 0;
-
-            document.getElementById('waitingCount').textContent = waiting;
+            const emergency = filteredQueue.filter(p => p.priority === 'emergency').length;
+            const high = filteredQueue.filter(p => p.priority === 'high').length;
+            const regular = filteredQueue.filter(p => p.priority === 'regular').length;
+            const total = filteredQueue.length;
+            
             document.getElementById('emergencyCount').textContent = emergency;
-            document.getElementById('totalRevenue').textContent = `R$ ${totalRevenue.toLocaleString('pt-BR')}`;
-            document.getElementById('averageValue').textContent = `R$ ${averageValue}`;
+            document.getElementById('highValueCount').textContent = high;
+            document.getElementById('regularCount').textContent = regular;
+            document.getElementById('totalCount').textContent = total;
         }
 
-        function renderPatientList() {
-            const listContainer = document.getElementById('patientList');
+        function renderPatientQueue() {
+            const container = document.getElementById('patientList');
             
-            if (filteredPatients.length === 0) {
-                listContainer.innerHTML = `
+            if (filteredQueue.length === 0) {
+                container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-user-clock"></i>
+                        <i class="fas fa-user-friends"></i>
                         <h3>Nenhum paciente na fila</h3>
-                        <p>Aguardando novos pacientes solicitarem consultas</p>
+                        <p>Não há pacientes aguardando atendimento no momento</p>
                     </div>
                 `;
                 return;
             }
 
-            listContainer.innerHTML = filteredPatients.map(patient => `
+            container.innerHTML = filteredQueue.map(patient => `
                 <div class="patient-item">
-                    <div class="priority-badge ${patient.priority}"></div>
-                    <div class="patient-info">
-                        <div class="patient-name">${patient.patientName || 'Paciente'}</div>
-                        <div class="patient-specialty">${patient.specialty || 'Clínica Geral'}</div>
-                        <div class="patient-symptoms">${patient.symptoms || 'Sem sintomas informados'}</div>
+                    <div class="priority-indicator priority-${patient.priority}">
+                        ${getPriorityIcon(patient.priority)}
                     </div>
-                    <div class="patient-details">
-                        <div class="patient-value">R$ ${patient.bidAmount || '0'}</div>
-                        <div class="waiting-time">${patient.waitingTime}</div>
+                    <div class="patient-info">
+                        <div class="patient-name">${patient.name}</div>
+                        <div class="patient-details">
+                            <div class="detail-item">
+                                <i class="fas fa-birthday-cake"></i>
+                                <span>${patient.age} anos</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-stethoscope"></i>
+                                <span>${capitalize(patient.specialty)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>R$ ${patient.bidValue}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span>Urgência ${patient.urgencyLevel}</span>
+                            </div>
+                        </div>
+                        <div style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">
+                            <i class="fas fa-notes-medical"></i>
+                            ${patient.symptoms}
+                        </div>
+                    </div>
+                    <div class="waiting-time">
+                        <div class="time-value">${patient.waitingTime}</div>
+                        <div class="time-label">Aguardando</div>
                     </div>
                     <div class="patient-actions">
-                        <button class="action-btn ${patient.priority === 'emergency' ? 'emergency' : 'primary'}" 
-                                onclick="attendPatient('${patient.id}')">
-                            <i class="fas fa-video"></i>
-                            ${patient.priority === 'emergency' ? 'URGENTE' : 'ATENDER'}
+                        <a href="/videoconsulta.html" class="action-btn primary" onclick="acceptPatient(${patient.id})">
+                            <i class="fas fa-video"></i> ATENDER AGORA
+                        </a>
+                        <button class="action-btn secondary" onclick="schedulePatient(${patient.id})">
+                            <i class="fas fa-calendar-plus"></i> AGENDAR
                         </button>
-                        <button class="action-btn secondary" onclick="schedulePatient('${patient.id}')">
-                            <i class="fas fa-calendar"></i>
-                            AGENDAR
-                        </button>
-                        <button class="action-btn secondary" onclick="viewDetails('${patient.id}')">
-                            <i class="fas fa-info-circle"></i>
-                            DETALHES
+                        <button class="action-btn info" onclick="viewDetails(${patient.id})">
+                            <i class="fas fa-info-circle"></i> DETALHES
                         </button>
                     </div>
                 </div>
             `).join('');
+            
+            updateStats();
+        }
+
+        function getPriorityIcon(priority) {
+            switch(priority) {
+                case 'emergency': return '<i class="fas fa-exclamation-triangle"></i>';
+                case 'high': return '<i class="fas fa-dollar-sign"></i>';
+                case 'regular': return '<i class="fas fa-user"></i>';
+                default: return '<i class="fas fa-question"></i>';
+            }
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function filterByPriority(priority) {
+            currentPriorityFilter = priority;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.onclick && btn.onclick.toString().includes('filterByPriority')) {
+                    btn.classList.remove('active');
+                }
+            });
+            event.target.classList.add('active');
+            
+            applyFilters();
+        }
+
+        function filterBySpecialty(specialty) {
+            currentSpecialtyFilter = specialty;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.onclick && btn.onclick.toString().includes('filterBySpecialty')) {
+                    btn.classList.remove('active');
+                }
+            });
+            event.target.classList.add('active');
+            
+            applyFilters();
         }
 
         function applyFilters() {
-            const specialtyFilter = document.getElementById('specialtyFilter').value;
-            const priorityFilter = document.getElementById('priorityFilter').value;
-            const valueFilter = parseFloat(document.getElementById('valueFilter').value) || 0;
-
-            filteredPatients = currentPatients.filter(patient => {
-                if (specialtyFilter && patient.specialty?.toLowerCase() !== specialtyFilter) return false;
-                if (priorityFilter && patient.priority !== priorityFilter) return false;
-                if (valueFilter && (patient.bidAmount || 0) < valueFilter) return false;
-                return true;
+            filteredQueue = patientQueue.filter(patient => {
+                const priorityMatch = currentPriorityFilter === 'all' || patient.priority === currentPriorityFilter;
+                const specialtyMatch = currentSpecialtyFilter === 'all' || patient.specialty === currentSpecialtyFilter;
+                return priorityMatch && specialtyMatch;
             });
-
-            updateStats();
-            renderPatientList();
-            console.log(`🔍 Filtros aplicados: ${filteredPatients.length} pacientes`);
+            
+            renderPatientQueue();
         }
 
-        function attendPatient(patientId) {
-            const patient = currentPatients.find(p => p.id === patientId);
-            if (!patient) return;
-
-            if (confirm(`Iniciar atendimento de ${patient.patientName || 'Paciente'} por R$ ${patient.bidAmount || '0'}?`)) {
-                // Remove da fila ativa
-                const activeBids = JSON.parse(localStorage.getItem('activeBids') || '[]');
-                const updatedBids = activeBids.filter(bid => bid.id !== patientId);
-                localStorage.setItem('activeBids', JSON.stringify(updatedBids));
-
-                // Adiciona aos aceitos
-                const acceptedBids = JSON.parse(localStorage.getItem('acceptedBids') || '[]');
-                acceptedBids.push({
-                    ...patient,
-                    acceptedAt: new Date().toISOString(),
-                    doctorName: 'Dr. João Silva',
-                    status: 'aceito'
-                });
-                localStorage.setItem('acceptedBids', JSON.stringify(acceptedBids));
-
-                alert('Paciente aceito! Redirecionando para videoconsulta...');
-                setTimeout(() => {
-                    window.location.href = '/videoconsulta.html';
-                }, 1500);
+        function acceptPatient(patientId) {
+            const patient = patientQueue.find(p => p.id === patientId);
+            if (patient && confirm(`Iniciar videoconsulta com ${patient.name}?`)) {
+                // Remove patient from queue
+                const index = patientQueue.findIndex(p => p.id === patientId);
+                if (index > -1) {
+                    patientQueue.splice(index, 1);
+                    applyFilters();
+                    alert(`Videoconsulta iniciada com ${patient.name}!`);
+                }
             }
         }
 
         function schedulePatient(patientId) {
-            const patient = currentPatients.find(p => p.id === patientId);
-            if (!patient) return;
-
-            alert(`Agendamento de ${patient.patientName || 'Paciente'} será implementado em breve`);
+            const patient = patientQueue.find(p => p.id === patientId);
+            if (patient) {
+                alert(`Agendamento para ${patient.name} será implementado em breve`);
+            }
         }
 
         function viewDetails(patientId) {
-            const patient = currentPatients.find(p => p.id === patientId);
-            if (!patient) return;
-
-            alert(`Detalhes do Paciente:\n\nNome: ${patient.patientName || 'Não informado'}\nEspecialidade: ${patient.specialty || 'Clínica Geral'}\nValor: R$ ${patient.bidAmount || '0'}\nSintomas: ${patient.symptoms || 'Não informado'}\nTempo de espera: ${patient.waitingTime}`);
+            const patient = patientQueue.find(p => p.id === patientId);
+            if (patient) {
+                alert(`Detalhes do Paciente:\n\nNome: ${patient.name}\nIdade: ${patient.age} anos\nEspecialidade: ${capitalize(patient.specialty)}\nSintomas: ${patient.symptoms}\nValor da Consulta: R$ ${patient.bidValue}\nTempo de Espera: ${patient.waitingTime}\nUrgência: ${patient.urgencyLevel}`);
+            }
         }
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('👨‍⚕️ Fila de Pacientes Médico carregada');
-            loadPatientQueue();
+        function updateWaitingTimes() {
+            // Simulate real-time waiting time updates
+            patientQueue.forEach(patient => {
+                const timeParts = patient.waitingTime.split(':');
+                let minutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+                minutes += 1;
+                
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                patient.waitingTime = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+            });
             
-            // Atualiza a cada 30 segundos
-            setInterval(() => {
-                console.log('🔄 Atualizando fila de pacientes...');
-                loadPatientQueue();
-            }, 30000);
+            renderPatientQueue();
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            updateWaitingTimes();
+            console.log('🔄 Fila de pacientes atualizada automaticamente');
+        }, 30000);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('👥 Fila de Pacientes Médicos carregada');
+            renderPatientQueue();
+            console.log('✅ Sistema de fila inicializado com 9 pacientes');
         });
     </script>
 </body>

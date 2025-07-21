@@ -1,0 +1,66 @@
+DESENVOLVER FUNCIONALIDADES COMPLETAS DAS PÁGINAS CRIADAS:
+
+1. HISTÓRICO DE CONSULTAS (historico-consultas.html):
+   - Lista cronológica de todas as consultas realizadas
+   - Filtros por data, especialidade, tipo (presencial/online)
+   - Detalhes: paciente, diagnóstico, prescrições, valores
+   - Busca por nome do paciente ou CRM
+   - Exportar relatórios em PDF/Excel
+   - Gráficos de performance mensal
+
+2. SISTEMA DE PRESCRIÇÕES (prescricoes.html):
+   - Interface para criar novas prescrições digitais
+   - Base de medicamentos com dosagens
+   - Verificação de interações medicamentosas
+   - Assinatura digital integrada
+   - Envio automático para farmácias
+   - Histórico de prescrições por paciente
+   - Templates de prescrições frequentes
+
+3. PRONTUÁRIOS ELETRÔNICOS (prontuarios.html):
+   - Visualização completa do histórico médico
+   - Edição de informações do paciente
+   - Upload de exames e documentos
+   - Linha do tempo de consultas
+   - Anotações médicas categorizadas
+   - Alertas de alergias e condições
+   - Impressão de relatórios médicos
+
+4. CONSULTAS AGENDADAS (consultas-agendadas.html):
+   - Calendário visual com todas as consultas
+   - Diferentes visualizações (dia/semana/mês)
+   - Status de cada consulta (confirmada/pendente/cancelada)
+   - Detalhes do paciente e motivo
+   - Links diretos para videoconsulta
+   - Reordenação por arrastar e soltar
+   - Notificações automáticas
+
+5. ANOTAÇÕES MÉDICAS (anotacoes.html):
+   - Editor de texto rico para anotações
+   - Categorização por especialidade/urgência
+   - Busca por tags e palavras-chave
+   - Anotações vinculadas a pacientes específicos
+   - Backup automático
+   - Compartilhamento com outros médicos
+   - Modelos de anotações padrão
+
+6. PERFIL MÉDICO (perfil-medico.html):
+   - Edição de dados pessoais e profissionais
+   - Upload de foto de perfil
+   - Especialidades e certificações
+   - Configurações de disponibilidade
+   - Valores de consulta por modalidade
+   - Integração com redes sociais médicas
+   - Configurações de privacidade
+
+7. FILA DE PACIENTES MÉDICA (NOVA PÁGINA):
+   - Criar: fila-pacientes-medico.html
+   - Interface ESPECÍFICA para médicos
+   - Lista de pacientes aguardando (do sistema de lances)
+   - Priorização: emergências > alto valor > regular
+   - Filtros por especialidade e valor
+   - Tempo de espera em tempo real
+   - Botões: "ATENDER AGORA", "AGENDAR", "DETALHES"
+   - Carregamento de dados do localStorage
+
+IMPLEMENTAR TODAS COM FUNCIONALIDADES REAIS, NÃO APENAS PLACEHOLDERS!
