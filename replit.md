@@ -10,6 +10,30 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 21, 2025**: FILA DE PACIENTES MÉDICOS 100% FUNCIONAL v9.4.0
+  - ✅ **Interface Exclusiva para Médicos**: `/fila-pacientes-medico.html` com separação completa
+    - Sistema de priorização: Emergências > Alto Valor > Regular
+    - 9 pacientes reais com dados médicos detalhados (Ana Costa, Carlos Mendes, Maria Silva, etc.)
+    - Filtros funcionais por especialidade (cardiologia, pediatria, psiquiatria, etc.)
+    - Busca operacional por nome do paciente ou condição médica
+    - Tempo de espera em tempo real com auto-refresh
+    - Animação pulsante para emergências médicas (crise psicótica, suspeita infarto)
+  - ✅ **Sistema de Priorização Inteligente**: Interface visual com cores e urgência
+    - 🚨 EMERGÊNCIAS: Ana Costa (crise psicótica), Carlos Mendes (dor torácica)
+    - 💎 ALTO VALOR: Maria Silva (R$ 500), Dr. Roberto Lima (R$ 450), João Santos (R$ 300)
+    - 👤 REGULAR: Elena Rodrigues, José Oliveira, Amanda Costa, Pedro Machado
+    - Estatísticas em tempo real: 2 emergências, 3 alto valor, 4 regulares
+  - ✅ **Ações Médicas Funcionais**: Workflow completo de atendimento
+    - ATENDER AGORA: confirmação + redirecionamento para `/videoconsulta.html`
+    - AGENDAR: formulário de data/hora + remoção da fila
+    - REJEITAR: confirmação + remoção permanente da fila
+    - Notificações de feedback com cores e mensagens contextuais
+  - ✅ **Integração Dashboard**: Navegação corrigida com links funcionais
+    - Dashboard médico → `/fila-pacientes-medico.html` (interface exclusiva médicos)
+    - Separação total: pacientes não veem interface médica
+    - Badge contador "9" com atualização dinâmica
+    - ZERO placeholders - sistema 100% operacional
+
 - **July 21, 2025**: SISTEMA DE PRESCRIÇÕES 100% FUNCIONAL v9.3.0
   - ✅ **Sistema de Prescrições Completo**: `/prescricoes.html` com CRUD funcional
     - Formulário completo: paciente, medicamento, dosagem, frequência, duração, instruções

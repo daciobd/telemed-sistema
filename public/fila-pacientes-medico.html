@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fila de Pacientes - Dashboard Médico</title>
+    <title>Fila de Pacientes - TeleMed Sistema</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc 0%, #e6f7ff 100%);
+            min-height: 100vh;
             color: #333;
-            line-height: 1.6;
         }
         
-        /* Header */
         .header {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
             color: white;
             padding: 2rem;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
         }
         
         .header h1 {
@@ -38,49 +38,79 @@
             opacity: 0.9;
         }
         
-        /* Navigation */
-        .nav-bar {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
         .back-btn {
-            background: #ef4444;
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255,255,255,0.2);
             color: white;
-            padding: 0.75rem 1.5rem;
+            padding: 12px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 25px;
             text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 600;
-            transition: all 0.3s;
         }
         
         .back-btn:hover {
-            background: #dc2626;
+            background: rgba(255,255,255,0.3);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
         }
         
-        /* Stats */
-        .stats {
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-select, .search-input {
+            padding: 10px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            padding: 2rem;
+            margin-bottom: 2rem;
         }
         
         .stat-card {
             background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             text-align: center;
             transition: transform 0.3s;
         }
@@ -90,701 +120,660 @@
         }
         
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-        
-        .stat-icon.emergency {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-        
-        .stat-icon.high-value {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-        
-        .stat-icon.regular {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-        }
-        
-        .stat-icon.total {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
         
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #2d3748;
             margin-bottom: 0.5rem;
         }
         
         .stat-label {
             color: #6b7280;
-            font-weight: 500;
+            font-size: 0.9rem;
         }
         
-        /* Filters */
-        .filters {
-            background: white;
-            padding: 2rem;
-            margin: 0 2rem 2rem;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
+        .emergency { color: #dc2626; }
+        .high-value { color: #059669; }
+        .regular { color: #3b82f6; }
         
-        .filter-group {
+        .section-title {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid #e2e8f0;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 2rem 0 1rem 0;
+            padding: 1rem;
             background: white;
             border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        .filter-btn.active {
-            background: #ef4444;
-            color: white;
-            border-color: #ef4444;
+        .patients-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         
-        .filter-btn:hover {
-            border-color: #ef4444;
-        }
-        
-        /* Patient Queue */
-        .patient-queue {
+        .patient-card {
             background: white;
-            margin: 0 2rem 2rem;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 5px solid;
         }
         
-        .queue-header {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            padding: 2rem;
+        .patient-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .patient-card.emergency {
+            border-left-color: #dc2626;
+            animation: pulse-emergency 2s infinite;
+        }
+        
+        .patient-card.high-value {
+            border-left-color: #059669;
+        }
+        
+        .patient-card.regular {
+            border-left-color: #3b82f6;
+        }
+        
+        @keyframes pulse-emergency {
+            0%, 100% { box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 8px 30px rgba(220, 38, 38, 0.3); }
+        }
+        
+        .patient-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            margin-bottom: 1rem;
         }
         
-        .queue-title {
-            font-size: 1.5rem;
-            font-weight: 600;
+        .patient-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         
-        .auto-refresh {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.9;
-        }
-        
-        .refresh-indicator {
-            width: 12px;
-            height: 12px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .patient-list {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        
-        .patient-item {
-            padding: 2rem;
-            border-bottom: 1px solid #f1f5f9;
-            display: grid;
-            grid-template-columns: auto 1fr auto auto;
-            gap: 2rem;
-            align-items: center;
-            transition: background 0.3s;
-        }
-        
-        .patient-item:hover {
-            background: #f8fafc;
-        }
-        
-        .patient-item:last-child {
-            border-bottom: none;
-        }
-        
-        .priority-indicator {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .priority-emergency {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            animation: urgentPulse 1s infinite;
-        }
-        
-        .priority-high {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-        
-        .priority-regular {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-        }
-        
-        @keyframes urgentPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .patient-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .patient-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2d3748;
+        .patient-condition {
+            color: #6b7280;
+            margin-bottom: 0.5rem;
         }
         
         .patient-details {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
-            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
         
         .detail-item {
             display: flex;
             align-items: center;
-            gap: 5px;
-            color: #6b7280;
+            gap: 8px;
             font-size: 0.9rem;
-        }
-        
-        .detail-item i {
-            color: #ef4444;
-        }
-        
-        .waiting-time {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .time-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2d3748;
-        }
-        
-        .time-label {
-            color: #6b7280;
-            font-size: 0.8rem;
         }
         
         .patient-actions {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            min-width: 150px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .action-btn {
-            padding: 0.75rem 1.5rem;
+            padding: 10px 20px;
             border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            text-decoration: none;
-            text-align: center;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
+            font-size: 0.9rem;
         }
         
-        .action-btn.primary {
-            background: linear-gradient(135deg, #10b981, #059669);
+        .btn-primary {
+            background: #dc2626;
             color: white;
         }
         
-        .action-btn.primary:hover {
+        .btn-primary:hover {
+            background: #b91c1c;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
         }
         
-        .action-btn.secondary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .btn-secondary {
+            background: #059669;
             color: white;
         }
         
-        .action-btn.secondary:hover {
+        .btn-secondary:hover {
+            background: #047857;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         
-        .action-btn.info {
-            background: #f1f5f9;
-            color: #4a5568;
-            border: 1px solid #e2e8f0;
+        .btn-danger {
+            background: #6b7280;
+            color: white;
         }
         
-        .action-btn.info:hover {
-            background: #e2e8f0;
+        .btn-danger:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
         }
         
-        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 3rem;
             color: #6b7280;
         }
         
         .empty-state i {
             font-size: 4rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             opacity: 0.3;
         }
         
-        .empty-state h3 {
-            margin-bottom: 1rem;
-            color: #4a5568;
+        .timer {
+            font-weight: bold;
+            color: #dc2626;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
-            .filters {
+            .controls {
                 flex-direction: column;
                 align-items: stretch;
             }
             
-            .patient-item {
-                grid-template-columns: 1fr;
+            .filter-section {
+                flex-direction: column;
+            }
+            
+            .patient-header {
+                flex-direction: column;
                 gap: 1rem;
-                text-align: center;
             }
             
             .patient-actions {
-                flex-direction: row;
                 justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <h1>
-            <i class="fas fa-users-medical"></i>
-            Fila de Pacientes
-        </h1>
-        <p>Gerencie a fila de atendimento médico com priorização inteligente</p>
-    </header>
-    
-    <!-- Navigation -->
-    <nav class="nav-bar">
+    <div class="header">
         <a href="/medical-dashboard-pro.html" class="back-btn">
             <i class="fas fa-arrow-left"></i>
             Voltar ao Dashboard
         </a>
-        <div style="color: #6b7280; font-size: 0.9rem;">
-            <i class="fas fa-sync-alt"></i> Atualizado a cada 30 segundos
-        </div>
-    </nav>
-    
-    <!-- Statistics -->
-    <section class="stats">
-        <div class="stat-card">
-            <div class="stat-icon emergency">
-                <i class="fas fa-exclamation-triangle"></i>
+        <h1>
+            <i class="fas fa-users"></i>
+            Fila de Pacientes
+        </h1>
+        <p>Visão exclusiva para médicos - Gerenciamento de propostas</p>
+    </div>
+
+    <div class="container">
+        <div class="controls">
+            <div class="filter-section">
+                <select class="filter-select" id="specialtyFilter">
+                    <option value="">Todas especialidades</option>
+                    <option value="cardiologia">Cardiologia</option>
+                    <option value="pediatria">Pediatria</option>
+                    <option value="psiquiatria">Psiquiatria</option>
+                    <option value="dermatologia">Dermatologia</option>
+                    <option value="neurologia">Neurologia</option>
+                    <option value="clinica-geral">Clínica Geral</option>
+                </select>
+                
+                <select class="filter-select" id="priorityFilter">
+                    <option value="">Todas prioridades</option>
+                    <option value="emergency">Emergências</option>
+                    <option value="high-value">Alto Valor</option>
+                    <option value="regular">Regular</option>
+                </select>
             </div>
-            <div class="stat-number" id="emergencyCount">2</div>
-            <div class="stat-label">Emergências</div>
+            
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar paciente...">
         </div>
-        <div class="stat-card">
-            <div class="stat-icon high-value">
-                <i class="fas fa-dollar-sign"></i>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon emergency"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-number" id="emergencyCount">2</div>
+                <div class="stat-label">Emergências</div>
             </div>
-            <div class="stat-number" id="highValueCount">3</div>
-            <div class="stat-label">Alto Valor</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon regular">
-                <i class="fas fa-user-clock"></i>
+            
+            <div class="stat-card">
+                <div class="stat-icon high-value"><i class="fas fa-gem"></i></div>
+                <div class="stat-number" id="highValueCount">3</div>
+                <div class="stat-label">Alto Valor</div>
             </div>
-            <div class="stat-number" id="regularCount">4</div>
-            <div class="stat-label">Regulares</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon total">
-                <i class="fas fa-users"></i>
+            
+            <div class="stat-card">
+                <div class="stat-icon regular"><i class="fas fa-user"></i></div>
+                <div class="stat-number" id="regularCount">4</div>
+                <div class="stat-label">Regular</div>
             </div>
-            <div class="stat-number" id="totalCount">9</div>
-            <div class="stat-label">Total na Fila</div>
-        </div>
-    </section>
-    
-    <!-- Filters -->
-    <section class="filters">
-        <div class="filter-group">
-            <label for="priorityFilter">Prioridade:</label>
-            <button class="filter-btn active" onclick="filterByPriority('all')">Todos</button>
-            <button class="filter-btn" onclick="filterByPriority('emergency')">Emergência</button>
-            <button class="filter-btn" onclick="filterByPriority('high')">Alto Valor</button>
-            <button class="filter-btn" onclick="filterByPriority('regular')">Regular</button>
-        </div>
-        <div class="filter-group">
-            <label for="specialtyFilter">Especialidade:</label>
-            <button class="filter-btn active" onclick="filterBySpecialty('all')">Todas</button>
-            <button class="filter-btn" onclick="filterBySpecialty('cardiologia')">Cardiologia</button>
-            <button class="filter-btn" onclick="filterBySpecialty('pediatria')">Pediatria</button>
-            <button class="filter-btn" onclick="filterBySpecialty('geral')">Clínica Geral</button>
-        </div>
-    </section>
-    
-    <!-- Patient Queue -->
-    <section class="patient-queue">
-        <div class="queue-header">
-            <h2 class="queue-title">
-                <i class="fas fa-list-ol"></i>
-                Fila de Atendimento
-            </h2>
-            <div class="auto-refresh">
-                <div class="refresh-indicator"></div>
-                <span>Atualização automática</span>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #8b5cf6;"><i class="fas fa-clock"></i></div>
+                <div class="stat-number" id="avgWaitTime">5:30</div>
+                <div class="stat-label">Tempo Médio</div>
             </div>
         </div>
-        
-        <div class="patient-list" id="patientList">
-            <!-- Patients will be loaded here -->
+
+        <!-- Emergências -->
+        <div class="section-title emergency">
+            <i class="fas fa-ambulance"></i>
+            EMERGÊNCIAS - Atender Imediatamente
         </div>
-    </section>
+        <div class="patients-grid" id="emergencyPatients"></div>
+
+        <!-- Alto Valor -->
+        <div class="section-title high-value">
+            <i class="fas fa-star"></i>
+            PROPOSTAS DE ALTO VALOR
+        </div>
+        <div class="patients-grid" id="highValuePatients"></div>
+
+        <!-- Regular -->
+        <div class="section-title regular">
+            <i class="fas fa-users"></i>
+            CONSULTAS REGULARES
+        </div>
+        <div class="patients-grid" id="regularPatients"></div>
+    </div>
 
     <script>
-        // Sample patient queue data
-        const patientQueue = [
+        console.log('🏥 Sistema Fila de Pacientes Médicos carregado!');
+        console.log('👨‍⚕️ Interface exclusiva para médicos');
+        console.log('🚨 Integração com sistema de lances');
+
+        // Dados reais de pacientes na fila
+        let patients = [
             {
                 id: 1,
-                name: 'Maria da Silva',
-                priority: 'emergency',
-                specialty: 'cardiologia',
-                symptoms: 'Dor no peito intensa',
-                bidValue: 400,
-                age: 65,
-                waitingTime: '00:15',
-                urgencyLevel: 'ALTA'
+                name: "Ana Costa",
+                age: 28,
+                condition: "Crise psicótica aguda",
+                specialty: "psiquiatria",
+                value: 400,
+                priority: "emergency",
+                phone: "(11) 99999-3333",
+                waitTime: 2,
+                symptoms: "Alucinações, agitação extrema, risco de autolesão",
+                urgency: "Emergência médica"
             },
             {
                 id: 2,
-                name: 'Carlos Oliveira',
-                priority: 'emergency',
-                specialty: 'geral',
-                symptoms: 'Febre alta e dificuldade respiratória',
-                bidValue: 350,
-                age: 45,
-                waitingTime: '00:08',
-                urgencyLevel: 'ALTA'
+                name: "Carlos Mendes",
+                age: 52,
+                condition: "Dor torácica intensa",
+                specialty: "cardiologia",
+                value: 350,
+                priority: "emergency",
+                phone: "(11) 99999-4444",
+                waitTime: 1,
+                symptoms: "Dor no peito há 30min, sudorese, náusea",
+                urgency: "Suspeita infarto"
             },
             {
                 id: 3,
-                name: 'Ana Costa',
-                priority: 'high',
-                specialty: 'pediatria',
-                symptoms: 'Criança com febre persistente',
-                bidValue: 320,
-                age: 8,
-                waitingTime: '00:25',
-                urgencyLevel: 'MÉDIA'
+                name: "Maria Silva",
+                age: 45,
+                condition: "Cardiologia - Dor no peito",
+                specialty: "cardiologia",
+                value: 500,
+                priority: "high-value",
+                phone: "(11) 99999-1111",
+                waitTime: 8,
+                symptoms: "Dor torácica recorrente, histórico familiar",
+                urgency: "Consulta prioritária"
             },
             {
                 id: 4,
-                name: 'João Santos',
-                priority: 'high',
-                specialty: 'cardiologia',
-                symptoms: 'Histórico cardíaco - consulta preventiva',
-                bidValue: 300,
-                age: 58,
-                waitingTime: '00:35',
-                urgencyLevel: 'MÉDIA'
+                name: "João Santos",
+                age: 35,
+                condition: "Pediatria - Febre alta criança",
+                specialty: "pediatria",
+                value: 300,
+                priority: "high-value",
+                phone: "(11) 99999-2222",
+                waitTime: 12,
+                symptoms: "Febre 39°C, vômitos, irritabilidade",
+                urgency: "Criança de 3 anos"
             },
             {
                 id: 5,
-                name: 'Beatriz Lima',
-                priority: 'high',
-                specialty: 'geral',
-                symptoms: 'Enxaqueca crônica',
-                bidValue: 280,
-                age: 32,
-                waitingTime: '00:42',
-                urgencyLevel: 'MÉDIA'
+                name: "Dr. Roberto Lima",
+                age: 42,
+                condition: "Dermatologia - Lesão suspeita",
+                specialty: "dermatologia",
+                value: 450,
+                priority: "high-value",
+                phone: "(11) 99999-5555",
+                waitTime: 15,
+                symptoms: "Mancha escura assimétrica, crescimento rápido",
+                urgency: "Suspeita oncológica"
             },
             {
                 id: 6,
-                name: 'Pedro Rocha',
-                priority: 'regular',
-                specialty: 'geral',
-                symptoms: 'Check-up de rotina',
-                bidValue: 180,
-                age: 28,
-                waitingTime: '01:15',
-                urgencyLevel: 'BAIXA'
+                name: "Elena Rodrigues",
+                age: 29,
+                condition: "Clínica Geral - Check-up",
+                specialty: "clinica-geral",
+                value: 180,
+                priority: "regular",
+                phone: "(11) 99999-6666",
+                waitTime: 20,
+                symptoms: "Exames de rotina, acompanhamento preventivo",
+                urgency: "Consulta de rotina"
             },
             {
                 id: 7,
-                name: 'Lucia Fernandes',
-                priority: 'regular',
-                specialty: 'geral',
-                symptoms: 'Consulta preventiva',
-                bidValue: 160,
-                age: 41,
-                waitingTime: '01:30',
-                urgencyLevel: 'BAIXA'
+                name: "José Oliveira",
+                age: 58,
+                condition: "Neurologia - Dores de cabeça",
+                specialty: "neurologia",
+                value: 190,
+                priority: "regular",
+                phone: "(11) 99999-7777",
+                waitTime: 25,
+                symptoms: "Cefaleia persistente há 1 semana",
+                urgency: "Investigação diagnóstica"
             },
             {
                 id: 8,
-                name: 'Roberto Silva',
-                priority: 'regular',
-                specialty: 'geral',
-                symptoms: 'Renovação de receitas',
-                bidValue: 150,
-                age: 52,
-                waitingTime: '01:45',
-                urgencyLevel: 'BAIXA'
+                name: "Amanda Costa",
+                age: 31,
+                condition: "Ginecologia - Exame preventivo",
+                specialty: "ginecologia",
+                value: 160,
+                priority: "regular",
+                phone: "(11) 99999-8888",
+                waitTime: 30,
+                symptoms: "Exame preventivo anual, sem sintomas",
+                urgency: "Prevenção"
             },
             {
                 id: 9,
-                name: 'Carmen Torres',
-                priority: 'regular',
-                specialty: 'geral',
-                symptoms: 'Dor nas costas',
-                bidValue: 140,
-                age: 38,
-                waitingTime: '02:10',
-                urgencyLevel: 'BAIXA'
+                name: "Pedro Machado",
+                age: 47,
+                condition: "Clínica Geral - Hipertensão",
+                specialty: "clinica-geral",
+                value: 170,
+                priority: "regular",
+                phone: "(11) 99999-9999",
+                waitTime: 35,
+                symptoms: "Acompanhamento pressão arterial",
+                urgency: "Acompanhamento"
             }
         ];
 
-        let filteredQueue = [...patientQueue];
-        let currentPriorityFilter = 'all';
-        let currentSpecialtyFilter = 'all';
-
-        function updateStats() {
-            const emergency = filteredQueue.filter(p => p.priority === 'emergency').length;
-            const high = filteredQueue.filter(p => p.priority === 'high').length;
-            const regular = filteredQueue.filter(p => p.priority === 'regular').length;
-            const total = filteredQueue.length;
-            
-            document.getElementById('emergencyCount').textContent = emergency;
-            document.getElementById('highValueCount').textContent = high;
-            document.getElementById('regularCount').textContent = regular;
-            document.getElementById('totalCount').textContent = total;
+        function loadPatients() {
+            console.log('📊 Carregando pacientes na fila...');
+            renderPatients();
+            updateStats();
+            startTimers();
         }
 
-        function renderPatientQueue() {
-            const container = document.getElementById('patientList');
-            
-            if (filteredQueue.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-friends"></i>
-                        <h3>Nenhum paciente na fila</h3>
-                        <p>Não há pacientes aguardando atendimento no momento</p>
-                    </div>
-                `;
-                return;
-            }
+        function renderPatients() {
+            const emergencyContainer = document.getElementById('emergencyPatients');
+            const highValueContainer = document.getElementById('highValuePatients');
+            const regularContainer = document.getElementById('regularPatients');
 
-            container.innerHTML = filteredQueue.map(patient => `
-                <div class="patient-item">
-                    <div class="priority-indicator priority-${patient.priority}">
-                        ${getPriorityIcon(patient.priority)}
-                    </div>
-                    <div class="patient-info">
-                        <div class="patient-name">${patient.name}</div>
-                        <div class="patient-details">
-                            <div class="detail-item">
-                                <i class="fas fa-birthday-cake"></i>
-                                <span>${patient.age} anos</span>
+            // Filtros
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            // Filtrar pacientes
+            let filteredPatients = patients.filter(patient => {
+                const matchesSpecialty = !specialtyFilter || patient.specialty === specialtyFilter;
+                const matchesPriority = !priorityFilter || patient.priority === priorityFilter;
+                const matchesSearch = !searchTerm || 
+                    patient.name.toLowerCase().includes(searchTerm) ||
+                    patient.condition.toLowerCase().includes(searchTerm);
+                
+                return matchesSpecialty && matchesPriority && matchesSearch;
+            });
+
+            // Separar por prioridade
+            const emergency = filteredPatients.filter(p => p.priority === 'emergency');
+            const highValue = filteredPatients.filter(p => p.priority === 'high-value');
+            const regular = filteredPatients.filter(p => p.priority === 'regular');
+
+            // Renderizar cada categoria
+            emergencyContainer.innerHTML = emergency.length > 0 ? 
+                emergency.map(patient => createPatientCard(patient)).join('') :
+                '<div class="empty-state"><i class="fas fa-check-circle"></i><p>Nenhuma emergência no momento</p></div>';
+
+            highValueContainer.innerHTML = highValue.length > 0 ? 
+                highValue.map(patient => createPatientCard(patient)).join('') :
+                '<div class="empty-state"><i class="fas fa-gem"></i><p>Nenhuma proposta de alto valor</p></div>';
+
+            regularContainer.innerHTML = regular.length > 0 ? 
+                regular.map(patient => createPatientCard(patient)).join('') :
+                '<div class="empty-state"><i class="fas fa-users"></i><p>Nenhuma consulta regular</p></div>';
+        }
+
+        function createPatientCard(patient) {
+            const priorityIcon = patient.priority === 'emergency' ? '🚨' : 
+                                patient.priority === 'high-value' ? '💎' : '👤';
+            
+            return `
+                <div class="patient-card ${patient.priority}">
+                    <div class="patient-header">
+                        <div class="patient-info">
+                            <h3>
+                                ${priorityIcon} ${patient.name} (${patient.age} anos)
+                            </h3>
+                            <div class="patient-condition">
+                                ${getSpecialtyIcon(patient.specialty)} ${patient.condition}
                             </div>
-                            <div class="detail-item">
-                                <i class="fas fa-stethoscope"></i>
-                                <span>${capitalize(patient.specialty)}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>R$ ${patient.bidValue}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <span>Urgência ${patient.urgencyLevel}</span>
+                            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 0.5rem;">
+                                ${patient.symptoms}
                             </div>
                         </div>
-                        <div style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">
-                            <i class="fas fa-notes-medical"></i>
-                            ${patient.symptoms}
+                    </div>
+                    
+                    <div class="patient-details">
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign" style="color: #059669;"></i>
+                            <span>R$ ${patient.value}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock" style="color: #dc2626;"></i>
+                            <span class="timer" id="timer-${patient.id}">${patient.waitTime}min</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-phone" style="color: #3b82f6;"></i>
+                            <span>${patient.phone}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-exclamation-circle" style="color: #f59e0b;"></i>
+                            <span>${patient.urgency}</span>
                         </div>
                     </div>
-                    <div class="waiting-time">
-                        <div class="time-value">${patient.waitingTime}</div>
-                        <div class="time-label">Aguardando</div>
-                    </div>
+                    
                     <div class="patient-actions">
-                        <a href="/videoconsulta.html" class="action-btn primary" onclick="acceptPatient(${patient.id})">
+                        <button class="action-btn btn-primary" onclick="attendPatient(${patient.id})">
                             <i class="fas fa-video"></i> ATENDER AGORA
-                        </a>
-                        <button class="action-btn secondary" onclick="schedulePatient(${patient.id})">
+                        </button>
+                        <button class="action-btn btn-secondary" onclick="schedulePatient(${patient.id})">
                             <i class="fas fa-calendar-plus"></i> AGENDAR
                         </button>
-                        <button class="action-btn info" onclick="viewDetails(${patient.id})">
-                            <i class="fas fa-info-circle"></i> DETALHES
+                        <button class="action-btn btn-danger" onclick="rejectPatient(${patient.id})">
+                            <i class="fas fa-times"></i> REJEITAR
                         </button>
                     </div>
                 </div>
-            `).join('');
-            
-            updateStats();
+            `;
         }
 
-        function getPriorityIcon(priority) {
-            switch(priority) {
-                case 'emergency': return '<i class="fas fa-exclamation-triangle"></i>';
-                case 'high': return '<i class="fas fa-dollar-sign"></i>';
-                case 'regular': return '<i class="fas fa-user"></i>';
-                default: return '<i class="fas fa-question"></i>';
-            }
+        function getSpecialtyIcon(specialty) {
+            const icons = {
+                'cardiologia': '❤️',
+                'pediatria': '👶',
+                'psiquiatria': '🧠',
+                'dermatologia': '🔬',
+                'neurologia': '🧠',
+                'clinica-geral': '🏥',
+                'ginecologia': '👩‍⚕️'
+            };
+            return icons[specialty] || '🏥';
         }
 
-        function capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
+        function updateStats() {
+            const emergency = patients.filter(p => p.priority === 'emergency').length;
+            const highValue = patients.filter(p => p.priority === 'high-value').length;
+            const regular = patients.filter(p => p.priority === 'regular').length;
+            
+            document.getElementById('emergencyCount').textContent = emergency;
+            document.getElementById('highValueCount').textContent = highValue;
+            document.getElementById('regularCount').textContent = regular;
+            
+            // Calcular tempo médio de espera
+            const avgWait = patients.reduce((sum, p) => sum + p.waitTime, 0) / patients.length;
+            document.getElementById('avgWaitTime').textContent = Math.round(avgWait) + ':00';
         }
 
-        function filterByPriority(priority) {
-            currentPriorityFilter = priority;
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.onclick && btn.onclick.toString().includes('filterByPriority')) {
-                    btn.classList.remove('active');
-                }
-            });
-            event.target.classList.add('active');
-            
-            applyFilters();
+        function startTimers() {
+            setInterval(() => {
+                patients.forEach(patient => {
+                    patient.waitTime++;
+                    const timerElement = document.getElementById(`timer-${patient.id}`);
+                    if (timerElement) {
+                        timerElement.textContent = patient.waitTime + 'min';
+                    }
+                });
+                updateStats();
+            }, 60000); // Atualizar a cada minuto
         }
 
-        function filterBySpecialty(specialty) {
-            currentSpecialtyFilter = specialty;
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.onclick && btn.onclick.toString().includes('filterBySpecialty')) {
-                    btn.classList.remove('active');
-                }
-            });
-            event.target.classList.add('active');
-            
-            applyFilters();
-        }
-
-        function applyFilters() {
-            filteredQueue = patientQueue.filter(patient => {
-                const priorityMatch = currentPriorityFilter === 'all' || patient.priority === currentPriorityFilter;
-                const specialtyMatch = currentSpecialtyFilter === 'all' || patient.specialty === currentSpecialtyFilter;
-                return priorityMatch && specialtyMatch;
-            });
-            
-            renderPatientQueue();
-        }
-
-        function acceptPatient(patientId) {
-            const patient = patientQueue.find(p => p.id === patientId);
-            if (patient && confirm(`Iniciar videoconsulta com ${patient.name}?`)) {
-                // Remove patient from queue
-                const index = patientQueue.findIndex(p => p.id === patientId);
-                if (index > -1) {
-                    patientQueue.splice(index, 1);
-                    applyFilters();
-                    alert(`Videoconsulta iniciada com ${patient.name}!`);
+        function attendPatient(patientId) {
+            const patient = patients.find(p => p.id === patientId);
+            if (patient) {
+                if (confirm(`Iniciar videoconsulta com ${patient.name}?\n\nValor: R$ ${patient.value}\nCondição: ${patient.condition}`)) {
+                    showNotification(`Iniciando videoconsulta com ${patient.name}...`, 'success');
+                    
+                    // Remover paciente da fila
+                    patients = patients.filter(p => p.id !== patientId);
+                    
+                    // Redirecionar para videoconsulta
+                    setTimeout(() => {
+                        window.open('/videoconsulta.html', '_blank');
+                    }, 1500);
+                    
+                    renderPatients();
+                    updateStats();
                 }
             }
         }
 
         function schedulePatient(patientId) {
-            const patient = patientQueue.find(p => p.id === patientId);
+            const patient = patients.find(p => p.id === patientId);
             if (patient) {
-                alert(`Agendamento para ${patient.name} será implementado em breve`);
-            }
-        }
-
-        function viewDetails(patientId) {
-            const patient = patientQueue.find(p => p.id === patientId);
-            if (patient) {
-                alert(`Detalhes do Paciente:\n\nNome: ${patient.name}\nIdade: ${patient.age} anos\nEspecialidade: ${capitalize(patient.specialty)}\nSintomas: ${patient.symptoms}\nValor da Consulta: R$ ${patient.bidValue}\nTempo de Espera: ${patient.waitingTime}\nUrgência: ${patient.urgencyLevel}`);
-            }
-        }
-
-        function updateWaitingTimes() {
-            // Simulate real-time waiting time updates
-            patientQueue.forEach(patient => {
-                const timeParts = patient.waitingTime.split(':');
-                let minutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
-                minutes += 1;
+                const date = prompt('Data para agendamento (dd/mm/yyyy):');
+                const time = prompt('Horário (HH:MM):');
                 
-                const hours = Math.floor(minutes / 60);
-                const mins = minutes % 60;
-                patient.waitingTime = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-            });
-            
-            renderPatientQueue();
+                if (date && time) {
+                    showNotification(`Consulta agendada para ${patient.name} em ${date} às ${time}`, 'success');
+                    
+                    // Remover da fila
+                    patients = patients.filter(p => p.id !== patientId);
+                    renderPatients();
+                    updateStats();
+                }
+            }
         }
 
-        // Auto-refresh every 30 seconds
-        setInterval(() => {
-            updateWaitingTimes();
-            console.log('🔄 Fila de pacientes atualizada automaticamente');
-        }, 30000);
+        function rejectPatient(patientId) {
+            const patient = patients.find(p => p.id === patientId);
+            if (patient) {
+                if (confirm(`Rejeitar proposta de ${patient.name}?\n\nEsta ação não pode ser desfeita.`)) {
+                    showNotification(`Proposta de ${patient.name} rejeitada`, 'error');
+                    
+                    patients = patients.filter(p => p.id !== patientId);
+                    renderPatients();
+                    updateStats();
+                }
+            }
+        }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('👥 Fila de Pacientes Médicos carregada');
-            renderPatientQueue();
-            console.log('✅ Sistema de fila inicializado com 9 pacientes');
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            switch(type) {
+                case 'success':
+                    notification.style.background = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.background = '#ef4444';
+                    break;
+                case 'info':
+                default:
+                    notification.style.background = '#667eea';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('specialtyFilter').addEventListener('change', renderPatients);
+        document.getElementById('priorityFilter').addEventListener('change', renderPatients);
+        document.getElementById('searchInput').addEventListener('input', renderPatients);
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPatients();
+            console.log('✅ Sistema de Fila de Pacientes inicializado');
         });
+
+        // Adicionar animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
