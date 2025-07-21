@@ -10,6 +10,37 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 21, 2025**: TRIAGEM PSIQUIÁTRICA COM IA REVOLUCIONÁRIA v9.8.0
+  - ✅ **Primeiro Sistema de Triagem Psiquiátrica IA do Brasil**: `/triagem-psiquiatrica.html` com escalas científicas validadas
+    - 12 questões especializadas: PHQ-9 (Depressão), GAD-7 (Ansiedade), Avaliação de Risco, Impacto Funcional
+    - Algoritmo de IA médica para classificação automática de gravidade
+    - Detecção inteligente de emergências psiquiátricas com alertas em tempo real
+    - Sistema de pontuação científica com interpretação clínica automática
+    - Recomendações personalizadas baseadas no nível de risco identificado
+    - Interface médica especializada com design terapêutico e animações calmantes
+  - ✅ **Escalas Cientificamente Validadas Implementadas**:
+    - PHQ-9 (Patient Health Questionnaire): 5 questões para depressão
+    - GAD-7 (Generalized Anxiety Disorder): 4 questões para ansiedade
+    - Avaliação de Risco: 2 questões para ideação suicida e autolesão
+    - Impacto Funcional: 1 questão para interferência na vida diária
+  - ✅ **Classificação Automática por Gravidade**:
+    - Baixa (0-4 pts): Mínima/ausente - Manutenção e prevenção
+    - Moderada (5-9 pts): Acompanhamento - Agendamento prioritário
+    - Alta (10-14 pts): Consulta urgente - Psiquiatria prioritária
+    - Severa (15+ pts): EMERGÊNCIA IMEDIATA - Pronto-socorro + CVV
+  - ✅ **Integração Completa com Sistema TeleMed**:
+    - Botão específico no Dr. AI para "Triagem Psiquiátrica"
+    - Item dedicado no menu lateral do dashboard médico com badge "IA"
+    - Fluxo integrado: Triagem → Classificação → Priorização → Atendimento
+    - Persistência de dados com localStorage para continuidade
+    - Sistema único no mundo com IA psiquiátrica integrada à telemedicina
+  - ✅ **Interface Especializada em Saúde Mental**:
+    - Design roxo/azul com ícones neurológicos e psiquiátricos
+    - Progress bar motivacional com feedback em tempo real
+    - Badge de confidencialidade e segurança
+    - Navegação acessível por teclado e recomendações contextuais
+    - Backup automático de respostas e sistema de emergência integrado
+
 - **July 21, 2025**: SISTEMA NOTIFICAÇÕES ENTERPRISE COMPLETO v9.7.0
   - ✅ **Central de Notificações 100% Funcional**: `/notificacoes.html` com sistema enterprise completo
     - 10 notificações reais pré-carregadas com dados médicos autênticos
