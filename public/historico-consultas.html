@@ -489,10 +489,7 @@
                 gap: 1rem;
             }
             
-            .consultation-actions {
-                justify-content: center;
-            }
-            
+
             .modal-content {
                 padding: 1rem;
                 width: 95%;
@@ -500,3 +497,789 @@
         }
     </style>
 </head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="medical-dashboard-pro.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <h1>
+            <i class="fas fa-history"></i>
+            Histórico de Consultas
+        </h1>
+        <p>Sistema completo de acompanhamento médico</p>
+    </div>
+
+    <div class="container">
+        <!-- Estatísticas Resumo -->
+        <div class="summary-stats">
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #059669;">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="stat-number" id="totalConsultas">156</div>
+                <div class="stat-label">Total de Consultas</div>
+                <div class="stat-trend trend-up">+12% vs mês anterior</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #10b981;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number" id="consultasConcluidas">142</div>
+                <div class="stat-label">Concluídas</div>
+                <div class="stat-trend trend-up">+18% este mês</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #ef4444;">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-number" id="consultasCanceladas">14</div>
+                <div class="stat-label">Canceladas</div>
+                <div class="stat-trend trend-neutral">-2% vs anterior</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="color: #3b82f6;">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-number" id="receitaTotal">R$ 28.450</div>
+                <div class="stat-label">Receita Total</div>
+                <div class="stat-trend trend-up">+25% crescimento</div>
+            </div>
+        </div>
+
+        <!-- Controles e Filtros -->
+        <div class="controls">
+            <div class="filter-section">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar por paciente, diagnóstico ou prescrição...">
+                <select class="filter-select" id="dateFilter">
+                    <option value="all">📅 Todas as Datas</option>
+                    <option value="today">Hoje</option>
+                    <option value="week">Esta Semana</option>
+                    <option value="month">Este Mês</option>
+                    <option value="year">Este Ano</option>
+                </select>
+                <select class="filter-select" id="specialtyFilter">
+                    <option value="all">🏥 Todas Especialidades</option>
+                    <option value="cardiologia">Cardiologia</option>
+                    <option value="dermatologia">Dermatologia</option>
+                    <option value="pediatria">Pediatria</option>
+                    <option value="clinica-geral">Clínica Geral</option>
+                    <option value="psiquiatria">Psiquiatria</option>
+                </select>
+                <select class="filter-select" id="statusFilter">
+                    <option value="all">📊 Todos Status</option>
+                    <option value="concluida">Concluídas</option>
+                    <option value="cancelada">Canceladas</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="export-btn btn-primary" onclick="exportarCSV()">
+                    <i class="fas fa-download"></i>
+                    Exportar CSV
+                </button>
+                <button class="export-btn btn-secondary" onclick="imprimirRelatorio()">
+                    <i class="fas fa-print"></i>
+                    Imprimir
+                </button>
+            </div>
+        </div>
+
+        <!-- Timeline de Consultas -->
+        <div class="consultations-timeline" id="consultationsTimeline">
+            <!-- As consultas serão inseridas aqui via JavaScript -->
+        </div>
+
+        <!-- Seção de Gráficos -->
+        <div class="charts-section">
+            <h2 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-chart-bar" style="color: #059669;"></i>
+                Analytics e Relatórios
+            </h2>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="specialtyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes -->
+    <div class="modal" id="consultationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Detalhes da Consulta</h2>
+                <button class="close-modal" onclick="fecharModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn btn-info" onclick="baixarRelatorio()">
+                    <i class="fas fa-download"></i>
+                    Baixar Relatório
+                </button>
+                <button class="modal-btn btn-success" onclick="repetirPrescricao()">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    Repetir Prescrição
+                </button>
+                <button class="modal-btn btn-secondary" onclick="fecharModal()">
+                    <i class="fas fa-times"></i>
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados das consultas médicas
+        const consultasData = [
+            {
+                id: 1,
+                data: '2025-01-21',
+                horario: '14:30',
+                paciente: 'Maria Silva',
+                idade: 34,
+                especialidade: 'cardiologia',
+                diagnostico: 'Hipertensão arterial sistêmica',
+                cid: 'I10',
+                valor: 350.00,
+                status: 'concluida',
+                rating: 5.0,
+                prescricoes: ['Losartana 50mg - 1 comp ao dia', 'Hidroclorotiazida 25mg - 1/2 comp ao dia'],
+                exames: ['Eletrocardiograma', 'Ecocardiograma'],
+                observacoes: 'Paciente com boa resposta ao tratamento. Orientada sobre dieta hipossódica e exercícios.',
+                proximaConsulta: '2025-02-21'
+            },
+            {
+                id: 2,
+                data: '2025-01-21',
+                horario: '10:15',
+                paciente: 'João Santos',
+                idade: 28,
+                especialidade: 'dermatologia',
+                diagnostico: 'Acne vulgar severa',
+                cid: 'L70.0',
+                valor: 280.00,
+                status: 'concluida',
+                rating: 4.5,
+                prescricoes: ['Isotretinoína 20mg - 1 cap ao dia', 'Protetor solar FPS 60'],
+                exames: ['Hemograma completo', 'TGO/TGP'],
+                observacoes: 'Paciente iniciará tratamento com isotretinoína. Orientações sobre efeitos colaterais fornecidas.',
+                proximaConsulta: '2025-02-18'
+            },
+            {
+                id: 3,
+                data: '2025-01-20',
+                horario: '16:45',
+                paciente: 'Ana Costa',
+                idade: 8,
+                especialidade: 'pediatria',
+                diagnostico: 'Vacinação de rotina',
+                cid: 'Z23',
+                valor: 200.00,
+                status: 'concluida',
+                rating: 5.0,
+                prescricoes: ['Dipirona gotas 15ml - SOS febre', 'Paracetamol xarope - SOS dor'],
+                exames: [],
+                observacoes: 'Criança recebeu vacina tríplice viral. Cartão de vacinação atualizado.',
+                proximaConsulta: '2025-07-20'
+            },
+            {
+                id: 4,
+                data: '2025-01-19',
+                horario: '09:30',
+                paciente: 'Carlos Mendes',
+                idade: 45,
+                especialidade: 'clinica-geral',
+                diagnostico: 'Lombalgia aguda',
+                cid: 'M54.5',
+                valor: 320.00,
+                status: 'concluida',
+                rating: 4.8,
+                prescricoes: ['Diclofenaco 50mg - 1 comp 8/8h', 'Ciclobenzaprina 10mg - 1 comp à noite'],
+                exames: ['Raio-X da coluna lombar'],
+                observacoes: 'Dor lombar de início súbito após esforço físico. Orientações sobre postura e fisioterapia.',
+                proximaConsulta: '2025-02-02'
+            },
+            {
+                id: 5,
+                data: '2025-01-18',
+                horario: '11:00',
+                paciente: 'Pedro Alves',
+                idade: 52,
+                especialidade: 'clinica-geral',
+                diagnostico: 'Check-up preventivo',
+                cid: 'Z00.0',
+                valor: 280.00,
+                status: 'concluida',
+                rating: 4.9,
+                prescricoes: ['Ômega 3 1g - 1 cap ao dia', 'Vitamina D3 2000UI - 1 cap ao dia'],
+                exames: ['Hemograma completo', 'Perfil lipídico', 'Glicemia em jejum', 'PSA total'],
+                observacoes: 'Paciente assintomático. Exames laboratoriais dentro da normalidade.',
+                proximaConsulta: '2025-07-18'
+            },
+            {
+                id: 6,
+                data: '2025-01-17',
+                horario: '15:20',
+                paciente: 'Lúcia Ferreira',
+                idade: 39,
+                especialidade: 'dermatologia',
+                diagnostico: 'Dermatite atópica',
+                cid: 'L20.9',
+                valor: 260.00,
+                status: 'concluida',
+                rating: 4.7,
+                prescricoes: ['Betametasona creme - aplicar 2x ao dia', 'Loratadina 10mg - 1 comp ao dia'],
+                exames: [],
+                observacoes: 'Lesões eczematosas em flexuras. Orientações sobre cuidados com a pele e hidratação.',
+                proximaConsulta: '2025-02-14'
+            },
+            {
+                id: 7,
+                data: '2025-01-16',
+                horario: '13:45',
+                paciente: 'Roberto Lima',
+                idade: 60,
+                especialidade: 'cardiologia',
+                diagnostico: 'Fibrilação atrial',
+                cid: 'I48.9',
+                valor: 450.00,
+                status: 'concluida',
+                rating: 4.9,
+                prescricoes: ['Warfarina 5mg - conforme INR', 'Metoprolol 50mg - 1 comp 12/12h'],
+                exames: ['INR', 'Holter 24h'],
+                observacoes: 'Paciente com fibrilação atrial crônica. Anticoagulação oral ajustada.',
+                proximaConsulta: '2025-02-13'
+            },
+            {
+                id: 8,
+                data: '2025-01-15',
+                horario: '08:30',
+                paciente: 'Amanda Torres',
+                idade: 31,
+                especialidade: 'psiquiatria',
+                diagnostico: 'Transtorno de ansiedade generalizada',
+                cid: 'F41.1',
+                valor: 380.00,
+                status: 'cancelada',
+                rating: 0,
+                prescricoes: [],
+                exames: [],
+                observacoes: 'Consulta cancelada pelo paciente.',
+                proximaConsulta: ''
+            }
+        ];
+
+        let consultasFiltradas = [...consultasData];
+
+        // Inicialização da página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📊 Sistema de Histórico de Consultas carregado!');
+            console.log('🏥 Interface médica profissional');
+            console.log('📋 Dados de consultas carregados');
+            
+            renderizarConsultas();
+            configurarFiltros();
+            atualizarEstatisticas();
+            inicializarGraficos();
+            
+            console.log('✅ Sistema de Histórico inicializado');
+        });
+
+        // Renderização das consultas
+        function renderizarConsultas() {
+            const timeline = document.getElementById('consultationsTimeline');
+            
+            if (consultasFiltradas.length === 0) {
+                timeline.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhuma consulta encontrada</h3>
+                        <p>Ajuste os filtros para ver mais resultados</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Agrupar consultas por data
+            const consultasPorData = {};
+            consultasFiltradas.forEach(consulta => {
+                const data = new Date(consulta.data + 'T00:00:00');
+                const dataFormatada = formatarDataGrupo(data);
+                
+                if (!consultasPorData[dataFormatada]) {
+                    consultasPorData[dataFormatada] = [];
+                }
+                consultasPorData[dataFormatada].push(consulta);
+            });
+
+            // Renderizar grupos
+            let html = '';
+            Object.keys(consultasPorData).sort((a, b) => new Date(b) - new Date(a)).forEach(dataGrupo => {
+                html += `
+                    <div class="date-group">
+                        <div class="date-header">
+                            <i class="fas fa-calendar-day"></i>
+                            ${dataGrupo}
+                        </div>
+                `;
+
+                consultasPorData[dataGrupo].forEach(consulta => {
+                    html += criarCardConsulta(consulta);
+                });
+
+                html += '</div>';
+            });
+
+            timeline.innerHTML = html;
+        }
+
+        // Criar card de consulta
+        function criarCardConsulta(consulta) {
+            const statusClass = consulta.status;
+            const statusIcon = consulta.status === 'concluida' ? 'check-circle' : 'times-circle';
+            const ratingStars = consulta.rating > 0 ? '★'.repeat(Math.floor(consulta.rating)) + '☆'.repeat(5 - Math.floor(consulta.rating)) : 'N/A';
+
+            return `
+                <div class="consultation-card ${statusClass}" onclick="abrirDetalhes(${consulta.id})">
+                    <div class="consultation-header">
+                        <div class="patient-info">
+                            <h3>
+                                <i class="fas fa-user"></i>
+                                ${consulta.paciente}
+                                <span class="status-badge ${statusClass}">
+                                    <i class="fas fa-${statusIcon}"></i>
+                                    ${consulta.status === 'concluida' ? 'Concluída' : 'Cancelada'}
+                                </span>
+                            </h3>
+                            <div class="consultation-time">
+                                <i class="fas fa-clock"></i>
+                                ${consulta.horario} - ${formatarData(consulta.data)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="consultation-details">
+                        <div class="detail-item">
+                            <i class="fas fa-stethoscope" style="color: #059669;"></i>
+                            <strong>Especialidade:</strong> ${formatarEspecialidade(consulta.especialidade)}
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-diagnoses" style="color: #3b82f6;"></i>
+                            <strong>Diagnóstico:</strong> ${consulta.diagnostico}
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign" style="color: #10b981;"></i>
+                            <strong>Valor:</strong> R$ ${consulta.valor.toFixed(2)}
+                        </div>
+                        ${consulta.rating > 0 ? `
+                        <div class="detail-item">
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <strong>Avaliação:</strong>
+                            <span class="rating">
+                                <span class="stars">${ratingStars}</span>
+                                <span>${consulta.rating.toFixed(1)}</span>
+                            </span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="consultation-actions">
+                        <button class="action-btn btn-info" onclick="event.stopPropagation(); abrirDetalhes(${consulta.id})">
+                            <i class="fas fa-eye"></i>
+                            Ver Detalhes
+                        </button>
+                        <button class="action-btn btn-success" onclick="event.stopPropagation(); baixarRelatorio(${consulta.id})">
+                            <i class="fas fa-download"></i>
+                            Baixar Relatório
+                        </button>
+                        ${consulta.prescricoes.length > 0 ? `
+                        <button class="action-btn btn-info" onclick="event.stopPropagation(); repetirPrescricao(${consulta.id})">
+                            <i class="fas fa-prescription-bottle-alt"></i>
+                            Repetir Prescrição
+                        </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Configurar filtros
+        function configurarFiltros() {
+            document.getElementById('searchInput').addEventListener('input', filtrarConsultas);
+            document.getElementById('dateFilter').addEventListener('change', filtrarConsultas);
+            document.getElementById('specialtyFilter').addEventListener('change', filtrarConsultas);
+            document.getElementById('statusFilter').addEventListener('change', filtrarConsultas);
+        }
+
+        // Filtrar consultas
+        function filtrarConsultas() {
+            const busca = document.getElementById('searchInput').value.toLowerCase();
+            const dateFilter = document.getElementById('dateFilter').value;
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            consultasFiltradas = consultasData.filter(consulta => {
+                // Filtro de busca
+                const matchBusca = !busca || 
+                    consulta.paciente.toLowerCase().includes(busca) ||
+                    consulta.diagnostico.toLowerCase().includes(busca) ||
+                    consulta.prescricoes.some(p => p.toLowerCase().includes(busca));
+
+                // Filtro de data
+                const matchData = dateFilter === 'all' || verificarFiltroData(consulta.data, dateFilter);
+
+                // Filtro de especialidade
+                const matchEspecialidade = specialtyFilter === 'all' || consulta.especialidade === specialtyFilter;
+
+                // Filtro de status
+                const matchStatus = statusFilter === 'all' || consulta.status === statusFilter;
+
+                return matchBusca && matchData && matchEspecialidade && matchStatus;
+            });
+
+            renderizarConsultas();
+            atualizarEstatisticas();
+        }
+
+        // Verificar filtro de data
+        function verificarFiltroData(dataConsulta, filtro) {
+            const hoje = new Date();
+            const dataConsultaObj = new Date(dataConsulta + 'T00:00:00');
+
+            switch(filtro) {
+                case 'today':
+                    return dataConsultaObj.toDateString() === hoje.toDateString();
+                case 'week':
+                    const inicioSemana = new Date(hoje);
+                    inicioSemana.setDate(hoje.getDate() - 7);
+                    return dataConsultaObj >= inicioSemana;
+                case 'month':
+                    return dataConsultaObj.getMonth() === hoje.getMonth() && 
+                           dataConsultaObj.getFullYear() === hoje.getFullYear();
+                case 'year':
+                    return dataConsultaObj.getFullYear() === hoje.getFullYear();
+                default:
+                    return true;
+            }
+        }
+
+        // Atualizar estatísticas
+        function atualizarEstatisticas() {
+            const total = consultasFiltradas.length;
+            const concluidas = consultasFiltradas.filter(c => c.status === 'concluida').length;
+            const canceladas = consultasFiltradas.filter(c => c.status === 'cancelada').length;
+            const receitaTotal = consultasFiltradas
+                .filter(c => c.status === 'concluida')
+                .reduce((sum, c) => sum + c.valor, 0);
+
+            document.getElementById('totalConsultas').textContent = total;
+            document.getElementById('consultasConcluidas').textContent = concluidas;
+            document.getElementById('consultasCanceladas').textContent = canceladas;
+            document.getElementById('receitaTotal').textContent = `R$ ${receitaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        }
+
+        // Abrir detalhes da consulta
+        function abrirDetalhes(consultaId) {
+            const consulta = consultasData.find(c => c.id === consultaId);
+            if (!consulta) return;
+
+            document.getElementById('modalTitle').innerHTML = `
+                <i class="fas fa-file-medical"></i>
+                Consulta - ${consulta.paciente}
+            `;
+
+            const prescricoesList = consulta.prescricoes.length > 0 ? 
+                `<ul class="prescription-list">${consulta.prescricoes.map(p => `<li>${p}</li>`).join('')}</ul>` : 
+                '<p class="info-value">Nenhuma prescrição</p>';
+
+            const examesList = consulta.exames.length > 0 ? 
+                `<ul class="exam-list">${consulta.exames.map(e => `<li>${e}</li>`).join('')}</ul>` : 
+                '<p class="info-value">Nenhum exame solicitado</p>';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="info-grid">
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-user"></i>
+                            Paciente
+                        </div>
+                        <div class="info-value">${consulta.paciente} (${consulta.idade} anos)</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-calendar"></i>
+                            Data e Horário
+                        </div>
+                        <div class="info-value">${formatarData(consulta.data)} às ${consulta.horario}</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-stethoscope"></i>
+                            Especialidade
+                        </div>
+                        <div class="info-value">${formatarEspecialidade(consulta.especialidade)}</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-diagnoses"></i>
+                            Diagnóstico
+                        </div>
+                        <div class="info-value">${consulta.diagnostico} (${consulta.cid})</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-dollar-sign"></i>
+                            Valor
+                        </div>
+                        <div class="info-value">R$ ${consulta.valor.toFixed(2)}</div>
+                    </div>
+                    <div class="info-group">
+                        <div class="info-label">
+                            <i class="fas fa-star"></i>
+                            Avaliação
+                        </div>
+                        <div class="info-value">${consulta.rating > 0 ? consulta.rating.toFixed(1) + ' estrelas' : 'Não avaliada'}</div>
+                    </div>
+                </div>
+                
+                <div class="info-group">
+                    <div class="info-label">
+                        <i class="fas fa-prescription-bottle-alt"></i>
+                        Prescrições
+                    </div>
+                    ${prescricoesList}
+                </div>
+                
+                <div class="info-group">
+                    <div class="info-label">
+                        <i class="fas fa-vial"></i>
+                        Exames Solicitados
+                    </div>
+                    ${examesList}
+                </div>
+                
+                <div class="info-group">
+                    <div class="info-label">
+                        <i class="fas fa-sticky-note"></i>
+                        Observações Médicas
+                    </div>
+                    <div class="info-value">${consulta.observacoes}</div>
+                </div>
+                
+                ${consulta.proximaConsulta ? `
+                <div class="info-group">
+                    <div class="info-label">
+                        <i class="fas fa-calendar-plus"></i>
+                        Próxima Consulta
+                    </div>
+                    <div class="info-value">${formatarData(consulta.proximaConsulta)}</div>
+                </div>
+                ` : ''}
+            `;
+
+            document.getElementById('consultationModal').classList.add('active');
+        }
+
+        // Fechar modal
+        function fecharModal() {
+            document.getElementById('consultationModal').classList.remove('active');
+        }
+
+        // Exportar CSV
+        function exportarCSV() {
+            const csvContent = gerarCSV();
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `historico_consultas_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            
+            showNotification('✅ Arquivo CSV exportado com sucesso!', 'success');
+        }
+
+        // Gerar conteúdo CSV
+        function gerarCSV() {
+            const headers = ['Data', 'Paciente', 'Especialidade', 'Diagnóstico', 'Valor', 'Status', 'Avaliação'];
+            const rows = consultasFiltradas.map(consulta => [
+                consulta.data,
+                consulta.paciente,
+                formatarEspecialidade(consulta.especialidade),
+                consulta.diagnostico,
+                consulta.valor.toFixed(2),
+                consulta.status === 'concluida' ? 'Concluída' : 'Cancelada',
+                consulta.rating || 'N/A'
+            ]);
+
+            return [headers, ...rows].map(row => row.join(',')).join('\n');
+        }
+
+        // Imprimir relatório
+        function imprimirRelatorio() {
+            window.print();
+            showNotification('📄 Relatório enviado para impressão!', 'info');
+        }
+
+        // Baixar relatório específico
+        function baixarRelatorio(consultaId) {
+            const consulta = consultasData.find(c => c.id === consultaId);
+            if (!consulta) return;
+            
+            showNotification(`📄 Relatório da consulta de ${consulta.paciente} baixado!`, 'success');
+        }
+
+        // Repetir prescrição
+        function repetirPrescricao(consultaId) {
+            const consulta = consultasData.find(c => c.id === consultaId);
+            if (!consulta) return;
+            
+            showNotification(`💊 Prescrição de ${consulta.paciente} copiada para nova receita!`, 'success');
+        }
+
+        // Inicializar gráficos
+        function inicializarGraficos() {
+            // Gráfico mensal
+            const ctx1 = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Nov', 'Dez', 'Jan'],
+                    datasets: [{
+                        label: 'Consultas por Mês',
+                        data: [45, 52, 8],
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Consultas por Mês'
+                        }
+                    }
+                }
+            });
+
+            // Gráfico por especialidade
+            const ctx2 = document.getElementById('specialtyChart').getContext('2d');
+            const especialidades = {};
+            consultasData.forEach(consulta => {
+                const esp = formatarEspecialidade(consulta.especialidade);
+                especialidades[esp] = (especialidades[esp] || 0) + 1;
+            });
+
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(especialidades),
+                    datasets: [{
+                        data: Object.values(especialidades),
+                        backgroundColor: [
+                            '#059669',
+                            '#10b981',
+                            '#3b82f6',
+                            '#8b5cf6',
+                            '#f59e0b',
+                            '#ef4444'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Consultas por Especialidade'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Funções auxiliares
+        function formatarData(data) {
+            const dataObj = new Date(data + 'T00:00:00');
+            return dataObj.toLocaleDateString('pt-BR');
+        }
+
+        function formatarDataGrupo(data) {
+            const hoje = new Date();
+            const ontem = new Date(hoje);
+            ontem.setDate(hoje.getDate() - 1);
+
+            if (data.toDateString() === hoje.toDateString()) {
+                return 'Hoje';
+            } else if (data.toDateString() === ontem.toDateString()) {
+                return 'Ontem';
+            } else {
+                return data.toLocaleDateString('pt-BR', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            }
+        }
+
+        function formatarEspecialidade(especialidade) {
+            const especialidades = {
+                'cardiologia': 'Cardiologia',
+                'dermatologia': 'Dermatologia',
+                'pediatria': 'Pediatria',
+                'clinica-geral': 'Clínica Geral',
+                'psiquiatria': 'Psiquiatria'
+            };
+            return especialidades[especialidade] || especialidade;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                z-index: 10001;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fechar modal ao clicar fora
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('consultationModal');
+            if (e.target === modal) {
+                fecharModal();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModal();
+            }
+        });
+    </script>
+</body>
+</html>

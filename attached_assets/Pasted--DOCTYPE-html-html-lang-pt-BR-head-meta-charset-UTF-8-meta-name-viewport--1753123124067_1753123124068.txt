@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotações Médicas - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e6f7ff 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .new-note-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .new-note-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .filters {
+            margin-bottom: 2rem;
+        }
+        
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .tag.urgente {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .tag.importante {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .tag.rotina {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .tag.pesquisa {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+        
+        .tag.active {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .notes-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .note-item {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid #e2e8f0;
+        }
+        
+        .note-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .note-item.active {
+            background: #e6f7ff;
+            border-left-color: #667eea;
+        }
+        
+        .note-item.urgente {
+            border-left-color: #ef4444;
+        }
+        
+        .note-item.importante {
+            border-left-color: #f59e0b;
+        }
+        
+        .note-item.rotina {
+            border-left-color: #10b981;
+        }
+        
+        .note-item.pesquisa {
+            border-left-color: #8b5cf6;
+        }
+        
+        .note-preview {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .note-title {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .note-date {
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+        
+        .note-content-preview {
+            color: #6b7280;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .note-tags {
+            display: flex;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .note-tag {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+        
+        .editor-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-title-section {
+            flex: 1;
+        }
+        
+        .title-input {
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            outline: none;
+            width: 100%;
+            background: transparent;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .title-input::placeholder {
+            color: #a0aec0;
+        }
+        
+        .editor-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .priority-select {
+            padding: 8px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .priority-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .save-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .save-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        .editor-body {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .toolbar-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #4a5568;
+        }
+        
+        .toolbar-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .toolbar-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .content-editor {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #2d3748;
+            resize: none;
+            font-family: inherit;
+        }
+        
+        .content-editor::placeholder {
+            color: #a0aec0;
+        }
+        
+        .editor-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+        
+        .word-count {
+            margin-right: auto;
+        }
+        
+        .auto-save-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .save-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+        
+        .save-indicator.saving {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6b7280;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        .empty-action {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .empty-action:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        /* Templates Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: #ef4444;
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .template-card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .template-card:hover {
+            background: #e6f7ff;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .template-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .template-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .editor-actions {
+                justify-content: flex-end;
+            }
+            
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .note-item, .template-card {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/medical-dashboard-pro.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <h1>
+            <i class="fas fa-sticky-note"></i>
+            Anotações Médicas
+        </h1>
+        <p>Registre observações e notas importantes sobre pacientes</p>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Minhas Anotações</div>
+                <button class="new-note-btn" onclick="createNewNote()">
+                    <i class="fas fa-plus"></i>
+                    Nova
+                </button>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar anotações..." onkeyup="searchNotes()">
+            </div>
+            
+            <div class="filters">
+                <div class="filter-section">
+                    <div class="filter-title">Prioridade</div>
+                    <div class="filter-tags">
+                        <span class="tag urgente" onclick="filterByPriority('urgente')">Urgente</span>
+                        <span class="tag importante" onclick="filterByPriority('importante')">Importante</span>
+                        <span class="tag rotina" onclick="filterByPriority('rotina')">Rotina</span>
+                        <span class="tag pesquisa" onclick="filterByPriority('pesquisa')">Pesquisa</span>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <div class="filter-title">Ações Rápidas</div>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button class="toolbar-btn" onclick="openTemplatesModal()">
+                            <i class="fas fa-file-medical"></i> Templates
+                        </button>
+                        <button class="toolbar-btn" onclick="exportNotes()">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="notes-list" id="notesList">
+                <!-- Notes will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div id="editorContainer">
+                <!-- Editor will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates Modal -->
+    <div class="modal" id="templatesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Templates de Anotações</div>
+                <button class="close-btn" onclick="closeTemplatesModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="templates-grid">
+                <div class="template-card" onclick="useTemplate('consulta')">
+                    <div class="template-title">📋 Consulta Médica</div>
+                    <div class="template-description">Template estruturado para anotações durante consultas</div>
+                </div>
+                
+                <div class="template-card" onclick="useTemplate('emergencia')">
+                    <div class="template-title">🚨 Emergência</div>
+                    <div class="template-description">Protocolo rápido para situações de emergência</div>
+                </div>
+                
+                <div class="template-card" onclick="useTemplate('followup')">
+                    <div class="template-title">📅 Follow-up</div>
+                    <div class="template-description">Acompanhamento de pacientes em tratamento</div>
+                </div>
+                
+                <div class="template-card" onclick="useTemplate('pesquisa')">
+                    <div class="template-title">🔬 Pesquisa</div>
+                    <div class="template-description">Notas para estudos e pesquisas médicas</div>
+                </div>
+                
+                <div class="template-card" onclick="useTemplate('reuniao')">
+                    <div class="template-title">👥 Reunião</div>
+                    <div class="template-description">Atas e decisões de reuniões médicas</div>
+                </div>
+                
+                <div class="template-card" onclick="useTemplate('protocolo')">
+                    <div class="template-title">📋 Protocolo</div>
+                    <div class="template-description">Novos protocolos e procedimentos</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample notes data
+        let notes = [
+            {
+                id: 1,
+                title: "Protocolo COVID-19 Atualizado",
+                content: `## Protocolo de Atendimento COVID-19
+
+### Triagem Inicial:
+- Verificar sintomas: febre, tosse, dispneia
+- Histórico de exposição nos últimos 14 dias
+- Comorbidades de risco
+
+### Exames Necessários:
+- RT-PCR para COVID-19
+- Hemograma completo
+- D-dímero se indicado
+
+### Tratamento:
+- Casos leves: isolamento domiciliar
+- Casos moderados: considerar corticoides
+- Casos graves: UTI, suporte ventilatório
+
+### Orientações:
+- Isolamento por 10 dias
+- Retorno se piora dos sintomas
+- Vacinação após recuperação`,
+                priority: "importante",
+                date: "2024-07-22",
+                lastModified: "2024-07-22 08:30",
+                tags: ["protocolo", "covid", "infectologia"],
+                wordCount: 156
+            },
+            {
+                id: 2,
+                title: "Caso Clínico - Maria Silva",
+                content: `## Paciente: Maria Silva, 45 anos
+
+### Consulta: 22/07/2024
+
+**Queixa Principal:** Dor torácica há 3 dias
+
+**HDA:** 
+Paciente refere dor precordial, tipo peso, irradiando para braço esquerdo. Piora aos esforços, melhora com repouso.
+
+**Exame Físico:**
+- PA: 150/95 mmHg
+- FC: 88 bpm
+- FR: 16 irpm
+- Ausculta cardíaca: BRNF, sem sopros
+
+**Hipótese Diagnóstica:** 
+Síndrome coronariana aguda? Crise hipertensiva?
+
+**Conduta:**
+- ECG urgente
+- Troponina
+- Captopril 25mg
+- Retorno em 48h`,
+                priority: "urgente",
+                date: "2024-07-22",
+                lastModified: "2024-07-22 09:15",
+                tags: ["caso-clinico", "cardiologia", "emergencia"],
+                wordCount: 134
+            },
+            {
+                id: 3,
+                title: "Reunião Equipe Médica - Julho",
+                content: `## Reunião Mensal - Equipe Médica
+**Data:** 20/07/2024
+
+### Participantes:
+- Dr. João Silva (Coordenador)
+- Dra. Ana Santos (Pediatria)
+- Dr. Carlos Lima (Cardiologia)
+
+### Pautas Discutidas:
+
+1. **Novos Protocolos:**
+   - Implementação do protocolo de sepse
+   - Revisão das diretrizes de hipertensão
+
+2. **Indicadores de Qualidade:**
+   - Taxa de infecção hospitalar: 2.1%
+   - Satisfação do paciente: 4.8/5.0
+   - Tempo médio de atendimento: 18min
+
+3. **Decisões:**
+   - Treinamento da equipe em setembro
+   - Aquisição de novos equipamentos
+   - Revisão dos turnos de plantão
+
+### Próxima Reunião: 20/08/2024`,
+                priority: "rotina",
+                date: "2024-07-20",
+                lastModified: "2024-07-20 16:45",
+                tags: ["reuniao", "gestao", "equipe"],
+                wordCount: 187
+            },
+            {
+                id: 4,
+                title: "Pesquisa - Hipertensão em Diabéticos",
+                content: `## Estudo: Prevalência de Hipertensão em Diabéticos
+
+### Objetivo:
+Avaliar a prevalência de hipertensão arterial em pacientes diabéticos tipo 2 em nossa clínica.
+
+### Metodologia:
+- Estudo transversal
+- n = 200 pacientes
+- Critérios de inclusão: DM2 há > 5 anos
+- Critérios de exclusão: gestantes, <18 anos
+
+### Resultados Preliminares:
+- 78% dos diabéticos apresentam HAS
+- Média de idade: 58 ± 12 anos
+- HbA1c média: 8.2 ± 1.8%
+
+### Próximos Passos:
+- Análise estatística completa
+- Submissão para revista científica
+- Apresentação no congresso`,
+                priority: "pesquisa",
+                date: "2024-07-18",
+                lastModified: "2024-07-19 14:20",
+                tags: ["pesquisa", "diabetes", "hipertensao"],
+                wordCount: 142
+            }
+        ];
+
+        let currentNote = null;
+        let filteredNotes = [...notes];
+        let autoSaveTimer = null;
+
+        // Templates
+        const templates = {
+            consulta: `## Consulta Médica
+
+**Paciente:** [Nome, idade]
+**Data:** [Data da consulta]
+
+### Queixa Principal:
+[Motivo da consulta]
+
+### História da Doença Atual:
+[Descrição dos sintomas]
+
+### Exame Físico:
+- PA: ___/__ mmHg
+- FC: ___ bpm
+- FR: ___ irpm
+- [Outros achados]
+
+### Hipótese Diagnóstica:
+[Diagnóstico principal]
+
+### Conduta:
+- [Medicações]
+- [Exames solicitados]
+- [Orientações]
+- [Retorno]`,
+
+            emergencia: `## EMERGÊNCIA
+
+**Paciente:** [Nome, idade]
+**Horário:** [Hora de chegada]
+
+### SINAIS VITAIS:
+- PA: ___/__
+- FC: ___
+- FR: ___
+- SatO2: ___%
+- Temp: ___°C
+
+### QUEIXA PRINCIPAL:
+[Sintoma principal]
+
+### AVALIAÇÃO INICIAL:
+[Estado geral do paciente]
+
+### CONDUTA IMEDIATA:
+- [ ] Acesso venoso
+- [ ] Oximetria contínua
+- [ ] Medicações de urgência
+- [ ] Exames laboratoriais
+- [ ] Imagem (RX/TC)
+
+### EVOLUÇÃO:
+[Acompanhamento]`,
+
+            followup: `## Follow-up - [Nome do Paciente]
+
+**Data:** [Data atual]
+**Consulta anterior:** [Data da última consulta]
+
+### Evolução do Quadro:
+[Como está o paciente desde a última consulta]
+
+### Medicações em Uso:
+- [Medicação 1] - [Dosagem] - [Adesão]
+- [Medicação 2] - [Dosagem] - [Adesão]
+
+### Exames Realizados:
+[Resultados dos exames solicitados]
+
+### Avaliação Atual:
+[Estado clínico atual]
+
+### Plano:
+- [Ajustes na medicação]
+- [Novos exames]
+- [Próximo retorno]`,
+
+            pesquisa: `## Projeto de Pesquisa
+
+**Título:** [Título do estudo]
+**Data:** [Data atual]
+
+### Objetivo:
+[Objetivo principal da pesquisa]
+
+### Metodologia:
+- Tipo de estudo: 
+- População: 
+- Critérios de inclusão:
+- Critérios de exclusão:
+
+### Resultados:
+[Dados coletados]
+
+### Análise:
+[Interpretação dos resultados]
+
+### Conclusões:
+[Conclusões preliminares]
+
+### Próximos Passos:
+- [ ] [Ação 1]
+- [ ] [Ação 2]`,
+
+            reuniao: `## Reunião - [Título]
+
+**Data:** [Data da reunião]
+**Participantes:** [Lista de participantes]
+
+### Pauta:
+1. [Item 1]
+2. [Item 2]
+3. [Item 3]
+
+### Discussões:
+[Principais pontos discutidos]
+
+### Decisões:
+- [Decisão 1]
+- [Decisão 2]
+- [Decisão 3]
+
+### Ações:
+- [ ] [Ação] - Responsável: [Nome] - Prazo: [Data]
+- [ ] [Ação] - Responsável: [Nome] - Prazo: [Data]
+
+### Próxima Reunião:
+**Data:** [Data]
+**Pauta:** [Itens para próxima reunião]`,
+
+            protocolo: `## Protocolo - [Nome do Protocolo]
+
+**Versão:** [Número da versão]
+**Data:** [Data de criação/atualização]
+**Aprovado por:** [Responsável]
+
+### Objetivo:
+[Objetivo do protocolo]
+
+### Indicações:
+- [Indicação 1]
+- [Indicação 2]
+
+### Contraindicações:
+- [Contraindicação 1]
+- [Contraindicação 2]
+
+### Procedimento:
+1. [Passo 1]
+2. [Passo 2]
+3. [Passo 3]
+
+### Materiais Necessários:
+- [Material 1]
+- [Material 2]
+
+### Complicações Possíveis:
+- [Complicação 1]
+- [Complicação 2]
+
+### Referências:
+[Bibliografia]`
+        };
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            renderNotesList();
+            showEmptyState();
+            
+            console.log('📝 Sistema de Anotações carregado!');
+            console.log('📋 Editor de texto com templates funcionando');
+            console.log('🔍 Busca e filtros operacionais');
+        }
+
+        function renderNotesList() {
+            const notesList = document.getElementById('notesList');
+            
+            if (filteredNotes.length === 0) {
+                notesList.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <div>Nenhuma anotação encontrada</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filteredNotes.forEach(note => {
+                const isActive = currentNote && currentNote.id === note.id ? 'active' : '';
+                const preview = note.content.replace(/[#*`]/g, '').substring(0, 100) + '...';
+                
+                html += `
+                    <div class="note-item ${note.priority} ${isActive}" onclick="loadNote(${note.id})">
+                        <div class="note-preview">
+                            <div>
+                                <div class="note-title">${note.title}</div>
+                                <div class="note-date">${formatDate(note.date)} • ${note.wordCount} palavras</div>
+                            </div>
+                        </div>
+                        <div class="note-content-preview">${preview}</div>
+                        <div class="note-tags">
+                            ${note.tags.map(tag => `<span class="note-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            notesList.innerHTML = html;
+        }
+
+        function loadNote(noteId) {
+            currentNote = notes.find(note => note.id === noteId);
+            if (!currentNote) return;
+            
+            renderEditor();
+            renderNotesList(); // Refresh to show active state
+        }
+
+        function renderEditor() {
+            const editorContainer = document.getElementById('editorContainer');
+            
+            if (!currentNote) {
+                showEmptyState();
+                return;
+            }
+            
+            editorContainer.innerHTML = `
+                <div class="editor-header">
+                    <div class="editor-title-section">
+                        <input type="text" class="title-input" value="${currentNote.title}" placeholder="Título da anotação..." oninput="updateTitle(this.value)">
+                        <div class="editor-meta">
+                            <span><i class="fas fa-calendar"></i> Criado em ${formatDate(currentNote.date)}</span>
+                            <span><i class="fas fa-clock"></i> Modificado em ${currentNote.lastModified}</span>
+                        </div>
+                    </div>
+                    <div class="editor-actions">
+                        <select class="priority-select" onchange="updatePriority(this.value)">
+                            <option value="rotina" ${currentNote.priority === 'rotina' ? 'selected' : ''}>📝 Rotina</option>
+                            <option value="importante" ${currentNote.priority === 'importante' ? 'selected' : ''}>⚠️ Importante</option>
+                            <option value="urgente" ${currentNote.priority === 'urgente' ? 'selected' : ''}>🚨 Urgente</option>
+                            <option value="pesquisa" ${currentNote.priority === 'pesquisa' ? 'selected' : ''}>🔬 Pesquisa</option>
+                        </select>
+                        <button class="save-btn" onclick="saveNote()">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                        <button class="delete-btn" onclick="deleteNote()">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="editor-body">
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" onclick="formatText('bold')" title="Negrito">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatText('italic')" title="Itálico">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatText('header')" title="Cabeçalho">
+                            <i class="fas fa-heading"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatText('list')" title="Lista">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatText('link')" title="Link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="insertTemplate()" title="Inserir Template">
+                            <i class="fas fa-file-medical"></i>
+                        </button>
+                    </div>
+                    
+                    <textarea class="content-editor" placeholder="Comece a escrever sua anotação..." oninput="updateContent(this.value)">${currentNote.content}</textarea>
+                </div>
+                
+                <div class="editor-footer">
+                    <div class="word-count">${currentNote.wordCount} palavras</div>
+                    <div class="auto-save-status">
+                        <div class="save-indicator" id="saveIndicator"></div>
+                        <span id="saveStatus">Salvo</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showEmptyState() {
+            const editorContainer = document.getElementById('editorContainer');
+            editorContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="empty-title">Nenhuma anotação selecionada</div>
+                    <div class="empty-text">Selecione uma anotação da lista ou crie uma nova para começar</div>
+                    <button class="empty-action" onclick="createNewNote()">
+                        <i class="fas fa-plus"></i>
+                        Criar Nova Anotação
+                    </button>
+                </div>
+            `;
+        }
+
+        function createNewNote() {
+            const newNote = {
+                id: Math.max(...notes.map(n => n.id)) + 1,
+                title: "Nova Anotação",
+                content: "",
+                priority: "rotina",
+                date: new Date().toISOString().split('T')[0],
+                lastModified: new Date().toLocaleString('pt-BR'),
+                tags: [],
+                wordCount: 0
+            };
+            
+            notes.unshift(newNote);
+            filteredNotes = [...notes];
+            currentNote = newNote;
+            
+            renderNotesList();
+            renderEditor();
+            
+            // Focus on title input
+            setTimeout(() => {
+                const titleInput = document.querySelector('.title-input');
+                if (titleInput) {
+                    titleInput.focus();
+                    titleInput.select();
+                }
+            }, 100);
+        }
+
+        function updateTitle(title) {
+            if (currentNote) {
+                currentNote.title = title;
+                currentNote.lastModified = new Date().toLocaleString('pt-BR');
+                triggerAutoSave();
+                renderNotesList();
+            }
+        }
+
+        function updateContent(content) {
+            if (currentNote) {
+                currentNote.content = content;
+                currentNote.wordCount = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+                currentNote.lastModified = new Date().toLocaleString('pt-BR');
+                
+                // Update word count display
+                const wordCountEl = document.querySelector('.word-count');
+                if (wordCountEl) {
+                    wordCountEl.textContent = `${currentNote.wordCount} palavras`;
+                }
+                
+                triggerAutoSave();
+            }
+        }
+
+        function updatePriority(priority) {
+            if (currentNote) {
+                currentNote.priority = priority;
+                currentNote.lastModified = new Date().toLocaleString('pt-BR');
+                triggerAutoSave();
+                renderNotesList();
+            }
+        }
+
+        function triggerAutoSave() {
+            const saveIndicator = document.getElementById('saveIndicator');
+            const saveStatus = document.getElementById('saveStatus');
+            
+            if (saveIndicator && saveStatus) {
+                saveIndicator.classList.add('saving');
+                saveStatus.textContent = 'Salvando...';
+            }
+            
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                if (saveIndicator && saveStatus) {
+                    saveIndicator.classList.remove('saving');
+                    saveStatus.textContent = 'Salvo automaticamente';
+                }
+            }, 1000);
+        }
+
+        function saveNote() {
+            if (currentNote) {
+                showNotification('Anotação salva com sucesso!', 'success');
+                currentNote.lastModified = new Date().toLocaleString('pt-BR');
+                renderEditor();
+            }
+        }
+
+        function deleteNote() {
+            if (currentNote && confirm('Tem certeza que deseja excluir esta anotação?')) {
+                notes = notes.filter(note => note.id !== currentNote.id);
+                filteredNotes = filteredNotes.filter(note => note.id !== currentNote.id);
+                currentNote = null;
+                
+                renderNotesList();
+                showEmptyState();
+                showNotification('Anotação excluída', 'error');
+            }
+        }
+
+        function searchNotes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm.trim() === '') {
+                filteredNotes = [...notes];
+            } else {
+                filteredNotes = notes.filter(note => 
+                    note.title.toLowerCase().includes(searchTerm) ||
+                    note.content.toLowerCase().includes(searchTerm) ||
+                    note.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            renderNotesList();
+        }
+
+        function filterByPriority(priority) {
+            // Toggle filter
+            const activeFilters = document.querySelectorAll('.tag.active');
+            const clickedTag = document.querySelector(`.tag.${priority}`);
+            
+            if (clickedTag.classList.contains('active')) {
+                clickedTag.classList.remove('active');
+                filteredNotes = [...notes];
+            } else {
+                activeFilters.forEach(tag => tag.classList.remove('active'));
+                clickedTag.classList.add('active');
+                filteredNotes = notes.filter(note => note.priority === priority);
+            }
+            
+            renderNotesList();
+        }
+
+        function formatText(format) {
+            const textarea = document.querySelector('.content-editor');
+            if (!textarea) return;
+            
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            let formattedText = '';
+            
+            switch(format) {
+                case 'bold':
+                    formattedText = `**${selectedText || 'texto em negrito'}**`;
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText || 'texto em itálico'}*`;
+                    break;
+                case 'header':
+                    formattedText = `## ${selectedText || 'Cabeçalho'}`;
+                    break;
+                case 'list':
+                    formattedText = `- ${selectedText || 'Item da lista'}`;
+                    break;
+                case 'link':
+                    formattedText = `[${selectedText || 'texto do link'}](url)`;
+                    break;
+            }
+            
+            const newContent = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+            textarea.value = newContent;
+            updateContent(newContent);
+            
+            // Focus back on textarea
+            textarea.focus();
+            textarea.setSelectionRange(start + formattedText.length, start + formattedText.length);
+        }
+
+        function openTemplatesModal() {
+            document.getElementById('templatesModal').classList.add('active');
+        }
+
+        function closeTemplatesModal() {
+            document.getElementById('templatesModal').classList.remove('active');
+        }
+
+        function useTemplate(templateType) {
+            if (templates[templateType]) {
+                if (!currentNote) {
+                    createNewNote();
+                }
+                
+                currentNote.content = templates[templateType];
+                currentNote.title = getTemplateTitle(templateType);
+                
+                renderEditor();
+                closeTemplatesModal();
+                showNotification(`Template "${templateType}" aplicado!`, 'success');
+            }
+        }
+
+        function getTemplateTitle(templateType) {
+            const titles = {
+                consulta: 'Consulta Médica',
+                emergencia: 'Atendimento de Emergência',
+                followup: 'Follow-up de Paciente',
+                pesquisa: 'Projeto de Pesquisa',
+                reuniao: 'Reunião da Equipe',
+                protocolo: 'Novo Protocolo'
+            };
+            return titles[templateType] || 'Nova Anotação';
+        }
+
+        function insertTemplate() {
+            openTemplatesModal();
+        }
+
+        function exportNotes() {
+            const dataStr = JSON.stringify(filteredNotes, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `anotacoes_medicas_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Anotações exportadas com sucesso!', 'success');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Hoje';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Ontem';
+            } else {
+                return date.toLocaleDateString('pt-BR');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            switch(type) {
+                case 'success':
+                    notification.style.background = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.background = '#ef4444';
+                    break;
+                case 'info':
+                default:
+                    notification.style.background = '#667eea';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('templatesModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTemplatesModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'n':
+                        e.preventDefault();
+                        createNewNote();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        saveNote();
+                        break;
+                    case 'b':
+                        e.preventDefault();
+                        formatText('bold');
+                        break;
+                    case 'i':
+                        e.preventDefault();
+                        formatText('italic');
+                        break;
+                }
+            }
+        });
+
+        // Add CSS animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
