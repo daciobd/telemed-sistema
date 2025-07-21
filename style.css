@@ -941,3 +941,106 @@ footer p {
         transform: rotate(360deg);
     }
 }
+/* ==========================================
+   REFINAMENTOS DE EXCELÊNCIA v8.8.0 ULTRA
+   ========================================== */
+
+/* 1️⃣ Micro-animação menu hamburger */
+.nav-links {
+    transition: all 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6) !important;
+}
+
+.nav-links.active {
+    animation: slideDownBounce 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* 2️⃣ Hierarquia visual CTA aprimorada */
+.cta-primary:focus-visible {
+    outline: 3px solid var(--secondary-color) !important;
+    outline-offset: 4px;
+    filter: brightness(1.1);
+}
+
+.btn-primary:focus-visible {
+    outline: 3px solid var(--secondary-color) !important;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.2) !important;
+}
+
+/* 3️⃣ Responsividade ultra-refinada para telas pequenas */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .hero h1 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .hero p {
+        font-size: 1.1rem !important;
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .cta-primary {
+        padding: 16px 28px !important;
+        font-size: 15px !important;
+        min-height: 48px; /* Touch target accessibility */
+    }
+    
+    .card {
+        padding: var(--spacing-lg) !important;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .stats-grid {
+        gap: var(--spacing-sm) !important;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem !important;
+    }
+}
+
+/* 4️⃣ Animações UX mais sutis */
+.card {
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                box-shadow 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                background-color 0.2s ease !important;
+}
+
+.card:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Animação sutil para links de navegação */
+nav a {
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+nav a:hover {
+    transform: scale(1.05) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Micro-interação para botões secundários */
+.cta-secondary {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+.cta-secondary:hover {
+    transform: translateY(-2px) scale(1.06) !important;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4) !important;
+    filter: brightness(1.1);
+}
+
+/* Smooth scroll aprimorado */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Compensar header fixo */
+}
+
+/* TeleMed Sistema v8.8.0 Ultra Premium - Refinamentos de Excelência Implementados ✨ */
