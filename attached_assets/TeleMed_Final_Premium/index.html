@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
+    
+    <title>TeleMed Sistema - Consultas Médicas Online com IA | Telemedicina Avançada</title>
+    <meta name="description" content="Plataforma de telemedicina revolucionária com IA médica (Dr. AI), sistema de lances inovador, videoconsultas WebRTC e prescrições MEMED. Consulte médicos qualificados online com tecnologia avançada e atendimento humanizado.">
+    <meta name="keywords" content="telemedicina, consulta médica online, IA médica, Dr. AI, videoconsulta, prescrição digital, MEMED, consulta virtual, médico online, sistema de lances médico">
+    <meta name="author" content="TeleMed Sistema">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://telemed-sistema.replit.dev/">
+
+    <meta property="og:title" content="TeleMed Sistema - Consultas Médicas Online com IA">
+    <meta property="og:description" content="Triagem por IA, médicos experientes, consultas rápidas e preços acessíveis.">
+    <meta property="og:image" content="images/image1.webp">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <h1 class="logo">TeleMed</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" aria-current="page">Início</a></li>
+                    <li><a href="#">Como Funciona</a></li>
+                    <li><a href="#">Recursos</a></li>
+                    <li><a href="#">Preços</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h2>Consulta médica com IA, rápida e acessível</h2>
+                <p>Triagem inteligente e atendimento humanizado, sem sair de casa.</p>
+                <a href="#" class="btn-primary" aria-label="Iniciar sua consulta agora">Iniciar Consulta</a>
+            </div>
+            <picture>
+                <source srcset="images/image1.webp" type="image/webp">
+                <img src="images/image1.webp" alt="Consulta médica online" class="hero-img">
+            </picture>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h3>Por que o TeleMed é melhor?</h3>
+            <div class="cards">
+                <div class="card">
+                    <picture><source srcset="images/image2.webp" type="image/webp"><img src="images/image2.webp" alt="Médico atencioso"></picture>
+                    <h4>Especialistas qualificados</h4>
+                    <p>Atendimento por profissionais com +10 anos de experiência.</p>
+                </div>
+                <div class="card">
+                    <picture><source srcset="images/image3.webp" type="image/webp"><img src="images/image3.webp" alt="Paciente em casa feliz"></picture>
+                    <h4>Triagem por IA</h4>
+                    <p>30% mais rápida que outras plataformas.</p>
+                </div>
+                <div class="card">
+                    <h4>Preços transparentes</h4>
+                    <p>Você propõe seu valor, sem surpresas ou taxas escondidas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 TeleMed - Todos os direitos reservados.</p>
+            <div class="socials">
+                <a href="#" aria-label="LinkedIn"><span>LinkedIn</span></a>
+                <a href="#" aria-label="Instagram"><span>Instagram</span></a>
+                <a href="#" aria-label="YouTube"><span>YouTube</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    function toggleMenu() {
+        document.querySelector('.nav-links').classList.toggle('active');
+    }
+    </script>
+</body>
+</html>
