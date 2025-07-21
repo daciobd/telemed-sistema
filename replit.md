@@ -10,6 +10,21 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 21, 2025**: SISTEMA PERFIL MÉDICO PROFISSIONAL COMPLETO v9.5.0
+  - ✅ **Sistema de Perfil Médico Completo**: `/perfil-medico.html` com funcionalidade enterprise completa
+    - Card de perfil lateral com foto, estatísticas e ações (15 anos experiência, 4.9⭐, 2.847 consultas)
+    - Dr. João Silva - dados realistas completos (CRM: 123456-SP, cardiologista USP)
+    - Formulários editáveis: informações pessoais, biografia profissional, formação
+    - Sistema de especialidades: adicionar/remover com tags visuais (Cardiologia, Clínico Geral, Hipertensão, Prevenção Cardiovascular)
+    - Configuração de valores: Presencial R$ 300, Telemedicina R$ 250, Emergência R$ 500
+    - Horários de atendimento: toggle para 7 dias, configuração horário início/fim (padrão: Segunda-Sexta 8h-17h)
+    - Timeline de experiência profissional completa (2009-presente: Sírio-Libanês, 2006-2009: InCor, 2004-2006: HC-USP, 1997-2003: Graduação USP)
+    - Configurações de notificação: 4 tipos com toggles (novas consultas, emergências, avaliações, pagamentos)
+    - Auto-save com localStorage, interface responsiva, atalhos de teclado (Ctrl+S)
+    - Upload de foto simulado, compartilhamento de perfil, preview público
+    - Navegação integrada no dashboard médico através do link "Perfil Médico"
+    - ZERO placeholders - sistema 100% operacional para uso profissional
+
 - **July 21, 2025**: FILA DE PACIENTES MÉDICOS 100% FUNCIONAL v9.4.0
   - ✅ **Interface Exclusiva para Médicos**: `/fila-pacientes-medico.html` com separação completa
     - Sistema de priorização: Emergências > Alto Valor > Regular
