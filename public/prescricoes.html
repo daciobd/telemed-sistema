@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prescrições Médicas - Dashboard Médico</title>
+    <title>Sistema de Prescrições - Dashboard Médico</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,8 +15,9 @@
             line-height: 1.6;
         }
         
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -26,8 +27,13 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
         
+        /* Navigation */
         .nav-bar {
             background: white;
             padding: 1rem 2rem;
@@ -38,7 +44,7 @@
         }
         
         .back-btn {
-            background: #667eea;
+            background: #10b981;
             color: white;
             padding: 0.75rem 1.5rem;
             border: none;
@@ -52,100 +58,781 @@
         }
         
         .back-btn:hover {
-            background: #5a67d8;
+            background: #059669;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
         }
         
+        /* Content Layout */
         .content {
             padding: 2rem;
-            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
         
-        .placeholder {
+        /* Form Section */
+        .form-section {
             background: white;
-            padding: 4rem 2rem;
+            padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            max-width: 600px;
-            margin: 0 auto;
+            height: fit-content;
         }
         
-        .placeholder i {
-            font-size: 4rem;
-            color: #10b981;
-            margin-bottom: 2rem;
-        }
-        
-        .placeholder h2 {
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
             color: #2d3748;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .form-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        /* List Section */
+        .list-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .list-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .list-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .search-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .search-btn:hover {
+            background: #059669;
+        }
+        
+        /* Prescription List */
+        .prescription-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .prescription-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.3s;
+        }
+        
+        .prescription-item:hover {
+            background: #f8fafc;
+        }
+        
+        .prescription-item:last-child {
+            border-bottom: none;
+        }
+        
+        .prescription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1rem;
         }
         
-        .placeholder p {
-            color: #6b7280;
-            margin-bottom: 2rem;
+        .patient-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
         }
         
-        .action-btns {
-            display: flex;
+        .prescription-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .prescription-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .prescription-instructions {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #10b981;
+        }
+        
+        .prescription-actions {
+            display: flex;
+            gap: 0.5rem;
         }
         
         .action-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 1rem 2rem;
+            padding: 0.5rem 1rem;
             border: none;
-            border-radius: 10px;
-            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
             font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
         
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        .action-btn.edit {
+            background: #3b82f6;
+            color: white;
         }
         
-        .action-btn.success {
-            background: linear-gradient(135deg, #10b981, #059669);
+        .action-btn.edit:hover {
+            background: #2563eb;
+        }
+        
+        .action-btn.delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .action-btn.delete:hover {
+            background: #dc2626;
+        }
+        
+        .action-btn.view {
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .action-btn.view:hover {
+            background: #e2e8f0;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .modal-close:hover {
+            color: #ef4444;
+        }
+        
+        /* Success Message */
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            border-left: 4px solid #10b981;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .prescription-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .prescription-actions {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
-        <h1><i class="fas fa-prescription-bottle-alt"></i> Prescrições Médicas</h1>
-        <p>Gerencie e emita prescrições digitais para seus pacientes</p>
+        <h1>
+            <i class="fas fa-prescription-bottle-alt"></i>
+            Sistema de Prescrições
+        </h1>
+        <p>Gerencie prescrições médicas digitais de forma segura e eficiente</p>
     </header>
     
+    <!-- Navigation -->
     <nav class="nav-bar">
         <a href="/medical-dashboard-pro.html" class="back-btn">
             <i class="fas fa-arrow-left"></i>
             Voltar ao Dashboard
         </a>
+        <div style="color: #6b7280; font-size: 0.9rem;">
+            <i class="fas fa-database"></i> <span id="totalPrescriptions">0</span> prescrições cadastradas
+        </div>
     </nav>
     
+    <!-- Content -->
     <div class="content">
-        <div class="placeholder">
-            <i class="fas fa-file-prescription"></i>
-            <h2>Sistema de Prescrições</h2>
-            <p>Funcionalidade em desenvolvimento. Em breve você poderá criar, gerenciar e enviar prescrições digitais integradas com MEMED.</p>
-            <div class="action-btns">
-                <a href="/videoconsulta.html" class="action-btn success">
-                    <i class="fas fa-video"></i>
-                    Consulta com Prescrição
-                </a>
-                <a href="/fila-pacientes-medico.html" class="action-btn">
-                    <i class="fas fa-users"></i>
-                    Ver Pacientes
-                </a>
+        <!-- Form Section -->
+        <section class="form-section">
+            <h2 class="form-title">
+                <i class="fas fa-plus-circle"></i>
+                Nova Prescrição
+            </h2>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                Prescrição criada com sucesso!
             </div>
+            
+            <form id="prescriptionForm">
+                <div class="form-group">
+                    <label class="form-label" for="patientName">Nome do Paciente *</label>
+                    <input type="text" id="patientName" class="form-input" placeholder="Digite o nome completo do paciente" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="medication">Medicamento *</label>
+                    <input type="text" id="medication" class="form-input" placeholder="Nome do medicamento" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="dosage">Dosagem *</label>
+                    <input type="text" id="dosage" class="form-input" placeholder="Ex: 10mg, 1 comprimido" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="frequency">Frequência *</label>
+                    <select id="frequency" class="form-select" required>
+                        <option value="">Selecione a frequência</option>
+                        <option value="1x ao dia">1x ao dia</option>
+                        <option value="2x ao dia">2x ao dia</option>
+                        <option value="3x ao dia">3x ao dia</option>
+                        <option value="4x ao dia">4x ao dia</option>
+                        <option value="De 8 em 8 horas">De 8 em 8 horas</option>
+                        <option value="De 12 em 12 horas">De 12 em 12 horas</option>
+                        <option value="Quando necessário">Quando necessário</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="duration">Duração do Tratamento</label>
+                    <input type="text" id="duration" class="form-input" placeholder="Ex: 7 dias, 30 dias">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="instructions">Instruções Especiais</label>
+                    <textarea id="instructions" class="form-textarea" placeholder="Instruções detalhadas sobre como tomar o medicamento, cuidados especiais, etc."></textarea>
+                </div>
+                
+                <button type="submit" class="form-btn">
+                    <i class="fas fa-save"></i>
+                    Criar Prescrição
+                </button>
+            </form>
+        </section>
+        
+        <!-- List Section -->
+        <section class="list-section">
+            <div class="list-header">
+                <h2 class="list-title">
+                    <i class="fas fa-list"></i>
+                    Prescrições Cadastradas
+                </h2>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por paciente ou medicamento...">
+                <button class="search-btn" onclick="searchPrescriptions()">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
+            </div>
+            
+            <div class="prescription-list" id="prescriptionList">
+                <!-- Prescriptions will be loaded here -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            <h3 style="margin-bottom: 2rem;">
+                <i class="fas fa-edit"></i>
+                Editar Prescrição
+            </h3>
+            
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                
+                <div class="form-group">
+                    <label class="form-label">Nome do Paciente</label>
+                    <input type="text" id="editPatientName" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Medicamento</label>
+                    <input type="text" id="editMedication" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Dosagem</label>
+                    <input type="text" id="editDosage" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Frequência</label>
+                    <select id="editFrequency" class="form-select" required>
+                        <option value="1x ao dia">1x ao dia</option>
+                        <option value="2x ao dia">2x ao dia</option>
+                        <option value="3x ao dia">3x ao dia</option>
+                        <option value="4x ao dia">4x ao dia</option>
+                        <option value="De 8 em 8 horas">De 8 em 8 horas</option>
+                        <option value="De 12 em 12 horas">De 12 em 12 horas</option>
+                        <option value="Quando necessário">Quando necessário</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Duração</label>
+                    <input type="text" id="editDuration" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Instruções</label>
+                    <textarea id="editInstructions" class="form-textarea"></textarea>
+                </div>
+                
+                <button type="submit" class="form-btn">
+                    <i class="fas fa-save"></i>
+                    Salvar Alterações
+                </button>
+            </form>
         </div>
     </div>
+
+    <script>
+        // Prescription management system
+        let prescriptions = [];
+        let filteredPrescriptions = [];
+
+        // Load prescriptions from localStorage on page load
+        function loadPrescriptions() {
+            const saved = localStorage.getItem('prescriptions');
+            if (saved) {
+                prescriptions = JSON.parse(saved);
+                filteredPrescriptions = [...prescriptions];
+                console.log('💊 Prescrições carregadas do localStorage:', prescriptions.length);
+            } else {
+                // Sample prescriptions for demonstration
+                prescriptions = [
+                    {
+                        id: 1,
+                        patientName: 'Maria da Silva',
+                        medication: 'Enalapril',
+                        dosage: '10mg',
+                        frequency: '1x ao dia',
+                        duration: '30 dias',
+                        instructions: 'Tomar em jejum, preferencialmente pela manhã.',
+                        date: '2025-07-21',
+                        time: '14:30'
+                    },
+                    {
+                        id: 2,
+                        patientName: 'João Santos',
+                        medication: 'Paracetamol',
+                        dosage: '750mg',
+                        frequency: 'De 8 em 8 horas',
+                        duration: '5 dias',
+                        instructions: 'Tomar em caso de dor ou febre. Não exceder 3 gramas por dia.',
+                        date: '2025-07-21',
+                        time: '10:15'
+                    },
+                    {
+                        id: 3,
+                        patientName: 'Ana Costa',
+                        medication: 'Dipirona Infantil',
+                        dosage: '10 gotas',
+                        frequency: 'De 6 em 6 horas',
+                        duration: '3 dias',
+                        instructions: 'Para criança de 8 anos. Administrar apenas em caso de febre acima de 38°C.',
+                        date: '2025-07-20',
+                        time: '16:45'
+                    }
+                ];
+                filteredPrescriptions = [...prescriptions];
+                savePrescriptions();
+            }
+            renderPrescriptions();
+            updateCounter();
+        }
+
+        // Save prescriptions to localStorage
+        function savePrescriptions() {
+            localStorage.setItem('prescriptions', JSON.stringify(prescriptions));
+            console.log('💾 Prescrições salvas no localStorage');
+        }
+
+        // Create new prescription
+        document.getElementById('prescriptionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newPrescription = {
+                id: Date.now(),
+                patientName: document.getElementById('patientName').value,
+                medication: document.getElementById('medication').value,
+                dosage: document.getElementById('dosage').value,
+                frequency: document.getElementById('frequency').value,
+                duration: document.getElementById('duration').value || 'Não especificado',
+                instructions: document.getElementById('instructions').value || 'Nenhuma instrução especial',
+                date: new Date().toISOString().split('T')[0],
+                time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            };
+            
+            prescriptions.unshift(newPrescription);
+            filteredPrescriptions = [...prescriptions];
+            savePrescriptions();
+            renderPrescriptions();
+            updateCounter();
+            
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+            
+            // Reset form
+            this.reset();
+            
+            console.log('✅ Nova prescrição criada:', newPrescription);
+        });
+
+        // Render prescriptions list
+        function renderPrescriptions() {
+            const container = document.getElementById('prescriptionList');
+            
+            if (filteredPrescriptions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-prescription-bottle"></i>
+                        <h3>Nenhuma prescrição encontrada</h3>
+                        <p>Crie sua primeira prescrição usando o formulário ao lado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredPrescriptions.map(prescription => `
+                <div class="prescription-item">
+                    <div class="prescription-header">
+                        <div class="patient-name">${prescription.patientName}</div>
+                        <div class="prescription-date">${prescription.date} às ${prescription.time}</div>
+                    </div>
+                    
+                    <div class="prescription-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Medicamento</div>
+                            <div class="detail-value">${prescription.medication}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Dosagem</div>
+                            <div class="detail-value">${prescription.dosage}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Frequência</div>
+                            <div class="detail-value">${prescription.frequency}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Duração</div>
+                            <div class="detail-value">${prescription.duration}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="prescription-instructions">
+                        <strong>Instruções:</strong> ${prescription.instructions}
+                    </div>
+                    
+                    <div class="prescription-actions">
+                        <button class="action-btn view" onclick="viewPrescription(${prescription.id})">
+                            <i class="fas fa-eye"></i> Visualizar
+                        </button>
+                        <button class="action-btn edit" onclick="editPrescription(${prescription.id})">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="action-btn delete" onclick="deletePrescription(${prescription.id})">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search prescriptions
+        function searchPrescriptions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredPrescriptions = [...prescriptions];
+            } else {
+                filteredPrescriptions = prescriptions.filter(prescription => 
+                    prescription.patientName.toLowerCase().includes(searchTerm) ||
+                    prescription.medication.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            renderPrescriptions();
+            console.log('🔍 Busca realizada:', searchTerm, 'Resultados:', filteredPrescriptions.length);
+        }
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPrescriptions();
+            }
+        });
+
+        // Edit prescription
+        function editPrescription(id) {
+            const prescription = prescriptions.find(p => p.id === id);
+            if (prescription) {
+                document.getElementById('editId').value = prescription.id;
+                document.getElementById('editPatientName').value = prescription.patientName;
+                document.getElementById('editMedication').value = prescription.medication;
+                document.getElementById('editDosage').value = prescription.dosage;
+                document.getElementById('editFrequency').value = prescription.frequency;
+                document.getElementById('editDuration').value = prescription.duration;
+                document.getElementById('editInstructions').value = prescription.instructions;
+                
+                document.getElementById('editModal').style.display = 'block';
+            }
+        }
+
+        // Save edited prescription
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const id = parseInt(document.getElementById('editId').value);
+            const prescriptionIndex = prescriptions.findIndex(p => p.id === id);
+            
+            if (prescriptionIndex !== -1) {
+                prescriptions[prescriptionIndex] = {
+                    ...prescriptions[prescriptionIndex],
+                    patientName: document.getElementById('editPatientName').value,
+                    medication: document.getElementById('editMedication').value,
+                    dosage: document.getElementById('editDosage').value,
+                    frequency: document.getElementById('editFrequency').value,
+                    duration: document.getElementById('editDuration').value,
+                    instructions: document.getElementById('editInstructions').value
+                };
+                
+                filteredPrescriptions = [...prescriptions];
+                savePrescriptions();
+                renderPrescriptions();
+                closeEditModal();
+                
+                console.log('✏️ Prescrição editada:', prescriptions[prescriptionIndex]);
+            }
+        });
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // View prescription details
+        function viewPrescription(id) {
+            const prescription = prescriptions.find(p => p.id === id);
+            if (prescription) {
+                alert(`PRESCRIÇÃO MÉDICA\n\nPaciente: ${prescription.patientName}\nData: ${prescription.date} às ${prescription.time}\n\nMedicamento: ${prescription.medication}\nDosagem: ${prescription.dosage}\nFrequência: ${prescription.frequency}\nDuração: ${prescription.duration}\n\nInstruções:\n${prescription.instructions}`);
+            }
+        }
+
+        // Delete prescription
+        function deletePrescription(id) {
+            const prescription = prescriptions.find(p => p.id === id);
+            if (prescription && confirm(`Tem certeza que deseja excluir a prescrição de ${prescription.patientName}?`)) {
+                prescriptions = prescriptions.filter(p => p.id !== id);
+                filteredPrescriptions = [...prescriptions];
+                savePrescriptions();
+                renderPrescriptions();
+                updateCounter();
+                
+                console.log('🗑️ Prescrição excluída:', prescription);
+            }
+        }
+
+        // Update counter
+        function updateCounter() {
+            document.getElementById('totalPrescriptions').textContent = prescriptions.length;
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('💊 Sistema de Prescrições carregado');
+            loadPrescriptions();
+            console.log('✅ Sistema funcional inicializado com CRUD completo');
+        });
+    </script>
 </body>
 </html>
