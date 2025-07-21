@@ -1,0 +1,62 @@
+IMPLEMENTAR FUNCIONALIDADE REAL - CONSULTAS AGENDADAS:
+
+1. RECRIAR consultas-agendadas.html COM FUNCIONALIDADES REAIS:
+   - Parar de usar "Funcionalidade em desenvolvimento"
+   - Criar sistema completo de agenda médica
+   - Calendário visual e funcional
+
+2. FUNCIONALIDADES OBRIGATÓRIAS:
+   - Calendário visual (semana/mês)
+   - Lista de consultas por data
+   - Filtros por status (confirmada/pendente/cancelada)
+   - Visualizar detalhes da consulta
+   - Reagendar consulta (arrastar e soltar)
+   - Confirmar/cancelar consultas
+   - Adicionar nova consulta
+
+3. ESTRUTURA DA PÁGINA:
+   - Header: "Agenda Médica - Consultas Agendadas"
+   - Calendário visual (grid de horários)
+   - Painel lateral com lista de consultas
+   - Filtros por data e status
+   - Modal para detalhes/edição
+   - Botões de ação rápida
+
+4. DADOS FAKE OBRIGATÓRIOS (localStorage):
+   Consultas exemplo para esta semana:
+   - 08:00 - Maria Silva - Cardiologia - Confirmada
+   - 09:30 - João Santos - Dermatologia - Pendente
+   - 11:00 - Ana Costa - Pediatria - Confirmada
+   - 14:00 - Carlos Lima - Ortopedia - Cancelada
+   - 15:30 - Pedro Alves - Clínico Geral - Confirmada
+
+5. FUNCIONALIDADES ESPECÍFICAS:
+   - Visualização semanal com horários
+   - Click na consulta abre modal com detalhes
+   - Botões: Confirmar, Cancelar, Reagendar
+   - Filtro por status e especialidade
+   - Contador de consultas por status
+   - Links diretos para videoconsulta
+   - Notificações automáticas
+
+6. LAYOUT VISUAL OBRIGATÓRIO:
+   ┌─ CALENDÁRIO SEMANAL ─┐ ┌─ LISTA CONSULTAS ─┐
+   │ SEG TER QUA QUI SEX  │ │ 📋 Hoje (3)        │
+   │ 08h [Maria Silva]    │ │ ✅ Maria - 08:00   │
+   │ 09h [João Santos]    │ │ ⏳ João - 09:30    │
+   │ 10h                  │ │ ✅ Ana - 11:00     │
+   │ 11h [Ana Costa]      │ │                    │
+   └─────────────────────┘ └──────────────────── ┘
+
+7. DADOS ESTRUTURADOS:
+   {
+     id: 1,
+     paciente: "Maria Silva",
+     data: "2024-07-22",
+     horario: "08:00",
+     especialidade: "Cardiologia",
+     status: "confirmada",
+     observacoes: "Consulta de rotina"
+   }
+
+IMPLEMENTAR AGENDA REAL COM CALENDÁRIO VISUAL!
