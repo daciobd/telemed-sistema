@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fila de Pacientes - Dashboard Médico</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 1.5rem 2rem;
+            margin: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        
+        .filter-select, .filter-input {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .filter-btn {
+            background: #10b981;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 0 2rem 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-icon.waiting {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .stat-icon.priority {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .stat-icon.revenue {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .stat-icon.average {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        /* Patient Queue */
+        .patient-queue {
+            margin: 0 2rem 2rem;
+        }
+        
+        .queue-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px 15px 0 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .queue-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .patient-list {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .patient-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 1.5rem;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        
+        .patient-item:hover {
+            background: #f8fafc;
+        }
+        
+        .patient-item:last-child {
+            border-bottom: none;
+        }
+        
+        .priority-badge {
+            width: 12px;
+            height: 60px;
+            border-radius: 6px;
+            margin-right: 1rem;
+        }
+        
+        .priority-badge.emergency {
+            background: linear-gradient(to bottom, #ef4444, #dc2626);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+        }
+        
+        .priority-badge.high {
+            background: linear-gradient(to bottom, #f59e0b, #d97706);
+        }
+        
+        .priority-badge.normal {
+            background: linear-gradient(to bottom, #10b981, #059669);
+        }
+        
+        .patient-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .patient-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .patient-specialty {
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        .patient-symptoms {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .patient-details {
+            text-align: center;
+        }
+        
+        .patient-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 0.25rem;
+        }
+        
+        .waiting-time {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .patient-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 140px;
+        }
+        
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .action-btn.secondary {
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        .action-btn.emergency {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .action-btn.emergency:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-bar {
+                padding: 1rem;
+            }
+            
+            .filters, .patient-queue {
+                margin: 1rem;
+            }
+            
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                margin: 0 1rem 1rem;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .patient-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .patient-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1><i class="fas fa-users-medical"></i> Fila de Pacientes</h1>
+        <p>Gerencie pacientes aguardando atendimento médico</p>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <a href="/medical-dashboard-pro.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <div style="color: #6b7280; font-size: 0.9rem;">
+            <i class="fas fa-clock"></i> Atualizado em tempo real
+        </div>
+    </nav>
+    
+    <!-- Filters -->
+    <section class="filters">
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label for="specialtyFilter">Especialidade</label>
+                <select id="specialtyFilter" class="filter-select">
+                    <option value="">Todas as especialidades</option>
+                    <option value="cardiologia">Cardiologia</option>
+                    <option value="pediatria">Pediatria</option>
+                    <option value="dermatologia">Dermatologia</option>
+                    <option value="psiquiatria">Psiquiatria</option>
+                    <option value="clinica-geral">Clínica Geral</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="priorityFilter">Prioridade</label>
+                <select id="priorityFilter" class="filter-select">
+                    <option value="">Todas as prioridades</option>
+                    <option value="emergency">Emergência</option>
+                    <option value="high">Alta</option>
+                    <option value="normal">Normal</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="valueFilter">Valor Mínimo</label>
+                <input type="number" id="valueFilter" class="filter-input" placeholder="R$ 0" min="0">
+            </div>
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button class="filter-btn" onclick="applyFilters()">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Statistics -->
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-icon waiting">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-number" id="waitingCount">0</div>
+            <div class="stat-label">Pacientes Aguardando</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon priority">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-number" id="emergencyCount">0</div>
+            <div class="stat-label">Emergências</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon revenue">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-number" id="totalRevenue">R$ 0</div>
+            <div class="stat-label">Receita Potencial</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon average">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-number" id="averageValue">R$ 0</div>
+            <div class="stat-label">Valor Médio</div>
+        </div>
+    </section>
+    
+    <!-- Patient Queue -->
+    <section class="patient-queue">
+        <div class="queue-header">
+            <h2 class="queue-title">
+                <i class="fas fa-list-ul"></i>
+                Fila de Atendimento
+            </h2>
+            <button class="refresh-btn" onclick="loadPatientQueue()">
+                <i class="fas fa-sync-alt"></i>
+                Atualizar
+            </button>
+        </div>
+        <div class="patient-list" id="patientList">
+            <div class="empty-state">
+                <i class="fas fa-user-clock"></i>
+                <h3>Nenhum paciente na fila</h3>
+                <p>Aguardando novos pacientes solicitarem consultas</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let currentPatients = [];
+        let filteredPatients = [];
+
+        function getPriorityLevel(symptoms, bidAmount) {
+            const emergencyKeywords = ['dor no peito', 'falta de ar', 'emergência', 'urgente', 'grave'];
+            const symptomsLower = symptoms.toLowerCase();
+            
+            if (emergencyKeywords.some(keyword => symptomsLower.includes(keyword))) {
+                return 'emergency';
+            }
+            
+            if (bidAmount >= 300) {
+                return 'high';
+            }
+            
+            return 'normal';
+        }
+
+        function calculateWaitingTime(timestamp) {
+            const now = new Date();
+            const start = new Date(timestamp);
+            const diff = Math.floor((now - start) / 1000 / 60); // minutes
+            
+            if (diff < 1) return 'Agora mesmo';
+            if (diff < 60) return `${diff} min`;
+            const hours = Math.floor(diff / 60);
+            const mins = diff % 60;
+            return `${hours}h ${mins}min`;
+        }
+
+        function loadPatientQueue() {
+            try {
+                const activeBids = JSON.parse(localStorage.getItem('activeBids') || '[]');
+                console.log('📋 Carregando fila de pacientes:', activeBids.length);
+                
+                // Adiciona prioridade e ordena
+                currentPatients = activeBids.map(bid => ({
+                    ...bid,
+                    priority: getPriorityLevel(bid.symptoms || '', bid.bidAmount || 0),
+                    waitingTime: calculateWaitingTime(bid.timestamp || Date.now())
+                })).sort((a, b) => {
+                    // Ordem: emergência > alta > normal, depois por valor
+                    const priorityOrder = { emergency: 3, high: 2, normal: 1 };
+                    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+                        return priorityOrder[b.priority] - priorityOrder[a.priority];
+                    }
+                    return (b.bidAmount || 0) - (a.bidAmount || 0);
+                });
+                
+                filteredPatients = [...currentPatients];
+                updateStats();
+                renderPatientList();
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar fila:', error);
+            }
+        }
+
+        function updateStats() {
+            const waiting = filteredPatients.length;
+            const emergency = filteredPatients.filter(p => p.priority === 'emergency').length;
+            const totalRevenue = filteredPatients.reduce((sum, p) => sum + (p.bidAmount || 0), 0);
+            const averageValue = waiting > 0 ? Math.round(totalRevenue / waiting) : 0;
+
+            document.getElementById('waitingCount').textContent = waiting;
+            document.getElementById('emergencyCount').textContent = emergency;
+            document.getElementById('totalRevenue').textContent = `R$ ${totalRevenue.toLocaleString('pt-BR')}`;
+            document.getElementById('averageValue').textContent = `R$ ${averageValue}`;
+        }
+
+        function renderPatientList() {
+            const listContainer = document.getElementById('patientList');
+            
+            if (filteredPatients.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-clock"></i>
+                        <h3>Nenhum paciente na fila</h3>
+                        <p>Aguardando novos pacientes solicitarem consultas</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = filteredPatients.map(patient => `
+                <div class="patient-item">
+                    <div class="priority-badge ${patient.priority}"></div>
+                    <div class="patient-info">
+                        <div class="patient-name">${patient.patientName || 'Paciente'}</div>
+                        <div class="patient-specialty">${patient.specialty || 'Clínica Geral'}</div>
+                        <div class="patient-symptoms">${patient.symptoms || 'Sem sintomas informados'}</div>
+                    </div>
+                    <div class="patient-details">
+                        <div class="patient-value">R$ ${patient.bidAmount || '0'}</div>
+                        <div class="waiting-time">${patient.waitingTime}</div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="action-btn ${patient.priority === 'emergency' ? 'emergency' : 'primary'}" 
+                                onclick="attendPatient('${patient.id}')">
+                            <i class="fas fa-video"></i>
+                            ${patient.priority === 'emergency' ? 'URGENTE' : 'ATENDER'}
+                        </button>
+                        <button class="action-btn secondary" onclick="schedulePatient('${patient.id}')">
+                            <i class="fas fa-calendar"></i>
+                            AGENDAR
+                        </button>
+                        <button class="action-btn secondary" onclick="viewDetails('${patient.id}')">
+                            <i class="fas fa-info-circle"></i>
+                            DETALHES
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function applyFilters() {
+            const specialtyFilter = document.getElementById('specialtyFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const valueFilter = parseFloat(document.getElementById('valueFilter').value) || 0;
+
+            filteredPatients = currentPatients.filter(patient => {
+                if (specialtyFilter && patient.specialty?.toLowerCase() !== specialtyFilter) return false;
+                if (priorityFilter && patient.priority !== priorityFilter) return false;
+                if (valueFilter && (patient.bidAmount || 0) < valueFilter) return false;
+                return true;
+            });
+
+            updateStats();
+            renderPatientList();
+            console.log(`🔍 Filtros aplicados: ${filteredPatients.length} pacientes`);
+        }
+
+        function attendPatient(patientId) {
+            const patient = currentPatients.find(p => p.id === patientId);
+            if (!patient) return;
+
+            if (confirm(`Iniciar atendimento de ${patient.patientName || 'Paciente'} por R$ ${patient.bidAmount || '0'}?`)) {
+                // Remove da fila ativa
+                const activeBids = JSON.parse(localStorage.getItem('activeBids') || '[]');
+                const updatedBids = activeBids.filter(bid => bid.id !== patientId);
+                localStorage.setItem('activeBids', JSON.stringify(updatedBids));
+
+                // Adiciona aos aceitos
+                const acceptedBids = JSON.parse(localStorage.getItem('acceptedBids') || '[]');
+                acceptedBids.push({
+                    ...patient,
+                    acceptedAt: new Date().toISOString(),
+                    doctorName: 'Dr. João Silva',
+                    status: 'aceito'
+                });
+                localStorage.setItem('acceptedBids', JSON.stringify(acceptedBids));
+
+                alert('Paciente aceito! Redirecionando para videoconsulta...');
+                setTimeout(() => {
+                    window.location.href = '/videoconsulta.html';
+                }, 1500);
+            }
+        }
+
+        function schedulePatient(patientId) {
+            const patient = currentPatients.find(p => p.id === patientId);
+            if (!patient) return;
+
+            alert(`Agendamento de ${patient.patientName || 'Paciente'} será implementado em breve`);
+        }
+
+        function viewDetails(patientId) {
+            const patient = currentPatients.find(p => p.id === patientId);
+            if (!patient) return;
+
+            alert(`Detalhes do Paciente:\n\nNome: ${patient.patientName || 'Não informado'}\nEspecialidade: ${patient.specialty || 'Clínica Geral'}\nValor: R$ ${patient.bidAmount || '0'}\nSintomas: ${patient.symptoms || 'Não informado'}\nTempo de espera: ${patient.waitingTime}`);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('👨‍⚕️ Fila de Pacientes Médico carregada');
+            loadPatientQueue();
+            
+            // Atualiza a cada 30 segundos
+            setInterval(() => {
+                console.log('🔄 Atualizando fila de pacientes...');
+                loadPatientQueue();
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
