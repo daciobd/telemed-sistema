@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas Agendadas - Dashboard Médico</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        /* Content */
+        .content {
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .placeholder {
+            background: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .placeholder i {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 2rem;
+        }
+        
+        .placeholder h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .placeholder p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .action-btn.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1><i class="fas fa-clock"></i> Consultas Agendadas</h1>
+        <p>Visualize e gerencie todas as consultas agendadas</p>
+    </header>
+    
+    <nav class="nav-bar">
+        <a href="/medical-dashboard-pro.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+    </nav>
+    
+    <div class="content">
+        <div class="placeholder">
+            <i class="fas fa-calendar-check"></i>
+            <h2>Consultas Agendadas</h2>
+            <p>Esta funcionalidade será implementada em breve. Por enquanto, use a "Agenda do Dia" para visualizar as consultas.</p>
+            <div class="action-btns">
+                <a href="/agenda-do-dia.html" class="action-btn">
+                    <i class="fas fa-calendar-day"></i>
+                    Ver Agenda do Dia
+                </a>
+                <a href="/videoconsulta.html" class="action-btn success">
+                    <i class="fas fa-video"></i>
+                    Iniciar Videoconsulta
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
