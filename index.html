@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMed Sistema - Telemedicina de Ponta</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -572,5 +575,20 @@
             © 2025 TeleMed Sistema - Sistema Revolucionário de Telemedicina com IA. Todos os direitos reservados.
         </div>
     </footer>
+    
+    <script>
+        console.log('✅ Landing Page Carregada - Versão com Imagens das Especialidades');
+        
+        // Verificar se as especialidades estão carregando
+        document.addEventListener('DOMContentLoaded', function() {
+            const specialtyImages = document.querySelectorAll('.specialty-image');
+            console.log('🎨 Imagens de especialidades encontradas:', specialtyImages.length);
+            
+            specialtyImages.forEach((img, index) => {
+                const bgStyle = window.getComputedStyle(img).background;
+                console.log(`Especialidade ${index + 1} - Background:`, bgStyle);
+            });
+        });
+    </script>
 </body>
 </html>
