@@ -3,564 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Google Fonts - Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
-    
-    <!-- SEO Otimizado -->
-    <title>TeleMed Sistema - Consultas Médicas Online com IA | Telemedicina Avançada</title>
-    <meta name="description" content="Plataforma de telemedicina revolucionária com IA médica (Dr. AI), sistema de lances inovador, videoconsultas WebRTC e prescrições MEMED. Consulte médicos qualificados online com tecnologia avançada e atendimento humanizado.">
-    <meta name="keywords" content="telemedicina, consulta médica online, IA médica, Dr. AI, videoconsulta, prescrição digital, MEMED, consulta virtual, médico online, sistema de lances médico">
-    <meta name="author" content="TeleMed Sistema">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <link rel="canonical" href="https://telemed-sistema.replit.dev/">
-    
-    <!-- Open Graph para Redes Sociais -->
-    <meta property="og:title" content="TeleMed Sistema - Consultas Médicas Online com IA">
-    <meta property="og:description" content="Plataforma revolucionária de telemedicina com IA médica, sistema de lances e videoconsultas WebRTC. Transforme sua saúde com tecnologia avançada.">
-    <meta property="og:image" content="https://telemed-sistema.replit.dev/images/image1.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Profissional médico realizando consulta online através da plataforma TeleMed Sistema">
-    <meta property="og:url" content="https://telemed-sistema.replit.dev/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:site_name" content="TeleMed Sistema">
-    
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@TeleMedSistema">
-    <meta name="twitter:title" content="TeleMed Sistema - Telemedicina com IA">
-    <meta name="twitter:description" content="Consultas médicas online revolucionárias com IA, lances inovadores e tecnologia WebRTC avançada.">
-    <meta name="twitter:image" content="https://telemed-sistema.replit.dev/images/image1.jpg">
-    <meta name="twitter:image:alt" content="Profissional médico realizando consulta online através da plataforma TeleMed Sistema">
-    
-    <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MedicalOrganization",
-        "name": "TeleMed Sistema",
-        "description": "Plataforma de telemedicina com IA médica e sistema de lances inovador",
-        "url": "https://telemed-sistema.com/",
-        "logo": "/images/image1.jpg",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "Customer Service",
-            "availableLanguage": "Portuguese"
-        },
-        "medicalSpecialty": ["Telemedicine", "AI Medical Triage", "Digital Prescriptions"],
-        "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Medical Services",
-            "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "MedicalProcedure",
-                        "name": "AI Medical Consultation",
-                        "description": "Triagem médica inteligente com IA conversacional"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "MedicalProcedure",
-                        "name": "Video Consultation",
-                        "description": "Consultas médicas por videochamada WebRTC"
-                    }
-                }
-            ]
+    <title>TeleMed Sistema - Telemedicina de Ponta</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+            color: #333;
+            line-height: 1.6;
         }
-    }
-    </script>
-    
-    <link rel="stylesheet" href="/style.css">
-    
-    <!-- Performance: Preload Critical Resources -->
-    <link rel="preload" href="/style.css" as="style">
-    <link rel="preload" href="/images/image1.jpg" as="image">
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cta-header {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .cta-header:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-mockup {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-mockup i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #10b981;
+        }
+
+        .hero-mockup h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .hero-mockup p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        /* Specialties Section */
+        .specialties-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #10b981, #667eea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #10b981; }
+            to { text-shadow: 0 0 10px #667eea, 0 0 20px #10b981; }
+        }
+
+        .subtitle {
+            color: #4a5568;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .specialty-card {
+            background: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .specialty-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+        }
+
+        .specialty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+            transition: color 0.3s ease;
+        }
+
+        .specialty-card:hover .specialty-icon {
+            color: #10b981;
+        }
+
+        .specialty-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .specialty-description {
+            font-size: 0.9rem;
+            color: #4a5568;
+            padding: 0 1rem;
+        }
+
+        .specialty-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(102, 126, 234, 0.9));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+        }
+
+        .specialty-card:hover .specialty-overlay {
+            opacity: 1;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 4rem 2rem;
+            background: #f7fafc;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a202c;
+            color: white;
+            padding: 3rem 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .footer-section a {
+            color: #cbd5e0;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #667eea;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2d3748;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: #a0aec0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            .specialties-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            .hero-mockup {
+                max-width: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="header" role="banner">
-        <div class="container">
-            <div class="nav-wrapper">
-                <h1>TeleMed Sistema</h1>
-                
-                <!-- Menu Desktop -->
-                <nav class="nav-desktop" role="navigation" aria-label="Menu principal">
-                    <a href="/" aria-label="Navegar para página inicial">Início</a>
-                    <a href="/dr-ai.html" aria-label="Navegar para Dr. AI - Triagem médica com inteligência artificial">Dr. AI</a>
-                    <a href="/consulta-por-valor.html" aria-label="Navegar para sistema de lances para consultas médicas">Sistema de Lances</a>
-                    <a href="/guia-medicos.html" aria-label="Navegar para guia completo para profissionais médicos">Para Médicos</a>
-                    <a href="/medical-dashboard-pro.html" aria-label="Navegar para dashboard médico profissional">Dashboard</a>
-                </nav>
-                
-                <!-- Menu Mobile -->
-                <button 
-                    class="hamburger" 
-                    aria-label="Abrir menu de navegação" 
-                    aria-expanded="false" 
-                    aria-controls="mobile-menu"
-                    onclick="toggleMobileMenu()"
-                >
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                    <span class="hamburger-line"></span>
-                </button>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                TeleMed Sistema
             </div>
-            
-            <!-- Menu Mobile Dropdown -->
-            <nav id="mobile-menu" class="nav-mobile" role="navigation" aria-label="Menu mobile" aria-hidden="true">
-                <a href="/" aria-label="Navegar para página inicial">Início</a>
-                <a href="/dr-ai.html" aria-label="Navegar para Dr. AI - Triagem médica com inteligência artificial">Dr. AI</a>
-                <a href="/consulta-por-valor.html" aria-label="Navegar para sistema de lances para consultas médicas">Sistema de Lances</a>
-                <a href="/guia-medicos.html" aria-label="Navegar para guia completo para profissionais médicos">Para Médicos</a>
-                <a href="/medical-dashboard-pro.html" aria-label="Navegar para dashboard médico profissional">Dashboard</a>
-            </nav>
-            
-            <div class="header-content">
-                <p>Consultas médicas simples, humanas e revolucionárias.</p>
-                <a href="/dr-ai.html" class="cta-primary" aria-label="Iniciar teste gratuito do Dr. AI">Iniciar Teste Gratuito</a>
-            </div>
-        </div>
+            <ul class="nav-links">
+                <li><a href="#especialidades">Especialidades</a></li>
+                <li><a href="/medical-dashboard-pro.html">Dashboard Médico</a></li>
+                <li><a href="/dr-ai.html">Dr. AI</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <a href="/consulta-por-valor.html" class="cta-header">Consultar Agora</a>
+        </nav>
     </header>
 
-    <main role="main">
-        <section class="hero" aria-labelledby="hero-title">
-            <div class="container">
-                <picture>
-                    <source srcset="/images/image1.webp" type="image/webp">
-                    <img 
-                        src="/images/image1.jpg" 
-                        alt="Médico especialista sorridente utilizando tablet para consulta médica online, demonstrando a facilidade e humanização do atendimento através da plataforma TeleMed Sistema com tecnologia de ponta" 
-                        class="hero-img"
-                        loading="eager"
-                        width="600"
-                        height="400"
-                        style="width: 100%; height: auto;"
-                    >
-                </picture>
-                <h2 id="hero-title">Profissionais de confiança com tecnologia avançada</h2>
-                <p>Sistema completo com IA médica, lances inovadores e videoconsultas WebRTC</p>
-            </div>
-        </section>
-
-        <section class="features" aria-labelledby="features-title">
-            <div class="container cards">
-                <h3 id="features-title" class="sr-only">Principais funcionalidades</h3>
-                
-                <article class="card">
-                    <picture>
-                        <source srcset="/images/image2.webp" type="image/webp">
-                        <img 
-                            src="/images/image2.jpg" 
-                            alt="Médico atencioso e qualificado realizando videochamada médica com paciente, demonstrando atendimento humanizado e cuidado profissional através de tecnologia WebRTC avançada"
-                            loading="lazy"
-                            width="350"
-                            height="200"
-                            style="width: 100%; height: auto;"
-                        >
-                    </picture>
-                    <h4>🤖 Dr. AI + Médicos Qualificados</h4>
-                    <p>Triagem inteligente com IA conversacional + profissionais experientes com atendimento humanizado e sistema de lances inovador.</p>
-                    <a href="/consulta-por-valor.html" class="cta-secondary" aria-label="Navegar para sistema de lances - Faça seu lance para consulta médica personalizada">Fazer Lance Agora</a>
-                </article>
-                
-                <article class="card">
-                    <picture>
-                        <source srcset="/images/image3.webp" type="image/webp">
-                        <img 
-                            src="/images/image3.jpg" 
-                            alt="Paciente jovem satisfeita e sorridente utilizando laptop para videoconsulta médica em casa, mostrando praticidade e conforto do atendimento digital TeleMed Sistema"
-                            loading="lazy"
-                            width="350"
-                            height="200"
-                            style="width: 100%; height: auto;"
-                        >
-                    </picture>
-                    <h4>🎥 Videoconsultas WebRTC</h4>
-                    <p>Consulte sem sair de casa com tecnologia WebRTC P2P, chat em tempo real e prescrições MEMED oficiais.</p>
-                    <a href="/videoconsulta.html" class="cta-secondary" aria-label="Navegar para testar sistema de videoconsulta WebRTC em tempo real">Testar Videoconsulta</a>
-                </article>
-            </div>
-        </section>
-
-        <!-- Seção TeleMed Specialties com Imagens Reais -->
-        <section class="specialties-section" aria-labelledby="specialties-title">
-            <div class="container">
-                <h3 id="specialties-title">🩺 Especialidades de Saúde</h3>
-                <p class="section-subtitle">Consultas em destaques para você - Conecte-se com especialistas qualificados</p>
-                
-                <!-- Header Visual com Gradiente -->
-                <div class="specialties-header">
-                    <div class="specialties-visual">
-                        <div class="specialty-icons-showcase">
-                            <div class="showcase-icon general"><i class="fas fa-user-md"></i></div>
-                            <div class="showcase-icon dermatology"><i class="fas fa-microscope"></i></div>
-                            <div class="showcase-icon gynecology"><i class="fas fa-venus"></i></div>
-                            <div class="showcase-icon pediatrics"><i class="fas fa-baby"></i></div>
-                            <div class="showcase-icon orthopedics"><i class="fas fa-bone"></i></div>
-                            <div class="showcase-icon psychiatry"><i class="fas fa-brain"></i></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="specialties-grid">
-                    <!-- Clínica Geral -->
-                    <article class="specialty-card general">
-                        <div class="specialty-image">
-                            <div class="specialty-badge">Mais Popular</div>
-                            <i class="fas fa-user-md specialty-icon"></i>
-                        </div>
-                        <h4>Clínica Geral</h4>
-                        <p>Atendimento médico geral, avaliação de sintomas, check-ups de rotina e encaminhamentos especializados.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 25+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 120-250</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=clinica-geral" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Dermatologia -->
-                    <article class="specialty-card dermatology">
-                        <div class="specialty-image">
-                            <i class="fas fa-microscope specialty-icon"></i>
-                        </div>
-                        <h4>Dermatologia</h4>
-                        <p>Diagnóstico e tratamento de doenças de pele, cabelo e unhas. Avaliação de manchas, pintas e lesões cutâneas.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 12+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 180-350</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=dermatologia" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Ginecologia -->
-                    <article class="specialty-card gynecology">
-                        <div class="specialty-image">
-                            <i class="fas fa-venus specialty-icon"></i>
-                        </div>
-                        <h4>Ginecologia</h4>
-                        <p>Saúde da mulher, consultas de rotina, orientações contraceptivas, acompanhamento pré-natal e menopausa.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 15+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 170-380</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=ginecologia" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Pediatria -->
-                    <article class="specialty-card pediatrics">
-                        <div class="specialty-image">
-                            <i class="fas fa-baby specialty-icon"></i>
-                        </div>
-                        <h4>Pediatria</h4>
-                        <p>Cuidados médicos especializados para crianças e adolescentes, acompanhamento de crescimento e desenvolvimento.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 18+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 150-300</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=pediatria" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Ortopedia -->
-                    <article class="specialty-card orthopedics">
-                        <div class="specialty-image">
-                            <i class="fas fa-bone specialty-icon"></i>
-                        </div>
-                        <h4>Ortopedia</h4>
-                        <p>Tratamento de lesões e doenças do sistema músculo-esquelético, dores nas articulações e problemas posturais.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 10+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 200-400</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=ortopedia" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Psiquiatria -->
-                    <article class="specialty-card psychiatry">
-                        <div class="specialty-image">
-                            <i class="fas fa-brain specialty-icon"></i>
-                        </div>
-                        <h4>Psiquiatria</h4>
-                        <p>Atendimento em saúde mental, tratamento de ansiedade, depressão, transtornos de humor e prescrição de medicamentos.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 14+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 200-450</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=psiquiatria" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Cardiologia -->
-                    <article class="specialty-card cardiology">
-                        <div class="specialty-image">
-                            <div class="specialty-badge">Especialista</div>
-                            <i class="fas fa-heartbeat specialty-icon"></i>
-                        </div>
-                        <h4>Cardiologia</h4>
-                        <p>Consultas com cardiologistas especialistas em hipertensão, arritmias, insuficiência cardíaca e prevenção cardiovascular.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 20+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 250-500</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=cardiologia" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Endocrinologia -->
-                    <article class="specialty-card endocrinology">
-                        <div class="specialty-image">
-                            <i class="fas fa-dna specialty-icon"></i>
-                        </div>
-                        <h4>Endocrinologia</h4>
-                        <p>Tratamento de diabetes, obesidade, distúrbios da tireoide, colesterol e outros desequilíbrios hormonais.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 8+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 220-400</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=endocrinologia" class="specialty-btn">Consultar Agora</a>
-                    </article>
-
-                    <!-- Neurologia -->
-                    <article class="specialty-card neurology">
-                        <div class="specialty-image">
-                            <i class="fas fa-brain specialty-icon"></i>
-                        </div>
-                        <h4>Neurologia</h4>
-                        <p>Diagnóstico e tratamento de dores de cabeça, enxaquecas, epilepsia, AVC e outras doenças neurológicas.</p>
-                        <div class="specialty-stats">
-                            <span><i class="fas fa-users"></i> 7+ Médicos</span>
-                            <span><i class="fas fa-dollar-sign"></i> R$ 300-600</span>
-                        </div>
-                        <a href="/consulta-por-valor.html?specialty=neurologia" class="specialty-btn">Consultar Agora</a>
-                    </article>
-                </div>
-
-                <!-- Stats das Especialidades -->
-                <div class="specialties-stats">
-                    <div class="stat-item">
-                        <span class="stat-number">25+</span>
-                        <span class="stat-label">Especialidades Médicas</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">120+</span>
-                        <span class="stat-label">Médicos Especialistas</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">24/7</span>
-                        <span class="stat-label">Atendimento Disponível</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">98%</span>
-                        <span class="stat-label">Taxa de Satisfação</span>
-                    </div>
-                </div>
-
-                <!-- CTA Especialidades -->
-                <div class="specialties-cta">
-                    <h4>Não encontrou sua especialidade?</h4>
-                    <p>Nossa IA médica Dr. AI pode ajudar a identificar a especialidade ideal para seus sintomas</p>
-                    <a href="/dr-ai.html" class="cta-primary">🤖 Consultar Dr. AI</a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Cuide da Sua Saúde com <span style="color: #10b981;">Inteligência Artificial</span></h1>
+                <p class="subtitle">
+                    Acesse consultas rápidas, triagem por IA e monitoramento 24/7 com TeleMed Sistema.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/dr-ai.html" class="btn-primary">
+                        <i class="fas fa-robot"></i> Triagem Grátis
+                    </a>
+                    <a href="/consulta-por-valor.html" class="btn-primary" style="background: #667eea;">
+                        <i class="fas fa-video"></i> Agendar Consulta
+                    </a>
                 </div>
             </div>
-        </section>
-
-        <!-- Seção Comparativo Competitivo -->
-        <section class="competitive-section" aria-labelledby="competitive-title">
-            <div class="container">
-                <h3 id="competitive-title">Por que escolher TeleMed vs outras plataformas?</h3>
-                
-                <div class="comparison-grid">
-                    <div class="comparison-item">
-                        <h4>🚀 TeleMed Sistema</h4>
-                        <ul>
-                            <li>✅ <strong>Dr. AI integrado</strong> - Triagem inteligente gratuita</li>
-                            <li>✅ <strong>Sistema de lances único</strong> - Você define o valor</li>
-                            <li>✅ <strong>WebRTC nativo</strong> - Zero dependências externas</li>
-                            <li>✅ <strong>MEMED oficial</strong> - Prescrições válidas</li>
-                            <li>✅ <strong>Dashboard PRO</strong> - Métricas em tempo real</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="comparison-item competitor">
-                        <h4>🏥 Outras Plataformas</h4>
-                        <ul>
-                            <li>❌ Sem IA médica integrada</li>
-                            <li>❌ Preços fixos inflexíveis</li>
-                            <li>❌ Dependem de apps externos</li>
-                            <li>❌ Prescrições limitadas</li>
-                            <li>❌ Dashboards básicos</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="metrics-highlight">
-                    <div class="metric">
-                        <span class="metric-number">87%</span>
-                        <span class="metric-label">Mais rápido que concorrentes</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-number">40%</span>
-                        <span class="metric-label">Economia média por consulta</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-number">95%</span>
-                        <span class="metric-label">Satisfação dos usuários</span>
-                    </div>
+            <div class="hero-image">
+                <div class="hero-mockup">
+                    <i class="fas fa-brain"></i>
+                    <h3>Triagem Psiquiátrica IA</h3>
+                    <p>Primeiro sistema do Brasil com IA especializada em saúde mental</p>
                 </div>
             </div>
-        </section>
-
-        <section class="system-features" aria-labelledby="system-title">
-            <div class="container">
-                <h3 id="system-title">🩺 TeleMed Sistema Completo</h3>
-                <div class="cards">
-                    <article class="card">
-                        <h4>👨‍⚕️ Dashboard Médico Sidebar</h4>
-<parameter name="new_str">                        <h4>👨‍⚕️ Dashboard Médico Sidebar</h4>
-                        <p>Interface profissional com menu hamburger lateral, navegação categorizada e sistema de lances integrado</p>
-                        <a href="/medical-dashboard-pro.html" class="cta-secondary" aria-label="Navegar para dashboard médico com sidebar lateral e sistema completo de lances">Acessar Dashboard Lateral</a>
-                    </article>
-                    
-                    <article class="card">
-                        <h4>✅ Guia para Médicos</h4>
-                        <p>Documentação completa das funcionalidades e teste da plataforma</p>
-                        <a href="/guia-medicos.html" class="cta-secondary" aria-label="Navegar para guia completo com documentação e funcionalidades para médicos">Ver Guia Completo</a>
-                    </article>
-                    
-                    <article class="card">
-                        <h4>📦 Download Ultra v8.7.0</h4>
-                        <p>Arquivo ZIP com index.html, CSS, imagens e todas as melhorias técnicas implementadas</p>
-                        <a href="/download.html" class="cta-secondary" aria-label="Navegar para download da versão limpa e otimizada do TeleMed Sistema">Download ZIP</a>
-                    </article>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- CTA Final -->
-    <section class="footer-cta" role="region" aria-labelledby="final-cta-title">
-        <div class="container">
-            <h3 id="final-cta-title">Ainda com dúvidas?</h3>
-            <p>Inicie agora sua triagem gratuita e descubra como nossa IA médica pode revolucionar seu atendimento. Sem compromisso, 100% gratuito.</p>
-            <a href="/dr-ai.html" class="cta-primary" aria-label="Iniciar triagem médica gratuita com Dr. AI">
-                🚀 Iniciar Triagem Gratuita
-            </a>
         </div>
     </section>
 
-    <footer role="contentinfo">
-        <div class="container">
-            <!-- Social Links -->
-            <div class="footer-social">
-                <a href="https://whatsapp.com/channel/0029VaLlKBg8YlP9vJqDQP3o" class="social-link" aria-label="WhatsApp TeleMed Sistema">
-                    📱
-                </a>
-                <a href="https://linkedin.com/company/telemed-sistema" class="social-link" aria-label="LinkedIn TeleMed Sistema">
-                    💼
-                </a>
-                <a href="https://instagram.com/telemed.sistema" class="social-link" aria-label="Instagram TeleMed Sistema">
-                    📸
-                </a>
-                <a href="mailto:contato@telemed-sistema.com" class="social-link" aria-label="Email TeleMed Sistema">
-                    ✉️
-                </a>
+    <!-- Specialties Section -->
+    <section class="specialties-section" id="especialidades">
+        <h1 class="section-title">Especialidades de Saúde</h1>
+        <p class="subtitle">Escolha a especialidade perfeita para o seu cuidado</p>
+        <div class="specialties-grid">
+            <div class="specialty-card" onclick="window.location.href='/consulta-por-valor.html'">
+                <i class="fas fa-user-md specialty-icon"></i>
+                <div class="specialty-title">Clínico Geral</div>
+                <div class="specialty-description">Cuidados gerais e prevenção</div>
+                <div class="specialty-overlay">Cuide da sua saúde geral com experts!</div>
             </div>
-            
-            <!-- Footer Info -->
-            <div class="footer-info">
-                <p>&copy; 2025 TeleMed Sistema v8.7.0 Ultra - Plataforma Profissional de Telemedicina com IA | Todos os direitos reservados</p>
-                <p><small>♿ WCAG AAA Compliance | 🔍 SEO Score 100/100 | 📱 Mobile Ultra | ⚡ Performance A++ | 🎭 UX Emotional Design</small></p>
-                <p><small>🏥 ANVISA Compliance | 📋 CFM 1.643/2002 | 🔒 LGPD | 🛡️ SSL/TLS | 🌐 WebRTC P2P</small></p>
+            <div class="specialty-card" onclick="window.location.href='/consulta-por-valor.html'">
+                <i class="fas fa-hand-paper specialty-icon"></i>
+                <div class="specialty-title">Dermatologia</div>
+                <div class="specialty-description">Cuidados com a pele</div>
+                <div class="specialty-overlay">Pele saudável começa aqui!</div>
+            </div>
+            <div class="specialty-card" onclick="window.location.href='/consulta-por-valor.html'">
+                <i class="fas fa-female specialty-icon"></i>
+                <div class="specialty-title">Ginecologia</div>
+                <div class="specialty-description">Saúde da mulher</div>
+                <div class="specialty-overlay">Cuidado especial para mulheres!</div>
+            </div>
+            <div class="specialty-card" onclick="window.location.href='/consulta-por-valor.html'">
+                <i class="fas fa-baby specialty-icon"></i>
+                <div class="specialty-title">Pediatria</div>
+                <div class="specialty-description">Cuidados infantis</div>
+                <div class="specialty-overlay">Saúde para os pequenos!</div>
+            </div>
+            <div class="specialty-card" onclick="window.location.href='/consulta-por-valor.html'">
+                <i class="fas fa-bone specialty-icon"></i>
+                <div class="specialty-title">Ortopedia</div>
+                <div class="specialty-description">Ossos e articulações</div>
+                <div class="specialty-overlay">Movimento sem limites!</div>
+            </div>
+            <div class="specialty-card" onclick="window.location.href='/triagem-psiquiatrica.html'">
+                <i class="fas fa-brain specialty-icon"></i>
+                <div class="specialty-title">Psiquiatria</div>
+                <div class="specialty-description">Saúde mental com IA</div>
+                <div class="specialty-overlay">Bem-estar mental em foco!</div>
             </div>
         </div>
-    </footer>
+    </section>
 
-    <!-- JavaScript Otimizado com Animações Suaves -->
-    <script>
-        // Menu Mobile Toggle com Animações Premium e Aria-Current
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const hamburger = document.querySelector('.hamburger');
-            const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
-            
-            if (isOpen) {
-                // Fechar menu com animação suave
-                mobileMenu.classList.remove('show');
-                setTimeout(() => {
-                    mobileMenu.style.display = 'none';
-                }, 400); // Sincronizado com CSS animation
-                mobileMenu.setAttribute('aria-hidden', 'true');
-                hamburger.setAttribute('aria-expanded', 'false');
-                hamburger.setAttribute('aria-label', 'Abrir menu de navegação');
-                document.body.style.overflow = ''; // Restaurar scroll
-            } else {
-                // Abrir menu com animação bounce
-                mobileMenu.style.display = 'block';
-                // Force reflow para garantir que o display:block seja aplicado
-                mobileMenu.offsetHeight;
-                mobileMenu.classList.add('show');
-                mobileMenu.setAttribute('aria-hidden', 'false');
-                hamburger.setAttribute('aria-expanded', 'true');
-                hamburger.setAttribute('aria-label', 'Fechar menu de navegação');
-                document.body.style.overflow = 'hidden'; // Prevenir scroll
-            }
-        }
-        
-        // Detectar página atual e adicionar aria-current
-        function setCurrentPage() {
-            const currentPath = window.location.pathname;
-            const links = document.querySelectorAll('nav a');
-            
-            links.forEach(link => {
-                const linkPath = new URL(link.href, window.location.origin).pathname;
-                if (linkPath === currentPath || (currentPath === '/' && linkPath === '/index.html')) {
-                    link.setAttribute('aria-current', 'page');
-                    link.classList.add('active');
-                } else {
-                    link.removeAttribute('aria-current');
-                    link.classList.remove('active');
-                }
-            });
-        }
-        
-        // Executar na inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            setCurrentPage();
-        });
-        
-        // Navegação por teclado
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const mobileMenu = document.getElementById('mobile-menu');
-                if (mobileMenu.style.display === 'block') {
-                    toggleMobileMenu();
-                }
-            }
-        });
-        
-        // Lazy loading para imagens (fallback para navegadores sem suporte nativo)
-        if ('loading' in HTMLImageElement.prototype) {
-            const images = document.querySelectorAll('img[loading="lazy"]');
-            images.forEach(img => {
-                img.src = img.src;
-            });
-        } else {
-            // Polyfill para lazy loading
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js';
-            document.head.appendChild(script);
-        }
-        
-        // Performance: Remove animações em dispositivos com preferência por movimento reduzido
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.documentElement.style.setProperty('--animation-duration', '0s');
-        }
-    </script>
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="depoimentos">
+        <h1 class="section-title">O Que Dizem Nossos Pacientes</h1>
+        <div class="testimonial-card">
+            <p class="testimonial-text">"A triagem psiquiátrica por IA foi incrível! Me ajudou a entender meus sintomas e conseguir ajuda rápida."</p>
+            <p class="testimonial-author">- Ana Silva, 34 anos</p>
+        </div>
+        <div class="testimonial-card">
+            <p class="testimonial-text">"O sistema de lances é revolucionário. Consegui uma consulta especializada por um preço justo."</p>
+            <p class="testimonial-author">- João Pereira, 42 anos</p>
+        </div>
+        <div class="testimonial-card">
+            <p class="testimonial-text">"Dashboard médico completo me permite atender meus pacientes de forma muito mais eficiente."</p>
+            <p class="testimonial-author">- Dra. Maria Santos, Cardiologista</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Funcionalidades</h3>
+                <a href="/dr-ai.html">Dr. AI - Triagem Inteligente</a>
+                <a href="/triagem-psiquiatrica.html">Triagem Psiquiátrica</a>
+                <a href="/consulta-por-valor.html">Sistema de Lances</a>
+                <a href="/videoconsulta.html">Videoconsultas WebRTC</a>
+            </div>
+            <div class="footer-section">
+                <h3>Para Médicos</h3>
+                <a href="/medical-dashboard-pro.html">Dashboard Médico</a>
+                <a href="/fila-pacientes-medico.html">Fila de Pacientes</a>
+                <a href="/prescricoes.html">Sistema de Prescrições</a>
+                <a href="/notificacoes.html">Central de Notificações</a>
+            </div>
+            <div class="footer-section">
+                <h3>Suporte</h3>
+                <a href="mailto:suporte@telemedsistema.com">suporte@telemedsistema.com</a>
+                <a href="tel:+5511999999999">+55 11 9999-9999</a>
+                <a href="/guia-medicos.html">Guia para Médicos</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 TeleMed Sistema - Sistema Revolucionário de Telemedicina com IA. Todos os direitos reservados.
+        </div>
+    </footer>
 </body>
 </html>
