@@ -1,0 +1,117 @@
+{
+  "telemed_sistema_links": {
+    "base_url": "https://telemed-sistema.replit.dev",
+    "sistemas_principais": {
+      "dr_ai": {
+        "url": "https://telemed-sistema.replit.dev/dr-ai.html",
+        "titulo": "Dr. AI - Triagem Inteligente",
+        "descricao": "Sistema de triagem médica com inteligência artificial",
+        "categoria": "IA Médica"
+      },
+      "triagem_psiquiatrica": {
+        "url": "https://telemed-sistema.replit.dev/triagem-psiquiatrica.html",
+        "titulo": "Triagem Psiquiátrica",
+        "descricao": "Avaliação psiquiátrica com escalas PHQ-9 e GAD-7",
+        "categoria": "Saúde Mental"
+      },
+      "telemonitoramento": {
+        "url": "https://telemed-sistema.replit.dev/telemonitoramento-enfermagem.html",
+        "titulo": "Telemonitoramento de Enfermagem",
+        "descricao": "Monitoramento 24/7 com enfermeiro dedicado",
+        "categoria": "Enfermagem",
+        "preco": "R$ 89/mês"
+      },
+      "sistema_lances": {
+        "url": "https://telemed-sistema.replit.dev/consulta-por-valor.html",
+        "titulo": "Sistema de Lances",
+        "descricao": "Consultas médicas por lances com preços justos",
+        "categoria": "Consultas"
+      },
+      "videoconsultas": {
+        "url": "https://telemed-sistema.replit.dev/videoconsulta.html",
+        "titulo": "Videoconsultas WebRTC",
+        "descricao": "Consultas por vídeo com tecnologia WebRTC",
+        "categoria": "Consultas"
+      }
+    },
+    "sistemas_medicos": {
+      "dashboard_medico": {
+        "url": "https://telemed-sistema.replit.dev/medical-dashboard-pro.html",
+        "titulo": "Dashboard Médico",
+        "descricao": "Painel completo para médicos",
+        "categoria": "Profissional"
+      },
+      "notificacoes": {
+        "url": "https://telemed-sistema.replit.dev/notificacoes.html",
+        "titulo": "Central de Notificações",
+        "descricao": "Sistema enterprise de notificações médicas",
+        "categoria": "Profissional"
+      },
+      "prescricoes": {
+        "url": "https://telemed-sistema.replit.dev/prescricoes.html",
+        "titulo": "Sistema de Prescrições",
+        "descricao": "Emissão digital de receitas médicas",
+        "categoria": "Profissional"
+      },
+      "fila_pacientes": {
+        "url": "https://telemed-sistema.replit.dev/fila-pacientes-medico.html",
+        "titulo": "Fila de Pacientes",
+        "descricao": "Gerenciamento de fila para médicos",
+        "categoria": "Profissional"
+      },
+      "historico": {
+        "url": "https://telemed-sistema.replit.dev/historico-consultas.html",
+        "titulo": "Histórico de Consultas",
+        "descricao": "Histórico completo de atendimentos",
+        "categoria": "Profissional"
+      }
+    },
+    "landing_pages": {
+      "principal": {
+        "url": "https://telemed-sistema.replit.dev/",
+        "titulo": "TeleMed Sistema - Página Principal",
+        "descricao": "Landing page com todas as especialidades"
+      },
+      "integracao": {
+        "url": "https://telemed-sistema.replit.dev/integracao-hostinger.html",
+        "titulo": "Página de Integração Hostinger",
+        "descricao": "Guia completo com todos os links para integração"
+      }
+    },
+    "instrucoes_hostinger": {
+      "passo_1": "Acesse o Hostinger Website Builder",
+      "passo_2": "Selecione o botão que deseja configurar",
+      "passo_3": "Procure por 'Link' ou 'URL' nas configurações do botão",
+      "passo_4": "Cole o link desejado da lista acima",
+      "passo_5": "Configure para 'Abrir em nova aba'",
+      "passo_6": "Salve e publique as alterações"
+    },
+    "categorias_botoes": {
+      "pacientes": [
+        "dr_ai",
+        "triagem_psiquiatrica", 
+        "telemonitoramento",
+        "sistema_lances",
+        "videoconsultas"
+      ],
+      "medicos": [
+        "dashboard_medico",
+        "notificacoes",
+        "prescricoes",
+        "fila_pacientes",
+        "historico"
+      ]
+    },
+    "especializacoes_medicas": {
+      "cardiologia": "Para problemas cardíacos",
+      "pediatria": "Cuidados infantis",
+      "psiquiatria": "Saúde mental especializada",
+      "clinica_geral": "Atendimento geral",
+      "dermatologia": "Problemas de pele",
+      "ginecologia": "Saúde da mulher",
+      "neurologia": "Sistema nervoso",
+      "endocrinologia": "Hormônios e metabolismo",
+      "ortopedia": "Ossos e articulações"
+    }
+  }
+}
