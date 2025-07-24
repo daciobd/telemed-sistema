@@ -3,1177 +3,909 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta por Proposta de Valor - TeleMed Sistema</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <title>Sistema de Lances - Consulta por Valor | TeleMed Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-        
-        .header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            color: white;
-            text-align: center;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            font-size: 2rem;
-        }
-        
-        .back-link {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: opacity 0.3s;
-        }
-        
-        .back-link:hover {
-            opacity: 0.7;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        
-        /* Patient Bidding Interface */
-        .bidding-panel {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            height: fit-content;
-        }
-        
-        .panel-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        .panel-content {
-            padding: 2rem;
-        }
-        
-        .urgency-check {
-            background: #fef3c7;
-            border: 2px solid #f59e0b;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .urgency-check h3 {
-            color: #92400e;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .urgency-questions {
-            display: grid;
-            gap: 1rem;
-        }
-        
-        .urgency-question {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .urgency-question input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #f59e0b;
-        }
-        
-        .urgency-question label {
-            color: #92400e;
-            font-weight: 500;
-        }
-        
-        .value-selector {
-            margin: 2rem 0;
-        }
-        
-        .value-selector h3 {
-            margin-bottom: 1rem;
-            color: #2d3748;
-        }
-        
-        .value-options {
-            display: grid;
-            gap: 1rem;
-        }
-        
-        .value-option {
-            border: 2px solid #e2e8f0;
-            border-radius: 15px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .value-option:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .value-option.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-        }
-        
-        .value-tier {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .tier-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        .tier-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .bronze { background: #cd7f32; color: white; }
-        .silver { background: #c0c0c0; color: #333; }
-        .gold { background: #ffd700; color: #333; }
-        .platinum { background: #e5e4e2; color: #333; }
-        .premium { background: linear-gradient(45deg, #ff6b6b, #4ecdc4); color: white; }
-        
-        .tier-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .tier-benefits {
-            color: #4a5568;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        
-        .availability-indicator {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        
-        .available { background: #10b981; }
-        .busy { background: #f59e0b; }
-        .unavailable { background: #ef4444; }
-        
-        .custom-value {
-            margin-top: 1rem;
-        }
-        
-        .custom-input {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .custom-input input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-        
-        .bid-button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 2rem;
-            transition: all 0.3s;
-        }
-        
-        .bid-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .bid-button:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        /* Doctor Dashboard */
-        .doctor-dashboard {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            height: fit-content;
-        }
-        
-        .dashboard-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 1.5rem;
-        }
-        
-        .doctor-status {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .status-toggle {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .status-btn {
-            padding: 8px 16px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: transparent;
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .status-btn.active {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .queue-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
-        
-        .queue-filters {
-            padding: 1rem;
-            background: #f8fafc;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid #cbd5e0;
-            background: white;
-            color: #4a5568;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .filter-btn.active, .filter-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .queue-list {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        
-        .queue-item {
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1.5rem;
-            transition: background 0.3s;
-        }
-        
-        .queue-item:hover {
-            background: #f8fafc;
-        }
-        
-        .queue-item.emergency {
-            border-left: 4px solid #ef4444;
-            background: #fef2f2;
-        }
-        
-        .queue-item.high-value {
-            border-left: 4px solid #ffd700;
-            background: #fffbeb;
-        }
-        
-        .patient-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-        
-        .patient-details h4 {
-            color: #2d3748;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .patient-details p {
-            color: #4a5568;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .bid-info {
-            text-align: right;
-        }
-        
-        .bid-amount {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .wait-time {
-            font-size: 0.8rem;
-            color: #6b7280;
-            margin-top: 0.25rem;
-        }
-        
-        .tier-indicator {
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-            margin-top: 0.25rem;
-            display: inline-block;
-        }
-        
-        .patient-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .action-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .attend-now {
-            background: #10b981;
-            color: white;
-        }
-        
-        .attend-now:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-        
-        .schedule-later {
-            background: #6b7280;
-            color: white;
-        }
-        
-        .schedule-later:hover {
-            background: #4b5563;
-        }
-        
-        .priority-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .priority-emergency { background: #ef4444; }
-        .priority-high { background: #f59e0b; }
-        .priority-medium { background: #10b981; }
-        .priority-low { background: #6b7280; }
-        
-        .revenue-highlight {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem;
-            text-align: center;
-        }
-        
-        .revenue-highlight h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                margin: 1rem auto;
-                padding: 0 15px;
-            }
-            
-            .queue-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .status-toggle, .queue-filters {
-                flex-wrap: wrap;
-            }
-        }
-        
-        /* Animations */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .queue-item {
-            animation: slideIn 0.5s ease;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .availability-indicator.available {
-            animation: pulse 2s infinite;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
+        .bid-animation {
+            animation: bidPulse 2s infinite;
+        }
+        @keyframes bidPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .lance-card {
+            transition: all 0.3s ease;
+        }
+        .lance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body>
-    <header class="header">
-        <a href="/" class="back-link">
-            <i class="fas fa-arrow-left"></i> Voltar
-        </a>
-        <h1>
-            <i class="fas fa-coins"></i>
-            Consulta por Proposta de Valor
-        </h1>
-        <p>Faça sua proposta - quanto maior o valor, maior a prioridade</p>
-    </header>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-gavel text-white text-2xl"></i>
+                    </div>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Sistema de Lances Progressivos</h1>
+                <p class="text-gray-600">Conecte-se com médicos através de lances competitivos para consultas personalizadas</p>
+                <div class="mt-4">
+                    <a href="/" class="text-blue-600 hover:text-blue-800 mr-4">← Voltar ao Início</a>
+                    <a href="/guia-medicos.html" class="text-purple-600 hover:text-purple-800 mr-4">📋 Guia Médicos</a>
+                    <a href="/medical-dashboard-pro.html" class="text-purple-600 hover:text-purple-800 mr-4">👨‍⚕️ Dashboard Médico</a>
+                    <a href="/dr-ai.html" class="text-green-600 hover:text-green-800">🤖 Triagem IA</a>
+                </div>
+            </div>
+        </div>
 
-    <div class="container">
-        <!-- Patient Bidding Interface -->
-        <div class="bidding-panel">
-            <div class="panel-header">
-                <h2>💰 Faça Sua Proposta</h2>
-                <p>Sistema inovador: você decide quanto pagar</p>
+        <!-- Como Funciona o Sistema de Lances - Seção Explicativa Completa -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Como Funciona o Sistema de Lances</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    Nosso sistema conecta pacientes e médicos de forma transparente e eficiente. 
+                    Veja como é simples usar nossa plataforma inovadora:
+                </p>
             </div>
             
-            <div class="panel-content">
-                <!-- Urgency Check -->
-                <div class="urgency-check">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Verificação de Urgência</h3>
-                    <div class="urgency-questions">
-                        <div class="urgency-question">
-                            <input type="checkbox" id="suicidal" onchange="checkUrgency()">
-                            <label for="suicidal">Pensamentos de autolesão ou suicídio</label>
-                        </div>
-                        <div class="urgency-question">
-                            <input type="checkbox" id="psychotic" onchange="checkUrgency()">
-                            <label for="psychotic">Sintomas psicóticos ativos</label>
-                        </div>
-                        <div class="urgency-question">
-                            <input type="checkbox" id="panic" onchange="checkUrgency()">
-                            <label for="panic">Crise de pânico severa</label>
-                        </div>
-                        <div class="urgency-question">
-                            <input type="checkbox" id="substances" onchange="checkUrgency()">
-                            <label for="substances">Uso recente de substâncias com risco</label>
-                        </div>
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Passo 1 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
                     </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">1. Cadastre sua Necessidade</h3>
+                    <p class="text-gray-600 text-sm">
+                        Informe a especialidade, tipo de consulta e valor inicial que você está disposto a pagar
+                    </p>
                 </div>
 
-                <!-- Value Selector -->
-                <div class="value-selector">
-                    <h3>💸 Escolha sua Proposta de Valor</h3>
-                    <div class="value-options">
-                        <div class="value-option" onclick="selectValue('bronze', 149)">
-                            <div class="availability-indicator available"></div>
-                            <div class="value-tier">
-                                <span class="tier-name">Bronze</span>
-                                <span class="tier-badge bronze">BÁSICO</span>
-                            </div>
-                            <div class="tier-price">R$ 149 - 199</div>
-                            <div class="tier-benefits">
-                                • Agendamento 24-48h<br>
-                                • Horário comercial (8h-18h)<br>
-                                • Segunda a sexta-feira
-                            </div>
-                        </div>
-
-                        <div class="value-option" onclick="selectValue('silver', 200)">
-                            <div class="availability-indicator busy"></div>
-                            <div class="value-tier">
-                                <span class="tier-name">Prata</span>
-                                <span class="tier-badge silver">POPULAR</span>
-                            </div>
-                            <div class="tier-price">R$ 200 - 299</div>
-                            <div class="tier-benefits">
-                                • Encaixe em 2-4h<br>
-                                • Horário estendido (7h-20h)<br>
-                                • Segunda a sexta-feira
-                            </div>
-                        </div>
-
-                        <div class="value-option" onclick="selectValue('gold', 300)">
-                            <div class="availability-indicator available"></div>
-                            <div class="value-tier">
-                                <span class="tier-name">Ouro</span>
-                                <span class="tier-badge gold">PREMIUM</span>
-                            </div>
-                            <div class="tier-price">R$ 300 - 399</div>
-                            <div class="tier-benefits">
-                                • Atendimento em até 15 min<br>
-                                • Inclui sábados manhã<br>
-                                • Prioridade alta na fila
-                            </div>
-                        </div>
-
-                        <div class="value-option" onclick="selectValue('platinum', 400)">
-                            <div class="availability-indicator available"></div>
-                            <div class="value-tier">
-                                <span class="tier-name">Platina</span>
-                                <span class="tier-badge platinum">VIP</span>
-                            </div>
-                            <div class="tier-price">R$ 400 - 499</div>
-                            <div class="tier-benefits">
-                                • Atendimento imediato<br>
-                                • Sábados completos<br>
-                                • Prioridade máxima
-                            </div>
-                        </div>
-
-                        <div class="value-option" onclick="selectValue('premium', 500)">
-                            <div class="availability-indicator available"></div>
-                            <div class="value-tier">
-                                <span class="tier-name">Premium</span>
-                                <span class="tier-badge premium">24/7</span>
-                            </div>
-                            <div class="tier-price">R$ 500+</div>
-                            <div class="tier-benefits">
-                                • Atendimento 24/7<br>
-                                • Finais de semana e feriados<br>
-                                • Horários noturnos disponíveis
-                            </div>
-                        </div>
+                <!-- Passo 2 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-search text-green-600 text-2xl"></i>
                     </div>
-
-                    <div class="custom-value">
-                        <h4>💡 Ou faça uma proposta personalizada:</h4>
-                        <div class="custom-input">
-                            <span>R$</span>
-                            <input type="number" id="customValue" placeholder="Mínimo R$ 149" min="149" onchange="updateCustomValue()">
-                        </div>
-                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">2. Médicos Fazem Lances</h3>
+                    <p class="text-gray-600 text-sm">
+                        Profissionais qualificados competem pelo melhor valor para sua consulta
+                    </p>
                 </div>
 
-                <button class="bid-button" id="bidButton" onclick="submitBid()" disabled>
-                    Selecione um valor para continuar
+                <!-- Passo 3 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-star text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">3. Escolha o Melhor</h3>
+                    <p class="text-gray-600 text-sm">
+                        Analise perfis e escolha o médico ideal baseado em valor, especialização e avaliações
+                    </p>
+                </div>
+
+                <!-- Passo 4 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-video text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">4. Realize a Consulta</h3>
+                    <p class="text-gray-600 text-sm">
+                        Agende e realize sua consulta com segurança através de nossa plataforma
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vantagens do Sistema -->
+            <div class="mt-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Por que usar nosso Sistema de Lances?</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700"><strong>Preços Justos:</strong> Competição garante valores acessíveis</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700"><strong>Transparência:</strong> Veja todos os lances em tempo real</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700"><strong>Qualidade:</strong> Médicos verificados e qualificados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão para Iniciar Lance -->
+            <div class="text-center mt-6">
+                <button onclick="showBidForm()" class="bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-green-700 transition-all font-bold text-lg shadow-lg">
+                    <i class="fas fa-plus mr-2"></i>Criar Novo Lance de Consulta
                 </button>
             </div>
         </div>
 
-        <!-- Doctor Dashboard -->
-        <div class="doctor-dashboard">
-            <div class="dashboard-header">
-                <div class="doctor-status">
-                    <h2>👨‍⚕️ Dashboard Médico</h2>
-                    <div class="status-toggle">
-                        <button class="status-btn active" onclick="setStatus('online')">🟢 Online</button>
-                        <button class="status-btn" onclick="setStatus('busy')">🟡 Ocupado</button>
-                        <button class="status-btn" onclick="setStatus('offline')">🔴 Offline</button>
+        <!-- Formulário de Novo Lance (Oculto inicialmente) -->
+        <div id="bidForm" class="bg-white rounded-2xl shadow-lg p-8 mb-8 hidden">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Criar Nova Solicitação de Consulta</h3>
+            <form onsubmit="createNewBid(event)" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Especialidade Médica</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Selecione a especialidade</option>
+                            <option value="cardiologia">Cardiologia</option>
+                            <option value="pediatria">Pediatria</option>
+                            <option value="dermatologia">Dermatologia</option>
+                            <option value="ginecologia">Ginecologia</option>
+                            <option value="psiquiatria">Psiquiatria</option>
+                            <option value="clinica-geral">Clínica Geral</option>
+                            <option value="ortopedia">Ortopedia</option>
+                            <option value="neurologia">Neurologia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Valor Inicial do Lance</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                            <input type="number" placeholder="149" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" min="60" step="1" required>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Valor mínimo: R$ 60</p>
                     </div>
                 </div>
                 
-                <div class="queue-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalQueue">9</span>
-                        <span class="stat-label">Na Fila</span>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Descrição dos Sintomas/Necessidades</label>
+                    <textarea placeholder="Descreva brevemente seus sintomas ou necessidades médicas..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-24 resize-none" required></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="hideBidForm()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-rocket mr-2"></i>Iniciar Lance
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Active Auctions -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Consulta Cardiologia -->
+            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Consulta Cardiologia</h3>
+                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Urgente</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Atual:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 180</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="emergencyCount">2</span>
-                        <span class="stat-label">Emergenciais</span>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-red-600 font-semibold">12:45</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="estimatedRevenue">R$ 2.890</span>
-                        <span class="stat-label">Receita Est.</span>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">5</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="avgWait">18min</span>
-                        <span class="stat-label">Tempo Médio</span>
+                    <div class="mt-4 bid-section">
+                        <div class="bid-input-wrapper">
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                                <input type="number" placeholder="185" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all" min="185" step="5" value="185">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 185 • Sugestão: R$ 190-200</p>
+                        </div>
+                        <div class="space-y-2">
+                            <button onclick="attendPatient('Maria Silva')" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-bold">
+                                🚨 ATENDER AGORA - R$ 300
+                            </button>
+                            <button onclick="submitBid(this, 'Cardiologia')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="revenue-highlight">
-                <h4>💰 Potencial de Receita</h4>
-                <p>Com 9 pacientes na fila: <strong>R$ 2.890</strong> em consultas</p>
-                <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 0.5rem;">
-                    Horário noturno e fins de semana: +40% de valor médio
-                </p>
+            <!-- Teleconsulta Pediatria -->
+            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Teleconsulta Pediatria</h3>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Regular</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Atual:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 150</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-orange-600 font-semibold">25:30</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">3</span>
+                    </div>
+                    <div class="mt-4 bid-section">
+                        <div class="bid-input-wrapper">
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                                <input type="number" placeholder="155" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" min="155" step="5" value="155">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 155 • Sugestão: R$ 160-170</p>
+                        </div>
+                        <div class="space-y-2">
+                            <button onclick="attendPatient('Ana Costa')" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold">
+                                ▶️ Atender Agora - R$ 150
+                            </button>
+                            <button onclick="submitBid(this, 'Pediatria')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="queue-filters">
-                <button class="filter-btn active" onclick="filterQueue('all')">Todos (9)</button>
-                <button class="filter-btn" onclick="filterQueue('emergency')">Emergência (2)</button>
-                <button class="filter-btn" onclick="filterQueue('high')">Alto Valor (3)</button>
-                <button class="filter-btn" onclick="filterQueue('medium')">Médio (3)</button>
-                <button class="filter-btn" onclick="filterQueue('low')">Baixo (1)</button>
+            <!-- Consulta Dermatologia -->
+            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Consulta Dermatologia</h3>
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Agendado</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Atual:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 120</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-green-600 font-semibold">45:15</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">7</span>
+                    </div>
+                    <div class="mt-4 bid-section">
+                        <div class="bid-input-wrapper">
+                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                                <input type="number" placeholder="125" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all" min="125" step="5" value="125">
+                            </div>
+                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 125 • Sugestão: R$ 130-140</p>
+                        </div>
+                        <div class="space-y-2">
+                            <button onclick="scheduleConsultation('João Santos', '22:00')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-bold">
+                                📅 Agendar 22h - R$ 120
+                            </button>
+                            <button onclick="submitBid(this, 'Dermatologia')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="queue-list" id="queueList">
-                <!-- Emergency Cases First (Always Priority) -->
-                <div class="queue-item emergency" data-filter="emergency">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-emergency"></span>Maria Silva (28 anos)</h4>
-                            <p><strong>🚨 EMERGENCIAL:</strong> Ideação suicida ativa</p>
-                            <p><strong>Sintomas:</strong> Depressão severa, isolamento</p>
-                            <p>⏰ Aguardando há: <strong>2 min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">EMERGÊNCIA</div>
-                            <div class="tier-indicator emergency">PRIORIDADE ABSOLUTA</div>
-                            <div class="wait-time">Atender IMEDIATAMENTE</div>
-                        </div>
+        <!-- Create New Auction -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                <i class="fas fa-plus-circle text-blue-600 mr-2"></i>
+                Criar Nova Consulta por Lance
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Especialidade Médica</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="">Selecione a especialidade</option>
+                            <option value="cardiologia">Cardiologia</option>
+                            <option value="pediatria">Pediatria</option>
+                            <option value="dermatologia">Dermatologia</option>
+                            <option value="neurologia">Neurologia</option>
+                            <option value="ortopedia">Ortopedia</option>
+                            <option value="ginecologia">Ginecologia</option>
+                        </select>
                     </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">🚨 ATENDER AGORA</button>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Tipo de Consulta</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="">Selecione o tipo</option>
+                            <option value="presencial">Consulta Presencial</option>
+                            <option value="teleconsulta">Teleconsulta</option>
+                            <option value="urgente">Consulta Urgente</option>
+                            <option value="retorno">Consulta de Retorno</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Lance Inicial (R$)</label>
+                        <input type="number" class="w-full p-3 border rounded-lg" placeholder="100" min="50" step="10">
                     </div>
                 </div>
-
-                <div class="queue-item emergency" data-filter="emergency">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-emergency"></span>João Santos (45 anos)</h4>
-                            <p><strong>🚨 EMERGENCIAL:</strong> Crise psicótica aguda</p>
-                            <p><strong>Sintomas:</strong> Alucinações, agitação</p>
-                            <p>⏰ Aguardando há: <strong>5 min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">EMERGÊNCIA</div>
-                            <div class="tier-indicator emergency">PRIORIDADE ABSOLUTA</div>
-                            <div class="wait-time">Atender IMEDIATAMENTE</div>
-                        </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Data Preferida</label>
+                        <input type="date" class="w-full p-3 border rounded-lg">
                     </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">🚨 ATENDER AGORA</button>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Horário Preferido</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="">Selecione o horário</option>
+                            <option value="manha">Manhã (8h-12h)</option>
+                            <option value="tarde">Tarde (13h-17h)</option>
+                            <option value="noite">Noite (18h-22h)</option>
+                            <option value="flexivel">Horário Flexível</option>
+                        </select>
                     </div>
-                </div>
-
-                <!-- High Value Bids (Ordered by Value) -->
-                <div class="queue-item high-value" data-filter="high">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-high"></span>Ana Costa (35 anos)</h4>
-                            <p><strong>Motivo:</strong> Ansiedade severa e insônia</p>
-                            <p><strong>Preferência:</strong> Atendimento noturno (22h)</p>
-                            <p>⏰ Aguardando há: <strong>8 min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 650</div>
-                            <div class="tier-indicator premium">PREMIUM 24/7</div>
-                            <div class="wait-time">Horário noturno disponível</div>
-                        </div>
-                    </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">🌙 Agendar 22h</button>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-2">Duração do Lance (minutos)</label>
+                        <select class="w-full p-3 border rounded-lg">
+                            <option value="30">30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="120">2 horas</option>
+                            <option value="240">4 horas</option>
+                        </select>
                     </div>
                 </div>
+            </div>
+            <div class="mt-6">
+                <label class="block text-gray-700 font-semibold mb-2">Descrição dos Sintomas/Necessidades</label>
+                <textarea class="w-full p-3 border rounded-lg h-24" placeholder="Descreva brevemente seus sintomas ou necessidades médicas..."></textarea>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="submitNewBid()" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-rocket mr-2"></i>Iniciar Lance
+                </button>
+            </div>
+        </div>
 
-                <div class="queue-item high-value" data-filter="high">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-high"></span>Carlos Lima (42 anos)</h4>
-                            <p><strong>Motivo:</strong> Ajuste de medicação antidepressiva</p>
-                            <p><strong>Preferência:</strong> Sábado manhã</p>
-                            <p>⏰ Aguardando há: <strong>15 min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 520</div>
-                            <div class="tier-indicator premium">PREMIUM 24/7</div>
-                            <div class="wait-time">Fins de semana</div>
-                        </div>
+        <!-- How It Works -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Como Funciona o Sistema de Lances</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
                     </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">📅 Sábado 9h</button>
-                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">1. Cadastre sua Necessidade</h3>
+                    <p class="text-gray-600 text-sm">Informe a especialidade, tipo de consulta e valor inicial</p>
                 </div>
-
-                <div class="queue-item high-value" data-filter="high">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-high"></span>Patricia Oliveira (29 anos)</h4>
-                            <p><strong>Motivo:</strong> Primera consulta - transtorno alimentar</p>
-                            <p><strong>Preferência:</strong> Atendimento em 15 min</p>
-                            <p>⏰ Aguardando há: <strong>12 min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 480</div>
-                            <div class="tier-indicator platinum">PLATINA VIP</div>
-                            <div class="wait-time">Atendimento imediato</div>
-                        </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-search text-green-600 text-2xl"></i>
                     </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">📅 Agendar</button>
-                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">2. Médicos Fazem Lances</h3>
+                    <p class="text-gray-600 text-sm">Profissionais qualificados competem pelo melhor valor</p>
                 </div>
-
-                <!-- Medium Value Bids -->
-                <div class="queue-item" data-filter="medium">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-medium"></span>Roberto Silva (38 anos)</h4>
-                            <p><strong>Motivo:</strong> Acompanhamento - transtorno bipolar</p>
-                            <p><strong>Preferência:</strong> Horário estendido (até 20h)</p>
-                            <p>⏰ Aguardando há: <strong>45 min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 350</div>
-                            <div class="tier-indicator gold">OURO PREMIUM</div>
-                            <div class="wait-time">Até 15 min</div>
-                        </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gavel text-purple-600 text-2xl"></i>
                     </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">📅 Agendar</button>
-                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">3. Escolha o Melhor</h3>
+                    <p class="text-gray-600 text-sm">Analise perfis e escolha o médico ideal</p>
                 </div>
-
-                <div class="queue-item" data-filter="medium">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-medium"></span>Luciana Costa (31 anos)</h4>
-                            <p><strong>Motivo:</strong> Síndrome do pânico - retorno</p>
-                            <p><strong>Preferência:</strong> Horário estendido</p>
-                            <p>⏰ Aguardando há: <strong>1h 02min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 320</div>
-                            <div class="tier-indicator gold">OURO PREMIUM</div>
-                            <div class="wait-time">Sábado manhã</div>
-                        </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-handshake text-red-600 text-2xl"></i>
                     </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">📅 Agendar</button>
-                    </div>
-                </div>
-
-                <div class="queue-item" data-filter="medium">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-medium"></span>Eduardo Santos (26 anos)</h4>
-                            <p><strong>Motivo:</strong> TDAH - ajuste medicação</p>
-                            <p><strong>Preferência:</strong> Encaixe em 2-4h</p>
-                            <p>⏰ Aguardando há: <strong>1h 18min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 280</div>
-                            <div class="tier-indicator silver">PRATA POPULAR</div>
-                            <div class="wait-time">Horário estendido</div>
-                        </div>
-                    </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">📅 Agendar</button>
-                    </div>
-                </div>
-
-                <!-- Low Value Bids -->
-                <div class="queue-item" data-filter="low">
-                    <div class="patient-info">
-                        <div class="patient-details">
-                            <h4><span class="priority-indicator priority-low"></span>Fernanda Santos (31 anos)</h4>
-                            <p><strong>Motivo:</strong> Primeira consulta - ansiedade</p>
-                            <p><strong>Preferência:</strong> Horário comercial</p>
-                            <p>⏰ Aguardando há: <strong>2h 20min</strong></p>
-                        </div>
-                        <div class="bid-info">
-                            <div class="bid-amount">R$ 179</div>
-                            <div class="tier-indicator bronze">BRONZE BÁSICO</div>
-                            <div class="wait-time">24-48h</div>
-                        </div>
-                    </div>
-                    <div class="patient-actions">
-                        <button class="action-btn attend-now">▶️ Atender Agora</button>
-                        <button class="action-btn schedule-later">📅 Agendar</button>
-                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">4. Realize a Consulta</h3>
+                    <p class="text-gray-600 text-sm">Agende e realize sua consulta com segurança</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification System -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationText">Proposta enviada com sucesso!</span>
-    </div>
-
     <script>
-        let selectedTier = null;
-        let selectedValue = 0;
-        let isEmergency = false;
-        let currentFilter = 'all';
-
-        function checkUrgency() {
-            const urgencyChecks = ['suicidal', 'psychotic', 'panic', 'substances'];
-            isEmergency = urgencyChecks.some(id => document.getElementById(id).checked);
-            
-            if (isEmergency) {
-                showNotification('🚨 CASO DE EMERGÊNCIA DETECTADO - Você será direcionado imediatamente para atendimento prioritário!', 'emergency');
-                document.getElementById('bidButton').textContent = '🚨 EMERGÊNCIA - Aguarde Contato Imediato';
-                document.getElementById('bidButton').style.background = '#ef4444';
-                document.getElementById('bidButton').disabled = false;
-            } else {
-                document.getElementById('bidButton').textContent = 'Selecione um valor para continuar';
-                document.getElementById('bidButton').style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                updateBidButton();
-            }
+        // Funções de navegação para consultas
+        function attendPatient(patientName) {
+            alert(`✅ Atendimento aceito!\n\nPaciente: ${patientName}\nRedirecionando para videoconsulta...`);
+            setTimeout(() => {
+                window.location.href = '/videoconsulta.html';
+            }, 1500);
         }
 
-        function selectValue(tier, baseValue) {
-            // Remove previous selection
-            document.querySelectorAll('.value-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            // Add selection to clicked option
-            event.currentTarget.classList.add('selected');
-            
-            selectedTier = tier;
-            selectedValue = baseValue;
-            document.getElementById('customValue').value = baseValue;
-            
-            updateBidButton();
+        function scheduleConsultation(patientName, time) {
+            alert(`📅 Consulta agendada!\n\nPaciente: ${patientName}\nHorário: ${time}\nRedirecionando para videoconsulta...`);
+            setTimeout(() => {
+                window.location.href = '/videoconsulta.html';
+            }, 1500);
         }
 
-        function updateCustomValue() {
-            const customValue = parseInt(document.getElementById('customValue').value) || 0;
-            if (customValue >= 149) {
-                selectedValue = customValue;
-                
-                // Remove all selections
-                document.querySelectorAll('.value-option').forEach(option => {
-                    option.classList.remove('selected');
-                });
-                
-                // Determine tier based on value
-                if (customValue < 200) selectedTier = 'bronze';
-                else if (customValue < 300) selectedTier = 'silver';
-                else if (customValue < 400) selectedTier = 'gold';
-                else if (customValue < 500) selectedTier = 'platinum';
-                else selectedTier = 'premium';
-                
-                updateBidButton();
-            }
+        // Navegação direta para dashboard médico
+        function goToDashboard() {
+            window.location.href = '/medical-dashboard-pro.html';
         }
 
-        function updateBidButton() {
-            const button = document.getElementById('bidButton');
-            if (selectedValue >= 149) {
-                button.disabled = false;
-                button.textContent = `💰 Fazer Proposta - R$ ${selectedValue}`;
-            } else {
-                button.disabled = true;
-                button.textContent = 'Selecione um valor (mín. R$ 149)';
-            }
-        }
-
-        function submitBid() {
-            if (isEmergency) {
-                showNotification('🚨 EMERGÊNCIA REGISTRADA - Médico notificado imediatamente!', 'emergency');
-                // Simulate adding emergency to queue
-                addToQueue({
-                    name: 'Você (EMERGÊNCIA)',
-                    age: '32 anos',
-                    issue: 'Caso emergencial',
-                    value: 'EMERGÊNCIA',
-                    tier: 'PRIORIDADE ABSOLUTA',
-                    isEmergency: true
-                });
+        // Função para submeter lance com animações e feedback visual
+        function submitBid(button, specialty) {
+            const inputElement = button.parentElement.parentElement.querySelector('input[type="number"]');
+            const bidValue = inputElement.value;
+            const bidValueNum = parseFloat(bidValue);
+            
+            // Validação mais robusta
+            if (!bidValue || bidValue.trim() === '' || isNaN(bidValueNum) || bidValueNum <= 0) {
+                showErrorFeedback(inputElement, 'Por favor, insira um valor válido!');
                 return;
             }
-
-            if (selectedValue < 149) {
-                showNotification('Por favor, selecione um valor mínimo de R$ 149,00', 'error');
+            
+            const minValue = parseInt(inputElement.getAttribute('min')) || 149;
+            if (bidValueNum < minValue) {
+                showErrorFeedback(inputElement, `Lance mínimo: R$ ${minValue}`);
                 return;
             }
-
-            const tierNames = {
-                'bronze': 'Bronze Básico',
-                'silver': 'Prata Popular', 
-                'gold': 'Ouro Premium',
-                'platinum': 'Platina VIP',
-                'premium': 'Premium 24/7'
-            };
-
-            const estimatedTimes = {
-                'bronze': '24-48 horas',
-                'silver': '2-4 horas',
-                'gold': 'até 15 minutos',
-                'platinum': 'imediato quando disponível',
-                'premium': 'atendimento prioritário 24/7'
-            };
-
-            // Add to queue
-            addToQueue({
-                name: 'Você',
-                age: '32 anos',
-                issue: 'Consulta solicitada',
-                value: selectedValue,
-                tier: tierNames[selectedTier],
-                estimatedTime: estimatedTimes[selectedTier]
-            });
-
-            showNotification(`💰 PROPOSTA ENVIADA! R$ ${selectedValue} - ${tierNames[selectedTier]} - Tempo: ${estimatedTimes[selectedTier]}`, 'success');
+            
+            // Animação de envio
+            button.disabled = true;
+            button.style.transform = 'scale(0.95)';
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+            
+            // Simular processo de lance
+            setTimeout(() => {
+                // Sucesso visual
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Enviado!';
+                button.className = button.className.replace('bg-green-600', 'bg-green-500');
+                
+                // Notificação de sucesso melhorada
+                showSuccessModal(specialty, bidValue);
+                
+                // Atualizar valor na tela com animação
+                const currentBidElement = button.parentElement.parentElement.parentElement.querySelector('.bid-animation');
+                if (currentBidElement) {
+                    currentBidElement.style.transform = 'scale(1.1)';
+                    currentBidElement.style.color = '#059669';
+                    currentBidElement.textContent = `R$ ${bidValue}`;
+                    
+                    setTimeout(() => {
+                        currentBidElement.style.transform = 'scale(1)';
+                    }, 300);
+                }
+                
+                // Simular atualização no dashboard médico
+                updateMedicalDashboard(specialty, bidValue);
+                
+                // Reset do botão após sucesso
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.style.transform = 'scale(1)';
+                    button.innerHTML = '<i class="fas fa-gavel mr-2"></i>Novo Lance';
+                    button.className = button.className.replace('bg-green-500', 'bg-blue-600');
+                }, 3000);
+                
+            }, 1500);
         }
-
-        function addToQueue(patient) {
-            // Update queue statistics
-            const currentTotal = parseInt(document.getElementById('totalQueue').textContent);
-            const currentRevenue = parseFloat(document.getElementById('estimatedRevenue').textContent.replace('R$ ', '').replace('.', ''));
+        
+        // Função para mostrar feedback de erro
+        function showErrorFeedback(inputElement, message) {
+            inputElement.style.borderColor = '#ef4444';
+            inputElement.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
             
-            document.getElementById('totalQueue').textContent = currentTotal + 1;
+            // Criar tooltip de erro
+            const tooltip = document.createElement('div');
+            tooltip.className = 'error-tooltip';
+            tooltip.textContent = message;
+            tooltip.style.cssText = `
+                position: absolute; 
+                background: #ef4444; 
+                color: white; 
+                padding: 8px 12px; 
+                border-radius: 6px; 
+                font-size: 12px; 
+                top: -40px; 
+                left: 50%; 
+                transform: translateX(-50%); 
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            `;
             
-            if (patient.isEmergency) {
-                const currentEmergency = parseInt(document.getElementById('emergencyCount').textContent);
-                document.getElementById('emergencyCount').textContent = currentEmergency + 1;
-            } else {
-                document.getElementById('estimatedRevenue').textContent = `R$ ${(currentRevenue + patient.value).toLocaleString()}`;
-            }
-
-            // Add visual feedback
-            const queueList = document.getElementById('queueList');
-            const newItem = document.createElement('div');
-            newItem.className = `queue-item ${patient.isEmergency ? 'emergency' : 'high-value'}`;
-            newItem.style.background = '#e6fffa';
-            newItem.style.border = '2px solid #10b981';
+            inputElement.parentElement.style.position = 'relative';
+            inputElement.parentElement.appendChild(tooltip);
+            inputElement.focus();
+            inputElement.select();
             
-            newItem.innerHTML = `
-                <div class="patient-info">
-                    <div class="patient-details">
-                        <h4><span class="priority-indicator priority-${patient.isEmergency ? 'emergency' : 'high'}"></span>${patient.name} (${patient.age})</h4>
-                        <p><strong>Motivo:</strong> ${patient.issue}</p>
-                        <p>⏰ Aguardando há: <strong>0 min</strong> 🆕</p>
+            // Remover feedback após 3 segundos
+            setTimeout(() => {
+                inputElement.style.borderColor = '#d1d5db';
+                inputElement.style.boxShadow = '';
+                if (tooltip.parentElement) {
+                    tooltip.parentElement.removeChild(tooltip);
+                }
+            }, 3000);
+        }
+        
+        // Função para mostrar modal de sucesso
+        function showSuccessModal(specialty, bidValue) {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
+                        <h3 style="color: #059669; font-size: 24px; margin-bottom: 15px; font-weight: bold;">Lance Enviado!</h3>
+                        <p style="color: #6b7280; margin-bottom: 20px;">
+                            <strong>Especialidade:</strong> ${specialty}<br>
+                            <strong>Valor:</strong> R$ ${bidValue}<br><br>
+                            <em>Você receberá notificação se for selecionado!</em>
+                        </p>
+                        <button onclick="this.parentElement.parentElement.remove(); window.location.href='/aguardando-medico.html';" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            Entendi ✓
+                        </button>
                     </div>
-                    <div class="bid-info">
-                        <div class="bid-amount">${patient.isEmergency ? 'EMERGÊNCIA' : 'R$ ' + patient.value}</div>
-                        <div class="tier-indicator ${selectedTier}">${patient.tier}</div>
-                        <div class="wait-time">${patient.estimatedTime || 'Imediato'}</div>
-                    </div>
-                </div>
-                <div class="patient-actions">
-                    <button class="action-btn attend-now">${patient.isEmergency ? '🚨' : '▶️'} Atender Agora</button>
-                    ${!patient.isEmergency ? '<button class="action-btn schedule-later">📅 Agendar</button>' : ''}
                 </div>
             `;
-
-            if (patient.isEmergency) {
-                queueList.insertBefore(newItem, queueList.firstChild);
-            } else {
-                // Insert based on value priority
-                const emergencyItems = queueList.querySelectorAll('.emergency');
-                if (emergencyItems.length > 0) {
-                    queueList.insertBefore(newItem, emergencyItems[emergencyItems.length - 1].nextSibling);
-                } else {
-                    queueList.insertBefore(newItem, queueList.firstChild);
-                }
-            }
-        }
-
-        function setStatus(status) {
-            // Update status buttons
-            document.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            document.body.appendChild(modal);
             
-            const statusMessages = {
-                'online': 'Médico disponível para atendimentos',
-                'busy': 'Médico em consulta - novos pacientes para fila',
-                'offline': 'Médico offline - apenas agendamentos'
-            };
-            
-            showNotification(statusMessages[status], 'info');
-        }
-
-        function filterQueue(filter) {
-            currentFilter = filter;
-            
-            // Update filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Show/hide queue items
-            const items = document.querySelectorAll('.queue-item');
-            items.forEach(item => {
-                if (filter === 'all') {
-                    item.style.display = 'block';
-                } else {
-                    const matchesFilter = item.getAttribute('data-filter') === filter;
-                    item.style.display = matchesFilter ? 'block' : 'none';
-                }
-            });
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            
-            notificationText.textContent = message;
-            
-            // Set notification color based on type
-            const colors = {
-                'success': '#10b981',
-                'error': '#ef4444',
-                'emergency': '#ef4444',
-                'info': '#3b82f6'
-            };
-            
-            notification.style.background = colors[type] || colors.success;
-            notification.classList.add('show');
-            
-            // Auto hide after 5 seconds
+            // Auto-remover após 5 segundos
             setTimeout(() => {
-                notification.classList.remove('show');
+                if (modal.parentElement) {
+                    modal.parentElement.removeChild(modal);
+                }
             }, 5000);
         }
-
-        // Simulate real-time updates
-        function simulateRealTimeUpdates() {
-            setInterval(() => {
-                // Update wait times
-                const waitTimes = document.querySelectorAll('.patient-details p');
-                waitTimes.forEach(time => {
-                    if (time.textContent.includes('Aguardando há:')) {
-                        const match = time.textContent.match(/(\d+)\s*(min|h)/);
-                        if (match) {
-                            let value = parseInt(match[1]);
-                            const unit = match[2];
-                            
-                            if (unit === 'min') {
-                                value += 1;
-                                if (value >= 60) {
-                                    time.innerHTML = time.innerHTML.replace(/\d+\s*min/, '1h 0min');
-                                } else {
-                                    time.innerHTML = time.innerHTML.replace(/\d+\s*min/, value + 'min');
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                // Update average wait time
-                const avgWait = document.getElementById('avgWait');
-                let currentAvg = parseInt(avgWait.textContent);
-                avgWait.textContent = (currentAvg + 1) + 'min';
-                
-            }, 60000); // Update every minute
+        
+        // Função para simular atualização no dashboard médico
+        function updateMedicalDashboard(specialty, bidValue) {
+            // Lista de nomes brasileiros realistas
+            const patientNames = [
+                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
+                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
+                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
+                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha',
+                'Gabriel Monteiro', 'Bianca Castro', 'Leonardo Torres', 'Adriana Dias', 'Henrique Cardoso'
+            ];
+            
+            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
+            
+            // Simular notificação para o dashboard médico
+            console.log(`🏥 DASHBOARD MÉDICO ATUALIZADO: Nova consulta ${specialty} - R$ ${bidValue} aguardando`);
+            
+            // Simular localStorage para persistir dados entre páginas
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            bids.push({
+                id: Date.now(),
+                specialty: specialty,
+                value: bidValue,
+                status: 'aguardando',
+                timestamp: new Date().toISOString(),
+                patient: randomName
+            });
+            localStorage.setItem('telemed_bids', JSON.stringify(bids));
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('💰 Sistema de Lances Progressivos carregado!');
-            console.log('📊 Dashboard médico com priorização ativo');
-            console.log('🔢 Faixa de valores: R$ 149 - R$ 500+');
+        // Atualizar contadores de tempo em tempo real
+        function updateTimers() {
+            const timers = document.querySelectorAll('.text-red-600, .text-orange-600, .text-green-600');
+            timers.forEach(timer => {
+                if (timer.textContent.includes(':')) {
+                    const [minutes, seconds] = timer.textContent.split(':').map(Number);
+                    let totalSeconds = minutes * 60 + seconds;
+                    totalSeconds--;
+                    if (totalSeconds >= 0) {
+                        const newMinutes = Math.floor(totalSeconds / 60);
+                        const newSeconds = totalSeconds % 60;
+                        timer.textContent = `${newMinutes}:${newSeconds.toString().padStart(2, '0')}`;
+                    }
+                }
+            });
+        }
+
+        // Atualizar a cada segundo
+        setInterval(updateTimers, 1000);
+
+        // Simular atualizações de lances
+        function updateBids() {
+            const bids = document.querySelectorAll('.bid-animation');
+            bids.forEach(bid => {
+                if (Math.random() > 0.8) { // 20% chance de atualizar
+                    const currentValue = parseInt(bid.textContent.replace('R$ ', ''));
+                    const increase = Math.floor(Math.random() * 20) + 5;
+                    bid.textContent = `R$ ${currentValue + increase}`;
+                }
+            });
+        }
+
+        // Atualizar lances a cada 10 segundos
+        setInterval(updateBids, 10000);
+
+        // Função para mostrar formulário de novo lance
+        function showBidForm() {
+            document.getElementById('bidForm').classList.remove('hidden');
+            document.getElementById('bidForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Função para esconder formulário de novo lance
+        function hideBidForm() {
+            document.getElementById('bidForm').classList.add('hidden');
+        }
+
+        // Função para criar novo lance
+        function createNewBid(event) {
+            event.preventDefault();
             
-            simulateRealTimeUpdates();
-        });
+            const form = event.target;
+            const specialty = form.querySelector('select').value;
+            const value = form.querySelector('input[type="number"]').value;
+            const description = form.querySelector('textarea').value;
+            
+            if (!specialty || !value || !description) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            if (parseInt(value) < 60) {
+                alert('O valor mínimo para um lance é R$ 60.');
+                return;
+            }
+            
+            // Criar nova solicitação
+            console.log('🆕 Criando nova solicitação:', { specialty, value, description });
+            
+            // Simular envio para o backend
+            setTimeout(() => {
+                // Esconder formulário
+                hideBidForm();
+                
+                // Mostrar modal de sucesso
+                showSuccessModal(specialty, value);
+                
+                // Adicionar à lista de lances ativos (simulação)
+                addNewBidToList(specialty, value, description);
+                
+                // Reset do formulário
+                form.reset();
+                
+            }, 1000);
+        }
 
-        // Emergency button handlers
-        document.querySelectorAll('.attend-now').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const patientName = this.closest('.queue-item').querySelector('h4').textContent;
-                showNotification(`Iniciando atendimento: ${patientName}`, 'info');
-            });
-        });
+        // Função para adicionar novo lance à lista
+        function addNewBidToList(specialty, value, description) {
+            const container = document.querySelector('.grid.md\\:grid-cols-2.lg\\:grid-cols-3');
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'lance-card bg-white rounded-xl shadow-lg p-6';
+            newCard.innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Consulta ${specialty}</h3>
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Novo</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Inicial:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ ${value}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-green-600 font-semibold">59:59</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">0</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600 mb-3"><strong>Descrição:</strong> ${description}</p>
+                        <div class="space-y-2">
+                            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-clock mr-2"></i>Aguardando Médicos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertBefore(newCard, container.firstChild);
+            
+            // Animação de entrada
+            newCard.style.opacity = '0';
+            newCard.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                newCard.style.transition = 'all 0.5s ease';
+                newCard.style.opacity = '1';
+                newCard.style.transform = 'translateY(0)';
+            }, 100);
+        }
 
-        // Schedule button handlers
-        document.querySelectorAll('.schedule-later').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const patientName = this.closest('.queue-item').querySelector('h4').textContent;
-                showNotification(`Agendamento marcado: ${patientName}`, 'info');
+        // Função para submeter novo lance do formulário
+        function submitNewBid() {
+            console.log('🚀 Iniciando submissão de novo lance...');
+            console.log('🔍 Event object:', event);
+            
+            // Coletar dados do formulário
+            const specialty = document.querySelector('select').value;
+            const consultType = document.querySelectorAll('select')[1].value;
+            const bidAmount = document.querySelector('input[type="number"]').value;
+            const preferredDate = document.querySelector('input[type="date"]').value;
+            const preferredTime = document.querySelectorAll('select')[2].value;
+            const duration = document.querySelectorAll('select')[3].value;
+            const symptoms = document.querySelector('textarea').value;
+            
+            console.log('📋 Dados coletados:', {
+                specialty, consultType, bidAmount, preferredDate, preferredTime, duration, symptoms
             });
-        });
+            
+            // Validação crítica
+            if (!specialty || !consultType || !bidAmount || !symptoms) {
+                alert('⚠️ ERRO: Preencha todos os campos obrigatórios!\n\n' +
+                      '• Especialidade Médica\n' +
+                      '• Tipo de Consulta\n' +
+                      '• Lance Inicial\n' +
+                      '• Descrição dos Sintomas');
+                return;
+            }
+            
+            const bidAmountNum = parseFloat(bidAmount);
+            if (isNaN(bidAmountNum) || bidAmountNum < 50) {
+                alert('⚠️ ERRO: Lance mínimo é R$ 50');
+                return;
+            }
+            
+            // Animação de envio
+            const button = event.target;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processando Lance...';
+            button.style.transform = 'scale(0.95)';
+            
+            // Lista de nomes brasileiros realistas
+            const patientNames = [
+                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
+                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
+                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
+                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha'
+            ];
+            
+            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
+            
+            // Mapear especialidades para formato consistente
+            const specialtyMap = {
+                'cardiologia': 'Cardiologia',
+                'pediatria': 'Pediatria', 
+                'dermatologia': 'Dermatologia',
+                'neurologia': 'Neurologia',
+                'ortopedia': 'Ortopedia',
+                'ginecologia': 'Ginecologia'
+            };
+            
+            const mappedSpecialty = specialtyMap[specialty] || specialty;
+            
+            // Simular processo de envio
+            setTimeout(() => {
+                // Criar objeto de lance completo
+                const newBid = {
+                    id: Date.now(),
+                    specialty: mappedSpecialty,
+                    consultType: consultType,
+                    value: bidAmountNum,
+                    preferredDate: preferredDate,
+                    preferredTime: preferredTime,
+                    duration: duration,
+                    symptoms: symptoms,
+                    status: 'aguardando',
+                    timestamp: new Date().toISOString(),
+                    patient: randomName
+                };
+                
+                console.log('💾 Salvando lance:', newBid);
+                
+                // Salvar no localStorage
+                const existingBids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+                existingBids.push(newBid);
+                localStorage.setItem('telemed_bids', JSON.stringify(existingBids));
+                
+                console.log('✅ Lance salvo com sucesso! Total de lances:', existingBids.length);
+                
+                // Success feedback
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Criado! Redirecionando...';
+                button.className = button.className.replace('bg-blue-600', 'bg-green-600');
+                button.style.transform = 'scale(1)';
+                
+                // Redirect DIRECTLY to waiting page
+                console.log('🔄 REDIRECIONANDO DIRETAMENTE para aguardando...');
+                console.log('🌐 URL atual:', window.location.href);
+                console.log('🎯 Tentando redirecionar para: /aguardando-medico.html');
+                
+                // Try multiple redirect approaches
+                setTimeout(() => {
+                    console.log('⏰ Executando redirecionamento...');
+                    try {
+                        window.location.href = '/aguardando-medico.html';
+                        console.log('✅ Redirect chamado via href');
+                    } catch (error) {
+                        console.error('❌ Erro no redirect:', error);
+                        // Fallback
+                        window.location.replace('/aguardando-medico.html');
+                    }
+                }, 1000);
+                
+                // Reset form
+                setTimeout(() => {
+                    document.querySelector('select').selectedIndex = 0;
+                    document.querySelectorAll('select')[1].selectedIndex = 0;
+                    document.querySelector('input[type="number"]').value = '';
+                    document.querySelector('input[type="date"]').value = '';
+                    document.querySelectorAll('select')[2].selectedIndex = 0;
+                    document.querySelectorAll('select')[3].selectedIndex = 0;
+                    document.querySelector('textarea').value = '';
+                    
+                    button.disabled = false;
+                    button.innerHTML = '<i class="fas fa-rocket mr-2"></i>Iniciar Lance';
+                    button.className = button.className.replace('bg-green-600', 'bg-blue-600');
+                }, 3000);
+                
+            }, 2000);
+        }
+        
+        // Modal de sucesso para novo lance
+        function showNewBidSuccessModal(specialty, bidAmount, patientName) {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
+                        <h3 style="color: #059669; font-size: 24px; margin-bottom: 15px; font-weight: bold;">Lance Criado com Sucesso!</h3>
+                        <div style="background: #f0f9ff; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <p style="color: #374151; margin-bottom: 10px;">
+                                <strong>Paciente:</strong> ${patientName}<br>
+                                <strong>Especialidade:</strong> ${specialty}<br>
+                                <strong>Valor:</strong> R$ ${bidAmount}
+                            </p>
+                        </div>
+                        <p style="color: #6b7280; margin-bottom: 20px;">
+                            <strong>🏥 Seu lance foi adicionado à fila médica!</strong><br>
+                            <em>Médicos podem ver e atender em tempo real.</em>
+                        </p>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button id="waiting-btn" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                Entendi ✓
+                            </button>
+                            <button onclick="window.location.href='/medical-dashboard-pro.html'" style="background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                                Ver Dashboard 👨‍⚕️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add click event to the waiting button
+            const waitingBtn = modal.querySelector('#waiting-btn');
+            waitingBtn.addEventListener('click', function() {
+                console.log('🔄 Redirecionando para página de aguardando...');
+                document.body.removeChild(modal);
+                window.location.href = '/aguardando-medico.html';
+            });
+            
+            // Auto-remover após 10 segundos
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.parentElement.removeChild(modal);
+                }
+            }, 10000);
+        }
+
+        // Função para ir para página de aguardando médico
+        function goToWaitingPage() {
+            // Close the modal first
+            const modal = document.querySelector('[style*="position: fixed"]');
+            if (modal && modal.parentElement) {
+                modal.parentElement.removeChild(modal);
+            }
+            
+            console.log('⏰ Redirecionando para página de aguardando médico...');
+            window.location.href = '/aguardando-medico.html';
+        }
+
+        console.log('💰 Sistema de Lances TeleMed Ativo - Fluxo Completo - v2.1 CACHE_BUST_' + Date.now());
     </script>
 </body>
 </html>
