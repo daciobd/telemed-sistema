@@ -32,6 +32,12 @@
         "titulo": "Videoconsultas WebRTC",
         "descricao": "Consultas por vídeo com tecnologia WebRTC",
         "categoria": "Consultas"
+      },
+      "cadastro": {
+        "url": "https://telemed-sistema.replit.dev/register.html",
+        "titulo": "Página de Cadastro",
+        "descricao": "Cadastro profissional multi-etapa para médicos e pacientes",
+        "categoria": "Autenticação"
       }
     },
     "sistemas_medicos": {
@@ -98,6 +104,7 @@
     },
     "categorias_botoes": {
       "pacientes": [
+        "cadastro",
         "dr_ai",
         "triagem_psiquiatrica", 
         "telemonitoramento",
@@ -105,6 +112,7 @@
         "videoconsultas"
       ],
       "medicos": [
+        "cadastro",
         "dashboard_medico",
         "notificacoes",
         "prescricoes",
