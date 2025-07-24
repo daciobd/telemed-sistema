@@ -1,6 +1,6 @@
 # TeleMed Sistema - Changelog
 
-## [v10.5.1] - 2025-07-24
+## [v10.5.1] - 2025-07-24 - SISTEMA DE LANCES EXPLICATIVO IMPLEMENTADO
 
 ### Adicionado
 - Seção explicativa completa "Como Funciona o Sistema de Lances" em consulta-por-valor.html
