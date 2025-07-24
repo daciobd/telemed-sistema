@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Especialidades Médicas - TeleMed Sistema</title>
+    <meta name="description" content="Especialidades médicas disponíveis no TeleMed: Clínico Geral, Psiquiatra, Psicoterapia, Pediatra, Ginecologista, Nutricionista, Dermatologista e Ortopedista. Consultas online com profissionais qualificados.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Especialidades Médicas - TeleMed Sistema">
+    <meta property="og:description" content="8 especialidades médicas disponíveis para consulta online. Profissionais qualificados para cuidar da sua saúde onde você estiver.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://telemed-sistema.replit.dev/especialidades.html">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #4338ca;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --background-color: #ffffff;
+            --text-color: #1f2937;
+            --text-light: #6b7280;
+            --border-color: #e5e7eb;
+            --success-color: #059669;
+            --error-color: #dc2626;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            margin-top: 80px;
+        }
+        
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            margin-top: 20px;
+            border-radius: 20px 20px 0 0;
+            min-height: calc(100vh - 120px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Specialties Grid */
+        .specialties-section {
+            margin: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-color);
+        }
+        
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .specialty-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .specialty-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+        
+        .specialty-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .specialty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .specialty-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+        
+        .specialty-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        /* Specialty-specific colors */
+        .clinico-geral {
+            --gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .psiquiatra {
+            --gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        
+        .psicoterapia {
+            --gradient: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        }
+        
+        .pediatra {
+            --gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .ginecologista {
+            --gradient: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+        }
+        
+        .nutricionista {
+            --gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .dermatologista {
+            --gradient: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+        
+        .ortopedista {
+            --gradient: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary, .btn-secondary {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .specialties-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .specialty-card {
+                padding: 1.5rem;
+            }
+            
+            .hero {
+                padding: 2rem 1rem;
+            }
+            
+            .cta-section {
+                padding: 3rem 1rem;
+            }
+            
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .specialty-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        .specialty-card:nth-child(1) { animation-delay: 0.1s; }
+        .specialty-card:nth-child(2) { animation-delay: 0.2s; }
+        .specialty-card:nth-child(3) { animation-delay: 0.3s; }
+        .specialty-card:nth-child(4) { animation-delay: 0.4s; }
+        .specialty-card:nth-child(5) { animation-delay: 0.5s; }
+        .specialty-card:nth-child(6) { animation-delay: 0.6s; }
+        .specialty-card:nth-child(7) { animation-delay: 0.7s; }
+        .specialty-card:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                TeleMed Sistema
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/dr-ai.html">Dr. AI</a></li>
+                    <li><a href="/consulta-por-valor.html">Consultas</a></li>
+                    <li><a href="/especialidades.html">Especialidades</a></li>
+                    <li><a href="/saiba-mais.html">Saiba Mais</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="/">TeleMed</a> › <span>Especialidades Médicas</span>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>👩‍⚕️ Especialidades Médicas</h1>
+            <p>Profissionais confiáveis, para cuidar da sua saúde onde você estiver.</p>
+        </section>
+
+        <!-- Specialties Section -->
+        <section class="specialties-section">
+            <div class="specialties-grid">
+                <!-- Clínico Geral -->
+                <div class="specialty-card clinico-geral">
+                    <span class="specialty-icon">🩺</span>
+                    <h3>Clínico Geral</h3>
+                    <p>O primeiro passo para cuidar da sua saúde. Indicado para sintomas gerais, mal-estar, acompanhamento de rotina e encaminhamentos.</p>
+                </div>
+
+                <!-- Psiquiatra -->
+                <div class="specialty-card psiquiatra">
+                    <span class="specialty-icon">🧠</span>
+                    <h3>Psiquiatra</h3>
+                    <p>Tratamento para ansiedade, depressão, insônia, bipolaridade e outros transtornos mentais. Prescrição de medicamentos e acompanhamento cuidadoso.</p>
+                </div>
+
+                <!-- Psicoterapia -->
+                <div class="specialty-card psicoterapia">
+                    <span class="specialty-icon">💬</span>
+                    <h3>Psicoterapia</h3>
+                    <p>Conversas que acolhem. Atendimentos com psicólogos experientes para ajudar em momentos difíceis, crises emocionais, autoestima ou autoconhecimento.</p>
+                </div>
+
+                <!-- Pediatra -->
+                <div class="specialty-card pediatra">
+                    <span class="specialty-icon">👶</span>
+                    <h3>Pediatra</h3>
+                    <p>Especialistas no cuidado com bebês, crianças e adolescentes. Tire dúvidas, acompanhe o crescimento, vacinas e sintomas.</p>
+                </div>
+
+                <!-- Ginecologista -->
+                <div class="specialty-card ginecologista">
+                    <span class="specialty-icon">👩‍⚕️</span>
+                    <h3>Ginecologista</h3>
+                    <p>Consultas sobre saúde íntima, ciclo menstrual, anticoncepcionais, menopausa e exames de rotina.</p>
+                </div>
+
+                <!-- Nutricionista -->
+                <div class="specialty-card nutricionista">
+                    <span class="specialty-icon">🍎</span>
+                    <h3>Nutricionista</h3>
+                    <p>Planos alimentares personalizados, acompanhamento de peso, saúde intestinal, intolerâncias alimentares e hábitos saudáveis.</p>
+                </div>
+
+                <!-- Dermatologista -->
+                <div class="specialty-card dermatologista">
+                    <span class="specialty-icon">💆</span>
+                    <h3>Dermatologista</h3>
+                    <p>Atendimento para acne, manchas, queda de cabelo, pele sensível, alergias e prescrição de medicamentos tópicos.</p>
+                </div>
+
+                <!-- Ortopedista -->
+                <div class="specialty-card ortopedista">
+                    <span class="specialty-icon">🦴</span>
+                    <h3>Ortopedista</h3>
+                    <p>Dores articulares, lesões, problemas na coluna, torções e acompanhamento de condições musculoesqueléticas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>📲 Tudo isso com o conforto da sua casa</h2>
+            <p>Sem filas, sem deslocamento. Escolha sua especialidade, defina o valor que pode pagar e consulte um profissional rapidamente.</p>
+            <div class="cta-buttons">
+                <a href="/consulta-por-valor.html" class="btn-primary">AGENDAR CONSULTA AGORA</a>
+                <a href="/dr-ai.html" class="btn-secondary">Triagem Grátis com IA</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="/dr-ai.html">Dr. AI</a>
+            <a href="/triagem-psiquiatrica.html">Triagem Psiquiátrica</a>
+            <a href="/telemonitoramento-enfermagem.html">Telemonitoramento</a>
+            <a href="/consulta-por-valor.html">Sistema de Lances</a>
+            <a href="/videoconsulta.html">Videoconsultas</a>
+            <a href="/medical-dashboard-pro.html">Dashboard Médico</a>
+            <a href="/notificacoes.html">Notificações</a>
+            <a href="/prescricoes.html">Prescrições</a>
+        </div>
+        <p>&copy; 2025 TeleMed Sistema - Especialidades Médicas Online</p>
+    </footer>
+
+    <script>
+        // Animação de entrada quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.specialty-card');
+            
+            // Observer para animação quando o elemento entra na tela
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+
+            // Log para confirmação de carregamento
+            console.log('✅ Página Especialidades Médicas Carregada - 8 Especialidades Disponíveis');
+        });
+
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -77,6 +77,11 @@
         "titulo": "Saiba Mais - TeleMed Sistema",
         "descricao": "Página informativa completa sobre recursos e funcionalidades"
       },
+      "especialidades": {
+        "url": "https://telemed-sistema.replit.dev/especialidades.html",
+        "titulo": "Especialidades Médicas - TeleMed Sistema",
+        "descricao": "8 especialidades disponíveis: Clínico Geral, Psiquiatra, Pediatra, Ginecologista e mais"
+      },
       "integracao": {
         "url": "https://telemed-sistema.replit.dev/integracao-hostinger.html",
         "titulo": "Página de Integração Hostinger",
