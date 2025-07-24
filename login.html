@@ -12,20 +12,80 @@
             box-sizing: border-box;
         }
 
+        /* === PALETA DE CORES === */
+        :root {
+            --bg-main: #FAF8F5;
+            --card-bg: #FFFFFF;
+            --border-color: #E2E2E2;
+            --accent-green: #A7D9C0;
+            --accent-blue: #C9DAF8;
+            --accent-lilac: #D8C9F8;
+            --accent-coral: #F8C9C9;
+            --text-gray: #888888;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #F9FAFB;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: #333;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1rem;
+            margin: 0;
+        }
+
+        /* === BOTÕES === */
+        button {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background-color: var(--accent-blue);
+            color: #222;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #b9cde9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* === TÍTULOS E TEXTOS === */
+        h1, h2, h3 {
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        small {
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        /* === LAYOUT RESPONSIVO === */
+        @media (max-width: 768px) {
+            .card {
+                padding: 16px;
+            }
+
+            button {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
         }
 
         .login-container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
             overflow: hidden;
             width: 100%;
             max-width: 400px;

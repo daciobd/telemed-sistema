@@ -42,12 +42,53 @@
             --error-color: #dc2626;
         }
         
+        /* === PALETA DE CORES === */
+        :root {
+            --bg-main: #FAF8F5;
+            --card-bg: #FFFFFF;
+            --border-color: #E2E2E2;
+            --accent-green: #A7D9C0;
+            --accent-blue: #C9DAF8;
+            --accent-lilac: #D8C9F8;
+            --accent-coral: #F8C9C9;
+            --text-gray: #888888;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Poppins', 'Inter', sans-serif;
             line-height: 1.6;
-            color: #374151;
-            background: #F9FAFB;
+            color: #333;
+            background-color: var(--bg-main);
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* === BOTÕES === */
+        button {
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background-color: var(--accent-blue);
+            color: #222;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #b9cde9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* === CARDS E CONTAINERS === */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
         }
         
         /* Header */
