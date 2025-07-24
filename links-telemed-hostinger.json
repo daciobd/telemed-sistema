@@ -33,6 +33,12 @@
         "descricao": "Consultas por vídeo com tecnologia WebRTC",
         "categoria": "Consultas"
       },
+      "login": {
+        "url": "https://telemed-sistema.replit.dev/login.html",
+        "titulo": "Página de Login",
+        "descricao": "Sistema de login com autenticação social (Google, Facebook)",
+        "categoria": "Autenticação"
+      },
       "cadastro": {
         "url": "https://telemed-sistema.replit.dev/register.html",
         "titulo": "Página de Cadastro",
@@ -104,6 +110,7 @@
     },
     "categorias_botoes": {
       "pacientes": [
+        "login",
         "cadastro",
         "dr_ai",
         "triagem_psiquiatrica", 
@@ -112,6 +119,7 @@
         "videoconsultas"
       ],
       "medicos": [
+        "login",
         "cadastro",
         "dashboard_medico",
         "notificacoes",

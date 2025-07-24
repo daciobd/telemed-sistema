@@ -686,7 +686,7 @@
             </form>
 
             <div class="login-link">
-                <p>Já tem uma conta? <a href="login.html">Fazer login</a></p>
+                <p>Já tem uma conta? <a href="/login.html">Fazer login</a></p>
             </div>
         </div>
     </div>
@@ -898,9 +898,9 @@
                 // Redirecionar baseado no tipo de usuário
                 setTimeout(() => {
                     if (userData.userType === 'doctor') {
-                        window.location.href = '/medical-dashboard-pro.html';
+                        window.location.href = '/login.html?registered=true&type=doctor';
                     } else {
-                        window.location.href = '/consulta-por-valor.html';
+                        window.location.href = '/login.html?registered=true&type=patient';
                     }
                 }, 1500);
                 

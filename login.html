@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TeleMed Sistema</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .login-form {
+            padding: 2rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 12px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-btn:hover {
+            border-color: #9ca3af;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .social-btn.google {
+            color: #db4437;
+        }
+
+        .social-btn.facebook {
+            color: #4267b2;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .divider span {
+            padding: 0 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .password-toggle:hover {
+            color: #667eea;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remember-me input {
+            width: auto;
+            margin: 0;
+        }
+
+        .forgot-password {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .signup-link {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .loading {
+            opacity: 0.8;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            transform: translateY(-50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 1rem;
+                max-width: none;
+            }
+
+            .login-header {
+                padding: 1.5rem;
+            }
+
+            .login-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-heartbeat"></i> TeleMed Sistema</h1>
+            <p>Entre em sua conta e acesse as melhores consultas médicas online</p>
+        </div>
+
+        <div class="login-form">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- Social Login Buttons -->
+            <div class="social-buttons">
+                <button class="social-btn google" onclick="loginWithGoogle()">
+                    <i class="fab fa-google"></i>
+                    Continuar com Google
+                </button>
+                <button class="social-btn facebook" onclick="loginWithFacebook()">
+                    <i class="fab fa-facebook-f"></i>
+                    Continuar com Facebook
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>ou entre com email</span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required placeholder="Sua senha">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        Lembrar de mim
+                    </label>
+                    <a href="#" class="forgot-password" onclick="forgotPassword()">Esqueci minha senha</a>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    Entrar
+                </button>
+            </form>
+
+            <div class="signup-link">
+                Não tem uma conta? <a href="/register.html">Criar conta grátis</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo users para teste
+        const demoUsers = {
+            'paciente@demo.com': {
+                password: '123456',
+                type: 'patient',
+                name: 'Maria Silva'
+            },
+            'medico@demo.com': {
+                password: '123456',
+                type: 'doctor',
+                name: 'Dr. João Santos'
+            },
+            'admin@telemed.com': {
+                password: 'admin123',
+                type: 'admin',
+                name: 'Administrador'
+            }
+        };
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.className = 'fas fa-eye';
+            }
+        }
+
+        // Social login functions
+        function loginWithGoogle() {
+            showMessage('Redirecionando para Google...', 'success');
+            
+            // Simular login social
+            setTimeout(() => {
+                const user = {
+                    email: 'usuario@gmail.com',
+                    name: 'Usuário Google',
+                    type: 'patient',
+                    provider: 'google'
+                };
+                
+                completeLogin(user);
+            }, 1500);
+        }
+
+        function loginWithFacebook() {
+            showMessage('Redirecionando para Facebook...', 'success');
+            
+            // Simular login social
+            setTimeout(() => {
+                const user = {
+                    email: 'usuario@facebook.com',
+                    name: 'Usuário Facebook',
+                    type: 'patient',
+                    provider: 'facebook'
+                };
+                
+                completeLogin(user);
+            }, 1500);
+        }
+
+        // Forgot password
+        function forgotPassword() {
+            const email = prompt('Digite seu email para recuperação de senha:');
+            if (email) {
+                showMessage('Email de recuperação enviado! Verifique sua caixa de entrada.', 'success');
+            }
+        }
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.textContent;
+            
+            // Show loading state
+            loginBtn.textContent = 'Entrando...';
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
+            
+            try {
+                // Simular verificação de credenciais
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const user = demoUsers[email];
+                
+                if (!user || user.password !== password) {
+                    throw new Error('Email ou senha incorretos');
+                }
+                
+                // Login successful
+                completeLogin({
+                    email: email,
+                    name: user.name,
+                    type: user.type,
+                    rememberMe: rememberMe
+                });
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            } finally {
+                loginBtn.textContent = originalText;
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Complete login process
+        function completeLogin(user) {
+            // Save user data
+            const userData = {
+                ...user,
+                loginTime: new Date().toISOString(),
+                isLoggedIn: true
+            };
+            
+            if (user.rememberMe) {
+                localStorage.setItem('telemed_user', JSON.stringify(userData));
+            } else {
+                sessionStorage.setItem('telemed_user', JSON.stringify(userData));
+            }
+            
+            showMessage(`Bem-vindo(a), ${user.name}! Redirecionando...`, 'success');
+            
+            // Redirect based on user type
+            setTimeout(() => {
+                if (user.type === 'doctor') {
+                    window.location.href = '/medical-dashboard-pro.html';
+                } else if (user.type === 'admin') {
+                    window.location.href = '/medical-dashboard-pro.html';
+                } else {
+                    window.location.href = '/consulta-por-valor.html';
+                }
+            }, 1500);
+        }
+
+        // Show messages
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            // Hide both first
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+            }
+            
+            // Auto-hide success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    successDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Check if user came from registration
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const registered = urlParams.get('registered');
+            
+            if (registered === 'true') {
+                showMessage('Conta criada com sucesso! Faça login para continuar.', 'success');
+            }
+        });
+
+        // Auto-fill demo credentials on page load for testing
+        window.addEventListener('load', function() {
+            // Only for development/demo purposes
+            if (window.location.hostname === 'localhost' || window.location.hostname.includes('replit')) {
+                const emailField = document.getElementById('email');
+                const passwordField = document.getElementById('password');
+                
+                // Add helper text for demo
+                const helpText = document.createElement('div');
+                helpText.innerHTML = `
+                    <div style="background: #f3f4f6; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.8rem; color: #6b7280;">
+                        <strong>Contas de teste:</strong><br>
+                        📧 paciente@demo.com / 123456<br>
+                        🩺 medico@demo.com / 123456
+                    </div>
+                `;
+                
+                document.querySelector('.login-form').insertBefore(helpText, document.querySelector('.social-buttons'));
+            }
+        });
+    </script>
+</body>
+</html>

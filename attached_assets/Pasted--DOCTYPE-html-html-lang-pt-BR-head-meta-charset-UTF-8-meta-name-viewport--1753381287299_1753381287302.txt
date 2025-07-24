@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed Consultas - Consulte médicos especialistas online agora!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23f0f0f0" width="1200" height="800"/><rect fill="%23ddd" x="800" y="200" width="300" height="400" rx="20"/><circle fill="%23666" cx="950" cy="300" r="50"/><rect fill="%23333" x="880" y="380" width="140" height="8" rx="4"/><rect fill="%23333" x="880" y="400" width="100" height="8" rx="4"/></svg>') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .hero-rating {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            display: inline-block;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-text {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #1e40af;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(30, 58, 138, 0.4);
+        }
+
+        .btn-secondary {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #1e40af;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(30, 58, 138, 0.4);
+        }
+
+        /* Why Choose Section */
+        .why-choose {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .feature-item {
+            margin-bottom: 2rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .feature-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-black {
+            background: #000;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-black:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #000;
+            padding: 12px 24px;
+            border: 2px solid #000;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: #000;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .feature-image {
+            width: 100%;
+            height: 400px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400"><rect fill="%23f8f9fa" width="500" height="400"/><rect fill="%23e9ecef" x="50" y="50" width="400" height="300" rx="20"/><circle fill="%23666" cx="250" cy="150" r="40"/><rect fill="%23333" x="180" y="220" width="140" height="8" rx="4"/><rect fill="%23333" x="200" y="240" width="100" height="8" rx="4"/></svg>') center/cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .benefits h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefits-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .benefits-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 15px 30px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-bottom: 3rem;
+        }
+
+        .benefits-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .benefit-image {
+            width: 100%;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        /* Specialties Section */
+        .specialties {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            text-align: center;
+        }
+
+        .specialties h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .specialties-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .specialties-btn {
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            padding: 12px 24px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-bottom: 3rem;
+        }
+
+        .specialties-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .specialty-card {
+            background: rgba(255,255,255,0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .specialty-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .specialty-image {
+            width: 100%;
+            height: 150px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .specialty-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .how-it-works h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 3rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .steps-content {
+            space-y: 2rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: #f8f9fa;
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            background: #000;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .steps-image {
+            width: 100%;
+            height: 400px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect fill="%23f8f9fa" width="400" height="400"/><circle fill="%23e9ecef" cx="200" cy="150" r="60"/><rect fill="%23333" x="150" y="250" width="100" height="8" rx="4"/><rect fill="%23333" x="170" y="270" width="60" height="8" rx="4"/></svg>') center/cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Monitoring Section */
+        .monitoring {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .monitoring h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .monitoring-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .monitoring-text {
+            space-y: 1.5rem;
+        }
+
+        .monitoring-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .monitoring-features li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .monitoring-features li::before {
+            content: '•';
+            color: #a8edea;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .monitoring-btn {
+            background: #a8edea;
+            color: #333;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .monitoring-btn:hover {
+            background: #fed6e3;
+            transform: translateY(-2px);
+        }
+
+        /* AI Section */
+        .ai-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        }
+
+        .ai-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .ai-text h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .ai-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .ai-features li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-features li::before {
+            content: '✓';
+            background: #00b894;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .ai-visual {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .ai-robot {
+            width: 200px;
+            height: 200px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23636e72" width="200" height="200" rx="30"/><circle fill="%234169e1" cx="100" cy="80" r="30"/><rect fill="%23fff" x="80" y="70" width="40" height="20" rx="10"/><circle fill="%23000" cx="85" cy="80" r="3"/><circle fill="%23000" cx="115" cy="80" r="3"/></svg>') center/contain no-repeat;
+        }
+
+        .ai-doctor {
+            width: 200px;
+            height: 200px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23f0f0f0" width="200" height="200" rx="20"/><circle fill="%23ddd" cx="100" cy="80" r="30"/><rect fill="%234169e1" x="70" y="120" width="60" height="40" rx="10"/></svg>') center/contain no-repeat;
+        }
+
+        /* App Section */
+        .app-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .app-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .app-text h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .app-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .app-features li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .app-features li::before {
+            content: '✓';
+            background: #00b894;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .app-download {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .app-download h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .download-btn {
+            background: #4169e1;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .download-btn:hover {
+            background: #2c5aa0;
+            transform: translateY(-2px);
+        }
+
+        .phone-mockup {
+            width: 250px;
+            height: 500px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 500"><rect fill="%23333" width="250" height="500" rx="30"/><rect fill="%23fff" x="20" y="40" width="210" height="420" rx="20"/><rect fill="%234169e1" x="30" y="50" width="190" height="100" rx="10"/><text x="125" y="110" text-anchor="middle" fill="white" font-family="Arial" font-size="14">TeleMed</text></svg>') center/contain no-repeat;
+            margin: 0 auto;
+        }
+
+        /* Testimonial Section */
+        .testimonial {
+            padding: 5rem 0;
+            background: #1e3a8a;
+            color: white;
+            text-align: center;
+        }
+
+        .testimonial-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial-stars {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4169e1;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: #1e3a8a;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+        }
+
+        .contact-image {
+            width: 100%;
+            height: 300px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f8f9fa" width="400" height="300"/><circle fill="%23ddd" cx="150" cy="100" r="40"/><circle fill="%23ddd" cx="250" cy="100" r="40"/><rect fill="%23333" x="100" y="180" width="200" height="8" rx="4"/><rect fill="%23333" x="120" y="200" width="160" height="8" rx="4"/></svg>') center/cover;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .content-grid,
+            .steps-grid,
+            .monitoring-content,
+            .ai-content,
+            .app-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .benefits-grid,
+            .specialties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .feature-buttons {
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #4169e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4169e1;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #00b894;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Consulte médicos especialistas online agora!</h1>
+            <p>Agende consultas rápidas e seguras sem mensalidade. Pague apenas pelo que usar.</p>
+            
+            <div class="hero-rating">
+                <div class="stars">★★★★★</div>
+                <div class="rating-text">AVALIAÇÕES EXCELENTES DE PACIENTES</div>
+            </div>
+            
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary" onclick="startConsultation()">Começar minha consulta</a>
+                <a href="#" class="btn-secondary" onclick="openRegistration()">Fazer o meu cadastro</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose TeleMed Section -->
+    <section class="why-choose">
+        <div class="container">
+            <div class="content-grid">
+                <div>
+                    <div class="section-header">
+                        <h2>Por que escolher a TeleMed?</h2>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <h3>Na TeleMed, você tem acesso imediato a <strong>médicos experientes de todo o Brasil</strong>, com atendimento online por vídeo, diretamente do seu celular ou computador — sem agendamentos, sem complicação.</h3>
+                    </div>
+
+                    <div class="feature-item">
+                        <h3>A qualquer hora, de qualquer lugar.</h3>
+                        <p>Nosso sistema funciona 24h por dia, 7 dias por semana. Tudo o que você precisa é de um celular com Internet. Atendimentos realizados com conforto e privacidade.</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <h3>Consulta completa, com documentos válidos.</h3>
+                        <p>O profissional pode emitir <strong>receitas, atestados ou pedidos de exames</strong>, enviados para você na mesma plataforma, de forma segura e digital.</p>
+                    </div>
+
+                    <div class="feature-buttons">
+                        <a href="#" class="btn-black" onclick="openSpecialties()">Especialidades</a>
+                        <a href="#" class="btn-outline" onclick="learnMore()">saiba mais</a>
+                        <a href="#" class="btn-black" onclick="startConsultation()">quero uma consulta</a>
+                    </div>
+                </div>
+                
+                <div class="feature-image"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <h2>Por que a TeleMed é melhor?</h2>
+            <p class="benefits-subtitle">Simples, acessível e do seu jeito.</p>
