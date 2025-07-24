@@ -1,0 +1,84 @@
+
+/* === Cores de Fundo Suaves === */
+body {
+    background-color: #FAF8F5;
+    font-family: 'Poppins', sans-serif;
+    color: #333333;
+}
+
+/* === Cabeçalhos com tons suaves === */
+.header {
+    background-color: #F8C9C9 !important; /* Coral claro */
+    color: #333333;
+    font-weight: 600;
+}
+
+/* === Segundo exemplo de header (Agenda) === */
+.header-purple {
+    background-color: #D8C9F8 !important; /* Lilás claro */
+    color: #333333;
+    font-weight: 600;
+}
+
+/* === Botões com tons suaves e transição leve === */
+button,
+.btn {
+    background-color: #C9DAF8; /* Azul suave */
+    color: #333333;
+    border: 1px solid #AABBDD;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: none;
+    font-weight: 500;
+}
+
+button:hover,
+.btn:hover {
+    background-color: #B7CFEF;
+}
+
+/* === Cartões (Cards) === */
+.card {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* === Ícones estilo outline com cores suaves === */
+.icon {
+    stroke: #7C8CA1;
+    fill: none;
+    width: 24px;
+    height: 24px;
+}
+
+/* === Textos secundários === */
+.text-muted {
+    color: #888888;
+    font-size: 12px;
+}
+
+/* === Remoção de cores vibrantes === */
+.bg-danger,
+.bg-primary,
+.bg-warning {
+    background-color: #F8C9C9 !important; /* Coral claro ou equivalente */
+    color: #333333;
+    font-weight: 500;
+}
+
+/* === Ajustes de responsividade mobile === */
+@media (max-width: 768px) {
+    .card, .btn {
+        margin-bottom: 16px;
+        width: 100%;
+    }
+
+    .header, .header-purple {
+        font-size: 18px;
+        text-align: center;
+    }
+}

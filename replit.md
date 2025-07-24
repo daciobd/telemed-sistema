@@ -10,38 +10,31 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 24, 2025**: IDENTIDADE VISUAL UNIFICADA IMPLEMENTADA v10.6.0
-  - ✅ **CSS Global Aplicado**: Nova paleta de cores baseada no guia de identidade visual implementada
-    - Paleta consistente: --bg-main (#FAF8F5), --card-bg (#FFFFFF), --border-color (#E2E2E2)
-    - Cores de destaque: --accent-green (#A7D9C0), --accent-blue (#C9DAF8), --accent-lilac (#D8C9F8), --accent-coral (#F8C9C9)
-    - Fonte Poppins como padrão, com fallback para Inter e system fonts
-    - Text-gray (#888888) para elementos secundários e labels
-  - ✅ **Sistema de Botões Padronizado**: Design consistente em todas as páginas
-    - Padding 10px 20px, border-radius 12px, background --accent-blue
-    - Hover states com #b9cde9 e box-shadow suave (0 2px 6px rgba(0,0,0,0.05))
-    - Responsivo: padding reduzido (8px 16px) e fonte 13px em mobile
-  - ✅ **Cards e Containers Unificados**: Layout limpo e profissional
-    - Background --card-bg com border 1px solid --border-color
-    - Border-radius 16px, padding 24px (16px em mobile)
-    - Box-shadow sutil: 0 1px 4px rgba(0,0,0,0.05)
-  - ✅ **Tipografia Moderna**: Hierarquia visual clara e legível
-    - h1, h2, h3 com font-weight 600 e margin-bottom 12px
-    - Labels com font-size 14px e font-weight 400
-    - Small text em 12px com cor --text-gray
-  - ✅ **Páginas Atualizadas**: Aplicação consistente do novo design
-    - Dashboard médico: Integração completa com nova paleta
-    - Login: Interface clean com cards suaves
-    - Sistema-índice: Layout modernizado
-    - Especialidades: Cores pastéis aplicadas
-  - ✅ **Responsividade Aprimorada**: Media queries para mobile otimizadas
-    - Cards com padding adaptativo
-    - Botões com sizing responsivo
-    - Layout breathing room consistente
-  - ✅ **Design System Completo**: Todos os componentes seguem padrão unificado
-    - Cores suaves e acolhedoras conforme guia de identidade
-    - Bordas arredondadas para modernidade
-    - Espaçamentos respiráveis em todo sistema
-    - Transições suaves (0.2s ease) para interatividade
+- **July 24, 2025**: CSS VISUAL SUAVE APLICADO CONFORME GUIA v10.6.1
+  - ✅ **Classes CSS Obrigatórias Implementadas**: Sistema baseado nas classes .header, .card, .btn, .text-muted, .icon
+    - Background #FAF8F5 e fonte Poppins como padrão em todas as páginas
+    - Headers com tons suaves: .header (#F8C9C9 coral claro), .header-purple (#D8C9F8 lilás claro)
+    - Botões azul suave (#C9DAF8) com hover (#B7CFEF) e border-radius 8px
+    - Cards brancos (#FFFFFF) com bordas #E2E2E2 e shadow sutil
+    - Ícones outline (#7C8CA1) e textos secundários (#888888)
+  - ✅ **Eliminação de Cores Vibrantes**: Remoção completa de vermelho e roxo vibrantes
+    - .bg-danger, .bg-primary, .bg-warning convertidos para coral claro (#F8C9C9)
+    - Gradientes coloridos substituídos por background sólido suave
+    - Transições leves (0.2s ease-in-out) para interações discretas
+  - ✅ **Páginas Completamente Atualizadas**: Aplicação consistente do CSS visual suave
+    - Dashboard médico: Tons suaves e classes obrigatórias aplicadas
+    - Login: Interface clean com paleta coral/azul/lilás
+    - Sistema-índice: Layout modernizado com tons pastéis
+    - Especialidades: Cores suaves e breathing room consistente
+  - ✅ **Responsividade Mobile Completa**: Media queries @768px implementadas
+    - Cards e botões com width 100% em mobile
+    - Headers centralizados com font-size 18px
+    - Margin-bottom 16px para espaçamento adequado
+  - ✅ **Padrão Visual Clean e Leve**: Sistema completamente alinhado ao guia
+    - Peso visual reduzido com cores acolhedoras
+    - Sombras discretas (0 1px 4px rgba(0,0,0,0.05))
+    - Font-weight 500 para botões e 600 para headers
+    - Breathing room consistente em todo sistema
 
 - **July 24, 2025**: SEÇÃO EXPLICATIVA SISTEMA DE LANCES IMPLEMENTADA E SINCRONIZADA v10.5.1
   - ✅ **Seção "Como Funciona o Sistema de Lances"**: Explicação visual completa implementada e sincronizada com GitHub

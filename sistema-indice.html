@@ -12,53 +12,68 @@
             box-sizing: border-box;
         }
 
-        /* === PALETA DE CORES === */
-        :root {
-            --bg-main: #FAF8F5;
-            --card-bg: #FFFFFF;
-            --border-color: #E2E2E2;
-            --accent-green: #A7D9C0;
-            --accent-blue: #C9DAF8;
-            --accent-lilac: #D8C9F8;
-            --accent-coral: #F8C9C9;
-            --text-gray: #888888;
-        }
-
+        /* === Cores de Fundo Suaves === */
         body {
-            font-family: 'Poppins', 'Inter', sans-serif;
+            background-color: #FAF8F5;
+            font-family: 'Poppins', sans-serif;
+            color: #333333;
             line-height: 1.6;
-            color: #333;
-            background-color: var(--bg-main);
             min-height: 100vh;
             padding: 2rem;
             margin: 0;
         }
 
-        /* === BOTÕES === */
-        button {
+        /* === Cabeçalhos com tons suaves === */
+        .header {
+            background-color: #F8C9C9 !important; /* Coral claro */
+            color: #333333;
+            font-weight: 600;
+        }
+
+        /* === Botões com tons suaves e transição leve === */
+        button,
+        .btn {
+            background-color: #C9DAF8; /* Azul suave */
+            color: #333333;
+            border: 1px solid #AABBDD;
+            border-radius: 8px;
             padding: 10px 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background-color: var(--accent-blue);
-            color: #222;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease-in-out;
+            box-shadow: none;
+            font-weight: 500;
         }
 
-        button:hover {
-            background-color: #b9cde9;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        button:hover,
+        .btn:hover {
+            background-color: #B7CFEF;
         }
 
-        /* === CARDS E CONTAINERS === */
+        /* === Cartões (Cards) === */
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background-color: #FFFFFF;
+            border: 1px solid #E2E2E2;
             border-radius: 16px;
             padding: 24px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
+        }
+
+        /* === Textos secundários === */
+        .text-muted {
+            color: #888888;
+            font-size: 12px;
+        }
+
+        /* === Ajustes de responsividade mobile === */
+        @media (max-width: 768px) {
+            .card, .btn, button {
+                margin-bottom: 16px;
+                width: 100%;
+            }
+
+            .header, .header-purple {
+                font-size: 18px;
+                text-align: center;
+            }
         }
 
         /* === TÍTULOS E TEXTOS === */
