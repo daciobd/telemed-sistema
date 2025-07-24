@@ -872,4 +872,274 @@
             
             // Select previously chosen answer if exists
             if (answers[question.id] !== undefined) {
-                const selectedOption =
+                const selectedOption = document.querySelector(`.option[onclick*="${answers[question.id]}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                }
+            }
+        }
+
+        function selectOption(questionIndex, optionIndex, score) {
+            const question = questions[questionIndex];
+            answers[question.id] = score;
+            
+            // Visual feedback
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            const selectedOption = document.querySelectorAll('.option')[optionIndex];
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+            }
+            
+            // Auto-advance after selection
+            setTimeout(() => {
+                nextQuestion();
+            }, 800);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion(currentQuestionIndex);
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((currentQuestionIndex / questions.length) * 100);
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex >= questions.length - 1;
+        }
+
+        function showResults() {
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            
+            // Calculate scores
+            const phq9Score = calculateScore('phq9');
+            const gad7Score = calculateScore('gad7');
+            const riskScore = calculateScore('risk');
+            const functionalScore = calculateScore('functional');
+            
+            const totalScore = phq9Score + gad7Score + riskScore + functionalScore;
+            
+            // Determine severity and recommendations
+            const severity = determineSeverity(totalScore, riskScore);
+            const recommendations = getRecommendations(severity, phq9Score, gad7Score, riskScore);
+            
+            // Display results
+            displayResults(phq9Score, gad7Score, riskScore, functionalScore, totalScore, severity, recommendations);
+            
+            // Save to localStorage
+            const results = {
+                timestamp: new Date().toISOString(),
+                scores: { phq9Score, gad7Score, riskScore, functionalScore, totalScore },
+                severity,
+                recommendations,
+                answers
+            };
+            localStorage.setItem('psychiatricAssessmentResults', JSON.stringify(results));
+        }
+
+        function calculateScore(type) {
+            return Object.keys(answers).reduce((total, questionId) => {
+                const question = questions.find(q => q.id == questionId);
+                if (question && question.type === type) {
+                    return total + answers[questionId];
+                }
+                return total;
+            }, 0);
+        }
+
+        function determineSeverity(totalScore, riskScore) {
+            if (riskScore >= 3 || totalScore >= 15) return 'severe';
+            if (totalScore >= 10) return 'high';
+            if (totalScore >= 5) return 'moderate';
+            return 'low';
+        }
+
+        function getRecommendations(severity, phq9, gad7, risk) {
+            const recommendations = [];
+            
+            switch(severity) {
+                case 'severe':
+                    recommendations.push('EMERGÊNCIA: Procure atendimento imediato no pronto-socorro');
+                    recommendations.push('Entre em contato com o CVV: 188 (24 horas)');
+                    recommendations.push('Consulta psiquiátrica prioritária nas próximas 24-48h');
+                    break;
+                case 'high':
+                    recommendations.push('Consulta psiquiátrica urgente (próximos 7 dias)');
+                    recommendations.push('Considere buscar apoio de familiares/amigos');
+                    recommendations.push('Evite ficar sozinho por períodos prolongados');
+                    break;
+                case 'moderate':
+                    recommendations.push('Agendamento de consulta psiquiátrica (próximas 2 semanas)');
+                    recommendations.push('Considere psicoterapia como tratamento complementar');
+                    recommendations.push('Pratique técnicas de relaxamento e mindfulness');
+                    break;
+                case 'low':
+                    recommendations.push('Manutenção de hábitos saudáveis');
+                    recommendations.push('Atividade física regular');
+                    recommendations.push('Acompanhamento preventivo anual');
+                    break;
+            }
+            
+            return recommendations;
+        }
+
+        function displayResults(phq9, gad7, risk, functional, total, severity, recommendations) {
+            const container = document.getElementById('resultsContainer');
+            
+            const severityColors = {
+                low: { color: '#10b981', text: 'Baixa' },
+                moderate: { color: '#f59e0b', text: 'Moderada' },
+                high: { color: '#ef4444', text: 'Alta' },
+                severe: { color: '#dc2626', text: 'Severa' }
+            };
+            
+            const isEmergency = severity === 'severe';
+            
+            container.innerHTML = `
+                ${isEmergency ? `
+                <div class="emergency-warning">
+                    <div class="emergency-icon">🚨</div>
+                    <div class="emergency-title">ATENÇÃO: EMERGÊNCIA PSIQUIÁTRICA</div>
+                    <div class="emergency-text">
+                        Suas respostas indicam risco significativo. É fundamental buscar ajuda profissional imediatamente.
+                        Você não está sozinho e existem profissionais prontos para ajudar.
+                    </div>
+                    <div class="emergency-actions">
+                        <button class="emergency-btn" onclick="window.open('tel:188', '_blank')">
+                            <i class="fas fa-phone"></i>
+                            CVV: 188
+                        </button>
+                        <button class="emergency-btn" onclick="window.open('tel:192', '_blank')">
+                            <i class="fas fa-ambulance"></i>
+                            SAMU: 192
+                        </button>
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="assessment-header">
+                    <h2 class="assessment-title">Resultados da Avaliação</h2>
+                    <p class="assessment-description">
+                        Baseado em escalas cientificamente validadas (PHQ-9, GAD-7)
+                    </p>
+                </div>
+
+                <div class="scores-grid">
+                    <div class="score-card depression">
+                        <div class="score-title">Depressão (PHQ-9)</div>
+                        <div class="score-value ${severity}">${phq9} pontos</div>
+                        <div class="score-interpretation">
+                            ${phq9 <= 4 ? 'Mínima' : phq9 <= 9 ? 'Leve' : phq9 <= 14 ? 'Moderada' : phq9 <= 19 ? 'Moderadamente severa' : 'Severa'}
+                        </div>
+                    </div>
+                    
+                    <div class="score-card anxiety">
+                        <div class="score-title">Ansiedade (GAD-7)</div>
+                        <div class="score-value ${severity}">${gad7} pontos</div>
+                        <div class="score-interpretation">
+                            ${gad7 <= 4 ? 'Mínima' : gad7 <= 9 ? 'Leve' : gad7 <= 14 ? 'Moderada' : 'Severa'}
+                        </div>
+                    </div>
+                    
+                    <div class="score-card risk">
+                        <div class="score-title">Avaliação de Risco</div>
+                        <div class="score-value ${risk >= 3 ? 'severe' : risk >= 1 ? 'moderate' : 'low'}">${risk} pontos</div>
+                        <div class="score-interpretation">
+                            ${risk === 0 ? 'Sem risco identificado' : risk <= 2 ? 'Risco baixo' : 'Risco elevado'}
+                        </div>
+                    </div>
+                    
+                    <div class="score-card">
+                        <div class="score-title">Classificação Geral</div>
+                        <div class="score-value ${severity}" style="color: ${severityColors[severity].color}">
+                            ${severityColors[severity].text}
+                        </div>
+                        <div class="score-interpretation">Total: ${total} pontos</div>
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    <div class="recommendations-title">
+                        <i class="fas fa-lightbulb"></i>
+                        Recomendações Personalizadas
+                    </div>
+                    <ul class="recommendations-list">
+                        ${recommendations.map(rec => `
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                ${rec}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+
+                <div class="final-actions">
+                    <button class="action-btn" onclick="scheduleAppointment()">
+                        <i class="fas fa-calendar-plus"></i>
+                        Agendar Consulta
+                    </button>
+                    <button class="action-btn secondary" onclick="downloadResults()">
+                        <i class="fas fa-download"></i>
+                        Baixar Resultados
+                    </button>
+                    <button class="action-btn secondary" onclick="restartAssessment()">
+                        <i class="fas fa-redo"></i>
+                        Nova Avaliação
+                    </button>
+                </div>
+            `;
+        }
+
+        function scheduleAppointment() {
+            // Redirect to consultation booking system
+            window.location.href = '/consulta-por-valor.html?especialidade=psiquiatria&urgencia=true';
+        }
+
+        function downloadResults() {
+            const results = localStorage.getItem('psychiatricAssessmentResults');
+            if (results) {
+                const blob = new Blob([results], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `triagem-psiquiatrica-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function restartAssessment() {
+            currentQuestionIndex = 0;
+            answers = {};
+            assessmentStarted = false;
+            
+            document.getElementById('introContainer').style.display = 'block';
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'none';
+        }
+
+        function goBack() {
+            window.location.href = '/dr-ai.html';
+        }
+    </script>
+</body>
+</html>
