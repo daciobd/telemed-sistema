@@ -44,6 +44,140 @@
             </div>
         </div>
 
+        <!-- Como Funciona o Sistema de Lances -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Como Funciona o Sistema de Lances</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">
+                    Nosso sistema conecta pacientes e médicos de forma transparente e eficiente. 
+                    Veja como é simples usar nossa plataforma:
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Passo 1 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">1. Cadastre sua Necessidade</h3>
+                    <p class="text-gray-600 text-sm">
+                        Informe a especialidade, tipo de consulta e valor inicial que você está disposto a pagar
+                    </p>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-search text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">2. Médicos Fazem Lances</h3>
+                    <p class="text-gray-600 text-sm">
+                        Profissionais qualificados competem pelo melhor valor para sua consulta
+                    </p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-star text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">3. Escolha o Melhor</h3>
+                    <p class="text-gray-600 text-sm">
+                        Analise perfis e escolha o médico ideal baseado em valor, especialização e avaliações
+                    </p>
+                </div>
+
+                <!-- Passo 4 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-video text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">4. Realize a Consulta</h3>
+                    <p class="text-gray-600 text-sm">
+                        Agende e realize sua consulta com segurança através de nossa plataforma
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vantagens do Sistema -->
+            <div class="mt-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Por que usar nosso Sistema de Lances?</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700"><strong>Preços Justos:</strong> Competição garante valores acessíveis</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700"><strong>Transparência:</strong> Veja todos os lances em tempo real</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check text-white text-sm"></i>
+                        </div>
+                        <span class="text-gray-700"><strong>Qualidade:</strong> Médicos verificados e qualificados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão para Iniciar Lance -->
+            <div class="text-center mt-6">
+                <button onclick="showBidForm()" class="bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-green-700 transition-all font-bold text-lg shadow-lg">
+                    <i class="fas fa-plus mr-2"></i>Criar Novo Lance de Consulta
+                </button>
+            </div>
+        </div>
+
+        <!-- Formulário de Novo Lance (Oculto inicialmente) -->
+        <div id="bidForm" class="bg-white rounded-2xl shadow-lg p-8 mb-8 hidden">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Criar Nova Solicitação de Consulta</h3>
+            <form onsubmit="createNewBid(event)" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Especialidade Médica</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Selecione a especialidade</option>
+                            <option value="cardiologia">Cardiologia</option>
+                            <option value="pediatria">Pediatria</option>
+                            <option value="dermatologia">Dermatologia</option>
+                            <option value="ginecologia">Ginecologia</option>
+                            <option value="psiquiatria">Psiquiatria</option>
+                            <option value="clinica-geral">Clínica Geral</option>
+                            <option value="ortopedia">Ortopedia</option>
+                            <option value="neurologia">Neurologia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Valor Inicial do Lance</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
+                            <input type="number" placeholder="149" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" min="60" step="1" required>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Valor mínimo: R$ 60</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Descrição dos Sintomas/Necessidades</label>
+                    <textarea placeholder="Descreva brevemente seus sintomas ou necessidades médicas..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-24 resize-none" required></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="hideBidForm()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-rocket mr-2"></i>Iniciar Lance
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <!-- Active Auctions -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <!-- Consulta Cardiologia -->
@@ -484,6 +618,103 @@
 
         // Atualizar lances a cada 10 segundos
         setInterval(updateBids, 10000);
+
+        // Função para mostrar formulário de novo lance
+        function showBidForm() {
+            document.getElementById('bidForm').classList.remove('hidden');
+            document.getElementById('bidForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Função para esconder formulário de novo lance
+        function hideBidForm() {
+            document.getElementById('bidForm').classList.add('hidden');
+        }
+
+        // Função para criar novo lance
+        function createNewBid(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const specialty = form.querySelector('select').value;
+            const value = form.querySelector('input[type="number"]').value;
+            const description = form.querySelector('textarea').value;
+            
+            if (!specialty || !value || !description) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            if (parseInt(value) < 60) {
+                alert('O valor mínimo para um lance é R$ 60.');
+                return;
+            }
+            
+            // Criar nova solicitação
+            console.log('🆕 Criando nova solicitação:', { specialty, value, description });
+            
+            // Simular envio para o backend
+            setTimeout(() => {
+                // Esconder formulário
+                hideBidForm();
+                
+                // Mostrar modal de sucesso
+                showSuccessModal(specialty, value);
+                
+                // Adicionar à lista de lances ativos (simulação)
+                addNewBidToList(specialty, value, description);
+                
+                // Reset do formulário
+                form.reset();
+                
+            }, 1000);
+        }
+
+        // Função para adicionar novo lance à lista
+        function addNewBidToList(specialty, value, description) {
+            const container = document.querySelector('.grid.md\\:grid-cols-2.lg\\:grid-cols-3');
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'lance-card bg-white rounded-xl shadow-lg p-6';
+            newCard.innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Consulta ${specialty}</h3>
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Novo</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Lance Inicial:</span>
+                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ ${value}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Tempo Restante:</span>
+                        <span class="text-green-600 font-semibold">59:59</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Médicos Interessados:</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">0</span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600 mb-3"><strong>Descrição:</strong> ${description}</p>
+                        <div class="space-y-2">
+                            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-clock mr-2"></i>Aguardando Médicos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertBefore(newCard, container.firstChild);
+            
+            // Animação de entrada
+            newCard.style.opacity = '0';
+            newCard.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                newCard.style.transition = 'all 0.5s ease';
+                newCard.style.opacity = '1';
+                newCard.style.transform = 'translateY(0)';
+            }, 100);
+        }
 
         // Função para submeter novo lance do formulário
         function submitNewBid() {

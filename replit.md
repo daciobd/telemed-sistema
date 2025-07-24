@@ -10,6 +10,28 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 24, 2025**: SEÇÃO EXPLICATIVA SISTEMA DE LANCES IMPLEMENTADA v10.5.1
+  - ✅ **Seção "Como Funciona o Sistema de Lances"**: Adicionada explicação visual completa na página consulta-por-valor.html
+    - 4 passos explicativos: Cadastre Necessidade → Médicos Fazem Lances → Escolha o Melhor → Realize a Consulta
+    - Cards visuais com ícones específicos e descrições detalhadas para cada etapa
+    - Seção "Por que usar nosso Sistema de Lances?" com 3 vantagens principais
+    - Design responsivo com gradientes e animações consistentes com identidade TeleMed
+  - ✅ **Formulário de Novo Lance**: Sistema completo para criar novas solicitações de consulta
+    - Botão "Criar Novo Lance de Consulta" com destaque visual
+    - Formulário com campos: Especialidade Médica, Valor Inicial (R$ 60 mínimo), Descrição de Sintomas
+    - Validação completa com feedback de erro e mensagens de sucesso
+    - Integração com localStorage para persistência entre páginas
+  - ✅ **Funcionalidades JavaScript Aprimoradas**: Sistema de interação dinâmica
+    - Funções showBidForm() e hideBidForm() para controle do formulário
+    - createNewBid() com validação e feedback visual profissional
+    - addNewBidToList() para adicionar novos lances dinamicamente à interface
+    - Animações de entrada suaves e feedback visual para melhor UX
+  - ✅ **Melhoria na Experiência do Usuário**: Interface mais educativa e intuitiva
+    - Explicação clara do processo antes dos lances ativos
+    - Formulário oculto inicialmente, aparece sob demanda
+    - Modal de sucesso com informações do lance criado
+    - Sistema de cores consistente: azul/verde/roxo para diferentes elementos
+
 - **July 24, 2025**: PÁGINA ÍNDICE DO SISTEMA CRIADA v10.5.0
   - ✅ **Página de Navegação Completa**: `/sistema-indice.html` com overview total do TeleMed Sistema
     - Design moderno com grid responsivo e cards interativos
