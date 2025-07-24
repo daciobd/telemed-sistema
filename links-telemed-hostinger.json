@@ -2,6 +2,12 @@
   "telemed_sistema_links": {
     "base_url": "https://telemed-sistema.replit.dev",
     "sistemas_principais": {
+      "sistema_indice": {
+        "url": "https://telemed-sistema.replit.dev/sistema-indice.html",
+        "titulo": "Índice do Sistema",
+        "descricao": "Navegação completa entre todas as 12 páginas do sistema",
+        "categoria": "Principal"
+      },
       "dr_ai": {
         "url": "https://telemed-sistema.replit.dev/dr-ai.html",
         "titulo": "Dr. AI - Triagem Inteligente",
@@ -110,6 +116,7 @@
     },
     "categorias_botoes": {
       "pacientes": [
+        "sistema_indice",
         "login",
         "cadastro",
         "dr_ai",
@@ -119,6 +126,7 @@
         "videoconsultas"
       ],
       "medicos": [
+        "sistema_indice",
         "login",
         "cadastro",
         "dashboard_medico",

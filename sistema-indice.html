@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Índice do Sistema</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .page-card:hover::before {
+            left: 100%;
+        }
+
+        .page-card:hover {
+            border-color: #4ECDC4;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .page-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: #4ECDC4;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2C5F56;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-description {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .page-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .feature-item i {
+            color: #4ECDC4;
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .page-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-premium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-new {
+            background: #e7f3ff;
+            color: #1971c2;
+        }
+
+        .system-info {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .demo-credentials {
+            background: #e7f3ff;
+            border: 1px solid #4dabf7;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .demo-credentials h4 {
+            color: #1971c2;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .credential-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid #4dabf7;
+        }
+
+        .quick-actions {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .page-card.featured {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .page-card.featured .page-title {
+            color: white;
+        }
+
+        .page-card.featured .page-description {
+            color: rgba(255,255,255,0.9);
+        }
+
+        @media (max-width: 768px) {
+            .pages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i> TeleMed Sistema
+            </div>
+            <p class="subtitle">Plataforma Completa de Telemedicina</p>
+            <span class="version-badge">v10.4.0 - Sistema Completo</span>
+        </div>
+
+        <div class="pages-grid">
+            <a href="index.html" class="page-card">
+                <i class="fas fa-home page-icon"></i>
+                <div class="page-title">Landing Page Principal</div>
+                <div class="page-description">Página inicial moderna com informações sobre a TeleMed e especialidades médicas</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> 9 especialidades médicas</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Design responsivo</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> CTAs integrados</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="login.html" class="page-card featured">
+                <i class="fas fa-sign-in-alt page-icon"></i>
+                <div class="page-title">Sistema de Login</div>
+                <div class="page-description">Autenticação avançada com login social e contas demo</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Login Google/Facebook</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Contas de demonstração</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Redirecionamento inteligente</div>
+                </div>
+                <span class="page-status status-new">🆕 Novo</span>
+            </a>
+
+            <a href="register.html" class="page-card">
+                <i class="fas fa-user-plus page-icon"></i>
+                <div class="page-title">Cadastro Multi-Etapa</div>
+                <div class="page-description">Registro profissional em 3 etapas com validação completa</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Validação de CPF</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> API ViaCEP</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Diferenciação médico/paciente</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="especialidades.html" class="page-card">
+                <i class="fas fa-stethoscope page-icon"></i>
+                <div class="page-title">Especialidades Médicas</div>
+                <div class="page-description">8 especialidades detalhadas com agendamento direto</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Clínico, Psiquiatra, Pediatra</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Ginecologia, Dermatologia</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Cards interativos</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="dr-ai.html" class="page-card">
+                <i class="fas fa-robot page-icon"></i>
+                <div class="page-title">Dr. AI - Triagem Inteligente</div>
+                <div class="page-description">Sistema de IA médica para triagem inicial de sintomas</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Chatbot conversacional</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Classificação de risco</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Recomendações personalizadas</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="triagem-psiquiatrica.html" class="page-card">
+                <i class="fas fa-brain page-icon"></i>
+                <div class="page-title">Triagem Psiquiátrica IA</div>
+                <div class="page-description">Primeiro sistema do Brasil com IA especializada em saúde mental</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Escalas PHQ-9 e GAD-7</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Detecção de emergências</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Sistema revolucionário</div>
+                </div>
+                <span class="page-status status-premium">⭐ Premium</span>
+            </a>
+
+            <a href="telemonitoramento-enfermagem.html" class="page-card">
+                <i class="fas fa-user-nurse page-icon"></i>
+                <div class="page-title">Telemonitoramento</div>
+                <div class="page-description">Acompanhamento 24/7 com enfermeiros especializados</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> R$ 89/mês</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Monitoramento contínuo</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Alertas inteligentes</div>
+                </div>
+                <span class="page-status status-premium">⭐ Premium</span>
+            </a>
+
+            <a href="saiba-mais.html" class="page-card">
+                <i class="fas fa-info-circle page-icon"></i>
+                <div class="page-title">Saiba Mais</div>
+                <div class="page-description">Informações detalhadas sobre recursos e funcionalidades</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> 9 recursos revolucionários</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Estatísticas da plataforma</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Design informativo</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="medical-dashboard-pro.html" class="page-card">
+                <i class="fas fa-chart-line page-icon"></i>
+                <div class="page-title">Dashboard Médico Pro</div>
+                <div class="page-description">Interface profissional completa para médicos</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Sidebar lateral 280px</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Sistema de lances</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Videoconsultas WebRTC</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="consulta-por-valor.html" class="page-card">
+                <i class="fas fa-gavel page-icon"></i>
+                <div class="page-title">Sistema de Lances</div>
+                <div class="page-description">Consultas médicas por lances a partir de R$ 60</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Lances em tempo real</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> LocalStorage persistente</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Integração com dashboard</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="videoconsulta.html" class="page-card">
+                <i class="fas fa-video page-icon"></i>
+                <div class="page-title">Videoconsultas WebRTC</div>
+                <div class="page-description">Sistema completo de videochamadas médicas</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> WebRTC real</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Chat integrado</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Prescrições digitais</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+
+            <a href="integracao-hostinger.html" class="page-card">
+                <i class="fas fa-link page-icon"></i>
+                <div class="page-title">Integração Hostinger</div>
+                <div class="page-description">Sistema completo de links para hospedagem</div>
+                <div class="page-features">
+                    <div class="feature-item"><i class="fas fa-check"></i> Links copiáveis</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Botões de teste</div>
+                    <div class="feature-item"><i class="fas fa-check"></i> Metadados completos</div>
+                </div>
+                <span class="page-status status-ready">✅ Operacional</span>
+            </a>
+        </div>
+
+        <div class="system-info">
+            <h3><i class="fas fa-chart-bar"></i> Status do Sistema</h3>
+            <p>Todas as funcionalidades principais estão 100% operacionais</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">Páginas Ativas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Funcionalidades</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">25+</span>
+                    <span class="stat-label">Especialidades</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Responsivo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-credentials">
+            <h4><i class="fas fa-key"></i> Credenciais para Demonstração</h4>
+            <div class="credential-item">
+                <strong>👤 Paciente:</strong> paciente@demo.com / senha: 123456
+            </div>
+            <div class="credential-item">
+                <strong>🩺 Médico:</strong> medico@demo.com / senha: 123456
+            </div>
+            <div class="credential-item">
+                <strong>👑 Admin:</strong> admin@telemed.com / senha: admin123
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.95rem; color: #666;">
+                <i class="fas fa-info-circle"></i> Use essas credenciais para testar todo o fluxo de autenticação e navegação do sistema
+            </p>
+        </div>
+
+        <div class="quick-actions">
+            <h4><i class="fas fa-rocket"></i> Ações Rápidas</h4>
+            <p>Teste o sistema completo com os links abaixo:</p>
+            <div class="action-buttons">
+                <a href="login.html" class="action-btn">
+                    <i class="fas fa-sign-in-alt"></i> Fazer Login
+                </a>
+                <a href="register.html" class="action-btn">
+                    <i class="fas fa-user-plus"></i> Cadastrar
+                </a>
+                <a href="dr-ai.html" class="action-btn">
+                    <i class="fas fa-robot"></i> Testar Dr. AI
+                </a>
+                <a href="consulta-por-valor.html" class="action-btn">
+                    <i class="fas fa-gavel"></i> Fazer Lance
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificação automática de status das páginas
+        document.addEventListener('DOMContentLoaded', function() {
+            const pages = [
+                'index.html', 'login.html', 'register.html', 'especialidades.html',
+                'dr-ai.html', 'triagem-psiquiatrica.html', 'telemonitoramento-enfermagem.html',
+                'saiba-mais.html', 'medical-dashboard-pro.html', 'consulta-por-valor.html',
+                'videoconsulta.html', 'integracao-hostinger.html'
+            ];
+
+            console.log('🩺 TeleMed Sistema v10.4.0 - Índice de Navegação');
+            console.log('📋 Verificando status de todas as páginas...');
+
+            let pagesChecked = 0;
+            let pagesAvailable = 0;
+
+            pages.forEach(async (page) => {
+                try {
+                    const response = await fetch(page, { method: 'HEAD' });
+                    const card = document.querySelector(`a[href="${page}"]`);
+                    
+                    pagesChecked++;
+                    
+                    if (card) {
+                        if (response.ok) {
+                            pagesAvailable++;
+                            console.log(`✅ ${page} disponível`);
+                        } else {
+                            console.log(`❌ ${page} erro ${response.status}`);
+                            card.style.opacity = '0.6';
+                            card.style.filter = 'grayscale(50%)';
+                            
+                            const status = card.querySelector('.page-status');
+                            if (status) {
+                                status.textContent = '❌ Erro 404';
+                                status.className = 'page-status status-premium';
+                            }
+                        }
+                    }
+
+                    // Atualizar estatísticas quando todas as páginas forem verificadas
+                    if (pagesChecked === pages.length) {
+                        const statNumber = document.querySelector('.stat-number');
+                        if (statNumber) {
+                            statNumber.textContent = pagesAvailable;
+                        }
+                        console.log(`📊 ${pagesAvailable}/${pages.length} páginas disponíveis`);
+                    }
+                } catch (error) {
+                    console.log(`❌ ${page} falha na requisição:`, error.message);
+                    pagesChecked++;
+                    
+                    const card = document.querySelector(`a[href="${page}"]`);
+                    if (card) {
+                        card.style.opacity = '0.6';
+                        card.style.filter = 'grayscale(50%)';
+                    }
+                }
+            });
+
+            // Adicionar tracking de cliques
+            document.querySelectorAll('.page-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const title = this.querySelector('.page-title').textContent;
+                    console.log(`🔗 Navegando para: ${title}`);
+                    
+                    // Feedback visual
+                    this.style.transform = 'scale(0.96)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+
+            // Animação de entrada dos cards
+            const cards = document.querySelectorAll('.page-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Função para copiar link para clipboard
+        function copyPageLink(page) {
+            const url = window.location.origin + '/' + page;
+            navigator.clipboard.writeText(url).then(() => {
+                console.log(`📋 Link copiado: ${url}`);
+                
+                // Mostrar feedback visual
+                const notification = document.createElement('div');
+                notification.textContent = 'Link copiado!';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #4ECDC4;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease;
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            });
+        }
+
+        // CSS para animação
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

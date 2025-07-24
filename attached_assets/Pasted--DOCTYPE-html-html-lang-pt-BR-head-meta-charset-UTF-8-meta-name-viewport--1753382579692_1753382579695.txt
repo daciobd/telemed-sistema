@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Índice do Sistema</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4ECDC4;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .pages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .page-card:hover {
+            border-color: #4ECDC4;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .page-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2C5F56;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-ready {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-dev {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .system-info {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .demo-credentials {
+            background: #e7f3ff;
+            border: 1px solid #4dabf7;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .demo-credentials h4 {
+            color: #1971c2;
+            margin-bottom: 1rem;
+        }
+
+        .credential-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .pages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">TeleMed Consultas</div>
+            <p class="subtitle">Sistema Completo de Telemedicina</p>
+        </div>
+
+        <div class="pages-grid">
+            <a href="index.html" class="page-card">
+                <span class="page-icon">🏠</span>
+                <div class="page-title">Página Principal</div>
+                <div class="page-description">Landing page com informações sobre a TeleMed e CTAs principais</div>
+                <span class="page-status status-ready">✅ Pronto</span>
+            </a>
+
+            <a href="register.html" class="page-card">
+                <span class="page-icon">📝</span>
+                <div class="page-title">Cadastro de Usuários</div>
+                <div class="page-description">Formulário completo em 3 etapas para cadastro de pacientes e médicos</div>
+                <span class="page-status status-ready">✅ Pronto</span>
+            </a>
+
+            <a href="login.html" class="page-card">
+                <span class="page-icon">🔐</span>
+                <div class="page-title">Login</div>
+                <div class="page-description">Sistema de autenticação com suporte a pacientes e médicos</div>
+                <span class="page-status status-ready">✅ Pronto</span>
+            </a>
+
+            <a href="consultation.html" class="page-card">
+                <span class="page-icon">🩺</span>
+                <div class="page-title">Sistema de Consultas</div>
+                <div class="page-description">Fluxo completo de consultas médicas online com videochamada</div>
+                <span class="page-status status-ready">✅ Pronto</span>
+            </a>
+
+            <a href="nursing-monitoring.html" class="page-card">
+                <span class="page-icon">👩‍⚕️</span>
+                <div class="page-title">Telemonitoramento</div>
+                <div class="page-description">Sistema de acompanhamento contínuo com enfermeiros especializados</div>
+                <span class="page-status status-ready">✅ Pronto</span>
+            </a>
+
+            <a href="como-funciona.html" class="page-card">
+                <span class="page-icon">❓</span>
+                <div class="page-title">Como Funciona</div>
+                <div class="page-description">Explicações detalhadas sobre o processo e funcionamento da plataforma</div>
+                <span class="page-status status-ready">✅ Pronto</span>
+            </a>
+
+            <div class="page-card" style="opacity: 0.6;">
+                <span class="page-icon">👨‍⚕️</span>
+                <div class="page-title">Dashboard Médico</div>
+                <div class="page-description">Painel administrativo para médicos gerenciarem consultas</div>
+                <span class="page-status status-dev">🚧 Em Desenvolvimento</span>
+            </div>
+
+            <div class="page-card" style="opacity: 0.6;">
+                <span class="page-icon">💊</span>
+                <div class="page-title">Receitas Digitais</div>
+                <div class="page-description">Sistema dedicado para receitas e documentos médicos</div>
+                <span class="page-status status-dev">🚧 Em Desenvolvimento</span>
+            </div>
+        </div>
+
+        <div class="system-info">
+            <h3>Status do Sistema</h3>
+            <p>Todas as funcionalidades principais estão operacionais</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Páginas Ativas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Funcionalidades</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Responsivo</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-credentials">
+            <h4>🔑 Credenciais para Teste</h4>
+            <div class="credential-item">
+                <strong>Paciente:</strong> paciente@demo.com / 123456
+            </div>
+            <div class="credential-item">
+                <strong>Médico:</strong> medico@demo.com / 123456
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                Use essas credenciais para testar o sistema de login e navegação
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Check page availability and update status
+        document.addEventListener('DOMContentLoaded', function() {
+            const pages = [
+                'index.html',
+                'register.html', 
+                'login.html',
+                'consultation.html',
+                'nursing-monitoring.html',
+                'como-funciona.html'
+            ];
+
+            pages.forEach(async (page) => {
+                try {
+                    const response = await fetch(page, { method: 'HEAD' });
+                    const card = document.querySelector(`a[href="${page}"]`);
+                    
+                    if (card) {
+                        if (response.ok) {
+                            console.log(`✅ ${page} is available`);
+                        } else {
+                            console.log(`❌ ${page} returned ${response.status}`);
+                            card.style.opacity = '0.5';
+                            const status = card.querySelector('.page-status');
+                            if (status) {
+                                status.textContent = '❌ Erro 404';
+                                status.className = 'page-status status-dev';
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.log(`❌ ${page} failed to load:`, error.message);
+                    const card = document.querySelector(`a[href="${page}"]`);
+                    if (card) {
+                        card.style.opacity = '0.5';
+                        const status = card.querySelector('.page-status');
+                        if (status) {
+                            status.textContent = '❌ Não Encontrado';
+                            status.className = 'page-status status-dev';
+                        }
+                    }
+                }
+            });
+
+            // Show navigation info
+            console.log('📋 Sistema TeleMed - Índice de Páginas');
+            console.log('🔗 Use este índice para navegar entre as páginas do sistema');
+            console.log('🐛 Se houver erro 404, verifique se todos os arquivos estão no Replit');
+        });
+
+        // Add click tracking
+        document.querySelectorAll('.page-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const title = this.querySelector('.page-title').textContent;
+                console.log(`Navegando para: ${title}`);
+                
+                // Add visual feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
