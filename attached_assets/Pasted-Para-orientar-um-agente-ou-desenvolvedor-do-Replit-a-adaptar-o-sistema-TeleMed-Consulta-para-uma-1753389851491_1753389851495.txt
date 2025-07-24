@@ -1,0 +1,59 @@
+Para orientar um agente ou desenvolvedor do Replit a adaptar o **sistema TeleMed Consulta** para uma estética mais moderna, leve e clean, você pode usar a seguinte mensagem como **briefing visual e funcional**. Sinta-se à vontade para copiar e enviar:
+
+---
+
+### 🎨 **Briefing de Redesign para Interface do Sistema TeleMed Consulta**
+
+Olá! Parabéns pelo sistema já funcional. Gostaria de aprimorar a estética e a usabilidade visual da interface com base nas seguintes diretrizes:
+
+---
+
+### 🔧 **1. Estilo visual desejado: leve, moderno e profissional**
+
+* **Tema:** Clean, com fundo branco ou cinza muito claro.
+* **Paleta de cores:** tons pastel (azul claro, verde suave, lavanda, coral) — evitar cores muito vibrantes como o roxo escuro e o vermelho puro.
+* **Tipografia:** fonte sans-serif moderna e de fácil leitura (ex: Inter, Poppins, Roboto).
+* **Espaçamento:** mais espaço entre elementos (padding e margin) para deixar tudo mais “arejado”.
+
+---
+
+### 🎯 **2. Ajustes específicos por tela**
+
+#### A. **Dashboard do Médico**
+
+* **Boas-vindas:** remover o gradiente forte, usar fundo branco com borda sutil ou sombra leve.
+* **Cartões de métricas (Pacientes, Consultas, Receita, Avaliação):** aplicar cantos mais arredondados, cores mais suaves e ícones menores.
+* **Ícones:** substituir por ícones flat ou outline discretos (ex: do [Lucide Icons](https://lucide.dev) ou [Heroicons](https://heroicons.com)).
+
+#### B. **Fila de Pacientes**
+
+* **Header vermelho intenso:** suavizar para um tom coral ou cinza claro com ícone sutil de emergência.
+* **Cartões de prioridade:** aplicar ícones pequenos e cores menos saturadas.
+* **Layout geral:** aumentar espaçamento entre os blocos, aplicar sombras suaves.
+
+---
+
+### 📲 **3. Componentes**
+
+* **Botões:** plano (flat), com cor pastel e ícone discreto, e hover leve (ex: sombra, sublinhado ou leve mudança de cor).
+* **Menus laterais:** fundo branco com ícones outline em cinza escuro e texto preto.
+* **Notificações:** usar número em bolha mais pequena e discreta (evitar vermelho vibrante).
+
+---
+
+### 💡 **Inspirações visuais (referências)**
+
+* Sites e sistemas como: Notion, Linear, Slack Web, Calm, Zocdoc.
+* Estilo minimalista com foco em legibilidade e experiência suave.
+
+---
+
+### ✅ **Resumo das metas**
+
+* Modernizar o visual sem comprometer a clareza e a funcionalidade.
+* Tornar a experiência mais leve, elegante e profissional.
+* Manter usabilidade em desktop e tablets.
+
+---
+
+Se quiser, posso também gerar um **protótipo visual ou tela modelo** com base nessas diretrizes. Deseja isso?
