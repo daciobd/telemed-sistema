@@ -72,6 +72,11 @@
         "titulo": "TeleMed Sistema - Página Principal",
         "descricao": "Landing page com todas as especialidades"
       },
+      "saiba_mais": {
+        "url": "https://telemed-sistema.replit.dev/saiba-mais.html",
+        "titulo": "Saiba Mais - TeleMed Sistema",
+        "descricao": "Página informativa completa sobre recursos e funcionalidades"
+      },
       "integracao": {
         "url": "https://telemed-sistema.replit.dev/integracao-hostinger.html",
         "titulo": "Página de Integração Hostinger",

@@ -10,6 +10,33 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 24, 2025**: PÁGINA "SAIBA MAIS" INFORMATIVA CRIADA v10.1.0
+  - ✅ **Página Informativa Completa**: `/saiba-mais.html` com apresentação detalhada do sistema
+    - Hero section com estatísticas: 2min conexão, 24/7 disponível, 98% satisfação, 25+ especialidades
+    - Seção "Recursos Revolucionários" com 9 funcionalidades principais
+    - Design responsivo com gradiente roxo/azul e animações suaves
+    - CTAs integrados direcionando para Dr. AI e Sistema de Lances
+  - ✅ **Funcionalidades Destacadas**: Cards informativos sobre todos os sistemas
+    - Dr. AI - Triagem Inteligente com IA médica especializada
+    - Sistema de Lances transparente com pagamento por consulta realizada
+    - Videoconsultas WebRTC com tecnologia de ponta
+    - Dashboard Médico Profissional com interface exclusiva
+    - Telemonitoramento de Enfermagem 24/7 por R$ 89/mês
+    - Triagem Psiquiátrica com escalas científicas PHQ-9 e GAD-7
+    - Sistema de Notificações Enterprise com priorização inteligente
+    - Multiplataforma e responsivo para todos os dispositivos
+    - Segurança LGPD com criptografia end-to-end
+  - ✅ **Integração Hostinger Atualizada**: Links adicionados no sistema de integração
+    - Novo card na página `/integracao-hostinger.html` com link copiável
+    - Botão demonstrativo funcional na seção de testes
+    - Atualização do arquivo JSON com metadados completos
+    - Posicionamento estratégico entre Videoconsultas e Dashboard Médico
+  - ✅ **Design Profissional**: Layout moderno com foco em conversão
+    - Header fixo com breadcrumb navigation
+    - Footer institucional com links para todos os sistemas
+    - Animações CSS com Intersection Observer
+    - Sistema de cores consistente com identidade TeleMed
+
 - **July 23, 2025**: TELEMONITORAMENTO DE ENFERMAGEM INTEGRADO v10.0.0
   - ✅ **Sistema Completo Implementado**: `/telemonitoramento-enfermagem.html` com funcionalidade enterprise completa
     - Banner hero com enfermeira e condições atendidas (Hipertensão, Diabetes, Obesidade)
