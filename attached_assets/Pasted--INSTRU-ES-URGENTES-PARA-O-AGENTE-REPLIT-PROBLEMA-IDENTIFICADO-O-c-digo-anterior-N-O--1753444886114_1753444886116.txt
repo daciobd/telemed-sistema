@@ -1,0 +1,569 @@
+# 🚨 INSTRUÇÕES URGENTES PARA O AGENTE REPLIT
+
+## ⚠️ PROBLEMA IDENTIFICADO
+O código anterior NÃO foi implementado. Precisa substituir EXATAMENTE o arquivo correto.
+
+---
+
+## 🎯 AÇÃO IMEDIATA NECESSÁRIA
+
+### PASSO 1: ENCONTRAR O ARQUIVO CORRETO
+```bash
+# Execute EXATAMENTE este comando:
+find . -name "*.html" | grep -i agenda
+```
+
+**Você deve encontrar algo como:**
+- `agenda-do-dia.html`
+- `consultas-agendadas.html`
+
+### PASSO 2: VERIFICAR O CONTEÚDO ATUAL
+```bash
+# Verifique qual arquivo contém "Agenda do Dia":
+grep -l "Agenda do Dia" *.html
+# ou
+grep -l "Cronograma de Hoje" *.html
+```
+
+### PASSO 3: FAZER BACKUP DO ARQUIVO CORRETO
+```bash
+# Substitua NOME_ARQUIVO pelo arquivo encontrado:
+cp agenda-do-dia.html agenda-do-dia.html.backup
+```
+
+---
+
+## 🔄 SUBSTITUIÇÃO COMPLETA DO ARQUIVO
+
+**APAGUE TODO O CONTEÚDO do arquivo `agenda-do-dia.html` e substitua por:**
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda do Dia - Telemed Consultas</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide-react@latest/dist/umd/lucide-react.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        const { Calendar, Clock, Video, CheckCircle, XCircle, Bell, BellOff, ArrowLeft, ChevronLeft, ChevronRight, Plus, Settings } = lucideReact;
+
+        const AgendaDia = () => {
+          const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 25));
+          const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '00' });
+          const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+          const [showAdvancedFields, setShowAdvancedFields] = useState(false);
+
+          const consultas = [
+            {
+              id: 1,
+              horario: '07:00',
+              status: 'indisponivel',
+              paciente: '',
+              tipo: '',
+              obs: 'Não disponível'
+            },
+            {
+              id: 2,
+              horario: '07:20',
+              status: 'finalizado',
+              paciente: 'Moreira, Carlos Otávio',
+              tipo: 'Médico',
+              obs: 'Finalizado'
+            },
+            {
+              id: 3,
+              horario: '07:40',
+              status: 'confirmado',
+              paciente: 'Ferreira, Carla Patrícia',
+              tipo: 'Médico',
+              obs: 'Confirmado'
+            },
+            {
+              id: 4,
+              horario: '08:00',
+              status: 'confirmado',
+              paciente: 'Cavalcante, Juliana',
+              tipo: 'Psicólogo',
+              obs: 'Confirmado'
+            },
+            {
+              id: 5,
+              horario: '08:20',
+              status: 'confirmado',
+              paciente: 'Diniz Ferreira, Fernando',
+              tipo: 'Doutor Azul',
+              obs: 'Confirmado'
+            },
+            {
+              id: 6,
+              horario: '08:40',
+              status: 'confirmado',
+              paciente: 'Rufino, Aline Amanda De Salles',
+              tipo: 'Médico',
+              obs: 'Confirmado'
+            },
+            {
+              id: 7,
+              horario: '09:00',
+              status: 'confirmado',
+              paciente: 'De Oliveira Canno, Kethelyn',
+              tipo: 'Médico',
+              obs: 'Confirmado'
+            }
+          ];
+
+          const getStatusIcon = (status) => {
+            switch (status) {
+              case 'confirmado':
+                return React.createElement(CheckCircle, { className: "w-4 h-4", style: { color: '#A7C7E7' } });
+              case 'finalizado':
+                return React.createElement(CheckCircle, { className: "w-4 h-4", style: { color: '#F4D9B4' } });
+              case 'indisponivel':
+                return React.createElement(XCircle, { className: "w-4 h-4", style: { color: '#E9967A' } });
+              default:
+                return React.createElement(Clock, { className: "w-4 h-4", style: { color: '#A7C7E7' } });
+            }
+          };
+
+          const getTipoColor = (tipo) => {
+            switch (tipo) {
+              case 'Médico':
+                return { backgroundColor: '#A7C7E7', color: 'white' };
+              case 'Psicólogo':
+                return { backgroundColor: '#F4D9B4', color: '#8B4513' };
+              case 'Doutor Azul':
+                return { backgroundColor: '#E9967A', color: 'white' };
+              default:
+                return { backgroundColor: '#D1D5DB', color: '#6B7280' };
+            }
+          };
+
+          const formatDate = (date) => {
+            return date.toLocaleDateString('pt-BR', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          };
+
+          const changeDate = (days) => {
+            const newDate = new Date(currentDate);
+            newDate.setDate(currentDate.getDate() + days);
+            setCurrentDate(newDate);
+          };
+
+          const generateTimeOptions = () => {
+            const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+            const minutes = ['00', '15', '30', '45'];
+            return { hours, minutes };
+          };
+
+          const { hours, minutes } = generateTimeOptions();
+
+          return React.createElement('div', {
+            className: "max-w-7xl mx-auto p-8 min-h-screen",
+            style: { 
+              fontFamily: "'Poppins', 'Inter', sans-serif", 
+              backgroundColor: '#FAFBFC' 
+            }
+          }, [
+            // Header
+            React.createElement('div', {
+              key: 'header',
+              className: "text-white p-8 mb-8",
+              style: { 
+                background: 'linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%)', 
+                borderRadius: '20px' 
+              }
+            }, 
+              React.createElement('div', { className: "flex items-center justify-between" }, [
+                React.createElement('div', { key: 'left', className: "flex items-center gap-6" }, [
+                  React.createElement(ArrowLeft, { 
+                    key: 'arrow',
+                    className: "w-6 h-6 cursor-pointer hover:opacity-80 rounded-full p-1 transition-opacity" 
+                  }),
+                  React.createElement('h1', { 
+                    key: 'title',
+                    className: "text-2xl font-semibold" 
+                  }, 'Agenda de Videoconsultas')
+                ]),
+                React.createElement('div', { key: 'right', className: "text-right" },
+                  React.createElement('p', { className: "opacity-90 font-light" }, 'Bem-vindo, Dr. Dácio Bonoldi Dutra')
+                )
+              ])
+            ),
+
+            // Main Content
+            React.createElement('div', {
+              key: 'main',
+              className: "bg-white p-8",
+              style: { borderRadius: '20px' }
+            },
+              React.createElement('div', { className: "grid grid-cols-1 lg:grid-cols-3 gap-8" }, [
+                
+                // Sidebar
+                React.createElement('div', { key: 'sidebar', className: "space-y-8" }, [
+                  
+                  // Calendar
+                  React.createElement('div', {
+                    key: 'calendar',
+                    className: "p-6",
+                    style: { backgroundColor: '#F8F9FA', borderRadius: '20px' }
+                  }, [
+                    React.createElement('div', { 
+                      key: 'cal-header',
+                      className: "flex items-center justify-between mb-6" 
+                    }, [
+                      React.createElement('button', {
+                        key: 'prev',
+                        onClick: () => changeDate(-1),
+                        className: "p-2 hover:opacity-70 transition-opacity",
+                        style: { borderRadius: '12px' }
+                      }, React.createElement(ChevronLeft, { className: "w-5 h-5", style: { color: '#A7C7E7' } })),
+                      
+                      React.createElement('h3', { 
+                        key: 'month',
+                        className: "font-medium text-gray-700" 
+                      }, currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })),
+                      
+                      React.createElement('button', {
+                        key: 'next',
+                        onClick: () => changeDate(1),
+                        className: "p-2 hover:opacity-70 transition-opacity",
+                        style: { borderRadius: '12px' }
+                      }, React.createElement(ChevronRight, { className: "w-5 h-5", style: { color: '#A7C7E7' } }))
+                    ]),
+
+                    React.createElement('div', { 
+                      key: 'cal-days',
+                      className: "grid grid-cols-7 gap-1 text-center text-sm mb-3" 
+                    }, ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => 
+                      React.createElement('div', { 
+                        key: day, 
+                        className: "p-3 font-medium text-gray-500" 
+                      }, day)
+                    )),
+
+                    React.createElement('div', { 
+                      key: 'cal-grid',
+                      className: "grid grid-cols-7 gap-1 text-center text-sm" 
+                    }, Array.from({ length: 35 }, (_, i) => {
+                      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i - 10);
+                      const isToday = date.toDateString() === currentDate.toDateString();
+                      const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+                      
+                      return React.createElement('button', {
+                        key: i,
+                        onClick: () => setCurrentDate(date),
+                        className: `p-3 transition-all font-medium ${
+                          isToday 
+                            ? 'text-white' 
+                            : isCurrentMonth 
+                              ? 'hover:opacity-70 text-gray-600' 
+                              : 'text-gray-300'
+                        }`,
+                        style: {
+                          borderRadius: '12px',
+                          backgroundColor: isToday ? '#A7C7E7' : 'transparent'
+                        }
+                      }, date.getDate());
+                    }))
+                  ]),
+
+                  // Add Time
+                  React.createElement('div', {
+                    key: 'add-time',
+                    className: "p-6",
+                    style: { backgroundColor: '#F8F9FA', borderRadius: '20px' }
+                  }, [
+                    React.createElement('div', { 
+                      key: 'add-header',
+                      className: "flex items-center justify-between mb-6" 
+                    }, [
+                      React.createElement('h3', { 
+                        key: 'add-title',
+                        className: "font-medium text-gray-700" 
+                      }, 'Adicionar horário'),
+                      React.createElement('button', {
+                        key: 'settings',
+                        onClick: () => setShowAdvancedFields(!showAdvancedFields),
+                        className: "p-2 hover:opacity-70 transition-opacity",
+                        style: { borderRadius: '12px', backgroundColor: '#F4D9B4' }
+                      }, React.createElement(Settings, { className: "w-4 h-4 text-amber-800" }))
+                    ]),
+
+                    React.createElement('div', { 
+                      key: 'time-selectors',
+                      className: "flex items-center gap-3 mb-4" 
+                    }, [
+                      React.createElement('select', {
+                        key: 'hour',
+                        value: selectedTime.hour,
+                        onChange: (e) => setSelectedTime({...selectedTime, hour: e.target.value}),
+                        className: "px-4 py-3 font-medium text-gray-700 bg-white border-0 focus:outline-none",
+                        style: { borderRadius: '12px' }
+                      }, hours.map(hour => React.createElement('option', { key: hour, value: hour }, hour))),
+
+                      React.createElement('span', { 
+                        key: 'colon',
+                        className: "text-gray-500 font-medium" 
+                      }, ':'),
+
+                      React.createElement('select', {
+                        key: 'minute',
+                        value: selectedTime.minute,
+                        onChange: (e) => setSelectedTime({...selectedTime, minute: e.target.value}),
+                        className: "px-4 py-3 font-medium text-gray-700 bg-white border-0 focus:outline-none",
+                        style: { borderRadius: '12px' }
+                      }, minutes.map(minute => React.createElement('option', { key: minute, value: minute }, minute))),
+
+                      React.createElement('button', {
+                        key: 'add-btn',
+                        className: "text-white px-5 py-3 font-medium transition-opacity hover:opacity-80 flex items-center gap-2",
+                        style: { backgroundColor: '#A7C7E7', borderRadius: '12px' }
+                      }, [
+                        React.createElement(Plus, { key: 'plus-icon', className: "w-4 h-4" }),
+                        'Adicionar'
+                      ])
+                    ]),
+
+                    // Advanced Fields
+                    showAdvancedFields && React.createElement('div', {
+                      key: 'advanced',
+                      className: "space-y-4 mt-6 pt-6 border-t border-gray-200"
+                    }, [
+                      React.createElement('div', { key: 'tipo' }, [
+                        React.createElement('label', { 
+                          className: "block text-sm font-medium text-gray-600 mb-2" 
+                        }, 'Tipo de Consulta'),
+                        React.createElement('select', {
+                          className: "w-full px-4 py-3 bg-white border-0 font-medium text-gray-700 focus:outline-none",
+                          style: { borderRadius: '12px' }
+                        }, [
+                          React.createElement('option', { key: 'medico' }, 'Médico'),
+                          React.createElement('option', { key: 'psicologo' }, 'Psicólogo'),
+                          React.createElement('option', { key: 'doutor-azul' }, 'Doutor Azul')
+                        ])
+                      ]),
+                      React.createElement('div', { key: 'duracao' }, [
+                        React.createElement('label', { 
+                          className: "block text-sm font-medium text-gray-600 mb-2" 
+                        }, 'Duração (minutos)'),
+                        React.createElement('select', {
+                          className: "w-full px-4 py-3 bg-white border-0 font-medium text-gray-700 focus:outline-none",
+                          style: { borderRadius: '12px' }
+                        }, [
+                          React.createElement('option', { key: '15' }, '15'),
+                          React.createElement('option', { key: '30' }, '30'),
+                          React.createElement('option', { key: '45' }, '45'),
+                          React.createElement('option', { key: '60' }, '60')
+                        ])
+                      ])
+                    ])
+                  ])
+                ]),
+
+                // Main Content Area
+                React.createElement('div', { key: 'content', className: "lg:col-span-2" }, [
+                  
+                  // Header
+                  React.createElement('div', { 
+                    key: 'content-header',
+                    className: "flex items-center justify-between mb-8" 
+                  }, [
+                    React.createElement('div', { 
+                      key: 'title-section',
+                      className: "flex items-center gap-4" 
+                    }, [
+                      React.createElement(Calendar, { 
+                        key: 'cal-icon',
+                        className: "w-6 h-6", 
+                        style: { color: '#A7C7E7' } 
+                      }),
+                      React.createElement('h2', { 
+                        key: 'content-title',
+                        className: "text-xl font-medium text-gray-700" 
+                      }, `Horários para ${formatDate(currentDate)}`)
+                    ]),
+
+                    React.createElement('button', {
+                      key: 'notifications',
+                      onClick: () => setNotificationsEnabled(!notificationsEnabled),
+                      className: "flex items-center gap-3 px-5 py-3 font-medium transition-opacity hover:opacity-80",
+                      style: {
+                        backgroundColor: notificationsEnabled ? '#A7C7E71A' : '#F8F9FA',
+                        color: notificationsEnabled ? '#5A7A9A' : '#6B7280',
+                        borderRadius: '12px'
+                      }
+                    }, [
+                      notificationsEnabled ? 
+                        React.createElement(Bell, { key: 'bell-on', className: "w-4 h-4", style: { color: '#A7C7E7' } }) : 
+                        React.createElement(BellOff, { key: 'bell-off', className: "w-4 h-4", style: { color: '#9CA3AF' } }),
+                      notificationsEnabled ? 'Notificações Ativas' : 'Ativar notificações'
+                    ])
+                  ]),
+
+                  // Appointments List
+                  React.createElement('div', { 
+                    key: 'appointments',
+                    className: "space-y-4" 
+                  }, consultas.map((consulta) => 
+                    React.createElement('div', {
+                      key: consulta.id,
+                      className: "p-6 transition-all hover:opacity-80",
+                      style: {
+                        backgroundColor: consulta.status === 'confirmado' ? '#A7C7E71A' :
+                                       consulta.status === 'finalizado' ? '#F4D9B41A' :
+                                       consulta.status === 'indisponivel' ? '#E9967A1A' : '#F8F9FA',
+                        borderRadius: '20px'
+                      }
+                    },
+                      React.createElement('div', { className: "flex items-center justify-between" }, [
+                        React.createElement('div', { 
+                          key: 'left-section',
+                          className: "flex items-center gap-6" 
+                        }, [
+                          React.createElement('div', { 
+                            key: 'time-section',
+                            className: "flex items-center gap-3" 
+                          }, [
+                            React.createElement('input', {
+                              key: 'checkbox',
+                              type: "checkbox",
+                              className: "w-4 h-4 rounded border-gray-300 focus:ring-0",
+                              style: { accentColor: '#A7C7E7' },
+                              disabled: consulta.status === 'indisponivel'
+                            }),
+                            React.createElement('div', { 
+                              key: 'time',
+                              className: "text-lg font-semibold text-gray-800" 
+                            }, consulta.horario),
+                            consulta.status === 'confirmado' && React.createElement(Bell, { 
+                              key: 'bell',
+                              className: "w-4 h-4", 
+                              style: { color: '#A7C7E7' } 
+                            })
+                          ]),
+
+                          React.createElement('div', { 
+                            key: 'patient-info',
+                            className: "flex-1" 
+                          }, [
+                            consulta.paciente && React.createElement('div', { key: 'patient' }, [
+                              React.createElement('div', { 
+                                key: 'name',
+                                className: "font-medium text-gray-800 mb-2" 
+                              }, consulta.paciente),
+                              React.createElement('div', { 
+                                key: 'details',
+                                className: "flex items-center gap-3" 
+                              }, [
+                                consulta.tipo && React.createElement('span', {
+                                  key: 'type',
+                                  className: "px-3 py-1 text-xs font-medium",
+                                  style: {
+                                    ...getTipoColor(consulta.tipo),
+                                    borderRadius: '12px'
+                                  }
+                                }, consulta.tipo),
+                                React.createElement('span', { 
+                                  key: 'obs',
+                                  className: "text-sm text-gray-500 font-light" 
+                                }, consulta.obs)
+                              ])
+                            ]),
+                            !consulta.paciente && React.createElement('div', { 
+                              key: 'empty',
+                              className: "text-gray-500 font-medium" 
+                            }, consulta.obs)
+                          ])
+                        ]),
+
+                        React.createElement('div', { 
+                          key: 'actions',
+                          className: "flex items-center gap-4" 
+                        }, [
+                          getStatusIcon(consulta.status),
+                          consulta.status === 'confirmado' && React.createElement('div', { 
+                            key: 'buttons',
+                            className: "flex gap-3" 
+                          }, [
+                            React.createElement('button', {
+                              key: 'video',
+                              className: "text-white p-3 transition-opacity hover:opacity-80",
+                              style: { backgroundColor: '#A7C7E7', borderRadius: '12px' }
+                            }, React.createElement(Video, { className: "w-4 h-4" })),
+                            
+                            React.createElement('button', {
+                              key: 'calendar',
+                              className: "text-white p-3 transition-opacity hover:opacity-80",
+                              style: { backgroundColor: '#F4D9B4', borderRadius: '12px' }
+                            }, React.createElement(Calendar, { 
+                              className: "w-4 h-4", 
+                              style: { color: '#8B4513' } 
+                            }))
+                          ])
+                        ])
+                      ])
+                    )
+                  )),
+
+                  // Back Button
+                  React.createElement('div', { 
+                    key: 'back-section',
+                    className: "mt-10 flex justify-start" 
+                  },
+                    React.createElement('button', {
+                      className: "flex items-center gap-3 px-8 py-4 text-white font-medium transition-opacity hover:opacity-80",
+                      style: { backgroundColor: '#6B7280', borderRadius: '12px' }
+                    }, [
+                      React.createElement(ArrowLeft, { key: 'back-arrow', className: "w-4 h-4" }),
+                      'Voltar'
+                    ])
+                  )
+                ])
+              ])
+            )
+          ]);
+        };
+
+        ReactDOM.render(React.createElement(AgendaDia), document.getElementById('root'));
+    </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ VERIFICAÇÃO FINAL
+
+Após salvar o arquivo:
+
+1. **Abra:** `/agenda-do-dia.html` no navegador
+2. **Confirme:** Visual duotônico suave aparece
+3. **Teste:** Botões e interações funcionam
+4. **Verifique:** Bordas arredondadas 20px visíveis
+
+---
+
+## 🚨 SE NÃO FUNCIONAR
+
+Execute este comando para diagnosticar:
+```bash
+ls -la *.html
+cat agenda-do-dia.html | head -20
+```
+
+**ENVIE O RESULTADO para análise.**
