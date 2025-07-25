@@ -3,8 +3,8 @@ services:
     name: telemed-sistema
     env: node
     plan: starter
-    buildCommand: node deploy-build.js
-    startCommand: node deploy-start.js
+    buildCommand: npm install
+    startCommand: node render-start.js
     envVars:
       - key: NODE_ENV
         value: production

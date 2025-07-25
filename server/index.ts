@@ -58,6 +58,12 @@ app.get('/medical-dashboard-pro.html', (req, res) => {
   res.sendFile(dashboardPath);
 });
 
+app.get('/agenda-do-dia.html', (req, res) => {
+  const agendaPath = path.join(__dirname, '../public/agenda-do-dia.html');
+  console.log('📄 Serving agenda do dia for:', req.path);
+  res.sendFile(agendaPath);
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
