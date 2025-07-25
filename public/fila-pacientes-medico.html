@@ -8,19 +8,22 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        /* === Cores de Fundo Suaves === */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e6f7ff 100%);
+            background-color: #FAF8F5;
+            font-family: 'Poppins', sans-serif;
+            color: #333333;
             min-height: 100vh;
-            color: #333;
         }
         
+        /* === Cabeçalhos com tons suaves === */
         .header {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-            color: white;
+            background-color: #F8C9C9 !important; /* Coral claro */
+            color: #333333;
+            font-weight: 600;
             padding: 2rem;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
             position: relative;
         }
         
@@ -38,26 +41,34 @@
             opacity: 0.9;
         }
         
-        .back-btn {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
+        /* === Botões com tons suaves e transição leve === */
+        .back-btn,
+        button,
+        .btn {
+            background-color: #C9DAF8; /* Azul suave */
+            color: #333333;
+            border: 1px solid #AABBDD;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: none;
+            font-weight: 500;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
+        .back-btn:hover,
+        button:hover,
+        .btn:hover {
+            background-color: #B7CFEF;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
         }
         
         .container {
@@ -66,12 +77,15 @@
             padding: 2rem;
         }
         
-        .controls {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
+        /* === Cartões (Cards) === */
+        .controls,
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E2E2;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
             margin-bottom: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -107,21 +121,56 @@
         }
         
         .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            background-color: #FFFFFF;
+            border: 1px solid #E2E2E2;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
             text-align: center;
-            transition: transform 0.3s;
+            transition: transform 0.2s ease-in-out;
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
         }
         
+        /* === Ícones estilo outline com cores suaves === */
+        .icon,
         .stat-icon {
+            stroke: #7C8CA1;
+            fill: none;
+            width: 24px;
+            height: 24px;
             font-size: 2rem;
             margin-bottom: 0.5rem;
+        }
+
+        /* === Textos secundários === */
+        .text-muted {
+            color: #888888;
+            font-size: 12px;
+        }
+
+        /* === Remoção de cores vibrantes === */
+        .bg-danger,
+        .bg-primary,
+        .bg-warning {
+            background-color: #F8C9C9 !important; /* Coral claro ou equivalente */
+            color: #333333;
+            font-weight: 500;
+        }
+
+        /* === Ajustes de responsividade mobile === */
+        @media (max-width: 768px) {
+            .card, .btn, button, .stat-card, .controls {
+                margin-bottom: 16px;
+                width: 100%;
+            }
+
+            .header, .header-purple {
+                font-size: 18px;
+                text-align: center;
+            }
         }
         
         .stat-number {

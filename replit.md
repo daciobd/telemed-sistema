@@ -26,6 +26,8 @@ Preferred communication style: Simple, everyday language.
     - Login: Interface clean com paleta coral/azul/lilás
     - Sistema-índice: Layout modernizado com tons pastéis
     - Especialidades: Cores suaves e breathing room consistente
+    - Fila de pacientes: Eliminação completa de gradientes vibrantes, aplicação de cores pastéis
+    - Agenda do dia: Headers lilás suave, botões azul pastel, ícones com cores acolhedoras
   - ✅ **Responsividade Mobile Completa**: Media queries @768px implementadas
     - Cards e botões com width 100% em mobile
     - Headers centralizados com font-size 18px
