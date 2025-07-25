@@ -12,64 +12,80 @@
             box-sizing: border-box;
         }
 
-        /* === Cores de Fundo Suaves === */
+        /* CSS GLOBAL - TELEMED DUOTÔNICO */
+        :root {
+            --primary-color: #A7C7E7;
+            --secondary-color: #F4D9B4;
+            --background-color: #FAF8F5;
+            --card-color: #FFFFFF;
+            --border-color: #E2E2E2;
+            --text-gray: #888888;
+            --font-family: 'Poppins', 'Inter', sans-serif;
+        }
+
         body {
-            background-color: #FAF8F5;
-            font-family: 'Poppins', sans-serif;
-            color: #333333;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            color: #222;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1rem;
-            margin: 0;
         }
 
-        /* === Cabeçalhos com tons suaves === */
         .header {
-            background-color: #F8C9C9 !important; /* Coral claro */
-            color: #333333;
+            background-color: var(--primary-color) !important;
+            color: #222;
             font-weight: 600;
         }
 
-        /* === Botões com tons suaves e transição leve === */
-        button,
-        .btn {
-            background-color: #C9DAF8; /* Azul suave */
-            color: #333333;
-            border: 1px solid #AABBDD;
+        button, .btn {
+            font-family: var(--font-family);
             border-radius: 8px;
             padding: 10px 20px;
+            font-size: 14px;
+            border: 1px solid var(--primary-color);
+            background-color: #ffffff;
+            color: var(--primary-color);
+            cursor: pointer;
             transition: all 0.2s ease-in-out;
-            box-shadow: none;
-            font-weight: 500;
         }
 
-        button:hover,
-        .btn:hover {
-            background-color: #B7CFEF;
+        button:hover, .btn:hover {
+            background-color: var(--primary-color);
+            color: white;
         }
 
-        /* === Cartões (Cards) === */
-        .card {
-            background-color: #FFFFFF;
-            border: 1px solid #E2E2E2;
+        button.alert, .btn.alert {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        button.alert:hover, .btn.alert:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .container, .card, .box {
+            background-color: var(--card-color);
             border-radius: 16px;
+            border: 1px solid var(--border-color);
             padding: 24px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
         }
 
-        /* === Textos secundários === */
-        .text-muted {
-            color: #888888;
+        .text-small, .text-muted {
             font-size: 12px;
+            color: var(--text-gray);
         }
 
-        /* === Ajustes de responsividade mobile === */
-        @media (max-width: 768px) {
-            .card, .btn, button {
-                margin-bottom: 16px;
-                width: 100%;
+        /* RESPONSIVO */
+        @media screen and (max-width: 768px) {
+            .container, .card, .box {
+                padding: 16px;
             }
 
             .header, .header-purple {

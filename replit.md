@@ -10,6 +10,40 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 25, 2025**: CSS DUOTÔNICO APLICADO CONFORME GUIA v10.7.0
+  - ✅ **Migração para Design Duotônico**: Sistema completamente migrado para paleta azul/ocre
+    - Azul suave (#A7C7E7) como cor principal para botões e ícones
+    - Ocre claro (#F4D9B4) como cor secundária de alerta
+    - Background neutro (#FAF8F5) mantido para consistência
+    - Headers com azul primário ao invés de coral/lilás
+  - ✅ **CSS Variables Implementadas**: Sistema baseado em :root para máxima flexibilidade
+    - --primary-color: #A7C7E7 (azul duotônico)
+    - --secondary-color: #F4D9B4 (ocre alerta)
+    - --background-color: #FAF8F5 (fundo neutro)
+    - --card-color: #FFFFFF (cartões brancos)
+    - --border-color: #E2E2E2 (bordas sutis)
+    - --text-gray: #888888 (textos secundários)
+    - --font-family: 'Poppins', 'Inter', sans-serif
+  - ✅ **Botões Duotônicos**: Sistema inteligente de cores por contexto
+    - Botões padrão: borda azul, fundo branco, hover azul sólido
+    - Botões alert: borda ocre, fundo branco, hover ocre sólido
+    - Transições suaves (0.2s ease-in-out) mantidas
+  - ✅ **Páginas Atualizadas com CSS Duotônico**:
+    - Dashboard médico: Headers azuis, botões duotônicos, ícones temáticos
+    - Login: Interface clean com azul/ocre para diferentes elementos
+    - Fila de pacientes: Cores duotônicas aplicadas, sistema de alertas ocre
+    - Agenda do dia: Headers azuis, status com cores contextuais
+  - ✅ **Classes Utilitárias Implementadas**: Sistema completo de helpers CSS
+    - Espacamentos: .mt-1/.mt-2/.mt-3, .mb-1/.mb-2/.mb-3
+    - Textos: .text-center, .text-small, .text-muted
+    - Ícones: .icon (azul), .icon.alert (ocre)
+    - Inputs: estilização consistente com border-radius 8px
+  - ✅ **Responsividade Aprimorada**: Media queries @768px otimizadas
+    - .hide-mobile para elementos desktop-only
+    - .stacked-layout para reorganização mobile
+    - Padding reduzido em containers (24px → 16px)
+    - Layout adaptativo para todos dispositivos
+
 - **July 24, 2025**: CSS VISUAL SUAVE APLICADO CONFORME GUIA v10.6.1
   - ✅ **Classes CSS Obrigatórias Implementadas**: Sistema baseado nas classes .header, .card, .btn, .text-muted, .icon
     - Background #FAF8F5 e fonte Poppins como padrão em todas as páginas
