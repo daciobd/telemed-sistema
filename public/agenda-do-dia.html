@@ -8,10 +8,11 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* CSS GLOBAL - TELEMED DUOTÔNICO */
+        /* CSS GLOBAL - TELEMED CONSULTA (DUOTÔNICO REFINADO) */
         :root {
-            --primary-color: #A7C7E7;
-            --secondary-color: #F4D9B4;
+            --primary-color: #A7C7E7; /* azul suave */
+            --secondary-color: #F4D9B4; /* ocre claro */
+            --alert-soft: #E9967A; /* coral suave para alertas */
             --background-color: #FAF8F5;
             --card-color: #FFFFFF;
             --border-color: #E2E2E2;
@@ -29,8 +30,10 @@
 
         .header {
             background-color: var(--primary-color) !important;
-            color: #222;
+            color: white;
             font-weight: 600;
+            padding: 16px;
+            border-radius: 16px 16px 0 0;
             padding: 2rem;
             text-align: center;
             box-shadow: 0 1px 4px rgba(0,0,0,0.05);
@@ -191,7 +194,45 @@
         }
 
         .icon.alert {
-            color: var(--secondary-color);
+            color: var(--alert-soft);
+        }
+
+        button, .btn {
+            font-family: var(--font-family);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: 1px solid var(--primary-color);
+            background-color: #ffffff;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            box-shadow: none;
+        }
+
+        button:hover, .btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        button.alert, .btn.alert {
+            border-color: var(--alert-soft);
+            color: var(--alert-soft);
+        }
+
+        button.alert:hover, .btn.alert:hover {
+            background-color: var(--alert-soft);
+            color: white;
+        }
+
+        /* ALERTA DESTACADO MAS SUAVE */
+        .alert-banner {
+            background-color: var(--alert-soft);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
 
         .text-small, .text-muted {

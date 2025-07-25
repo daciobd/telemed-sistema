@@ -12,49 +12,76 @@
             box-sizing: border-box;
         }
 
-        /* === Cores de Fundo Suaves === */
+        /* CSS GLOBAL - TELEMED CONSULTA (DUOTÔNICO REFINADO) */
+        :root {
+            --primary-color: #A7C7E7; /* azul suave */
+            --secondary-color: #F4D9B4; /* ocre claro */
+            --alert-soft: #E9967A; /* coral suave para alertas */
+            --background-color: #FAF8F5;
+            --card-color: #FFFFFF;
+            --border-color: #E2E2E2;
+            --text-gray: #888888;
+            --font-family: 'Poppins', 'Inter', sans-serif;
+        }
+
         body {
-            background-color: #FAF8F5;
-            font-family: 'Poppins', sans-serif;
-            color: #333333;
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            color: #222;
             line-height: 1.6;
             min-height: 100vh;
             padding: 2rem;
-            margin: 0;
         }
 
-        /* === Cabeçalhos com tons suaves === */
-        .header {
-            background-color: #F8C9C9 !important; /* Coral claro */
-            color: #333333;
+        h1, h2, h3, h4, h5, h6 {
             font-weight: 600;
+            color: #222;
         }
 
-        /* === Botões com tons suaves e transição leve === */
-        button,
-        .btn {
-            background-color: #C9DAF8; /* Azul suave */
-            color: #333333;
-            border: 1px solid #AABBDD;
+        .container, .card, .box {
+            background-color: var(--card-color);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            margin-bottom: 16px;
+        }
+
+        button, .btn {
+            font-family: var(--font-family);
             border-radius: 8px;
             padding: 10px 20px;
-            transition: all 0.2s ease-in-out;
+            font-size: 14px;
+            border: 1px solid var(--primary-color);
+            background-color: #ffffff;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
             box-shadow: none;
-            font-weight: 500;
         }
 
-        button:hover,
-        .btn:hover {
-            background-color: #B7CFEF;
+        button:hover, .btn:hover {
+            background-color: var(--primary-color);
+            color: white;
         }
 
-        /* === Cartões (Cards) === */
-        .card {
-            background-color: #FFFFFF;
-            border: 1px solid #E2E2E2;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        button.alert, .btn.alert {
+            border-color: var(--alert-soft);
+            color: var(--alert-soft);
+        }
+
+        button.alert:hover, .btn.alert:hover {
+            background-color: var(--alert-soft);
+            color: white;
+        }
+
+        .header {
+            background-color: var(--primary-color) !important;
+            color: white;
+            font-weight: 600;
+            padding: 16px;
+            border-radius: 16px 16px 0 0;
         }
 
         /* === Textos secundários === */

@@ -10,38 +10,47 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 25, 2025**: CSS DUOTÔNICO APLICADO CONFORME GUIA v10.7.0
-  - ✅ **Migração para Design Duotônico**: Sistema completamente migrado para paleta azul/ocre
+- **July 25, 2025**: CSS DUOTÔNICO REFINADO APLICADO CONFORME GUIA v10.7.1
+  - ✅ **Migração para Design Duotônico Refinado**: Sistema completamente migrado para paleta azul/coral
     - Azul suave (#A7C7E7) como cor principal para botões e ícones
-    - Ocre claro (#F4D9B4) como cor secundária de alerta
+    - Ocre claro (#F4D9B4) como cor secundária
+    - Coral suave (#E9967A) para alertas e elementos destacados
     - Background neutro (#FAF8F5) mantido para consistência
-    - Headers com azul primário ao invés de coral/lilás
-  - ✅ **CSS Variables Implementadas**: Sistema baseado em :root para máxima flexibilidade
+    - Headers com azul primário e texto branco
+  - ✅ **CSS Variables Aprimoradas**: Sistema baseado em :root com nova cor de alerta
     - --primary-color: #A7C7E7 (azul duotônico)
-    - --secondary-color: #F4D9B4 (ocre alerta)
+    - --secondary-color: #F4D9B4 (ocre claro)
+    - --alert-soft: #E9967A (coral suave para alertas)
     - --background-color: #FAF8F5 (fundo neutro)
     - --card-color: #FFFFFF (cartões brancos)
     - --border-color: #E2E2E2 (bordas sutis)
     - --text-gray: #888888 (textos secundários)
     - --font-family: 'Poppins', 'Inter', sans-serif
-  - ✅ **Botões Duotônicos**: Sistema inteligente de cores por contexto
+  - ✅ **Botões Duotônicos Refinados**: Sistema inteligente com coral para alertas
     - Botões padrão: borda azul, fundo branco, hover azul sólido
-    - Botões alert: borda ocre, fundo branco, hover ocre sólido
-    - Transições suaves (0.2s ease-in-out) mantidas
-  - ✅ **Páginas Atualizadas com CSS Duotônico**:
-    - Dashboard médico: Headers azuis, botões duotônicos, ícones temáticos
-    - Login: Interface clean com azul/ocre para diferentes elementos
-    - Fila de pacientes: Cores duotônicas aplicadas, sistema de alertas ocre
-    - Agenda do dia: Headers azuis, status com cores contextuais
-  - ✅ **Classes Utilitárias Implementadas**: Sistema completo de helpers CSS
-    - Espacamentos: .mt-1/.mt-2/.mt-3, .mb-1/.mb-2/.mb-3
-    - Textos: .text-center, .text-small, .text-muted
-    - Ícones: .icon (azul), .icon.alert (ocre)
-    - Inputs: estilização consistente com border-radius 8px
-  - ✅ **Responsividade Aprimorada**: Media queries @768px otimizadas
+    - Botões alert: borda coral, fundo branco, hover coral sólido
+    - Transições suaves (background-color 0.2s ease-in-out) mantidas
+    - Sem sombras (box-shadow: none) para visual mais clean
+  - ✅ **Bordas Arredondadas Aprimoradas**: Sistema com mais respiração visual
+    - Cards: border-radius 20px (era 16px)
+    - Padding cards: 20px (era 24px) para melhor proporção
+    - Sombras sutis: 0 1px 3px rgba(0, 0, 0, 0.04) em vez de 0.05
+    - Alert banners: 12px border-radius com coral suave
+  - ✅ **Páginas Atualizadas com CSS Refinado**:
+    - Dashboard médico: Headers azuis com texto branco, alertas coral
+    - Login: Interface clean com bordas arredondadas 20px
+    - Fila de pacientes: Cores refinadas, alertas coral suave
+    - Agenda do dia: Headers azuis, sistema de alertas coral
+    - Sistema índice: Migração completa para paleta refinada
+  - ✅ **Elementos Especiais Implementados**: Componentes avançados
+    - .alert-banner: Coral suave com texto branco para alertas
+    - .advanced-fields: Display none por padrão conforme especificado
+    - .header-bar: Headers com cor primária e texto branco
+    - Ícones: .icon.alert agora usam coral suave em vez de ocre
+  - ✅ **Responsividade Mantida**: Media queries @768px preservadas
     - .hide-mobile para elementos desktop-only
     - .stacked-layout para reorganização mobile
-    - Padding reduzido em containers (24px → 16px)
+    - Padding reduzido para mobile (20px → 16px)
     - Layout adaptativo para todos dispositivos
 
 - **July 24, 2025**: CSS VISUAL SUAVE APLICADO CONFORME GUIA v10.6.1
