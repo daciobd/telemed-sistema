@@ -1,0 +1,151 @@
+Ótimo! Vamos resolver esses três pontos **de forma prática e objetiva**:
+
+---
+
+### **1️⃣ Códigos HTML para Páginas Faltantes**  
+*(Templates mínimos e funcionais)*  
+
+#### **📄 contato.html**  
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato | TeleMed Consulta</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .btn { background: #667eea; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Fale Conosco</h1>
+    <p>Email: <strong>contato@telamedconsulta.com</strong></p>
+    <p>WhatsApp: <strong>(11) 98765-4321</strong></p>
+    
+    <h2>Horário de Atendimento</h2>
+    <p>Segunda a Sexta: 8h às 18h</p>
+    
+    <a href="/" class="btn">Voltar à Página Inicial</a>
+</body>
+</html>
+```
+
+#### **📄 faq.html**  
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>FAQ | TeleMed Consulta</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .faq-item { margin-bottom: 20px; }
+        .question { font-weight: bold; color: #667eea; }
+    </style>
+</head>
+<body>
+    <h1>Perguntas Frequentes</h1>
+    
+    <div class="faq-item">
+        <p class="question">Como agendar uma consulta?</p>
+        <p>Clique em "Começar minha consulta", escolha a especialidade e faça sua proposta de valor.</p>
+    </div>
+    
+    <div class="faq-item">
+        <p class="question">O Dr. AI é gratuito?</p>
+        <p>Sim! A triagem inicial com nossa IA é 100% gratuita.</p>
+    </div>
+    
+    <a href="/">← Voltar ao início</a>
+</body>
+</html>
+```
+
+#### **📄 suporte.html**  
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Suporte | TeleMed Consulta</title>
+</head>
+<body>
+    <h1>Suporte Técnico</h1>
+    <p>Problemas com consultas, pagamentos ou acesso? Envie um email para:</p>
+    <p><strong>suporte@telamedconsulta.com</strong></p>
+    <p>Respondemos em até 2 horas úteis.</p>
+    <a href="/">Página inicial</a>
+</body>
+</html>
+```
+
+---
+
+### **2️⃣ Padronização de Redirecionamentos para Especialidades**  
+**Problema:** Atualmente há duas formas diferentes:  
+- `triagem-psiquiatrica.html` (isolado)  
+- `consulta-por-valor.html?especialidade=xyz` (padrão)  
+
+**Solução unificada:**  
+```html
+<!-- Altere TODOS os links de especialidades para: -->
+<a href="/consulta-por-valor.html?especialidade=ginecologia">Ginecologia</a>
+<a href="/consulta-por-valor.html?especialidade=psiquiatria">Psiquiatria</a>  <!-- Padronizado! -->
+
+<!-- No backend (Replit), trate o parâmetro "especialidade": -->
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const especialidade = urlParams.get('especialidade');
+    if (especialidade) {
+        // Filtre médicos ou mostre conteúdo específico
+    }
+</script>
+```
+
+---
+
+### **3️⃣ Otimização de Tracking (GA4)**  
+**Melhorias nos eventos:**  
+
+#### **📊 Código Universal para CTAs**  
+```html
+<script>
+    function trackCTA(action, label) {
+        gtag('event', 'click', {
+            'event_category': 'CTA',
+            'event_label': label,
+            'value': action === 'conversion' ? 1 : 0
+        });
+    }
+</script>
+
+<!-- Exemplo de uso: -->
+<a href="/consulta-por-valor.html" 
+   onclick="trackCTA('conversion', 'Header - Começar Consulta')">
+   Começar Consulta
+</a>
+```
+
+#### **🎯 Eventos Recomendados**  
+| **Elemento**               | **Código de Rastreamento**                                  |
+|----------------------------|------------------------------------------------------------|
+| Botão Dr. AI               | `trackCTA('engagement', 'Dr. AI - Triagem')`               |
+| Cadastro                   | `trackCTA('conversion', 'Cadastro - Completo')`            |
+| Seleção de Especialidade   | `trackCTA('navigation', 'Especialidade: ' + especialidade)` |
+
+#### **📈 Dashboard Sugerido no GA4**  
+Crie um relatório personalizado com:  
+- **Eventos-chave:** `click` (categorizados por CTA, navegação, conversão)  
+- **Segmentação:** Por página de origem (`page_referrer`)  
+- **Funnel:** Jornada de `triagem` → `seleção de especialidade` → `pagamento`  
+
+---
+
+### **🔍 Checklist Final**  
+1. [ ] Criar `contato.html`, `faq.html`, `suporte.html` com os templates acima  
+2. [ ] Padronizar TODOS os links de especialidades para `?especialidade=xxx`  
+3. [ ] Adicionar a função `trackCTA` no `<head>` do site  
+4. [ ] Atualizar os `onclick` dos botões conforme tabela de eventos  
+
+Precisa que eu gere algum outro código específico? Ou ajustar algo nos exemplos?

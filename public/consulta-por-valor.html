@@ -410,8 +410,123 @@
     </div>
 
     <script>
+        // Tracking GA4
+        function trackCTA(action, label) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click', {
+                    'event_category': 'CTA',
+                    'event_label': label,
+                    'value': action === 'conversion' ? 1 : 0
+                });
+            }
+        }
+
+        // Detectar parâmetro de especialidade na URL
+        function getSpecialtyFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const especialidade = urlParams.get('especialidade');
+            
+            if (especialidade) {
+                // Track specialty parameter received
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'specialty_parameter', {
+                        'event_category': 'URL Parameter',
+                        'event_label': especialidade,
+                        'value': 1
+                    });
+                }
+                
+                // Pre-select specialty in form if available
+                preSelectSpecialty(especialidade);
+                
+                // Show specialty-specific message
+                showSpecialtyMessage(especialidade);
+            }
+        }
+
+        // Pré-selecionar especialidade no formulário
+        function preSelectSpecialty(especialidade) {
+            const specialtySelect = document.querySelector('#bid-form select');
+            if (specialtySelect) {
+                // Map URL slugs to form values
+                const specialtyMap = {
+                    'clinica-geral': 'Clínica Geral',
+                    'psiquiatria': 'Psiquiatria',
+                    'psicoterapia': 'Psicoterapia',
+                    'pediatria': 'Pediatria',
+                    'ginecologia': 'Ginecologia',
+                    'nutricao': 'Nutrição',
+                    'dermatologia': 'Dermatologia',
+                    'ortopedia': 'Ortopedia'
+                };
+                
+                const formValue = specialtyMap[especialidade];
+                if (formValue) {
+                    specialtySelect.value = formValue;
+                    console.log('🎯 Especialidade pré-selecionada:', formValue);
+                }
+            }
+        }
+
+        // Mostrar mensagem específica da especialidade
+        function showSpecialtyMessage(especialidade) {
+            const specialtyNames = {
+                'clinica-geral': 'Clínica Geral',
+                'psiquiatria': 'Psiquiatria',
+                'psicoterapia': 'Psicoterapia',
+                'pediatria': 'Pediatria',
+                'ginecologia': 'Ginecologia',
+                'nutricao': 'Nutrição',
+                'dermatologia': 'Dermatologia',
+                'ortopedia': 'Ortopedia'
+            };
+            
+            const specialtyName = specialtyNames[especialidade] || especialidade;
+            
+            // Create specialty banner
+            const banner = document.createElement('div');
+            banner.className = 'bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-r-lg';
+            banner.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle mr-3 text-blue-500"></i>
+                    <div>
+                        <p class="font-medium">Especialidade Selecionada: ${specialtyName}</p>
+                        <p class="text-sm">Você será conectado preferencialmente com médicos desta especialidade.</p>
+                    </div>
+                </div>
+            `;
+            
+            // Insert banner after header
+            const header = document.querySelector('.container .text-center');
+            if (header && header.nextElementSibling) {
+                header.nextElementSibling.insertBefore(banner, header.nextElementSibling.firstChild);
+            }
+        }
+
+        // Track page view
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                'page_title': 'Sistema de Lances',
+                'page_location': window.location.href
+            });
+        }
+
+        // Initialize specialty detection
+        document.addEventListener('DOMContentLoaded', function() {
+            getSpecialtyFromURL();
+        });
+
         // Funções de navegação para consultas
         function attendPatient(patientName) {
+            // Track consultation start
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'consultation_start', {
+                    'event_category': 'Medical Consultation',
+                    'event_label': patientName,
+                    'value': 1
+                });
+            }
+            
             alert(`✅ Atendimento aceito!\n\nPaciente: ${patientName}\nRedirecionando para videoconsulta...`);
             setTimeout(() => {
                 window.location.href = '/videoconsulta.html';
@@ -435,6 +550,15 @@
             const inputElement = button.parentElement.parentElement.querySelector('input[type="number"]');
             const bidValue = inputElement.value;
             const bidValueNum = parseFloat(bidValue);
+            
+            // Track bid attempt
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'bid_attempt', {
+                    'event_category': 'Bid Interaction',
+                    'event_label': specialty,
+                    'value': bidValueNum || 0
+                });
+            }
             
             // Validação mais robusta
             if (!bidValue || bidValue.trim() === '' || isNaN(bidValueNum) || bidValueNum <= 0) {
@@ -638,6 +762,15 @@
             const specialty = form.querySelector('select').value;
             const value = form.querySelector('input[type="number"]').value;
             const description = form.querySelector('textarea').value;
+            
+            // Track form submission attempt
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submit', {
+                    'event_category': 'New Bid Form',
+                    'event_label': specialty || 'Incomplete',
+                    'value': parseInt(value) || 0
+                });
+            }
             
             if (!specialty || !value || !description) {
                 alert('Por favor, preencha todos os campos obrigatórios.');

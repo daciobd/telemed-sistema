@@ -552,56 +552,56 @@
         <section class="specialties-section">
             <div class="specialties-grid">
                 <!-- Clínico Geral -->
-                <div class="specialty-card clinico-geral">
+                <div class="specialty-card clinico-geral" onclick="redirectToSpecialty('clinica-geral', 'Clínico Geral')" style="cursor: pointer;">
                     <span class="specialty-icon">🩺</span>
                     <h3>Clínico Geral</h3>
                     <p>O primeiro passo para cuidar da sua saúde. Indicado para sintomas gerais, mal-estar, acompanhamento de rotina e encaminhamentos.</p>
                 </div>
 
                 <!-- Psiquiatra -->
-                <div class="specialty-card psiquiatra">
+                <div class="specialty-card psiquiatra" onclick="redirectToSpecialty('psiquiatria', 'Psiquiatra')" style="cursor: pointer;">
                     <span class="specialty-icon">🧠</span>
                     <h3>Psiquiatra</h3>
                     <p>Tratamento para ansiedade, depressão, insônia, bipolaridade e outros transtornos mentais. Prescrição de medicamentos e acompanhamento cuidadoso.</p>
                 </div>
 
                 <!-- Psicoterapia -->
-                <div class="specialty-card psicoterapia">
+                <div class="specialty-card psicoterapia" onclick="redirectToSpecialty('psicoterapia', 'Psicoterapia')" style="cursor: pointer;">
                     <span class="specialty-icon">💬</span>
                     <h3>Psicoterapia</h3>
                     <p>Conversas que acolhem. Atendimentos com psicólogos experientes para ajudar em momentos difíceis, crises emocionais, autoestima ou autoconhecimento.</p>
                 </div>
 
                 <!-- Pediatra -->
-                <div class="specialty-card pediatra">
+                <div class="specialty-card pediatra" onclick="redirectToSpecialty('pediatria', 'Pediatra')" style="cursor: pointer;">
                     <span class="specialty-icon">👶</span>
                     <h3>Pediatra</h3>
                     <p>Especialistas no cuidado com bebês, crianças e adolescentes. Tire dúvidas, acompanhe o crescimento, vacinas e sintomas.</p>
                 </div>
 
                 <!-- Ginecologista -->
-                <div class="specialty-card ginecologista">
+                <div class="specialty-card ginecologista" onclick="redirectToSpecialty('ginecologia', 'Ginecologista')" style="cursor: pointer;">
                     <span class="specialty-icon">👩‍⚕️</span>
                     <h3>Ginecologista</h3>
                     <p>Consultas sobre saúde íntima, ciclo menstrual, anticoncepcionais, menopausa e exames de rotina.</p>
                 </div>
 
                 <!-- Nutricionista -->
-                <div class="specialty-card nutricionista">
+                <div class="specialty-card nutricionista" onclick="redirectToSpecialty('nutricao', 'Nutricionista')" style="cursor: pointer;">
                     <span class="specialty-icon">🍎</span>
                     <h3>Nutricionista</h3>
                     <p>Planos alimentares personalizados, acompanhamento de peso, saúde intestinal, intolerâncias alimentares e hábitos saudáveis.</p>
                 </div>
 
                 <!-- Dermatologista -->
-                <div class="specialty-card dermatologista">
+                <div class="specialty-card dermatologista" onclick="redirectToSpecialty('dermatologia', 'Dermatologista')" style="cursor: pointer;">
                     <span class="specialty-icon">💆</span>
                     <h3>Dermatologista</h3>
                     <p>Atendimento para acne, manchas, queda de cabelo, pele sensível, alergias e prescrição de medicamentos tópicos.</p>
                 </div>
 
                 <!-- Ortopedista -->
-                <div class="specialty-card ortopedista">
+                <div class="specialty-card ortopedista" onclick="redirectToSpecialty('ortopedia', 'Ortopedista')" style="cursor: pointer;">
                     <span class="specialty-icon">🦴</span>
                     <h3>Ortopedista</h3>
                     <p>Dores articulares, lesões, problemas na coluna, torções e acompanhamento de condições musculoesqueléticas.</p>
@@ -614,8 +614,8 @@
             <h2>📲 Tudo isso com o conforto da sua casa</h2>
             <p>Sem filas, sem deslocamento. Escolha sua especialidade, defina o valor que pode pagar e consulte um profissional rapidamente.</p>
             <div class="cta-buttons">
-                <a href="/consulta-por-valor.html" class="btn-primary">AGENDAR CONSULTA AGORA</a>
-                <a href="/dr-ai.html" class="btn-secondary">Triagem Grátis com IA</a>
+                <a href="/consulta-por-valor.html?especialidade=clinica-geral" class="btn-primary" onclick="trackCTA('conversion', 'Agendar Consulta - Clínica Geral')">AGENDAR CONSULTA AGORA</a>
+                <a href="/dr-ai.html" class="btn-secondary" onclick="trackCTA('engagement', 'Triagem Grátis com IA')">Triagem Grátis com IA</a>
             </div>
         </section>
     </div>
@@ -636,6 +636,40 @@
     </footer>
 
     <script>
+        // Tracking GA4
+        function trackCTA(action, label) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click', {
+                    'event_category': 'CTA',
+                    'event_label': label,
+                    'value': action === 'conversion' ? 1 : 0
+                });
+            }
+        }
+
+        // Função para redirecionar para especialidade específica
+        function redirectToSpecialty(specialtySlug, specialtyName) {
+            // Track specialty selection
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click', {
+                    'event_category': 'Specialty Selection',
+                    'event_label': specialtyName,
+                    'value': 1
+                });
+            }
+            
+            // Redirect to bidding system with specialty parameter
+            window.location.href = `/consulta-por-valor.html?especialidade=${specialtySlug}`;
+        }
+
+        // Track page view
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                'page_title': 'Especialidades Médicas',
+                'page_location': window.location.href
+            });
+        }
+
         // Animação de entrada quando a página carrega
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.specialty-card');
