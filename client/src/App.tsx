@@ -21,6 +21,7 @@ import DashboardMedicalPro from "@/pages/DashboardMedicalPro";
 import LegacyDemoPage from "@/pages/LegacyDemoPage";
 import PatientBiddingPage from "@/pages/PatientBiddingPage";
 import AgendaDia from "@/pages/AgendaDia";
+import AgendamentoEspecialidade from "@/pages/AgendamentoEspecialidade";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/diagnostic" component={DiagnosticPage} />
             <Route path="/patient-bidding" component={PatientBiddingPage} />
             <Route path="/fazer-lance" component={PatientBiddingPage} />
+            <Route path="/agendamento" component={AgendamentoEspecialidade} />
             <Route path="/agenda-dia" component={AgendaDia} />
             <Route path="/agenda" component={AgendaDia} />
             

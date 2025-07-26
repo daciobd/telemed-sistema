@@ -29,6 +29,54 @@ Consulta por Valor:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta-por-valor.html
 
 ===============================================
+🏥 ESPECIALIDADES POR PARÂMETRO:
+
+Clínica Geral:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=clinica-geral
+
+Ortopedia:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=ortopedia
+
+Pediatria:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=pediatria
+
+Dermatologia:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=dermatologia
+
+Psiquiatria:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=psiquiatria
+
+Ginecologia:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=ginecologia
+
+Psicoterapia:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=psicoterapia
+
+Nutrição:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=nutricao
+
+===============================================
+📋 PÁGINAS INSTITUCIONAIS:
+
+Termos de Uso:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/termos-de-uso.html
+
+Política de Privacidade:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/politica-privacidade.html
+
+Preços e Planos:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/precos.html
+
+Como Funciona:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/como-funciona.html
+
+Sobre Nós:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/sobre.html
+
+Equipe Médica:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/equipe-medica.html
+
+===============================================
 📞 PÁGINAS DE CONTATO:
 
 Contato:
