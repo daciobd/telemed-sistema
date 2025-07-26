@@ -1,0 +1,16 @@
+{
+  "name": "telemed-sistema",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm install && node build.js",
+    "start": "node start.js",
+    "dev": "tsx server/index.ts",
+    "postinstall": "echo 'Dependencies installed successfully'"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

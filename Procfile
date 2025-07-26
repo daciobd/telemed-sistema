@@ -1,1 +1,1 @@
-web: node deploy-start.js
+web: npm install && node build.js && node start.js
