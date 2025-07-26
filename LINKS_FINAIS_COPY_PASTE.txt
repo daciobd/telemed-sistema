@@ -5,7 +5,7 @@
 🎯 BOTÕES PRINCIPAIS (COPIE E COLE):
 
 Começar Consulta:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/patient-bidding
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento
 
 Login/Cadastro:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login
@@ -25,8 +25,8 @@ https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
 Especialidades:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/especialidades.html
 
-Consulta por Valor:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta-por-valor.html
+Sistema de Lances (Versão Anterior):
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/patient-bidding
 
 ===============================================
 🏥 ESPECIALIDADES POR PARÂMETRO:

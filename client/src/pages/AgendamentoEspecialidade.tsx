@@ -133,9 +133,9 @@ export default function AgendamentoEspecialidade() {
         description: `Seu lance de R$ ${valorLance} para ${especialidadeInfo?.nome} foi enviado. Aguarde os médicos responderem.`
       });
 
-      // Redirecionar para página de aguardo
+      // Redirecionar para página de aguardo médico  
       setTimeout(() => {
-        setLocation('/patient-bidding');
+        setLocation('/aguardando-medico.html');
       }, 2000);
 
     } catch (error) {
