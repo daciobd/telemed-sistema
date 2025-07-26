@@ -53,12 +53,14 @@ contato@telemed-sistema.replit.dev
 Suporte Técnico:
 suporte@telemed-sistema.replit.dev
 
-=== PARA HOSTINGER (URL COMPLETA) ===
+=== PARA HOSTINGER (URL COMPLETA CORRETA) ===
 
-Substitua [SEU-PROJETO] pelo nome do seu projeto Replit:
-
-https://[SEU-PROJETO].replit.app/patient-bidding
-https://[SEU-PROJETO].replit.app/login
-https://[SEU-PROJETO].replit.app/doctor-dashboard
-https://[SEU-PROJETO].replit.app/dr-ai
-https://[SEU-PROJETO].replit.app/especialidades.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/patient-bidding
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/doctor-dashboard
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/especialidades.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta-por-valor.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/contato.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/suporte.html
