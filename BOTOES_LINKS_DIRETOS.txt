@@ -1,0 +1,64 @@
+LINKS PARA COPIAR E COLAR NOS BOTÕES:
+
+=== BOTÕES PRINCIPAIS ===
+
+Começar Consulta:
+/patient-bidding
+
+Fazer Cadastro:
+/login
+
+Dashboard Médico:
+/doctor-dashboard
+
+Dashboard Paciente:
+/patient-dashboard
+
+=== FUNCIONALIDADES ESPECIAIS ===
+
+Dr. AI (Triagem):
+/dr-ai
+
+Triagem Psiquiátrica:
+/triagem-psiquiatrica
+
+Especialidades:
+/especialidades.html
+
+Sistema Completo:
+/sistema-indice.html
+
+Consulta por Valor:
+/consulta-por-valor.html
+
+=== PÁGINAS DE APOIO ===
+
+Contato:
+/contato.html
+
+Suporte:
+/suporte.html
+
+FAQ:
+/faq.html
+
+Segurança/LGPD:
+/security
+
+=== EMAILS ===
+
+Contato Geral:
+contato@telemed-sistema.replit.dev
+
+Suporte Técnico:
+suporte@telemed-sistema.replit.dev
+
+=== PARA HOSTINGER (URL COMPLETA) ===
+
+Substitua [SEU-PROJETO] pelo nome do seu projeto Replit:
+
+https://[SEU-PROJETO].replit.app/patient-bidding
+https://[SEU-PROJETO].replit.app/login
+https://[SEU-PROJETO].replit.app/doctor-dashboard
+https://[SEU-PROJETO].replit.app/dr-ai
+https://[SEU-PROJETO].replit.app/especialidades.html
