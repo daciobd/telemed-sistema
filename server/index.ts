@@ -26,9 +26,12 @@ app.use((req, res, next) => {
     return res.redirect(301, `https://${req.headers.host}${req.url}`);
   }
   
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  // Only apply security headers to non-Vite resources
+  if (!req.url.startsWith('/@vite/') && !req.url.startsWith('/src/') && !req.url.includes('?v=')) {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+  }
   
   next();
 });
