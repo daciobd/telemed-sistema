@@ -10,6 +10,23 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 27, 2025**: ROUTING CORRETO CONFIRMADO - DOIS SISTEMAS FUNCIONAIS v11.2.0
+  - ✅ **Sistema Principal Confirmado**: `/agendamento` funciona corretamente com especialidades
+    - AgendamentoEspecialidade.tsx: Sistema moderno com parâmetros URL funcionais
+    - URLs de especialidades: /agendamento?especialidade=[slug] funcionando
+    - Redirecionamento correto após envio de lance: /aguardando-medico.html
+    - Link principal "Começar Consulta" aponta corretamente para /agendamento
+  - ✅ **Sistema Backup Preservado**: `/patient-bidding` mantido como alternativa
+    - PatientBiddingPage.tsx: Sistema de lances com dados mock funcionais
+    - Mostra consultas de exemplo: Cardiologia (R$ 185), Pediatria (R$ 155), Dermatologia (R$ 125)
+    - Interface React completa com timer em tempo real
+    - Disponível como sistema alternativo funcional
+  - ✅ **Documentação Atualizada**: LINKS_FINAIS_COPY_PASTE.txt corrigido
+    - Botão principal: /agendamento (sistema moderno)
+    - Sistema alternativo: /patient-bidding (lances)
+    - Todos os links de especialidades apontam para /agendamento corretamente
+  - ✅ **Status Final**: Ambos sistemas funcionais, routing correto confirmado
+
 - **July 26, 2025**: SISTEMA COMPLETO FINALIZADO - TODOS OS LINKS IMPLEMENTADOS v11.1.0
   - ✅ **Páginas Institucionais Criadas**: Sistema 100% completo para Hostinger
     - /termos-de-uso.html: Termos completos com conformidade legal e LGPD
