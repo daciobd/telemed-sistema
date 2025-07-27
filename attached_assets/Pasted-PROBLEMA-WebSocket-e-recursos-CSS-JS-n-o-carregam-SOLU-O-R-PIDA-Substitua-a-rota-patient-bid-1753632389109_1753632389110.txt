@@ -1,0 +1,59 @@
+PROBLEMA: WebSocket e recursos CSS/JS não carregam
+
+SOLUÇÃO RÁPIDA - Substitua a rota /patient-bidding por HTML estático:
+
+app.get('/patient-bidding', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Sistema de Lances TeleMed</title>
+        <style>
+            body { font-family: 'Poppins', Arial; padding: 20px; background: #FAFBFC; }
+            .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; padding: 30px; }
+            .header { background: linear-gradient(135deg, #A7C7E7, #92B4D7); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+            .card { background: #F8F9FA; border-radius: 15px; padding: 20px; margin: 15px 0; border-left: 5px solid #A7C7E7; }
+            .urgente { border-left-color: #E9967A; }
+            .btn { background: #A7C7E7; color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer; margin: 5px; }
+            .btn:hover { opacity: 0.8; }
+            .valor { font-size: 20px; font-weight: bold; color: #2D5A87; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🏥 Sistema de Lances TeleMed</h1>
+                <p>Faça seu lance e receba propostas dos melhores médicos</p>
+            </div>
+            
+            <div class="card urgente">
+                <h3>❤️ Cardiologia - Urgente</h3>
+                <div class="valor">Lance Atual: R$ 180</div>
+                <p>Tempo Restante: 12:26 | Médicos Interessados: 5</p>
+                <p>Paciente: Maria Silva</p>
+                <button class="btn" onclick="window.location.href='/login'">🩺 ATENDER AGORA - R$ 230</button>
+                <button class="btn" onclick="alert('Lance enviado!')">💰 Fazer Lance</button>
+            </div>
+            
+            <div class="card">
+                <h3>👶 Pediatria - Regular</h3>
+                <div class="valor">Lance Atual: R$ 150</div>
+                <p>Tempo Restante: 25:11 | Médicos Interessados: 3</p>
+                <p>Paciente: Ana Costa</p>
+                <button class="btn" onclick="window.location.href='/login'">🩺 ATENDER AGORA - R$ 200</button>
+                <button class="btn" onclick="alert('Lance enviado!')">💰 Fazer Lance</button>
+            </div>
+            
+            <div class="card">
+                <h3>🔬 Dermatologia - Alta</h3>
+                <div class="valor">Lance Atual: R$ 120</div>
+                <p>Tempo Restante: 34:43 | Médicos Interessados: 2</p>
+                <p>Paciente: João Santos</p>
+                <button class="btn" onclick="window.location.href='/login'">🩺 ATENDER AGORA - R$ 170</button>
+                <button class="btn" onclick="alert('Lance enviado!')">💰 Fazer Lance</button>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
+});
