@@ -25,7 +25,7 @@ https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
 Especialidades:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/especialidades.html
 
-Sistema de Lances (Versão Anterior):
+Sistema de Lances Completo:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/patient-bidding
 
 ===============================================
@@ -54,6 +54,9 @@ https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
 
 Nutrição:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=nutricao
+
+Cardiologia:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=cardiologia
 
 ===============================================
 📋 PÁGINAS INSTITUCIONAIS:

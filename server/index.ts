@@ -67,6 +67,435 @@ app.get('/agenda-do-dia.html', (req, res) => {
   res.sendFile(agendaPath);
 });
 
+// SOLUÇÃO AGENDAMENTO - HTML Estático com CSS Inline (4 passos organizados)
+app.get('/agendamento', (req, res) => {
+  const especialidade = req.query.especialidade || '';
+  console.log('📄 Serving agendamento (HTML estático) for:', req.path, 'especialidade:', especialidade);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Agendamento - TeleMed Consultas</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                padding: 20px; 
+            }
+            .container { 
+                max-width: 800px; 
+                margin: 0 auto; 
+                background: white; 
+                border-radius: 20px; 
+                padding: 40px; 
+                box-shadow: 0 10px 30px rgba(167, 199, 231, 0.1);
+            }
+            .header { 
+                text-align: center;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%); 
+                color: white; 
+                padding: 30px; 
+                border-radius: 20px; 
+                margin-bottom: 40px; 
+            }
+            .step-indicator {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 30px;
+            }
+            .step {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #E5E7EB;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 10px;
+                font-weight: bold;
+                color: #6B7280;
+            }
+            .step.active {
+                background: #A7C7E7;
+                color: white;
+            }
+            .step.completed {
+                background: #10B981;
+                color: white;
+            }
+            .form-section {
+                background: #F8F9FA;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 25px;
+                border-left: 5px solid #A7C7E7;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #2D5A87;
+                font-size: 14px;
+            }
+            .form-group input, 
+            .form-group select, 
+            .form-group textarea {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: all 0.3s ease;
+                font-family: inherit;
+            }
+            .form-group input:focus, 
+            .form-group select:focus, 
+            .form-group textarea:focus {
+                outline: none;
+                border-color: #A7C7E7;
+                box-shadow: 0 0 0 3px rgba(167, 199, 231, 0.1);
+            }
+            .form-group textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
+            .radio-group {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 10px;
+            }
+            .radio-option {
+                background: white;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                padding: 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: center;
+            }
+            .radio-option:hover {
+                border-color: #A7C7E7;
+            }
+            .radio-option.selected {
+                border-color: #A7C7E7;
+                background: #A7C7E71A;
+            }
+            .radio-option input {
+                display: none;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 18px 40px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                width: 100%;
+                transition: all 0.3s ease;
+                margin-top: 20px;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.4);
+            }
+            .btn-secondary {
+                background: #F4D9B4;
+                color: #8B4513;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 500;
+                margin-right: 10px;
+            }
+            .price-display {
+                background: linear-gradient(135deg, #F4D9B4 0%, #E6C7A0 100%);
+                border-radius: 15px;
+                padding: 20px;
+                text-align: center;
+                margin: 20px 0;
+            }
+            .price-value {
+                font-size: 32px;
+                font-weight: bold;
+                color: #8B4513;
+            }
+            .alert {
+                background: #E9967A;
+                color: white;
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            @media (max-width: 768px) {
+                .container { padding: 20px; margin: 10px; }
+                .radio-group { grid-template-columns: 1fr; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>📅 Agendamento de Consulta</h1>
+                <p>Configure sua consulta médica online</p>
+            </div>
+            
+            <!-- Indicador de Passos -->
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+                <div class="step">4</div>
+            </div>
+            
+            <form id="agendamentoForm">
+                <!-- PASSO 1: ESPECIALIDADE -->
+                <div class="form-section">
+                    <h2 style="color: #2D5A87; margin-bottom: 20px;">🏥 Passo 1: Escolha a Especialidade</h2>
+                    
+                    <div class="form-group">
+                        <label for="especialidade">Área Médica:</label>
+                        <select id="especialidade" name="especialidade" required>
+                            <option value="">Selecione uma especialidade...</option>
+                            <option value="clinica-geral" ${especialidade === 'clinica-geral' ? 'selected' : ''}>🩺 Clínica Geral</option>
+                            <option value="cardiologia" ${especialidade === 'cardiologia' ? 'selected' : ''}>❤️ Cardiologia</option>
+                            <option value="pediatria" ${especialidade === 'pediatria' ? 'selected' : ''}>👶 Pediatria</option>
+                            <option value="dermatologia" ${especialidade === 'dermatologia' ? 'selected' : ''}>🔬 Dermatologia</option>
+                            <option value="psiquiatria" ${especialidade === 'psiquiatria' ? 'selected' : ''}>🧠 Psiquiatria</option>
+                            <option value="ginecologia" ${especialidade === 'ginecologia' ? 'selected' : ''}>👩‍⚕️ Ginecologia</option>
+                            <option value="psicoterapia" ${especialidade === 'psicoterapia' ? 'selected' : ''}>💭 Psicoterapia</option>
+                            <option value="nutricao" ${especialidade === 'nutricao' ? 'selected' : ''}>🥗 Nutrição</option>
+                            <option value="ortopedia" ${especialidade === 'ortopedia' ? 'selected' : ''}>🦴 Ortopedia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- PASSO 2: TIPO DE CONSULTA -->
+                <div class="form-section">
+                    <h2 style="color: #2D5A87; margin-bottom: 20px;">⚡ Passo 2: Tipo de Consulta</h2>
+                    
+                    <div class="radio-group">
+                        <div class="radio-option" onclick="selectOption(this, 'tipo', 'agendada')">
+                            <input type="radio" name="tipo" value="agendada">
+                            <h3>📅 Consulta Agendada</h3>
+                            <p>Escolha data e horário</p>
+                            <strong>A partir de R$ 120</strong>
+                        </div>
+                        
+                        <div class="radio-option" onclick="selectOption(this, 'tipo', 'lance')">
+                            <input type="radio" name="tipo" value="lance">
+                            <h3>🎯 Sistema de Lances</h3>
+                            <p>Médicos fazem propostas</p>
+                            <strong>Você define o valor</strong>
+                        </div>
+                        
+                        <div class="radio-option" onclick="selectOption(this, 'tipo', 'urgente')">
+                            <input type="radio" name="tipo" value="urgente">
+                            <h3>🚨 Consulta Urgente</h3>
+                            <p>Atendimento em até 30min</p>
+                            <strong>A partir de R$ 200</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PASSO 3: VALOR E URGÊNCIA -->
+                <div class="form-section">
+                    <h2 style="color: #2D5A87; margin-bottom: 20px;">💰 Passo 3: Valor e Prioridade</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="valor">Valor Máximo (R$):</label>
+                            <input type="number" id="valor" name="valor" placeholder="150" min="50" max="500" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="urgencia">Nível de Urgência:</label>
+                            <select id="urgencia" name="urgencia" required>
+                                <option value="regular">Regular (24-48h)</option>
+                                <option value="alta">Alta (6-12h)</option>
+                                <option value="urgente">Urgente (até 2h)</option>
+                                <option value="emergencia">Emergência (até 30min)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="price-display">
+                        <div class="price-value" id="valorDisplay">R$ 0</div>
+                        <p>Valor da sua consulta</p>
+                    </div>
+                </div>
+                
+                <!-- PASSO 4: INFORMAÇÕES PESSOAIS -->
+                <div class="form-section">
+                    <h2 style="color: #2D5A87; margin-bottom: 20px;">👤 Passo 4: Seus Dados</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo:</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefone">Telefone:</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sintomas">Descreva seus sintomas:</label>
+                        <textarea id="sintomas" name="sintomas" placeholder="Descreva brevemente o que você está sentindo..." required></textarea>
+                    </div>
+                </div>
+                
+                <!-- BOTÕES DE AÇÃO -->
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="button" class="btn-secondary" onclick="window.history.back()">
+                        ← Voltar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        🚀 Finalizar Agendamento
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <script>
+            // Atualizar valor em tempo real
+            document.getElementById('valor').addEventListener('input', function() {
+                const valor = this.value || 0;
+                document.getElementById('valorDisplay').textContent = 'R$ ' + valor;
+            });
+            
+            // Função para selecionar opções
+            function selectOption(element, name, value) {
+                // Remove seleção anterior
+                const siblings = element.parentNode.children;
+                for (let sibling of siblings) {
+                    sibling.classList.remove('selected');
+                }
+                
+                // Adiciona seleção atual
+                element.classList.add('selected');
+                element.querySelector('input').checked = true;
+                
+                // Atualizar preços baseado no tipo
+                const valorInput = document.getElementById('valor');
+                if (value === 'agendada') {
+                    valorInput.value = 120;
+                    valorInput.min = 80;
+                } else if (value === 'lance') {
+                    valorInput.value = 100;
+                    valorInput.min = 50;
+                } else if (value === 'urgente') {
+                    valorInput.value = 200;
+                    valorInput.min = 150;
+                }
+                
+                // Atualizar display
+                valorInput.dispatchEvent(new Event('input'));
+                
+                // Atualizar indicador de passos
+                updateSteps();
+            }
+            
+            // Atualizar indicador de passos
+            function updateSteps() {
+                const steps = document.querySelectorAll('.step');
+                let currentStep = 1;
+                
+                if (document.getElementById('especialidade').value) currentStep = 2;
+                if (document.querySelector('input[name="tipo"]:checked')) currentStep = 3;
+                if (document.getElementById('valor').value) currentStep = 4;
+                
+                steps.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index + 1 < currentStep) {
+                        step.classList.add('completed');
+                    } else if (index + 1 === currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+            }
+            
+            // Submit do formulário
+            document.getElementById('agendamentoForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                // Validações
+                if (!data.especialidade || !data.tipo || !data.valor || !data.nome || !data.email) {
+                    alert('Por favor, preencha todos os campos obrigatórios!');
+                    return;
+                }
+                
+                if (parseInt(data.valor) < 50) {
+                    alert('Valor mínimo é R$ 50');
+                    return;
+                }
+                
+                // Simular envio e redirecionar baseado no tipo de consulta
+                alert(\`Agendamento enviado com sucesso!\\n\\nEspecialidade: \${data.especialidade}\\nTipo: \${data.tipo}\\nValor: R$ \${data.valor}\\nPaciente: \${data.nome}\\n\\nRedirecionando...\`);
+                
+                // Redirecionar baseado no tipo
+                if (data.tipo === 'lance') {
+                    window.location.href = '/patient-bidding';
+                } else if (data.tipo === 'agendada') {
+                    window.location.href = '/patient-dashboard';
+                } else if (data.tipo === 'urgente') {
+                    window.location.href = '/aguardando-medico.html';
+                }
+            });
+            
+            // Inicializar página
+            document.addEventListener('DOMContentLoaded', function() {
+                updateSteps();
+                
+                // Se especialidade veio da URL, atualizar indicador
+                if (document.getElementById('especialidade').value) {
+                    updateSteps();
+                }
+                
+                // Adicionar listeners para atualização de passos
+                document.getElementById('especialidade').addEventListener('change', updateSteps);
+                document.getElementById('valor').addEventListener('input', updateSteps);
+                
+                // Máscara para telefone
+                document.getElementById('telefone').addEventListener('input', function() {
+                    let value = this.value.replace(/\\D/g, '');
+                    if (value.length >= 11) {
+                        value = value.replace(/(\\d{2})(\\d{5})(\\d{4})/, '($1) $2-$3');
+                    } else if (value.length >= 7) {
+                        value = value.replace(/(\\d{2})(\\d{4})(\\d{0,4})/, '($1) $2-$3');
+                    } else if (value.length >= 3) {
+                        value = value.replace(/(\\d{2})(\\d{0,5})/, '($1) $2');
+                    }
+                    this.value = value;
+                });
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
 // SISTEMA COMPLETO DE LANCES - HTML Estático com Todas as Especialidades
 app.get('/patient-bidding', (req, res) => {
   console.log('📄 Serving sistema completo de lances for:', req.path);
