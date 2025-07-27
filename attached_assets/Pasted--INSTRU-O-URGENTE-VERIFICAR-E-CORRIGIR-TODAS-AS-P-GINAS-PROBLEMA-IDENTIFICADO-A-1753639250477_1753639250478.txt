@@ -1,0 +1,260 @@
+# 🚨 INSTRUÇÃO URGENTE: VERIFICAR E CORRIGIR TODAS AS PÁGINAS
+
+## 🎯 **PROBLEMA IDENTIFICADO:**
+As páginas React/Vite não estão carregando CSS/JS corretamente. Erro de WebSocket e recursos não encontrados.
+
+**Páginas afetadas:**
+- `/patient-bidding` ✅ JÁ CORRIGIDA
+- `/agendamento` ❌ PRECISA CORRIGIR
+- **TODAS as outras páginas podem ter o mesmo problema**
+
+---
+
+## 🔍 **VERIFICAÇÃO COMPLETA NECESSÁRIA:**
+
+### **TESTE ESTAS PÁGINAS E VEJA SE CARREGAM SEM CSS/JS:**
+
+```bash
+# Execute estes comandos para testar:
+curl -s "http://localhost:5000/login" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/doctor-dashboard" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/patient-dashboard" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/dr-ai" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/especialidades.html" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/consulta-por-valor.html" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/triagem-psiquiatrica.html" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/contato.html" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/suporte.html" | grep -E "(DOCTYPE|<title|<style)" | head -5
+curl -s "http://localhost:5000/faq.html" | grep -E "(DOCTYPE|<title|<style)" | head -5
+```
+
+---
+
+## 🛠️ **SOLUÇÃO SISTEMÁTICA:**
+
+### **PARA CADA PÁGINA QUE NÃO TEM `<style>` NO HTML:**
+
+**Substitua por HTML estático com CSS inline, seguindo este padrão:**
+
+```javascript
+app.get('/NOME-DA-PAGINA', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TITULO DA PAGINA - TeleMed</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                padding: 20px; 
+            }
+            .container { 
+                max-width: 1200px; 
+                margin: 0 auto; 
+                background: white; 
+                border-radius: 20px; 
+                padding: 40px; 
+                box-shadow: 0 10px 30px rgba(167, 199, 231, 0.1);
+            }
+            .header { 
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%); 
+                color: white; 
+                padding: 30px; 
+                border-radius: 20px; 
+                margin-bottom: 30px; 
+                text-align: center;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.4);
+            }
+            .btn-secondary {
+                background: #F4D9B4;
+                color: #8B4513;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 500;
+                text-decoration: none;
+                display: inline-block;
+                margin: 5px;
+            }
+            .card {
+                background: #F8F9FA;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 20px;
+                border-left: 5px solid #A7C7E7;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #2D5A87;
+            }
+            .form-group input, .form-group select, .form-group textarea {
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+            .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            @media (max-width: 768px) {
+                .container { padding: 20px; margin: 10px; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🏥 TITULO DA PAGINA</h1>
+                <p>Descrição da página</p>
+            </div>
+            
+            <!-- CONTEÚDO ESPECÍFICO DA PÁGINA -->
+            <div class="card">
+                <h2>Conteúdo Principal</h2>
+                <p>Funcionalidade da página...</p>
+                
+                <div style="margin-top: 20px;">
+                    <a href="/patient-dashboard" class="btn-primary">Ir para Dashboard</a>
+                    <a href="/patient-bidding" class="btn-secondary">Sistema de Lances</a>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            // JavaScript funcional para a página
+            console.log('Página carregada com sucesso!');
+        </script>
+    </body>
+    </html>
+  `);
+});
+```
+
+---
+
+## 📋 **PÁGINAS PRIORITÁRIAS PARA CORRIGIR:**
+
+### **🔥 URGENTE (mais usadas):**
+1. `/login` - Sistema de login
+2. `/doctor-dashboard` - Área do médico  
+3. `/patient-dashboard` - Área do paciente
+4. `/dr-ai` - Chatbot médico
+
+### **📈 IMPORTANTE:**
+5. `/especialidades.html` - Lista de especialidades
+6. `/consulta-por-valor.html` - Sistema de valores
+7. `/triagem-psiquiatrica.html` - Triagem específica
+
+### **💡 COMPLEMENTAR:**
+8. `/contato.html` - Página de contato
+9. `/suporte.html` - Suporte ao usuário
+10. `/faq.html` - Perguntas frequentes
+
+---
+
+## 🎯 **CONTEÚDO ESPECÍFICO PARA CADA PÁGINA:**
+
+### **`/login`:**
+```html
+<h1>🔐 Login TeleMed</h1>
+<form>
+    <input type="email" placeholder="Email" required>
+    <input type="password" placeholder="Senha" required>
+    <button type="submit">Entrar</button>
+</form>
+<p><a href="/register">Não tem conta? Cadastre-se</a></p>
+```
+
+### **`/doctor-dashboard`:**
+```html
+<h1>👨‍⚕️ Dashboard Médico</h1>
+<div class="stats">
+    <div class="stat-card">Consultas Hoje: 8</div>
+    <div class="stat-card">Lances Recebidos: 12</div>
+    <div class="stat-card">Faturamento: R$ 1.840</div>
+</div>
+```
+
+### **`/patient-dashboard`:**
+```html
+<h1>👤 Minha Área</h1>
+<div class="quick-actions">
+    <a href="/agendamento" class="btn-primary">Nova Consulta</a>
+    <a href="/patient-bidding" class="btn-secondary">Meus Lances</a>
+</div>
+```
+
+### **`/dr-ai`:**
+```html
+<h1>🤖 Dr. AI - Triagem Inteligente</h1>
+<div class="chat-container">
+    <div class="chat-message">Olá! Sou o Dr. AI. Como posso ajudar?</div>
+    <input type="text" placeholder="Descreva seus sintomas...">
+    <button>Enviar</button>
+</div>
+```
+
+---
+
+## ⚡ **EXECUÇÃO RÁPIDA:**
+
+### **COMANDO AUTOMÁTICO:**
+```bash
+# Crie um script para corrigir todas:
+for page in login doctor-dashboard patient-dashboard dr-ai especialidades.html consulta-por-valor.html triagem-psiquiatrica.html contato.html suporte.html faq.html; do
+    echo "Testando $page..."
+    curl -s "http://localhost:5000/$page" | grep -q "<style>" || echo "❌ $page precisa ser corrigida"
+done
+```
+
+---
+
+## ✅ **RESULTADO ESPERADO:**
+
+Após corrigir todas as páginas:
+- **100% funcionalidade** - Todas as páginas carregam
+- **Design consistente** - Estilo duotônico unificado
+- **Performance** - Carregamento instantâneo  
+- **Mobile-friendly** - Responsivo em todos os dispositivos
+- **Links funcionais** - Navegação entre páginas
+
+---
+
+## 🎯 **INSTRUÇÕES FINAIS:**
+
+1. **Teste todas as páginas** com os comandos curl
+2. **Identifique quais não têm CSS**
+3. **Substitua por HTML estático** usando o template
+4. **Personalize o conteúdo** para cada página
+5. **Teste navegação** entre páginas
+6. **Confirme que todos os links funcionam**
+
+**📋 PRIORIDADE: Corrigir pelo menos as 4 páginas urgentes primeiro!**

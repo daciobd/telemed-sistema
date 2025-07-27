@@ -36,6 +36,19 @@ app.use((req, res, next) => {
   next();
 });
 
+// PÁGINAS CRÍTICAS - MÁXIMA PRIORIDADE (antes de Vite/React)
+// PATIENT-DASHBOARD - Corrigido com HTML estático
+app.get('/patient-dashboard', (req, res) => {
+  console.log('📄 Serving patient-dashboard (HTML corrigido - PRIORIDADE) for:', req.path);
+  res.send(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard Paciente - TeleMed</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins','Inter',Arial,sans-serif;background-color:#FAFBFC}.dashboard-header{background:linear-gradient(135deg,#E9967A 0%,#D67B5A 100%);color:white;padding:20px;display:flex;justify-content:space-between;align-items:center}.patient-info h1{font-size:24px;margin-bottom:5px}.patient-info p{font-size:14px;opacity:0.9}.welcome-section{padding:30px;text-align:center}.welcome-card{background:white;border-radius:20px;padding:40px;box-shadow:0 4px 15px rgba(0,0,0,0.08);margin-bottom:30px}.welcome-card h2{color:#2D5A87;font-size:28px;margin-bottom:15px}.welcome-card p{color:#666;font-size:16px;line-height:1.6}.actions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:0 30px 30px}.action-card{background:white;border-radius:20px;padding:30px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:2px solid transparent;transition:all 0.3s;cursor:pointer}.action-card:hover{border-color:#E9967A;transform:translateY(-5px)}.action-card .icon{font-size:48px;margin-bottom:20px;display:block}.action-card h3{color:#2D5A87;font-size:20px;margin-bottom:15px}.action-card p{color:#666;font-size:14px;margin-bottom:20px}.action-btn{background:linear-gradient(135deg,#E9967A 0%,#D67B5A 100%);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:600;cursor:pointer;transition:transform 0.2s;text-decoration:none;display:inline-block}.action-btn:hover{transform:translateY(-2px)}@media (max-width:768px){.dashboard-header{flex-direction:column;text-align:center;gap:10px}.actions-grid{grid-template-columns:1fr;padding:0 20px 20px}.welcome-section{padding:20px}}</style></head><body><div class="dashboard-header"><div class="patient-info"><h1>👤 Maria Silva</h1><p>Paciente • ID: 789456</p></div><div><a href="/" style="color:white;text-decoration:none;padding:10px 20px;border:1px solid rgba(255,255,255,0.3);border-radius:10px">Voltar ao Site</a></div></div><div class="welcome-section"><div class="welcome-card"><h2>Bem-vinda ao TeleMed Sistema! 👋</h2><p>Sua saúde está em boas mãos. Acesse consultas médicas profissionais sem sair de casa, com toda a segurança e qualidade que você merece.</p></div></div><div class="actions-grid"><div class="action-card" onclick="window.location.href='/agendamento'"><span class="icon">📅</span><h3>Agendar Consulta</h3><p>Agende sua consulta médica com especialistas qualificados</p><a href="/agendamento" class="action-btn">Agendar Agora</a></div><div class="action-card" onclick="window.location.href='/patient-bidding'"><span class="icon">💰</span><h3>Sistema de Lances</h3><p>Faça lances por consultas e encontre o melhor preço</p><a href="/patient-bidding" class="action-btn">Fazer Lance</a></div><div class="action-card" onclick="window.location.href='/dr-ai'"><span class="icon">🤖</span><h3>Dr. AI - Triagem</h3><p>Triagem inteligente gratuita com inteligência artificial</p><a href="/dr-ai" class="action-btn">Iniciar Triagem</a></div><div class="action-card" onclick="window.location.href='/especialidades.html'"><span class="icon">🩺</span><h3>Especialidades</h3><p>Conheça nossas especialidades médicas disponíveis</p><a href="/especialidades.html" class="action-btn">Ver Especialidades</a></div></div></body></html>`);
+});
+
+// DR-AI - Corrigido com HTML estático
+app.get('/dr-ai', (req, res) => {
+  console.log('📄 Serving dr-ai (HTML corrigido - PRIORIDADE) for:', req.path);
+  res.send(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dr. AI - Triagem Médica - TeleMed</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins','Inter',Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;flex-direction:column}.header{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:20px;text-align:center;color:white}.header h1{font-size:28px;margin-bottom:10px}.header p{font-size:16px;opacity:0.9}.chat-container{flex:1;max-width:800px;margin:20px auto;background:white;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column}.chat-messages{flex:1;padding:30px;overflow-y:auto;max-height:400px}.message{margin-bottom:20px;display:flex;align-items:flex-start;gap:15px}.message.ai{flex-direction:row}.message.user{flex-direction:row-reverse}.message-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}.message.ai .message-avatar{background:linear-gradient(135deg,#667eea,#764ba2);color:white}.message.user .message-avatar{background:linear-gradient(135deg,#E9967A,#D67B5A);color:white}.message-content{background:#f8f9fa;padding:15px 20px;border-radius:18px;max-width:70%;line-height:1.6}.message.ai .message-content{border-bottom-left-radius:5px}.message.user .message-content{border-bottom-right-radius:5px;background:linear-gradient(135deg,#667eea,#764ba2);color:white}.chat-input-container{padding:20px;background:#f8f9fa;border-top:1px solid #eee}.chat-input{display:flex;gap:10px}.chat-input input{flex:1;padding:15px 20px;border:2px solid #e2e8f0;border-radius:25px;font-size:16px;outline:none}.chat-input input:focus{border-color:#667eea}.send-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.2s}.send-btn:hover{transform:scale(1.05)}.suggestions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.suggestion-btn{background:white;border:2px solid #667eea;color:#667eea;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;transition:all 0.2s}.suggestion-btn:hover{background:#667eea;color:white}.back-btn{position:fixed;top:20px;left:20px;background:rgba(255,255,255,0.2);color:white;border:none;padding:10px 20px;border-radius:25px;cursor:pointer;backdrop-filter:blur(10px);text-decoration:none}@media (max-width:768px){.chat-container{margin:10px;border-radius:15px}.message-content{max-width:85%}.suggestions{flex-direction:column}}</style></head><body><a href="/" class="back-btn">← Voltar</a><div class="header"><h1>🤖 Dr. AI - Assistente Médico</h1><p>Triagem inteligente e orientações médicas personalizadas</p></div><div class="chat-container"><div class="chat-messages" id="chatMessages"><div class="message ai"><div class="message-avatar">🤖</div><div class="message-content">Olá! Sou o Dr. AI, seu assistente médico virtual. 👋<br><br>Estou aqui para ajudar com uma triagem inicial dos seus sintomas e orientá-lo sobre os próximos passos. Como posso ajudá-lo hoje?</div></div></div><div class="chat-input-container"><div class="chat-input"><input type="text" id="messageInput" placeholder="Descreva seus sintomas ou faça uma pergunta..."/><button class="send-btn" onclick="sendMessage()">📤</button></div><div class="suggestions"><button class="suggestion-btn" onclick="sendSuggestion('Estou com dor de cabeça há 2 dias')">Dor de cabeça</button><button class="suggestion-btn" onclick="sendSuggestion('Tenho ansiedade e insônia')">Ansiedade</button><button class="suggestion-btn" onclick="sendSuggestion('Dor no peito e falta de ar')">Dor no peito</button><button class="suggestion-btn" onclick="sendSuggestion('Triagem psiquiátrica completa')">Triagem psiquiátrica</button></div></div></div><script>const chatMessages=document.getElementById('chatMessages');const messageInput=document.getElementById('messageInput');function addMessage(content,isUser=false){const messageDiv=document.createElement('div');messageDiv.className=\`message \${isUser?'user':'ai'}\`;messageDiv.innerHTML=\`<div class="message-avatar">\${isUser?'👤':'🤖'}</div><div class="message-content">\${content}</div>\`;chatMessages.appendChild(messageDiv);chatMessages.scrollTop=chatMessages.scrollHeight}function sendMessage(){const message=messageInput.value.trim();if(!message)return;addMessage(message,true);messageInput.value='';setTimeout(()=>{const responses=["Entendo seus sintomas. Com base no que você descreveu, recomendo algumas avaliações. Você gostaria de:","Obrigado por compartilhar. Vou fazer algumas perguntas para uma triagem mais precisa:","Seus sintomas podem indicar algumas possibilidades. Para um diagnóstico adequado, sugiro:","Com base nos sintomas relatados, aqui estão meus próximos passos recomendados:"];const randomResponse=responses[Math.floor(Math.random()*responses.length)];addMessage(randomResponse+"<br><br>• Consulta com especialista<br>• Exames complementares<br>• <a href='/agendamento' style='color:#667eea;'>Agendar consulta presencial</a>")},1500)}function sendSuggestion(suggestion){messageInput.value=suggestion;sendMessage()}messageInput.addEventListener('keypress',function(e){if(e.key==='Enter'){sendMessage()}})</script></body></html>`);
+});
+
 // HTML Landing Pages - HIGHEST PRIORITY
 app.get('/', (req, res) => {
   const indexPath = path.join(__dirname, '../index.html');
@@ -496,7 +509,174 @@ app.get('/agendamento', (req, res) => {
   `);
 });
 
-// SISTEMA COMPLETO DE LANCES - HTML Estático com Todas as Especialidades
+// PÁGINAS CORRIGIDAS - HTML Estático com CSS Inline (solução para problema React/Vite)
+// 1. LOGIN - Sistema de entrada
+app.get('/login', (req, res) => {
+  console.log('📄 Serving login (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px; 
+            }
+            .login-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                width: 100%;
+                max-width: 400px;
+            }
+            .logo {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .logo h1 {
+                color: #2D5A87;
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            .logo p {
+                color: #666;
+                font-size: 14px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #333;
+                font-weight: 500;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 12px 16px;
+                border: 2px solid #E2E2E2;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: border-color 0.2s;
+            }
+            .form-group input:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .login-btn {
+                width: 100%;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 14px;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+            .login-btn:hover {
+                transform: translateY(-2px);
+            }
+            .links {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .links a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-size: 14px;
+                margin: 0 10px;
+            }
+            .demo-accounts {
+                background: #F8F9FA;
+                border-radius: 12px;
+                padding: 15px;
+                margin-top: 20px;
+                font-size: 12px;
+                color: #666;
+            }
+            .demo-accounts strong {
+                color: #333;
+            }
+            @media (max-width: 768px) {
+                .login-container {
+                    padding: 30px 20px;
+                    margin: 0 10px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <div class="logo">
+                <h1>🩺 TeleMed Sistema</h1>
+                <p>Acesso Profissional</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required placeholder="Sua senha">
+                </div>
+                
+                <button type="submit" class="login-btn">Entrar no Sistema</button>
+            </form>
+            
+            <div class="links">
+                <a href="/register.html">Criar Conta</a> |
+                <a href="/">Voltar ao Site</a>
+            </div>
+            
+            <div class="demo-accounts">
+                <strong>Contas de Demonstração:</strong><br>
+                👨‍⚕️ <strong>Médico:</strong> medico@demo.com / 123456<br>
+                👤 <strong>Paciente:</strong> paciente@demo.com / 123456
+            </div>
+        </div>
+        
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Sistema de login de demonstração
+                if (email === 'medico@demo.com' && password === '123456') {
+                    alert('Login como médico realizado com sucesso!');
+                    window.location.href = '/doctor-dashboard';
+                } else if (email === 'paciente@demo.com' && password === '123456') {
+                    alert('Login como paciente realizado com sucesso!');
+                    window.location.href = '/patient-dashboard';
+                } else {
+                    alert('Email ou senha incorretos. Use as contas de demonstração.');
+                }
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// ROTAS DUPLICADAS REMOVIDAS - VERSÕES PRINCIPAIS ESTÃO NO TOPO DO ARQUIVO
+
+// CONTINUAÇÃO DO SISTEMA DE LANCES (corrigindo estrutura)
 app.get('/patient-bidding', (req, res) => {
   console.log('📄 Serving sistema completo de lances for:', req.path);
   res.send(`
