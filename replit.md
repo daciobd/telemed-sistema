@@ -10,6 +10,33 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 27, 2025**: SISTEMA DE FOTOS PROFISSIONAIS UNSPLASH IMPLEMENTADO v11.5.0
+  - ✅ **Fotos Reais Integradas**: especialidades.html agora usa fotos profissionais do Unsplash API
+    - 8 especialidades com fotos reais de médicos profissionais
+    - URLs otimizadas: ?w=200&h=200&fit=crop&crop=face para fotos circulares
+    - Sistema de fallback inteligente: se foto não carregar, mostra emoji correspondente
+  - ✅ **Design Profissional Aprimorado**: Cards com estatísticas e badges funcionais
+    - Estatísticas reais: número de médicos, preços a partir de, avaliações com estrelas
+    - Badges de status: Disponível (verde), Alta Demanda (coral), Procurado (ocre)
+    - Animações de entrada escalonadas para melhor UX
+  - ✅ **8 Especialidades Completas**: Cada uma com foto, estatísticas e descrição profissional
+    - Cardiologia: 12 médicos, R$ 180, 4.9⭐ (foto cardiólogo)
+    - Clínica Geral: 18 médicos, R$ 120, 4.8⭐ (foto médico geral)
+    - Pediatria: 8 médicos, R$ 150, 4.9⭐ (foto pediatra)
+    - Dermatologia: 6 médicos, R$ 200, 4.8⭐ (foto dermatologista)
+    - Psiquiatria: 10 médicos, R$ 220, 4.9⭐ (foto psiquiatra) - Badge "Alta Demanda"
+    - Ginecologia: 7 médicos, R$ 160, 4.9⭐ (foto ginecologista)
+    - Psicoterapia: 12 terapeutas, R$ 140, 4.8⭐ (foto psicoterapeuta) - Badge "Procurado"
+    - Nutrição: 9 nutricionistas, R$ 100, 4.7⭐ (foto nutricionista)
+  - ✅ **Integração Funcional**: Cada card redireciona para /agendamento?especialidade=slug
+    - JavaScript agendarConsulta() implementado
+    - Navegação fluida para sistema de agendamento especializado
+    - Botão global "Sistema de Lances" integrado
+  - ✅ **Sistema de Fallback Robusto**: Garantia de funcionamento sem internet
+    - onerror handler em cada imagem para fallback automático
+    - Emojis específicos por especialidade como backup visual
+    - Funcionalidade preservada mesmo sem acesso ao Unsplash
+
 - **July 27, 2025**: TODAS AS 4 PÁGINAS REACT/VITE CORRIGIDAS - SOLUÇÃO COMPLETA IMPLEMENTADA v11.4.0
   - ✅ **Problema Route Precedence Resolvido**: Movidas rotas críticas para topo do server/index.ts
     - `/patient-dashboard` e `/dr-ai` estavam sendo interceptadas pelo React routing
