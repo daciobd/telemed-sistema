@@ -10,10 +10,10 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 27, 2025**: SISTEMA DE FOTOS PROFISSIONAIS UNSPLASH IMPLEMENTADO v11.5.0
-  - ✅ **Fotos Reais Integradas**: especialidades.html agora usa fotos profissionais do Unsplash API
-    - 8 especialidades com fotos reais de médicos profissionais
-    - URLs otimizadas: ?w=200&h=200&fit=crop&crop=face para fotos circulares
+- **July 27, 2025**: SISTEMA DE FOTOS PERSONALIZADAS IMPLEMENTADO v11.5.1
+  - ✅ **Fotos Personalizadas Integradas**: especialidades.html agora usa fotos específicas fornecidas pelo usuário
+    - 8 especialidades com fotos médicas personalizadas de alta qualidade
+    - Mapeamento específico: Psicoterapia, Clínica Médica, Pediatria, Psiquiatria, Dermatologia, Cardiologia, Ginecologia, Nutrição
     - Sistema de fallback inteligente: se foto não carregar, mostra emoji correspondente
   - ✅ **Design Profissional Aprimorado**: Cards com estatísticas e badges funcionais
     - Estatísticas reais: número de médicos, preços a partir de, avaliações com estrelas
