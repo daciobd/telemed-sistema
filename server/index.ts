@@ -367,6 +367,56 @@ app.get('/doctor-dashboard', (req, res) => {
                 cursor: pointer;
                 margin-left: 10px;
             }
+            
+            /* OTIMIZAÇÕES VISUAIS - Animações */
+            .fade-in {
+                animation: fadeIn 0.5s ease-in;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes slideIn {
+                from { transform: translateX(300px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            .toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 12px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-weight: 500;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+            
+            .toast-success {
+                background: #A7C7E7;
+                color: white;
+            }
+            
+            .toast-error {
+                background: #E9967A;
+                color: white;
+            }
+            
+            .btn-loading {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+            
+            @media (max-width: 768px) {
+                .toast {
+                    right: 10px;
+                    left: 10px;
+                    top: 10px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -452,13 +502,67 @@ app.get('/doctor-dashboard', (req, res) => {
         </div>
         
         <script>
+            // Sistema de Toast Notifications
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = \`toast toast-\${type}\`;
+                toast.innerHTML = message;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+            
+            // Sistema de Loading States
+            function showLoading(button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '⏳ Processando...';
+                button.disabled = true;
+                button.classList.add('btn-loading');
+                
+                return () => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    button.classList.remove('btn-loading');
+                };
+            }
+            
+            // Aplicar animações fade-in quando página carrega
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.stat-card, .lance-card, .section').forEach((element, index) => {
+                    setTimeout(() => {
+                        element.classList.add('fade-in');
+                    }, index * 100);
+                });
+            });
+            
             function aceitarLance(especialidade, valor) {
+                const button = event.target;
+                
                 if (confirm(\`Aceitar lance de \${especialidade} por R$ \${valor}?\\n\\nApós aceitar, a consulta será agendada automaticamente.\`)) {
-                    alert(\`Lance aceito!\\nConsulta de \${especialidade} agendada.\\nValor: R$ \${valor}\\n\\nPaciente será notificado via WhatsApp.\`);
-                    // Remover o card ou marcar como aceito
-                    event.target.closest('.lance-card').style.opacity = '0.5';
-                    event.target.innerHTML = '✅ Aceito';
-                    event.target.disabled = true;
+                    const hideLoading = showLoading(button);
+                    
+                    // Simular processamento
+                    setTimeout(() => {
+                        hideLoading();
+                        
+                        showToast(\`✅ Lance de \${especialidade} aceito! Consulta agendada por R$ \${valor}\`);
+                        
+                        // Marcar como aceito
+                        const card = button.closest('.lance-card');
+                        card.style.opacity = '0.5';
+                        card.style.transform = 'scale(0.98)';
+                        button.innerHTML = '✅ Aceito';
+                        button.style.background = '#10B981';
+                        button.disabled = true;
+                        
+                        // Atualizar contador de lances
+                        setTimeout(() => {
+                            const lancesAtivos = document.querySelector('.stat-card:nth-child(3) .stat-value');
+                            if (lancesAtivos) {
+                                lancesAtivos.textContent = parseInt(lancesAtivos.textContent) - 1;
+                            }
+                        }, 500);
+                        
+                    }, 1500);
                 }
             }
         </script>
@@ -1039,10 +1143,57 @@ app.get('/login', (req, res) => {
             .demo-accounts strong {
                 color: #333;
             }
+            /* OTIMIZAÇÕES VISUAIS - Animações e Toast */
+            .fade-in {
+                animation: fadeIn 0.5s ease-in;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes slideIn {
+                from { transform: translateX(300px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            .toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 12px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-weight: 500;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+            
+            .toast-success {
+                background: #A7C7E7;
+                color: white;
+            }
+            
+            .toast-error {
+                background: #E9967A;
+                color: white;
+            }
+            
+            .btn-loading {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+            
             @media (max-width: 768px) {
                 .login-container {
                     padding: 30px 20px;
                     margin: 0 10px;
+                }
+                .toast {
+                    right: 10px;
+                    left: 10px;
+                    top: 10px;
                 }
             }
         </style>
@@ -1081,22 +1232,63 @@ app.get('/login', (req, res) => {
         </div>
         
         <script>
+            // Sistema de Toast Notifications
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = \`toast toast-\${type}\`;
+                toast.innerHTML = message;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+            
+            // Sistema de Loading States
+            function showLoading(button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '⏳ Carregando...';
+                button.disabled = true;
+                button.classList.add('btn-loading');
+                
+                return () => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    button.classList.remove('btn-loading');
+                };
+            }
+            
+            // Aplicar animações fade-in quando página carrega
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('.login-container').classList.add('fade-in');
+            });
+            
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
+                const submitButton = document.querySelector('.login-btn');
                 
-                // Sistema de login de demonstração
-                if (email === 'medico@demo.com' && password === '123456') {
-                    alert('Login como médico realizado com sucesso!');
-                    window.location.href = '/doctor-dashboard';
-                } else if (email === 'paciente@demo.com' && password === '123456') {
-                    alert('Login como paciente realizado com sucesso!');
-                    window.location.href = '/patient-dashboard';
-                } else {
-                    alert('Email ou senha incorretos. Use as contas de demonstração.');
+                if (!email || !password) {
+                    showToast('⚠️ Preencha todos os campos', 'error');
+                    return;
                 }
+                
+                const hideLoading = showLoading(submitButton);
+                
+                // Simular processamento
+                setTimeout(() => {
+                    hideLoading();
+                    
+                    // Sistema de login de demonstração
+                    if (email === 'medico@demo.com' && password === '123456') {
+                        showToast('✅ Login médico realizado com sucesso!');
+                        setTimeout(() => window.location.href = '/doctor-dashboard', 1000);
+                    } else if (email === 'paciente@demo.com' && password === '123456') {
+                        showToast('✅ Login paciente realizado com sucesso!');
+                        setTimeout(() => window.location.href = '/patient-dashboard', 1000);
+                    } else {
+                        showToast('❌ Email ou senha incorretos. Use as contas demo.', 'error');
+                    }
+                }, 1500);
             });
         </script>
     </body>
