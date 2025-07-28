@@ -571,6 +571,817 @@ app.get('/doctor-dashboard', (req, res) => {
   `);
 });
 
+// REGISTER - PÁGINA DE CADASTRO CRÍTICA
+app.get('/register', (req, res) => {
+  console.log('📄 Serving register (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .register-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                width: 100%;
+                max-width: 1000px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                box-shadow: 0 20px 40px rgba(167, 199, 231, 0.15);
+                animation: fadeIn 0.5s ease-in;
+            }
+            .register-left {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .register-right {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                border-radius: 15px;
+                padding: 30px;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+                color: #2D5A87;
+                margin-bottom: 10px;
+            }
+            .subtitle {
+                color: #6B7280;
+                margin-bottom: 30px;
+            }
+            .user-type {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+            .type-option {
+                flex: 1;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                cursor: pointer;
+                text-align: center;
+                transition: all 0.3s;
+                background: white;
+            }
+            .type-option:hover,
+            .type-option.selected {
+                border-color: #A7C7E7;
+                background: #A7C7E71A;
+            }
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #2D5A87;
+            }
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+            .form-group input:focus, .form-group select:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .speciality-section {
+                display: none;
+                padding: 20px;
+                background: #F8F9FA;
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+            .speciality-section.show {
+                display: block;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 18px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                width: 100%;
+                margin-bottom: 15px;
+                transition: transform 0.3s;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+            .btn-primary:disabled {
+                background: #D1D5DB;
+                cursor: not-allowed;
+                transform: none;
+            }
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .links {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .links a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .feature {
+                background: rgba(255,255,255,0.2);
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                font-size: 14px;
+            }
+            .btn-loading {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+            
+            /* OTIMIZAÇÕES VISUAIS */
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes slideIn {
+                from { transform: translateX(300px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            .toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 12px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                font-weight: 500;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+            .toast-success {
+                background: #A7C7E7;
+                color: white;
+            }
+            .toast-error {
+                background: #E9967A;
+                color: white;
+            }
+            
+            @media (max-width: 768px) {
+                .register-container {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                }
+                .form-row {
+                    grid-template-columns: 1fr;
+                }
+                .toast {
+                    right: 10px;
+                    left: 10px;
+                    top: 10px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="register-container">
+            <div class="register-left">
+                <div class="logo">🏥 TeleMed Sistema</div>
+                <div class="subtitle">Crie sua conta e comece a cuidar da sua saúde</div>
+                
+                <!-- Tipo de Usuário -->
+                <div class="user-type">
+                    <div class="type-option" onclick="selectUserType('paciente')">
+                        <h4>👤 Sou Paciente</h4>
+                        <p>Busco consultas médicas</p>
+                    </div>
+                    <div class="type-option" onclick="selectUserType('medico')">
+                        <h4>👨‍⚕️ Sou Médico</h4>
+                        <p>Quero atender pacientes</p>
+                    </div>
+                </div>
+                
+                <form id="registerForm">
+                    <input type="hidden" id="userType" name="userType" required>
+                    
+                    <!-- Dados Pessoais -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo:</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefone">Telefone/WhatsApp:</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cpf">CPF:</label>
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nascimento">Data de Nascimento:</label>
+                            <input type="date" id="nascimento" name="nascimento" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="senha">Senha:</label>
+                            <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção Específica para Médicos -->
+                    <div id="medicoSection" class="speciality-section">
+                        <h4 style="color: #2D5A87; margin-bottom: 15px;">📋 Informações Profissionais</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="crm">CRM:</label>
+                                <input type="text" id="crm" name="crm" placeholder="CRM/SP 123456">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="especialidade1">Especialidade Principal:</label>
+                                <select id="especialidade1" name="especialidade1">
+                                    <option value="">Selecione...</option>
+                                    <option value="clinica-geral">Clínica Geral</option>
+                                    <option value="cardiologia">Cardiologia</option>
+                                    <option value="pediatria">Pediatria</option>
+                                    <option value="dermatologia">Dermatologia</option>
+                                    <option value="psiquiatria">Psiquiatria</option>
+                                    <option value="ginecologia">Ginecologia</option>
+                                    <option value="ortopedia">Ortopedia</option>
+                                    <option value="psicoterapia">Psicoterapia</option>
+                                    <option value="nutricao">Nutrição</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="experiencia">Anos de Experiência:</label>
+                            <select id="experiencia" name="experiencia">
+                                <option value="">Selecione...</option>
+                                <option value="0-2">0-2 anos</option>
+                                <option value="3-5">3-5 anos</option>
+                                <option value="6-10">6-10 anos</option>
+                                <option value="11-20">11-20 anos</option>
+                                <option value="20+">Mais de 20 anos</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Termos e Condições -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="termos" name="termos" required>
+                        <label for="termos">Concordo com os <a href="/termos-de-uso" target="_blank">Termos de Uso</a> e <a href="/politica-privacidade" target="_blank">Política de Privacidade</a></label>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        Criar Conta Gratuitamente
+                    </button>
+                    
+                    <div class="links">
+                        Já tem uma conta? <a href="/login">Fazer Login</a>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="register-right">
+                <h3 style="margin-bottom: 20px;">🎯 Por que escolher o TeleMed?</h3>
+                
+                <div class="feature">
+                    <strong>🩺 Sistema de Lances Único</strong><br>
+                    Primeiro sistema do Brasil com preços flexíveis
+                </div>
+                
+                <div class="feature">
+                    <strong>🤖 Dr. AI Integrado</strong><br>
+                    Triagem inteligente com IA médica especializada
+                </div>
+                
+                <div class="feature">
+                    <strong>📱 100% Digital</strong><br>
+                    Consultas por videochamada com qualidade HD
+                </div>
+                
+                <div class="feature">
+                    <strong>🔒 Segurança Total</strong><br>
+                    Conformidade LGPD e criptografia end-to-end
+                </div>
+                
+                <div class="feature">
+                    <strong>⚡ Disponível 24/7</strong><br>
+                    Emergências médicas a qualquer hora
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            // Sistema de Toast Notifications
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = \`toast toast-\${type}\`;
+                toast.innerHTML = message;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+            
+            // Sistema de Loading States
+            function showLoading(button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '⏳ Criando conta...';
+                button.disabled = true;
+                button.classList.add('btn-loading');
+                
+                return () => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    button.classList.remove('btn-loading');
+                };
+            }
+            
+            let selectedType = '';
+            
+            function selectUserType(type) {
+                selectedType = type;
+                document.getElementById('userType').value = type;
+                
+                // Atualizar visual
+                document.querySelectorAll('.type-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                event.target.closest('.type-option').classList.add('selected');
+                
+                // Mostrar/ocultar seção médico
+                const medicoSection = document.getElementById('medicoSection');
+                if (type === 'medico') {
+                    medicoSection.classList.add('show');
+                } else {
+                    medicoSection.classList.remove('show');
+                }
+            }
+            
+            // Máscaras para inputs
+            document.getElementById('telefone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                e.target.value = value;
+            });
+            
+            document.getElementById('cpf').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            });
+            
+            // Submit do formulário
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitButton = document.getElementById('submitBtn');
+                
+                if (!selectedType) {
+                    showToast('⚠️ Selecione o tipo de usuário', 'error');
+                    return;
+                }
+                
+                const hideLoading = showLoading(submitButton);
+                
+                // Simular processamento
+                setTimeout(() => {
+                    hideLoading();
+                    
+                    showToast('✅ Conta criada com sucesso! Redirecionando...');
+                    
+                    // Redirecionar baseado no tipo
+                    setTimeout(() => {
+                        if (selectedType === 'medico') {
+                            window.location.href = '/doctor-dashboard';
+                        } else {
+                            window.location.href = '/patient-dashboard';
+                        }
+                    }, 1500);
+                    
+                }, 2000);
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// TERMOS DE USO - PÁGINA INSTITUCIONAL CRÍTICA
+app.get('/termos-de-uso', (req, res) => {
+  console.log('📄 Serving termos-de-uso (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Termos de Uso - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: #FAFBFC;
+                line-height: 1.6;
+                color: #374151;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 0;
+                text-align: center;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 40px 20px;
+                background: white;
+                border-radius: 20px;
+                margin-top: -20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                animation: fadeIn 0.5s ease-in;
+            }
+            h1 { color: #2D5A87; margin-bottom: 20px; }
+            h2 { color: #2D5A87; margin: 30px 0 15px 0; font-size: 20px; }
+            h3 { color: #374151; margin: 20px 0 10px 0; font-size: 18px; }
+            p { margin-bottom: 15px; }
+            .section { margin-bottom: 30px; }
+            .back-btn {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 10px;
+                text-decoration: none;
+                display: inline-block;
+                margin-bottom: 20px;
+                font-weight: 500;
+            }
+            .back-btn:hover { transform: translateY(-2px); }
+            .highlight { background: #F3F4F6; padding: 15px; border-radius: 8px; margin: 15px 0; }
+            .date { color: #6B7280; font-size: 14px; }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>📋 Termos de Uso</h1>
+            <p>TeleMed Sistema - Plataforma de Telemedicina</p>
+        </div>
+        
+        <div class="container">
+            <a href="/" class="back-btn">← Voltar ao Site</a>
+            
+            <div class="date">Última atualização: 28 de julho de 2025</div>
+            
+            <div class="section">
+                <h2>1. Aceitação dos Termos</h2>
+                <p>Ao acessar e utilizar a plataforma TeleMed Sistema, você concorda em cumprir e estar vinculado a estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não deve usar nossos serviços.</p>
+            </div>
+            
+            <div class="section">
+                <h2>2. Descrição do Serviço</h2>
+                <p>O TeleMed Sistema é uma plataforma de telemedicina que conecta pacientes e médicos através de:</p>
+                <div class="highlight">
+                    <p><strong>• Sistema de Lances:</strong> Pacientes fazem lances por consultas médicas</p>
+                    <p><strong>• Dr. AI:</strong> Triagem médica inteligente com inteligência artificial</p>
+                    <p><strong>• Videoconsultas:</strong> Consultas médicas por videochamada</p>
+                    <p><strong>• Prescrições Digitais:</strong> Emissão de receitas médicas digitais</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>3. Cadastro e Conta de Usuário</h2>
+                <h3>3.1 Elegibilidade</h3>
+                <p>Para usar nossos serviços, você deve ter pelo menos 18 anos de idade ou ter autorização dos pais/responsáveis.</p>
+                
+                <h3>3.2 Informações Precisas</h3>
+                <p>Você deve fornecer informações precisas, atuais e completas durante o processo de registro e manter essas informações atualizadas.</p>
+                
+                <h3>3.3 Segurança da Conta</h3>
+                <p>Você é responsável por manter a confidencialidade de sua senha e por todas as atividades que ocorrem sob sua conta.</p>
+            </div>
+            
+            <div class="section">
+                <h2>4. Contato</h2>
+                <p>Para dúvidas sobre estes termos, entre em contato:</p>
+                <div class="highlight">
+                    <p><strong>E-mail:</strong> juridico@telemed.com.br</p>
+                    <p><strong>WhatsApp:</strong> (11) 99999-8888</p>
+                    <p><strong>Endereço:</strong> São Paulo, SP - Brasil</p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
+});
+
+// POLÍTICA DE PRIVACIDADE - PÁGINA INSTITUCIONAL CRÍTICA
+app.get('/politica-privacidade', (req, res) => {
+  console.log('📄 Serving politica-privacidade (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Política de Privacidade - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: #FAFBFC;
+                line-height: 1.6;
+                color: #374151;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 0;
+                text-align: center;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 40px 20px;
+                background: white;
+                border-radius: 20px;
+                margin-top: -20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                animation: fadeIn 0.5s ease-in;
+            }
+            h1 { color: #2D5A87; margin-bottom: 20px; }
+            h2 { color: #2D5A87; margin: 30px 0 15px 0; font-size: 20px; }
+            h3 { color: #374151; margin: 20px 0 10px 0; font-size: 18px; }
+            p { margin-bottom: 15px; }
+            .section { margin-bottom: 30px; }
+            .back-btn {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 10px;
+                text-decoration: none;
+                display: inline-block;
+                margin-bottom: 20px;
+                font-weight: 500;
+            }
+            .back-btn:hover { transform: translateY(-2px); }
+            .highlight { background: #F3F4F6; padding: 15px; border-radius: 8px; margin: 15px 0; }
+            .lgpd-box { background: linear-gradient(135deg, #A7C7E71A 0%, #92B4D71A 100%); padding: 20px; border-radius: 12px; border: 2px solid #A7C7E7; margin: 20px 0; }
+            .date { color: #6B7280; font-size: 14px; }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🔒 Política de Privacidade</h1>
+            <p>TeleMed Sistema - Proteção de Dados LGPD</p>
+        </div>
+        
+        <div class="container">
+            <a href="/" class="back-btn">← Voltar ao Site</a>
+            
+            <div class="date">Última atualização: 28 de julho de 2025</div>
+            
+            <div class="lgpd-box">
+                <h3>🛡️ Conformidade LGPD</h3>
+                <p>Esta Política de Privacidade está em total conformidade com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018) e garante seus direitos como titular dos dados.</p>
+            </div>
+            
+            <div class="section">
+                <h2>1. Informações que Coletamos</h2>
+                <h3>1.1 Dados Pessoais Básicos</h3>
+                <p>• Nome completo, CPF, data de nascimento</p>
+                <p>• E-mail, telefone/WhatsApp</p>
+                <p>• Endereço residencial</p>
+                
+                <h3>1.2 Dados Médicos (Pacientes)</h3>
+                <p>• Histórico médico e sintomas relatados</p>
+                <p>• Prescrições e tratamentos recebidos</p>
+                <p>• Resultados de triagem com Dr. AI</p>
+            </div>
+            
+            <div class="section">
+                <h2>2. Seus Direitos como Titular (LGPD)</h2>
+                <div class="lgpd-box">
+                    <h3>Você tem direito a:</h3>
+                    <p><strong>• Confirmação:</strong> Saber se processamos seus dados</p>
+                    <p><strong>• Acesso:</strong> Obter cópia dos seus dados pessoais</p>
+                    <p><strong>• Correção:</strong> Corrigir dados incompletos ou incorretos</p>
+                    <p><strong>• Eliminação:</strong> Excluir dados desnecessários</p>
+                    <p><strong>• Revogação:</strong> Retirar consentimento a qualquer momento</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>3. Contato e Exercício de Direitos</h2>
+                <div class="highlight">
+                    <p><strong>Encarregado de Dados (DPO):</strong></p>
+                    <p><strong>E-mail:</strong> dpo@telemed.com.br</p>
+                    <p><strong>WhatsApp:</strong> (11) 99999-7777</p>
+                    <p><strong>Horário:</strong> Segunda a sexta, 9h às 18h</p>
+                </div>
+                <p>Para exercer seus direitos ou esclarecer dúvidas sobre esta política, entre em contato conosco através dos canais acima.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
+});
+
+// SOBRE - PÁGINA INSTITUCIONAL
+app.get('/sobre', (req, res) => {
+  console.log('📄 Serving sobre (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sobre Nós - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: #FAFBFC;
+                line-height: 1.6;
+                color: #374151;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 40px 0;
+                text-align: center;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 40px 20px;
+                background: white;
+                border-radius: 20px;
+                margin-top: -20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                animation: fadeIn 0.5s ease-in;
+            }
+            .hero {
+                text-align: center;
+                margin: 40px 0;
+                padding: 30px;
+                background: linear-gradient(135deg, #A7C7E71A 0%, #92B4D71A 100%);
+                border-radius: 15px;
+            }
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 20px;
+                margin: 30px 0;
+            }
+            .stat {
+                text-align: center;
+                padding: 20px;
+                background: #F8F9FA;
+                border-radius: 12px;
+            }
+            .section { margin-bottom: 30px; }
+            .back-btn {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 10px;
+                text-decoration: none;
+                display: inline-block;
+                margin-bottom: 20px;
+                font-weight: 500;
+            }
+            h1 { color: #2D5A87; margin-bottom: 20px; }
+            h2 { color: #2D5A87; margin: 30px 0 15px 0; font-size: 20px; }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🏥 Sobre o TeleMed Sistema</h1>
+            <p>Revolucionando o acesso à saúde no Brasil</p>
+        </div>
+        
+        <div class="container">
+            <a href="/" class="back-btn">← Voltar ao Site</a>
+            
+            <div class="hero">
+                <h2>🎯 Nossa Missão</h2>
+                <p style="font-size: 18px; margin-top: 15px;">Democratizar o acesso à saúde de qualidade através da tecnologia, conectando médicos e pacientes de forma inovadora, segura e acessível.</p>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <h3 style="font-size: 24px; color: #A7C7E7;">5.000+</h3>
+                    <p>Médicos Credenciados</p>
+                </div>
+                <div class="stat">
+                    <h3 style="font-size: 24px; color: #A7C7E7;">100K+</h3>
+                    <p>Consultas Realizadas</p>
+                </div>
+                <div class="stat">
+                    <h3 style="font-size: 24px; color: #A7C7E7;">4.9⭐</h3>
+                    <p>Avaliação dos Usuários</p>
+                </div>
+                <div class="stat">
+                    <h3 style="font-size: 24px; color: #A7C7E7;">24/7</h3>
+                    <p>Disponibilidade</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🚀 Nossa História</h2>
+                <p>Fundado em 2025, o TeleMed Sistema nasceu da necessidade de tornar a medicina mais acessível e eficiente. Somos pioneiros no sistema de lances médicos, permitindo que pacientes definam quanto podem pagar por uma consulta médica de qualidade.</p>
+            </div>
+            
+            <div class="section">
+                <h2>📞 Entre em Contato</h2>
+                <div style="background: linear-gradient(135deg, #A7C7E71A 0%, #92B4D71A 100%); padding: 20px; border-radius: 12px;">
+                    <p><strong>E-mail:</strong> contato@telemed.com.br</p>
+                    <p><strong>WhatsApp:</strong> (11) 99999-0000</p>
+                    <p><strong>Endereço:</strong> São Paulo, SP - Brasil</p>
+                    <p><strong>Horário:</strong> Segunda a domingo, 24 horas</p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
+});
+
 // PATIENT-DASHBOARD - Corrigido com HTML estático
 app.get('/patient-dashboard', (req, res) => {
   console.log('📄 Serving patient-dashboard (HTML corrigido - PRIORIDADE) for:', req.path);

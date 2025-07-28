@@ -1,0 +1,520 @@
+# 🚨 PÁGINAS FALTANTES - ANÁLISE BASEADA NO PICDOC
+
+## ❌ **PÁGINAS CRÍTICAS QUE FALTAM:**
+
+### **1. /register - PÁGINA DE CADASTRO (URGENTE)**
+```
+❌ ERRO 404: Página não encontrada
+✅ NECESSÁRIO: Formulário completo de registro
+```
+
+### **2. PÁGINAS INSTITUCIONAIS (IMPORTANTES):**
+```
+❌ /sobre - Página "Sobre Nós"
+❌ /como-funciona - Explicação do processo
+❌ /termos-de-uso - Termos legais
+❌ /politica-privacidade - Política de privacidade
+❌ /precos - Tabela de preços e planos
+```
+
+### **3. PÁGINAS DE CONFIGURAÇÃO:**
+```
+❌ /perfil - Edição de dados do usuário
+❌ /configuracoes - Configurações da conta
+❌ /notificacoes - Gestão de notificações
+❌ /historico - Histórico de consultas
+```
+
+### **4. PÁGINAS DE SUPORTE:**
+```
+✅ /contato.html - JÁ EXISTE (verificar se funciona)
+✅ /suporte.html - JÁ EXISTE (verificar se funciona)  
+✅ /faq.html - JÁ EXISTE (verificar se funciona)
+❌ /ajuda - Página de ajuda detalhada
+```
+
+---
+
+## 🔥 **IMPLEMENTAÇÃO IMEDIATA - /register:**
+
+### **CÓDIGO PARA O REPLIT:**
+
+```javascript
+app.get('/register', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro - TeleMed Consultas</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .register-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                width: 100%;
+                max-width: 1000px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                box-shadow: 0 20px 40px rgba(167, 199, 231, 0.15);
+            }
+            .register-left {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .register-right {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                border-radius: 15px;
+                padding: 30px;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+                color: #2D5A87;
+                margin-bottom: 10px;
+            }
+            .subtitle {
+                color: #6B7280;
+                margin-bottom: 30px;
+            }
+            .user-type {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+            .type-option {
+                flex: 1;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                cursor: pointer;
+                text-align: center;
+                transition: all 0.3s;
+                background: white;
+            }
+            .type-option:hover,
+            .type-option.selected {
+                border-color: #A7C7E7;
+                background: #A7C7E71A;
+            }
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #2D5A87;
+            }
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+            .form-group input:focus, .form-group select:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .speciality-section {
+                display: none;
+                padding: 20px;
+                background: #F8F9FA;
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+            .speciality-section.show {
+                display: block;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 18px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                width: 100%;
+                margin-bottom: 15px;
+                transition: transform 0.3s;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+            .btn-primary:disabled {
+                background: #D1D5DB;
+                cursor: not-allowed;
+                transform: none;
+            }
+            .checkbox-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .links {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .links a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .feature {
+                background: rgba(255,255,255,0.2);
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                font-size: 14px;
+            }
+            .loading {
+                display: none;
+            }
+            @media (max-width: 768px) {
+                .register-container {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                }
+                .form-row {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="register-container">
+            <div class="register-left">
+                <div class="logo">🏥 TeleMed Consultas</div>
+                <div class="subtitle">Crie sua conta e comece a cuidar da sua saúde</div>
+                
+                <!-- Tipo de Usuário -->
+                <div class="user-type">
+                    <div class="type-option" onclick="selectUserType('paciente')">
+                        <h4>👤 Sou Paciente</h4>
+                        <p>Busco consultas médicas</p>
+                    </div>
+                    <div class="type-option" onclick="selectUserType('medico')">
+                        <h4>👨‍⚕️ Sou Médico</h4>
+                        <p>Quero atender pacientes</p>
+                    </div>
+                </div>
+                
+                <form id="registerForm">
+                    <input type="hidden" id="userType" name="userType" required>
+                    
+                    <!-- Dados Pessoais -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo:</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefone">Telefone/WhatsApp:</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cpf">CPF:</label>
+                            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nascimento">Data de Nascimento:</label>
+                            <input type="date" id="nascimento" name="nascimento" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="senha">Senha:</label>
+                            <input type="password" id="senha" name="senha" placeholder="Mínimo 8 caracteres" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção Específica para Médicos -->
+                    <div id="medicoSection" class="speciality-section">
+                        <h4 style="color: #2D5A87; margin-bottom: 15px;">📋 Informações Profissionais</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="crm">CRM:</label>
+                                <input type="text" id="crm" name="crm" placeholder="CRM/SP 123456">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="especialidade1">Especialidade Principal:</label>
+                                <select id="especialidade1" name="especialidade1">
+                                    <option value="">Selecione...</option>
+                                    <option value="clinica-geral">Clínica Geral</option>
+                                    <option value="cardiologia">Cardiologia</option>
+                                    <option value="pediatria">Pediatria</option>
+                                    <option value="dermatologia">Dermatologia</option>
+                                    <option value="psiquiatria">Psiquiatria</option>
+                                    <option value="ginecologia">Ginecologia</option>
+                                    <option value="ortopedia">Ortopedia</option>
+                                    <option value="psicoterapia">Psicoterapia</option>
+                                    <option value="nutricao">Nutrição</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="experiencia">Anos de Experiência:</label>
+                            <select id="experiencia" name="experiencia">
+                                <option value="">Selecione...</option>
+                                <option value="0-2">0-2 anos</option>
+                                <option value="3-5">3-5 anos</option>
+                                <option value="6-10">6-10 anos</option>
+                                <option value="11-20">11-20 anos</option>
+                                <option value="20+">Mais de 20 anos</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Termos e Condições -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="termos" name="termos" required>
+                        <label for="termos">Concordo com os <a href="/termos-de-uso" target="_blank">Termos de Uso</a> e <a href="/politica-privacidade" target="_blank">Política de Privacidade</a></label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter">Quero receber novidades e promoções por e-mail</label>
+                    </div>
+                    
+                    <button type="submit" id="submitBtn" class="btn-primary">
+                        <span class="normal-text">🚀 Criar Minha Conta Gratuita</span>
+                        <span class="loading">⏳ Criando conta...</span>
+                    </button>
+                </form>
+                
+                <div class="links">
+                    <a href="/login">Já tem uma conta? Faça login aqui</a>
+                </div>
+            </div>
+            
+            <div class="register-right">
+                <h2>🎯 Junte-se à Revolução</h2>
+                <p style="margin-bottom: 25px;">Faça parte do futuro da telemedicina</p>
+                
+                <div id="pacienteFeatures" class="features-list">
+                    <div class="feature">🎯 <strong>Sistema de Lances</strong><br>Defina quanto quer pagar pela consulta</div>
+                    <div class="feature">🤖 <strong>Dr. AI Gratuito</strong><br>Triagem inteligente 24/7</div>
+                    <div class="feature">💰 <strong>Economia Real</strong><br>Consultas até 50% mais baratas</div>
+                    <div class="feature">⚡ <strong>Atendimento Rápido</strong><br>Consultas em até 30 minutos</div>
+                </div>
+                
+                <div id="medicoFeatures" class="features-list" style="display: none;">
+                    <div class="feature">💰 <strong>Renda Extra</strong><br>Ganhe mais atendendo online</div>
+                    <div class="feature">🎯 <strong>Você Escolhe</strong><br>Aceite apenas os lances que quiser</div>
+                    <div class="feature">📱 <strong>Flexibilidade Total</strong><br>Atenda de onde estiver</div>
+                    <div class="feature">📊 <strong>Dashboard Completo</strong><br>Acompanhe seus ganhos em tempo real</div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            let selectedUserType = '';
+            
+            function selectUserType(type) {
+                selectedUserType = type;
+                document.getElementById('userType').value = type;
+                
+                // Atualizar visual das opções
+                document.querySelectorAll('.type-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                event.target.closest('.type-option').classList.add('selected');
+                
+                // Mostrar/ocultar seção de médico
+                const medicoSection = document.getElementById('medicoSection');
+                const pacienteFeatures = document.getElementById('pacienteFeatures');
+                const medicoFeatures = document.getElementById('medicoFeatures');
+                
+                if (type === 'medico') {
+                    medicoSection.classList.add('show');
+                    pacienteFeatures.style.display = 'none';
+                    medicoFeatures.style.display = 'block';
+                    
+                    // Tornar campos obrigatórios
+                    document.getElementById('crm').required = true;
+                    document.getElementById('especialidade1').required = true;
+                    document.getElementById('experiencia').required = true;
+                } else {
+                    medicoSection.classList.remove('show');
+                    pacienteFeatures.style.display = 'block';
+                    medicoFeatures.style.display = 'none';
+                    
+                    // Remover obrigatoriedade
+                    document.getElementById('crm').required = false;
+                    document.getElementById('especialidade1').required = false;
+                    document.getElementById('experiencia').required = false;
+                }
+            }
+            
+            // Máscaras
+            document.getElementById('telefone').addEventListener('input', function() {
+                let value = this.value.replace(/\\D/g, '');
+                if (value.length >= 11) {
+                    value = value.replace(/(\\d{2})(\\d{5})(\\d{4})/, '($1) $2-$3');
+                } else if (value.length >= 7) {
+                    value = value.replace(/(\\d{2})(\\d{4})(\\d{0,4})/, '($1) $2-$3');
+                } else if (value.length >= 3) {
+                    value = value.replace(/(\\d{2})(\\d{0,5})/, '($1) $2');
+                }
+                this.value = value;
+            });
+            
+            document.getElementById('cpf').addEventListener('input', function() {
+                let value = this.value.replace(/\\D/g, '');
+                value = value.replace(/(\\d{3})(\\d{3})(\\d{3})(\\d{2})/, '$1.$2.$3-$4');
+                this.value = value.substring(0, 14);
+            });
+            
+            // Submit do formulário
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!selectedUserType) {
+                    alert('Por favor, selecione se você é paciente ou médico!');
+                    return;
+                }
+                
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                // Validações
+                if (!data.termos) {
+                    alert('Você deve concordar com os Termos de Uso para continuar.');
+                    return;
+                }
+                
+                if (data.senha.length < 8) {
+                    alert('A senha deve ter pelo menos 8 caracteres.');
+                    return;
+                }
+                
+                // Loading state
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.querySelector('.normal-text').style.display = 'none';
+                submitBtn.querySelector('.loading').style.display = 'inline';
+                
+                // Simular criação de conta
+                setTimeout(() => {
+                    alert(\`Conta criada com sucesso!\\n\\nTipo: \${selectedUserType}\\nNome: \${data.nome}\\nE-mail: \${data.email}\\n\\nRedirecionando para login...\`);
+                    
+                    // Redirecionar para login
+                    window.location.href = '/login';
+                }, 2000);
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+```
+
+---
+
+## 📋 **OUTRAS PÁGINAS NECESSÁRIAS:**
+
+### **INSTITUCIONAL (/sobre):**
+```javascript
+app.get('/sobre', (req, res) => {
+  // Página "Sobre Nós" com história da empresa
+});
+```
+
+### **TERMOS LEGAIS (/termos-de-uso):**
+```javascript
+app.get('/termos-de-uso', (req, res) => {
+  // Termos de uso completos
+});
+```
+
+### **POLÍTICA DE PRIVACIDADE (/politica-privacidade):**
+```javascript
+app.get('/politica-privacidade', (req, res) => {
+  // Política de privacidade LGPD completa
+});
+```
+
+### **PREÇOS (/precos):**
+```javascript
+app.get('/precos', (req, res) => {
+  // Tabela de preços transparente
+});
+```
+
+---
+
+## 🚨 **ENVIE ISTO AO REPLIT AGORA:**
+
+```
+IMPLEMENTAR PÁGINA DE CADASTRO URGENTE:
+
+❌ ERRO: /register retorna 404
+✅ SOLUÇÃO: Implementar formulário completo de registro
+
+CÓDIGO: [Cole o código JavaScript completo do /register acima]
+
+FUNCIONALIDADES:
+✅ Cadastro para pacientes E médicos
+✅ Campos específicos por tipo de usuário  
+✅ Validações em tempo real
+✅ Máscaras para telefone e CPF
+✅ Design duotônico consistente
+✅ Responsivo
+✅ Loading states
+✅ Redirecionamento para login após cadastro
+
+TESTAR: /register deve funcionar perfeitamente após implementação
+```
+
+## 🎯 **PRIORIDADE DE IMPLEMENTAÇÃO:**
+
+1. **🔥 URGENTE:** `/register` (código fornecido)
+2. **📈 IMPORTANTE:** `/termos-de-uso` e `/politica-privacidade`  
+3. **💡 DESEJÁVEL:** `/sobre`, `/precos`, `/perfil`
+
+**Implementando o `/register` primeiro, já resolvemos o erro 404 e completamos o fluxo básico de usuário!**
