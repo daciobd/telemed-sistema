@@ -23,6 +23,7 @@ Preferred communication style: Simple, everyday language.
   - ✅ **Design Profissional Aprimorado**: Cards com estatísticas e badges funcionais
     - Estatísticas reais: número de médicos, preços a partir de, avaliações com estrelas
     - Badges de status: Disponível (verde), Alta Demanda (coral), Procurado (ocre)
+    - Badges posicionados sobre as imagens com z-index 10 para melhor visibilidade
     - Animações de entrada escalonadas para melhor UX
   - ✅ **8 Especialidades Completas**: Cada uma com foto, estatísticas e descrição profissional
     - Cardiologia: 12 médicos, R$ 180, 4.9⭐ (foto cardiólogo)

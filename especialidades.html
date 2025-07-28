@@ -138,14 +138,15 @@
         }
         .badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             background: #10B981;
             color: white;
-            padding: 4px 8px;
+            padding: 6px 10px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: bold;
+            z-index: 10;
         }
         .badge.urgente { background: #E9967A; }
         .badge.medio { background: #F4D9B4; color: #8B4513; }
@@ -165,8 +166,8 @@
         <div class="especialidades-grid">
             <!-- CARDIOLOGIA -->
             <div class="especialidade-card" onclick="agendarConsulta('cardiologia')">
-                <div class="badge">Disponível</div>
                 <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
                     <img src="/attached_assets/CARDIOLOGISTA_1753652987872.jpg" alt="Cardiologia" onerror="this.style.display='none'; this.parentNode.innerHTML='❤️'">
                 </div>
                 <h3>Cardiologia</h3>
@@ -192,8 +193,8 @@
             
             <!-- CLÍNICA GERAL -->
             <div class="especialidade-card" onclick="agendarConsulta('clinica-geral')">
-                <div class="badge">Disponível</div>
                 <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
                     <img src="/attached_assets/consultas online com especialistasw_1753652601464.PNG" alt="Clínica Geral" onerror="this.style.display='none'; this.parentNode.innerHTML='🩺'">
                 </div>
                 <h3>Clínica Geral</h3>
@@ -219,8 +220,8 @@
             
             <!-- PEDIATRIA -->
             <div class="especialidade-card" onclick="agendarConsulta('pediatria')">
-                <div class="badge">Disponível</div>
                 <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
                     <img src="/attached_assets/médica consulta mãe e filha_1753652627155.jpg" alt="Pediatria" onerror="this.style.display='none'; this.parentNode.innerHTML='👶'">
                 </div>
                 <h3>Pediatria</h3>
@@ -246,8 +247,8 @@
             
             <!-- DERMATOLOGIA -->
             <div class="especialidade-card" onclick="agendarConsulta('dermatologia')">
-                <div class="badge">Disponível</div>
                 <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
                     <img src="/attached_assets/DERMATOLOGIA_1753652987872.jpg" alt="Dermatologia" onerror="this.style.display='none'; this.parentNode.innerHTML='🔬'">
                 </div>
                 <h3>Dermatologia</h3>
@@ -273,8 +274,8 @@
             
             <!-- PSIQUIATRIA -->
             <div class="especialidade-card" onclick="agendarConsulta('psiquiatria')">
-                <div class="badge urgente">Alta Demanda</div>
                 <div class="especialidade-image">
+                    <div class="badge urgente">Alta Demanda</div>
                     <img src="/attached_assets/PSIQUIATRIA_1753652987872.jpg" alt="Psiquiatria" onerror="this.style.display='none'; this.parentNode.innerHTML='🧠'">
                 </div>
                 <h3>Psiquiatria</h3>
@@ -300,8 +301,8 @@
             
             <!-- GINECOLOGIA -->
             <div class="especialidade-card" onclick="agendarConsulta('ginecologia')">
-                <div class="badge">Disponível</div>
                 <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
                     <img src="/attached_assets/GINECOLOGISTA_1753653216188.jpg" alt="Ginecologia" onerror="this.style.display='none'; this.parentNode.innerHTML='👩‍⚕️'">
                 </div>
                 <h3>Ginecologia</h3>
@@ -327,8 +328,8 @@
             
             <!-- PSICOTERAPIA -->
             <div class="especialidade-card" onclick="agendarConsulta('psicoterapia')">
-                <div class="badge medio">Procurado</div>
                 <div class="especialidade-image">
+                    <div class="badge medio">Procurado</div>
                     <img src="/attached_assets/acompanhamento psicológico e nutricional_1753652601462.PNG" alt="Psicoterapia" onerror="this.style.display='none'; this.parentNode.innerHTML='💭'">
                 </div>
                 <h3>Psicoterapia</h3>
@@ -354,8 +355,8 @@
             
             <!-- NUTRIÇÃO -->
             <div class="especialidade-card" onclick="agendarConsulta('nutricao')">
-                <div class="badge">Disponível</div>
                 <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
                     <img src="/attached_assets/NUTRICIONISTA_1753653519172.jpg" alt="Nutrição" onerror="this.style.display='none'; this.parentNode.innerHTML='🥗'">
                 </div>
                 <h3>Nutrição</h3>
