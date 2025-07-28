@@ -10,8 +10,13 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 27, 2025**: SISTEMA DE FOTOS PERSONALIZADAS IMPLEMENTADO v11.5.1
-  - ✅ **Fotos Personalizadas Integradas**: especialidades.html agora usa fotos específicas fornecidas pelo usuário
+- **July 28, 2025**: FOTOS RETANGULARES GRANDES IMPLEMENTADAS v11.5.2
+  - ✅ **Imagens Retangulares**: Fotos das especialidades agora ocupam formato retangular grande
+    - Tamanho aumentado: 100% largura x 150px altura (antes era 80x80 circular)
+    - Border-radius suavizado: 16px para visual moderno retangular
+    - Cards com altura mínima: 380px para acomodar imagens maiores
+    - Layout flexível: display flex column para melhor organização
+  - ✅ **Fotos Personalizadas Mantidas**: especialidades.html com fotos específicas do usuário
     - 8 especialidades com fotos médicas personalizadas de alta qualidade
     - Mapeamento específico: Psicoterapia, Clínica Médica, Pediatria, Psiquiatria, Dermatologia, Cardiologia, Ginecologia, Nutrição
     - Sistema de fallback inteligente: se foto não carregar, mostra emoji correspondente
