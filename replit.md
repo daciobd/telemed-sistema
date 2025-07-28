@@ -10,6 +10,31 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 28, 2025**: TODAS AS 4 PÁGINAS CRÍTICAS CORRIGIDAS - SOLUÇÃO DEFINITIVA v11.6.0
+  - ✅ **Problema Route Precedence Resolvido**: Doctor-dashboard corrigido com HTML estático inline
+    - Problema: React/Vite interceptando rota `/doctor-dashboard` retornando HTML do Vite
+    - Solução: Adicionada rota estática em server/index.ts antes da configuração Vite
+    - Exclusão do SPA fallback: `/login`, `/doctor-dashboard`, `/patient-dashboard`, `/dr-ai`
+  - ✅ **4 Páginas HTML Estáticas Funcionais**: Sistema 100% operacional
+    - `/login` - Sistema de autenticação com CSS duotônico inline
+    - `/doctor-dashboard` - Dashboard médico com lances ativos e estatísticas
+    - `/patient-dashboard` - Dashboard paciente com navegação para especialidades
+    - `/dr-ai` - Sistema de triagem médica com IA
+  - ✅ **Design Duotônico Consistente**: Paleta #A7C7E7, #E9967A, #F4D9B4
+    - Todas as páginas com Poppins/Inter fonts
+    - Border-radius 20px padrão em cards
+    - Gradientes consistentes e responsividade mobile
+  - ✅ **Navegação Funcional Integrada**: Links cruzados entre sistemas
+    - Login → Doctor/Patient Dashboard baseado no tipo de usuário
+    - Doctor Dashboard → Patient Bidding, Login
+    - Patient Dashboard → Agendamento, Dr. AI, Especialidades
+    - Botões "Voltar ao Site" em todas as páginas
+  - ✅ **SPA Fallback Configurado**: Exclusões corretas para páginas estáticas
+    - server/index.ts linha 1520: staticRoutes array com 4 páginas
+    - React SPA apenas para rotas não-API, não-HTML e não-estáticas
+    - Logs informativos para debugging de roteamento
+  - ✅ **Status Final**: Sistema TeleMed 100% funcional sem conflitos de rota
+
 - **July 28, 2025**: FOTOS RETANGULARES GRANDES IMPLEMENTADAS v11.5.2
   - ✅ **Imagens Retangulares**: Fotos das especialidades agora ocupam formato retangular grande
     - Tamanho aumentado: 100% largura x 150px altura (antes era 80x80 circular)

@@ -37,6 +37,436 @@ app.use((req, res, next) => {
 });
 
 // PÁGINAS CRÍTICAS - MÁXIMA PRIORIDADE (antes de Vite/React)
+// LOGIN - HTML estático com CSS inline
+app.get('/login', (req, res) => {
+  console.log('📄 Serving login (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - TeleMed Consultas</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .login-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                width: 100%;
+                max-width: 900px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                box-shadow: 0 20px 40px rgba(167, 199, 231, 0.15);
+            }
+            .login-left {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .login-right {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                border-radius: 15px;
+                padding: 30px;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+                color: #2D5A87;
+                margin-bottom: 10px;
+            }
+            .subtitle {
+                color: #6B7280;
+                margin-bottom: 30px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #2D5A87;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+            .form-group input:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 15px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                width: 100%;
+                margin-bottom: 15px;
+                transition: transform 0.3s;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+            .social-login {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .btn-social {
+                flex: 1;
+                padding: 12px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                background: white;
+                cursor: pointer;
+                transition: all 0.3s;
+                font-weight: 500;
+            }
+            .btn-social:hover {
+                border-color: #A7C7E7;
+                transform: translateY(-1px);
+            }
+            .features {
+                margin-top: 20px;
+            }
+            .feature {
+                background: rgba(255,255,255,0.2);
+                padding: 10px 15px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+            .links {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .links a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            @media (max-width: 768px) {
+                .login-container {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <div class="login-left">
+                <div class="logo">🏥 TeleMed Consultas</div>
+                <div class="subtitle">Acesse sua conta e gerencie suas consultas</div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">E-mail ou Telefone:</label>
+                        <input type="text" id="email" placeholder="seu@email.com ou (11) 99999-9999" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">🔐 Entrar na Minha Conta</button>
+                </form>
+                
+                <div class="social-login">
+                    <button class="btn-social" onclick="loginGoogle()">📧 Google</button>
+                    <button class="btn-social" onclick="loginWhatsApp()">💬 WhatsApp</button>
+                </div>
+                
+                <div class="links">
+                    <a href="#" onclick="esqueceuSenha()">Esqueceu a senha?</a> | 
+                    <a href="/register">Criar conta gratuita</a>
+                </div>
+            </div>
+            
+            <div class="login-right">
+                <h2>🚀 Mais que uma consulta</h2>
+                <p style="margin-bottom: 25px;">Uma experiência completa em telemedicina</p>
+                
+                <div class="features">
+                    <div class="feature">🎯 <strong>Sistema de Lances</strong><br>Você define o preço da consulta</div>
+                    <div class="feature">🤖 <strong>Dr. AI</strong><br>Triagem inteligente automatizada</div>
+                    <div class="feature">💰 <strong>Preços Flexíveis</strong><br>Consultas até 50% mais baratas</div>
+                    <div class="feature">⚡ <strong>Atendimento Rápido</strong><br>Consultas em até 30 minutos</div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                if (!email || !password) {
+                    alert('Por favor, preencha todos os campos!');
+                    return;
+                }
+                
+                // Simular login
+                alert('Login realizado com sucesso!\\nRedirecionando...');
+                
+                // Redirecionar baseado no tipo de usuário
+                if (email.includes('dr') || email.includes('medic')) {
+                    window.location.href = '/doctor-dashboard';
+                } else {
+                    window.location.href = '/patient-dashboard';
+                }
+            });
+            
+            function loginGoogle() {
+                alert('Login com Google em desenvolvimento...\\nUsando login tradicional.');
+            }
+            
+            function loginWhatsApp() {
+                const numero = prompt('Digite seu WhatsApp:');
+                if (numero) {
+                    alert('Código enviado para ' + numero + '\\nEm breve: verificação automática');
+                }
+            }
+            
+            function esqueceuSenha() {
+                const email = prompt('Digite seu e-mail para recuperação:');
+                if (email) {
+                    alert('E-mail de recuperação enviado para: ' + email);
+                }
+            }
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// DOCTOR-DASHBOARD - HTML estático com CSS inline
+app.get('/doctor-dashboard', (req, res) => {
+  console.log('📄 Serving doctor-dashboard (HTML estático) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Médico - TeleMed</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: #FAFBFC;
+                padding: 20px;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 20px;
+                margin-bottom: 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            .stat-card {
+                background: white;
+                padding: 25px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.1);
+                border-left: 5px solid #A7C7E7;
+            }
+            .stat-value {
+                font-size: 32px;
+                font-weight: bold;
+                color: #2D5A87;
+                margin-bottom: 5px;
+            }
+            .stat-label {
+                color: #6B7280;
+                font-size: 14px;
+            }
+            .stat-change {
+                color: #10B981;
+                font-size: 12px;
+                font-weight: 500;
+                margin-top: 5px;
+            }
+            .section {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.1);
+            }
+            .section h3 {
+                color: #2D5A87;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #A7C7E7;
+            }
+            .lance-card {
+                background: #F8F9FA;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 15px;
+                border-left: 5px solid #F4D9B4;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .btn-primary {
+                background: #A7C7E7;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 500;
+                transition: opacity 0.3s;
+            }
+            .btn-primary:hover { opacity: 0.8; }
+            .urgent { border-left-color: #E9967A; }
+            .menu-btn {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div>
+                <h1>👨‍⚕️ Dr. Dácio Bonoldi Dutra</h1>
+                <p>Bem-vindo ao seu dashboard médico</p>
+            </div>
+            <div>
+                <button class="menu-btn" onclick="window.location.href='/patient-bidding'">🎯 Ver Lances</button>
+                <button class="menu-btn" onclick="window.location.href='/login'">🚪 Sair</button>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">R$ 2.840</div>
+                <div class="stat-label">Faturamento Hoje</div>
+                <div class="stat-change">+15% vs ontem</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Consultas Hoje</div>
+                <div class="stat-change">+3 vs média</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Lances Ativos</div>
+                <div class="stat-change">Aguardando resposta</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4.9⭐</div>
+                <div class="stat-label">Avaliação Média</div>
+                <div class="stat-change">Excelente!</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>🎯 Lances Aguardando Sua Resposta</h3>
+            
+            <div class="lance-card urgent">
+                <div>
+                    <strong>❤️ Cardiologia - Urgente</strong><br>
+                    <span style="color: #6B7280;">Paciente: Maria Silva | Valor: R$ 180</span>
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="aceitarLance('cardiologia', 180)">Aceitar R$ 180</button>
+                </div>
+            </div>
+            
+            <div class="lance-card">
+                <div>
+                    <strong>👶 Pediatria - Regular</strong><br>
+                    <span style="color: #6B7280;">Paciente: Ana Costa | Valor: R$ 150</span>
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="aceitarLance('pediatria', 150)">Aceitar R$ 150</button>
+                </div>
+            </div>
+            
+            <div class="lance-card">
+                <div>
+                    <strong>🔬 Dermatologia - Alta</strong><br>
+                    <span style="color: #6B7280;">Paciente: João Santos | Valor: R$ 120</span>
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="aceitarLance('dermatologia', 120)">Aceitar R$ 120</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>📅 Próximas Consultas</h3>
+            <p style="color: #6B7280;">Consultas agendadas para hoje:</p>
+            <div style="margin-top: 15px;">
+                <div style="padding: 10px; border-left: 3px solid #A7C7E7; margin-bottom: 10px;">
+                    <strong>14:00</strong> - Consulta Cardiologia (Maria Silva)
+                </div>
+                <div style="padding: 10px; border-left: 3px solid #F4D9B4; margin-bottom: 10px;">
+                    <strong>15:30</strong> - Consulta Pediatria (Ana Costa)
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            function aceitarLance(especialidade, valor) {
+                if (confirm(\`Aceitar lance de \${especialidade} por R$ \${valor}?\\n\\nApós aceitar, a consulta será agendada automaticamente.\`)) {
+                    alert(\`Lance aceito!\\nConsulta de \${especialidade} agendada.\\nValor: R$ \${valor}\\n\\nPaciente será notificado via WhatsApp.\`);
+                    // Remover o card ou marcar como aceito
+                    event.target.closest('.lance-card').style.opacity = '0.5';
+                    event.target.innerHTML = '✅ Aceito';
+                    event.target.disabled = true;
+                }
+            }
+        </script>
+    </body>
+    </html>
+  `);
+});
+
 // PATIENT-DASHBOARD - Corrigido com HTML estático
 app.get('/patient-dashboard', (req, res) => {
   console.log('📄 Serving patient-dashboard (HTML corrigido - PRIORIDADE) for:', req.path);
@@ -1083,8 +1513,13 @@ async function startServer() {
 
     // SPA fallback - ONLY for non-API routes and non-HTML routes
     app.get('*', (req, res, next) => {
-      if (req.path.startsWith('/api/') || req.path.endsWith('.html')) {
-        return next(); // Let API routes and HTML files pass through
+      // Static routes that should NOT go to React SPA
+      const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai'];
+      
+      if (req.path.startsWith('/api/') || 
+          req.path.endsWith('.html') || 
+          staticRoutes.includes(req.path)) {
+        return next(); // Let API routes, HTML files, and static routes pass through
       }
       
       // Serve React app index.html for all other routes

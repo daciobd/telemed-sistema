@@ -1,0 +1,925 @@
+# 🚀 TAREFAS IMEDIATAS PARA O REPLIT
+
+## ⚡ **PRIORIDADE CRÍTICA - FAZER AGORA:**
+
+### **1. CORRIGIR TODAS AS PÁGINAS CSS/JS (30 min)**
+
+```bash
+# TESTE SISTEMÁTICO - Execute isso primeiro:
+curl -s "http://localhost:5000/login" | grep -q "<style>" || echo "❌ /login precisa correção"
+curl -s "http://localhost:5000/doctor-dashboard" | grep -q "<style>" || echo "❌ /doctor-dashboard precisa correção"  
+curl -s "http://localhost:5000/patient-dashboard" | grep -q "<style>" || echo "❌ /patient-dashboard precisa correção"
+curl -s "http://localhost:5000/dr-ai" | grep -q "<style>" || echo "❌ /dr-ai precisa correção"
+```
+
+**PARA CADA PÁGINA QUEBRADA, SUBSTITUA POR HTML ESTÁTICO:**
+
+### **2. LOGIN SUPERIOR - IMPLEMENTAR IMEDIATAMENTE:**
+
+```javascript
+app.get('/login', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - TeleMed Consultas</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .login-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                width: 100%;
+                max-width: 900px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                box-shadow: 0 20px 40px rgba(167, 199, 231, 0.15);
+            }
+            .login-left {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .login-right {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                border-radius: 15px;
+                padding: 30px;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+            .logo {
+                font-size: 24px;
+                font-weight: bold;
+                color: #2D5A87;
+                margin-bottom: 10px;
+            }
+            .subtitle {
+                color: #6B7280;
+                margin-bottom: 30px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #2D5A87;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+            .form-group input:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border: none;
+                padding: 15px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 16px;
+                width: 100%;
+                margin-bottom: 15px;
+                transition: transform 0.3s;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+            }
+            .social-login {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .btn-social {
+                flex: 1;
+                padding: 12px;
+                border: 2px solid #E5E7EB;
+                border-radius: 12px;
+                background: white;
+                cursor: pointer;
+                transition: all 0.3s;
+                font-weight: 500;
+            }
+            .btn-social:hover {
+                border-color: #A7C7E7;
+                transform: translateY(-1px);
+            }
+            .features {
+                margin-top: 20px;
+            }
+            .feature {
+                background: rgba(255,255,255,0.2);
+                padding: 10px 15px;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                font-size: 14px;
+            }
+            .links {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .links a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            @media (max-width: 768px) {
+                .login-container {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <div class="login-left">
+                <div class="logo">🏥 TeleMed Consultas</div>
+                <div class="subtitle">Acesse sua conta e gerencie suas consultas</div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">E-mail ou Telefone:</label>
+                        <input type="text" id="email" placeholder="seu@email.com ou (11) 99999-9999" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">🔐 Entrar na Minha Conta</button>
+                </form>
+                
+                <div class="social-login">
+                    <button class="btn-social" onclick="loginGoogle()">📧 Google</button>
+                    <button class="btn-social" onclick="loginWhatsApp()">💬 WhatsApp</button>
+                </div>
+                
+                <div class="links">
+                    <a href="#" onclick="esqueceuSenha()">Esqueceu a senha?</a> | 
+                    <a href="/register">Criar conta gratuita</a>
+                </div>
+            </div>
+            
+            <div class="login-right">
+                <h2>🚀 Mais que uma consulta</h2>
+                <p style="margin-bottom: 25px;">Uma experiência completa em telemedicina</p>
+                
+                <div class="features">
+                    <div class="feature">🎯 <strong>Sistema de Lances</strong><br>Você define o preço da consulta</div>
+                    <div class="feature">🤖 <strong>Dr. AI</strong><br>Triagem inteligente automatizada</div>
+                    <div class="feature">💰 <strong>Preços Flexíveis</strong><br>Consultas até 50% mais baratas</div>
+                    <div class="feature">⚡ <strong>Atendimento Rápido</strong><br>Consultas em até 30 minutos</div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                if (!email || !password) {
+                    alert('Por favor, preencha todos os campos!');
+                    return;
+                }
+                
+                // Simular login
+                alert('Login realizado com sucesso!\\nRedirecionando...');
+                
+                // Redirecionar baseado no tipo de usuário
+                if (email.includes('dr') || email.includes('medic')) {
+                    window.location.href = '/doctor-dashboard';
+                } else {
+                    window.location.href = '/patient-dashboard';
+                }
+            });
+            
+            function loginGoogle() {
+                alert('Login com Google em desenvolvimento...\\nUsando login tradicional.');
+            }
+            
+            function loginWhatsApp() {
+                const numero = prompt('Digite seu WhatsApp:');
+                if (numero) {
+                    alert('Código enviado para ' + numero + '\\nEm breve: verificação automática');
+                }
+            }
+            
+            function esqueceuSenha() {
+                const email = prompt('Digite seu e-mail para recuperação:');
+                if (email) {
+                    alert('E-mail de recuperação enviado para: ' + email);
+                }
+            }
+        </script>
+    </body>
+    </html>
+  `);
+});
+```
+
+### **3. DOCTOR DASHBOARD SUPERIOR:**
+
+```javascript
+app.get('/doctor-dashboard', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Médico - TeleMed</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: #FAFBFC;
+                padding: 20px;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 20px;
+                margin-bottom: 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            .stat-card {
+                background: white;
+                padding: 25px;
+                border-radius: 15px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.1);
+                border-left: 5px solid #A7C7E7;
+            }
+            .stat-value {
+                font-size: 32px;
+                font-weight: bold;
+                color: #2D5A87;
+                margin-bottom: 5px;
+            }
+            .stat-label {
+                color: #6B7280;
+                font-size: 14px;
+            }
+            .stat-change {
+                color: #10B981;
+                font-size: 12px;
+                font-weight: 500;
+                margin-top: 5px;
+            }
+            .section {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.1);
+            }
+            .section h3 {
+                color: #2D5A87;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #A7C7E7;
+            }
+            .lance-card {
+                background: #F8F9FA;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 15px;
+                border-left: 5px solid #F4D9B4;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .btn-primary {
+                background: #A7C7E7;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 500;
+                transition: opacity 0.3s;
+            }
+            .btn-primary:hover { opacity: 0.8; }
+            .urgent { border-left-color: #E9967A; }
+            .menu-btn {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div>
+                <h1>👨‍⚕️ Dr. Dácio Bonoldi Dutra</h1>
+                <p>Bem-vindo ao seu dashboard médico</p>
+            </div>
+            <div>
+                <button class="menu-btn" onclick="window.location.href='/patient-bidding'">🎯 Ver Lances</button>
+                <button class="menu-btn" onclick="window.location.href='/login'">🚪 Sair</button>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">R$ 2.840</div>
+                <div class="stat-label">Faturamento Hoje</div>
+                <div class="stat-change">+15% vs ontem</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Consultas Hoje</div>
+                <div class="stat-change">+3 vs média</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Lances Ativos</div>
+                <div class="stat-change">Aguardando resposta</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">4.9⭐</div>
+                <div class="stat-label">Avaliação Média</div>
+                <div class="stat-change">Excelente!</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>🎯 Lances Aguardando Sua Resposta</h3>
+            
+            <div class="lance-card urgent">
+                <div>
+                    <strong>❤️ Cardiologia - Urgente</strong><br>
+                    <span style="color: #6B7280;">Paciente: Maria Silva | Valor: R$ 180</span>
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="aceitarLance('cardiologia', 180)">Aceitar R$ 180</button>
+                </div>
+            </div>
+            
+            <div class="lance-card">
+                <div>
+                    <strong>👶 Pediatria - Regular</strong><br>
+                    <span style="color: #6B7280;">Paciente: Ana Costa | Valor: R$ 150</span>
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="aceitarLance('pediatria', 150)">Aceitar R$ 150</button>
+                </div>
+            </div>
+            
+            <div class="lance-card">
+                <div>
+                    <strong>🔬 Dermatologia - Alta</strong><br>
+                    <span style="color: #6B7280;">Paciente: João Santos | Valor: R$ 120</span>
+                </div>
+                <div>
+                    <button class="btn-primary" onclick="aceitarLance('dermatologia', 120)">Aceitar R$ 120</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>📅 Próximas Consultas</h3>
+            <p style="color: #6B7280;">Consultas agendadas para hoje:</p>
+            <div style="margin-top: 15px;">
+                <div style="padding: 10px; border-left: 3px solid #A7C7E7; margin-bottom: 10px;">
+                    <strong>14:00</strong> - Consulta Cardiologia (Maria Silva)
+                </div>
+                <div style="padding: 10px; border-left: 3px solid #F4D9B4; margin-bottom: 10px;">
+                    <strong>15:30</strong> - Consulta Pediatria (Ana Costa)
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            function aceitarLance(especialidade, valor) {
+                if (confirm(\`Aceitar lance de \${especialidade} por R$ \${valor}?\\n\\nApós aceitar, a consulta será agendada automaticamente.\`)) {
+                    alert(\`Lance aceito!\\nConsulta de \${especialidade} agendada.\\nValor: R$ \${valor}\\n\\nPaciente será notificado via WhatsApp.\`);
+                    // Remover o card ou marcar como aceito
+                    event.target.closest('.lance-card').style.opacity = '0.5';
+                    event.target.innerHTML = '✅ Aceito';
+                    event.target.disabled = true;
+                }
+            }
+        </script>
+    </body>
+    </html>
+  `);
+});
+```
+
+### **4. PATIENT DASHBOARD:**
+
+```javascript
+app.get('/patient-dashboard', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Minha Área - TeleMed</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: #FAFBFC;
+                padding: 20px;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 30px;
+                border-radius: 20px;
+                margin-bottom: 30px;
+                text-align: center;
+            }
+            .quick-actions {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            .action-card {
+                background: white;
+                padding: 25px;
+                border-radius: 15px;
+                text-align: center;
+                cursor: pointer;
+                transition: transform 0.3s;
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.1);
+                border-left: 5px solid #A7C7E7;
+            }
+            .action-card:hover {
+                transform: translateY(-5px);
+            }
+            .action-icon {
+                font-size: 48px;
+                margin-bottom: 15px;
+            }
+            .section {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(167, 199, 231, 0.1);
+            }
+            .consulta-card {
+                background: #F8F9FA;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 15px;
+                border-left: 5px solid #A7C7E7;
+            }
+            .status-badge {
+                display: inline-block;
+                padding: 4px 12px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .status-confirmado { background: #A7C7E7; color: white; }
+            .status-pendente { background: #F4D9B4; color: #8B4513; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>👤 Minha Área - TeleMed</h1>
+            <p>Gerencie suas consultas e cuidados de saúde</p>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="action-card" onclick="window.location.href='/agendamento'">
+                <div class="action-icon">📅</div>
+                <h3>Nova Consulta</h3>
+                <p>Agendar com especialista</p>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='/patient-bidding'">
+                <div class="action-icon">🎯</div>
+                <h3>Sistema de Lances</h3>
+                <p>Você define o preço</p>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='/dr-ai'">
+                <div class="action-icon">🤖</div>
+                <h3>Dr. AI</h3>
+                <p>Triagem inteligente</p>
+            </div>
+            
+            <div class="action-card" onclick="window.location.href='/especialidades.html'">
+                <div class="action-icon">🏥</div>
+                <h3>Especialidades</h3>
+                <p>Ver todos os médicos</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 style="color: #2D5A87; margin-bottom: 20px;">📋 Minhas Consultas</h3>
+            
+            <div class="consulta-card">
+                <div class="status-badge status-confirmado">✅ Confirmada</div>
+                <h4>❤️ Cardiologia - Dr. João Silva</h4>
+                <p><strong>Data:</strong> Hoje, 14:00</p>
+                <p><strong>Valor:</strong> R$ 180</p>
+                <div style="margin-top: 15px;">
+                    <button style="background: #A7C7E7; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                        📹 Iniciar Videochamada
+                    </button>
+                </div>
+            </div>
+            
+            <div class="consulta-card">
+                <div class="status-badge status-pendente">⏳ Aguardando</div>
+                <h4>👶 Pediatria - Aguardando Médico</h4>
+                <p><strong>Lance:</strong> R$ 150</p>
+                <p><strong>Status:</strong> 3 médicos interessados</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 style="color: #2D5A87; margin-bottom: 20px;">📊 Histórico de Saúde</h3>
+            <p>Em breve: Histórico completo de consultas e exames</p>
+        </div>
+    </body>
+    </html>
+  `);
+});
+```
+
+### **5. DR. AI PÁGINA:**
+
+```javascript
+app.get('/dr-ai', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dr. AI - Triagem Inteligente</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: #FAFBFC;
+                padding: 20px;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(167, 199, 231, 0.1);
+            }
+            .header {
+                text-align: center;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 20px;
+                margin-bottom: 30px;
+            }
+            .chat-container {
+                max-height: 400px;
+                overflow-y: auto;
+                border: 2px solid #E5E7EB;
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 20px;
+                background: #F8F9FA;
+            }
+            .message {
+                margin-bottom: 15px;
+                padding: 12px 18px;
+                border-radius: 18px;
+                max-width: 80%;
+            }
+            .message.ai {
+                background: #A7C7E7;
+                color: white;
+                margin-right: auto;
+            }
+            .message.user {
+                background: #F4D9B4;
+                color: #8B4513;
+                margin-left: auto;
+                text-align: right;
+            }
+            .input-container {
+                display: flex;
+                gap: 10px;
+            }
+            .input-container input {
+                flex: 1;
+                padding: 15px;
+                border: 2px solid #E5E7EB;
+                border-radius: 25px;
+                font-size: 16px;
+            }
+            .input-container button {
+                background: #A7C7E7;
+                color: white;
+                border: none;
+                padding: 15px 25px;
+                border-radius: 25px;
+                cursor: pointer;
+                font-weight: 600;
+            }
+            .quick-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .quick-btn {
+                background: white;
+                border: 2px solid #A7C7E7;
+                color: #A7C7E7;
+                padding: 8px 15px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: all 0.3s;
+            }
+            .quick-btn:hover {
+                background: #A7C7E7;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🤖 Dr. AI - Triagem Inteligente</h1>
+                <p>Conte seus sintomas e eu te ajudo a encontrar o especialista certo</p>
+            </div>
+            
+            <div class="chat-container" id="chatContainer">
+                <div class="message ai">
+                    <strong>🤖 Dr. AI:</strong> Olá! Sou o Dr. AI, sua inteligência artificial médica. Como posso ajudá-lo hoje? Descreva seus sintomas ou desconfortos.
+                </div>
+            </div>
+            
+            <div class="quick-buttons">
+                <button class="quick-btn" onclick="enviarRapido('Dor de cabeça frequente')">🧠 Dor de cabeça</button>
+                <button class="quick-btn" onclick="enviarRapido('Dor no peito')">❤️ Dor no peito</button>
+                <button class="quick-btn" onclick="enviarRapido('Problemas de pele')">🔬 Problemas de pele</button>
+                <button class="quick-btn" onclick="enviarRapido('Ansiedade e estresse')">😰 Ansiedade</button>
+                <button class="quick-btn" onclick="enviarRapido('Dor nas costas')">🦴 Dor nas costas</button>
+            </div>
+            
+            <div class="input-container">
+                <input type="text" id="userInput" placeholder="Descreva seus sintomas..." onkeypress="if(event.key==='Enter') enviarMensagem()">
+                <button onclick="enviarMensagem()">📤 Enviar</button>
+            </div>
+        </div>
+        
+        <script>
+            const responses = {
+                'dor de cabeça': {
+                    message: '🧠 Baseado nos seus sintomas de dor de cabeça, recomendo: **Neurologista** ou **Clínico Geral**. Pode ser tensão, enxaqueca ou outros fatores.',
+                    speciality: 'neurologia'
+                },
+                'dor no peito': {
+                    message: '❤️ Dor no peito requer atenção! Recomendo **Cardiologista** urgente. Pode ser cardíaco, muscular ou respiratório.',
+                    speciality: 'cardiologia'
+                },
+                'pele': {
+                    message: '🔬 Para problemas de pele, recomendo **Dermatologista**. Podem ser alergias, infecções ou condições dermatológicas.',
+                    speciality: 'dermatologia'
+                },
+                'ansiedade': {
+                    message: '😌 Para ansiedade e estresse, recomendo **Psiquiatra** ou **Psicólogo**. Cuidar da saúde mental é fundamental!',
+                    speciality: 'psiquiatria'
+                },
+                'costas': {
+                    message: '🦴 Dor nas costas pode precisar de **Ortopedista** ou **Fisioterapeuta**. Pode ser postura, lesão ou problema estrutural.',
+                    speciality: 'ortopedia'
+                },
+                'default': {
+                    message: '🤔 Entendi seus sintomas. Com base no que você descreveu, recomendo uma **Consulta com Clínico Geral** para avaliação inicial.',
+                    speciality: 'clinica-geral'
+                }
+            };
+            
+            function enviarMensagem() {
+                const input = document.getElementById('userInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+                
+                // Adicionar mensagem do usuário
+                adicionarMensagem(message, 'user');
+                input.value = '';
+                
+                // Simular digitação da IA
+                setTimeout(() => {
+                    const response = analisarSintomas(message);
+                    adicionarMensagem(response.message, 'ai');
+                    
+                    // Oferecer agendamento
+                    setTimeout(() => {
+                        adicionarMensagem(\`💡 Quer agendar uma consulta de **\${response.speciality}**? Posso te redirecionar!\`, 'ai');
+                        
+                        setTimeout(() => {
+                            const agendarBtn = document.createElement('button');
+                            agendarBtn.innerHTML = '📅 Agendar Consulta';
+                            agendarBtn.style.cssText = 'background: #A7C7E7; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 10px;';
+                            agendarBtn.onclick = () => {
+                                window.location.href = \`/agendamento?especialidade=\${response.speciality}\`;
+                            };
+                            
+                            const chatContainer = document.getElementById('chatContainer');
+                            const lastMessage = chatContainer.lastElementChild;
+                            lastMessage.appendChild(agendarBtn);
+                        }, 1000);
+                    }, 1500);
+                }, 1000);
+            }
+            
+            function enviarRapido(sintoma) {
+                document.getElementById('userInput').value = sintoma;
+                enviarMensagem();
+            }
+            
+            function adicionarMensagem(text, type) {
+                const chatContainer = document.getElementById('chatContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = \`message \${type}\`;
+                
+                if (type === 'ai') {
+                    messageDiv.innerHTML = \`<strong>🤖 Dr. AI:</strong> \${text}\`;
+                } else {
+                    messageDiv.innerHTML = \`<strong>👤 Você:</strong> \${text}\`;
+                }
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            function analisarSintomas(sintomas) {
+                const texto = sintomas.toLowerCase();
+                
+                for (const [key, response] of Object.entries(responses)) {
+                    if (key !== 'default' && texto.includes(key)) {
+                        return response;
+                    }
+                }
+                
+                return responses.default;
+            }
+        </script>
+    </body>
+    </html>
+  `);
+});
+```
+
+---
+
+## ⚡ **CHECKLIST DE EXECUÇÃO IMEDIATA:**
+
+### **📋 FASE 1 - PRÓXIMAS 30 MINUTOS:**
+
+```bash
+# 1. TESTAR TODAS AS PÁGINAS
+for page in login doctor-dashboard patient-dashboard dr-ai; do
+    echo "Testando /$page..."
+    curl -s "http://localhost:5000/$page" | grep -q "<style>" || echo "❌ $page precisa correção"
+done
+
+# 2. IMPLEMENTAR AS 4 PÁGINAS PRINCIPAIS
+# - /login (código fornecido acima)
+# - /doctor-dashboard (código fornecido acima)  
+# - /patient-dashboard (código fornecido acima)
+# - /dr-ai (código fornecido acima)
+
+# 3. TESTAR LINKS ENTRE PÁGINAS
+echo "✅ Testando navegação..."
+```
+
+### **📋 FASE 2 - PRÓXIMA 1 HORA:**
+
+```bash
+# 4. CORRIGIR PÁGINAS SECUNDÁRIAS
+# - /especialidades.html (usar código com fotos que já enviamos)
+# - /contato.html
+# - /suporte.html  
+# - /faq.html
+
+# 5. IMPLEMENTAR PÁGINA DE REGISTRO
+app.get('/register', (req, res) => {
+  // Formulário de cadastro similar ao login
+});
+```
+
+### **📋 FASE 3 - PRÓXIMAS 2 HORAS:**
+
+```bash
+# 6. MELHORAR SISTEMA DE LANCES
+# - Adicionar mais funcionalidades ao /patient-bidding
+# - Integração com dashboards
+
+# 7. INTEGRAÇÃO WHATSAPP
+# - Botões funcionais
+# - Links diretos
+
+# 8. TESTE COMPLETO DO FLUXO
+# Landing Page → Agendamento → Login → Dashboard
+```
+
+---
+
+## 🎯 **RESULTADO ESPERADO EM 2 HORAS:**
+
+### **✅ PÁGINAS 100% FUNCIONAIS:**
+- Login profissional (superior ao PicDoc)
+- Dashboard médico com KPIs  
+- Dashboard paciente com ações rápidas
+- Dr. AI com chat inteligente
+- Especialidades com fotos
+- Sistema de lances operacional
+
+### **✅ NAVEGAÇÃO COMPLETA:**
+- Todos os links funcionando
+- Redirecionamentos corretos
+- Fluxo de usuário perfeito
+
+### **✅ DESIGN SUPERIOR:**
+- Visual duotônico consistente
+- Animações e interações
+- Responsivo em todos os dispositivos
+
+---
+
+## 📞 **COPY-PASTE PARA O REPLIT:**
+
+```
+TAREFAS IMEDIATAS - EXECUTAR NAS PRÓXIMAS 2 HORAS:
+
+1. TESTAR PÁGINAS:
+for page in login doctor-dashboard patient-dashboard dr-ai; do curl -s "http://localhost:5000/$page" | grep -q "<style>" || echo "❌ $page precisa correção"; done
+
+2. IMPLEMENTAR 4 PÁGINAS PRINCIPAIS:
+- Substitua /login pelo código fornecido
+- Substitua /doctor-dashboard pelo código fornecido  
+- Substitua /patient-dashboard pelo código fornecido
+- Substitua /dr-ai pelo código fornecido
+
+3. TESTAR NAVEGAÇÃO:
+- Login → Dashboard
+- Dashboard → Lances  
+- Especialidades → Agendamento
+
+4. CONFIRMAR FUNCIONAMENTO:
+- Todos os botões clicáveis
+- Redirecionamentos corretos
+- CSS/JS carregando
+
+PRIORIDADE: Páginas principais primeiro, depois detalhes!
+```
+
+**🚀 Com essas implementações, teremos um sistema SUPERIOR ao PicDoc em 2 horas!**
