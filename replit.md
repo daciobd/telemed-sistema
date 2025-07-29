@@ -10,6 +10,28 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 29, 2025**: PÁGINAS CRÍTICAS LOGIN E AGENDAMENTO CORRIGIDAS - SISTEMA COMPLETO v12.3.0
+  - ✅ **Problema 404 Pages Resolvido**: Adicionadas rotas `/login` e `/agendamento` no server/index.ts
+  - ✅ **Sistema de Login Completo**: Interface profissional com autenticação de demonstração
+    - Contas demo: paciente@demo.com / medico@demo.com (senha: 123456)
+    - Redirecionamento inteligente baseado no tipo de usuário
+    - Design duotônico consistente com tema TeleMed (#A7C7E7, #F4D9B4)
+    - Toggle paciente/médico com validação completa
+  - ✅ **Sistema de Agendamento Funcional**: Formulário completo para consultas
+    - Suporte a especialidades via parâmetro URL (?especialidade=cardiologia)
+    - Formulário com dados pessoais, sintomas e especialidade médica
+    - Máscaras automáticas para telefone e validação de campos
+    - Redirecionamento para sistema de lances após agendamento
+  - ✅ **Todas as Páginas Críticas Operacionais**: Teste HTTP 200 confirmado
+    - `/login` - Sistema de autenticação funcional
+    - `/agendamento` - Sistema de agendamento funcional  
+    - `/doctor-dashboard` - Dashboard médico funcional
+    - Todas as páginas institucionais (Sobre, Política, Termos, FAQ) funcionais
+  - ✅ **Correção de Syntax Errors**: Servidor reiniciado com sucesso
+    - Template literals corrigidas nas linhas de log
+    - Fechamento correto da função app.listen()
+    - Logs informativos confirmam funcionamento em porta 5000
+
 - **July 29, 2025**: PROBLEMA DOCTOR-DASHBOARD CORRIGIDO - SISTEMA COMPLETO v12.2.0
   - ✅ **Problema crítico resolvido**: Página `/doctor-dashboard` estava inacessível (página em branco)
   - ✅ **Rota criada no servidor**: Adicionada nova rota GET em server/index.ts

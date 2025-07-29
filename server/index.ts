@@ -2002,8 +2002,495 @@ app.get('/doctor-dashboard', (req, res) => {
   `);
 });
 
+// 6. LOGIN PAGE - Sistema de autenticação
+app.get('/login', (req, res) => {
+  console.log('🔐 Serving Login Page for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - TeleMed Sistema</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .login-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+                width: 100%;
+                max-width: 400px;
+                text-align: center;
+            }
+            .login-header {
+                margin-bottom: 30px;
+            }
+            .login-header h1 {
+                color: #2D5A87;
+                font-size: 2rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+            .login-header p {
+                color: #666;
+                font-size: 1rem;
+            }
+            .form-group {
+                margin-bottom: 20px;
+                text-align: left;
+            }
+            .form-group label {
+                display: block;
+                color: #2D5A87;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E0E6ED;
+                border-radius: 12px;
+                font-size: 1rem;
+                transition: border-color 0.3s ease;
+            }
+            .form-group input:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .btn-primary {
+                width: 100%;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 15px;
+                border: none;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+                margin-bottom: 20px;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(167, 199, 231, 0.4);
+            }
+            .user-type-selector {
+                display: flex;
+                margin-bottom: 20px;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 2px solid #E0E6ED;
+            }
+            .user-type-option {
+                flex: 1;
+                padding: 12px;
+                background: #F8F9FA;
+                cursor: pointer;
+                text-align: center;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            .user-type-option.active {
+                background: #A7C7E7;
+                color: white;
+            }
+            .demo-accounts {
+                background: #F0F9FF;
+                border: 1px solid #A7C7E7;
+                border-radius: 12px;
+                padding: 15px;
+                margin-bottom: 20px;
+                text-align: left;
+            }
+            .demo-accounts h4 {
+                color: #2D5A87;
+                margin-bottom: 10px;
+                font-size: 0.9rem;
+            }
+            .demo-accounts p {
+                font-size: 0.8rem;
+                color: #666;
+                margin: 5px 0;
+            }
+            .back-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: rgba(255,255,255,0.9);
+                color: #2D5A87;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+            }
+            .back-button:hover {
+                background: white;
+                transform: translateY(-2px);
+            }
+            .success-message, .error-message {
+                padding: 10px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                font-weight: 600;
+                display: none;
+            }
+            .success-message {
+                background: #E6F7E6;
+                color: #059669;
+                border: 1px solid #059669;
+            }
+            .error-message {
+                background: #FFE6E6;
+                color: #DC2626;
+                border: 1px solid #DC2626;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Site
+        </a>
+        
+        <div class="login-container">
+            <div class="login-header">
+                <h1>🩺 Login TeleMed</h1>
+                <p>Acesse sua conta médica ou de paciente</p>
+            </div>
+            
+            <div class="user-type-selector">
+                <div class="user-type-option active" data-type="patient">
+                    <i class="fas fa-user"></i> Paciente
+                </div>
+                <div class="user-type-option" data-type="doctor">
+                    <i class="fas fa-user-md"></i> Médico
+                </div>
+            </div>
+            
+            <div class="demo-accounts">
+                <h4>📋 Contas de Demonstração:</h4>
+                <p><strong>Paciente:</strong> paciente@demo.com / 123456</p>
+                <p><strong>Médico:</strong> medico@demo.com / 123456</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="success-message" id="successMessage"></div>
+                <div class="error-message" id="errorMessage"></div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+            
+            <p style="color: #666; font-size: 0.9rem;">
+                Não tem conta? <a href="/register" style="color: #A7C7E7; text-decoration: none; font-weight: 600;">Cadastre-se aqui</a>
+            </p>
+        </div>
+        
+        <script>
+            let selectedUserType = 'patient';
+            
+            // User type selection
+            document.querySelectorAll('.user-type-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.user-type-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedUserType = this.dataset.type;
+                });
+            });
+            
+            // Form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Hide previous messages
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'none';
+                
+                // Demo authentication
+                if ((email === 'paciente@demo.com' || email === 'medico@demo.com') && password === '123456') {
+                    document.getElementById('successMessage').textContent = 'Login realizado com sucesso! Redirecionando...';
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        if (email === 'medico@demo.com' || selectedUserType === 'doctor') {
+                            window.location.href = '/doctor-dashboard';
+                        } else {
+                            window.location.href = '/patient-dashboard';
+                        }
+                    }, 1500);
+                } else {
+                    document.getElementById('errorMessage').textContent = 'E-mail ou senha incorretos. Use as contas de demonstração.';
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            });
+            
+            console.log('🔐 Sistema de Login TeleMed carregado!');
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// 7. AGENDAMENTO PAGE - Sistema de agendamento com especialidades
+app.get('/agendamento', (req, res) => {
+  console.log('📅 Serving Agendamento Page for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Agendamento - TeleMed Sistema</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+            .header h1 {
+                color: #2D5A87;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+            .header p {
+                color: #666;
+                font-size: 1.1rem;
+            }
+            .form-section {
+                margin-bottom: 30px;
+                padding: 25px;
+                border: 2px solid #E0E6ED;
+                border-radius: 15px;
+                background: #FAFBFC;
+            }
+            .form-section h2 {
+                color: #2D5A87;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                color: #2D5A87;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+            .form-group select, .form-group input {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #E0E6ED;
+                border-radius: 12px;
+                font-size: 1rem;
+                transition: border-color 0.3s ease;
+            }
+            .form-group select:focus, .form-group input:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .btn-primary {
+                width: 100%;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 18px;
+                border: none;
+                border-radius: 15px;
+                font-size: 1.1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+                margin-top: 30px;
+            }
+            .btn-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 30px rgba(167, 199, 231, 0.4);
+            }
+            .back-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: rgba(255,255,255,0.9);
+                color: #2D5A87;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: all 0.3s ease;
+            }
+            .back-button:hover {
+                background: white;
+                transform: translateY(-2px);
+            }
+        </style>
+    </head>
+    <body>
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Site
+        </a>
+        
+        <div class="container">
+            <div class="header">
+                <h1>📅 Agendar Consulta</h1>
+                <p>Preencha os dados para agendar sua consulta médica</p>
+            </div>
+            
+            <form id="agendamentoForm">
+                <div class="form-section">
+                    <h2><i class="fas fa-stethoscope"></i> Especialidade Médica</h2>
+                    
+                    <div class="form-group">
+                        <label for="especialidade">Escolha a especialidade:</label>
+                        <select id="especialidade" name="especialidade" required>
+                            <option value="">Selecione uma especialidade</option>
+                            <option value="cardiologia">Cardiologia - Doenças do coração</option>
+                            <option value="clinica-geral">Clínica Geral - Consultas gerais</option>
+                            <option value="pediatria">Pediatria - Cuidados infantis</option>
+                            <option value="dermatologia">Dermatologia - Problemas de pele</option>
+                            <option value="psiquiatria">Psiquiatria - Saúde mental</option>
+                            <option value="ginecologia">Ginecologia - Saúde feminina</option>
+                            <option value="ortopedia">Ortopedia - Ossos e articulações</option>
+                            <option value="psicoterapia">Psicoterapia - Terapia</option>
+                            <option value="nutricao">Nutrição - Alimentação</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2><i class="fas fa-user"></i> Seus Dados</h2>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo:</label>
+                            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefone">Telefone:</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sintomas">Descreva seus sintomas:</label>
+                        <textarea id="sintomas" name="sintomas" rows="4" placeholder="Descreva brevemente o que está sentindo..." style="width: 100%; padding: 15px; border: 2px solid #E0E6ED; border-radius: 12px; resize: vertical;"></textarea>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-calendar-plus"></i>
+                    Agendar Consulta
+                </button>
+            </form>
+        </div>
+        
+        <script>
+            // Auto-detect specialty from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const especialidadeParam = urlParams.get('especialidade');
+            if (especialidadeParam) {
+                document.getElementById('especialidade').value = especialidadeParam;
+            }
+            
+            // Phone mask
+            document.getElementById('telefone').addEventListener('input', function() {
+                let value = this.value.replace(/\\D/g, '');
+                value = value.replace(/^(\\d{2})(\\d)/g, '($1) $2');
+                value = value.replace(/(\\d{5})(\\d)/, '$1-$2');
+                this.value = value;
+            });
+            
+            // Form submission
+            document.getElementById('agendamentoForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                if (!data.especialidade || !data.nome || !data.email) {
+                    alert('Por favor, preencha todos os campos obrigatórios!');
+                    return;
+                }
+                
+                alert(\`Agendamento enviado com sucesso!\\n\\nEspecialidade: \${data.especialidade}\\nPaciente: \${data.nome}\\n\\nRedirecionando para sistema de lances...\`);
+                
+                // Redirect to bidding system
+                window.location.href = '/patient-bidding';
+            });
+            
+            console.log('📅 Sistema de Agendamento TeleMed carregado!');
+        </script>
+    </body>
+    </html>
+  `);
+});
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[${new Date().toISOString()}] 🩺 TeleMed Sistema v12.0.0`);
+  console.log(`[${new Date().toISOString()}] 🩺 TeleMed Sistema v12.2.0`);
   console.log(`[${new Date().toISOString()}] 🌐 Servidor rodando na porta ${PORT}`);
   console.log(`[${new Date().toISOString()}] 🔗 Acesso: http://localhost:${PORT}`);
 });
+
