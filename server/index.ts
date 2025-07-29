@@ -1372,6 +1372,636 @@ app.get('/faq', (req, res) => {
   `);
 });
 
+// 5. DOCTOR DASHBOARD - Dashboard médico profissional
+app.get('/doctor-dashboard', (req, res) => {
+  console.log('🩺 Serving Doctor Dashboard for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Médico - TeleMed Sistema</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', Arial, sans-serif; 
+                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+                line-height: 1.6; 
+                color: #2D5A87; 
+                min-height: 100vh;
+            }
+            .dashboard-container {
+                display: grid;
+                grid-template-columns: 280px 1fr;
+                min-height: 100vh;
+            }
+            
+            /* SIDEBAR */
+            .sidebar {
+                background: linear-gradient(180deg, #2D5A87 0%, #1A365D 100%);
+                color: white;
+                padding: 0;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
+            .sidebar-header {
+                padding: 30px 20px;
+                text-align: center;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .sidebar-header h2 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin-bottom: 5px;
+            }
+            .sidebar-header p {
+                font-size: 0.9rem;
+                color: rgba(255,255,255,0.8);
+            }
+            .sidebar-nav {
+                padding: 20px 0;
+            }
+            .nav-section {
+                margin-bottom: 30px;
+            }
+            .nav-section-title {
+                padding: 0 20px 10px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: rgba(255,255,255,0.6);
+            }
+            .nav-item {
+                display: flex;
+                align-items: center;
+                padding: 12px 20px;
+                color: rgba(255,255,255,0.8);
+                text-decoration: none;
+                transition: all 0.3s ease;
+                border-left: 3px solid transparent;
+            }
+            .nav-item:hover {
+                background: rgba(255,255,255,0.1);
+                color: white;
+                border-left-color: #A7C7E7;
+            }
+            .nav-item.active {
+                background: rgba(167, 199, 231, 0.2);
+                color: white;
+                border-left-color: #A7C7E7;
+            }
+            .nav-item i {
+                width: 20px;
+                margin-right: 12px;
+                font-size: 1.1rem;
+            }
+            .nav-badge {
+                margin-left: auto;
+                background: #E9967A;
+                color: white;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+            
+            /* MAIN CONTENT */
+            .main-content {
+                padding: 30px;
+                overflow-y: auto;
+            }
+            .main-header {
+                display: flex;
+                justify-content: between;
+                align-items: center;
+                margin-bottom: 40px;
+                background: white;
+                padding: 25px 30px;
+                border-radius: 20px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+            .welcome-section h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #2D5A87;
+                margin-bottom: 5px;
+            }
+            .welcome-section p {
+                color: #666;
+                font-size: 1.1rem;
+            }
+            .header-actions {
+                display: flex;
+                gap: 15px;
+            }
+            .action-btn {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 12px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .action-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(167, 199, 231, 0.4);
+            }
+            
+            /* STATS CARDS */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 25px;
+                margin-bottom: 40px;
+            }
+            .stat-card {
+                background: white;
+                padding: 25px;
+                border-radius: 20px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                border: 1px solid #E0E6ED;
+                transition: transform 0.3s ease;
+            }
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+            .stat-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+            .stat-title {
+                font-size: 0.9rem;
+                color: #666;
+                font-weight: 500;
+            }
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: white;
+            }
+            .stat-value {
+                font-size: 2.2rem;
+                font-weight: 700;
+                color: #2D5A87;
+                margin-bottom: 5px;
+            }
+            .stat-change {
+                font-size: 0.85rem;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .stat-change.positive {
+                color: #059669;
+            }
+            .stat-change.negative {
+                color: #DC2626;
+            }
+            
+            /* CONTENT SECTIONS */
+            .content-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 30px;
+            }
+            .content-card {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                border: 1px solid #E0E6ED;
+            }
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #F0F4F8;
+            }
+            .card-title {
+                font-size: 1.3rem;
+                font-weight: 600;
+                color: #2D5A87;
+            }
+            .consultation-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px 0;
+                border-bottom: 1px solid #F0F4F8;
+            }
+            .consultation-item:last-child {
+                border-bottom: none;
+            }
+            .patient-info h4 {
+                font-weight: 600;
+                color: #2D5A87;
+                margin-bottom: 3px;
+            }
+            .patient-info p {
+                color: #666;
+                font-size: 0.9rem;
+            }
+            .consultation-status {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+            .status-confirmed {
+                background: #E6F7FF;
+                color: #0891B2;
+            }
+            .status-pending {
+                background: #FFF7ED;
+                color: #EA580C;
+            }
+            .status-completed {
+                background: #ECFDF5;
+                color: #059669;
+            }
+            
+            /* QUICK ACTIONS */
+            .quick-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .quick-action {
+                display: flex;
+                align-items: center;
+                padding: 15px;
+                background: #F8F9FA;
+                border-radius: 12px;
+                text-decoration: none;
+                color: #2D5A87;
+                transition: all 0.3s ease;
+                border: 1px solid #E0E6ED;
+            }
+            .quick-action:hover {
+                background: #E6F3FF;
+                transform: translateX(5px);
+            }
+            .quick-action i {
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 15px;
+            }
+            
+            /* RESPONSIVE */
+            @media (max-width: 768px) {
+                .dashboard-container {
+                    grid-template-columns: 1fr;
+                }
+                .sidebar {
+                    display: none;
+                }
+                .content-grid {
+                    grid-template-columns: 1fr;
+                }
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                }
+                .main-header {
+                    flex-direction: column;
+                    text-align: center;
+                    gap: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>TeleMed</h2>
+                    <p>Dashboard Médico</p>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <div class="nav-section-title">Principal</div>
+                        <a href="#" class="nav-item active">
+                            <i class="fas fa-home"></i>
+                            Dashboard
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-users"></i>
+                            Fila de Pacientes
+                            <span class="nav-badge">9</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-calendar"></i>
+                            Agenda do Dia
+                            <span class="nav-badge">8</span>
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Consultas</div>
+                        <a href="/videoconsulta.html" class="nav-item">
+                            <i class="fas fa-video"></i>
+                            Videoconsultas
+                            <span class="nav-badge">2</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-clock"></i>
+                            Agendadas
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-history"></i>
+                            Histórico
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Ferramentas</div>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-prescription"></i>
+                            Prescrições
+                        </a>
+                        <a href="/dr-ai.html" class="nav-item">
+                            <i class="fas fa-robot"></i>
+                            Dr. AI
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-file-medical"></i>
+                            Prontuários
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Configurações</div>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-user"></i>
+                            Perfil Médico
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-bell"></i>
+                            Notificações
+                            <span class="nav-badge">3</span>
+                        </a>
+                        <a href="/" class="nav-item">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar ao Site
+                        </a>
+                    </div>
+                </nav>
+            </div>
+            
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <div class="main-header">
+                    <div class="welcome-section">
+                        <h1>Bom dia, Dr. Carlos Mendes! 👨‍⚕️</h1>
+                        <p>Você tem 3 consultas pendentes hoje e 5 já concluídas.</p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="/videoconsulta.html" class="action-btn">
+                            <i class="fas fa-video"></i>
+                            Nova Videoconsulta
+                        </a>
+                        <a href="/consulta-por-valor.html" class="action-btn">
+                            <i class="fas fa-gavel"></i>
+                            Ver Lances
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- STATS CARDS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Pacientes Ativos</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12% este mês
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Consultas Hoje</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #F4D9B4 0%, #E6C896 100%);">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +8% vs ontem
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Receita Hoje</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #E9967A 0%, #D4825A 100%);">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">R$ 1.850</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +25% vs ontem
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Avaliação</span>
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">4.9</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +0.1 este mês
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CONTENT GRID -->
+                <div class="content-grid">
+                    <!-- CONSULTAS DO DIA -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Consultas de Hoje</h3>
+                            <a href="#" class="action-btn" style="padding: 8px 16px; font-size: 0.9rem;">
+                                <i class="fas fa-plus"></i>
+                                Nova Consulta
+                            </a>
+                        </div>
+                        
+                        <div class="consultation-item">
+                            <div class="patient-info">
+                                <h4>Maria Silva</h4>
+                                <p>09:00 - Cardiologia - Videoconsulta</p>
+                            </div>
+                            <span class="consultation-status status-confirmed">Confirmada</span>
+                        </div>
+                        
+                        <div class="consultation-item">
+                            <div class="patient-info">
+                                <h4>João Santos</h4>
+                                <p>10:30 - Clínica Geral - Presencial</p>
+                            </div>
+                            <span class="consultation-status status-pending">Aguardando</span>
+                        </div>
+                        
+                        <div class="consultation-item">
+                            <div class="patient-info">
+                                <h4>Ana Costa</h4>
+                                <p>14:00 - Cardiologia - Videoconsulta</p>
+                            </div>
+                            <span class="consultation-status status-confirmed">Confirmada</span>
+                        </div>
+                        
+                        <div class="consultation-item">
+                            <div class="patient-info">
+                                <h4>Pedro Lima</h4>
+                                <p>15:30 - Retorno - Presencial</p>
+                            </div>
+                            <span class="consultation-status status-pending">Aguardando</span>
+                        </div>
+                        
+                        <div class="consultation-item">
+                            <div class="patient-info">
+                                <h4>Carla Oliveira</h4>
+                                <p>16:00 - Exames - Videoconsulta</p>
+                            </div>
+                            <span class="consultation-status status-completed">Concluída</span>
+                        </div>
+                    </div>
+                    
+                    <!-- AÇÕES RÁPIDAS -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ações Rápidas</h3>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <a href="/videoconsulta.html" class="quick-action">
+                                <i class="fas fa-video"></i>
+                                <div>
+                                    <strong>Iniciar Videoconsulta</strong>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Atender paciente agora</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="quick-action">
+                                <i class="fas fa-user-injured"></i>
+                                <div>
+                                    <strong>Emergências</strong>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Casos urgentes</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="quick-action">
+                                <i class="fas fa-prescription"></i>
+                                <div>
+                                    <strong>Prescrições</strong>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Receitas digitais</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="quick-action">
+                                <i class="fas fa-user-plus"></i>
+                                <div>
+                                    <strong>Cadastrar Paciente</strong>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Novo cadastro</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="quick-action">
+                                <i class="fas fa-chart-bar"></i>
+                                <div>
+                                    <strong>Relatórios</strong>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Análises e métricas</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            // Add active state to navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
+                    
+                    // Remove active from all items
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active to clicked item
+                    this.classList.add('active');
+                });
+            });
+            
+            // Auto-refresh badges (simulate real-time updates)
+            setInterval(() => {
+                const badges = document.querySelectorAll('.nav-badge');
+                badges.forEach(badge => {
+                    if (Math.random() > 0.8) {
+                        badge.style.animation = 'pulse 0.5s ease-in-out';
+                        setTimeout(() => {
+                            badge.style.animation = '';
+                        }, 500);
+                    }
+                });
+            }, 10000);
+            
+            console.log('🩺 Dashboard Médico TeleMed carregado com sucesso!');
+        </script>
+        
+        <style>
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        </style>
+    </body>
+    </html>
+  `);
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[${new Date().toISOString()}] 🩺 TeleMed Sistema v12.0.0`);
   console.log(`[${new Date().toISOString()}] 🌐 Servidor rodando na porta ${PORT}`);
