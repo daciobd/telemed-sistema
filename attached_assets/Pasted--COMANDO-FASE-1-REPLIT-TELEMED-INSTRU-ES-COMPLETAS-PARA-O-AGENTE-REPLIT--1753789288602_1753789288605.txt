@@ -1,0 +1,303 @@
+# 🚀 COMANDO FASE 1 - REPLIT TELEMED
+
+## 📋 **INSTRUÇÕES COMPLETAS PARA O AGENTE REPLIT**
+
+### **🎯 OBJETIVO DA FASE 1:**
+Criar as 4 páginas CRÍTICAS para completar a jornada do usuário da landing page até a conversão.
+
+---
+
+## 🔥 **PÁGINAS PARA CRIAR (FASE 1):**
+
+### **1. PÁGINA "COMO FUNCIONA" (`/como-funciona.html`)**
+
+**ESTRUTURA:**
+```html
+HEADER: "Como Funciona a TeleMed"
+SUBTÍTULO: "Consulta médica online em 4 passos simples"
+
+SEÇÃO 1 - PASSOS:
+┌─ PASSO 1: Cadastro Rápido
+│  ícone: 👤 | "Faça seu cadastro em 2 minutos"
+│  
+┌─ PASSO 2: Escolha e Lance
+│  ícone: 🏥 | "Escolha a especialidade e defina seu valor"
+│  
+┌─ PASSO 3: Médico Aceita  
+│  ícone: 👨‍⚕️ | "Médico qualificado aceita seu lance"
+│  
+┌─ PASSO 4: Teleconsulta
+│  ícone: 💻 | "Consulta por vídeo + receita digital"
+
+SEÇÃO 2 - VANTAGENS:
+• Sem filas ou deslocamento
+• Você define o preço da consulta
+• Atestados e receitas digitais válidos
+• Médicos CRM verificados
+
+CTA: [Começar Minha Consulta] → /patient-bidding
+```
+
+### **2. PÁGINA FAQ (`/faq.html`)**
+
+**PERGUNTAS ESSENCIAIS:**
+```html
+HEADER: "Perguntas Frequentes"
+
+❓ Como funciona o sistema de lances?
+📝 Você cria um lance com valor e especialidade. Médicos interessados aceitam seu valor.
+
+❓ As receitas digitais são válidas?
+📝 Sim! Todas têm assinatura digital certificada, aceitas em farmácias.
+
+❓ Como sei se o médico é qualificado?
+📝 Todos têm CRM verificado e especialização comprovada.
+
+❓ Posso cancelar uma consulta?
+📝 Sim, até 30 minutos antes sem custo.
+
+❓ Qual o valor mínimo das consultas?
+📝 Varia por especialidade. Clínica geral a partir de R$ 50.
+
+❓ Preciso de receita médica para psicotrópicos?
+📝 Sim, fazemos triagem específica para medicamentos controlados.
+
+❓ E se tiver problema técnico?
+📝 Suporte 24h via chat, telefone ou email.
+
+❓ Como funciona o pagamento?
+📝 Pix, cartão ou boleto. Pagamento só após confirmação da consulta.
+
+❓ Posso escolher o médico?
+📝 Sim! Veja perfis disponíveis e escolha seu preferido.
+
+❓ Há limite de tempo na consulta?
+📝 Mínimo 15 minutos, sem limite máximo definido pelo médico.
+
+CTA: [Esclarecer Dúvidas no Chat] → /suporte
+CTA: [Fazer Minha Primeira Consulta] → /patient-bidding
+```
+
+### **3. PÁGINA CADASTRO OTIMIZADA (`/cadastro.html`)**
+
+**FORMULÁRIO INTELIGENTE:**
+```html
+HEADER: "Cadastro Rápido - 2 minutos"
+SUBTÍTULO: "Sua primeira consulta está a um clique de distância"
+
+FORMULÁRIO SIMPLIFICADO:
+┌─ DADOS BÁSICOS:
+│  • Nome Completo*
+│  • Email*  
+│  • Telefone/WhatsApp*
+│  • Data de Nascimento*
+│
+┌─ ACESSO:
+│  • Senha* (mín. 6 caracteres)
+│  • Confirmar Senha*
+│
+┌─ ACEITES:
+│  ☑️ Aceito os Termos de Uso
+│  ☑️ Aceito receber comunicações sobre consultas
+│
+┌─ OPCIONAL (campo oculto, expandir se clicar):
+│  • CPF (para receitas e atestados)
+│  • Endereço completo
+│  • Plano de saúde
+
+BOTÕES:
+[Cadastrar e Começar] → /patient-bidding
+[Já tenho conta - Fazer Login] → /login
+
+RODAPÉ:
+🔒 Dados protegidos pela LGPD
+⚡ Cadastro em menos de 2 minutos  
+🏥 Mais de 500 médicos disponíveis
+```
+
+### **4. PÁGINA VANTAGENS (`/vantagens.html`)**
+
+**ESTRUTURA DE BENEFÍCIOS:**
+```html
+HEADER: "Por que escolher a TeleMed?"
+SUBTÍTULO: "A evolução da consulta médica está aqui"
+
+SEÇÃO 1 - VANTAGENS PRINCIPAIS:
+┌─ 🚀 CONSULTA SEM ESPERA
+│  "Atendimento em até 30 minutos"
+│  "Sem filas, sem deslocamento"
+│
+┌─ 💰 VOCÊ DEFINE O PREÇO  
+│  "Faça seu lance e escolha o valor"
+│  "Transparência total nos custos"
+│
+┌─ 🏠 COMODIDADE TOTAL
+│  "Consulte de casa, trabalho ou viagem" 
+│  "Disponível 24h/7 dias"
+│
+┌─ 👨‍⚕️ MÉDICOS QUALIFICADOS
+│  "CRM verificado e especialização comprovada"
+│  "Avaliações reais de outros pacientes"
+
+SEÇÃO 2 - COMPARATIVO:
+TELEMED vs CONSULTA PRESENCIAL:
+
+┌─ TEMPO:
+│  TeleMed: 30 min | Presencial: 2-4 horas
+│
+┌─ CUSTO:
+│  TeleMed: Você define | Presencial: Preço fixo alto
+│
+┌─ DESLOCAMENTO:
+│  TeleMed: Zero | Presencial: Combustível + estacionamento
+│
+┌─ RECEITA:
+│  TeleMed: Digital imediata | Presencial: Física apenas
+
+SEÇÃO 3 - FUNCIONALIDADES:
+• ✅ Receitas digitais válidas nacionalmente
+• ✅ Atestados médicos certificados
+• ✅ Histórico completo de consultas
+• ✅ Lembretes automáticos
+• ✅ Segunda opinião médica
+• ✅ Triagem por IA (Dr. AI)
+
+CTA: [Experimentar Agora - Gratuito] → /patient-bidding
+```
+
+---
+
+## 🎨 **ESPECIFICAÇÕES DE DESIGN:**
+
+### **APLICAR ESTILO DUOTÔNICO CONSISTENTE:**
+```css
+CORES:
+- Azul suave: #A7C7E7 (botões primários)
+- Ocre claro: #F4D9B4 (destaques e botões secundários)  
+- Coral leve: #E9967A (alertas e urgências)
+- Background: #FAFBFC
+- Containers: #F8F9FA
+
+TIPOGRAFIA:
+- Família: 'Poppins', 'Inter', sans-serif
+- Headers: font-weight: 600
+- Texto: font-weight: 400
+- Botões: font-weight: 500
+
+BORDAS:
+- Containers principais: border-radius: 20px
+- Botões e campos: border-radius: 12px
+- Cards: border-radius: 16px
+
+EFEITOS:
+- Sem sombras pesadas
+- Hover: opacity: 0.8
+- Transições suaves: transition: all 0.3s ease
+```
+
+---
+
+## 🔗 **NAVEGAÇÃO E LINKS:**
+
+### **MENU PRINCIPAL (todas as páginas):**
+```html
+<nav>
+  <a href="/">Início</a>
+  <a href="/especialidades.html">Especialidades</a>
+  <a href="/como-funciona.html">Como Funciona</a>
+  <a href="/vantagens.html">Vantagens</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/login">Login</a>
+  <a href="/cadastro.html" class="cta-button">Cadastre-se</a>
+</nav>
+```
+
+### **CTAs ESTRATÉGICOS:**
+- **Primário:** "Começar Consulta" → `/patient-bidding`
+- **Secundário:** "Cadastrar" → `/cadastro.html`
+- **Suporte:** "Falar no Chat" → `/suporte.html`
+
+---
+
+## 📱 **RESPONSIVIDADE:**
+
+### **BREAKPOINTS:**
+```css
+- Mobile: até 768px
+- Tablet: 769px - 1024px  
+- Desktop: 1025px+
+
+ADAPTAÇÕES MOBILE:
+- Menu hamburger
+- Botões full-width
+- Texto maior (16px mínimo)
+- Espaçamento aumentado
+- CTAs fixos na parte inferior
+```
+
+---
+
+## ⚡ **OTIMIZAÇÕES DE PERFORMANCE:**
+
+### **SEO BÁSICO:**
+```html
+- Title tags únicos por página
+- Meta descriptions atrativas
+- Headers estruturados (H1 > H2 > H3)
+- Alt text em imagens
+- Schema markup para páginas médicas
+```
+
+### **VELOCIDADE:**
+- Imagens otimizadas (WebP)
+- CSS/JS minificado
+- Lazy loading em imagens
+- Fontes precarregadas
+
+---
+
+## 🎯 **MÉTRICAS DE SUCESSO:**
+
+### **CONVERSÃO:**
+- Taxa de cadastro por visita
+- Tempo na página FAQ
+- Cliques em "Começar Consulta"
+- Abandonos no formulário
+
+### **USABILIDADE:**
+- Tempo para completar cadastro
+- Páginas mais visitadas
+- Bounce rate por página
+
+---
+
+## ✅ **CHECKLIST DE ENTREGA:**
+
+### **FUNCIONALIDADES:**
+- [ ] 4 páginas HTML funcionais
+- [ ] Navegação entre páginas
+- [ ] Formulário de cadastro operacional
+- [ ] Links para patient-bidding
+- [ ] Design duotônico aplicado
+- [ ] Responsividade mobile
+- [ ] CTAs otimizados
+
+### **QUALIDADE:**
+- [ ] Código limpo e organizado
+- [ ] Compatibilidade cross-browser
+- [ ] Velocidade de carregamento < 3s
+- [ ] Acessibilidade básica
+- [ ] SEO on-page implementado
+
+---
+
+## 🚀 **COMANDO FINAL PARA O REPLIT:**
+
+**"Crie 4 páginas HTML com design duotônico (azul #A7C7E7 + ocre #F4D9B4), bordas arredondadas 20px, fonte Poppins, sem sombras pesadas:**
+
+1. **/como-funciona.html** - 4 passos do processo + vantagens + CTA
+2. **/faq.html** - 10 perguntas essenciais + CTAs  
+3. **/cadastro.html** - Formulário simplificado + validação
+4. **/vantagens.html** - Benefícios + comparativo + funcionalidades
+
+**Todas devem ter menu de navegação consistente, ser responsivas, e direcionar CTAs para /patient-bidding. Use mesmo domínio atual do projeto."**

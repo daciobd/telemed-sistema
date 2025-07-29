@@ -1255,16 +1255,18 @@ app.get('/politica-privacidade', (req, res) => {
   `);
 });
 
-// SOBRE - PÁGINA INSTITUCIONAL
-app.get('/sobre', (req, res) => {
-  console.log('📄 Serving sobre (HTML estático) for:', req.path);
+// 🚀 FASE 1 - PÁGINAS CRÍTICAS IMPLEMENTADAS
+
+// 1. COMO FUNCIONA
+app.get('/como-funciona.html', (req, res) => {
+  console.log('📄 Serving como-funciona (FASE 1) for:', req.path);
   res.send(`
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sobre Nós - TeleMed Sistema</title>
+        <title>Como Funciona - TeleMed Sistema</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { 
@@ -1276,105 +1278,246 @@ app.get('/sobre', (req, res) => {
             .header {
                 background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
                 color: white;
-                padding: 40px 0;
+                padding: 60px 0;
                 text-align: center;
             }
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 40px 20px;
+            .header h1 { font-size: 48px; margin-bottom: 15px; font-weight: 600; }
+            .header p { font-size: 20px; opacity: 0.9; }
+            
+            nav {
                 background: white;
-                border-radius: 20px;
-                margin-top: -20px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                animation: fadeIn 0.5s ease-in;
+                padding: 15px 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                position: sticky;
+                top: 0;
+                z-index: 100;
             }
-            .hero {
-                text-align: center;
-                margin: 40px 0;
-                padding: 30px;
-                background: linear-gradient(135deg, #A7C7E71A 0%, #92B4D71A 100%);
-                border-radius: 15px;
+            nav .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
-            .stats {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 20px;
-                margin: 30px 0;
-            }
-            .stat {
-                text-align: center;
-                padding: 20px;
-                background: #F8F9FA;
-                border-radius: 12px;
-            }
-            .section { margin-bottom: 30px; }
-            .back-btn {
-                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 10px;
+            nav a {
                 text-decoration: none;
-                display: inline-block;
-                margin-bottom: 20px;
+                color: #374151;
+                margin: 0 15px;
+                padding: 8px 16px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
                 font-weight: 500;
             }
-            h1 { color: #2D5A87; margin-bottom: 20px; }
-            h2 { color: #2D5A87; margin: 30px 0 15px 0; font-size: 20px; }
+            nav a:hover { background: #F4D9B4; color: #2D5A87; }
+            nav .cta-button {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white !important;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+            }
+            
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 60px 20px;
+            }
+            
+            .steps-section {
+                margin-bottom: 60px;
+            }
+            .steps-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+                margin-top: 40px;
+            }
+            .step-card {
+                background: white;
+                padding: 40px 30px;
+                border-radius: 20px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+                border: 3px solid transparent;
+                transition: all 0.3s ease;
+                animation: fadeIn 0.5s ease-in;
+            }
+            .step-card:hover {
+                border-color: #A7C7E7;
+                transform: translateY(-5px);
+            }
+            .step-icon {
+                font-size: 64px;
+                margin-bottom: 20px;
+                display: block;
+            }
+            .step-title {
+                color: #2D5A87;
+                font-size: 24px;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+            .step-description {
+                color: #666;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            
+            .advantages-section {
+                background: linear-gradient(135deg, #A7C7E71A 0%, #F4D9B41A 100%);
+                padding: 50px;
+                border-radius: 20px;
+                margin-bottom: 60px;
+            }
+            .advantages-title {
+                text-align: center;
+                color: #2D5A87;
+                font-size: 32px;
+                margin-bottom: 30px;
+                font-weight: 600;
+            }
+            .advantages-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            .advantage-item {
+                display: flex;
+                align-items: center;
+                padding: 15px;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            }
+            .advantage-icon {
+                font-size: 32px;
+                margin-right: 15px;
+            }
+            .advantage-text {
+                color: #374151;
+                font-weight: 500;
+            }
+            
+            .cta-section {
+                text-align: center;
+                padding: 60px 40px;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            }
+            .cta-button-large {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 40px;
+                border: none;
+                border-radius: 12px;
+                font-size: 20px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+                margin-top: 20px;
+            }
+            .cta-button-large:hover {
+                opacity: 0.8;
+                transform: translateY(-2px);
+            }
             
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(20px); }
                 to { opacity: 1; transform: translateY(0); }
             }
+            
+            @media (max-width: 768px) {
+                .header h1 { font-size: 32px; }
+                .header p { font-size: 16px; }
+                nav .container { flex-direction: column; gap: 10px; }
+                nav a { margin: 5px; }
+                .container { padding: 40px 20px; }
+                .steps-grid { grid-template-columns: 1fr; }
+                .advantages-section { padding: 30px 20px; }
+                .advantages-list { grid-template-columns: 1fr; }
+            }
         </style>
     </head>
     <body>
         <div class="header">
-            <h1>🏥 Sobre o TeleMed Sistema</h1>
-            <p>Revolucionando o acesso à saúde no Brasil</p>
+            <h1>Como Funciona a TeleMed</h1>
+            <p>Consulta médica online em 4 passos simples</p>
         </div>
         
+        <nav>
+            <div class="container">
+                <div>
+                    <a href="/">Início</a>
+                    <a href="/especialidades.html">Especialidades</a>
+                    <a href="/como-funciona.html">Como Funciona</a>
+                    <a href="/vantagens.html">Vantagens</a>
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/login">Login</a>
+                </div>
+                <a href="/cadastro.html" class="cta-button">Cadastre-se</a>
+            </div>
+        </nav>
+        
         <div class="container">
-            <a href="/" class="back-btn">← Voltar ao Site</a>
-            
-            <div class="hero">
-                <h2>🎯 Nossa Missão</h2>
-                <p style="font-size: 18px; margin-top: 15px;">Democratizar o acesso à saúde de qualidade através da tecnologia, conectando médicos e pacientes de forma inovadora, segura e acessível.</p>
+            <div class="steps-section">
+                <h2 style="text-align: center; color: #2D5A87; font-size: 36px; margin-bottom: 20px; font-weight: 600;">Processo Simples e Rápido</h2>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <span class="step-icon">👤</span>
+                        <h3 class="step-title">PASSO 1: Cadastro Rápido</h3>
+                        <p class="step-description">Faça seu cadastro em 2 minutos com dados básicos. Simples, rápido e seguro.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <span class="step-icon">🏥</span>
+                        <h3 class="step-title">PASSO 2: Escolha e Lance</h3>
+                        <p class="step-description">Escolha a especialidade e defina seu valor. Você tem controle total do preço.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <span class="step-icon">👨‍⚕️</span>
+                        <h3 class="step-title">PASSO 3: Médico Aceita</h3>
+                        <p class="step-description">Médico qualificado e verificado aceita seu lance em minutos.</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <span class="step-icon">💻</span>
+                        <h3 class="step-title">PASSO 4: Teleconsulta</h3>
+                        <p class="step-description">Consulta por vídeo + receita digital válida nacionalmente.</p>
+                    </div>
+                </div>
             </div>
             
-            <div class="stats">
-                <div class="stat">
-                    <h3 style="font-size: 24px; color: #A7C7E7;">5.000+</h3>
-                    <p>Médicos Credenciados</p>
-                </div>
-                <div class="stat">
-                    <h3 style="font-size: 24px; color: #A7C7E7;">100K+</h3>
-                    <p>Consultas Realizadas</p>
-                </div>
-                <div class="stat">
-                    <h3 style="font-size: 24px; color: #A7C7E7;">4.9⭐</h3>
-                    <p>Avaliação dos Usuários</p>
-                </div>
-                <div class="stat">
-                    <h3 style="font-size: 24px; color: #A7C7E7;">24/7</h3>
-                    <p>Disponibilidade</p>
+            <div class="advantages-section">
+                <h2 class="advantages-title">Vantagens Exclusivas</h2>
+                <div class="advantages-list">
+                    <div class="advantage-item">
+                        <span class="advantage-icon">🚫</span>
+                        <span class="advantage-text">Sem filas ou deslocamento</span>
+                    </div>
+                    <div class="advantage-item">
+                        <span class="advantage-icon">💰</span>
+                        <span class="advantage-text">Você define o preço da consulta</span>
+                    </div>
+                    <div class="advantage-item">
+                        <span class="advantage-icon">📄</span>
+                        <span class="advantage-text">Atestados e receitas digitais válidos</span>
+                    </div>
+                    <div class="advantage-item">
+                        <span class="advantage-icon">🏥</span>
+                        <span class="advantage-text">Médicos CRM verificados</span>
+                    </div>
                 </div>
             </div>
             
-            <div class="section">
-                <h2>🚀 Nossa História</h2>
-                <p>Fundado em 2025, o TeleMed Sistema nasceu da necessidade de tornar a medicina mais acessível e eficiente. Somos pioneiros no sistema de lances médicos, permitindo que pacientes definam quanto podem pagar por uma consulta médica de qualidade.</p>
-            </div>
-            
-            <div class="section">
-                <h2>📞 Entre em Contato</h2>
-                <div style="background: linear-gradient(135deg, #A7C7E71A 0%, #92B4D71A 100%); padding: 20px; border-radius: 12px;">
-                    <p><strong>E-mail:</strong> contato@telemed.com.br</p>
-                    <p><strong>WhatsApp:</strong> (11) 99999-0000</p>
-                    <p><strong>Endereço:</strong> São Paulo, SP - Brasil</p>
-                    <p><strong>Horário:</strong> Segunda a domingo, 24 horas</p>
-                </div>
+            <div class="cta-section">
+                <h2 style="color: #2D5A87; font-size: 28px; margin-bottom: 15px;">Pronto para Começar?</h2>
+                <p style="color: #666; font-size: 18px; margin-bottom: 20px;">Sua saúde não pode esperar. Comece sua consulta agora mesmo!</p>
+                <a href="/patient-bidding" class="cta-button-large">Começar Minha Consulta</a>
             </div>
         </div>
     </body>
@@ -1382,16 +1525,991 @@ app.get('/sobre', (req, res) => {
   `);
 });
 
-// PATIENT-DASHBOARD - Corrigido com HTML estático
-app.get('/patient-dashboard', (req, res) => {
-  console.log('📄 Serving patient-dashboard (HTML corrigido - PRIORIDADE) for:', req.path);
-  res.send(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard Paciente - TeleMed</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins','Inter',Arial,sans-serif;background-color:#FAFBFC}.dashboard-header{background:linear-gradient(135deg,#E9967A 0%,#D67B5A 100%);color:white;padding:20px;display:flex;justify-content:space-between;align-items:center}.patient-info h1{font-size:24px;margin-bottom:5px}.patient-info p{font-size:14px;opacity:0.9}.welcome-section{padding:30px;text-align:center}.welcome-card{background:white;border-radius:20px;padding:40px;box-shadow:0 4px 15px rgba(0,0,0,0.08);margin-bottom:30px}.welcome-card h2{color:#2D5A87;font-size:28px;margin-bottom:15px}.welcome-card p{color:#666;font-size:16px;line-height:1.6}.actions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding:0 30px 30px}.action-card{background:white;border-radius:20px;padding:30px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.08);border:2px solid transparent;transition:all 0.3s;cursor:pointer}.action-card:hover{border-color:#E9967A;transform:translateY(-5px)}.action-card .icon{font-size:48px;margin-bottom:20px;display:block}.action-card h3{color:#2D5A87;font-size:20px;margin-bottom:15px}.action-card p{color:#666;font-size:14px;margin-bottom:20px}.action-btn{background:linear-gradient(135deg,#E9967A 0%,#D67B5A 100%);color:white;border:none;padding:12px 24px;border-radius:10px;font-weight:600;cursor:pointer;transition:transform 0.2s;text-decoration:none;display:inline-block}.action-btn:hover{transform:translateY(-2px)}@media (max-width:768px){.dashboard-header{flex-direction:column;text-align:center;gap:10px}.actions-grid{grid-template-columns:1fr;padding:0 20px 20px}.welcome-section{padding:20px}}</style></head><body><div class="dashboard-header"><div class="patient-info"><h1>👤 Maria Silva</h1><p>Paciente • ID: 789456</p></div><div><a href="/" style="color:white;text-decoration:none;padding:10px 20px;border:1px solid rgba(255,255,255,0.3);border-radius:10px">Voltar ao Site</a></div></div><div class="welcome-section"><div class="welcome-card"><h2>Bem-vinda ao TeleMed Sistema! 👋</h2><p>Sua saúde está em boas mãos. Acesse consultas médicas profissionais sem sair de casa, com toda a segurança e qualidade que você merece.</p></div></div><div class="actions-grid"><div class="action-card" onclick="window.location.href='/agendamento'"><span class="icon">📅</span><h3>Agendar Consulta</h3><p>Agende sua consulta médica com especialistas qualificados</p><a href="/agendamento" class="action-btn">Agendar Agora</a></div><div class="action-card" onclick="window.location.href='/patient-bidding'"><span class="icon">💰</span><h3>Sistema de Lances</h3><p>Faça lances por consultas e encontre o melhor preço</p><a href="/patient-bidding" class="action-btn">Fazer Lance</a></div><div class="action-card" onclick="window.location.href='/dr-ai'"><span class="icon">🤖</span><h3>Dr. AI - Triagem</h3><p>Triagem inteligente gratuita com inteligência artificial</p><a href="/dr-ai" class="action-btn">Iniciar Triagem</a></div><div class="action-card" onclick="window.location.href='/especialidades.html'"><span class="icon">🩺</span><h3>Especialidades</h3><p>Conheça nossas especialidades médicas disponíveis</p><a href="/especialidades.html" class="action-btn">Ver Especialidades</a></div></div></body></html>`);
+// 2. FAQ
+app.get('/faq.html', (req, res) => {
+  console.log('📄 Serving faq (FASE 1) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Perguntas Frequentes - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: #FAFBFC;
+                line-height: 1.6;
+                color: #374151;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 60px 0;
+                text-align: center;
+            }
+            .header h1 { font-size: 48px; margin-bottom: 15px; font-weight: 600; }
+            .header p { font-size: 20px; opacity: 0.9; }
+            
+            nav {
+                background: white;
+                padding: 15px 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            nav .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            nav a {
+                text-decoration: none;
+                color: #374151;
+                margin: 0 15px;
+                padding: 8px 16px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+            nav a:hover { background: #F4D9B4; color: #2D5A87; }
+            nav .cta-button {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white !important;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+            }
+            
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 60px 20px;
+            }
+            
+            .faq-item {
+                background: white;
+                margin-bottom: 20px;
+                border-radius: 20px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+                overflow: hidden;
+                transition: all 0.3s ease;
+                animation: fadeIn 0.5s ease-in;
+            }
+            .faq-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            
+            .faq-question {
+                padding: 25px 30px;
+                background: linear-gradient(135deg, #A7C7E71A 0%, #F4D9B41A 100%);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border: none;
+                width: 100%;
+                text-align: left;
+                font-size: 18px;
+                font-weight: 600;
+                color: #2D5A87;
+            }
+            .faq-question:hover {
+                background: linear-gradient(135deg, #A7C7E730 0%, #F4D9B430 100%);
+            }
+            .faq-icon {
+                font-size: 24px;
+                margin-right: 15px;
+            }
+            .faq-toggle {
+                font-size: 20px;
+                transition: transform 0.3s ease;
+            }
+            .faq-answer {
+                padding: 0 30px;
+                max-height: 0;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                background: white;
+            }
+            .faq-item.active .faq-answer {
+                padding: 25px 30px;
+                max-height: 200px;
+            }
+            .faq-item.active .faq-toggle {
+                transform: rotate(45deg);
+            }
+            
+            .cta-section {
+                text-align: center;
+                padding: 60px 40px;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+                margin-top: 40px;
+            }
+            .cta-buttons {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 30px;
+                flex-wrap: wrap;
+            }
+            .cta-button-large {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 18px 35px;
+                border: none;
+                border-radius: 12px;
+                font-size: 18px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+            }
+            .cta-button-secondary {
+                background: linear-gradient(135deg, #F4D9B4 0%, #E9C79C 100%);
+                color: #2D5A87;
+                padding: 18px 35px;
+                border: none;
+                border-radius: 12px;
+                font-size: 18px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+            }
+            .cta-button-large:hover, .cta-button-secondary:hover {
+                opacity: 0.8;
+                transform: translateY(-2px);
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @media (max-width: 768px) {
+                .header h1 { font-size: 32px; }
+                .header p { font-size: 16px; }
+                nav .container { flex-direction: column; gap: 10px; }
+                nav a { margin: 5px; }
+                .container { padding: 40px 20px; }
+                .faq-question { padding: 20px; font-size: 16px; }
+                .faq-answer { padding: 0 20px; }
+                .faq-item.active .faq-answer { padding: 20px; }
+                .cta-buttons { flex-direction: column; align-items: center; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Perguntas Frequentes</h1>
+            <p>Tire todas as suas dúvidas sobre nossa plataforma</p>
+        </div>
+        
+        <nav>
+            <div class="container">
+                <div>
+                    <a href="/">Início</a>
+                    <a href="/especialidades.html">Especialidades</a>
+                    <a href="/como-funciona.html">Como Funciona</a>
+                    <a href="/vantagens.html">Vantagens</a>
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/login">Login</a>
+                </div>
+                <a href="/cadastro.html" class="cta-button">Cadastre-se</a>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">❓</span>Como funciona o sistema de lances?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Você cria um lance informando a especialidade desejada e o valor que pode pagar. Médicos qualificados da nossa rede visualizam seu lance e podem aceitar atendê-lo pelo valor proposto. É simples, transparente e você tem controle total.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">📝</span>As receitas digitais são válidas?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Sim! Todas as receitas emitidas têm assinatura digital certificada pelo CFM (Conselho Federal de Medicina) e são aceitas em qualquer farmácia do Brasil. Possuem a mesma validade legal das receitas físicas.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">🏥</span>Como sei se o médico é qualificado?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Todos os nossos médicos têm CRM ativo e especialização comprovada. Você pode consultar o perfil completo, incluindo formação, experiência e avaliações de outros pacientes antes de confirmar a consulta.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">❌</span>Posso cancelar uma consulta?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Sim, você pode cancelar até 30 minutos antes do horário agendado sem nenhum custo. Após esse prazo, cobramos 50% do valor. O reembolso é processado em até 2 dias úteis.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">💰</span>Qual o valor mínimo das consultas?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Os valores variam por especialidade. Clínica geral a partir de R$ 50, especialistas a partir de R$ 80. Consultas de emergência têm valores diferenciados. Você sempre define quanto quer pagar.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">💊</span>Preciso de receita para medicamentos controlados?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Sim, fazemos triagem específica para medicamentos psicotrópicos e controlados. Nossos psiquiatras estão habilitados para prescrever esses medicamentos seguindo todas as normas da ANVISA.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">🔧</span>E se tiver problema técnico?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Oferecemos suporte técnico 24h via chat, telefone (0800) ou email. Nossa equipe resolve rapidamente problemas de conexão, áudio ou vídeo. Garantimos que sua consulta aconteça.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">💳</span>Como funciona o pagamento?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Aceitamos Pix (confirmação imediata), cartão de crédito ou boleto. O pagamento só é processado após a confirmação da consulta realizada. Seguro e transparente.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">👨‍⚕️</span>Posso escolher o médico?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Sim! Você pode visualizar perfis dos médicos disponíveis, suas especialidades, avaliações e experiência, e escolher aquele com quem se sentir mais confortável para a consulta.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <div><span class="faq-icon">⏰</span>Há limite de tempo na consulta?</div>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Garantimos mínimo de 15 minutos por consulta. O tempo máximo varia conforme a complexidade do caso e decisão médica. A maioria das consultas dura entre 20-30 minutos.</p>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2 style="color: #2D5A87; font-size: 28px; margin-bottom: 15px;">Ainda tem dúvidas?</h2>
+                <p style="color: #666; font-size: 18px; margin-bottom: 20px;">Nossa equipe está pronta para ajudar você!</p>
+                <div class="cta-buttons">
+                    <a href="/suporte.html" class="cta-button-secondary">Falar no Chat</a>
+                    <a href="/patient-bidding" class="cta-button-large">Fazer Minha Primeira Consulta</a>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            function toggleFaq(element) {
+                const faqItem = element.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Fechar todos os outros
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Alternar o atual
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            }
+            
+            // Animar os itens quando carregarem
+            document.addEventListener('DOMContentLoaded', function() {
+                const faqItems = document.querySelectorAll('.faq-item');
+                faqItems.forEach((item, index) => {
+                    item.style.animationDelay = \`\${index * 0.1}s\`;
+                });
+            });
+        </script>
+    </body>
+    </html>
+  `);
 });
 
-// DR-AI - Corrigido com HTML estático
-app.get('/dr-ai', (req, res) => {
-  console.log('📄 Serving dr-ai (HTML corrigido - PRIORIDADE) for:', req.path);
-  res.send(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dr. AI - Triagem Médica - TeleMed</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Poppins','Inter',Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;display:flex;flex-direction:column}.header{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:20px;text-align:center;color:white}.header h1{font-size:28px;margin-bottom:10px}.header p{font-size:16px;opacity:0.9}.chat-container{flex:1;max-width:800px;margin:20px auto;background:white;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,0.15);overflow:hidden;display:flex;flex-direction:column}.chat-messages{flex:1;padding:30px;overflow-y:auto;max-height:400px}.message{margin-bottom:20px;display:flex;align-items:flex-start;gap:15px}.message.ai{flex-direction:row}.message.user{flex-direction:row-reverse}.message-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}.message.ai .message-avatar{background:linear-gradient(135deg,#667eea,#764ba2);color:white}.message.user .message-avatar{background:linear-gradient(135deg,#E9967A,#D67B5A);color:white}.message-content{background:#f8f9fa;padding:15px 20px;border-radius:18px;max-width:70%;line-height:1.6}.message.ai .message-content{border-bottom-left-radius:5px}.message.user .message-content{border-bottom-right-radius:5px;background:linear-gradient(135deg,#667eea,#764ba2);color:white}.chat-input-container{padding:20px;background:#f8f9fa;border-top:1px solid #eee}.chat-input{display:flex;gap:10px}.chat-input input{flex:1;padding:15px 20px;border:2px solid #e2e8f0;border-radius:25px;font-size:16px;outline:none}.chat-input input:focus{border-color:#667eea}.send-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.2s}.send-btn:hover{transform:scale(1.05)}.suggestions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.suggestion-btn{background:white;border:2px solid #667eea;color:#667eea;padding:8px 16px;border-radius:20px;cursor:pointer;font-size:14px;transition:all 0.2s}.suggestion-btn:hover{background:#667eea;color:white}.back-btn{position:fixed;top:20px;left:20px;background:rgba(255,255,255,0.2);color:white;border:none;padding:10px 20px;border-radius:25px;cursor:pointer;backdrop-filter:blur(10px);text-decoration:none}@media (max-width:768px){.chat-container{margin:10px;border-radius:15px}.message-content{max-width:85%}.suggestions{flex-direction:column}}</style></head><body><a href="/" class="back-btn">← Voltar</a><div class="header"><h1>🤖 Dr. AI - Assistente Médico</h1><p>Triagem inteligente e orientações médicas personalizadas</p></div><div class="chat-container"><div class="chat-messages" id="chatMessages"><div class="message ai"><div class="message-avatar">🤖</div><div class="message-content">Olá! Sou o Dr. AI, seu assistente médico virtual. 👋<br><br>Estou aqui para ajudar com uma triagem inicial dos seus sintomas e orientá-lo sobre os próximos passos. Como posso ajudá-lo hoje?</div></div></div><div class="chat-input-container"><div class="chat-input"><input type="text" id="messageInput" placeholder="Descreva seus sintomas ou faça uma pergunta..."/><button class="send-btn" onclick="sendMessage()">📤</button></div><div class="suggestions"><button class="suggestion-btn" onclick="sendSuggestion('Estou com dor de cabeça há 2 dias')">Dor de cabeça</button><button class="suggestion-btn" onclick="sendSuggestion('Tenho ansiedade e insônia')">Ansiedade</button><button class="suggestion-btn" onclick="sendSuggestion('Dor no peito e falta de ar')">Dor no peito</button><button class="suggestion-btn" onclick="sendSuggestion('Triagem psiquiátrica completa')">Triagem psiquiátrica</button></div></div></div><script>const chatMessages=document.getElementById('chatMessages');const messageInput=document.getElementById('messageInput');function addMessage(content,isUser=false){const messageDiv=document.createElement('div');messageDiv.className=\`message \${isUser?'user':'ai'}\`;messageDiv.innerHTML=\`<div class="message-avatar">\${isUser?'👤':'🤖'}</div><div class="message-content">\${content}</div>\`;chatMessages.appendChild(messageDiv);chatMessages.scrollTop=chatMessages.scrollHeight}function sendMessage(){const message=messageInput.value.trim();if(!message)return;addMessage(message,true);messageInput.value='';setTimeout(()=>{const responses=["Entendo seus sintomas. Com base no que você descreveu, recomendo algumas avaliações. Você gostaria de:","Obrigado por compartilhar. Vou fazer algumas perguntas para uma triagem mais precisa:","Seus sintomas podem indicar algumas possibilidades. Para um diagnóstico adequado, sugiro:","Com base nos sintomas relatados, aqui estão meus próximos passos recomendados:"];const randomResponse=responses[Math.floor(Math.random()*responses.length)];addMessage(randomResponse+"<br><br>• Consulta com especialista<br>• Exames complementares<br>• <a href='/agendamento' style='color:#667eea;'>Agendar consulta presencial</a>")},1500)}function sendSuggestion(suggestion){messageInput.value=suggestion;sendMessage()}messageInput.addEventListener('keypress',function(e){if(e.key==='Enter'){sendMessage()}})</script></body></html>`);
+// 3. CADASTRO
+app.get('/cadastro.html', (req, res) => {
+  console.log('📄 Serving cadastro (FASE 1) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .cadastro-container {
+                max-width: 800px;
+                width: 100%;
+                margin: 20px;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+                overflow: hidden;
+            }
+            .cadastro-header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 40px;
+                text-align: center;
+            }
+            .cadastro-header h1 { font-size: 32px; margin-bottom: 10px; }
+            .cadastro-header p { font-size: 16px; opacity: 0.9; }
+            
+            .cadastro-form {
+                padding: 40px;
+            }
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            .form-group {
+                margin-bottom: 25px;
+            }
+            .form-group label {
+                display: block;
+                color: #2D5A87;
+                font-weight: 600;
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+            .form-group input,
+            .form-group select {
+                width: 100%;
+                padding: 15px 20px;
+                border: 2px solid #E2E8F0;
+                border-radius: 12px;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease;
+            }
+            .form-group input:focus,
+            .form-group select:focus {
+                border-color: #A7C7E7;
+            }
+            
+            .radio-group {
+                display: flex;
+                gap: 30px;
+                margin-top: 10px;
+            }
+            .radio-option {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .radio-option input[type="radio"] {
+                width: auto;
+                margin: 0;
+            }
+            
+            .btn-cadastrar {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 18px 40px;
+                border: none;
+                border-radius: 12px;
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                width: 100%;
+                margin-top: 20px;
+            }
+            .btn-cadastrar:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+            
+            .login-link {
+                text-align: center;
+                margin-top: 20px;
+                color: #666;
+            }
+            .login-link a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-weight: 600;
+            }
+            .login-link a:hover {
+                text-decoration: underline;
+            }
+            
+            .back-btn {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: rgba(255,255,255,0.2);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 25px;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+                text-decoration: none;
+                font-weight: 500;
+            }
+            
+            @media (max-width: 768px) {
+                .cadastro-container { margin: 10px; }
+                .cadastro-header { padding: 30px 20px; }
+                .cadastro-header h1 { font-size: 24px; }
+                .cadastro-form { padding: 30px 20px; }
+                .form-row { grid-template-columns: 1fr; gap: 0; }
+                .radio-group { flex-direction: column; gap: 15px; }
+            }
+        </style>
+    </head>
+    <body>
+        <a href="/" class="back-btn">← Voltar</a>
+        
+        <div class="cadastro-container">
+            <div class="cadastro-header">
+                <h1>Crie sua Conta</h1>
+                <p>Junte-se a milhares de pessoas que já cuidam da saúde online</p>
+            </div>
+            
+            <form class="cadastro-form" onsubmit="enviarCadastro(event)">
+                <div class="form-group">
+                    <label>Tipo de Usuário</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="paciente" name="tipo" value="paciente" checked>
+                            <label for="paciente">👤 Paciente</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="medico" name="tipo" value="medico">
+                            <label for="medico">👨‍⚕️ Médico</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail *</label>
+                        <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefone">Telefone *</label>
+                        <input type="tel" id="telefone" name="telefone" required placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="cpf">CPF *</label>
+                        <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="senha">Senha *</label>
+                        <input type="password" id="senha" name="senha" required placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmar">Confirmar Senha *</label>
+                        <input type="password" id="confirmar" name="confirmar" required placeholder="Confirme sua senha">
+                    </div>
+                </div>
+                
+                <div id="medicoFields" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="crm">CRM *</label>
+                            <input type="text" id="crm" name="crm" placeholder="123456-SP">
+                        </div>
+                        <div class="form-group">
+                            <label for="especialidade">Especialidade *</label>
+                            <select id="especialidade" name="especialidade">
+                                <option value="">Selecione sua especialidade</option>
+                                <option value="clinica-geral">Clínica Geral</option>
+                                <option value="cardiologia">Cardiologia</option>
+                                <option value="pediatria">Pediatria</option>
+                                <option value="psiquiatria">Psiquiatria</option>
+                                <option value="dermatologia">Dermatologia</option>
+                                <option value="ginecologia">Ginecologia</option>
+                                <option value="ortopedia">Ortopedia</option>
+                                <option value="neurologia">Neurologia</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-cadastrar">Criar Minha Conta</button>
+                
+                <div class="login-link">
+                    Já tem uma conta? <a href="/login">Faça login aqui</a>
+                </div>
+            </form>
+        </div>
+        
+        <script>
+            // Mostrar/ocultar campos específicos do médico
+            document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const medicoFields = document.getElementById('medicoFields');
+                    if (this.value === 'medico') {
+                        medicoFields.style.display = 'block';
+                        document.getElementById('crm').required = true;
+                        document.getElementById('especialidade').required = true;
+                    } else {
+                        medicoFields.style.display = 'none';
+                        document.getElementById('crm').required = false;
+                        document.getElementById('especialidade').required = false;
+                    }
+                });
+            });
+            
+            // Máscara para telefone
+            document.getElementById('telefone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                e.target.value = value;
+            });
+            
+            // Máscara para CPF
+            document.getElementById('cpf').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{2})/, '$1-$2');
+                e.target.value = value;
+            });
+            
+            function enviarCadastro(event) {
+                event.preventDefault();
+                
+                const senha = document.getElementById('senha').value;
+                const confirmar = document.getElementById('confirmar').value;
+                
+                if (senha !== confirmar) {
+                    alert('As senhas não coincidem. Tente novamente.');
+                    return;
+                }
+                
+                const tipo = document.querySelector('input[name="tipo"]:checked').value;
+                
+                // Simular cadastro
+                alert('Cadastro realizado com sucesso! Redirecionando...');
+                
+                setTimeout(() => {
+                    if (tipo === 'medico') {
+                        window.location.href = '/doctor-dashboard';
+                    } else {
+                        window.location.href = '/patient-dashboard';
+                    }
+                }, 1000);
+            }
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// 4. VANTAGENS
+app.get('/vantagens.html', (req, res) => {
+  console.log('📄 Serving vantagens (FASE 1) for:', req.path);
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vantagens - TeleMed Sistema</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+                background: #FAFBFC;
+                line-height: 1.6;
+                color: #374151;
+            }
+            .header {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 80px 0;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+            .header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+                opacity: 0.3;
+            }
+            .header h1 { 
+                font-size: 56px; 
+                margin-bottom: 20px; 
+                font-weight: 700;
+                position: relative;
+                z-index: 1;
+            }
+            .header p { 
+                font-size: 22px; 
+                opacity: 0.95;
+                position: relative;
+                z-index: 1;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            nav {
+                background: white;
+                padding: 15px 0;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            nav .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            nav a {
+                text-decoration: none;
+                color: #374151;
+                margin: 0 15px;
+                padding: 8px 16px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+            nav a:hover { background: #F4D9B4; color: #2D5A87; }
+            nav .cta-button {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white !important;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 80px 20px;
+            }
+            
+            .vantagens-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 40px;
+                margin-bottom: 80px;
+            }
+            .vantagem-card {
+                background: white;
+                padding: 50px 40px;
+                border-radius: 20px;
+                text-align: center;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+                border: 3px solid transparent;
+                transition: all 0.4s ease;
+                animation: fadeInUp 0.6s ease-in;
+                position: relative;
+                overflow: hidden;
+            }
+            .vantagem-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(167, 199, 231, 0.1), transparent);
+                transition: left 0.6s ease;
+            }
+            .vantagem-card:hover::before {
+                left: 100%;
+            }
+            .vantagem-card:hover {
+                border-color: #A7C7E7;
+                transform: translateY(-10px);
+                box-shadow: 0 25px 60px rgba(167, 199, 231, 0.15);
+            }
+            .vantagem-icon {
+                font-size: 80px;
+                margin-bottom: 30px;
+                display: block;
+                filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            }
+            .vantagem-title {
+                color: #2D5A87;
+                font-size: 28px;
+                margin-bottom: 20px;
+                font-weight: 700;
+            }
+            .vantagem-description {
+                color: #666;
+                font-size: 16px;
+                line-height: 1.8;
+                margin-bottom: 25px;
+            }
+            .vantagem-highlight {
+                background: linear-gradient(135deg, #A7C7E71A 0%, #F4D9B41A 100%);
+                padding: 15px 20px;
+                border-radius: 12px;
+                color: #2D5A87;
+                font-weight: 600;
+                font-size: 14px;
+            }
+            
+            .stats-section {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 80px 40px;
+                border-radius: 20px;
+                text-align: center;
+                margin-bottom: 80px;
+            }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 40px;
+                margin-top: 50px;
+            }
+            .stat-item {
+                text-align: center;
+            }
+            .stat-number {
+                font-size: 48px;
+                font-weight: 700;
+                margin-bottom: 10px;
+                display: block;
+            }
+            .stat-label {
+                font-size: 16px;
+                opacity: 0.9;
+            }
+            
+            .cta-section {
+                text-align: center;
+                padding: 80px 40px;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            }
+            .cta-buttons {
+                display: flex;
+                gap: 20px;
+                justify-content: center;
+                margin-top: 40px;
+                flex-wrap: wrap;
+            }
+            .cta-button-large {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px 40px;
+                border: none;
+                border-radius: 12px;
+                font-size: 20px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+            }
+            .cta-button-secondary {
+                background: linear-gradient(135deg, #F4D9B4 0%, #E9C79C 100%);
+                color: #2D5A87;
+                padding: 20px 40px;
+                border: none;
+                border-radius: 12px;
+                font-size: 20px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.3s ease;
+            }
+            .cta-button-large:hover, .cta-button-secondary:hover {
+                opacity: 0.9;
+                transform: translateY(-3px);
+            }
+            
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @media (max-width: 768px) {
+                .header h1 { font-size: 36px; }
+                .header p { font-size: 18px; }
+                nav .container { flex-direction: column; gap: 10px; }
+                nav a { margin: 5px; }
+                .container { padding: 60px 20px; }
+                .vantagens-grid { grid-template-columns: 1fr; gap: 30px; }
+                .vantagem-card { padding: 40px 30px; }
+                .stats-section { padding: 60px 30px; }
+                .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+                .cta-buttons { flex-direction: column; align-items: center; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Por que Escolher a TeleMed?</h1>
+            <p>Descubra todas as vantagens de cuidar da sua saúde de forma moderna, prática e segura</p>
+        </div>
+        
+        <nav>
+            <div class="container">
+                <div>
+                    <a href="/">Início</a>
+                    <a href="/especialidades.html">Especialidades</a>
+                    <a href="/como-funciona.html">Como Funciona</a>
+                    <a href="/vantagens.html">Vantagens</a>
+                    <a href="/faq.html">FAQ</a>
+                    <a href="/login">Login</a>
+                </div>
+                <a href="/cadastro.html" class="cta-button">Cadastre-se</a>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <div class="vantagens-grid">
+                <div class="vantagem-card">
+                    <span class="vantagem-icon">⚡</span>
+                    <h3 class="vantagem-title">Rapidez Total</h3>
+                    <p class="vantagem-description">Conecte-se com médicos em até 2 minutos. Sem filas, sem espera, sem perda de tempo. Sua saúde não pode esperar.</p>
+                    <div class="vantagem-highlight">Atendimento em até 120 segundos</div>
+                </div>
+                
+                <div class="vantagem-card">
+                    <span class="vantagem-icon">💰</span>
+                    <h3 class="vantagem-title">Você Define o Preço</h3>
+                    <p class="vantagem-description">Sistema único de lances: você propõe quanto quer pagar pela consulta. Transparência total e controle financeiro.</p>
+                    <div class="vantagem-highlight">Economia de até 60% vs consultas tradicionais</div>
+                </div>
+                
+                <div class="vantagem-card">
+                    <span class="vantagem-icon">🏆</span>
+                    <h3 class="vantagem-title">Médicos de Elite</h3>
+                    <p class="vantagem-description">Profissionais com CRM ativo, especializações comprovadas e avaliação 4.9/5. Qualidade médica premium garantida.</p>
+                    <div class="vantagem-highlight">100% dos médicos com CRM verificado</div>
+                </div>
+                
+                <div class="vantagem-card">
+                    <span class="vantagem-icon">📱</span>
+                    <h3 class="vantagem-title">Tecnologia Avançada</h3>
+                    <p class="vantagem-description">Plataforma com IA médica, videoconsultas HD, receitas digitais válidas nacionalmente e segurança LGPD.</p>
+                    <div class="vantagem-highlight">Tecnologia WebRTC de última geração</div>
+                </div>
+                
+                <div class="vantagem-card">
+                    <span class="vantagem-icon">🏠</span>
+                    <h3 class="vantagem-title">Conforto da Sua Casa</h3>
+                    <p class="vantagem-description">Zero deslocamento, zero trânsito, zero stress. Consulte-se de qualquer lugar, a qualquer hora, com total privacidade.</p>
+                    <div class="vantagem-highlight">Disponível 24/7 em qualquer dispositivo</div>
+                </div>
+                
+                <div class="vantagem-card">
+                    <span class="vantagem-icon">🔒</span>
+                    <h3 class="vantagem-title">Segurança Total</h3>
+                    <p class="vantagem-description">Dados protegidos com criptografia end-to-end, conformidade LGPD e sigilo médico garantido por lei.</p>
+                    <div class="vantagem-highlight">Certificação SSL 256-bit e compliance LGPD</div>
+                </div>
+            </div>
+            
+            <div class="stats-section">
+                <h2 style="font-size: 36px; margin-bottom: 20px; font-weight: 700;">Números que Comprovam nossa Excelência</h2>
+                <p style="font-size: 18px; opacity: 0.9; margin-bottom: 30px;">Mais de 100.000 pessoas já confiam na TeleMed para cuidar da sua saúde</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">100K+</span>
+                        <span class="stat-label">Consultas realizadas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">5.000+</span>
+                        <span class="stat-label">Médicos cadastrados</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4.9★</span>
+                        <span class="stat-label">Avaliação dos pacientes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Taxa de satisfação</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2 style="color: #2D5A87; font-size: 32px; margin-bottom: 20px; font-weight: 700;">Experimente Todas Essas Vantagens</h2>
+                <p style="color: #666; font-size: 18px; margin-bottom: 20px;">Junte-se a milhares de pessoas que já descobriram uma forma melhor de cuidar da saúde</p>
+                <div class="cta-buttons">
+                    <a href="/dr-ai" class="cta-button-secondary">Teste Grátis com Dr. AI</a>
+                    <a href="/patient-bidding" class="cta-button-large">Fazer Minha Primeira Consulta</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
 });
 
 // HTML Landing Pages - HIGHEST PRIORITY
