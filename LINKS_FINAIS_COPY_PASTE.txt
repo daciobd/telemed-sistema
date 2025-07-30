@@ -22,6 +22,9 @@ https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
 Triagem Psiquiátrica:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html
 
+Triagem Psiquiátrica (Auto-Start):
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html?autostart=true
+
 Especialidades:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/especialidades.html
 

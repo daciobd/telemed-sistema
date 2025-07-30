@@ -1140,6 +1140,32 @@
         function goBack() {
             window.location.href = '/dr-ai.html';
         }
+
+        function iniciarTriagem() {
+            startAssessment();
+        }
+
+        function mostrarIntroducao() {
+            // Mantém comportamento padrão - mostra introdução
+            document.getElementById('introContainer').style.display = 'block';
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'none';
+        }
+
+        // Verificação do parâmetro autostart na inicialização da página
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('autostart') === 'true') {
+                console.log('🚀 Auto-start ativado - Iniciando triagem automaticamente');
+                // Pula a introdução e inicia diretamente
+                iniciarTriagem();
+            } else {
+                console.log('📋 Modo normal - Mostrando introdução');
+                // Comportamento padrão - mostra introdução
+                mostrarIntroducao();
+            }
+        });
     </script>
 </body>
 </html>

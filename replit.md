@@ -10,6 +10,22 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 30, 2025**: TRIAGEM PSIQUIÁTRICA AUTO-START IMPLEMENTADA - SISTEMA v12.4.0
+  - ✅ **Parâmetro ?autostart=true Adicionado**: Nova funcionalidade na triagem psiquiátrica
+    - URL normal: /triagem-psiquiatrica.html (mostra introdução)
+    - URL auto-start: /triagem-psiquiatrica.html?autostart=true (pula introdução)
+    - JavaScript detecta parâmetro automaticamente via URLSearchParams
+    - Funções iniciarTriagem() e mostrarIntroducao() implementadas
+    - DOMContentLoaded listener verifica parâmetro e executa ação correspondente
+  - ✅ **LINKS_FINAIS_COPY_PASTE.txt Atualizado**: Novo link auto-start adicionado
+    - Link normal mantido para comportamento padrão
+    - Link auto-start adicionado para integração direta com sistemas externos
+    - Ambas URLs testadas e funcionais com HTTP 200
+  - ✅ **Logs de Debug Implementados**: Console logs informativos
+    - '🚀 Auto-start ativado' quando parâmetro presente
+    - '📋 Modo normal' quando parâmetro ausente
+    - Facilita debugging e verificação de funcionamento
+
 - **July 29, 2025**: PÁGINAS CRÍTICAS LOGIN E AGENDAMENTO CORRIGIDAS - SISTEMA COMPLETO v12.3.0
   - ✅ **Problema 404 Pages Resolvido**: Adicionadas rotas `/login` e `/agendamento` no server/index.ts
   - ✅ **Sistema de Login Completo**: Interface profissional com autenticação de demonstração
