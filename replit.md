@@ -10,6 +10,24 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 30, 2025**: CADASTRO DE NOVOS USUÁRIOS IMPLEMENTADO - SISTEMA v12.5.4
+  - ✅ **Página de Cadastro `/register` Criada**: Sistema completo para novos usuários
+    - Formulário dual: Seletor Paciente/Médico com campos específicos
+    - Validação completa: nome, email, telefone, senha, confirmação
+    - Campos médicos: CRM e especialidade (aparecem quando médico selecionado)
+    - Máscaras automáticas para telefone e validação em tempo real
+    - Design duotônico profissional consistente (#A7C7E7, #F4D9B4, #E9967A)
+    - Redirecionamento pós-cadastro para página de login
+  - ✅ **Links de Cadastro Corrigidos**: Todos os "Cannot GET" resolvidos
+    - Botão "Sou Paciente" no login → redireciona para /register
+    - Botão "Sou Médico" no login → redireciona para /register?type=medico
+    - Rota /register adicionada às rotas estáticas do servidor
+    - Link "Já tem conta?" → retorna para /login
+  - ✅ **Fluxo Completo Funcional**: Novos usuários podem se cadastrar
+    - Página login → "Não tem conta?" → página cadastro → confirmação → retorno login
+    - Integração perfeita com sistema de autenticação existente
+    - Problema "Cannot GET /cadastro.html" completamente resolvido
+
 - **July 30, 2025**: PATIENT-DASHBOARD CRIADO + AUTENTICAÇÃO COMPLETA - SISTEMA v12.5.3
   - ✅ **Patient Dashboard Implementado**: Página `/patient-dashboard` criada e funcional
     - Dashboard completo com estatísticas do paciente (3 consultas, 1 agendada, 2 receitas, 4.9⭐)

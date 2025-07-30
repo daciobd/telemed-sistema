@@ -1994,7 +1994,7 @@ app.get('/login', (req, res) => {
                         <i class="fas fa-user-plus" style="margin-right: 5px;"></i>
                         Sou Paciente
                     </a>
-                    <a href="/medico-cadastro.html" style="
+                    <a href="/register?type=medico" style="
                         flex: 1;
                         background: #E9967A;
                         color: white;
