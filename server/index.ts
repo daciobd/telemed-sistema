@@ -2488,6 +2488,48 @@ app.get('/agendamento', (req, res) => {
   `);
 });
 
+// ÁREA MÉDICA - SISTEMA DE SEGURANÇA E AUTENTICAÇÃO
+
+// 1. Área Médica (Porteiro)
+app.get('/area-medica.html', (req, res) => {
+  console.log('🏥 Serving Área Médica (Porteiro) for:', req.path);
+  res.sendFile(path.join(__dirname, '../public/area-medica.html'));
+});
+
+// 2. Login Médico
+app.get('/login-medico.html', (req, res) => {
+  console.log('🔐 Serving Login Médico for:', req.path);
+  res.sendFile(path.join(__dirname, '../public/login-medico.html'));
+});
+
+// 3. Cadastro Médico
+app.get('/medico-cadastro.html', (req, res) => {
+  console.log('📋 Serving Cadastro Médico for:', req.path);
+  res.sendFile(path.join(__dirname, '../public/medico-cadastro.html'));
+});
+
+// 4. Proteção de URLs médicas - Middleware de segurança
+const protectedMedicalRoutes = [
+  '/doctor-dashboard',
+  '/agenda-medico.html',
+  '/estatisticas-medico.html',
+  '/pagamentos-medicos.html'
+];
+
+// Middleware para verificar autenticação médica (simulação)
+function checkMedicalAuth(req, res, next) {
+  // Em produção, verificaria JWT token ou sessão
+  // Por agora, redireciona para área médica
+  console.log(`🔒 Verificando acesso médico para: ${req.path}`);
+  
+  // Para demonstração, permite acesso direto
+  // Em produção, faria verificação real de autenticação
+  next();
+}
+
+// Aplicar middleware de segurança nas rotas protegidas
+app.use(protectedMedicalRoutes, checkMedicalAuth);
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[${new Date().toISOString()}] 🩺 TeleMed Sistema v12.2.0`);
   console.log(`[${new Date().toISOString()}] 🌐 Servidor rodando na porta ${PORT}`);

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Médica - TeleMed Sistema</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="preconnect">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #A7C7E7;
+            --secondary-color: #F4D9B4;
+            --alert-color: #E9967A;
+            --background-color: #FAF8F5;
+            --card-color: #FFFFFF;
+            --text-dark: #2c3e50;
+            --text-gray: #666;
+            --border-color: #e1e5e9;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .security-banner {
+            background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .security-banner i {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .access-card {
+            background: var(--card-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .access-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .access-card.login {
+            border-top: 4px solid var(--success-color);
+        }
+
+        .access-card.register {
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .login .card-icon {
+            color: var(--success-color);
+        }
+
+        .register .card-icon {
+            color: var(--primary-color);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .card-description {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .card-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(167, 199, 231, 0.4);
+        }
+
+        .card-btn.register-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+        }
+
+        .card-btn.register-btn:hover {
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .info-section {
+            background: var(--card-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .info-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .info-title i {
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list i {
+            color: var(--success-color);
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .verification-process {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #F0C87A 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .verification-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .verification-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .step {
+            background: rgba(255,255,255,0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: 600;
+        }
+
+        .support-banner {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .support-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .support-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .header-content {
+                padding: 0 1rem;
+            }
+            
+            .support-contacts {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        .monitoring-notice {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-user-md"></i>
+                Área Médica - TeleMed
+            </div>
+            <a href="/" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Voltar ao Site
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="security-banner">
+            <i class="fas fa-shield-alt"></i>
+            <strong>Área Restrita:</strong> Acesso exclusivo para profissionais médicos com CRM ativo
+        </div>
+
+        <div class="main-grid">
+            <div class="access-card login">
+                <div class="card-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h2 class="card-title">Médicos Cadastrados</h2>
+                <p class="card-description">
+                    Acesse seu dashboard profissional, agenda de consultas, relatórios financeiros e ferramentas médicas.
+                </p>
+                <a href="/login-medico.html" class="card-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login Seguro
+                </a>
+            </div>
+
+            <div class="access-card register">
+                <div class="card-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h2 class="card-title">Novos Médicos</h2>
+                <p class="card-description">
+                    Cadastre-se na plataforma. Processo de verificação em até 48h com validação de CRM.
+                </p>
+                <a href="/medico-cadastro.html" class="card-btn register-btn">
+                    <i class="fas fa-clipboard-check"></i>
+                    Cadastrar-se
+                </a>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3 class="info-title">
+                <i class="fas fa-info-circle"></i>
+                Como Funciona o Sistema
+            </h3>
+            <ul class="info-list">
+                <li>
+                    <i class="fas fa-check"></i>
+                    Dashboard personalizado com métricas de atendimento
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Sistema de lances: médicos fazem ofertas para consultas
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Agenda integrada com videoconsultas WebRTC
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Prescrições digitais com assinatura eletrônica
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Prontuários eletrônicos com histórico completo
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Pagamentos automáticos por consulta realizada
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Suporte Dr. AI para triagem e diagnósticos
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    Relatórios financeiros e de performance
+                </li>
+            </ul>
+
+            <div class="verification-process">
+                <div class="verification-title">
+                    <i class="fas fa-clipboard-check"></i>
+                    Processo de Verificação
+                </div>
+                <div class="verification-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <strong>Cadastro</strong><br>
+                        Preencha dados pessoais e CRM
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <strong>Validação</strong><br>
+                        Verificamos CRM no CFM
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <strong>Documentos</strong><br>
+                        Envio de documentos comprobatórios
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <strong>Aprovação</strong><br>
+                        Ativação em até 48h
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="support-banner">
+            <h3>Suporte Especializado para Médicos</h3>
+            <p>Nossa equipe está disponível para ajudar profissionais médicos</p>
+            <div class="support-contacts">
+                <div class="support-contact">
+                    <i class="fas fa-phone"></i>
+                    (11) 4000-8888
+                </div>
+                <div class="support-contact">
+                    <i class="fas fa-envelope"></i>
+                    medicos@telemed.com.br
+                </div>
+                <div class="support-contact">
+                    <i class="fab fa-whatsapp"></i>
+                    (11) 99999-8888
+                </div>
+            </div>
+        </div>
+
+        <div class="monitoring-notice">
+            <i class="fas fa-eye"></i>
+            <strong>Aviso:</strong> Tentativas de acesso não autorizado são monitoradas e registradas conforme legislação vigente.
+        </div>
+    </div>
+
+    <script>
+        // Verificar se há redirecionamento pendente
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectUrl = urlParams.get('redirect');
+            
+            if (redirectUrl) {
+                console.log('🔄 Redirecionamento pendente para:', redirectUrl);
+                
+                // Salvar URL de redirecionamento no localStorage
+                localStorage.setItem('medical_redirect_after_login', redirectUrl);
+                
+                // Atualizar links de login para incluir parâmetro
+                const loginBtn = document.querySelector('a[href="/login-medico.html"]');
+                if (loginBtn) {
+                    loginBtn.href = `/login-medico.html?redirect=${encodeURIComponent(redirectUrl)}`;
+                }
+            }
+        });
+
+        // Animações de entrada
+        const cards = document.querySelectorAll('.access-card, .info-section');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 150);
+        });
+    </script>
+</body>
+</html>

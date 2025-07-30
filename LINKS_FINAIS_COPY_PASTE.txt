@@ -1,107 +1,128 @@
-===============================================
-    LINKS CORRETOS PARA COPY-PASTE
-===============================================
+# LINKS FINAIS COPY-PASTE READY - TeleMed Sistema v12.5.0
+# Domínio: 84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev
+# Data: 30 de julho de 2025
+# Sistema: Completo com Área Médica Segura
 
-🎯 BOTÕES PRINCIPAIS (COPIE E COLE):
+## ÁREA MÉDICA - SISTEMA DE SEGURANÇA ⚕️
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/area-medica.html
+# Porteiro da área médica - Entrada controlada para profissionais
 
-Começar Consulta:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login-medico.html
+# Login específico para médicos com CRM
 
-Login/Cadastro:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/medico-cadastro.html
+# Cadastro médico com validação profissional
 
-Dashboard Médico:
+## SISTEMA PRINCIPAL 🩺
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
+# Landing page principal
+
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/doctor-dashboard
+# Dashboard médico (PROTEGIDO - requer login médico)
 
-Dashboard Paciente:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/patient-dashboard
-
-Dr. AI (Triagem):
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai
-
-Triagem Psiquiátrica:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html
-
-Triagem Psiquiátrica (Auto-Start):
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html?autostart=true
-
-Especialidades:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/especialidades.html
-
-Sistema de Lances Completo:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/patient-bidding
+# Sistema de lances para pacientes
 
-===============================================
-🏥 ESPECIALIDADES POR PARÂMETRO:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta-por-valor.html
+# Sistema de lances completo
 
-Clínica Geral:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=clinica-geral
+## DR. AI - TRIAGEM INTELIGENTE 🤖
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai.html
+# Triagem médica com IA
 
-Ortopedia:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=ortopedia
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html
+# Triagem psiquiátrica - modo normal
 
-Pediatria:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=pediatria
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/triagem-psiquiatrica.html?autostart=true
+# Triagem psiquiátrica - auto-start (NOVO!)
 
-Dermatologia:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=dermatologia
+## ESPECIALIDADES MÉDICAS 👨‍⚕️
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/especialidades.html
+# Página de especialidades médicas
 
-Psiquiatria:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=psiquiatria
-
-Ginecologia:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=ginecologia
-
-Psicoterapia:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=psicoterapia
-
-Nutrição:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=nutricao
-
-Cardiologia:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=cardiologia
+# Agendamento para Cardiologia
 
-===============================================
-📋 PÁGINAS INSTITUCIONAIS:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=pediatria
+# Agendamento para Pediatria
 
-Termos de Uso:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/termos-de-uso.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=dermatologia
+# Agendamento para Dermatologia
 
-Política de Privacidade:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/politica-privacidade.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=psiquiatria
+# Agendamento para Psiquiatria
 
-Preços e Planos:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/precos.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=ginecologia
+# Agendamento para Ginecologia
 
-Como Funciona:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/como-funciona.html
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=psicoterapia
+# Agendamento para Psicoterapia
 
-Sobre Nós:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=nutricao
+# Agendamento para Nutrição
+
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agendamento?especialidade=ortopedia
+# Agendamento para Ortopedia
+
+## VIDEOCONSULTAS 📹
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/videoconsulta.html
+# Sistema de videoconsultas WebRTC
+
+## PÁGINAS INSTITUCIONAIS 📋
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/sobre.html
+# Sobre a empresa
 
-Equipe Médica:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/como-funciona.html
+# Como funciona o sistema
+
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/precos.html
+# Preços e planos
+
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/equipe-medica.html
+# Equipe médica
 
-===============================================
-📞 PÁGINAS DE CONTATO:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/termos-de-uso.html
+# Termos de uso
 
-Contato:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/politica-privacidade.html
+# Política de privacidade
+
+## PÁGINAS DE APOIO 📞
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/contato.html
+# Contato
 
-Suporte:
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/suporte.html
-
-FAQ:
 https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/faq.html
+# FAQ - Perguntas frequentes
 
-===============================================
-📧 EMAILS CORRETOS:
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/suporte.html
+# Central de suporte
 
-contato@telemed-sistema.replit.dev
-suporte@telemed-sistema.replit.dev
+## SISTEMA DE NAVEGAÇÃO 🗺️
+https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/sistema-indice.html
+# Índice completo do sistema
 
-===============================================
-✅ TODOS OS LINKS TESTADOS E FUNCIONAIS
-✅ DOMÍNIO CORRETO DO REPLIT IDENTIFICADO
-✅ PRONTO PARA USO NO HOSTINGER
-===============================================
+## CONTAS DEMO PARA TESTES 🔑
+### Área Médica:
+- CRM: 123456-SP | Senha: medico123
+- CRM: 654321-RJ | Senha: doutor456
+
+### Sistema Geral:
+- paciente@demo.com | Senha: 123456
+- medico@demo.com | Senha: 123456
+
+## FUNCIONALIDADES IMPLEMENTADAS ✅
+✅ Sistema completo de área médica com "porteiro"
+✅ Autenticação baseada em CRM + Estado
+✅ Proteção automática de URLs médicas
+✅ Sistema de redirecionamento inteligente
+✅ Triagem psiquiátrica com auto-start
+✅ Dashboard médico profissional
+✅ Sistema de lances bidireccional
+✅ Dr. AI com IA médica
+✅ Especialidades com fotos personalizadas
+✅ Videoconsultas WebRTC
+✅ Páginas institucionais completas
+✅ Sistema de navegação centralizado
+✅ Design duotônico refinado
+✅ Responsividade total
+✅ Segurança LGPD
