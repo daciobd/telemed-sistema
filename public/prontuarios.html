@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuários - TeleMed Sistema</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #A7C7E7;
+            --secondary-color: #F4D9B4;
+            --alert-color: #E9967A;
+            --background-color: #FAF8F5;
+            --card-color: #FFFFFF;
+            --text-dark: #2c3e50;
+            --text-gray: #666;
+            --border-color: #e1e5e9;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-color);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            color: var(--success-color);
+        }
+
+        .controls-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 300px;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(167, 199, 231, 0.4);
+        }
+
+        .prontuarios-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .prontuario-card {
+            background: var(--card-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .prontuario-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .prontuario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .patient-info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .patient-details {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .prontuario-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-ativo {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-arquivado {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+
+        .prontuario-summary {
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .prontuario-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-view {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-view:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-edit {
+            border-color: var(--warning-color);
+            color: var(--warning-color);
+            background: transparent;
+        }
+
+        .btn-edit:hover {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-archive {
+            border-color: var(--text-gray);
+            color: var(--text-gray);
+            background: transparent;
+        }
+
+        .btn-archive:hover {
+            background: var(--text-gray);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .controls-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-filters {
+                flex-direction: column;
+            }
+
+            .search-input {
+                max-width: none;
+            }
+
+            .prontuario-actions {
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-file-medical"></i>
+                TeleMed - Prontuários
+            </div>
+            <a href="/doctor-dashboard" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Voltar ao Dashboard
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Prontuários Médicos</h1>
+        <p class="page-subtitle">Gerencie e consulte todos os prontuários dos seus pacientes</p>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Total de Prontuários</div>
+                    <div class="stat-icon" style="background: var(--primary-color);">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                </div>
+                <div class="stat-value">127</div>
+                <div class="stat-change">+12 este mês</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Ativos</div>
+                    <div class="stat-icon" style="background: var(--success-color);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-value">89</div>
+                <div class="stat-change">Pacientes em acompanhamento</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Atualizados Hoje</div>
+                    <div class="stat-icon" style="background: var(--warning-color);">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="stat-value">8</div>
+                <div class="stat-change">Consultas realizadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Arquivados</div>
+                    <div class="stat-icon" style="background: var(--text-gray);">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                </div>
+                <div class="stat-value">38</div>
+                <div class="stat-change">Tratamentos concluídos</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-section">
+            <div class="search-filters">
+                <input type="text" class="search-input" placeholder="Buscar por nome, CPF ou diagnóstico..." id="searchInput">
+                <select class="filter-select" id="statusFilter">
+                    <option value="">Todos os Status</option>
+                    <option value="ativo">Ativos</option>
+                    <option value="arquivado">Arquivados</option>
+                </select>
+                <select class="filter-select" id="especialidadeFilter">
+                    <option value="">Todas Especialidades</option>
+                    <option value="cardiologia">Cardiologia</option>
+                    <option value="clinica-geral">Clínica Geral</option>
+                    <option value="pediatria">Pediatria</option>
+                    <option value="psiquiatria">Psiquiatria</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="criarNovoProntuario()">
+                <i class="fas fa-plus"></i>
+                Novo Prontuário
+            </button>
+        </div>
+
+        <!-- Prontuários List -->
+        <div class="prontuarios-grid" id="prontuariosList">
+            <!-- Os prontuários serão carregados aqui -->
+        </div>
+    </div>
+
+    <script>
+        // Dados mock dos prontuários
+        const prontuarios = [
+            {
+                id: 1,
+                nome: "Maria Silva Santos",
+                idade: 45,
+                cpf: "123.456.789-01",
+                telefone: "(11) 99999-1234",
+                email: "maria.silva@email.com",
+                especialidade: "Cardiologia",
+                status: "ativo",
+                ultimaConsulta: "2025-07-28",
+                proximaConsulta: "2025-08-15",
+                totalConsultas: 8,
+                diagnosticoPrincipal: "Hipertensão Arterial",
+                medicamentos: 3,
+                alergias: "Nenhuma conhecida"
+            },
+            {
+                id: 2,
+                nome: "João Carlos Mendes",
+                idade: 32,
+                cpf: "987.654.321-09",
+                telefone: "(11) 88888-5678",
+                email: "joao.mendes@email.com",
+                especialidade: "Clínica Geral",
+                status: "ativo",
+                ultimaConsulta: "2025-07-30",
+                proximaConsulta: "2025-08-10",
+                totalConsultas: 12,
+                diagnosticoPrincipal: "Diabetes Tipo 2",
+                medicamentos: 2,
+                alergias: "Penicilina"
+            },
+            {
+                id: 3,
+                nome: "Ana Costa Oliveira",
+                idade: 28,
+                cpf: "456.789.123-45",
+                telefone: "(11) 77777-9012",
+                email: "ana.costa@email.com",
+                especialidade: "Psiquiatria",
+                status: "ativo",
+                ultimaConsulta: "2025-07-29",
+                proximaConsulta: "2025-08-05",
+                totalConsultas: 15,
+                diagnosticoPrincipal: "Transtorno de Ansiedade",
+                medicamentos: 1,
+                alergias: "Nenhuma conhecida"
+            },
+            {
+                id: 4,
+                nome: "Pedro Lima Santos",
+                idade: 67,
+                cpf: "321.654.987-12",
+                telefone: "(11) 66666-3456",
+                email: "pedro.lima@email.com",
+                especialidade: "Cardiologia",
+                status: "arquivado",
+                ultimaConsulta: "2025-06-15",
+                proximaConsulta: null,
+                totalConsultas: 25,
+                diagnosticoPrincipal: "Infarto do Miocárdio (Recuperado)",
+                medicamentos: 4,
+                alergias: "Aspirina"
+            },
+            {
+                id: 5,
+                nome: "Sofia Rodriguez",
+                idade: 35,
+                cpf: "789.123.456-78",
+                telefone: "(11) 55555-7890",
+                email: "sofia.rodriguez@email.com",
+                especialidade: "Pediatria",
+                status: "ativo",
+                ultimaConsulta: "2025-07-27",
+                proximaConsulta: "2025-08-20",
+                totalConsultas: 6,
+                diagnosticoPrincipal: "Acompanhamento Pediátrico",
+                medicamentos: 0,
+                alergias: "Lactose"
+            }
+        ];
+
+        function renderProntuarios(prontuariosToRender = prontuarios) {
+            const container = document.getElementById('prontuariosList');
+            
+            if (prontuariosToRender.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-gray);">
+                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>Nenhum prontuário encontrado</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = prontuariosToRender.map(prontuario => `
+                <div class="prontuario-card">
+                    <div class="prontuario-header">
+                        <div class="patient-info">
+                            <h3>${prontuario.nome}</h3>
+                            <div class="patient-details">
+                                ${prontuario.idade} anos • ${prontuario.cpf} • ${prontuario.especialidade}
+                            </div>
+                        </div>
+                        <div class="prontuario-status status-${prontuario.status}">
+                            ${prontuario.status === 'ativo' ? 'Ativo' : 'Arquivado'}
+                        </div>
+                    </div>
+                    
+                    <div class="prontuario-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Diagnóstico Principal:</span>
+                            <span class="summary-value">${prontuario.diagnosticoPrincipal}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total de Consultas:</span>
+                            <span class="summary-value">${prontuario.totalConsultas}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Última Consulta:</span>
+                            <span class="summary-value">${formatDate(prontuario.ultimaConsulta)}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Medicamentos Ativos:</span>
+                            <span class="summary-value">${prontuario.medicamentos}</span>
+                        </div>
+                        ${prontuario.proximaConsulta ? `
+                        <div class="summary-item">
+                            <span class="summary-label">Próxima Consulta:</span>
+                            <span class="summary-value">${formatDate(prontuario.proximaConsulta)}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="prontuario-actions">
+                        <button class="action-btn btn-view" onclick="visualizarProntuario(${prontuario.id})">
+                            <i class="fas fa-eye"></i>
+                            Visualizar
+                        </button>
+                        <button class="action-btn btn-edit" onclick="editarProntuario(${prontuario.id})">
+                            <i class="fas fa-edit"></i>
+                            Editar
+                        </button>
+                        ${prontuario.status === 'ativo' ? `
+                        <button class="action-btn btn-archive" onclick="arquivarProntuario(${prontuario.id})">
+                            <i class="fas fa-archive"></i>
+                            Arquivar
+                        </button>
+                        ` : `
+                        <button class="action-btn btn-view" onclick="reativarProntuario(${prontuario.id})">
+                            <i class="fas fa-undo"></i>
+                            Reativar
+                        </button>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function filterProntuarios() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const especialidadeFilter = document.getElementById('especialidadeFilter').value;
+            
+            const filtered = prontuarios.filter(prontuario => {
+                const matchesSearch = prontuario.nome.toLowerCase().includes(searchTerm) ||
+                                    prontuario.cpf.includes(searchTerm) ||
+                                    prontuario.diagnosticoPrincipal.toLowerCase().includes(searchTerm);
+                
+                const matchesStatus = !statusFilter || prontuario.status === statusFilter;
+                const matchesEspecialidade = !especialidadeFilter || 
+                                           prontuario.especialidade.toLowerCase().includes(especialidadeFilter);
+                
+                return matchesSearch && matchesStatus && matchesEspecialidade;
+            });
+            
+            renderProntuarios(filtered);
+        }
+
+        function criarNovoProntuario() {
+            alert('Funcionalidade em desenvolvimento: Criar Novo Prontuário');
+        }
+
+        function visualizarProntuario(id) {
+            const prontuario = prontuarios.find(p => p.id === id);
+            alert(`Visualizando prontuário de: ${prontuario.nome}\n\nEsta funcionalidade abrirá uma janela detalhada com o histórico completo do paciente.`);
+        }
+
+        function editarProntuario(id) {
+            const prontuario = prontuarios.find(p => p.id === id);
+            alert(`Editando prontuário de: ${prontuario.nome}\n\nEsta funcionalidade abrirá um formulário para edição dos dados do paciente.`);
+        }
+
+        function arquivarProntuario(id) {
+            if (confirm('Tem certeza que deseja arquivar este prontuário?')) {
+                const prontuario = prontuarios.find(p => p.id === id);
+                prontuario.status = 'arquivado';
+                renderProntuarios();
+                alert(`Prontuário de ${prontuario.nome} foi arquivado com sucesso.`);
+            }
+        }
+
+        function reativarProntuario(id) {
+            if (confirm('Tem certeza que deseja reativar este prontuário?')) {
+                const prontuario = prontuarios.find(p => p.id === id);
+                prontuario.status = 'ativo';
+                renderProntuarios();
+                alert(`Prontuário de ${prontuario.nome} foi reativado com sucesso.`);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterProntuarios);
+        document.getElementById('statusFilter').addEventListener('change', filterProntuarios);
+        document.getElementById('especialidadeFilter').addEventListener('change', filterProntuarios);
+
+        // Carregar prontuários na inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProntuarios();
+            console.log('📋 Sistema de Prontuários carregado com sucesso!');
+        });
+    </script>
+</body>
+</html>
