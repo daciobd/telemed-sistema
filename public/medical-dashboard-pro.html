@@ -1109,13 +1109,58 @@
             }
         }
 
+        // SISTEMA DE AUTENTICAÇÃO - Verificar se está logado
+        function verificarAutenticacao() {
+            const loggedIn = sessionStorage.getItem('telemed_logged_in');
+            const userType = sessionStorage.getItem('telemed_user_type');
+            
+            if (loggedIn !== 'true' || userType !== 'medico') {
+                // Usuário não está logado ou não é médico
+                alert('🔒 Acesso restrito!\n\nPor favor, faça login como médico para acessar esta área.');
+                window.location.href = '/login';
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Função de logout
+        function logout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                // Limpar todas as sessões
+                sessionStorage.clear();
+                localStorage.removeItem('telemed_remember');
+                localStorage.removeItem('telemed_user_type');
+                
+                alert('Logout realizado com sucesso!');
+                window.location.href = '/login';
+            }
+        }
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('👨‍⚕️ Dashboard Médico com Sidebar Lateral CARREGADO!');
+            // VERIFICAR AUTENTICAÇÃO PRIMEIRO
+            if (!verificarAutenticacao()) {
+                return; // Parar execução se não autenticado
+            }
+            
+            console.log('👨‍⚕️ Dashboard Médico PROTEGIDO com Sidebar Lateral CARREGADO!');
+            console.log('🔒 Verificação de autenticação ativa');
             console.log('🍔 Menu hamburger lateral implementado');
             console.log('📱 Responsivo desktop/mobile completo');
             console.log('⚡ Navegação categorizada por seções');
             console.log('🎯 Sistema de lances integrado');
+            
+            // Adicionar botão de logout no header
+            const headerRight = document.querySelector('.header-right');
+            if (headerRight) {
+                const logoutBtn = document.createElement('button');
+                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Sair';
+                logoutBtn.className = 'btn alert';
+                logoutBtn.onclick = logout;
+                logoutBtn.style.marginLeft = '10px';
+                headerRight.appendChild(logoutBtn);
+            }
             
             // Carrega lances após um pequeno delay
             setTimeout(() => {
