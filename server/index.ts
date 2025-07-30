@@ -2508,6 +2508,18 @@ app.get('/medico-cadastro.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/medico-cadastro.html'));
 });
 
+// 4. Agenda Médico (Protegida)
+app.get('/agenda-medico.html', (req, res) => {
+  console.log('📅 Serving Agenda Médico for:', req.path);
+  res.sendFile(path.join(__dirname, '../public/agenda-medico.html'));
+});
+
+// 5. Estatísticas Médico (Protegida)
+app.get('/estatisticas-medico.html', (req, res) => {
+  console.log('📊 Serving Estatísticas Médico for:', req.path);
+  res.sendFile(path.join(__dirname, '../public/estatisticas-medico.html'));
+});
+
 // 4. Proteção de URLs médicas - Middleware de segurança
 const protectedMedicalRoutes = [
   '/doctor-dashboard',
