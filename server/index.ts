@@ -1372,9 +1372,15 @@ app.get('/faq', (req, res) => {
   `);
 });
 
-// 5. DOCTOR DASHBOARD - Dashboard médico profissional
+// 5. DOCTOR DASHBOARD - Dashboard médico profissional REPARADO
 app.get('/doctor-dashboard', (req, res) => {
-  console.log('🩺 Serving Doctor Dashboard for:', req.path);
+  console.log('🩺 Serving REPAIRED Doctor Dashboard for:', req.path);
+  res.sendFile(path.join(__dirname, '../public/medical-dashboard-pro.html'));
+});
+
+// 6. LOGIN PAGE - Sistema de autenticação
+app.get('/login', (req, res) => {
+  console.log('🔐 Serving Login Page for:', req.path);
   
   res.send(`
     <!DOCTYPE html>
@@ -1382,186 +1388,27 @@ app.get('/doctor-dashboard', (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard Médico - TeleMed Sistema</title>
+        <title>Login - TeleMed Sistema</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { 
                 font-family: 'Poppins', Arial, sans-serif; 
-                background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
-                line-height: 1.6; 
-                color: #2D5A87; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
                 min-height: 100vh;
-            }
-            .dashboard-container {
-                display: grid;
-                grid-template-columns: 280px 1fr;
-                min-height: 100vh;
-            }
-            
-            /* SIDEBAR */
-            .sidebar {
-                background: linear-gradient(180deg, #2D5A87 0%, #1A365D 100%);
-                color: white;
-                padding: 0;
-                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-                z-index: 100;
-            }
-            .sidebar-header {
-                padding: 30px 20px;
-                text-align: center;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-            .sidebar-header h2 {
-                font-size: 1.5rem;
-                font-weight: 700;
-                margin-bottom: 5px;
-            }
-            .sidebar-header p {
-                font-size: 0.9rem;
-                color: rgba(255,255,255,0.8);
-            }
-            .sidebar-nav {
-                padding: 20px 0;
-            }
-            .nav-section {
-                margin-bottom: 30px;
-            }
-            .nav-section-title {
-                padding: 0 20px 10px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: rgba(255,255,255,0.6);
-            }
-            .nav-item {
-                display: flex;
-                align-items: center;
-                padding: 12px 20px;
-                color: rgba(255,255,255,0.8);
-                text-decoration: none;
-                transition: all 0.3s ease;
-                border-left: 3px solid transparent;
-            }
-            .nav-item:hover {
-                background: rgba(255,255,255,0.1);
-                color: white;
-                border-left-color: #A7C7E7;
-            }
-            .nav-item.active {
-                background: rgba(167, 199, 231, 0.2);
-                color: white;
-                border-left-color: #A7C7E7;
-            }
-            .nav-item i {
-                width: 20px;
-                margin-right: 12px;
-                font-size: 1.1rem;
-            }
-            .nav-badge {
-                margin-left: auto;
-                background: #E9967A;
-                color: white;
-                padding: 2px 8px;
-                border-radius: 12px;
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
-            
-            /* MAIN CONTENT */
-            .main-content {
-                padding: 30px;
-                overflow-y: auto;
-            }
-            .main-header {
-                display: flex;
-                justify-content: between;
-                align-items: center;
-                margin-bottom: 40px;
-                background: white;
-                padding: 25px 30px;
-                border-radius: 20px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            }
-            .welcome-section h1 {
-                font-size: 2rem;
-                font-weight: 700;
-                color: #2D5A87;
-                margin-bottom: 5px;
-            }
-            .welcome-section p {
-                color: #666;
-                font-size: 1.1rem;
-            }
-            .header-actions {
-                display: flex;
-                gap: 15px;
-            }
-            .action-btn {
-                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
-                color: white;
-                padding: 12px 20px;
-                border: none;
-                border-radius: 12px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            .action-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(167, 199, 231, 0.4);
-            }
-            
-            /* STATS CARDS */
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 25px;
-                margin-bottom: 40px;
-            }
-            .stat-card {
-                background: white;
-                padding: 25px;
-                border-radius: 20px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-                border: 1px solid #E0E6ED;
-                transition: transform 0.3s ease;
-            }
-            .stat-card:hover {
-                transform: translateY(-5px);
-            }
-            .stat-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 15px;
-            }
-            .stat-title {
-                font-size: 0.9rem;
-                color: #666;
-                font-weight: 500;
-            }
-            .stat-icon {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.2rem;
-                color: white;
+                padding: 20px;
             }
-            .stat-value {
-                font-size: 2.2rem;
-                font-weight: 700;
-                color: #2D5A87;
-                margin-bottom: 5px;
+            .login-container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+                width: 100%;
+                text-align: center;
             }
             .stat-change {
                 font-size: 0.85rem;
