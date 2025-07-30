@@ -1381,7 +1381,256 @@ app.get('/doctor-dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/medical-dashboard-pro.html'));
 });
 
-// 6. PATIENT DASHBOARD - Dashboard do paciente
+// 6. REGISTER PAGE - Sistema de cadastro para novos usuários
+app.get('/register', (req, res) => {
+  console.log('📝 Serving Registration Form for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro - TeleMed Sistema</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+            .container {
+                max-width: 500px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            }
+            .header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .header h1 {
+                color: #A7C7E7;
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #374151;
+                font-weight: 500;
+            }
+            .form-group input {
+                width: 100%;
+                padding: 12px 16px;
+                border: 2px solid #E5E7EB;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+            .form-group input:focus {
+                outline: none;
+                border-color: #A7C7E7;
+            }
+            .btn {
+                width: 100%;
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 16px;
+                border: none;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+                margin-bottom: 20px;
+            }
+            .btn:hover { transform: translateY(-2px); }
+            .user-type-selector {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .user-type-btn {
+                flex: 1;
+                padding: 12px;
+                border: 2px solid #A7C7E7;
+                background: white;
+                color: #A7C7E7;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 500;
+                transition: all 0.3s;
+            }
+            .user-type-btn.active {
+                background: #A7C7E7;
+                color: white;
+            }
+            .already-account {
+                text-align: center;
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 1px solid #E5E7EB;
+            }
+            .already-account a {
+                color: #A7C7E7;
+                text-decoration: none;
+                font-weight: 500;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-user-plus"></i> Criar Conta</h1>
+                <p>Cadastre-se na plataforma TeleMed</p>
+            </div>
+
+            <form id="registerForm">
+                <!-- Seletor de Tipo de Usuário -->
+                <div class="user-type-selector">
+                    <button type="button" class="user-type-btn active" id="pacienteBtn" onclick="selectUserType('paciente')">
+                        <i class="fas fa-user"></i> Sou Paciente
+                    </button>
+                    <button type="button" class="user-type-btn" id="medicoBtn" onclick="selectUserType('medico')">
+                        <i class="fas fa-user-md"></i> Sou Médico
+                    </button>
+                </div>
+
+                <!-- Campos Gerais -->
+                <div class="form-group">
+                    <label for="nome"><i class="fas fa-user"></i> Nome Completo *</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone"><i class="fas fa-phone"></i> Telefone *</label>
+                    <input type="tel" id="telefone" name="telefone" required placeholder="(11) 99999-9999">
+                </div>
+
+                <!-- Campos Específicos do Médico (ocultos inicialmente) -->
+                <div id="medicoFields" style="display: none;">
+                    <div class="form-group">
+                        <label for="crm"><i class="fas fa-id-card"></i> CRM *</label>
+                        <input type="text" id="crm" name="crm" placeholder="123456-SP">
+                    </div>
+                    <div class="form-group">
+                        <label for="especialidade"><i class="fas fa-stethoscope"></i> Especialidade *</label>
+                        <input type="text" id="especialidade" name="especialidade" placeholder="Ex: Cardiologia">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha"><i class="fas fa-lock"></i> Senha *</label>
+                    <input type="password" id="senha" name="senha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmarSenha"><i class="fas fa-lock"></i> Confirmar Senha *</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" required>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-user-plus"></i> Criar Conta
+                </button>
+            </form>
+
+            <div class="already-account">
+                <p>Já tem uma conta? <a href="/login">Fazer Login</a></p>
+            </div>
+        </div>
+
+        <script>
+            let currentUserType = 'paciente';
+
+            function selectUserType(type) {
+                currentUserType = type;
+                
+                // Atualizar botões
+                const pacienteBtn = document.getElementById('pacienteBtn');
+                const medicoBtn = document.getElementById('medicoBtn');
+                const medicoFields = document.getElementById('medicoFields');
+                
+                if (type === 'paciente') {
+                    pacienteBtn.classList.add('active');
+                    medicoBtn.classList.remove('active');
+                    medicoFields.style.display = 'none';
+                } else {
+                    pacienteBtn.classList.remove('active');
+                    medicoBtn.classList.add('active');
+                    medicoFields.style.display = 'block';
+                }
+            }
+
+            // Máscara para telefone
+            document.getElementById('telefone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\\D/g, '');
+                value = value.replace(/(\\d{2})(\\d)/, '($1) $2');
+                value = value.replace(/(\\d{5})(\\d)/, '$1-$2');
+                e.target.value = value;
+            });
+
+            // Submissão do formulário
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const nome = document.getElementById('nome').value;
+                const email = document.getElementById('email').value;
+                const telefone = document.getElementById('telefone').value;
+                const senha = document.getElementById('senha').value;
+                const confirmarSenha = document.getElementById('confirmarSenha').value;
+                
+                // Validações
+                if (!nome || !email || !telefone || !senha || !confirmarSenha) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                
+                if (senha !== confirmarSenha) {
+                    alert('As senhas não coincidem.');
+                    return;
+                }
+                
+                if (currentUserType === 'medico') {
+                    const crm = document.getElementById('crm').value;
+                    const especialidade = document.getElementById('especialidade').value;
+                    
+                    if (!crm || !especialidade) {
+                        alert('Por favor, preencha CRM e Especialidade.');
+                        return;
+                    }
+                }
+                
+                // Simular cadastro
+                alert(\`Cadastro realizado com sucesso!\\n\\nTipo: \${currentUserType === 'paciente' ? 'Paciente' : 'Médico'}\\nNome: \${nome}\\nEmail: \${email}\`);
+                
+                // Redirecionar para login
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1000);
+            });
+
+            console.log('📝 Sistema de Cadastro TeleMed carregado');
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// 7. PATIENT DASHBOARD - Dashboard do paciente
 app.get('/patient-dashboard', (req, res) => {
   console.log('👤 Serving Patient Dashboard for:', req.path);
   
@@ -1730,7 +1979,7 @@ app.get('/login', (req, res) => {
             <div style="text-align: center; margin-bottom: 20px;">
                 <p style="color: #6B7280; margin-bottom: 15px; font-size: 14px;">Não tem conta?</p>
                 <div style="display: flex; gap: 10px;">
-                    <a href="/cadastro.html" style="
+                    <a href="/register" style="
                         flex: 1;
                         background: #F4D9B4;
                         color: #8B4513;
@@ -1928,7 +2177,7 @@ app.get('/login', (req, res) => {
 app.use(express.static(path.join(__dirname, '../public')));
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai', '/register'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
