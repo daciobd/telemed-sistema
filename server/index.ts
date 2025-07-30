@@ -1381,7 +1381,215 @@ app.get('/doctor-dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/medical-dashboard-pro.html'));
 });
 
-// 6. LOGIN PAGE - Sistema de autenticação CORRIGIDO
+// 6. PATIENT DASHBOARD - Dashboard do paciente
+app.get('/patient-dashboard', (req, res) => {
+  console.log('👤 Serving Patient Dashboard for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Paciente - TeleMed Sistema</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #F0F4F8;
+            }
+            .header h1 { color: #A7C7E7; font-size: 28px; }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            .stat-card {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 16px;
+                text-align: center;
+            }
+            .stat-card h3 { font-size: 24px; margin-bottom: 5px; }
+            .actions-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            .action-card {
+                background: #F8F9FA;
+                padding: 25px;
+                border-radius: 16px;
+                border: 1px solid #E0E6ED;
+                transition: transform 0.3s ease;
+            }
+            .action-card:hover { transform: translateY(-5px); }
+            .btn {
+                background: #A7C7E7;
+                color: white;
+                padding: 12px 24px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 500;
+                text-decoration: none;
+                display: inline-block;
+                margin-top: 15px;
+                transition: background 0.3s ease;
+            }
+            .btn:hover { background: #92B4D7; }
+            .btn.alert {
+                background: #E9967A;
+                margin-left: 10px;
+            }
+            .btn.alert:hover { background: #D18B6B; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div>
+                    <h1><i class="fas fa-user-circle"></i> Dashboard do Paciente</h1>
+                    <p>Bem-vindo ao seu painel de saúde</p>
+                </div>
+                <div>
+                    <button onclick="logout()" class="btn alert">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>3</h3>
+                    <p>Consultas Realizadas</p>
+                </div>
+                <div class="stat-card">
+                    <h3>1</h3>
+                    <p>Consulta Agendada</p>
+                </div>
+                <div class="stat-card">
+                    <h3>2</h3>
+                    <p>Receitas Ativas</p>
+                </div>
+                <div class="stat-card">
+                    <h3>4.9</h3>
+                    <p>Avaliação Média ⭐</p>
+                </div>
+            </div>
+
+            <div class="actions-grid">
+                <div class="action-card">
+                    <i class="fas fa-stethoscope" style="font-size: 2rem; color: #A7C7E7; margin-bottom: 15px;"></i>
+                    <h3>Nova Consulta</h3>
+                    <p>Agende uma consulta médica online ou participe do sistema de lances para encontrar o melhor preço.</p>
+                    <a href="/consulta-por-valor.html" class="btn">Agendar Consulta</a>
+                </div>
+
+                <div class="action-card">
+                    <i class="fas fa-brain" style="font-size: 2rem; color: #F4D9B4; margin-bottom: 15px;"></i>
+                    <h3>Dr. AI - Triagem Gratuita</h3>
+                    <p>Receba uma avaliação inicial gratuita com nossa IA médica especializada.</p>
+                    <a href="/dr-ai.html" class="btn">Iniciar Triagem</a>
+                </div>
+
+                <div class="action-card">
+                    <i class="fas fa-pills" style="font-size: 2rem; color: #E9967A; margin-bottom: 15px;"></i>
+                    <h3>Receitas Médicas</h3>
+                    <p>Visualize suas receitas ativas e histórico de medicamentos prescritos.</p>
+                    <a href="/prontuarios.html" class="btn">Ver Receitas</a>
+                </div>
+
+                <div class="action-card">
+                    <i class="fas fa-history" style="font-size: 2rem; color: #A7C7E7; margin-bottom: 15px;"></i>
+                    <h3>Histórico Médico</h3>
+                    <p>Acesse o histórico completo de suas consultas e tratamentos.</p>
+                    <a href="/prontuarios.html" class="btn">Ver Histórico</a>
+                </div>
+
+                <div class="action-card">
+                    <i class="fas fa-video" style="font-size: 2rem; color: #92B4D7; margin-bottom: 15px;"></i>
+                    <h3>Videoconsulta</h3>
+                    <p>Participe de uma consulta médica por vídeo com tecnologia segura.</p>
+                    <a href="/videoconsulta.html" class="btn">Entrar na Consulta</a>
+                </div>
+
+                <div class="action-card">
+                    <i class="fas fa-heart" style="font-size: 2rem; color: #F4D9B4; margin-bottom: 15px;"></i>
+                    <h3>Especialidades</h3>
+                    <p>Explore as diferentes especialidades médicas disponíveis na plataforma.</p>
+                    <a href="/especialidades.html" class="btn">Ver Especialidades</a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // SISTEMA DE AUTENTICAÇÃO - Verificar se está logado
+            function verificarAutenticacao() {
+                const loggedIn = sessionStorage.getItem('telemed_logged_in');
+                const userType = sessionStorage.getItem('telemed_user_type');
+                
+                if (loggedIn !== 'true' || userType !== 'paciente') {
+                    alert('🔒 Acesso restrito!\\n\\nPor favor, faça login como paciente para acessar esta área.');
+                    window.location.href = '/login';
+                    return false;
+                }
+                
+                return true;
+            }
+
+            // Função de logout
+            function logout() {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    sessionStorage.clear();
+                    localStorage.removeItem('telemed_remember');
+                    localStorage.removeItem('telemed_user_type');
+                    
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = '/login';
+                }
+            }
+
+            // Inicialização
+            document.addEventListener('DOMContentLoaded', function() {
+                // VERIFICAR AUTENTICAÇÃO PRIMEIRO
+                if (!verificarAutenticacao()) {
+                    return;
+                }
+                
+                console.log('👤 Dashboard Paciente PROTEGIDO carregado com sucesso!');
+                console.log('🔒 Verificação de autenticação ativa');
+                console.log('🎯 Sistema TeleMed operacional');
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// 7. LOGIN PAGE - Sistema de autenticação CORRIGIDO
 app.get('/login', (req, res) => {
   console.log('🔐 Serving SECURE Login Form for:', req.path);
   
@@ -1732,7 +1940,7 @@ app.get('*', (req, res, next) => {
 });
 
 // Start server
-const port = process.env.PORT || 5000;
+const port = parseInt(process.env.PORT || '5000');
 app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${port}`);
   console.log(`🔗 Acesse: http://localhost:${port}`);
