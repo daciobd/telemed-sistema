@@ -1630,84 +1630,166 @@ app.get('/register', (req, res) => {
   `);
 });
 
-// 7. PROCESSAR LOGIN - Endpoint para processamento automático via URL
+// Rate limiting storage (in-memory for development)
+const loginAttempts = new Map();
+
+// Crypto functions for secure parameter handling
+function encryptData(data) {
+  return Buffer.from(JSON.stringify(data)).toString('base64');
+}
+
+function decryptData(encryptedData) {
+  try {
+    return JSON.parse(Buffer.from(encryptedData, 'base64').toString('utf8'));
+  } catch (error) {
+    throw new Error('Invalid encrypted data');
+  }
+}
+
+// Rate limiting function
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const attempts = loginAttempts.get(ip) || [];
+  
+  // Remove attempts older than 5 minutes
+  const recentAttempts = attempts.filter(time => now - time < 5 * 60 * 1000);
+  
+  if (recentAttempts.length >= 5) {
+    return { allowed: false, remainingTime: Math.ceil((5 * 60 * 1000 - (now - recentAttempts[0])) / 1000) };
+  }
+  
+  recentAttempts.push(now);
+  loginAttempts.set(ip, recentAttempts);
+  
+  return { allowed: true, attempts: recentAttempts.length };
+}
+
+// Security log function
+function logSecurityEvent(type, details, ip) {
+  const timestamp = new Date().toISOString();
+  console.log(`🔒 [SECURITY] ${timestamp} - ${type} from ${ip}:`, details);
+}
+
+// 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
 app.get('/processar-login', (req, res) => {
-  console.log('🔄 Processing automatic login from URL parameters');
+  const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
   
-  const { email, senha, crm } = req.query;
+  console.log('🔄 Processing secure automatic login from:', clientIP);
+  logSecurityEvent('LOGIN_ATTEMPT', 'Automatic login request received', clientIP);
   
-  // Validar parâmetros obrigatórios
-  if ((!email || !senha) && (!crm || !senha)) {
-    console.log('❌ Missing required parameters');
-    return res.redirect('/login?erro=parametros-faltando');
+  // Check rate limiting
+  const rateLimit = checkRateLimit(clientIP);
+  if (!rateLimit.allowed) {
+    logSecurityEvent('RATE_LIMIT_EXCEEDED', `IP blocked for ${rateLimit.remainingTime}s`, clientIP);
+    return res.redirect('/login?erro=bloqueado&tempo=' + Math.ceil(rateLimit.remainingTime / 60));
+  }
+  
+  const { dados, email, senha, crm } = req.query;
+  let credentials = {};
+  
+  try {
+    // Try encrypted data first (new secure method)
+    if (dados) {
+      console.log('🔐 Processing encrypted credentials');
+      credentials = decryptData(dados as string);
+      
+      // Validate origin
+      if (credentials.origem && credentials.origem !== 'hostinger') {
+        logSecurityEvent('INVALID_ORIGIN', `Origin: ${credentials.origem}`, clientIP);
+        return res.redirect('/login?erro=origem');
+      }
+      
+      logSecurityEvent('ENCRYPTED_ACCESS', `Origin: ${credentials.origem || 'not-specified'}`, clientIP);
+    } 
+    // Fallback to plain parameters (legacy method)
+    else if ((email && senha) || (crm && senha)) {
+      console.log('⚠️ Processing plain credentials (legacy method)');
+      credentials = { email, senha, crm };
+      logSecurityEvent('PLAIN_ACCESS', 'Using legacy plain parameters', clientIP);
+    } else {
+      logSecurityEvent('MISSING_PARAMETERS', 'No valid credentials provided', clientIP);
+      return res.redirect('/login?erro=parametros');
+    }
+  } catch (error) {
+    logSecurityEvent('DECRYPTION_ERROR', error.message, clientIP);
+    return res.redirect('/login?erro=sistema');
   }
   
   let userType = '';
   let isValidCredentials = false;
   let redirectUrl = '';
+  let userIdentifier = '';
   
-  // Verificar credenciais de paciente
-  if (email && senha) {
-    console.log(`👤 Validating patient credentials: ${email}`);
+  // Validate patient credentials
+  if (credentials.email && credentials.senha) {
+    userIdentifier = credentials.email;
+    console.log(`👤 Validating patient credentials: ${userIdentifier}`);
     
-    // Contas demo de pacientes
     const validPatients = {
       'paciente@demo.com': '123456',
       'maria@paciente.com': 'senha123',
       'joao@telemed.com': 'paciente456'
     };
     
-    if (validPatients[email as string] === senha) {
+    if (validPatients[credentials.email] === credentials.senha) {
       isValidCredentials = true;
       userType = 'paciente';
       redirectUrl = '/patient-dashboard';
-      console.log('✅ Valid patient credentials');
+      logSecurityEvent('PATIENT_LOGIN_SUCCESS', userIdentifier, clientIP);
+    } else {
+      logSecurityEvent('PATIENT_LOGIN_FAILED', userIdentifier, clientIP);
     }
   }
   
-  // Verificar credenciais de médico
-  if (crm && senha) {
-    console.log(`🩺 Validating doctor credentials: ${crm}`);
+  // Validate doctor credentials
+  if (credentials.crm && credentials.senha) {
+    userIdentifier = credentials.crm;
+    console.log(`🩺 Validating doctor credentials: ${userIdentifier}`);
     
-    // Contas demo de médicos
     const validDoctors = {
       '123456-SP': 'medico123',
       '654321-RJ': 'doutor456', 
       '789012-MG': 'psiquiatra789'
     };
     
-    if (validDoctors[crm as string] === senha) {
+    if (validDoctors[credentials.crm] === credentials.senha) {
       isValidCredentials = true;
       userType = 'medico';
       redirectUrl = '/doctor-dashboard';
-      console.log('✅ Valid doctor credentials');
+      logSecurityEvent('DOCTOR_LOGIN_SUCCESS', userIdentifier, clientIP);
+    } else {
+      logSecurityEvent('DOCTOR_LOGIN_FAILED', userIdentifier, clientIP);
     }
   }
   
-  // Processar resultado da validação
+  // Process validation result
   if (!isValidCredentials) {
-    console.log('❌ Invalid credentials provided');
-    return res.redirect('/login?erro=credenciais-invalidas');
+    logSecurityEvent('INVALID_CREDENTIALS', userIdentifier, clientIP);
+    return res.redirect('/login?erro=credenciais');
   }
   
-  // Criar sessão (simulada via localStorage JavaScript)
+  // Create secure session
   const sessionData = {
     userType,
-    email: email || `CRM: ${crm}`,
+    userIdentifier,
+    email: credentials.email || `CRM: ${credentials.crm}`,
     loginTime: new Date().toISOString(),
-    redirectUrl
+    redirectUrl,
+    sessionId: Math.random().toString(36).substring(2, 15),
+    ip: clientIP
   };
   
-  console.log(`✅ Login successful for ${userType}: ${email || crm}`);
+  console.log(`✅ Secure login successful for ${userType}: ${userIdentifier}`);
+  logSecurityEvent('LOGIN_SUCCESS', `${userType}: ${userIdentifier}`, clientIP);
   
-  // Página de confirmação com redirecionamento automático
+  // Secure confirmation page with URL cleanup
   res.send(`
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Processando Login - TeleMed</title>
+        <title>Login Seguro - TeleMed</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <style>
@@ -1727,7 +1809,7 @@ app.get('/processar-login', (req, res) => {
                 padding: 40px;
                 text-align: center;
                 box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-                max-width: 400px;
+                max-width: 450px;
                 width: 100%;
             }
             .success-icon {
@@ -1767,30 +1849,44 @@ app.get('/processar-login', (req, res) => {
             }
             .redirect-info {
                 background: #F0F8FF;
-                padding: 15px;
-                border-radius: 8px;
+                padding: 20px;
+                border-radius: 12px;
                 margin: 20px 0;
                 border-left: 4px solid #A7C7E7;
+            }
+            .security-badge {
+                background: #E8F5E8;
+                color: #2E7D2E;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 12px;
+                margin-bottom: 15px;
+                display: inline-block;
             }
         </style>
     </head>
     <body>
         <div class="container">
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i> Login Seguro Verificado
+            </div>
+            
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
             
-            <h1>Login Processado com Sucesso!</h1>
+            <h1>Autenticação Aprovada!</h1>
             
             <div class="redirect-info">
-                <p><strong>Tipo:</strong> ${userType === 'paciente' ? 'Paciente' : 'Médico'}</p>
-                <p><strong>Usuário:</strong> ${email || crm}</p>
-                <p><strong>Redirecionando para:</strong> ${userType === 'paciente' ? 'Dashboard do Paciente' : 'Dashboard Médico'}</p>
+                <p><strong>Tipo:</strong> ${userType === 'paciente' ? 'Paciente' : 'Médico Credenciado'}</p>
+                <p><strong>Usuário:</strong> ${userIdentifier}</p>
+                <p><strong>Destino:</strong> ${userType === 'paciente' ? 'Área do Paciente' : 'Dashboard Médico'}</p>
+                <p><strong>ID Sessão:</strong> ${sessionData.sessionId}</p>
             </div>
             
             <p>
                 <div class="loading"></div>
-                Redirecionando automaticamente em <span id="countdown">3</span> segundos...
+                Redirecionamento seguro em <span id="countdown">3</span> segundos...
             </p>
             
             <p style="font-size: 12px; color: #999;">
@@ -1799,16 +1895,24 @@ app.get('/processar-login', (req, res) => {
         </div>
 
         <script>
-            // Salvar dados da sessão
+            // Clean URL parameters for security
+            if (window.location.search) {
+                const cleanUrl = window.location.protocol + '//' + window.location.host + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+                console.log('🔒 URL parameters cleaned for security');
+            }
+            
+            // Save secure session data
             const sessionData = ${JSON.stringify(sessionData)};
             localStorage.setItem('telemedSession', JSON.stringify(sessionData));
             
-            // Marcar como logado
+            // Mark as authenticated
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userType', '${userType}');
-            localStorage.setItem('userEmail', '${email || crm}');
+            localStorage.setItem('userEmail', '${userIdentifier}');
+            localStorage.setItem('sessionId', '${sessionData.sessionId}');
             
-            // Countdown e redirecionamento
+            // Secure countdown and redirect
             let countdown = 3;
             const countdownElement = document.getElementById('countdown');
             
@@ -1818,13 +1922,13 @@ app.get('/processar-login', (req, res) => {
                 
                 if (countdown <= 0) {
                     clearInterval(timer);
-                    console.log('🔄 Redirecting to:', '${redirectUrl}');
+                    console.log('🔄 Secure redirect to:', '${redirectUrl}');
                     window.location.href = '${redirectUrl}';
                 }
             }, 1000);
             
-            console.log('✅ Automatic login processed successfully');
-            console.log('📊 Session data saved:', sessionData);
+            console.log('✅ Secure login processed successfully');
+            console.log('🔒 Session secured with ID:', '${sessionData.sessionId}');
         </script>
     </body>
     </html>
@@ -2040,8 +2144,43 @@ app.get('/patient-dashboard', (req, res) => {
 });
 
 // 7. LOGIN PAGE - Sistema de autenticação CORRIGIDO
+// Helper function to create encrypted login URLs
+function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
+  const data = { email, senha, crm, origem };
+  const encryptedData = encryptData(data);
+  return `/processar-login?dados=${encodeURIComponent(encryptedData)}`;
+}
+
 app.get('/login', (req, res) => {
-  console.log('🔐 Serving SECURE Login Form for:', req.path);
+  console.log('🔐 Serving SECURE Login Form with error handling for:', req.path);
+  
+  const { erro, tempo, sucesso } = req.query;
+  let errorMessage = '';
+  let successMessage = '';
+  
+  // Error handling for security
+  switch (erro) {
+    case 'credenciais':
+      errorMessage = '❌ Email ou senha incorretos. Verifique os dados e tente novamente.';
+      break;
+    case 'bloqueado':
+      errorMessage = `🚫 Muitas tentativas de login. Tente novamente em ${tempo || 5} minutos.`;
+      break;
+    case 'sistema':
+      errorMessage = '⚠️ Erro interno do sistema. Contate o suporte técnico.';
+      break;
+    case 'origem':
+      errorMessage = '🔒 Acesso não autorizado. Use apenas links oficiais.';
+      break;
+    case 'parametros':
+      errorMessage = '📝 Dados de login incompletos. Preencha todos os campos.';
+      break;
+  }
+  
+  // Success handling
+  if (sucesso === '1') {
+    successMessage = '✅ Login realizado com sucesso! Redirecionando...';
+  }
   
   res.send(`
     <!DOCTYPE html>

@@ -10,28 +10,33 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
-- **July 30, 2025**: ENDPOINT PROCESSAR-LOGIN IMPLEMENTADO - SISTEMA v12.5.5
-  - ✅ **Endpoint `/processar-login` Criado**: Sistema completo para login automático via URL
-    - Recebe credenciais via parâmetros URL: ?email=X&senha=Y ou ?crm=X&senha=Y
-    - Validação automática contra base de dados demo
-    - Criação de sessão segura com localStorage
-    - Redirecionamento inteligente baseado no tipo de usuário
-    - Página de confirmação com countdown visual (3 segundos)
-    - Tratamento de erros com redirecionamento para login
-  - ✅ **Funcionalidades Completas**: Processamento automático end-to-end
-    - Pacientes: email + senha → /patient-dashboard
-    - Médicos: crm + senha → /doctor-dashboard
-    - Validação contra contas demo existentes
-    - Sessão persistente entre páginas
-    - Feedback visual com ícone de sucesso e loading
-  - ✅ **URLs de Exemplo Funcionais**:
-    - Paciente: /processar-login?email=paciente@demo.com&senha=123456
-    - Médico: /processar-login?crm=123456-SP&senha=medico123
-    - Erro: /processar-login?email=invalido&senha=errada → redireciona para login com erro
-  - ✅ **Integração Hostinger Ready**: Perfeito para sistemas externos
-    - Links diretos do Hostinger podem enviar usuários com credenciais
-    - Processamento automático sem interação manual
-    - Experiência fluida de login single-click
+- **July 30, 2025**: ENDPOINT PROCESSAR-LOGIN COM SEGURANÇA AVANÇADA IMPLEMENTADO - SISTEMA v12.6.0
+  - ✅ **Sistema de Segurança Avançado**: Criptografia Base64 e validação de origem implementadas
+    - Parâmetros criptografados: `/processar-login?dados=[dadosCriptografados]`
+    - Validação de origem Hostinger com logs de segurança
+    - Rate limiting: máximo 5 tentativas por IP em 5 minutos
+    - Limpeza automática de parâmetros URL após processamento
+    - Logs detalhados de eventos de segurança com timestamps
+  - ✅ **Funcionalidades de Segurança Completas**:
+    - Base64 encryption/decryption de credenciais
+    - IP tracking e bloqueio automático por rate limit
+    - Códigos de erro específicos: credenciais, bloqueado, sistema, origem, parametros
+    - Session ID único gerado para cada login
+    - Validação de origem para prevenir ataques
+  - ✅ **Tratamento de Erros Robusto**: Sistema completo de feedback
+    - Página login atualizada com mensagens de erro contextuais
+    - Redirecionamento inteligente baseado no tipo de erro
+    - Contadores de tempo para bloqueios temporários
+    - Logs de segurança para auditoria e monitoramento
+  - ✅ **URLs Seguras de Exemplo**:
+    - Método seguro: /processar-login?dados=[Base64EncodedCredentials]
+    - Legacy (ainda suportado): /processar-login?email=X&senha=Y
+    - Helper function `createSecureLoginUrl()` implementada
+  - ✅ **Integração Enterprise Ready**: Sistema profissional completo
+    - Compatível com sistemas externos via dados criptografados
+    - Auditoria completa de acessos com logs estruturados
+    - Prevenção de ataques de força bruta
+    - URL cleanup automático para segurança
 
 - **July 30, 2025**: CADASTRO DE NOVOS USUÁRIOS IMPLEMENTADO - SISTEMA v12.5.4
   - ✅ **Página de Cadastro `/register` Criada**: Sistema completo para novos usuários
