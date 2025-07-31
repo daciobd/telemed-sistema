@@ -2,17 +2,21 @@
   "version": 2,
   "builds": [
     {
-      "src": "deploy-build.js",
-      "use": "@vercel/node"
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["dist/**"]
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/deploy-start.js"
+      "dest": "/start.js"
     }
   ],
   "env": {
     "NODE_ENV": "production"
-  }
+  },
+  "buildCommand": "node prepare-deployment.js && npm run build"
 }

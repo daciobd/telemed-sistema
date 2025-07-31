@@ -1,1 +1,1 @@
-web: node deploy-start.js
+web: node prepare-deployment.js && npm run build && npm run start
