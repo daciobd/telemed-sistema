@@ -4,7 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx server/index.ts"
+    "dev": "tsx server/index.ts",
+    "build": "node build.js",
+    "start": "node start.js",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",

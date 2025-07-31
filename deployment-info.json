@@ -1,0 +1,9 @@
+{
+  "timestamp": "2025-07-31T19:57:34.539Z",
+  "version": "2.0.0",
+  "buildComplete": true,
+  "scriptsAvailable": {
+    "build": "node build.js",
+    "start": "node start.js"
+  }
+}
