@@ -2,8 +2,18 @@ services:
   - type: web
     name: telemed-sistema
     env: node
-    buildCommand: npm install && node build.js
-    startCommand: node start.js
+    buildCommand: node deploy-build.js
+    startCommand: node deploy-start.js
     envVars:
       - key: NODE_ENV
         value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: telemed-db
+          property: connectionString
+    autoDeploy: false
+
+databases:
+  - name: telemed-db
+    databaseName: telemed_production
+    user: telemed_user

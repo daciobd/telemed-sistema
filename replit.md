@@ -8,6 +8,23 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 31, 2025**: DEPLOYMENT SCRIPTS FIXED - SISTEMA v12.7.0
+  - ✅ **Deployment Configuration Complete**: Fixed missing build and start scripts for production deployment
+    - Created `deploy-build.js` and `deploy-start.js` wrapper scripts for deployment compatibility
+    - Added platform-specific configuration files: `Procfile`, `render.yaml`, `railway.json`, `vercel.json`
+    - Production package.json contains all required scripts: build, start, dev, db:push
+    - Build process creates optimized `dist/` directory with frontend and backend files
+  - 🚀 **Multi-Platform Support**: Works with all major deployment services
+    - Heroku, Render.com, Railway, Vercel compatibility ensured
+    - TypeScript support maintained in production via tsx runtime
+    - Automatic package.json switching for deployment environments
+    - Complete dependency management for production builds
+  - 📦 **Build System Enhanced**: 
+    - Frontend: Vite builds React app to `dist/public/` (1.07MB optimized)
+    - Backend: Server files copied with tsx TypeScript runtime support
+    - Shared modules: Database schema and utilities properly included
+    - Production optimization: Build warnings noted for future code-splitting improvements
+
 - **July 31, 2025**: PROBLEMA DE REDIRECIONAMENTO CORRIGIDO - SISTEMA v12.6.1
   - 🎯 **Correção Crítica de Redirecionamento**: URLs hardcoded do Replit substituídas por sistema dinâmico
     - Detecção automática do domínio de origem (req.get('host'))
