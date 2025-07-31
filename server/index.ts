@@ -1673,19 +1673,26 @@ function logSecurityEvent(type, details, ip) {
 // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
 app.get('/processar-login', (req, res) => {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+  const hostDomain = req.get('host') || 'localhost:5000';
+  const protocol = req.secure ? 'https' : 'http';
+  const baseUrl = `${protocol}://${hostDomain}`;
   
   console.log('🔄 Processing secure automatic login from:', clientIP);
-  logSecurityEvent('LOGIN_ATTEMPT', 'Automatic login request received', clientIP);
+  console.log('🌐 Host domain:', hostDomain);
+  logSecurityEvent('LOGIN_ATTEMPT', `Automatic login request received from ${baseUrl}`, clientIP);
   
   // Check rate limiting
   const rateLimit = checkRateLimit(clientIP);
   if (!rateLimit.allowed) {
     logSecurityEvent('RATE_LIMIT_EXCEEDED', `IP blocked for ${rateLimit.remainingTime}s`, clientIP);
-    return res.redirect('/login?erro=bloqueado&tempo=' + Math.ceil(rateLimit.remainingTime / 60));
+    return res.redirect(`${baseUrl}/login?erro=bloqueado&tempo=` + Math.ceil(rateLimit.remainingTime / 60));
   }
   
-  const { dados, email, senha, crm } = req.query;
+  const { dados, email, senha, crm, redirect_base } = req.query;
   let credentials = {};
+  
+  // Dynamic redirect URL configuration
+  const customRedirectBase = redirect_base || baseUrl;
   
   try {
     // Try encrypted data first (new secure method)
@@ -1694,9 +1701,9 @@ app.get('/processar-login', (req, res) => {
       credentials = decryptData(dados as string);
       
       // Validate origin
-      if (credentials.origem && credentials.origem !== 'hostinger') {
+      if (credentials.origem && credentials.origem !== 'hostinger' && credentials.origem !== 'local') {
         logSecurityEvent('INVALID_ORIGIN', `Origin: ${credentials.origem}`, clientIP);
-        return res.redirect('/login?erro=origem');
+        return res.redirect(`${baseUrl}/login?erro=origem`);
       }
       
       logSecurityEvent('ENCRYPTED_ACCESS', `Origin: ${credentials.origem || 'not-specified'}`, clientIP);
@@ -1708,11 +1715,11 @@ app.get('/processar-login', (req, res) => {
       logSecurityEvent('PLAIN_ACCESS', 'Using legacy plain parameters', clientIP);
     } else {
       logSecurityEvent('MISSING_PARAMETERS', 'No valid credentials provided', clientIP);
-      return res.redirect('/login?erro=parametros');
+      return res.redirect(`${baseUrl}/login?erro=parametros`);
     }
   } catch (error) {
     logSecurityEvent('DECRYPTION_ERROR', error.message, clientIP);
-    return res.redirect('/login?erro=sistema');
+    return res.redirect(`${baseUrl}/login?erro=sistema`);
   }
   
   let userType = '';
@@ -1734,7 +1741,7 @@ app.get('/processar-login', (req, res) => {
     if (validPatients[credentials.email] === credentials.senha) {
       isValidCredentials = true;
       userType = 'paciente';
-      redirectUrl = '/patient-dashboard';
+      redirectUrl = `${customRedirectBase}/patient-dashboard`;
       logSecurityEvent('PATIENT_LOGIN_SUCCESS', userIdentifier, clientIP);
     } else {
       logSecurityEvent('PATIENT_LOGIN_FAILED', userIdentifier, clientIP);
@@ -1755,7 +1762,7 @@ app.get('/processar-login', (req, res) => {
     if (validDoctors[credentials.crm] === credentials.senha) {
       isValidCredentials = true;
       userType = 'medico';
-      redirectUrl = '/doctor-dashboard';
+      redirectUrl = `${customRedirectBase}/doctor-dashboard`;
       logSecurityEvent('DOCTOR_LOGIN_SUCCESS', userIdentifier, clientIP);
     } else {
       logSecurityEvent('DOCTOR_LOGIN_FAILED', userIdentifier, clientIP);
@@ -1765,7 +1772,7 @@ app.get('/processar-login', (req, res) => {
   // Process validation result
   if (!isValidCredentials) {
     logSecurityEvent('INVALID_CREDENTIALS', userIdentifier, clientIP);
-    return res.redirect('/login?erro=credenciais');
+    return res.redirect(`${baseUrl}/login?erro=credenciais`);
   }
   
   // Create secure session
@@ -1776,11 +1783,13 @@ app.get('/processar-login', (req, res) => {
     loginTime: new Date().toISOString(),
     redirectUrl,
     sessionId: Math.random().toString(36).substring(2, 15),
-    ip: clientIP
+    ip: clientIP,
+    baseUrl: customRedirectBase
   };
   
   console.log(`✅ Secure login successful for ${userType}: ${userIdentifier}`);
-  logSecurityEvent('LOGIN_SUCCESS', `${userType}: ${userIdentifier}`, clientIP);
+  console.log(`🎯 Redirecting to: ${redirectUrl}`);
+  logSecurityEvent('LOGIN_SUCCESS', `${userType}: ${userIdentifier} -> ${redirectUrl}`, clientIP);
   
   // Secure confirmation page with URL cleanup
   res.send(`
