@@ -1630,7 +1630,208 @@ app.get('/register', (req, res) => {
   `);
 });
 
-// 7. PATIENT DASHBOARD - Dashboard do paciente
+// 7. PROCESSAR LOGIN - Endpoint para processamento automático via URL
+app.get('/processar-login', (req, res) => {
+  console.log('🔄 Processing automatic login from URL parameters');
+  
+  const { email, senha, crm } = req.query;
+  
+  // Validar parâmetros obrigatórios
+  if ((!email || !senha) && (!crm || !senha)) {
+    console.log('❌ Missing required parameters');
+    return res.redirect('/login?erro=parametros-faltando');
+  }
+  
+  let userType = '';
+  let isValidCredentials = false;
+  let redirectUrl = '';
+  
+  // Verificar credenciais de paciente
+  if (email && senha) {
+    console.log(`👤 Validating patient credentials: ${email}`);
+    
+    // Contas demo de pacientes
+    const validPatients = {
+      'paciente@demo.com': '123456',
+      'maria@paciente.com': 'senha123',
+      'joao@telemed.com': 'paciente456'
+    };
+    
+    if (validPatients[email as string] === senha) {
+      isValidCredentials = true;
+      userType = 'paciente';
+      redirectUrl = '/patient-dashboard';
+      console.log('✅ Valid patient credentials');
+    }
+  }
+  
+  // Verificar credenciais de médico
+  if (crm && senha) {
+    console.log(`🩺 Validating doctor credentials: ${crm}`);
+    
+    // Contas demo de médicos
+    const validDoctors = {
+      '123456-SP': 'medico123',
+      '654321-RJ': 'doutor456', 
+      '789012-MG': 'psiquiatra789'
+    };
+    
+    if (validDoctors[crm as string] === senha) {
+      isValidCredentials = true;
+      userType = 'medico';
+      redirectUrl = '/doctor-dashboard';
+      console.log('✅ Valid doctor credentials');
+    }
+  }
+  
+  // Processar resultado da validação
+  if (!isValidCredentials) {
+    console.log('❌ Invalid credentials provided');
+    return res.redirect('/login?erro=credenciais-invalidas');
+  }
+  
+  // Criar sessão (simulada via localStorage JavaScript)
+  const sessionData = {
+    userType,
+    email: email || `CRM: ${crm}`,
+    loginTime: new Date().toISOString(),
+    redirectUrl
+  };
+  
+  console.log(`✅ Login successful for ${userType}: ${email || crm}`);
+  
+  // Página de confirmação com redirecionamento automático
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Processando Login - TeleMed</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .container {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                text-align: center;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+                max-width: 400px;
+                width: 100%;
+            }
+            .success-icon {
+                font-size: 4rem;
+                color: #4CAF50;
+                margin-bottom: 20px;
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+            h1 {
+                color: #A7C7E7;
+                margin-bottom: 10px;
+                font-size: 24px;
+            }
+            p {
+                color: #6B7280;
+                margin-bottom: 20px;
+                line-height: 1.6;
+            }
+            .loading {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 3px solid #f3f3f3;
+                border-top: 3px solid #A7C7E7;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin-right: 10px;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .redirect-info {
+                background: #F0F8FF;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                border-left: 4px solid #A7C7E7;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1>Login Processado com Sucesso!</h1>
+            
+            <div class="redirect-info">
+                <p><strong>Tipo:</strong> ${userType === 'paciente' ? 'Paciente' : 'Médico'}</p>
+                <p><strong>Usuário:</strong> ${email || crm}</p>
+                <p><strong>Redirecionando para:</strong> ${userType === 'paciente' ? 'Dashboard do Paciente' : 'Dashboard Médico'}</p>
+            </div>
+            
+            <p>
+                <div class="loading"></div>
+                Redirecionando automaticamente em <span id="countdown">3</span> segundos...
+            </p>
+            
+            <p style="font-size: 12px; color: #999;">
+                Caso não seja redirecionado, <a href="${redirectUrl}" style="color: #A7C7E7;">clique aqui</a>
+            </p>
+        </div>
+
+        <script>
+            // Salvar dados da sessão
+            const sessionData = ${JSON.stringify(sessionData)};
+            localStorage.setItem('telemedSession', JSON.stringify(sessionData));
+            
+            // Marcar como logado
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userType', '${userType}');
+            localStorage.setItem('userEmail', '${email || crm}');
+            
+            // Countdown e redirecionamento
+            let countdown = 3;
+            const countdownElement = document.getElementById('countdown');
+            
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    console.log('🔄 Redirecting to:', '${redirectUrl}');
+                    window.location.href = '${redirectUrl}';
+                }
+            }, 1000);
+            
+            console.log('✅ Automatic login processed successfully');
+            console.log('📊 Session data saved:', sessionData);
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// 8. PATIENT DASHBOARD - Dashboard do paciente
 app.get('/patient-dashboard', (req, res) => {
   console.log('👤 Serving Patient Dashboard for:', req.path);
   
@@ -2177,7 +2378,7 @@ app.get('/login', (req, res) => {
 app.use(express.static(path.join(__dirname, '../public')));
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai', '/register'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai', '/register', '/processar-login'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {

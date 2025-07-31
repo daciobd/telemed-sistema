@@ -10,6 +10,29 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **July 30, 2025**: ENDPOINT PROCESSAR-LOGIN IMPLEMENTADO - SISTEMA v12.5.5
+  - ✅ **Endpoint `/processar-login` Criado**: Sistema completo para login automático via URL
+    - Recebe credenciais via parâmetros URL: ?email=X&senha=Y ou ?crm=X&senha=Y
+    - Validação automática contra base de dados demo
+    - Criação de sessão segura com localStorage
+    - Redirecionamento inteligente baseado no tipo de usuário
+    - Página de confirmação com countdown visual (3 segundos)
+    - Tratamento de erros com redirecionamento para login
+  - ✅ **Funcionalidades Completas**: Processamento automático end-to-end
+    - Pacientes: email + senha → /patient-dashboard
+    - Médicos: crm + senha → /doctor-dashboard
+    - Validação contra contas demo existentes
+    - Sessão persistente entre páginas
+    - Feedback visual com ícone de sucesso e loading
+  - ✅ **URLs de Exemplo Funcionais**:
+    - Paciente: /processar-login?email=paciente@demo.com&senha=123456
+    - Médico: /processar-login?crm=123456-SP&senha=medico123
+    - Erro: /processar-login?email=invalido&senha=errada → redireciona para login com erro
+  - ✅ **Integração Hostinger Ready**: Perfeito para sistemas externos
+    - Links diretos do Hostinger podem enviar usuários com credenciais
+    - Processamento automático sem interação manual
+    - Experiência fluida de login single-click
+
 - **July 30, 2025**: CADASTRO DE NOVOS USUÁRIOS IMPLEMENTADO - SISTEMA v12.5.4
   - ✅ **Página de Cadastro `/register` Criada**: Sistema completo para novos usuários
     - Formulário dual: Seletor Paciente/Médico com campos específicos
