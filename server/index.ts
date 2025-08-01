@@ -2891,6 +2891,64 @@ app.get('/triagem-psiquiatrica', (req, res) => {
   }
 });
 
+// ROTAS ADICIONAIS COM NOMES SOLICITADOS PELO USUÁRIO
+
+// Ansiedade GAD-7 (rota alternativa)
+app.get('/ansiedade-gad7', (req, res) => {
+  console.log('😰 Serving Teste Ansiedade GAD-7 for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../ansiedade-gad7.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading ansiedade-gad7.html:', error);
+    res.status(500).send('Erro ao carregar Teste Ansiedade GAD-7');
+  }
+});
+
+// Depressão PHQ-9 (rota alternativa)
+app.get('/depressao-phq9', (req, res) => {
+  console.log('😔 Serving Teste Depressão PHQ-9 for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../depressao-phq9.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading depressao-phq9.html:', error);
+    res.status(500).send('Erro ao carregar Teste Depressão PHQ-9');
+  }
+});
+
+// Transtorno Bipolar MDQ (rota alternativa)
+app.get('/bipolar-mdq', (req, res) => {
+  console.log('🔄 Serving Teste Bipolar MDQ for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../bipolar-mdq.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading bipolar-mdq.html:', error);
+    res.status(500).send('Erro ao carregar Teste Bipolar MDQ');
+  }
+});
+
+// Stress PSS-10 (rota alternativa)
+app.get('/stress-pss10', (req, res) => {
+  console.log('💭 Serving Teste Stress PSS-10 for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../stress-pss10.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading stress-pss10.html:', error);
+    res.status(500).send('Erro ao carregar Teste Stress PSS-10');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -3034,7 +3092,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress', '/triagem-psiquiatrica'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress', '/triagem-psiquiatrica', '/ansiedade-gad7', '/depressao-phq9', '/bipolar-mdq', '/stress-pss10'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
