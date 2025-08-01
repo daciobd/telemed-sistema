@@ -170,6 +170,13 @@ export default function DoctorDashboardUnified() {
       icon: FileText,
       color: "orange",
       action: () => window.location.href = "/medical-records"
+    },
+    {
+      title: "Telemonitoramento",
+      description: "Monitoramento de Enfermagem",
+      icon: Activity,
+      color: "cyan",
+      action: () => window.location.href = "/telemonitoramento-enfermagem"
     }
   ];
 

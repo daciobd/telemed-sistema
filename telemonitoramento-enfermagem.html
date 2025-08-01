@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemonitoramento de Enfermagem - TeleMed Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .vital-card {
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .vital-card:hover {
+            border-color: #0ea5e9;
+            background-color: #f0f9ff;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .normal { background-color: #10b981; }
+        .attention { background-color: #f59e0b; }
+        .critical { background-color: #ef4444; }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Breadcrumb Navigation -->
+            <nav class="bg-white/10 backdrop-blur-lg rounded-lg p-4 mb-6">
+                <div class="flex items-center space-x-2 text-white text-sm">
+                    <a href="/doctor-dashboard" class="hover:text-white/80">📊 Dashboard Médico</a>
+                    <span>→</span>
+                    <span class="font-semibold">👩‍⚕️ Telemonitoramento de Enfermagem</span>
+                </div>
+            </nav>
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-block bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-full mb-4">
+                    👩‍⚕️ TELEMONITORAMENTO DE ENFERMAGEM
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    📊 Central de Monitoramento
+                </h1>
+                <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                    Acompanhamento contínuo de pacientes à distância
+                </p>
+                <p class="text-white/70 mt-2">
+                    Conforme Resolução COFEN Nº 696/2022 - Telenfermagem
+                </p>
+            </div>
+
+            <!-- Status Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-white">24</div>
+                    <div class="text-white/80 text-sm">Pacientes Ativos</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-white">3</div>
+                    <div class="text-white/80 text-sm">Alertas Pendentes</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-white">12</div>
+                    <div class="text-white/80 text-sm">Contatos Hoje</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-white">98%</div>
+                    <div class="text-white/80 text-sm">Adesão</div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                
+                <!-- Patient List -->
+                <div class="lg:col-span-2 bg-white rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">📋 Pacientes em Monitoramento</h2>
+                        <button onclick="addNewPatient()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            ➕ Novo Paciente
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4" id="patientList">
+                        <!-- Patient Cards -->
+                        <div class="vital-card p-4 rounded-lg border cursor-pointer" onclick="openPatientDetail('001')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <span class="status-indicator critical pulse-animation"></span>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">Maria Silva, 67 anos</h3>
+                                        <p class="text-sm text-gray-600">Hipertensão • Diabetes • Pós-cirúrgico</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-red-600">PA: 180/110 mmHg</div>
+                                    <div class="text-xs text-gray-500">Última medição: 14:30</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="vital-card p-4 rounded-lg border cursor-pointer" onclick="openPatientDetail('002')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <span class="status-indicator attention"></span>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">João Santos, 45 anos</h3>
+                                        <p class="text-sm text-gray-600">Cardiopatia • Acompanhamento</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-yellow-600">FC: 95 bpm</div>
+                                    <div class="text-xs text-gray-500">Última medição: 13:45</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="vital-card p-4 rounded-lg border cursor-pointer" onclick="openPatientDetail('003')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <span class="status-indicator normal"></span>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">Ana Costa, 34 anos</h3>
+                                        <p class="text-sm text-gray-600">Gestante • 32 semanas</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-green-600">PA: 120/80 mmHg</div>
+                                    <div class="text-xs text-gray-500">Última medição: 12:20</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="vital-card p-4 rounded-lg border cursor-pointer" onclick="openPatientDetail('004')">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <span class="status-indicator normal"></span>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">Carlos Oliveira, 58 anos</h3>
+                                        <p class="text-sm text-gray-600">DPOC • Monitoramento</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-green-600">SpO2: 96%</div>
+                                    <div class="text-xs text-gray-500">Última medição: 11:15</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="space-y-6">
+                    <!-- Alerts -->
+                    <div class="bg-white rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">🚨 Alertas Críticos</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-red-50 border-l-4 border-red-500 rounded">
+                                <p class="text-sm font-medium text-red-800">Maria Silva</p>
+                                <p class="text-xs text-red-600">PA elevada - Contatar imediatamente</p>
+                            </div>
+                            <div class="p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded">
+                                <p class="text-sm font-medium text-yellow-800">João Santos</p>
+                                <p class="text-xs text-yellow-600">FC acima do normal - Acompanhar</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">⚡ Ações Rápidas</h3>
+                        <div class="space-y-3">
+                            <button onclick="openProtocols()" class="w-full bg-blue-50 hover:bg-blue-100 p-3 rounded-lg text-left transition-colors">
+                                <div class="font-medium text-blue-800">📋 Protocolos</div>
+                                <div class="text-sm text-blue-600">Acessar protocolos de cuidado</div>
+                            </button>
+                            
+                            <button onclick="scheduleContact()" class="w-full bg-green-50 hover:bg-green-100 p-3 rounded-lg text-left transition-colors">
+                                <div class="font-medium text-green-800">📞 Agendar Contato</div>
+                                <div class="text-sm text-green-600">Agendar contato com paciente</div>
+                            </button>
+                            
+                            <button onclick="generateReport()" class="w-full bg-purple-50 hover:bg-purple-100 p-3 rounded-lg text-left transition-colors">
+                                <div class="font-medium text-purple-800">📊 Relatórios</div>
+                                <div class="text-sm text-purple-600">Gerar relatórios de acompanhamento</div>
+                            </button>
+                            
+                            <button onclick="emergencyProtocol()" class="w-full bg-red-50 hover:bg-red-100 p-3 rounded-lg text-left transition-colors">
+                                <div class="font-medium text-red-800">🚨 Emergência</div>
+                                <div class="text-sm text-red-600">Protocolo de emergência</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Detail Modal (Hidden) -->
+            <div id="patientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800" id="modalTitle">Detalhes do Paciente</h2>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">✕</button>
+                    </div>
+                    
+                    <div id="modalContent">
+                        <!-- Content will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Patient Modal -->
+            <div id="addPatientModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">➕ Adicionar Novo Paciente</h2>
+                        <button onclick="closeAddPatientModal()" class="text-gray-500 hover:text-gray-700">✕</button>
+                    </div>
+                    
+                    <form id="addPatientForm" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
+                                <input type="text" id="patientName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Idade</label>
+                                <input type="number" id="patientAge" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Condições Médicas</label>
+                            <input type="text" id="patientConditions" placeholder="Ex: Hipertensão, Diabetes" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                                <input type="tel" id="patientPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" id="patientEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="button" onclick="closeAddPatientModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancelar</button>
+                            <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Adicionar Paciente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Patient data
+        const patients = {
+            '001': {
+                name: 'Maria Silva',
+                age: 67,
+                conditions: ['Hipertensão', 'Diabetes', 'Pós-cirúrgico'],
+                vitals: {
+                    bp: '180/110 mmHg',
+                    hr: '88 bpm',
+                    temp: '36.8°C',
+                    oxygen: '95%'
+                },
+                status: 'critical',
+                lastContact: '14:30',
+                notes: 'Paciente apresenta PA elevada. Necessário contato imediato com médico responsável.',
+                medications: ['Losartana 50mg', 'Metformina 850mg', 'AAS 100mg']
+            },
+            '002': {
+                name: 'João Santos',
+                age: 45,
+                conditions: ['Cardiopatia', 'Acompanhamento'],
+                vitals: {
+                    bp: '130/85 mmHg',
+                    hr: '95 bpm',
+                    temp: '36.5°C',
+                    oxygen: '97%'
+                },
+                status: 'attention',
+                lastContact: '13:45',
+                notes: 'FC ligeiramente elevada. Continuar monitoramento.',
+                medications: ['Carvedilol 12.5mg', 'Enalapril 10mg']
+            },
+            '003': {
+                name: 'Ana Costa',
+                age: 34,
+                conditions: ['Gestante', '32 semanas'],
+                vitals: {
+                    bp: '120/80 mmHg',
+                    hr: '85 bpm',
+                    temp: '36.6°C',
+                    oxygen: '98%'
+                },
+                status: 'normal',
+                lastContact: '12:20',
+                notes: 'Gestação evoluindo bem. Sinais vitais dentro da normalidade.',
+                medications: ['Ácido Fólico', 'Sulfato Ferroso']
+            },
+            '004': {
+                name: 'Carlos Oliveira',
+                age: 58,
+                conditions: ['DPOC', 'Monitoramento'],
+                vitals: {
+                    bp: '125/78 mmHg',
+                    hr: '76 bpm',
+                    temp: '36.7°C',
+                    oxygen: '96%'
+                },
+                status: 'normal',
+                lastContact: '11:15',
+                notes: 'Saturação estável. Aderindo bem ao tratamento.',
+                medications: ['Salbutamol', 'Budesonida']
+            }
+        };
+
+        function openPatientDetail(patientId) {
+            const patient = patients[patientId];
+            if (!patient) return;
+
+            document.getElementById('modalTitle').textContent = `${patient.name} - ${patient.age} anos`;
+            
+            const content = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">📊 Sinais Vitais</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between p-2 bg-gray-50 rounded">
+                                <span>Pressão Arterial:</span>
+                                <span class="font-medium">${patient.vitals.bp}</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded">
+                                <span>Frequência Cardíaca:</span>
+                                <span class="font-medium">${patient.vitals.hr}</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded">
+                                <span>Temperatura:</span>
+                                <span class="font-medium">${patient.vitals.temp}</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-gray-50 rounded">
+                                <span>Saturação O2:</span>
+                                <span class="font-medium">${patient.vitals.oxygen}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">💊 Medicações</h3>
+                        <div class="space-y-1">
+                            ${patient.medications.map(med => `<div class="p-2 bg-blue-50 rounded text-sm">${med}</div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">📝 Observações</h3>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <p class="text-sm">${patient.notes}</p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex space-x-3">
+                    <button onclick="contactPatient('${patientId}')" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">📞 Contatar</button>
+                    <button onclick="updateVitals('${patientId}')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">📊 Atualizar Vitais</button>
+                    <button onclick="addNote('${patientId}')" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg">📝 Adicionar Nota</button>
+                </div>
+            `;
+            
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('patientModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('patientModal').classList.add('hidden');
+        }
+
+        function addNewPatient() {
+            document.getElementById('addPatientModal').classList.remove('hidden');
+        }
+
+        function closeAddPatientModal() {
+            document.getElementById('addPatientModal').classList.add('hidden');
+            document.getElementById('addPatientForm').reset();
+        }
+
+        function contactPatient(patientId) {
+            alert(`Iniciando contato com ${patients[patientId].name}...`);
+            closeModal();
+        }
+
+        function updateVitals(patientId) {
+            alert(`Abrindo formulário de atualização de sinais vitais para ${patients[patientId].name}...`);
+        }
+
+        function addNote(patientId) {
+            const note = prompt(`Adicionar observação para ${patients[patientId].name}:`);
+            if (note) {
+                alert('Observação adicionada com sucesso!');
+            }
+        }
+
+        function openProtocols() {
+            alert('Abrindo protocolos de cuidado de enfermagem...');
+        }
+
+        function scheduleContact() {
+            alert('Abrindo agenda de contatos...');
+        }
+
+        function generateReport() {
+            alert('Gerando relatório de monitoramento...');
+        }
+
+        function emergencyProtocol() {
+            if (confirm('Ativar protocolo de emergência?')) {
+                alert('Protocolo de emergência ativado! Notificando equipe médica...');
+            }
+        }
+
+        // Handle add patient form submission
+        document.getElementById('addPatientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('patientName').value;
+            const age = document.getElementById('patientAge').value;
+            const conditions = document.getElementById('patientConditions').value;
+            const phone = document.getElementById('patientPhone').value;
+            const email = document.getElementById('patientEmail').value;
+            
+            alert(`Paciente ${name} adicionado ao sistema de monitoramento!`);
+            closeAddPatientModal();
+        });
+
+        // Initialize system
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('👩‍⚕️ Sistema de Telemonitoramento de Enfermagem carregado');
+            console.log('📊 Monitorando 24 pacientes ativos');
+        });
+    </script>
+</body>
+</html>
