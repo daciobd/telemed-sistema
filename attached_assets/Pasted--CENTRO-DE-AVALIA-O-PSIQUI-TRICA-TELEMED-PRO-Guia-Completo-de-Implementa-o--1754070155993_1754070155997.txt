@@ -1,0 +1,281 @@
+# 🧠 CENTRO DE AVALIAÇÃO PSIQUIÁTRICA - TELEMED PRO
+## Guia Completo de Implementação
+
+---
+
+## 📋 **VISÃO GERAL DO SISTEMA**
+
+O Centro de Avaliação Psiquiátrica é uma plataforma profissional completa com **6 testes psicológicos validados** para triagem e acompanhamento de transtornos mentais.
+
+### **✅ TESTES INCLUÍDOS:**
+1. **🎯 TDAH - ASRS-18** (18 perguntas, critérios DSM-5)
+2. **🧠 Triagem Psiquiátrica Geral** (20 perguntas, 6 categorias)
+3. **😰 Ansiedade - GAD-7** (7 perguntas, escala validada)
+4. **😔 Depressão - PHQ-9** (9 perguntas, detecção ideação suicida)
+5. **🔄 Transtorno Bipolar - MDQ** (13 sintomas + 2 complementares)
+6. **💭 Stress - PSS-10** (10 perguntas, stress percebido)
+
+---
+
+## 🚀 **ETAPAS DE IMPLEMENTAÇÃO NO REPLIT**
+
+### **PASSO 1: CRIAR ESTRUTURA DE ARQUIVOS**
+```
+/projeto-telemed/
+├── centro-avaliacao.html          (Página principal)
+├── tdah-asrs18.html               (Teste TDAH)
+├── triagem-psiquiatrica.html      (Triagem Geral)
+├── ansiedade-gad7.html            (Teste Ansiedade)
+├── depressao-phq9.html            (Teste Depressão)
+├── bipolar-mdq.html               (Teste Bipolar)
+└── stress-pss10.html              (Teste Stress)
+```
+
+### **PASSO 2: CONFIGURAR ROTAS**
+No arquivo principal do servidor (app.js ou similar):
+```javascript
+// Rotas para Centro de Avaliação
+app.get('/centro-avaliacao', (req, res) => {
+    res.sendFile('centro-avaliacao.html');
+});
+
+app.get('/tdah-asrs18', (req, res) => {
+    res.sendFile('tdah-asrs18.html');
+});
+
+app.get('/triagem-psiquiatrica', (req, res) => {
+    res.sendFile('triagem-psiquiatrica.html');
+});
+
+app.get('/ansiedade-gad7', (req, res) => {
+    res.sendFile('ansiedade-gad7.html');
+});
+
+app.get('/depressao-phq9', (req, res) => {
+    res.sendFile('depressao-phq9.html');
+});
+
+app.get('/bipolar-mdq', (req, res) => {
+    res.sendFile('bipolar-mdq.html');
+});
+
+app.get('/stress-pss10', (req, res) => {
+    res.sendFile('stress-pss10.html');
+});
+```
+
+### **PASSO 3: COPIAR CÓDIGOS DOS ARQUIVOS**
+Copie o código HTML completo de cada teste criado:
+- ✅ Centro de Avaliação (Página Principal)
+- ✅ TDAH - ASRS-18
+- ✅ Triagem Psiquiátrica Geral
+- ✅ Ansiedade - GAD-7
+- ✅ Depressão - PHQ-9
+- ✅ Transtorno Bipolar - MDQ
+- ✅ Stress - PSS-10
+
+---
+
+## 🔗 **INTEGRAÇÃO COM SISTEMA ATUAL**
+
+### **ADICIONAR AO DASHBOARD MÉDICO**
+```html
+<div class="dashboard-item">
+    <h3>🧠 Centro de Avaliação</h3>
+    <p>Ferramentas de triagem psiquiátrica</p>
+    <button onclick="window.location.href='/centro-avaliacao'">
+        Acessar Centro
+    </button>
+</div>
+```
+
+### **ADICIONAR À HOMEPAGE HOSTINGER**
+Modificar o código da homepage para incluir:
+```javascript
+// Adicionar ao card do Dashboard Médico
+document.getElementById('btn-dashboard').onclick = function() {
+    // Criar menu de opções
+    const opcoes = confirm('Escolha:\nOK = Dashboard Geral\nCancelar = Centro de Avaliação');
+    if (opcoes) {
+        window.location.href = 'https://replit-url/dashboard';
+    } else {
+        window.location.href = 'https://replit-url/centro-avaliacao';
+    }
+};
+```
+
+---
+
+## 🛡️ **RECURSOS DE SEGURANÇA IMPLEMENTADOS**
+
+### **DETECÇÃO DE RISCO:**
+- **Ideação Suicida** (PHQ-9, Triagem Geral)
+- **Sintomas Psicóticos** (MDQ, Triagem Geral)
+- **Stress Severo** (PSS-10)
+- **Alertas Automáticos** com recomendações
+
+### **CVV E EMERGÊNCIA:**
+- **CVV: 188** mencionado em situações críticas
+- **Orientações para UPA/Pronto Socorro**
+- **Recomendações para busca de ajuda profissional**
+
+---
+
+## 📊 **CARACTERÍSTICAS TÉCNICAS**
+
+### **DESIGN RESPONSIVO:**
+- ✅ Mobile-friendly
+- ✅ Cores temáticas por transtorno
+- ✅ Animações e efeitos visuais
+- ✅ Barra de progresso interativa
+
+### **FUNCIONALIDADES:**
+- ✅ Navegação entre perguntas
+- ✅ Validação de respostas
+- ✅ Cálculo automático de pontuação
+- ✅ Interpretação baseada em critérios científicos
+- ✅ Relatórios detalhados com gráficos
+- ✅ Sistema de analytics integrado
+
+### **INSTRUMENTOS BASEADOS EM:**
+- **ASRS-18:** Kessler et al. (2005)
+- **GAD-7:** Spitzer et al. (2006)
+- **PHQ-9:** Kroenke et al. (2001)
+- **MDQ:** Hirschfeld et al. (2000)
+- **PSS-10:** Cohen et al. (1983)
+- **Triagem Geral:** Combinação de múltiplos instrumentos
+
+---
+
+## 🎯 **FLUXO DE NAVEGAÇÃO**
+
+```
+Homepage Hostinger
+     ↓
+🎯 Login → Dashboard Bonito
+     ↓
+🧠 Centro de Avaliação
+     ↓
+┌─────────────────────────────────────┐
+│  Escolha do Teste:                  │
+│  • TDAH - ASRS-18                   │
+│  • Triagem Psiquiátrica Geral       │
+│  • Ansiedade - GAD-7                │
+│  • Depressão - PHQ-9                │
+│  • Transtorno Bipolar - MDQ         │
+│  • Stress - PSS-10                  │
+└─────────────────────────────────────┘
+     ↓
+📝 Realização do Teste
+     ↓
+📊 Resultados + Recomendações
+     ↓
+🔄 Voltar ao Centro ou Outros Testes
+```
+
+---
+
+## ⚙️ **CONFIGURAÇÕES RECOMENDADAS**
+
+### **VARIÁVEIS DE AMBIENTE:**
+```env
+# URLs de redirecionamento
+DASHBOARD_URL=https://replit-url/dashboard
+CENTRO_AVALIACAO_URL=https://replit-url/centro-avaliacao
+EMERGENCY_CONTACT=188
+```
+
+### **LOGGING E ANALYTICS:**
+```javascript
+// Função de tracking
+function trackTestUsage(testName, result) {
+    console.log(`📊 Teste: ${testName} | Resultado: ${result}`);
+    // Aqui pode integrar com Google Analytics, etc.
+}
+```
+
+---
+
+## 🔧 **CUSTOMIZAÇÕES POSSÍVEIS**
+
+### **CORES PERSONALIZADAS:**
+- **TDAH:** Azul (#3b82f6)
+- **Ansiedade:** Laranja (#f59e0b)
+- **Depressão:** Índigo (#6366f1)
+- **Bipolar:** Roxo (#8b5cf6)
+- **Stress:** Vermelho (#ef4444)
+- **Triagem:** Cinza (#64748b)
+
+### **TEXTOS CUSTOMIZÁVEIS:**
+- Nome da instituição
+- Contatos de emergência locais
+- Recomendações específicas
+- Logos e identidade visual
+
+---
+
+## 🚨 **ASPECTOS LEGAIS E ÉTICOS**
+
+### **DISCLAIMERS OBRIGATÓRIOS:**
+- ⚠️ "Não substitui avaliação profissional"
+- ⚠️ "Ferramenta de triagem apenas"
+- ⚠️ "Procure ajuda especializada"
+- ⚠️ "Em emergência: CVV 188"
+
+### **RECOMENDAÇÕES:**
+- Uso restrito a profissionais de saúde
+- Acompanhamento médico necessário
+- Resultados devem ser interpretados por especialistas
+- Manter confidencialidade dos dados
+
+---
+
+## 📈 **ESTATÍSTICAS DO SISTEMA**
+
+### **MÉTRICAS IMPLEMENTADAS:**
+- **6 Testes Completos** ✅
+- **79 Perguntas Totais** ✅
+- **6 Categorias Diagnósticas** ✅
+- **4 Níveis de Severidade** por teste ✅
+- **Sistema de Alertas** de segurança ✅
+- **Design Responsivo** ✅
+
+### **TEMPO ESTIMADO DE USO:**
+- **TDAH:** 5-8 minutos
+- **Triagem Geral:** 10-15 minutos
+- **Ansiedade:** 3-5 minutos
+- **Depressão:** 3-5 minutos
+- **Bipolar:** 5-7 minutos
+- **Stress:** 3-5 minutos
+
+---
+
+## 🎊 **RESULTADO FINAL**
+
+### **SISTEMA PROFISSIONAL COMPLETO:**
+✅ **Interface moderna** e responsiva  
+✅ **Testes validados** cientificamente  
+✅ **Segurança integrada** com alertas  
+✅ **Relatórios detalhados** com gráficos  
+✅ **Fácil implementação** no Replit  
+✅ **Integração perfeita** com TeleMed Pro  
+
+---
+
+## 📞 **SUPORTE E MANUTENÇÃO**
+
+### **CONTATOS DE EMERGÊNCIA:**
+- **CVV:** 188 (24 horas)
+- **UPA/Pronto Socorro:** Mais próximo
+- **Emergência Psiquiátrica:** Hospitais locais
+
+### **ATUALIZAÇÕES FUTURAS:**
+- Sistema de relatórios PDF
+- Banco de dados para histórico
+- Dashboard administrativo
+- Estatísticas avançadas
+- Integração com prontuário eletrônico
+
+---
+
+**🏆 PARABÉNS! VOCÊ AGORA TEM UM CENTRO DE AVALIAÇÃO PSIQUIÁTRICA PROFISSIONAL COMPLETO!**

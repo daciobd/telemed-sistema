@@ -118,7 +118,7 @@
                 <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('triagem-geral')">
                     <div class="flex items-start justify-between mb-6">
                         <div class="text-5xl">🧠</div>
-                        <span class="status-indicator coming-soon"></span>
+                        <span class="status-indicator available"></span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">Triagem Psiquiátrica</h3>
                     <p class="text-gray-600 mb-4">
@@ -126,11 +126,11 @@
                     </p>
                     <div class="space-y-2 text-sm text-gray-500 mb-6">
                         <div>⏱️ Tempo: 10-15 minutos</div>
-                        <div>📊 Múltiplas escalas</div>
-                        <div>🎯 Screening geral</div>
+                        <div>📊 20 questões</div>
+                        <div>🎯 6 categorias diagnósticas</div>
                     </div>
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Em Breve
+                    <button class="bg-slate-600 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
+                        Iniciar Triagem Geral
                     </button>
                 </div>
 
@@ -309,7 +309,8 @@
                     window.location.href = '/tdah-asrs18';
                     break;
                 case 'triagem-geral':
-                    alert('🧠 Triagem Psiquiátrica Geral em desenvolvimento!\n\nEm breve teremos uma avaliação completa disponível.');
+                    console.log('🧠 Redirecionando para Triagem Psiquiátrica Geral');
+                    window.location.href = '/triagem-psiquiatrica';
                     break;
                 case 'ansiedade-gad7':
                     console.log('😰 Redirecionando para teste GAD-7 Ansiedade');

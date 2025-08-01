@@ -2877,6 +2877,20 @@ app.get('/pss10-stress', (req, res) => {
   }
 });
 
+// 16. TRIAGEM PSIQUIÁTRICA GERAL - Avaliação Abrangente
+app.get('/triagem-psiquiatrica', (req, res) => {
+  console.log('🧠 Serving Triagem Psiquiátrica Geral for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../triagem-psiquiatrica.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading triagem-psiquiatrica.html:', error);
+    res.status(500).send('Erro ao carregar Triagem Psiquiátrica');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -3020,7 +3034,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress', '/triagem-psiquiatrica'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
