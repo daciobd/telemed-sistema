@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -2526,7 +2527,7 @@ app.get('/login', (req, res) => {
 app.use(express.static(path.join(__dirname, '../public')));
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai', '/register', '/processar-login'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
@@ -2534,7 +2535,47 @@ app.get('*', (req, res, next) => {
   }
   
   console.log('📱 Serving React SPA for:', req.path);
-  res.sendFile(path.join(__dirname, '../dist/public/index.html'));
+  
+  // For development, serve a fallback page that redirects to proper routes
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TeleMed Sistema</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div class="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">🏥 TeleMed Sistema</h1>
+                <p class="text-gray-600 mb-4">Você está tentando acessar: <strong>${req.path}</strong></p>
+                <p class="text-gray-500 mb-8">Escolha uma das opções abaixo para continuar:</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                    <a href="/" class="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        🏠 Página Inicial
+                    </a>
+                    <a href="/patient-dashboard" class="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 transition-colors">
+                        👤 Dashboard Paciente
+                    </a>
+                    <a href="/doctor-dashboard" class="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        👨‍⚕️ Dashboard Médico
+                    </a>
+                </div>
+                <div class="mt-8 text-sm text-gray-500">
+                    <p>Outras páginas disponíveis:</p>
+                    <div class="flex flex-wrap justify-center gap-2 mt-2">
+                        <a href="/login" class="text-blue-600 hover:underline">Login</a>
+                        <a href="/register" class="text-blue-600 hover:underline">Cadastro</a>
+                        <a href="/sobre" class="text-blue-600 hover:underline">Sobre</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+  `);
 });
 
 // Start server

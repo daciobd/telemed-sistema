@@ -46,6 +46,7 @@ function App() {
             <Route path="/diagnostic" component={DiagnosticPage} />
             <Route path="/patient-bidding" component={PatientBiddingPage} />
             <Route path="/fazer-lance" component={PatientBiddingPage} />
+            <Route path="/lances" component={PatientBiddingPage} />
             <Route path="/agendamento" component={AgendamentoEspecialidade} />
             <Route path="/agenda-dia" component={AgendaDia} />
             <Route path="/agenda" component={AgendaDia} />
