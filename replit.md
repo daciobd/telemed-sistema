@@ -8,6 +8,23 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **August 01, 2025**: TESTES PSICOLÓGICOS COMPLETOS - SISTEMA v13.2.0
+  - ✅ **GAD-7 e PHQ-9 Implementados**: Testes de Ansiedade e Depressão totalmente funcionais
+    - Nova rota `/gad7-ansiedade` com 7 questões para avaliação de ansiedade generalizada
+    - Nova rota `/phq9-depressao` com 9 questões para rastreio de episódio depressivo maior
+    - Integração completa com Centro de Avaliação Psiquiátrica
+    - Navegação bidirecional entre todos os testes e centro de avaliação
+  - 🧠 **Sistema de Triagem Psiquiátrica Completo**: 3 testes principais operacionais
+    - TDAH-ASRS18: 18 questões para avaliação de déficit de atenção e hiperatividade
+    - GAD-7: 7 questões para transtorno de ansiedade generalizada (0-21 pontos)
+    - PHQ-9: 9 questões para episódio depressivo maior (0-27 pontos)
+    - Todos com algoritmos de scoring baseados em critérios científicos validados
+  - 🎯 **Funcionalidades Médicas Avançadas**: Sistema completo de avaliação
+    - Alertas de segurança para ideação suicida no PHQ-9 com números de emergência
+    - Escalas de severidade profissionais com recomendações clínicas específicas
+    - Disclaimers médicos e orientações para busca de ajuda profissional
+    - Logs de servidor configurados para todos os testes: "😰 GAD-7", "😔 PHQ-9", "🧠 TDAH"
+
 - **August 01, 2025**: INTEGRAÇÃO TESTE TDAH COMPLETA - SISTEMA v13.1.0
   - ✅ **Teste TDAH-ASRS18 Integrado**: Conexão perfeita entre Centro de Avaliação e teste TDAH
     - Nova rota `/tdah-asrs18` totalmente funcional com interface de 18 questões interativas

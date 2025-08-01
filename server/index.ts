@@ -2821,6 +2821,34 @@ app.get('/tdah-asrs18', (req, res) => {
   }
 });
 
+// 12. TESTE GAD-7 ANSIEDADE - Avaliação de Ansiedade Generalizada
+app.get('/gad7-ansiedade', (req, res) => {
+  console.log('😰 Serving Teste GAD-7 Ansiedade for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../gad7-ansiedade.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading gad7-ansiedade.html:', error);
+    res.status(500).send('Erro ao carregar Teste GAD-7');
+  }
+});
+
+// 13. TESTE PHQ-9 DEPRESSÃO - Avaliação de Depressão
+app.get('/phq9-depressao', (req, res) => {
+  console.log('😔 Serving Teste PHQ-9 Depressão for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../phq9-depressao.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading phq9-depressao.html:', error);
+    res.status(500).send('Erro ao carregar Teste PHQ-9');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -2964,7 +2992,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {

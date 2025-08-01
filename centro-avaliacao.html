@@ -138,7 +138,7 @@
                 <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('ansiedade-gad7')">
                     <div class="flex items-start justify-between mb-6">
                         <div class="text-5xl">😰</div>
-                        <span class="status-indicator coming-soon"></span>
+                        <span class="status-indicator available"></span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">Ansiedade - GAD-7</h3>
                     <p class="text-gray-600 mb-4">
@@ -149,8 +149,8 @@
                         <div>📊 7 questões</div>
                         <div>🎯 Ansiedade generalizada</div>
                     </div>
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Em Breve
+                    <button class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
+                        Iniciar Teste GAD-7
                     </button>
                 </div>
 
@@ -158,7 +158,7 @@
                 <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('depressao-phq9')">
                     <div class="flex items-start justify-between mb-6">
                         <div class="text-5xl">😔</div>
-                        <span class="status-indicator coming-soon"></span>
+                        <span class="status-indicator available"></span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">Depressão - PHQ-9</h3>
                     <p class="text-gray-600 mb-4">
@@ -169,8 +169,8 @@
                         <div>📊 9 questões</div>
                         <div>🎯 Episódio depressivo</div>
                     </div>
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Em Breve
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
+                        Iniciar Teste PHQ-9
                     </button>
                 </div>
 
@@ -312,10 +312,12 @@
                     alert('🧠 Triagem Psiquiátrica Geral em desenvolvimento!\n\nEm breve teremos uma avaliação completa disponível.');
                     break;
                 case 'ansiedade-gad7':
-                    alert('😰 Teste GAD-7 para Ansiedade em desenvolvimento!\n\nInstrumento validado com 7 questões específicas.');
+                    console.log('😰 Redirecionando para teste GAD-7 Ansiedade');
+                    window.location.href = '/gad7-ansiedade';
                     break;
                 case 'depressao-phq9':
-                    alert('😔 Teste PHQ-9 para Depressão em desenvolvimento!\n\nQuestionário com 9 itens para rastreio de episódios depressivos.');
+                    console.log('😔 Redirecionando para teste PHQ-9 Depressão');
+                    window.location.href = '/phq9-depressao';
                     break;
                 case 'bipolar-mdq':
                     alert('🔄 Teste MDQ para Transtorno Bipolar em desenvolvimento!\n\nQuestionário especializado para detecção de episódios maníacos.');
