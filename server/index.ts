@@ -2807,6 +2807,20 @@ app.get('/centro-avaliacao', (req, res) => {
   }
 });
 
+// 11. TESTE TDAH-ASRS18 - Avaliação de TDAH
+app.get('/tdah-asrs18', (req, res) => {
+  console.log('🧠 Serving Teste TDAH-ASRS18 for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../tdah-asrs18.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading tdah-asrs18.html:', error);
+    res.status(500).send('Erro ao carregar Teste TDAH');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -2950,7 +2964,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {

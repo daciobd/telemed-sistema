@@ -8,6 +8,23 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **August 01, 2025**: INTEGRAÇÃO TESTE TDAH COMPLETA - SISTEMA v13.1.0
+  - ✅ **Teste TDAH-ASRS18 Integrado**: Conexão perfeita entre Centro de Avaliação e teste TDAH
+    - Nova rota `/tdah-asrs18` totalmente funcional com interface de 18 questões interativas
+    - Navegação bidirecional: Centro de Avaliação ↔ Teste TDAH com botões "Voltar" e "Outros Testes"
+    - Sistema de avaliação completo com algoritmo DSM-5 para diagnóstico TDAH
+    - Resultados detalhados: Tipo Combinado, Predominantemente Desatento, Hiperativo-Impulsivo
+  - 🧠 **Interface Médica Profissional**: Sistema de teste psicológico completo
+    - Barra de progresso em tempo real (18 questões com indicadores visuais)
+    - Categorização de sintomas: Desatenção vs Hiperatividade/Impulsividade
+    - Scoring automático baseado em critérios científicos (≥6 sintomas significativos)
+    - Relatório final com gráficos, recomendações clínicas e disclaimers profissionais
+  - 🎯 **Funcionalidade Completa**: Teste TDAH 100% operacional
+    - JavaScript interativo com navegação anterio/próxima e validação de respostas
+    - Sistema de reset para repetir teste e integração com outros módulos psiquiátricos
+    - Logs de servidor configurados: "🧠 Serving Teste TDAH-ASRS18"
+    - Status HTTP 200 OK confirmado com título "Teste TDAH - ASRS-18"
+
 - **August 01, 2025**: CENTRO DE AVALIAÇÃO PSIQUIÁTRICA IMPLEMENTADO - SISTEMA v13.0.0
   - ✅ **Centro de Avaliação Psiquiátrica Criado**: Página completa de testes psicológicos implementada
     - Nova rota `/centro-avaliacao` totalmente funcional e acessível via URL direta
