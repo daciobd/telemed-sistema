@@ -21,11 +21,38 @@ import {
   Activity,
   Star,
   BarChart3,
-  User
+  User,
+  Brain,
+  Target,
+  Heart,
+  Zap,
+  Download
 } from "lucide-react";
 
 export default function DoctorDashboardUnified() {
   const [activeTab, setActiveTab] = useState("overview");
+
+  // Psychiatric Evaluation Center Functions
+  const openQuickTest = (testType: string) => {
+    const testUrls = {
+      'gad7': '/gad7-ansiedade',
+      'phq9': '/phq9-depressao', 
+      'pss10': '/pss10-stress',
+      'tdah': '/tdah-asrs18',
+      'bipolar': '/mdq-bipolar',
+      'triagem': '/triagem-psiquiatrica'
+    };
+    
+    if (testUrls[testType as keyof typeof testUrls]) {
+      window.location.href = testUrls[testType as keyof typeof testUrls];
+    } else {
+      alert('Teste não encontrado!');
+    }
+  };
+
+  const showCenterStats = () => {
+    alert('📊 Estatísticas do Centro de Avaliação em desenvolvimento!');
+  };
 
   // Mock doctor data
   const doctor = {
@@ -279,6 +306,160 @@ export default function DoctorDashboardUnified() {
             ))}
           </div>
         </div>
+
+        {/* Centro de Avaliação Psiquiátrica Section */}
+        <Card className="bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              <div className="p-2 bg-indigo-100 rounded-lg">
+                <Brain className="h-6 w-6 text-indigo-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Centro de Avaliação Psiquiátrica</h2>
+                <p className="text-sm text-gray-600 font-normal">Ferramentas profissionais de triagem e diagnóstico</p>
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Testes Rápidos */}
+              <div className="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                <h3 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                  <Target className="h-4 w-4" />
+                  Testes Rápidos
+                </h3>
+                <div className="space-y-2">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 hover:bg-blue-100 transition-colors"
+                    onClick={() => openQuickTest('gad7')}
+                  >
+                    <span className="mr-2">😰</span>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">GAD-7</div>
+                      <div className="text-xs text-blue-600">Ansiedade (3 min)</div>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 hover:bg-blue-100 transition-colors"
+                    onClick={() => openQuickTest('phq9')}
+                  >
+                    <span className="mr-2">😔</span>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">PHQ-9</div>
+                      <div className="text-xs text-blue-600">Depressão (3 min)</div>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 hover:bg-blue-100 transition-colors"
+                    onClick={() => openQuickTest('pss10')}
+                  >
+                    <span className="mr-2">💭</span>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">PSS-10</div>
+                      <div className="text-xs text-blue-600">Stress (3 min)</div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Testes Completos */}
+              <div className="bg-green-50 p-5 rounded-xl border border-green-200">
+                <h3 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+                  <Zap className="h-4 w-4" />
+                  Testes Completos
+                </h3>
+                <div className="space-y-2">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 hover:bg-green-100 transition-colors"
+                    onClick={() => openQuickTest('tdah')}
+                  >
+                    <span className="mr-2">🎯</span>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">TDAH - ASRS-18</div>
+                      <div className="text-xs text-green-600">Atenção (8 min)</div>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 hover:bg-green-100 transition-colors"
+                    onClick={() => openQuickTest('bipolar')}
+                  >
+                    <span className="mr-2">🔄</span>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">Bipolar - MDQ</div>
+                      <div className="text-xs text-green-600">Humor (7 min)</div>
+                    </div>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-left p-3 hover:bg-green-100 transition-colors"
+                    onClick={() => openQuickTest('triagem')}
+                  >
+                    <span className="mr-2">🧠</span>
+                    <div className="text-left">
+                      <div className="font-medium text-sm">Triagem Geral</div>
+                      <div className="text-xs text-green-600">Completo (15 min)</div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Acesso Completo */}
+              <div className="bg-purple-50 p-5 rounded-xl border border-purple-200">
+                <h3 className="font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                  <Heart className="h-4 w-4" />
+                  Centro Completo
+                </h3>
+                <p className="text-sm text-purple-700 mb-4">
+                  Acesse todos os testes e ferramentas de avaliação psiquiátrica
+                </p>
+                <div className="space-y-2">
+                  <Button 
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white transition-colors"
+                    onClick={() => window.location.href = '/centro-avaliacao'}
+                  >
+                    <Brain className="h-4 w-4 mr-2" />
+                    Abrir Centro
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-purple-300 text-purple-700 hover:bg-purple-50"
+                    onClick={showCenterStats}
+                  >
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Estatísticas
+                  </Button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Stats for Psychiatric Center */}
+            <div className="mt-6 p-4 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-lg">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-indigo-600">6</div>
+                  <div className="text-xs text-indigo-600">Testes Disponíveis</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-purple-600">47</div>
+                  <div className="text-xs text-purple-600">Avaliações Mês</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-600">92%</div>
+                  <div className="text-xs text-green-600">Precisão Clínica</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-blue-600">CVV 188</div>
+                  <div className="text-xs text-blue-600">Emergência</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Main Dashboard Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

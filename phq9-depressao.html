@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste de Depressão - PHQ-9</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -59,13 +60,19 @@
 <body>
     <div class="min-h-screen py-8 px-4">
         <div class="max-w-4xl mx-auto">
+            <!-- Breadcrumb Navigation -->
+            <nav class="bg-white/10 backdrop-blur-lg rounded-lg p-4 mb-6">
+                <div class="flex items-center space-x-2 text-white text-sm">
+                    <a href="/doctor-dashboard" class="hover:text-white/80">📊 Dashboard</a>
+                    <span>→</span>
+                    <a href="/centro-avaliacao" class="hover:text-white/80">🧠 Centro de Avaliação</a>
+                    <span>→</span>
+                    <span class="font-semibold">😔 PHQ-9 Depressão</span>
+                </div>
+            </nav>
+
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="mb-4">
-                    <a href="/centro-avaliacao" class="inline-flex items-center text-white/80 hover:text-white transition-colors">
-                        ← Voltar ao Centro de Avaliação
-                    </a>
-                </div>
                 <div class="inline-block bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-full mb-4">
                     😔 AVALIAÇÃO DE DEPRESSÃO
                 </div>
@@ -387,9 +394,43 @@
                         ${suicidalIdeation ? '<p class="text-red-700 font-bold">⚠️ Ideação suicida detectada na questão 9</p>' : ''}
                     </div>
                 </div>
+                
+                <!-- PDF Generation and Navigation -->
+                <div class="text-center mt-8 space-x-4">
+                    <button onclick="generatePDFReport()" 
+                            class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors">
+                        📄 Gerar Relatório PDF
+                    </button>
+                    <button onclick="window.location.href='/centro-avaliacao'" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors">
+                        🧠 Outros Testes
+                    </button>
+                    <button onclick="resetTest()" 
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg transition-colors">
+                        🔄 Repetir Teste
+                    </button>
+                </div>
             `;
             
             resultsSection.classList.remove('hidden');
+            
+            // Generate PDF report function
+            window.generatePDFReport = function() {
+                const pdfData = {
+                    totalScore: totalScore,
+                    maxScore: 27,
+                    severity: severity,
+                    interpretation: description,
+                    recommendations: recommendation,
+                    emergency: suicidalIdeation
+                };
+                
+                generatePDF('PHQ-9 - Teste de Depressão', pdfData);
+                TeleMedAnalytics.trackPDFDownload('PHQ-9');
+            };
+            
+            // Analytics tracking
+            TeleMedAnalytics.trackTestComplete('PHQ-9 Depressão', severity);
             
             // Log result for analytics
             console.log('😔 Teste PHQ-9 concluído:', {
@@ -415,9 +456,138 @@
         document.getElementById('prevBtn').addEventListener('click', prevQuestion);
         document.getElementById('nextBtn').addEventListener('click', nextQuestion);
 
+        // PDF Generation Function
+        function generatePDF(testName, results) {
+            const { jsPDF } = window.jspdf;
+            if (!jsPDF) {
+                alert('Biblioteca PDF não carregada. Tente novamente.');
+                return;
+            }
+            
+            const doc = new jsPDF();
+            const pageWidth = 210;
+            const margin = 20;
+            const lineHeight = 10;
+            let yPosition = 30;
+            
+            // Add text with line wrapping
+            function addText(text, x, y, maxWidth) {
+                const lines = doc.splitTextToSize(text, maxWidth);
+                doc.text(lines, x, y);
+                return y + (lines.length * lineHeight);
+            }
+            
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('TeleMed Pro - Centro de Avaliação Psiquiátrica', margin, yPosition);
+            yPosition += 15;
+            
+            // Test title
+            doc.setFontSize(16);
+            doc.text(`Relatório: ${testName}`, margin, yPosition);
+            yPosition += 10;
+            
+            // Date
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, margin, yPosition);
+            yPosition += 15;
+            
+            // Results
+            doc.setFont(undefined, 'bold');
+            doc.text('RESULTADOS:', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFont(undefined, 'normal');
+            yPosition = addText(`Pontuação Total: ${results.totalScore}/${results.maxScore}`, margin, yPosition, pageWidth - 2*margin);
+            yPosition = addText(`Nível: ${results.severity}`, margin, yPosition, pageWidth - 2*margin);
+            yPosition += 5;
+            
+            // Interpretation
+            doc.setFont(undefined, 'bold');
+            doc.text('INTERPRETAÇÃO:', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFont(undefined, 'normal');
+            yPosition = addText(results.interpretation, margin, yPosition, pageWidth - 2*margin);
+            yPosition += 10;
+            
+            // Recommendations
+            doc.setFont(undefined, 'bold');
+            doc.text('RECOMENDAÇÕES:', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFont(undefined, 'normal');
+            yPosition = addText(results.recommendations, margin, yPosition, pageWidth - 2*margin);
+            yPosition += 15;
+            
+            // Emergency alert if needed
+            if (results.emergency) {
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text('🚨 ALERTA DE EMERGÊNCIA:', margin, yPosition);
+                yPosition += 10;
+                doc.setFont(undefined, 'normal');
+                yPosition = addText('Risco de autolesão identificado. CVV: 188 (24h) | SAMU: 192', margin, yPosition, pageWidth - 2*margin);
+                yPosition += 15;
+            }
+            
+            // Disclaimer
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'italic');
+            yPosition = addText('IMPORTANTE: Este relatório é uma ferramenta de triagem e não substitui a avaliação de um profissional de saúde mental qualificado.', margin, yPosition, pageWidth - 2*margin);
+            
+            // Footer
+            doc.setFontSize(8);
+            doc.text('TeleMed Pro - Sistema de Avaliação Psiquiátrica', margin, 280);
+            doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, margin, 285);
+            
+            // Save
+            const fileName = `TeleMed_${testName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(fileName);
+            
+            console.log('📄 PDF gerado:', fileName);
+        }
+
+        // Analytics tracking
+        class TeleMedAnalytics {
+            static trackTestStart(testName) {
+                console.log(`📊 Teste iniciado: ${testName}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'test_started', {
+                        'test_name': testName,
+                        'timestamp': new Date().toISOString()
+                    });
+                }
+            }
+            
+            static trackTestComplete(testName, result) {
+                console.log(`✅ Teste concluído: ${testName} - Resultado: ${result}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'test_completed', {
+                        'test_name': testName,
+                        'result': result,
+                        'timestamp': new Date().toISOString()
+                    });
+                }
+            }
+            
+            static trackPDFDownload(testName) {
+                console.log(`📄 PDF gerado: ${testName}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'pdf_downloaded', {
+                        'test_name': testName,
+                        'timestamp': new Date().toISOString()
+                    });
+                }
+            }
+        }
+
         // Initialize test on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('😔 Teste PHQ-9 Depressão carregado');
+            TeleMedAnalytics.trackTestStart('PHQ-9 Depressão');
             initTest();
         });
     </script>

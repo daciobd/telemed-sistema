@@ -1,0 +1,388 @@
+ INTEGRAÇÃO DASHBOARD MÉDICO REPLIT
+MODIFICAR DASHBOARD PRINCIPAL DO REPLIT
+1. LOCALIZAR: Arquivo do Dashboard Médico principal
+2. ADICIONAR SEÇÃO - Ferramentas de Avaliação:
+html<!-- ADICIONAR NOVA SEÇÃO NO DASHBOARD -->
+<div class="dashboard-section bg-white rounded-2xl p-8 mb-8">
+    <div class="flex items-center mb-6">
+        <div class="text-4xl mr-4">🧠</div>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">Centro de Avaliação Psiquiátrica</h2>
+            <p class="text-gray-600">Ferramentas profissionais de triagem e diagnóstico</p>
+        </div>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-4">
+        <!-- Testes Rápidos -->
+        <div class="bg-blue-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-blue-800 mb-2">🎯 Testes Rápidos</h3>
+            <div class="space-y-2 text-sm">
+                <button onclick="openQuickTest('gad7')" class="block w-full text-left p-2 hover:bg-blue-100 rounded">
+                    😰 GAD-7 (3 min)
+                </button>
+                <button onclick="openQuickTest('phq9')" class="block w-full text-left p-2 hover:bg-blue-100 rounded">
+                    😔 PHQ-9 (3 min)
+                </button>
+                <button onclick="openQuickTest('pss10')" class="block w-full text-left p-2 hover:bg-blue-100 rounded">
+                    💭 PSS-10 (3 min)
+                </button>
+            </div>
+        </div>
+        
+        <!-- Testes Completos -->
+        <div class="bg-green-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-green-800 mb-2">🔍 Testes Completos</h3>
+            <div class="space-y-2 text-sm">
+                <button onclick="openQuickTest('tdah')" class="block w-full text-left p-2 hover:bg-green-100 rounded">
+                    🎯 TDAH - ASRS-18 (8 min)
+                </button>
+                <button onclick="openQuickTest('bipolar')" class="block w-full text-left p-2 hover:bg-green-100 rounded">
+                    🔄 Bipolar - MDQ (7 min)
+                </button>
+                <button onclick="openQuickTest('triagem')" class="block w-full text-left p-2 hover:bg-green-100 rounded">
+                    🧠 Triagem Geral (15 min)
+                </button>
+            </div>
+        </div>
+        
+        <!-- Acesso Completo -->
+        <div class="bg-purple-50 p-4 rounded-lg">
+            <h3 class="font-semibold text-purple-800 mb-2">🏥 Centro Completo</h3>
+            <p class="text-sm text-purple-700 mb-3">Acesse todos os testes e ferramentas</p>
+            <button onclick="window.location.href='/centro-avaliacao'" 
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg w-full transition-colors">
+                Abrir Centro
+            </button>
+        </div>
+    </div>
+</div>
+3. ADICIONAR JAVASCRIPT - Funções de Navegação:
+javascript// ADICIONAR NO SCRIPT DO DASHBOARD
+
+// Função para testes rápidos
+function openQuickTest(testType) {
+    const testUrls = {
+        'gad7': '/ansiedade-gad7',
+        'phq9': '/depressao-phq9',
+        'pss10': '/stress-pss10',
+        'tdah': '/tdah-asrs18',
+        'bipolar': '/bipolar-mdq',
+        'triagem': '/triagem-psiquiatrica'
+    };
+    
+    if (testUrls[testType]) {
+        window.location.href = testUrls[testType];
+    } else {
+        alert('Teste não encontrado!');
+    }
+}
+
+// Função para estatísticas do Centro
+function showCenterStats() {
+    // Aqui pode implementar estatísticas de uso dos testes
+    alert('📊 Estatísticas do Centro de Avaliação em desenvolvimento!');
+}
+4. MENU LATERAL (Se existir):
+html<!-- ADICIONAR NO MENU LATERAL DO DASHBOARD -->
+<li class="nav-item">
+    <a href="/centro-avaliacao" class="nav-link">
+        <span class="icon">🧠</span>
+        <span class="text">Centro de Avaliação</span>
+    </a>
+    <ul class="submenu">
+        <li><a href="/tdah-asrs18">TDAH - ASRS-18</a></li>
+        <li><a href="/triagem-psiquiatrica">Triagem Geral</a></li>
+        <li><a href="/ansiedade-gad7">Ansiedade - GAD-7</a></li>
+        <li><a href="/depressao-phq9">Depressão - PHQ-9</a></li>
+        <li><a href="/bipolar-mdq">Bipolar - MDQ</a></li>
+        <li><a href="/stress-pss10">Stress - PSS-10</a></li>
+    </ul>
+</li>
+
+📄 PARTE 3: SISTEMA DE RELATÓRIOS PDF
+IMPLEMENTAÇÃO DE GERAÇÃO DE PDF
+1. INSTALAR BIBLIOTECA jsPDF:
+html<!-- ADICIONAR EM CADA TESTE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+2. FUNÇÃO UNIVERSAL DE GERAÇÃO PDF:
+javascript// ADICIONAR EM CADA TESTE
+
+function generatePDF(testName, results) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Configurações
+    const pageWidth = 210;
+    const margin = 20;
+    const lineHeight = 10;
+    let yPosition = 30;
+    
+    // Função para adicionar texto com quebra de linha
+    function addText(text, x, y, maxWidth) {
+        const lines = doc.splitTextToSize(text, maxWidth);
+        doc.text(lines, x, y);
+        return y + (lines.length * lineHeight);
+    }
+    
+    // Cabeçalho
+    doc.setFontSize(20);
+    doc.setFont(undefined, 'bold');
+    doc.text('TeleMed Pro - Centro de Avaliação Psiquiátrica', margin, yPosition);
+    yPosition += 15;
+    
+    // Título do teste
+    doc.setFontSize(16);
+    doc.text(`Relatório: ${testName}`, margin, yPosition);
+    yPosition += 10;
+    
+    // Data
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, margin, yPosition);
+    yPosition += 15;
+    
+    // Resultados principais
+    doc.setFont(undefined, 'bold');
+    doc.text('RESULTADOS:', margin, yPosition);
+    yPosition += 10;
+    
+    doc.setFont(undefined, 'normal');
+    yPosition = addText(`Pontuação Total: ${results.totalScore}/${results.maxScore}`, margin, yPosition, pageWidth - 2*margin);
+    yPosition = addText(`Nível: ${results.severity}`, margin, yPosition, pageWidth - 2*margin);
+    yPosition += 5;
+    
+    // Interpretação
+    doc.setFont(undefined, 'bold');
+    doc.text('INTERPRETAÇÃO:', margin, yPosition);
+    yPosition += 10;
+    
+    doc.setFont(undefined, 'normal');
+    yPosition = addText(results.interpretation, margin, yPosition, pageWidth - 2*margin);
+    yPosition += 10;
+    
+    // Recomendações
+    doc.setFont(undefined, 'bold');
+    doc.text('RECOMENDAÇÕES:', margin, yPosition);
+    yPosition += 10;
+    
+    doc.setFont(undefined, 'normal');
+    yPosition = addText(results.recommendations, margin, yPosition, pageWidth - 2*margin);
+    yPosition += 15;
+    
+    // Detalhes por categoria (se existir)
+    if (results.categories) {
+        doc.setFont(undefined, 'bold');
+        doc.text('ANÁLISE POR CATEGORIA:', margin, yPosition);
+        yPosition += 10;
+        
+        doc.setFont(undefined, 'normal');
+        Object.entries(results.categories).forEach(([category, score]) => {
+            yPosition = addText(`${category}: ${score.current}/${score.max} pontos`, margin + 10, yPosition, pageWidth - 2*margin);
+        });
+        yPosition += 10;
+    }
+    
+    // Disclaimer
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'italic');
+    yPosition = addText('IMPORTANTE: Este relatório é uma ferramenta de triagem e não substitui a avaliação de um profissional de saúde mental qualificado.', margin, yPosition, pageWidth - 2*margin);
+    
+    // Rodapé
+    doc.setFontSize(8);
+    doc.text('TeleMed Pro - Sistema de Avaliação Psiquiátrica', margin, 280);
+    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, margin, 285);
+    
+    // Salvar
+    const fileName = `TeleMed_${testName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(fileName);
+}
+3. INTEGRAR EM CADA TESTE - Exemplo PHQ-9:
+javascript// MODIFICAR A FUNÇÃO showResults() EM CADA TESTE
+
+function showResults() {
+    // ... código existente ...
+    
+    // Preparar dados para PDF
+    const pdfData = {
+        totalScore: totalScore,
+        maxScore: 27,
+        severity: severity,
+        interpretation: description,
+        recommendations: recommendation,
+        categories: null // PHQ-9 não tem categorias
+    };
+    
+    // Adicionar botão PDF nos resultados
+    resultContent.innerHTML += `
+        <div class="text-center mt-6">
+            <button onclick="generatePDF('PHQ-9 - Teste de Depressão', ${JSON.stringify(pdfData).replace(/"/g, '&quot;')})" 
+                    class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors mr-4">
+                📄 Gerar Relatório PDF
+            </button>
+        </div>
+    `;
+    
+    // ... resto do código ...
+}
+4. VERSÃO AVANÇADA - Para Triagem Geral com Categorias:
+javascript// PARA A TRIAGEM PSIQUIÁTRICA GERAL
+
+function showResults() {
+    // ... código existente ...
+    
+    // Preparar dados com categorias
+    const pdfData = {
+        totalScore: totalScore,
+        maxScore: maxScore,
+        severity: overallRisk,
+        interpretation: recommendation,
+        recommendations: recommendation,
+        categories: {
+            'Humor': { current: categoryScores.humor, max: 20 },
+            'Ansiedade': { current: categoryScores.ansiedade, max: 16 },
+            'Cognição': { current: categoryScores.cognicao, max: 16 },
+            'Psicose': { current: categoryScores.psicose, max: 12 },
+            'Substâncias': { current: categoryScores.substancias, max: 8 },
+            'Funcionamento': { current: categoryScores.funcionamento, max: 8 }
+        }
+    };
+    
+    // Adicionar botão PDF
+    resultContent.innerHTML += `
+        <div class="text-center mt-6">
+            <button onclick="generatePDF('Triagem Psiquiátrica Geral', ${JSON.stringify(pdfData).replace(/"/g, '&quot;')})" 
+                    class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors mr-4">
+                📄 Gerar Relatório PDF
+            </button>
+        </div>
+    `;
+}
+
+🔄 PARTE 4: SISTEMA DE NAVEGAÇÃO INTEGRADA
+BREADCRUMBS E NAVEGAÇÃO
+1. ADICIONAR EM CADA TESTE:
+html<!-- ADICIONAR NO INÍCIO DE CADA TESTE -->
+<nav class="bg-white/10 backdrop-blur-lg rounded-lg p-4 mb-6">
+    <div class="flex items-center space-x-2 text-white text-sm">
+        <a href="/dashboard" class="hover:text-white/80">📊 Dashboard</a>
+        <span>→</span>
+        <a href="/centro-avaliacao" class="hover:text-white/80">🧠 Centro de Avaliação</a>
+        <span>→</span>
+        <span class="font-semibold">Teste Atual</span>
+    </div>
+</nav>
+2. BOTÕES DE NAVEGAÇÃO UNIVERSAIS:
+javascript// ADICIONAR EM TODOS OS TESTES
+
+function addNavigationButtons() {
+    return `
+        <div class="text-center mt-8 space-x-4">
+            <button onclick="window.location.href='/centro-avaliacao'" 
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors">
+                ← Voltar ao Centro
+            </button>
+            <button onclick="window.location.href='/dashboard'" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                📊 Dashboard Principal
+            </button>
+            <button onclick="resetTest()" 
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors">
+                🔄 Repetir Teste
+            </button>
+        </div>
+    `;
+}
+
+📊 PARTE 5: SISTEMA DE ANALYTICS E ESTATÍSTICAS
+TRACKING DE USO DOS TESTES
+1. FUNÇÃO UNIVERSAL DE TRACKING:
+javascript// ADICIONAR EM TODOS OS ARQUIVOS
+
+class TeleMedAnalytics {
+    static trackTestStart(testName) {
+        console.log(`📊 Teste iniciado: ${testName}`);
+        // Aqui pode integrar com Google Analytics, etc.
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'test_started', {
+                'test_name': testName,
+                'timestamp': new Date().toISOString()
+            });
+        }
+    }
+    
+    static trackTestComplete(testName, result) {
+        console.log(`✅ Teste concluído: ${testName} - Resultado: ${result}`);
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'test_completed', {
+                'test_name': testName,
+                'result': result,
+                'timestamp': new Date().toISOString()
+            });
+        }
+    }
+    
+    static trackPDFDownload(testName) {
+        console.log(`📄 PDF gerado: ${testName}`);
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'pdf_downloaded', {
+                'test_name': testName,
+                'timestamp': new Date().toISOString()
+            });
+        }
+    }
+}
+2. INTEGRAR EM CADA TESTE:
+javascript// NO INÍCIO DO TESTE
+TeleMedAnalytics.trackTestStart('Nome do Teste');
+
+// AO COMPLETAR
+TeleMedAnalytics.trackTestComplete('Nome do Teste', severity);
+
+// AO GERAR PDF
+TeleMedAnalytics.trackPDFDownload('Nome do Teste');
+
+🚀 RESUMO DE IMPLEMENTAÇÃO
+CHECKLIST DE INTEGRAÇÃO:
+✅ HOMEPAGE HOSTINGER:
+
+ Adicionar card "Centro de Avaliação"
+ Implementar JavaScript de redirecionamento
+ Testar navegação
+
+✅ DASHBOARD MÉDICO:
+
+ Adicionar seção "Ferramentas de Avaliação"
+ Implementar menu de testes rápidos
+ Adicionar navegação lateral
+
+✅ SISTEMA PDF:
+
+ Instalar jsPDF em todos os testes
+ Implementar função generatePDF()
+ Adicionar botões PDF nos resultados
+
+✅ NAVEGAÇÃO:
+
+ Adicionar breadcrumbs
+ Implementar botões universais
+ Testar fluxo completo
+
+✅ ANALYTICS:
+
+ Implementar TeleMedAnalytics
+ Adicionar tracking em todos os testes
+ Configurar Google Analytics (opcional)
+
+
+🎯 FLUXO FINAL INTEGRADO
+Homepage Hostinger (Bonita)
+    ↓ Clique "Centro de Avaliação"
+Centro de Avaliação (Replit)
+    ↓ Escolher teste
+Teste Específico
+    ↓ Completar
+Resultados + PDF
+    ↓ Navegação
+Dashboard Médico OU Outros Testes
+
+🏆 COM ESTA INTEGRAÇÃO, VOCÊ TERÁ UM SISTEMA PROFISSIONAL COMPLETO E TOTALMENTE FUNCIONAL!
