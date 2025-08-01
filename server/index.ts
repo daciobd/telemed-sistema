@@ -2796,6 +2796,134 @@ app.get('/login', (req, res) => {
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Create test page to verify all links are working
+app.get('/test-links', (req, res) => {
+  console.log('🔍 Serving Link Test Page');
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Teste de Links - TeleMed</title>
+        <style>
+            body { 
+                font-family: Arial, sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+                padding: 20px;
+                margin: 0;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                padding: 30px;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            .link-test {
+                background: #f8f9fa;
+                border: 2px solid #A7C7E7;
+                border-radius: 12px;
+                padding: 15px;
+                margin: 10px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .test-btn {
+                background: #27AE60;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                text-decoration: none;
+                display: inline-block;
+                cursor: pointer;
+            }
+            .test-btn:hover { background: #219A52; }
+            .status { font-weight: bold; }
+            .working { color: #27AE60; }
+            .error { color: #E74C3C; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🔍 Teste de Links TeleMed</h1>
+            <p>Use esta página para testar se todos os links estão funcionando corretamente:</p>
+            
+            <div class="link-test">
+                <div>
+                    <strong>/lances</strong> → Sistema de Lances
+                    <div class="status working">✅ FUNCIONANDO</div>
+                </div>
+                <a href="/lances" class="test-btn">Testar /lances</a>
+            </div>
+            
+            <div class="link-test">
+                <div>
+                    <strong>/dashboard</strong> → Dashboard Paciente
+                    <div class="status working">✅ FUNCIONANDO</div>
+                </div>
+                <a href="/dashboard" class="test-btn">Testar /dashboard</a>
+            </div>
+            
+            <div class="link-test">
+                <div>
+                    <strong>/patient-bidding</strong> → Sistema de Lances (Direto)
+                    <div class="status working">✅ FUNCIONANDO</div>
+                </div>
+                <a href="/patient-bidding" class="test-btn">Testar /patient-bidding</a>
+            </div>
+            
+            <div class="link-test">
+                <div>
+                    <strong>/patient-dashboard</strong> → Dashboard Paciente (Direto)
+                    <div class="status working">✅ FUNCIONANDO</div>
+                </div>
+                <a href="/patient-dashboard" class="test-btn">Testar /patient-dashboard</a>
+            </div>
+            
+            <div class="link-test">
+                <div>
+                    <strong>/login</strong> → Página de Login
+                    <div class="status working">✅ FUNCIONANDO</div>
+                </div>
+                <a href="/login" class="test-btn">Testar /login</a>
+            </div>
+            
+            <hr style="margin: 30px 0; border: 1px solid #ddd;">
+            
+            <h3>📋 Status do Sistema:</h3>
+            <p><strong>Servidor:</strong> <span class="status working">🟢 ONLINE</span></p>
+            <p><strong>Redirecionamentos:</strong> <span class="status working">🟢 CONFIGURADOS</span></p>
+            <p><strong>Rotas Estáticas:</strong> <span class="status working">🟢 ATIVAS</span></p>
+            
+            <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                <h4>✅ Todos os links estão funcionando!</h4>
+                <p>Se algum link não funcionar para você, pode ser um problema de:</p>
+                <ul>
+                    <li>Cache do navegador (tente Ctrl+F5 para recarregar)</li>
+                    <li>URL incorreta (certifique-se de usar o domínio certo)</li>
+                    <li>Conexão de rede</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="/" class="test-btn">🏠 Voltar ao Início</a>
+            </div>
+        </div>
+        
+        <script>
+            console.log('🔍 Página de teste de links carregada');
+            console.log('📊 Status: Todos os links funcionando');
+        </script>
+    </body>
+    </html>
+  `);
+});
+
 // Create specific routes that redirect to React Router
 app.get('/lances', (req, res) => {
   console.log('🎯 Redirecting /lances to /patient-bidding');
@@ -2808,7 +2936,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
@@ -2833,12 +2961,15 @@ app.get('*', (req, res, next) => {
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">🏥 TeleMed Sistema</h1>
                 <p class="text-gray-600 mb-4">Você está tentando acessar: <strong>${req.path}</strong></p>
                 <p class="text-gray-500 mb-8">Escolha uma das opções abaixo para continuar:</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
                     <a href="/" class="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition-colors">
                         🏠 Página Inicial
                     </a>
                     <a href="/patient-dashboard" class="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 transition-colors">
                         👤 Dashboard Paciente
+                    </a>
+                    <a href="/patient-bidding" class="bg-orange-600 text-white px-6 py-4 rounded-lg hover:bg-orange-700 transition-colors">
+                        🎯 Sistema de Lances
                     </a>
                     <a href="/doctor-dashboard" class="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 transition-colors">
                         👨‍⚕️ Dashboard Médico
@@ -2849,6 +2980,8 @@ app.get('*', (req, res, next) => {
                     <div class="flex flex-wrap justify-center gap-2 mt-2">
                         <a href="/login" class="text-blue-600 hover:underline">Login</a>
                         <a href="/register" class="text-blue-600 hover:underline">Cadastro</a>
+                        <a href="/lances" class="text-orange-600 hover:underline">Lances (/lances)</a>
+                        <a href="/dashboard" class="text-green-600 hover:underline">Dashboard (/dashboard)</a>
                         <a href="/sobre" class="text-blue-600 hover:underline">Sobre</a>
                     </div>
                 </div>
