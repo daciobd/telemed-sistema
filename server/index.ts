@@ -2153,7 +2153,277 @@ app.get('/patient-dashboard', (req, res) => {
   `);
 });
 
-// 7. LOGIN PAGE - Sistema de autenticação CORRIGIDO
+// 8. PATIENT BIDDING PAGE - Sistema de lances para pacientes
+app.get('/patient-bidding', (req, res) => {
+  console.log('🎯 Serving Patient Bidding Page for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sistema de Lances - TeleMed</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+                font-family: 'Poppins', sans-serif; 
+                background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #F0F4F8;
+            }
+            .header h1 { color: #A7C7E7; font-size: 28px; }
+            .bidding-card {
+                background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+                border: 2px solid #A7C7E7;
+                border-radius: 16px;
+                padding: 20px;
+                margin-bottom: 20px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .bidding-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(167, 199, 231, 0.3);
+            }
+            .specialty-badge {
+                background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+                display: inline-block;
+                margin-bottom: 15px;
+            }
+            .bid-amount {
+                font-size: 24px;
+                font-weight: 600;
+                color: #27AE60;
+                margin: 10px 0;
+            }
+            .timer {
+                background: #FFE4B5;
+                color: #FF8C00;
+                padding: 8px 12px;
+                border-radius: 12px;
+                font-weight: 500;
+                display: inline-block;
+            }
+            .bid-btn {
+                background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 15px;
+            }
+            .bid-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+            }
+            .logout-btn {
+                background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 12px;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+            }
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+            .stat-card {
+                background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 16px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-gavel"></i> Sistema de Lances TeleMed</h1>
+                <a href="/login" class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+
+            <div id="bidding-content">
+                <!-- Consultations Available for Bidding -->
+                <div class="bidding-card">
+                    <div class="specialty-badge">
+                        <i class="fas fa-heart"></i> Cardiologia
+                    </div>
+                    <h3>Consulta Cardiológica - Urgente</h3>
+                    <p style="color: #666; margin: 10px 0;">Paciente com sintomas cardíacos necessita avaliação</p>
+                    <div class="bid-amount">
+                        <i class="fas fa-dollar-sign"></i> Lance Atual: R$ 180,00
+                    </div>
+                    <div class="timer">
+                        <i class="fas fa-clock"></i> Tempo: 12:45
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <span style="color: #666;">
+                            <i class="fas fa-users"></i> 5 médicos interessados
+                        </span>
+                    </div>
+                    <button class="bid-btn" onclick="fazerLance('cardiologia', 185)">
+                        <i class="fas fa-hand-paper"></i> Fazer Lance (R$ 185,00)
+                    </button>
+                </div>
+
+                <div class="bidding-card">
+                    <div class="specialty-badge">
+                        <i class="fas fa-child"></i> Pediatria
+                    </div>
+                    <h3>Consulta Pediátrica</h3>
+                    <p style="color: #666; margin: 10px 0;">Criança com febre e sintomas gripais</p>
+                    <div class="bid-amount">
+                        <i class="fas fa-dollar-sign"></i> Lance Atual: R$ 150,00
+                    </div>
+                    <div class="timer">
+                        <i class="fas fa-clock"></i> Tempo: 25:30
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <span style="color: #666;">
+                            <i class="fas fa-users"></i> 3 médicos interessados
+                        </span>
+                    </div>
+                    <button class="bid-btn" onclick="fazerLance('pediatria', 155)">
+                        <i class="fas fa-hand-paper"></i> Fazer Lance (R$ 155,00)
+                    </button>
+                </div>
+
+                <div class="bidding-card">
+                    <div class="specialty-badge">
+                        <i class="fas fa-eye"></i> Dermatologia
+                    </div>
+                    <h3>Consulta Dermatológica</h3>
+                    <p style="color: #666; margin: 10px 0;">Avaliação de lesão cutânea</p>
+                    <div class="bid-amount">
+                        <i class="fas fa-dollar-sign"></i> Lance Atual: R$ 120,00
+                    </div>
+                    <div class="timer">
+                        <i class="fas fa-clock"></i> Tempo: 35:00
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <span style="color: #666;">
+                            <i class="fas fa-users"></i> 2 médicos interessados
+                        </span>
+                    </div>
+                    <button class="bid-btn" onclick="fazerLance('dermatologia', 125)">
+                        <i class="fas fa-hand-paper"></i> Fazer Lance (R$ 125,00)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>3</h3>
+                    <p>Lances Ativos</p>
+                </div>
+                <div class="stat-card">
+                    <h3>R$ 450</h3>
+                    <p>Valor Total em Lances</p>
+                </div>
+                <div class="stat-card">
+                    <h3>10</h3>
+                    <p>Médicos Interessados</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function fazerLance(especialidade, valor) {
+                if (confirm(\`Confirma lance de R$ \${valor},00 para \${especialidade}?\`)) {
+                    // Simulate bidding process
+                    const btn = event.target;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        alert(\`✅ Lance de R$ \${valor},00 enviado com sucesso!\\n\\nVocê será notificado sobre o resultado da consulta.\`);
+                        btn.innerHTML = '<i class="fas fa-check"></i> Lance Enviado';
+                        btn.style.background = 'linear-gradient(135deg, #27AE60 0%, #2ECC71 100%)';
+                    }, 2000);
+                }
+            }
+
+            function logout() {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    sessionStorage.clear();
+                    localStorage.clear();
+                    alert('Logout realizado com sucesso!');
+                    window.location.href = '/login';
+                }
+            }
+
+            // Timer countdown simulation
+            function updateTimers() {
+                const timers = document.querySelectorAll('.timer');
+                timers.forEach(timer => {
+                    const timeText = timer.textContent;
+                    const match = timeText.match(/(\\d+):(\\d+)/);
+                    if (match) {
+                        let minutes = parseInt(match[1]);
+                        let seconds = parseInt(match[2]);
+                        
+                        if (seconds > 0) {
+                            seconds--;
+                        } else if (minutes > 0) {
+                            minutes--;
+                            seconds = 59;
+                        }
+                        
+                        timer.innerHTML = \`<i class="fas fa-clock"></i> Tempo: \${minutes.toString().padStart(2, '0')}:\${seconds.toString().padStart(2, '0')}\`;
+                    }
+                });
+            }
+
+            // Update timers every second
+            setInterval(updateTimers, 1000);
+
+            // Initialize page
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('🎯 Sistema de Lances TeleMed carregado com sucesso!');
+                console.log('💰 Plataforma de lances médicos ativa');
+            });
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+// 9. LOGIN PAGE - Sistema de autenticação CORRIGIDO
 // Helper function to create encrypted login URLs
 function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   const data = { email, senha, crm, origem };
@@ -2526,8 +2796,19 @@ app.get('/login', (req, res) => {
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Create specific routes that redirect to React Router
+app.get('/lances', (req, res) => {
+  console.log('🎯 Redirecting /lances to /patient-bidding');
+  res.redirect('/patient-bidding');
+});
+
+app.get('/dashboard', (req, res) => {
+  console.log('🎯 Redirecting /dashboard to /patient-dashboard');
+  res.redirect('/patient-dashboard');
+});
+
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {

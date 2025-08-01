@@ -8,6 +8,23 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **August 01, 2025**: URL ROUTING FIXED - SISTEMA v12.9.0
+  - ✅ **Critical URL Routing Issue Resolved**: Fixed direct URL access for `/lances` and `/dashboard` routes
+    - Added server-side redirect mapping: `/lances` → `/patient-bidding` and `/dashboard` → `/patient-dashboard`
+    - Created complete Patient Bidding Page with real-time timer system and interactive bidding interface
+    - Added comprehensive bidding functionality with Cardiologia, Pediatria, and Dermatologia specialties
+    - Implemented countdown timers, bid amount tracking, and interactive user interface
+    - Both routes now fully functional and accessible via direct URL access
+  - 🎯 **Bidding System Complete**: Full patient bidding platform implemented
+    - Real-time bid tracking with countdown timers (12:45, 25:30, 35:00)
+    - Interactive specialty cards with current bid amounts (R$ 180, R$ 150, R$ 120)
+    - Statistics dashboard showing active bids, total value, and interested doctors
+    - Professional UI with TeleMed branding and responsive design
+  - 🔧 **Server Architecture Enhanced**:
+    - SPA fallback routing properly configured for React routes
+    - Static route mapping updated to include `/patient-bidding` in protected routes
+    - Redirect system working seamlessly with proper logging and status codes
+
 - **July 31, 2025**: DEPLOYMENT ERROR FIXED - SISTEMA v12.8.0
   - ✅ **Critical Deployment Fix**: Resolved "Missing script: build" error for Replit deployments
     - Activated production package.json with required build and start scripts
