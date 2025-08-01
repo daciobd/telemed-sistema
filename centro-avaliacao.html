@@ -178,7 +178,7 @@
                 <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('bipolar-mdq')">
                     <div class="flex items-start justify-between mb-6">
                         <div class="text-5xl">🔄</div>
-                        <span class="status-indicator coming-soon"></span>
+                        <span class="status-indicator available"></span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">Bipolar - MDQ</h3>
                     <p class="text-gray-600 mb-4">
@@ -189,8 +189,8 @@
                         <div>📊 13 questões principais</div>
                         <div>🎯 Episódios maníacos</div>
                     </div>
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Em Breve
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
+                        Iniciar Teste MDQ
                     </button>
                 </div>
 
@@ -198,7 +198,7 @@
                 <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('stress-pss10')">
                     <div class="flex items-start justify-between mb-6">
                         <div class="text-5xl">💭</div>
-                        <span class="status-indicator coming-soon"></span>
+                        <span class="status-indicator available"></span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-3">Stress - PSS-10</h3>
                     <p class="text-gray-600 mb-4">
@@ -209,8 +209,8 @@
                         <div>📊 10 questões</div>
                         <div>🎯 Níveis de stress</div>
                     </div>
-                    <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Em Breve
+                    <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
+                        Iniciar Teste PSS-10
                     </button>
                 </div>
             </div>
@@ -320,10 +320,12 @@
                     window.location.href = '/phq9-depressao';
                     break;
                 case 'bipolar-mdq':
-                    alert('🔄 Teste MDQ para Transtorno Bipolar em desenvolvimento!\n\nQuestionário especializado para detecção de episódios maníacos.');
+                    console.log('🔄 Redirecionando para teste MDQ Transtorno Bipolar');
+                    window.location.href = '/mdq-bipolar';
                     break;
                 case 'stress-pss10':
-                    alert('💭 Teste PSS-10 para Stress em desenvolvimento!\n\nEscala com 10 itens para avaliação do stress percebido.');
+                    console.log('💭 Redirecionando para teste PSS-10 Stress');
+                    window.location.href = '/pss10-stress';
                     break;
                 default:
                     alert('⚠️ Teste não encontrado!');

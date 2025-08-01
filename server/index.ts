@@ -2849,6 +2849,34 @@ app.get('/phq9-depressao', (req, res) => {
   }
 });
 
+// 14. TESTE MDQ TRANSTORNO BIPOLAR - Avaliação de Episódios Maníacos
+app.get('/mdq-bipolar', (req, res) => {
+  console.log('🔄 Serving Teste MDQ Transtorno Bipolar for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../mdq-bipolar.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading mdq-bipolar.html:', error);
+    res.status(500).send('Erro ao carregar Teste MDQ');
+  }
+});
+
+// 15. TESTE PSS-10 STRESS - Avaliação de Stress Percebido
+app.get('/pss10-stress', (req, res) => {
+  console.log('💭 Serving Teste PSS-10 Stress for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../pss10-stress.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading pss10-stress.html:', error);
+    res.status(500).send('Erro ao carregar Teste PSS-10');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -2992,7 +3020,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
