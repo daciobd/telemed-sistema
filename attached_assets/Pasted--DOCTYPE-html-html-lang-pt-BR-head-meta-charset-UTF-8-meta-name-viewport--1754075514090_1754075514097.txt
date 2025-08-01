@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. AI - Assistente Médico Inteligente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .ai-thinking {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .disclaimer-banner {
+            background: linear-gradient(45deg, #fef3c7, #fde68a);
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .critical-alert {
+            background: linear-gradient(45deg, #fee2e2, #fecaca);
+            border-left: 4px solid #ef4444;
+            animation: alertPulse 2s infinite;
+        }
+        
+        @keyframes alertPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .suggestion-card {
+            transition: all 0.2s ease;
+        }
+        
+        .suggestion-card:hover {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-5xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-block bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-full mb-4">
+                    🤖 ASSISTENTE MÉDICO INTELIGENTE
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    Dr. AI - Copiloto Clínico
+                </h1>
+                <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                    Triagem inteligente e suporte à decisão médica
+                </p>
+                <p class="text-white/70 mt-2">
+                    ⚠️ Ferramenta de apoio - Não substitui avaliação médica profissional
+                </p>
+            </div>
+
+            <!-- Disclaimer Banner -->
+            <div class="disclaimer-banner p-4 rounded-xl mb-6">
+                <div class="flex items-start">
+                    <div class="text-2xl mr-3">⚠️</div>
+                    <div>
+                        <h3 class="font-bold text-amber-800 mb-1">Importante - Leia antes de continuar</h3>
+                        <p class="text-amber-700 text-sm">
+                            O Dr. AI é um <strong>assistente automatizado</strong> que oferece triagem inicial e sugestões baseadas em protocolos clínicos. 
+                            <strong>Não substitui consulta médica</strong> e não emite diagnósticos ou prescrições. 
+                            Toda avaliação definitiva deve ser realizada por profissional de saúde.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Chat Interface -->
+                <div class="lg:col-span-2 bg-white rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">💬 Triagem Inteligente</h2>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            Dr. AI Online
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Container -->
+                    <div class="chat-container bg-gray-50 rounded-xl p-4 mb-4" id="chatContainer">
+                        <div class="message mb-4">
+                            <div class="flex items-start">
+                                <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">
+                                    🤖
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded-lg flex-1">
+                                    <p class="text-gray-800">
+                                        Olá! Sou o Dr. AI, seu assistente de triagem médica. Vou fazer algumas perguntas para entender melhor seus sintomas e sugerir os próximos passos.
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-2">
+                                        ⚠️ Lembre-se: sou um assistente e não substituo a consulta médica.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="flex gap-3">
+                        <input type="text" id="messageInput" placeholder="Descreva seus sintomas ou como está se sentindo..." 
+                               class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                            Enviar
+                        </button>
+                    </div>
+
+                    <!-- Quick Suggestions -->
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600 mb-2">💡 Sugestões rápidas:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="quickSuggestion('Estou com febre e dor de cabeça')" 
+                                    class="suggestion-card text-xs bg-gray-100 hover:bg-blue-50 px-3 py-1 rounded-full border transition-colors">
+                                Febre e dor de cabeça
+                            </button>
+                            <button onclick="quickSuggestion('Dor abdominal há algumas horas')" 
+                                    class="suggestion-card text-xs bg-gray-100 hover:bg-blue-50 px-3 py-1 rounded-full border transition-colors">
+                                Dor abdominal
+                            </button>
+                            <button onclick="quickSuggestion('Tosse seca persistente')" 
+                                    class="suggestion-card text-xs bg-gray-100 hover:bg-blue-50 px-3 py-1 rounded-full border transition-colors">
+                                Tosse persistente
+                            </button>
+                            <button onclick="quickSuggestion('Ansiedade e palpitações')" 
+                                    class="suggestion-card text-xs bg-gray-100 hover:bg-blue-50 px-3 py-1 rounded-full border transition-colors">
+                                Ansiedade
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel -->
+                <div class="space-y-6">
+                    <!-- Clinical Support -->
+                    <div class="bg-white rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">🩺 Suporte Clínico</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-green-50 rounded-lg">
+                                <div class="font-medium text-green-800 text-sm">Para Médicos</div>
+                                <div class="text-green-700 text-xs">Visualize o raciocínio da IA e personalize protocolos</div>
+                            </div>
+                            <div class="p-3 bg-blue-50 rounded-lg">
+                                <div class="font-medium text-blue-800 text-sm">Relatórios Pré-Consulta</div>
+                                <div class="text-blue-700 text-xs">Economize tempo com sumários estruturados</div>
+                            </div>
+                            <div class="p-3 bg-purple-50 rounded-lg">
+                                <div class="font-medium text-purple-800 text-sm">Protocolos Validados</div>
+                                <div class="text-purple-700 text-xs">Baseado em diretrizes médicas atualizadas</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Safety Features -->
+                    <div class="bg-white rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">🛡️ Segurança</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-gray-700">Conformidade LGPD</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-gray-700">Resolução CFM 2.227/2018</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-gray-700">Logs auditáveis</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                <span class="text-gray-700">Redirecionamento automático</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Emergency Protocol -->
+                    <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-red-800 mb-4">🚨 Emergência</h3>
+                        <p class="text-red-700 text-sm mb-4">
+                            Em caso de emergência médica, procure imediatamente:
+                        </p>
+                        <div class="space-y-2 text-sm">
+                            <div class="text-red-700">📞 SAMU: 192</div>
+                            <div class="text-red-700">🏥 UPA mais próxima</div>
+                            <div class="text-red-700">🚑 Pronto Socorro</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="text-center mt-8">
+                <button onclick="goToCenter()" class="bg-white/20 hover:bg-white/30 text-white px-8 py-3 rounded-lg transition-colors mr-4">
+                    🧠 Centro de Avaliação
+                </button>
+                <button onclick="goToDashboard()" class="bg-white/20 hover:bg-white/30 text-white px-8 py-3 rounded-lg transition-colors">
+                    📊 Dashboard Principal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🤖 Dr. AI 2.0 - Copiloto Médico carregado');
+
+        let conversationHistory = [];
+        
+        // Clinical protocols and responses
+        const clinicalProtocols = {
+            fever: {
+                questions: [
+                    "Há quanto tempo você está com febre?",
+                    "Qual a temperatura máxima registrada?",
+                    "Tem outros sintomas como dor de garganta, tosse ou dor no corpo?",
+                    "Teve contato com pessoas doentes recentemente?"
+                ],
+                suggestions: [
+                    "Verificar sinais vitais completos",
+                    "Investigar foco infeccioso",
+                    "Considerar exames laboratoriais se febre persistente",
+                    "Orientar hidratação e repouso"
+                ],
+                redFlags: ["Temperatura > 39°C por mais de 3 dias", "Rigidez de nuca", "Confusão mental"],
+                disclaimer: "Febre pode indicar diversas condições. Avaliação médica é essencial para diagnóstico adequado."
+            },
+            abdominalPain: {
+                questions: [
+                    "Onde exatamente é a dor abdominal?",
+                    "Há quanto tempo começou a dor?",
+                    "A dor é constante ou vem em ondas?",
+                    "Tem náuseas, vômitos ou alteração do intestino?"
+                ],
+                suggestions: [
+                    "Investigar localização e características da dor",
+                    "Examinar sinais de defesa abdominal",
+                    "Verificar histórico de problemas digestivos",
+                    "Considerar exames de imagem se indicado"
+                ],
+                redFlags: ["Dor intensa súbita", "Rigidez abdominal", "Vômitos persistentes", "Febre alta"],
+                disclaimer: "Dor abdominal pode ter múltiplas causas. Exame físico médico é fundamental."
+            }
+        };
+
+        // Emergency keywords that trigger immediate referral
+        const emergencyKeywords = [
+            'dor no peito', 'falta de ar severa', 'perda de consciência', 
+            'sangramento intenso', 'dor de cabeça súbita e intensa',
+            'confusão mental', 'dificuldade extrema para respirar'
+        ];
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            // Check for emergency keywords
+            if (checkForEmergency(message)) {
+                showEmergencyAlert();
+                return;
+            }
+            
+            // Show AI thinking
+            showAIThinking();
+            
+            // Simulate AI processing delay
+            setTimeout(() => {
+                hideAIThinking();
+                processUserMessage(message);
+            }, 1500);
+        }
+
+        function quickSuggestion(suggestion) {
+            document.getElementById('messageInput').value = suggestion;
+            sendMessage();
+        }
+
+        function addUserMessage(message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message mb-4';
+            
+            messageDiv.innerHTML = `
+                <div class="flex items-start justify-end">
+                    <div class="bg-blue-500 text-white p-3 rounded-lg max-w-md">
+                        <p>${message}</p>
+                    </div>
+                    <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center ml-3 text-sm">
+                        👤
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+            
+            conversationHistory.push({type: 'user', message: message});
+        }
+
+        function addAIMessage(message, isAlert = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message mb-4';
+            
+            const alertClass = isAlert ? 'critical-alert' : 'bg-blue-50';
+            
+            messageDiv.innerHTML = `
+                <div class="flex items-start">
+                    <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">
+                        🤖
+                    </div>
+                    <div class="${alertClass} p-3 rounded-lg flex-1">
+                        <p class="text-gray-800">${message}</p>
+                        <p class="text-xs text-gray-500 mt-2">
+                            ⚠️ Esta é uma sugestão baseada em protocolos clínicos. Consulte um profissional para avaliação completa.
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+            
+            conversationHistory.push({type: 'ai', message: message});
+        }
+
+        function showAIThinking() {
+            const chatContainer = document.getElementById('chatContainer');
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.id = 'aiThinking';
+            thinkingDiv.className = 'ai-thinking mb-4';
+            
+            thinkingDiv.innerHTML = `
+                <div class="flex items-start">
+                    <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">
+                        🤖
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <p class="text-gray-600">Dr. AI está analisando...</p>
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(thinkingDiv);
+            scrollToBottom();
+        }
+
+        function hideAIThinking() {
+            const thinkingDiv = document.getElementById('aiThinking');
+            if (thinkingDiv) {
+                thinkingDiv.remove();
+            }
+        }
+
+        function checkForEmergency(message) {
+            const lowerMessage = message.toLowerCase();
+            return emergencyKeywords.some(keyword => lowerMessage.includes(keyword));
+        }
+
+        function showEmergencyAlert() {
+            addAIMessage(`
+                🚨 <strong>ATENÇÃO - POSSÍVEL EMERGÊNCIA DETECTADA</strong><br><br>
+                
+                Com base nos sintomas relatados, recomendo <strong>procurar atendimento médico imediato</strong>:<br><br>
+                
+                📞 <strong>SAMU: 192</strong><br>
+                🏥 <strong>UPA mais próxima</strong><br>
+                🚑 <strong>Pronto Socorro</strong><br><br>
+                
+                <strong>Não aguarde</strong> - procure ajuda médica agora mesmo.
+            `, true);
+        }
+
+        function processUserMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Determine the most likely condition
+            let response = "";
+            
+            if (lowerMessage.includes('febre') || lowerMessage.includes('temperatura')) {
+                response = generateProtocolResponse('fever');
+            } else if (lowerMessage.includes('dor') && (lowerMessage.includes('barriga') || lowerMessage.includes('abdominal') || lowerMessage.includes('estômago'))) {
+                response = generateProtocolResponse('abdominalPain');
+            } else if (lowerMessage.includes('tosse')) {
+                response = generateCoughResponse();
+            } else if (lowerMessage.includes('ansiedade') || lowerMessage.includes('palpitação')) {
+                response = generateAnxietyResponse();
+            } else {
+                response = generateGeneralResponse();
+            }
+            
+            addAIMessage(response);
+        }
+
+        function generateProtocolResponse(condition) {
+            const protocol = clinicalProtocols[condition];
+            
+            return `
+                <strong>Baseado nos sintomas relatados, tenho algumas perguntas importantes:</strong><br><br>
+                
+                ${protocol.questions.map((q, i) => `${i + 1}. ${q}`).join('<br>')}<br><br>
+                
+                <strong>Sugestões para avaliação médica:</strong><br>
+                ${protocol.suggestions.map(s => `• ${s}`).join('<br>')}<br><br>
+                
+                <strong>⚠️ Sinais de alerta:</strong><br>
+                ${protocol.redFlags.map(flag => `🔴 ${flag}`).join('<br>')}<br><br>
+                
+                <em>${protocol.disclaimer}</em>
+            `;
+        }
+
+        function generateCoughResponse() {
+            return `
+                <strong>Sobre a tosse, é importante saber:</strong><br><br>
+                
+                1. Há quanto tempo está com tosse?<br>
+                2. É tosse seca ou com catarro?<br>
+                3. Tem febre ou falta de ar?<br>
+                4. Piora em algum período do dia?<br><br>
+                
+                <strong>Sugestões para avaliação:</strong><br>
+                • Ausculta pulmonar<br>
+                • Verificar saturação de oxigênio<br>
+                • Investigar histórico de alergias<br>
+                • Considerar raio-X de tórax se indicado<br><br>
+                
+                <em>Tosse persistente requer avaliação médica para identificar a causa.</em>
+            `;
+        }
+
+        function generateAnxietyResponse() {
+            return `
+                <strong>Sintomas de ansiedade merecem atenção:</strong><br><br>
+                
+                1. Quando começaram os sintomas?<br>
+                2. Há fatores desencadeantes?<br>
+                3. Tem outros sintomas físicos?<br>
+                4. Interfere nas atividades diárias?<br><br>
+                
+                <strong>Sugestões para avaliação:</strong><br>
+                • Verificar sinais vitais<br>
+                • Avaliar histórico psiquiátrico<br>
+                • Investigar causas orgânicas<br>
+                • Considerar encaminhamento psicológico<br><br>
+                
+                <em>Ansiedade pode ter causas diversas. Avaliação profissional é importante.</em>
+            `;
+        }
+
+        function generateGeneralResponse() {
+            return `
+                <strong>Para uma avaliação mais precisa, preciso entender melhor:</strong><br><br>
+                
+                1. Quais são os principais sintomas?<br>
+                2. Quando começaram?<br>
+                3. Tem histórico de problemas de saúde?<br>
+                4. Está tomando algum medicamento?<br><br>
+                
+                <strong>Recomendação geral:</strong><br>
+                • Consulta médica para avaliação completa<br>
+                • Levar lista de sintomas e medicamentos<br>
+                • Anotar quando os sintomas começaram<br><br>
+                
+                <em>Cada caso é único. Avaliação médica personalizada é essencial.</em>
+            `;
+        }
+
+        function scrollToBottom() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function goToCenter() {
+            window.location.href = '/centro-avaliacao';
+        }
+
+        function goToDashboard() {
+            window.location.href = '/dashboard';
+        }
+
+        // Enter key support
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Dr. AI 2.0 inicializado como copiloto médico');
+        });
+    </script>
+</body>
+</html>

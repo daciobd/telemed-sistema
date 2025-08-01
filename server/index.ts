@@ -2963,6 +2963,20 @@ app.get('/telemonitoramento-enfermagem', (req, res) => {
   }
 });
 
+// 18. DR. AI - ASSISTENTE MÉDICO INTELIGENTE - Copiloto clínico com IA
+app.get('/dr-ai', (req, res) => {
+  console.log('🤖 Serving Dr. AI - Assistente Médico Inteligente for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../dr-ai.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading dr-ai.html:', error);
+    res.status(500).send('Erro ao carregar Dr. AI - Assistente Médico');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 

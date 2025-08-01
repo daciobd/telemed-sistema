@@ -177,6 +177,13 @@ export default function DoctorDashboardUnified() {
       icon: Activity,
       color: "cyan",
       action: () => window.location.href = "/telemonitoramento-enfermagem"
+    },
+    {
+      title: "Dr. AI",
+      description: "Assistente Médico Inteligente",
+      icon: Brain,
+      color: "indigo",
+      action: () => window.location.href = "/dr-ai"
     }
   ];
 
@@ -462,6 +469,92 @@ export default function DoctorDashboardUnified() {
                 <div>
                   <div className="text-2xl font-bold text-blue-600">CVV 188</div>
                   <div className="text-xs text-blue-600">Emergência</div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Dr. AI - Assistente Médico Inteligente Section */}
+        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Brain className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Dr. AI - Assistente Médico Inteligente</h2>
+                <p className="text-sm text-gray-600 font-normal">Copiloto clínico com triagem inteligente e suporte à decisão</p>
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Triagem Inteligente */}
+              <div className="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                <h3 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                  <Zap className="h-4 w-4" />
+                  Triagem Inteligente
+                </h3>
+                <p className="text-sm text-blue-700 mb-4">
+                  IA médica para análise inicial de sintomas e suporte à decisão clínica
+                </p>
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                  onClick={() => window.location.href = '/dr-ai'}
+                >
+                  <Brain className="h-4 w-4 mr-2" />
+                  Abrir Dr. AI
+                </Button>
+              </div>
+              
+              {/* Protocolos Clínicos */}
+              <div className="bg-green-50 p-5 rounded-xl border border-green-200">
+                <h3 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Protocolos Validados
+                </h3>
+                <div className="space-y-2 text-sm text-green-700">
+                  <div>• Triagem de emergências</div>
+                  <div>• Análise de sintomas</div>
+                  <div>• Sugestões de exames</div>
+                  <div>• Referenciamento adequado</div>
+                </div>
+              </div>
+              
+              {/* Segurança Clínica */}
+              <div className="bg-amber-50 p-5 rounded-xl border border-amber-200">
+                <h3 className="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  Segurança Clínica
+                </h3>
+                <div className="space-y-2 text-sm text-amber-700">
+                  <div>• Conformidade CFM 2.227/2018</div>
+                  <div>• Não substitui consulta médica</div>
+                  <div>• Logs auditáveis</div>
+                  <div>• Redirecionamento automático</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Quick Stats for Dr. AI */}
+            <div className="mt-6 p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-blue-600">AI</div>
+                  <div className="text-xs text-blue-600">Copiloto Ativo</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-600">97%</div>
+                  <div className="text-xs text-green-600">Precisão Triagem</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-purple-600">24/7</div>
+                  <div className="text-xs text-purple-600">Disponibilidade</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-red-600">192</div>
+                  <div className="text-xs text-red-600">SAMU - Emergência</div>
                 </div>
               </div>
             </div>
