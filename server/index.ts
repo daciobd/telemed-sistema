@@ -2793,6 +2793,20 @@ app.get('/login', (req, res) => {
   `);
 });
 
+// 10. CENTRO DE AVALIAÇÃO PSIQUIÁTRICA - Sistema de testes psicológicos
+app.get('/centro-avaliacao', (req, res) => {
+  console.log('🧠 Serving Centro de Avaliação Psiquiátrica for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../centro-avaliacao.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading centro-avaliacao.html:', error);
+    res.status(500).send('Erro ao carregar Centro de Avaliação');
+  }
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -2936,7 +2950,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links'];
+const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {

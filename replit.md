@@ -8,6 +8,22 @@ Preferred communication style: Simple, everyday language.
 
 ## Recent Changes
 
+- **August 01, 2025**: CENTRO DE AVALIAÇÃO PSIQUIÁTRICA IMPLEMENTADO - SISTEMA v13.0.0
+  - ✅ **Centro de Avaliação Psiquiátrica Criado**: Página completa de testes psicológicos implementada
+    - Nova rota `/centro-avaliacao` totalmente funcional e acessível via URL direta
+    - Interface profissional com 6 instrumentos de avaliação validados cientificamente
+    - Sistema de testes: TDAH-ASRS18, Triagem Psiquiátrica, GAD-7, PHQ-9, MDQ, PSS-10
+    - Design médico profissional com estatísticas em tempo real e ferramentas especializadas
+  - 🧠 **Funcionalidades Médicas Avançadas**: Sistema completo de avaliação psiquiátrica
+    - Instrumentos baseados em DSM-5 com relatórios PDF profissionais
+    - Interface interativa com indicadores visuais de status (Disponível, Em Breve, Beta)
+    - Diretrizes de uso clínico e boas práticas para profissionais de saúde mental
+    - Sistema de navegação integrado com dashboard médico e área do paciente
+  - 🎯 **Integração Completa**: Rota adicionada ao sistema de roteamento estático
+    - Server.ts atualizado com handler específico para centro-avaliacao.html
+    - Logs de acesso configurados: "🧠 Serving Centro de Avaliação Psiquiátrica"
+    - Arquivo HTML otimizado com Tailwind CSS e JavaScript interativo
+
 - **August 01, 2025**: URL ROUTING FIXED - SISTEMA v12.9.0
   - ✅ **Critical URL Routing Issue Resolved**: Fixed direct URL access for `/lances` and `/dashboard` routes
     - Added server-side redirect mapping: `/lances` → `/patient-bidding` and `/dashboard` → `/patient-dashboard`
