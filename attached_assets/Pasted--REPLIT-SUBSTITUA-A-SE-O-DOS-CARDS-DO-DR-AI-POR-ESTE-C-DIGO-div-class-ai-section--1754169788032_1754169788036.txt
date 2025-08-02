@@ -1,0 +1,163 @@
+<!-- REPLIT: SUBSTITUA A SEÇÃO DOS CARDS DO DR. AI POR ESTE CÓDIGO -->
+
+<div class="ai-section">
+    <h2>🤖 Dr. AI 2.0 - Copiloto Médico</h2>
+    <p>Assistente médico inteligente com protocolos clínicos avançados</p>
+    
+    <div class="ai-cards-grid">
+        <!-- CARD 1: TRIAGEM INTELIGENTE -->
+        <div class="ai-card triagem-card">
+            <div class="card-icon">🩺</div>
+            <h3>Triagem Inteligente</h3>
+            <p>Análise de sintomas com IA médica especializada</p>
+            <a href="triagem-inteligente.html" class="ai-btn btn-triagem">
+                Iniciar Triagem
+            </a>
+        </div>
+
+        <!-- CARD 2: PROTOCOLOS CLÍNICOS -->
+        <div class="ai-card protocolos-card">
+            <div class="card-icon">📋</div>
+            <h3>Protocolos Clínicos</h3>
+            <p>Diretrizes médicas baseadas em evidências</p>
+            <a href="protocolos-clinicos.html" class="ai-btn btn-protocolos">
+                Ver Protocolos
+            </a>
+        </div>
+
+        <!-- CARD 3: ANÁLISE DE EXAMES -->
+        <div class="ai-card exames-card">
+            <div class="card-icon">🔬</div>
+            <h3>Análise de Exames</h3>
+            <p>Interpretação assistida por IA</p>
+            <a href="analise-exames.html" class="ai-btn btn-exames">
+                Analisar Exame
+            </a>
+        </div>
+
+        <!-- CARD 4: PRESCRIÇÕES INTELIGENTES -->
+        <div class="ai-card prescricoes-card">
+            <div class="card-icon">💊</div>
+            <h3>Prescrições Inteligentes</h3>
+            <p>Sugestões de medicamentos personalizadas</p>
+            <a href="prescricoes-inteligentes.html" class="ai-btn btn-prescricoes">
+                Ajudar Prescrição
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- CSS PARA OS CARDS -->
+<style>
+.ai-section {
+    padding: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    text-align: center;
+    color: white;
+    margin: 20px 0;
+    border-radius: 20px;
+}
+
+.ai-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.ai-section p {
+    font-size: 1.2em;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+.ai-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.ai-card {
+    background: white;
+    color: #333;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.ai-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.card-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+.ai-card h3 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.ai-card p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1em;
+}
+
+.ai-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    color: white;
+    text-align: center;
+}
+
+.ai-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-decoration: none;
+    color: white;
+}
+
+/* CORES ESPECÍFICAS PARA CADA BOTÃO */
+.btn-triagem {
+    background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.btn-protocolos {
+    background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.btn-exames {
+    background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+}
+
+.btn-prescricoes {
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .ai-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .ai-card {
+        padding: 20px;
+    }
+    
+    .ai-section h2 {
+        font-size: 2em;
+    }
+}
+</style>

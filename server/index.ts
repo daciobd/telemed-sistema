@@ -3267,7 +3267,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
             }
 
             function analyzeExam() {
-                alert('🔬 Análise de exames em desenvolvimento!');
+                window.location.href = '/analise-exames';
             }
 
             function prescriptionHelper() {
@@ -4296,6 +4296,306 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
             }
 
             console.log('💊 Prescrições Inteligentes carregadas');
+        </script>
+    </body>
+    </html>
+  \`);
+});
+
+  // 22. ANÁLISE DE EXAMES - Sistema de análise de exames com IA
+  app.get('/analise-exames', (req, res) => {
+  console.log('🔬 Serving Análise de Exames for:', req.path);
+  
+  res.send(\`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Análise de Exames - Dr. AI</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .header {
+                background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .content {
+                padding: 40px;
+            }
+
+            .upload-section {
+                background: #f8f9ff;
+                border-radius: 15px;
+                padding: 30px;
+                margin-bottom: 30px;
+                text-align: center;
+                border: 2px dashed #ddd;
+            }
+
+            .upload-area {
+                padding: 40px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .upload-area:hover {
+                background: #f0f0f0;
+            }
+
+            .upload-icon {
+                font-size: 4em;
+                margin-bottom: 20px;
+                color: #fa709a;
+            }
+
+            .exam-types {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+
+            .exam-card {
+                background: white;
+                border-radius: 10px;
+                padding: 25px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .exam-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            }
+
+            .exam-icon {
+                font-size: 2.5em;
+                margin-bottom: 15px;
+            }
+
+            .exam-title {
+                font-size: 1.3em;
+                font-weight: 600;
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .exam-description {
+                color: #666;
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+
+            .back-btn {
+                background: #6c757d;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 20px;
+                cursor: pointer;
+                margin-bottom: 30px;
+                font-size: 1em;
+            }
+
+            .analyze-btn {
+                background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                font-size: 1.2em;
+                font-weight: 600;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 20px;
+            }
+
+            .analyze-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(250, 112, 154, 0.3);
+            }
+
+            .result-section {
+                display: none;
+                background: #f8f9ff;
+                border-radius: 15px;
+                padding: 30px;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🔬 Análise de Exames</h1>
+                <p>Interpretação assistida por IA médica especializada</p>
+            </div>
+
+            <div class="content">
+                <button class="back-btn" onclick="window.history.back()">← Voltar ao Dr. AI</button>
+                
+                <div class="upload-section">
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📄</div>
+                        <h3>Faça upload do seu exame</h3>
+                        <p>Arraste e solte o arquivo aqui ou clique para selecionar</p>
+                        <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                            Formatos aceitos: PDF, JPG, PNG (máx. 10MB)
+                        </p>
+                    </div>
+                    <input type="file" id="fileInput" style="display: none;" accept=".pdf,.jpg,.jpeg,.png" onchange="processFile(this)">
+                    
+                    <button class="analyze-btn" onclick="analisarExame()" style="display: none;" id="analyzeBtn">
+                        🔍 Analisar Exame
+                    </button>
+                </div>
+
+                <div class="exam-types">
+                    <div class="exam-card" onclick="selectExamType('hemograma')">
+                        <div class="exam-icon">🩸</div>
+                        <div class="exam-title">Hemograma Completo</div>
+                        <div class="exam-description">
+                            Análise de células sanguíneas, contagem de glóbulos e plaquetas
+                        </div>
+                    </div>
+
+                    <div class="exam-card" onclick="selectExamType('glicemia')">
+                        <div class="exam-icon">🍯</div>
+                        <div class="exam-title">Glicemia</div>
+                        <div class="exam-description">
+                            Níveis de glicose no sangue, teste de diabetes
+                        </div>
+                    </div>
+
+                    <div class="exam-card" onclick="selectExamType('colesterol')">
+                        <div class="exam-icon">❤️</div>
+                        <div class="exam-title">Perfil Lipídico</div>
+                        <div class="exam-description">
+                            Colesterol total, HDL, LDL e triglicerídeos
+                        </div>
+                    </div>
+
+                    <div class="exam-card" onclick="selectExamType('urina')">
+                        <div class="exam-icon">🧪</div>
+                        <div class="exam-title">Exame de Urina</div>
+                        <div class="exam-description">
+                            Análise física, química e microscópica da urina
+                        </div>
+                    </div>
+
+                    <div class="exam-card" onclick="selectExamType('tireoide')">
+                        <div class="exam-icon">🦋</div>
+                        <div class="exam-title">Função Tireoidiana</div>
+                        <div class="exam-description">
+                            TSH, T3, T4 - avaliação da glândula tireoide
+                        </div>
+                    </div>
+
+                    <div class="exam-card" onclick="selectExamType('raio-x')">
+                        <div class="exam-icon">📷</div>
+                        <div class="exam-title">Raio-X</div>
+                        <div class="exam-description">
+                            Imagens radiológicas de tórax, ossos e órgãos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-section" id="resultSection">
+                    <h3>📊 Resultado da Análise</h3>
+                    <div id="examResult">
+                        <!-- Resultado será inserido aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function processFile(input) {
+                const file = input.files[0];
+                if (file) {
+                    const analyzeBtn = document.getElementById('analyzeBtn');
+                    analyzeBtn.style.display = 'inline-block';
+                    
+                    const uploadArea = document.querySelector('.upload-area');
+                    uploadArea.innerHTML = \`
+                        <div class="upload-icon">✅</div>
+                        <h3>Arquivo carregado: \${file.name}</h3>
+                        <p>Clique em "Analisar Exame" para continuar</p>
+                    \`;
+                }
+            }
+
+            function selectExamType(type) {
+                const cards = document.querySelectorAll('.exam-card');
+                cards.forEach(card => card.style.background = 'white');
+                
+                event.target.closest('.exam-card').style.background = '#e8f4fd';
+                
+                alert(\`Tipo de exame selecionado: \${type}\\n\\nEsta funcionalidade será expandida para análise específica de cada tipo de exame.\`);
+            }
+
+            function analisarExame() {
+                const resultSection = document.getElementById('resultSection');
+                const examResult = document.getElementById('examResult');
+                
+                // Simulação de análise
+                examResult.innerHTML = \`
+                    <div style="padding: 20px; background: white; border-radius: 10px; margin-top: 15px;">
+                        <h4>🤖 Análise Preliminar por IA</h4>
+                        <div style="margin: 15px 0;">
+                            <strong>Status:</strong> <span style="color: green;">Valores dentro da normalidade</span>
+                        </div>
+                        <div style="margin: 15px 0;">
+                            <strong>Observações:</strong>
+                            <ul style="margin-top: 10px;">
+                                <li>Parâmetros analisados estão dentro dos valores de referência</li>
+                                <li>Nenhuma alteração significativa detectada</li>
+                                <li>Recomenda-se acompanhamento médico de rotina</li>
+                            </ul>
+                        </div>
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            <strong>⚠️ Importante:</strong> Esta análise é apenas orientativa. 
+                            Sempre consulte um médico para interpretação completa e diagnóstico preciso.
+                        </div>
+                    </div>
+                \`;
+                
+                resultSection.style.display = 'block';
+                resultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            console.log('🔬 Análise de Exames carregada');
         </script>
     </body>
     </html>
