@@ -2,24 +2,31 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { createServer } from 'http';
+import { setupVite } from './vite.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+async function startServer() {
+  const app = express();
+  const PORT = process.env.PORT || 5000;
+  const server = createServer(app);
 
-// Basic middleware
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+  // Basic middleware
+  app.use(express.json());
+  app.use(express.static(path.join(__dirname, '../public')));
 
-// Health check
-app.get('/health', (req, res) => {
+  // Setup Vite in development mode
+  await setupVite(app, server);
+
+  // Health check
+  app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
-app.get('/sobre', (req, res) => {
+  // 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
+  app.get('/sobre', (req, res) => {
   console.log('📄 Serving página Sobre Nós for:', req.path);
   
   res.send(`
@@ -277,8 +284,8 @@ app.get('/sobre', (req, res) => {
   `);
 });
 
-// 2. POLÍTICA DE PRIVACIDADE - Conformidade LGPD
-app.get('/politica-privacidade', (req, res) => {
+  // 2. POLÍTICA DE PRIVACIDADE - Conformidade LGPD
+  app.get('/politica-privacidade', (req, res) => {
   console.log('📄 Serving Política de Privacidade for:', req.path);
   
   res.send(`
@@ -617,8 +624,8 @@ app.get('/politica-privacidade', (req, res) => {
   `);
 });
 
-// 3. TERMOS DE USO - Condições legais de uso da plataforma
-app.get('/termos-de-uso', (req, res) => {
+  // 3. TERMOS DE USO - Condições legais de uso da plataforma
+  app.get('/termos-de-uso', (req, res) => {
   console.log('📄 Serving Termos de Uso for:', req.path);
   
   res.send(`
@@ -961,8 +968,8 @@ app.get('/termos-de-uso', (req, res) => {
   `);
 });
 
-// 4. FAQ - Perguntas Frequentes sobre TeleMed Sistema
-app.get('/faq', (req, res) => {
+  // 4. FAQ - Perguntas Frequentes sobre TeleMed Sistema
+  app.get('/faq', (req, res) => {
   console.log('📄 Serving FAQ for:', req.path);
   
   res.send(`
@@ -1373,11 +1380,11 @@ app.get('/faq', (req, res) => {
   `);
 });
 
-// 5. DOCTOR DASHBOARD - Dashboard médico protegido será servido pelo SPA fallback
-// Comentando rota específica para permitir que seja servida pelo React SPA no final do arquivo
+  // 5. DOCTOR DASHBOARD - Dashboard médico protegido será servido pelo SPA fallback
+  // Comentando rota específica para permitir que seja servida pelo React SPA no final do arquivo
 
-// 6. REGISTER PAGE - Sistema de cadastro para novos usuários
-app.get('/register', (req, res) => {
+  // 6. REGISTER PAGE - Sistema de cadastro para novos usuários
+  app.get('/register', (req, res) => {
   console.log('📝 Serving Registration Form for:', req.path);
   
   res.send(`
@@ -1625,10 +1632,10 @@ app.get('/register', (req, res) => {
   `);
 });
 
-// Rate limiting storage (in-memory for development)
-const loginAttempts = new Map();
+  // Rate limiting storage (in-memory for development)
+  const loginAttempts = new Map();
 
-// Crypto functions for secure parameter handling
+  // Crypto functions for secure parameter handling
 function encryptData(data) {
   return Buffer.from(JSON.stringify(data)).toString('base64');
 }
@@ -1641,7 +1648,7 @@ function decryptData(encryptedData) {
   }
 }
 
-// Rate limiting function
+  // Rate limiting function
 function checkRateLimit(ip) {
   const now = Date.now();
   const attempts = loginAttempts.get(ip) || [];
@@ -1659,14 +1666,14 @@ function checkRateLimit(ip) {
   return { allowed: true, attempts: recentAttempts.length };
 }
 
-// Security log function
+  // Security log function
 function logSecurityEvent(type, details, ip) {
   const timestamp = new Date().toISOString();
   console.log(`🔒 [SECURITY] ${timestamp} - ${type} from ${ip}:`, details);
 }
 
-// 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
-app.get('/processar-login', (req, res) => {
+  // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
+  app.get('/processar-login', (req, res) => {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
   const hostDomain = req.get('host') || 'localhost:5000';
   const protocol = req.secure ? 'https' : 'http';
@@ -1939,8 +1946,8 @@ app.get('/processar-login', (req, res) => {
   `);
 });
 
-// 8. PATIENT DASHBOARD - Dashboard do paciente
-app.get('/patient-dashboard', (req, res) => {
+  // 8. PATIENT DASHBOARD - Dashboard do paciente
+  app.get('/patient-dashboard', (req, res) => {
   console.log('👤 Serving Patient Dashboard for:', req.path);
   
   res.send(`
@@ -2147,8 +2154,8 @@ app.get('/patient-dashboard', (req, res) => {
   `);
 });
 
-// 8. PATIENT BIDDING PAGE - Sistema de lances para pacientes
-app.get('/patient-bidding', (req, res) => {
+  // 8. PATIENT BIDDING PAGE - Sistema de lances para pacientes
+  app.get('/patient-bidding', (req, res) => {
   console.log('🎯 Serving Patient Bidding Page for:', req.path);
   
   res.send(`
@@ -2417,15 +2424,15 @@ app.get('/patient-bidding', (req, res) => {
   `);
 });
 
-// 9. LOGIN PAGE - Sistema de autenticação CORRIGIDO
-// Helper function to create encrypted login URLs
+  // 9. LOGIN PAGE - Sistema de autenticação CORRIGIDO
+  // Helper function to create encrypted login URLs
 function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   const data = { email, senha, crm, origem };
   const encryptedData = encryptData(data);
   return `/processar-login?dados=${encodeURIComponent(encryptedData)}`;
 }
 
-app.get('/login', (req, res) => {
+  app.get('/login', (req, res) => {
   console.log('🔐 Serving SECURE Login Form with error handling for:', req.path);
   
   const { erro, tempo, sucesso } = req.query;
@@ -2787,8 +2794,8 @@ app.get('/login', (req, res) => {
   `);
 });
 
-// 10. CENTRO DE AVALIAÇÃO PSIQUIÁTRICA - Sistema de testes psicológicos
-app.get('/centro-avaliacao', (req, res) => {
+  // 10. CENTRO DE AVALIAÇÃO PSIQUIÁTRICA - Sistema de testes psicológicos
+  app.get('/centro-avaliacao', (req, res) => {
   console.log('🧠 Serving Centro de Avaliação Psiquiátrica for:', req.path);
   
   try {
@@ -2801,8 +2808,8 @@ app.get('/centro-avaliacao', (req, res) => {
   }
 });
 
-// 11. TESTE TDAH-ASRS18 - Avaliação de TDAH
-app.get('/tdah-asrs18', (req, res) => {
+  // 11. TESTE TDAH-ASRS18 - Avaliação de TDAH
+  app.get('/tdah-asrs18', (req, res) => {
   console.log('🧠 Serving Teste TDAH-ASRS18 for:', req.path);
   
   try {
@@ -2815,8 +2822,8 @@ app.get('/tdah-asrs18', (req, res) => {
   }
 });
 
-// 12. TESTE GAD-7 ANSIEDADE - Avaliação de Ansiedade Generalizada
-app.get('/gad7-ansiedade', (req, res) => {
+  // 12. TESTE GAD-7 ANSIEDADE - Avaliação de Ansiedade Generalizada
+  app.get('/gad7-ansiedade', (req, res) => {
   console.log('😰 Serving Teste GAD-7 Ansiedade for:', req.path);
   
   try {
@@ -2829,8 +2836,8 @@ app.get('/gad7-ansiedade', (req, res) => {
   }
 });
 
-// 13. TESTE PHQ-9 DEPRESSÃO - Avaliação de Depressão
-app.get('/phq9-depressao', (req, res) => {
+  // 13. TESTE PHQ-9 DEPRESSÃO - Avaliação de Depressão
+  app.get('/phq9-depressao', (req, res) => {
   console.log('😔 Serving Teste PHQ-9 Depressão for:', req.path);
   
   try {
@@ -2843,8 +2850,8 @@ app.get('/phq9-depressao', (req, res) => {
   }
 });
 
-// 14. TESTE MDQ TRANSTORNO BIPOLAR - Avaliação de Episódios Maníacos
-app.get('/mdq-bipolar', (req, res) => {
+  // 14. TESTE MDQ TRANSTORNO BIPOLAR - Avaliação de Episódios Maníacos
+  app.get('/mdq-bipolar', (req, res) => {
   console.log('🔄 Serving Teste MDQ Transtorno Bipolar for:', req.path);
   
   try {
@@ -2857,8 +2864,8 @@ app.get('/mdq-bipolar', (req, res) => {
   }
 });
 
-// 15. TESTE PSS-10 STRESS - Avaliação de Stress Percebido
-app.get('/pss10-stress', (req, res) => {
+  // 15. TESTE PSS-10 STRESS - Avaliação de Stress Percebido
+  app.get('/pss10-stress', (req, res) => {
   console.log('💭 Serving Teste PSS-10 Stress for:', req.path);
   
   try {
@@ -2871,8 +2878,8 @@ app.get('/pss10-stress', (req, res) => {
   }
 });
 
-// 16. TRIAGEM PSIQUIÁTRICA GERAL - Avaliação Abrangente
-app.get('/triagem-psiquiatrica', (req, res) => {
+  // 16. TRIAGEM PSIQUIÁTRICA GERAL - Avaliação Abrangente
+  app.get('/triagem-psiquiatrica', (req, res) => {
   console.log('🧠 Serving Triagem Psiquiátrica Geral for:', req.path);
   
   try {
@@ -2885,10 +2892,10 @@ app.get('/triagem-psiquiatrica', (req, res) => {
   }
 });
 
-// ROTAS ADICIONAIS COM NOMES SOLICITADOS PELO USUÁRIO
+  // ROTAS ADICIONAIS COM NOMES SOLICITADOS PELO USUÁRIO
 
-// Ansiedade GAD-7 (rota alternativa)
-app.get('/ansiedade-gad7', (req, res) => {
+  // Ansiedade GAD-7 (rota alternativa)
+  app.get('/ansiedade-gad7', (req, res) => {
   console.log('😰 Serving Teste Ansiedade GAD-7 for:', req.path);
   
   try {
@@ -2901,8 +2908,8 @@ app.get('/ansiedade-gad7', (req, res) => {
   }
 });
 
-// Depressão PHQ-9 (rota alternativa)
-app.get('/depressao-phq9', (req, res) => {
+  // Depressão PHQ-9 (rota alternativa)
+  app.get('/depressao-phq9', (req, res) => {
   console.log('😔 Serving Teste Depressão PHQ-9 for:', req.path);
   
   try {
@@ -2915,8 +2922,8 @@ app.get('/depressao-phq9', (req, res) => {
   }
 });
 
-// Transtorno Bipolar MDQ (rota alternativa)
-app.get('/bipolar-mdq', (req, res) => {
+  // Transtorno Bipolar MDQ (rota alternativa)
+  app.get('/bipolar-mdq', (req, res) => {
   console.log('🔄 Serving Teste Bipolar MDQ for:', req.path);
   
   try {
@@ -2929,8 +2936,8 @@ app.get('/bipolar-mdq', (req, res) => {
   }
 });
 
-// Stress PSS-10 (rota alternativa)
-app.get('/stress-pss10', (req, res) => {
+  // Stress PSS-10 (rota alternativa)
+  app.get('/stress-pss10', (req, res) => {
   console.log('💭 Serving Teste Stress PSS-10 for:', req.path);
   
   try {
@@ -2943,8 +2950,8 @@ app.get('/stress-pss10', (req, res) => {
   }
 });
 
-// 17. TELEMONITORAMENTO - Sistema de monitoramento remoto (rota principal)
-app.get('/telemonitoramento', (req, res) => {
+  // 17. TELEMONITORAMENTO - Sistema de monitoramento remoto (rota principal)
+  app.get('/telemonitoramento', (req, res) => {
   console.log('👩‍⚕️ Serving Telemonitoramento for:', req.path);
   
   try {
@@ -2957,8 +2964,8 @@ app.get('/telemonitoramento', (req, res) => {
   }
 });
 
-// 17b. TELEMONITORAMENTO DE ENFERMAGEM - Sistema de monitoramento remoto (rota específica)
-app.get('/telemonitoramento-enfermagem', (req, res) => {
+  // 17b. TELEMONITORAMENTO DE ENFERMAGEM - Sistema de monitoramento remoto (rota específica)
+  app.get('/telemonitoramento-enfermagem', (req, res) => {
   console.log('👩‍⚕️ Serving Telemonitoramento de Enfermagem for:', req.path);
   
   try {
@@ -2971,8 +2978,8 @@ app.get('/telemonitoramento-enfermagem', (req, res) => {
   }
 });
 
-// 18. DR. AI - ASSISTENTE MÉDICO INTELIGENTE - Copiloto clínico com IA
-app.get('/dr-ai', (req, res) => {
+  // 18. DR. AI - ASSISTENTE MÉDICO INTELIGENTE - Copiloto clínico com IA
+  app.get('/dr-ai', (req, res) => {
   console.log('🤖 Serving Dr. AI - Assistente Médico Inteligente for:', req.path);
   
   try {
@@ -2985,11 +2992,11 @@ app.get('/dr-ai', (req, res) => {
   }
 });
 
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, '../public')));
+  // Serve static files from public directory
+  app.use(express.static(path.join(__dirname, '../public')));
 
-// Create test page to verify all links are working
-app.get('/test-links', (req, res) => {
+  // Create test page to verify all links are working
+  app.get('/test-links', (req, res) => {
   console.log('🔍 Serving Link Test Page');
   
   res.send(`
@@ -3116,79 +3123,30 @@ app.get('/test-links', (req, res) => {
   `);
 });
 
-// Create specific routes that redirect to React Router
-app.get('/lances', (req, res) => {
+  // Create specific routes that redirect to React Router
+  app.get('/lances', (req, res) => {
   console.log('🎯 Redirecting /lances to /patient-bidding');
   res.redirect('/patient-bidding');
 });
 
-app.get('/dashboard', (req, res) => {
+  app.get('/dashboard', (req, res) => {
   console.log('🎯 Redirecting /dashboard to /patient-dashboard');
   res.redirect('/patient-dashboard');
 });
 
-// SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress', '/triagem-psiquiatrica', '/ansiedade-gad7', '/depressao-phq9', '/bipolar-mdq', '/stress-pss10', '/telemonitoramento-enfermagem'];
-app.get('*', (req, res, next) => {
-  // Skip static routes and API routes
-  if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
-    return next();
-  }
-  
-  console.log('📱 Serving React SPA for:', req.path);
-  
-  // For development, serve a fallback page that redirects to proper routes
-  res.send(`
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>TeleMed Sistema</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body>
-        <div class="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">🏥 TeleMed Sistema</h1>
-                <p class="text-gray-600 mb-4">Você está tentando acessar: <strong>${req.path}</strong></p>
-                <p class="text-gray-500 mb-8">Escolha uma das opções abaixo para continuar:</p>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                    <a href="/" class="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        🏠 Página Inicial
-                    </a>
-                    <a href="/patient-dashboard" class="bg-green-600 text-white px-6 py-4 rounded-lg hover:bg-green-700 transition-colors">
-                        👤 Dashboard Paciente
-                    </a>
-                    <a href="/patient-bidding" class="bg-orange-600 text-white px-6 py-4 rounded-lg hover:bg-orange-700 transition-colors">
-                        🎯 Sistema de Lances
-                    </a>
-                    <a href="/doctor-dashboard" class="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 transition-colors">
-                        👨‍⚕️ Dashboard Médico
-                    </a>
-                </div>
-                <div class="mt-8 text-sm text-gray-500">
-                    <p>Outras páginas disponíveis:</p>
-                    <div class="flex flex-wrap justify-center gap-2 mt-2">
-                        <a href="/login" class="text-blue-600 hover:underline">Login</a>
-                        <a href="/register" class="text-blue-600 hover:underline">Cadastro</a>
-                        <a href="/lances" class="text-orange-600 hover:underline">Lances (/lances)</a>
-                        <a href="/dashboard" class="text-green-600 hover:underline">Dashboard (/dashboard)</a>
-                        <a href="/sobre" class="text-blue-600 hover:underline">Sobre</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-    </html>
-  `);
-});
+  // Note: Vite middleware handles SPA fallback automatically
 
-// Start server
-const port = parseInt(process.env.PORT || '5000');
-app.listen(port, '0.0.0.0', () => {
-  console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${port}`);
-  console.log(`🔗 Acesse: http://localhost:${port}`);
-  console.log(`🛡️ Sistema de login seguro implementado`);
-  console.log(`🔐 Área médica protegida com autenticação`);
-});
+  // Start server
+  const port = parseInt(process.env.PORT || '5000');
+  server.listen(port, '0.0.0.0', () => {
+    console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${port}`);
+    console.log(`🔗 Acesse: http://localhost:${port}`);
+    console.log(`🛡️ Sistema de login seguro implementado`);
+    console.log(`🔐 Área médica protegida com autenticação`);
+  });
+
+  return { app, server };
+}
+
+  // Start the server
+startServer().catch(console.error);
