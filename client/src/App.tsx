@@ -15,6 +15,7 @@ import DiagnosticPage from "@/pages/DiagnosticPage";
 import SecurityPage from "@/pages/SecurityPage";
 import PatientDashboardUnified from "@/pages/PatientDashboardUnified";
 import DoctorDashboardUnified from "@/pages/DoctorDashboardUnified";
+import DoctorDashboardSimple from "@/pages/DoctorDashboardSimple";
 import LandingPageUnified from "@/pages/LandingPageUnified";
 import MonitoringDashboard from "@/pages/MonitoringDashboard";
 import DashboardMedicalPro from "@/pages/DashboardMedicalPro";
@@ -33,7 +34,7 @@ function App() {
             <Route path="/login" component={LoginPage} />
             <Route path="/landing" component={LandingPageUnified} />
             {/* Dashboards Unificados */}
-            <Route path="/doctor-dashboard" component={DoctorDashboardUnified} />
+            <Route path="/doctor-dashboard" component={DoctorDashboardSimple} />
             <Route path="/patient-dashboard" component={PatientDashboardUnified} />
             <Route path="/dashboard" component={PatientDashboardUnified} />
             
