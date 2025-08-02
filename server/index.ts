@@ -3259,11 +3259,11 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
 
         <script>
             function startTriage() {
-                window.location.href = '/centro-avaliacao';
+                window.location.href = '/triagem-inteligente';
             }
 
             function viewProtocols() {
-                alert('🔍 Protocolos clínicos em desenvolvimento!');
+                window.location.href = '/protocolos-clinicos';
             }
 
             function analyzeExam() {
@@ -3271,7 +3271,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
             }
 
             function prescriptionHelper() {
-                alert('💊 Assistente de prescrições em desenvolvimento!');
+                window.location.href = '/prescricoes-inteligentes';
             }
             
             console.log('🤖 Dr. AI 2.0 - Copiloto Médico carregado');
@@ -3282,6 +3282,1024 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
     </body>
     </html>
   `);
+});
+
+  // 19. TRIAGEM INTELIGENTE - Sistema de triagem com IA
+  app.get('/triagem-inteligente', (req, res) => {
+  console.log('🩺 Serving Triagem Inteligente for:', req.path);
+  
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Triagem Inteligente - Dr. AI</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .header {
+                background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 1.1em;
+                opacity: 0.9;
+            }
+
+            .form-section {
+                padding: 40px;
+            }
+
+            .question-group {
+                margin-bottom: 30px;
+                padding: 25px;
+                background: #f8f9ff;
+                border-radius: 15px;
+                border-left: 5px solid #4facfe;
+            }
+
+            .question-title {
+                font-size: 1.3em;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 15px;
+            }
+
+            .symptoms-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+
+            .symptom-card {
+                background: white;
+                padding: 15px;
+                border-radius: 10px;
+                border: 2px solid #e1e5e9;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .symptom-card:hover {
+                border-color: #4facfe;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+            }
+
+            .symptom-card.selected {
+                border-color: #4facfe;
+                background: #e8f4fd;
+            }
+
+            .symptom-card input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
+            .severity-slider {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            .slider-labels {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.9em;
+                color: #666;
+                margin-top: 5px;
+            }
+
+            .input-group {
+                margin-bottom: 20px;
+            }
+
+            .input-group label {
+                display: block;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+            }
+
+            .input-group input, .input-group select, .input-group textarea {
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e1e5e9;
+                border-radius: 8px;
+                font-size: 1em;
+                transition: border-color 0.3s ease;
+            }
+
+            .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+                outline: none;
+                border-color: #4facfe;
+            }
+
+            .analyze-btn {
+                background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                font-size: 1.2em;
+                font-weight: 600;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .analyze-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+            }
+
+            .result-section {
+                display: none;
+                padding: 40px;
+                background: #f8f9ff;
+                border-top: 3px solid #4facfe;
+            }
+
+            .urgency-level {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .urgency-badge {
+                display: inline-block;
+                padding: 10px 25px;
+                border-radius: 25px;
+                font-weight: 600;
+                font-size: 1.1em;
+                margin-bottom: 15px;
+            }
+
+            .urgency-baixa { background: #d4edda; color: #155724; }
+            .urgency-media { background: #fff3cd; color: #856404; }
+            .urgency-alta { background: #f8d7da; color: #721c24; }
+
+            .recommendations {
+                background: white;
+                padding: 25px;
+                border-radius: 15px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .back-btn {
+                background: #6c757d;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🩺 Triagem Inteligente</h1>
+                <p>Análise de sintomas com IA médica especializada</p>
+            </div>
+
+            <div class="form-section" id="triagemForm">
+                <div class="question-group">
+                    <div class="question-title">1. Quais sintomas você está apresentando?</div>
+                    <div class="symptoms-grid">
+                        <div class="symptom-card" onclick="toggleSymptom(this)">
+                            <input type="checkbox" id="febre" name="sintomas" value="febre">
+                            <label for="febre">🌡️ Febre</label>
+                        </div>
+                        <div class="symptom-card" onclick="toggleSymptom(this)">
+                            <input type="checkbox" id="dor_cabeca" name="sintomas" value="dor_cabeca">
+                            <label for="dor_cabeca">🤕 Dor de cabeça</label>
+                        </div>
+                        <div class="symptom-card" onclick="toggleSymptom(this)">
+                            <input type="checkbox" id="tosse" name="sintomas" value="tosse">
+                            <label for="tosse">😷 Tosse</label>
+                        </div>
+                        <div class="symptom-card" onclick="toggleSymptom(this)">
+                            <input type="checkbox" id="dor_peito" name="sintomas" value="dor_peito">
+                            <label for="dor_peito">💓 Dor no peito</label>
+                        </div>
+                        <div class="symptom-card" onclick="toggleSymptom(this)">
+                            <input type="checkbox" id="falta_ar" name="sintomas" value="falta_ar">
+                            <label for="falta_ar">🫁 Falta de ar</label>
+                        </div>
+                        <div class="symptom-card" onclick="toggleSymptom(this)">
+                            <input type="checkbox" id="nausea" name="sintomas" value="nausea">
+                            <label for="nausea">🤢 Náusea</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question-title">2. Qual a intensidade do seu desconforto?</div>
+                    <input type="range" min="1" max="10" value="3" class="severity-slider" id="intensidade">
+                    <div class="slider-labels">
+                        <span>1 - Leve</span>
+                        <span>5 - Moderado</span>
+                        <span>10 - Muito intenso</span>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="input-group">
+                        <label for="duracao">3. Há quanto tempo apresenta esses sintomas?</label>
+                        <select id="duracao">
+                            <option value="">Selecione...</option>
+                            <option value="horas">Algumas horas</option>
+                            <option value="1-2dias">1-2 dias</option>
+                            <option value="3-7dias">3-7 dias</option>
+                            <option value="semanas">Mais de uma semana</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="idade">4. Sua idade:</label>
+                        <input type="number" id="idade" min="0" max="120" placeholder="Ex: 35">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="historico">5. Possui alguma condição médica conhecida?</label>
+                        <textarea id="historico" rows="3" placeholder="Ex: diabetes, hipertensão, etc. (opcional)"></textarea>
+                    </div>
+                </div>
+
+                <button class="analyze-btn" onclick="analisarTriagem()">
+                    🔍 Analisar Sintomas
+                </button>
+            </div>
+
+            <div class="result-section" id="resultSection">
+                <button class="back-btn" onclick="voltarTriagem()">← Voltar</button>
+                
+                <div class="urgency-level">
+                    <div class="urgency-badge" id="urgencyBadge">Analisando...</div>
+                    <h2 id="urgencyTitle">Resultado da Triagem</h2>
+                </div>
+
+                <div class="recommendations" id="recommendations">
+                    <!-- Resultados serão inseridos aqui -->
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleSymptom(card) {
+                const checkbox = card.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                card.classList.toggle('selected', checkbox.checked);
+            }
+
+            function analisarTriagem() {
+                const sintomas = Array.from(document.querySelectorAll('input[name="sintomas"]:checked')).map(cb => cb.value);
+                const intensidade = document.getElementById('intensidade').value;
+                const duracao = document.getElementById('duracao').value;
+                const idade = document.getElementById('idade').value;
+                const historico = document.getElementById('historico').value;
+
+                if (sintomas.length === 0) {
+                    alert('Por favor, selecione pelo menos um sintoma.');
+                    return;
+                }
+
+                if (!duracao || !idade) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+
+                let pontuacao = 0;
+                let urgencia = 'baixa';
+                let especialidade = 'Clínica Geral';
+                let recomendacoes = [];
+
+                if (sintomas.includes('dor_peito')) pontuacao += 3;
+                if (sintomas.includes('falta_ar')) pontuacao += 3;
+                if (sintomas.includes('febre') && parseInt(intensidade) > 7) pontuacao += 2;
+                
+                if (parseInt(intensidade) > 8) pontuacao += 2;
+                else if (parseInt(intensidade) > 5) pontuacao += 1;
+
+                if (duracao === 'horas' && (sintomas.includes('dor_peito') || sintomas.includes('falta_ar'))) {
+                    pontuacao += 2;
+                }
+
+                if (pontuacao >= 5) {
+                    urgencia = 'alta';
+                    recomendacoes.push('Procure atendimento médico imediatamente');
+                    recomendacoes.push('Considere ir ao pronto-socorro');
+                } else if (pontuacao >= 3) {
+                    urgencia = 'media';
+                    recomendacoes.push('Agende consulta médica em 24-48h');
+                    recomendacoes.push('Monitore os sintomas');
+                } else {
+                    urgencia = 'baixa';
+                    recomendacoes.push('Agende consulta de rotina');
+                    recomendacoes.push('Cuidados gerais em casa');
+                }
+
+                if (sintomas.includes('dor_peito') || sintomas.includes('falta_ar')) {
+                    especialidade = 'Cardiologia';
+                } else if (sintomas.includes('tosse')) {
+                    especialidade = 'Pneumologia';
+                } else if (sintomas.includes('dor_cabeca')) {
+                    especialidade = 'Neurologia';
+                }
+
+                mostrarResultados(urgencia, especialidade, recomendacoes);
+            }
+
+            function mostrarResultados(urgencia, especialidade, recomendacoes) {
+                document.getElementById('triagemForm').style.display = 'none';
+                document.getElementById('resultSection').style.display = 'block';
+
+                const badge = document.getElementById('urgencyBadge');
+                badge.className = 'urgency-badge urgency-' + urgencia;
+                
+                if (urgencia === 'alta') {
+                    badge.textContent = '🚨 URGÊNCIA ALTA';
+                } else if (urgencia === 'media') {
+                    badge.textContent = '⚠️ URGÊNCIA MÉDIA';
+                } else {
+                    badge.textContent = '✅ URGÊNCIA BAIXA';
+                }
+
+                const recommendationsDiv = document.getElementById('recommendations');
+                recommendationsDiv.innerHTML = \`
+                    <h3>Especialidade Recomendada: \${especialidade}</h3>
+                    <ul>
+                        \${recomendacoes.map(rec => '<li>' + rec + '</li>').join('')}
+                    </ul>
+                    <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+                        <strong>Importante:</strong> Esta análise é apenas orientativa. Sempre consulte um médico para diagnóstico preciso.
+                    </p>
+                \`;
+            }
+
+            function voltarTriagem() {
+                document.getElementById('resultSection').style.display = 'none';
+                document.getElementById('triagemForm').style.display = 'block';
+            }
+
+            console.log('🩺 Triagem Inteligente carregada');
+        </script>
+    </body>
+    </html>
+  `);
+});
+
+  // 20. PROTOCOLOS CLÍNICOS - Sistema de protocolos médicos
+  app.get('/protocolos-clinicos', (req, res) => {
+  console.log('📋 Serving Protocolos Clínicos for:', req.path);
+  
+  res.send(\`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Protocolos Clínicos - Dr. AI</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #2E8B57 0%, #228B22 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .header {
+                background: linear-gradient(45deg, #32CD32 0%, #00FF7F 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .content {
+                padding: 40px;
+            }
+
+            .protocols-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 25px;
+                margin-top: 30px;
+            }
+
+            .protocol-card {
+                background: #f8f9ff;
+                border-radius: 15px;
+                padding: 25px;
+                border-left: 5px solid #32CD32;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .protocol-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(50, 205, 50, 0.2);
+            }
+
+            .protocol-title {
+                font-size: 1.4em;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 15px;
+            }
+
+            .protocol-description {
+                color: #666;
+                margin-bottom: 20px;
+                line-height: 1.6;
+            }
+
+            .protocol-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+
+            .tag {
+                background: #e8f5e8;
+                color: #2E8B57;
+                padding: 4px 12px;
+                border-radius: 15px;
+                font-size: 0.85em;
+                font-weight: 500;
+            }
+
+            .back-btn {
+                background: #6c757d;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 20px;
+                cursor: pointer;
+                margin-bottom: 30px;
+                font-size: 1em;
+            }
+
+            .search-box {
+                width: 100%;
+                padding: 15px;
+                border: 2px solid #e1e5e9;
+                border-radius: 10px;
+                font-size: 1.1em;
+                margin-bottom: 20px;
+            }
+
+            .search-box:focus {
+                outline: none;
+                border-color: #32CD32;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>📋 Protocolos Clínicos</h1>
+                <p>Diretrizes médicas baseadas em evidências científicas</p>
+            </div>
+
+            <div class="content">
+                <button class="back-btn" onclick="window.history.back()">← Voltar ao Dr. AI</button>
+                
+                <input type="text" class="search-box" placeholder="🔍 Buscar protocolos..." onkeyup="filtrarProtocolos(this.value)">
+
+                <div class="protocols-grid" id="protocolsGrid">
+                    <div class="protocol-card" onclick="abrirProtocolo('hipertensao')">
+                        <div class="protocol-title">🔴 Hipertensão Arterial</div>
+                        <div class="protocol-description">
+                            Protocolo completo para diagnóstico e manejo da hipertensão arterial sistêmica, incluindo critérios diagnósticos e tratamento.
+                        </div>
+                        <div class="protocol-tags">
+                            <span class="tag">Cardiologia</span>
+                            <span class="tag">Clínica Médica</span>
+                            <span class="tag">Emergência</span>
+                        </div>
+                    </div>
+
+                    <div class="protocol-card" onclick="abrirProtocolo('diabetes')">
+                        <div class="protocol-title">🍯 Diabetes Mellitus</div>
+                        <div class="protocol-description">
+                            Diretrizes para diagnóstico, tratamento e acompanhamento de pacientes com diabetes tipos 1 e 2.
+                        </div>
+                        <div class="protocol-tags">
+                            <span class="tag">Endocrinologia</span>
+                            <span class="tag">Clínica Médica</span>
+                            <span class="tag">Crônico</span>
+                        </div>
+                    </div>
+
+                    <div class="protocol-card" onclick="abrirProtocolo('infarto')">
+                        <div class="protocol-title">💔 Síndrome Coronariana Aguda</div>
+                        <div class="protocol-description">
+                            Protocolo de emergência para diagnóstico e tratamento inicial do infarto agudo do miocárdio.
+                        </div>
+                        <div class="protocol-tags">
+                            <span class="tag">Cardiologia</span>
+                            <span class="tag">Emergência</span>
+                            <span class="tag">UTI</span>
+                        </div>
+                    </div>
+
+                    <div class="protocol-card" onclick="abrirProtocolo('pneumonia')">
+                        <div class="protocol-title">🫁 Pneumonia Comunitária</div>
+                        <div class="protocol-description">
+                            Protocolo para diagnóstico e tratamento de pneumonia adquirida na comunidade em adultos.
+                        </div>
+                        <div class="protocol-tags">
+                            <span class="tag">Pneumologia</span>
+                            <span class="tag">Infectologia</span>
+                            <span class="tag">Antibiótico</span>
+                        </div>
+                    </div>
+
+                    <div class="protocol-card" onclick="abrirProtocolo('sepse')">
+                        <div class="protocol-title">🦠 Sepse e Choque Séptico</div>
+                        <div class="protocol-description">
+                            Protocolo de identificação e manejo precoce da sepse e choque séptico em ambiente hospitalar.
+                        </div>
+                        <div class="protocol-tags">
+                            <span class="tag">UTI</span>
+                            <span class="tag">Emergência</span>
+                            <span class="tag">Infectologia</span>
+                        </div>
+                    </div>
+
+                    <div class="protocol-card" onclick="abrirProtocolo('avc')">
+                        <div class="protocol-title">🧠 Acidente Vascular Cerebral</div>
+                        <div class="protocol-description">
+                            Protocolo de atendimento ao AVC agudo, incluindo critérios para trombólise e procedimentos.
+                        </div>
+                        <div class="protocol-tags">
+                            <span class="tag">Neurologia</span>
+                            <span class="tag">Emergência</span>
+                            <span class="tag">Trombólise</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function abrirProtocolo(tipo) {
+                alert(\`📋 Protocolo de \${tipo} será implementado em breve!\\n\\nEsta funcionalidade incluirá:\\n• Diretrizes completas\\n• Fluxogramas de decisão\\n• Critérios diagnósticos\\n• Opções terapêuticas\`);
+            }
+
+            function filtrarProtocolos(termo) {
+                const cards = document.querySelectorAll('.protocol-card');
+                termo = termo.toLowerCase();
+                
+                cards.forEach(card => {
+                    const titulo = card.querySelector('.protocol-title').textContent.toLowerCase();
+                    const descricao = card.querySelector('.protocol-description').textContent.toLowerCase();
+                    
+                    if (titulo.includes(termo) || descricao.includes(termo)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            console.log('📋 Protocolos Clínicos carregados');
+        </script>
+    </body>
+    </html>
+  \`);
+});
+
+  // 21. PRESCRIÇÕES INTELIGENTES - Sistema de prescrições com IA
+  app.get('/prescricoes-inteligentes', (req, res) => {
+  console.log('💊 Serving Prescrições Inteligentes for:', req.path);
+  
+  res.send(\`
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Prescrições Inteligentes - Dr. AI</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+
+            .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+
+            .header {
+                background: linear-gradient(45deg, #FF8C42 0%, #FFA726 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .content {
+                padding: 40px;
+            }
+
+            .prescription-form {
+                background: #f8f9ff;
+                border-radius: 15px;
+                padding: 30px;
+                margin-bottom: 30px;
+            }
+
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .form-group label {
+                display: block;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+                font-size: 1.1em;
+            }
+
+            .form-group input, .form-group select, .form-group textarea {
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #e1e5e9;
+                border-radius: 8px;
+                font-size: 1em;
+                transition: border-color 0.3s ease;
+            }
+
+            .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+                outline: none;
+                border-color: #FF8C42;
+            }
+
+            .medications-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            .medication-card {
+                background: white;
+                border-radius: 10px;
+                padding: 20px;
+                border: 2px solid #e1e5e9;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+
+            .medication-card:hover {
+                border-color: #FF8C42;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 140, 66, 0.2);
+            }
+
+            .medication-card.selected {
+                border-color: #FF8C42;
+                background: #fff8f5;
+            }
+
+            .medication-name {
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+            }
+
+            .medication-info {
+                font-size: 0.9em;
+                color: #666;
+                margin-bottom: 10px;
+            }
+
+            .medication-dosage {
+                background: #e8f4fd;
+                padding: 8px;
+                border-radius: 5px;
+                font-size: 0.85em;
+                color: #2d5a87;
+            }
+
+            .generate-btn {
+                background: linear-gradient(45deg, #FF8C42 0%, #FFA726 100%);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                font-size: 1.2em;
+                font-weight: 600;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .generate-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(255, 140, 66, 0.3);
+            }
+
+            .back-btn {
+                background: #6c757d;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 20px;
+                cursor: pointer;
+                margin-bottom: 30px;
+                font-size: 1em;
+            }
+
+            .prescription-result {
+                display: none;
+                background: white;
+                border-radius: 15px;
+                padding: 30px;
+                border: 2px solid #FF8C42;
+                margin-top: 20px;
+            }
+
+            .result-header {
+                text-align: center;
+                margin-bottom: 25px;
+                color: #FF6B35;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>💊 Prescrições Inteligentes</h1>
+                <p>Sugestões de medicamentos personalizadas com IA</p>
+            </div>
+
+            <div class="content">
+                <button class="back-btn" onclick="window.history.back()">← Voltar ao Dr. AI</button>
+                
+                <div class="prescription-form">
+                    <h2 style="margin-bottom: 25px; color: #333;">Dados do Paciente e Diagnóstico</h2>
+                    
+                    <div class="form-group">
+                        <label for="paciente">Nome do Paciente:</label>
+                        <input type="text" id="paciente" placeholder="Ex: João Silva">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label for="idade">Idade:</label>
+                            <input type="number" id="idade" placeholder="Ex: 45">
+                        </div>
+                        <div class="form-group">
+                            <label for="peso">Peso (kg):</label>
+                            <input type="number" id="peso" placeholder="Ex: 70">
+                        </div>
+                        <div class="form-group">
+                            <label for="altura">Altura (cm):</label>
+                            <input type="number" id="altura" placeholder="Ex: 175">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="diagnostico">Diagnóstico:</label>
+                        <select id="diagnostico" onchange="carregarMedicamentos()">
+                            <option value="">Selecione o diagnóstico...</option>
+                            <option value="hipertensao">Hipertensão Arterial</option>
+                            <option value="diabetes">Diabetes Mellitus</option>
+                            <option value="infeccao">Infecção Respiratória</option>
+                            <option value="dor">Dor/Inflamação</option>
+                            <option value="ansiedade">Ansiedade/Depressão</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alergias">Alergias conhecidas:</label>
+                        <textarea id="alergias" rows="2" placeholder="Ex: penicilina, dipirona (opcional)"></textarea>
+                    </div>
+
+                    <div id="medicationsSection" style="display: none;">
+                        <h3 style="margin: 25px 0 15px 0; color: #333;">Medicamentos Sugeridos:</h3>
+                        <div class="medications-grid" id="medicationsGrid">
+                            <!-- Medicamentos serão carregados aqui -->
+                        </div>
+                    </div>
+
+                    <button class="generate-btn" onclick="gerarPrescricao()">
+                        📝 Gerar Prescrição
+                    </button>
+                </div>
+
+                <div class="prescription-result" id="prescriptionResult">
+                    <div class="result-header">
+                        <h2>📋 Prescrição Médica Gerada</h2>
+                    </div>
+                    <div id="prescriptionContent">
+                        <!-- Conteúdo da prescrição será inserido aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const medicamentos = {
+                hipertensao: [
+                    { nome: 'Losartana 50mg', info: 'Inibidor do receptor de angiotensina', dosagem: '1 comprimido/dia' },
+                    { nome: 'Enalapril 10mg', info: 'Inibidor da ECA', dosagem: '1 comprimido 2x/dia' },
+                    { nome: 'Anlodipino 5mg', info: 'Bloqueador de canal de cálcio', dosagem: '1 comprimido/dia' }
+                ],
+                diabetes: [
+                    { nome: 'Metformina 500mg', info: 'Antidiabético oral', dosagem: '1 comprimido 2x/dia' },
+                    { nome: 'Glibenclamida 5mg', info: 'Sulfonilureia', dosagem: '1 comprimido/dia' },
+                    { nome: 'Insulina NPH', info: 'Insulina de ação intermediária', dosagem: 'Conforme glicemia' }
+                ],
+                infeccao: [
+                    { nome: 'Amoxicilina 500mg', info: 'Antibiótico betalactâmico', dosagem: '1 cápsula 3x/dia' },
+                    { nome: 'Azitromicina 500mg', info: 'Antibiótico macrolídeo', dosagem: '1 comprimido/dia' },
+                    { nome: 'Expectorante', info: 'Para eliminação de secreções', dosagem: '15ml 3x/dia' }
+                ],
+                dor: [
+                    { nome: 'Paracetamol 750mg', info: 'Analgésico e antipirético', dosagem: '1 comprimido 3x/dia' },
+                    { nome: 'Ibuprofeno 400mg', info: 'Anti-inflamatório', dosagem: '1 comprimido 2x/dia' },
+                    { nome: 'Dipirona 500mg', info: 'Analgésico e antipirético', dosagem: '1 comprimido 4x/dia' }
+                ],
+                ansiedade: [
+                    { nome: 'Sertralina 50mg', info: 'Antidepressivo ISRS', dosagem: '1 comprimido/dia' },
+                    { nome: 'Clonazepam 0,5mg', info: 'Ansiolítico benzodiazepínico', dosagem: '1 comprimido 2x/dia' },
+                    { nome: 'Escitalopram 10mg', info: 'Antidepressivo ISRS', dosagem: '1 comprimido/dia' }
+                ]
+            };
+
+            function carregarMedicamentos() {
+                const diagnostico = document.getElementById('diagnostico').value;
+                const section = document.getElementById('medicationsSection');
+                const grid = document.getElementById('medicationsGrid');
+
+                if (!diagnostico) {
+                    section.style.display = 'none';
+                    return;
+                }
+
+                section.style.display = 'block';
+                grid.innerHTML = '';
+
+                medicamentos[diagnostico].forEach(med => {
+                    const card = document.createElement('div');
+                    card.className = 'medication-card';
+                    card.onclick = () => toggleMedication(card);
+                    card.innerHTML = \`
+                        <div class="medication-name">\${med.nome}</div>
+                        <div class="medication-info">\${med.info}</div>
+                        <div class="medication-dosage">Dosagem: \${med.dosagem}</div>
+                    \`;
+                    grid.appendChild(card);
+                });
+            }
+
+            function toggleMedication(card) {
+                card.classList.toggle('selected');
+            }
+
+            function gerarPrescricao() {
+                const paciente = document.getElementById('paciente').value;
+                const idade = document.getElementById('idade').value;
+                const diagnostico = document.getElementById('diagnostico').value;
+                
+                if (!paciente || !idade || !diagnostico) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+
+                const medicamentosSelecionados = Array.from(document.querySelectorAll('.medication-card.selected'));
+                
+                if (medicamentosSelecionados.length === 0) {
+                    alert('Por favor, selecione pelo menos um medicamento.');
+                    return;
+                }
+
+                const dataAtual = new Date().toLocaleDateString('pt-BR');
+                
+                let prescricaoHTML = \`
+                    <div style="border: 1px solid #ddd; padding: 20px; font-family: monospace;">
+                        <h3 style="text-align: center; margin-bottom: 20px;">PRESCRIÇÃO MÉDICA</h3>
+                        <p><strong>Paciente:</strong> \${paciente}</p>
+                        <p><strong>Idade:</strong> \${idade} anos</p>
+                        <p><strong>Data:</strong> \${dataAtual}</p>
+                        <p><strong>Diagnóstico:</strong> \${document.getElementById('diagnostico').selectedOptions[0].text}</p>
+                        
+                        <h4 style="margin: 20px 0 10px 0;">MEDICAMENTOS PRESCRITOS:</h4>
+                        <ol>
+                \`;
+
+                medicamentosSelecionados.forEach(card => {
+                    const nome = card.querySelector('.medication-name').textContent;
+                    const dosagem = card.querySelector('.medication-dosage').textContent;
+                    prescricaoHTML += \`<li>\${nome} - \${dosagem}</li>\`;
+                });
+
+                prescricaoHTML += \`
+                        </ol>
+                        
+                        <p style="margin-top: 20px; font-size: 0.9em;">
+                            <strong>Observações:</strong><br>
+                            • Tomar conforme orientação médica<br>
+                            • Retornar em caso de efeitos adversos<br>
+                            • Não interromper o tratamento sem orientação
+                        </p>
+                        
+                        <div style="margin-top: 30px; text-align: right;">
+                            <p>_____________________</p>
+                            <p>Dr. AI - CRM 00000</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="imprimirPrescricao()" style="margin-top: 20px; padding: 10px 20px; background: #FF8C42; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        🖨️ Imprimir Prescrição
+                    </button>
+                \`;
+
+                document.getElementById('prescriptionContent').innerHTML = prescricaoHTML;
+                document.getElementById('prescriptionResult').style.display = 'block';
+            }
+
+            function imprimirPrescricao() {
+                window.print();
+            }
+
+            console.log('💊 Prescrições Inteligentes carregadas');
+        </script>
+    </body>
+    </html>
+  \`);
 });
 
   // Serve static files from public directory

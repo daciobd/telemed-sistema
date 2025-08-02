@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triagem Inteligente - Dr. AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .question-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .symptom-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e1e5e9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .symptom-card:hover {
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+
+        .symptom-card.selected {
+            border-color: #4facfe;
+            background: #e8f4fd;
+        }
+
+        .symptom-card input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .severity-slider {
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .result-section {
+            display: none;
+            padding: 40px;
+            background: #f8f9ff;
+            border-top: 3px solid #4facfe;
+        }
+
+        .urgency-level {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .urgency-badge {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .urgency-baixa { background: #d4edda; color: #155724; }
+        .urgency-media { background: #fff3cd; color: #856404; }
+        .urgency-alta { background: #f8d7da; color: #721c24; }
+
+        .recommendations {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🩺 Triagem Inteligente</h1>
+            <p>Análise de sintomas com IA médica especializada</p>
+        </div>
+
+        <div class="form-section" id="triagemForm">
+            <div class="question-group">
+                <div class="question-title">1. Quais sintomas você está apresentando?</div>
+                <div class="symptoms-grid">
+                    <div class="symptom-card" onclick="toggleSymptom(this)">
+                        <input type="checkbox" id="febre" name="sintomas" value="febre">
+                        <label for="febre">🌡️ Febre</label>
+                    </div>
+                    <div class="symptom-card" onclick="toggleSymptom(this)">
+                        <input type="checkbox" id="dor_cabeca" name="sintomas" value="dor_cabeca">
+                        <label for="dor_cabeca">🤕 Dor de cabeça</label>
+                    </div>
+                    <div class="symptom-card" onclick="toggleSymptom(this)">
+                        <input type="checkbox" id="tosse" name="sintomas" value="tosse">
+                        <label for="tosse">😷 Tosse</label>
+                    </div>
+                    <div class="symptom-card" onclick="toggleSymptom(this)">
+                        <input type="checkbox" id="dor_peito" name="sintomas" value="dor_peito">
+                        <label for="dor_peito">💓 Dor no peito</label>
+                    </div>
+                    <div class="symptom-card" onclick="toggleSymptom(this)">
+                        <input type="checkbox" id="falta_ar" name="sintomas" value="falta_ar">
+                        <label for="falta_ar">🫁 Falta de ar</label>
+                    </div>
+                    <div class="symptom-card" onclick="toggleSymptom(this)">
+                        <input type="checkbox" id="nausea" name="sintomas" value="nausea">
+                        <label for="nausea">🤢 Náusea</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-group">
+                <div class="question-title">2. Qual a intensidade do seu desconforto?</div>
+                <input type="range" min="1" max="10" value="3" class="severity-slider" id="intensidade">
+                <div class="slider-labels">
+                    <span>1 - Leve</span>
+                    <span>5 - Moderado</span>
+                    <span>10 - Muito intenso</span>
+                </div>
+            </div>
+
+            <div class="question-group">
+                <div class="input-group">
+                    <label for="duracao">3. Há quanto tempo apresenta esses sintomas?</label>
+                    <select id="duracao">
+                        <option value="">Selecione...</option>
+                        <option value="horas">Algumas horas</option>
+                        <option value="1-2dias">1-2 dias</option>
+                        <option value="3-7dias">3-7 dias</option>
+                        <option value="semanas">Mais de uma semana</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="idade">4. Sua idade:</label>
+                    <input type="number" id="idade" min="0" max="120" placeholder="Ex: 35">
+                </div>
+
+                <div class="input-group">
+                    <label for="historico">5. Possui alguma condição médica conhecida?</label>
+                    <textarea id="historico" rows="3" placeholder="Ex: diabetes, hipertensão, etc. (opcional)"></textarea>
+                </div>
+            </div>
+
+            <button class="analyze-btn" onclick="analisarTriagem()">
+                🔍 Analisar Sintomas
+            </button>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <button class="back-btn" onclick="voltarTriagem()">← Voltar</button>
+            
+            <div class="urgency-level">
+                <div class="urgency-badge" id="urgencyBadge">Analisando...</div>
+                <h2 id="urgencyTitle">Resultado da Triagem</h2>
+            </div>
+
+            <div class="recommendations" id="recommendations">
+                <!-- Resultados serão inseridos aqui -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSymptom(card) {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            card.classList.toggle('selected', checkbox.checked);
+        }
+
+        function analisarTriagem() {
+            // Coletar dados do formulário
+            const sintomas = Array.from(document.querySelectorAll('input[name="sintomas"]:checked')).map(cb => cb.value);
+            const intensidade = document.getElementById('intensidade').value;
+            const duracao = document.getElementById('duracao').value;
+            const idade = document.getElementById('idade').value;
+            const historico = document.getElementById('historico').value;
+
+            // Validações básicas
+            if (sintomas.length === 0) {
+                alert('Por favor, selecione pelo menos um sintoma.');
+                return;
+            }
+
+            if (!duracao || !idade) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            // Algoritmo simples de triagem
+            let pontuacao = 0;
+            let urgencia = 'baixa';
+            let especialidade = 'Clínica Geral';
+            let recomendacoes = [];
+
+            // Pontuação baseada em sintomas
+            if (sintomas.includes('dor_peito')) pontuacao += 3;
+            if (sintomas.includes('falta_ar')) pontuacao += 3;
+            if (sintomas.includes('febre') && parseInt(intensidade) > 7) pontuacao += 2;
+            
+            // Pontuação por intensidade
+            if (parseInt(intensidade) > 8) pontuacao += 2;
+            else if (parseInt(intensidade) > 5) pontuacao += 1;
+
+            // Pontuação por duração
+            if (duracao === 'horas' && (sintomas.includes('dor_peito') || sintomas.includes('falta_ar'))) {
+                pontuacao += 2;
+            }
+
+            // Definir nível de urgência
+            if (pontuacao >= 5) {
+                urgencia = 'alta';
+                recomendacoes.push('Procure atendimento médico imediatamente');
+                recomendacoes.push('Considere ir ao pronto-socorro');
+            } else if (pontuacao >= 3) {
+                urgencia = 'media';
+                recomendacoes.push('Agende consulta médica em 24-48h');
+                recomendacoes.push('Monitore os sintomas');
+            } else {
+                urgencia = 'baixa';
+                recomendacoes.push('Agende consulta de rotina');
+                recomendacoes.push('Cuidados gerais em casa');
+            }
+
+            // Definir especialidade
+            if (sintomas.includes('dor_peito') || sintomas.includes('falta_ar')) {
+                especialidade = 'Cardiologia';
+            } else if (sintomas.includes('tosse')) {
+                especialidade = 'Pneumologia';
+            } else if (sintomas.includes('dor_cabeca')) {
+                especialidade = 'Neurologia';
+            }
+
+            // Mostrar resultados
+            mostrarResultados(urgencia, especialidade, recomendacoes);
+        }
+
+        function mostrarResultados(urgencia, especialidade, recomendacoes) {
+            document.getElementById('triagemForm').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+
+            const badge = document.getElementById('urgencyBadge');
+            badge.className = `urgency-badge urgency-${urgencia}`;
+            
+            if (urgencia === 'alta') {
+                badge.textContent = '🚨 URGÊNCIA ALTA';
+            } else if (urgencia === 'media') {
+                badge.textContent = '⚠️ URGÊNCIA MÉDIA';
+            } else {
+                badge.textContent = '✅ URGÊNCIA BAIXA';
+            }
+
+            const recommendations = document.getElementById('recommendations');
+            recommendations.innerHTML = `
+                <h3>📋 Especialidade Recomendada</h3>
+                <p style="font-size: 1.2em; color: #4facfe; font-weight: 600; margin-bottom: 20px;">
+                    ${especialidade}
+                </p>
+                
+                <h3>💡 Recomendações</h3>
+                <ul style="list-style: none; padding: 0;">
+                    ${recomendacoes.map(rec => `<li style="padding: 8px 0; border-bottom: 1px solid #eee;">✓ ${rec}</li>`).join('')}
+                </ul>
+                
+                <div style="margin-top: 25px; padding: 15px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+                    <strong>⚠️ Importante:</strong> Esta é uma análise preliminar. Sempre consulte um profissional de saúde para diagnóstico e tratamento adequados.
+                </div>
+            `;
+        }
+
+        function voltarTriagem() {
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('triagemForm').style.display = 'block';
+        }
+
+        // Atualizar display da intensidade em tempo real
+        document.getElementById('intensidade').addEventListener('input', function() {
+            const value = this.value;
+            // Você pode adicionar feedback visual aqui
+        });
+    </script>
+</body>
+</html>
