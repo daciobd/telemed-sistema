@@ -3274,6 +3274,51 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
                 window.location.href = '/prescricoes-inteligentes';
             }
             
+            // SCRIPT DE CORREÇÃO FORÇADA DOS LINKS
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('🔧 Aplicando correção forçada dos links...');
+                
+                // Força a correção de todos os botões
+                setTimeout(() => {
+                    const buttons = document.querySelectorAll('button');
+                    buttons.forEach(btn => {
+                        if (btn.textContent.includes('Iniciar Triagem')) {
+                            btn.onclick = function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('🩺 Redirecionando para Triagem Inteligente');
+                                window.location.href = '/triagem-inteligente';
+                            };
+                        }
+                        if (btn.textContent.includes('Ver Protocolos')) {
+                            btn.onclick = function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('📋 Redirecionando para Protocolos Clínicos');
+                                window.location.href = '/protocolos-clinicos';
+                            };
+                        }
+                        if (btn.textContent.includes('Analisar Exame')) {
+                            btn.onclick = function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('🔬 Redirecionando para Análise de Exames');
+                                window.location.href = '/analise-exames';
+                            };
+                        }
+                        if (btn.textContent.includes('Ajudar Prescrição')) {
+                            btn.onclick = function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('💊 Redirecionando para Prescrições Inteligentes');
+                                window.location.href = '/prescricoes-inteligentes';
+                            };
+                        }
+                    });
+                    console.log('✅ Correção forçada aplicada com sucesso!');
+                }, 1000);
+            });
+            
             console.log('🤖 Dr. AI 2.0 - Copiloto Médico carregado');
             console.log('✅ Dr. AI sistema inicializado');
             console.log('🩺 Protocolos clínicos carregados');
@@ -3683,7 +3728,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   app.get('/protocolos-clinicos', (req, res) => {
   console.log('📋 Serving Protocolos Clínicos for:', req.path);
   
-  res.send(\`
+  res.send(`
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
@@ -3918,14 +3963,14 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
         </script>
     </body>
     </html>
-  \`);
+  `);
 });
 
   // 21. PRESCRIÇÕES INTELIGENTES - Sistema de prescrições com IA
   app.get('/prescricoes-inteligentes', (req, res) => {
   console.log('💊 Serving Prescrições Inteligentes for:', req.path);
   
-  res.send(\`
+  res.send(`
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
@@ -4299,14 +4344,14 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
         </script>
     </body>
     </html>
-  \`);
+  `);
 });
 
   // 22. ANÁLISE DE EXAMES - Sistema de análise de exames com IA
   app.get('/analise-exames', (req, res) => {
   console.log('🔬 Serving Análise de Exames for:', req.path);
   
-  res.send(\`
+  res.send(`
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
@@ -4599,7 +4644,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
         </script>
     </body>
     </html>
-  \`);
+  `);
 });
 
   // Serve static files from public directory

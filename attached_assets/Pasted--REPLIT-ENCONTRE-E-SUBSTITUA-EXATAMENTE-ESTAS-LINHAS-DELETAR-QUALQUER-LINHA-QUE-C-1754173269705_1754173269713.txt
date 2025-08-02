@@ -1,0 +1,62 @@
+<!-- REPLIT: ENCONTRE E SUBSTITUA EXATAMENTE ESTAS LINHAS -->
+
+<!-- ❌ DELETAR QUALQUER LINHA QUE CONTENHA: -->
+<!-- href="centro-avaliacao" -->
+<!-- href="centro-avaliacao.html" -->
+<!-- onclick="window.location.href='centro-avaliacao'" -->
+
+<!-- ✅ SUBSTITUIR POR EXATAMENTE ISTO: -->
+
+<!-- CARD TRIAGEM INTELIGENTE -->
+<div class="ai-card" onclick="window.location.href='triagem-inteligente.html'">
+    <div class="card-icon">🩺</div>
+    <h3>Triagem Inteligente</h3>
+    <p>Análise de sintomas com IA médica especializada</p>
+    <button onclick="event.stopPropagation(); window.location.href='triagem-inteligente.html'">
+        Iniciar Triagem
+    </button>
+</div>
+
+<!-- CARD PROTOCOLOS CLÍNICOS -->
+<div class="ai-card" onclick="window.location.href='protocolos-clinicos.html'">
+    <div class="card-icon">📋</div>
+    <h3>Protocolos Clínicos</h3>
+    <p>Diretrizes médicas baseadas em evidências</p>
+    <button onclick="event.stopPropagation(); window.location.href='protocolos-clinicos.html'">
+        Ver Protocolos
+    </button>
+</div>
+
+<!-- CARD PRESCRIÇÕES INTELIGENTES -->
+<div class="ai-card" onclick="window.location.href='prescricoes-inteligentes.html'">
+    <div class="card-icon">💊</div>
+    <h3>Prescrições Inteligentes</h3>
+    <p>Sugestões de medicamentos personalizadas</p>
+    <button onclick="event.stopPropagation(); window.location.href='prescricoes-inteligentes.html'">
+        Ajudar Prescrição
+    </button>
+</div>
+
+<!-- CARD ANÁLISE DE EXAMES -->
+<div class="ai-card" onclick="window.location.href='analise-exames.html'">
+    <div class="card-icon">🔬</div>
+    <h3>Análise de Exames</h3>
+    <p>Interpretação assistida por IA</p>
+    <button onclick="event.stopPropagation(); window.location.href='analise-exames.html'">
+        Analisar Exame
+    </button>
+</div>
+
+<!-- IMPORTANTE: O CENTRO DE AVALIAÇÃO PSIQUIÁTRICA É SEPARADO! -->
+<!-- DEVE TER SEU PRÓPRIO CARD EM OUTRA SEÇÃO -->
+
+<!-- SEÇÃO SEPARADA PARA AVALIAÇÃO PSIQUIÁTRICA -->
+<div class="psychiatric-section">
+    <h3>🧠 Centro de Avaliação Psiquiátrica</h3>
+    <div class="psychiatric-card" onclick="window.location.href='centro-avaliacao.html'">
+        <p>Realize avaliações psiquiátricas completas</p>
+        <button onclick="event.stopPropagation(); window.location.href='centro-avaliacao.html'">
+            Acessar Centro de Avaliação
+        </button>
+    </div>
+</div>
