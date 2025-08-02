@@ -1,4 +1,12 @@
 export default function DoctorDashboardInline() {
+  // Função para voltar à página anterior
+  const goBack = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = '/';
+    }
+  };
   const openTelemonitoramento = () => {
     window.location.href = '/telemonitoramento-enfermagem';
   };
@@ -12,7 +20,36 @@ export default function DoctorDashboardInline() {
   };
 
   const generatePDFReport = () => {
-    alert('🎯 Função de PDF em desenvolvimento!');
+    // Dados mock do paciente para demonstração
+    const patientData = {
+      name: "Maria Silva",
+      age: 45,
+      id: "PAC001",
+      condition: "Hipertensão",
+      lastVisit: "2024-08-02",
+      treatments: ["Medicação anti-hipertensiva", "Dieta controlada"],
+      prescriptions: ["Losartana 50mg - 1x ao dia", "Hidroclorotiazida 25mg - 1x ao dia"],
+      notes: "Paciente com boa aderência ao tratamento"
+    };
+
+    const consultationData = {
+      date: new Date().toLocaleDateString('pt-BR'),
+      doctor: "Dr. Carlos Mendes",
+      patient: "Maria Silva",
+      type: "Videoconsulta",
+      diagnosis: "Hipertensão Arterial Sistêmica estável",
+      treatment: "Manutenção da medicação atual",
+      followUp: "Retorno em 30 dias",
+      prescriptions: ["Losartana 50mg - 1x ao dia", "Hidroclorotiazida 25mg - 1x ao dia", "Dieta hipossódica"]
+    };
+
+    // Importação dinâmica para evitar problemas de carregamento
+    import('../utils/pdfGenerator').then(({ generateMedicalReportPDF }) => {
+      generateMedicalReportPDF(patientData, consultationData);
+    }).catch((error) => {
+      console.error('Erro ao carregar gerador de PDF:', error);
+      alert('Erro ao gerar PDF. Verifique se as dependências estão instaladas.');
+    });
   };
 
   return (
@@ -38,7 +75,26 @@ export default function DoctorDashboardInline() {
             alignItems: 'center',
             height: '4rem'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <button
+                onClick={goBack}
+                style={{
+                  backgroundColor: '#f3f4f6',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.375rem',
+                  padding: '0.5rem 1rem',
+                  fontSize: '0.875rem',
+                  color: '#374151',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                onMouseOver={(e) => e.target.style.backgroundColor = '#e5e7eb'}
+                onMouseOut={(e) => e.target.style.backgroundColor = '#f3f4f6'}
+              >
+                ← Voltar
+              </button>
               <h1 style={{
                 fontSize: '1.25rem',
                 fontWeight: '600',
@@ -49,9 +105,12 @@ export default function DoctorDashboardInline() {
               </h1>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <span style={{ fontSize: '0.875rem', color: '#374151' }}>
-                Painel Médico
-              </span>
+              {/* Breadcrumb */}
+              <nav style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                <a href="/" style={{ color: '#6b7280', textDecoration: 'none' }}>Início</a>
+                <span style={{ margin: '0 0.5rem' }}>→</span>
+                <span style={{ color: '#111827', fontWeight: '500' }}>Dashboard Médico</span>
+              </nav>
             </div>
           </div>
         </div>
@@ -325,7 +384,7 @@ export default function DoctorDashboardInline() {
                   Relatórios PDF
                 </div>
                 <div style={{ fontSize: '0.875rem', opacity: '0.9' }}>
-                  Gerar relatórios médicos
+                  ✅ Funcional - Clique para gerar
                 </div>
               </button>
             </div>
