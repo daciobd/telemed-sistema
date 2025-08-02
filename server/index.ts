@@ -1373,14 +1373,8 @@ app.get('/faq', (req, res) => {
   `);
 });
 
-// 5. DOCTOR DASHBOARD - Dashboard médico protegido (requer autenticação)
-app.get('/doctor-dashboard', (req, res) => {
-  console.log('🩺 Serving PROTECTED Doctor Dashboard for:', req.path);
-  
-  // Por enquanto, servimos diretamente (proteção via JavaScript no frontend)
-  // Em produção, adicionar middleware de autenticação aqui
-  res.sendFile(path.join(__dirname, '../public/medical-dashboard-pro.html'));
-});
+// 5. DOCTOR DASHBOARD - Dashboard médico protegido será servido pelo SPA fallback
+// Comentando rota específica para permitir que seja servida pelo React SPA no final do arquivo
 
 // 6. REGISTER PAGE - Sistema de cadastro para novos usuários
 app.get('/register', (req, res) => {
@@ -3134,7 +3128,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // SPA fallback - serve React app for any non-API routes
-const staticRoutes = ['/login', '/doctor-dashboard', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress', '/triagem-psiquiatrica', '/ansiedade-gad7', '/depressao-phq9', '/bipolar-mdq', '/stress-pss10', '/telemonitoramento-enfermagem'];
+const staticRoutes = ['/login', '/patient-dashboard', '/patient-bidding', '/fazer-lance', '/dr-ai', '/register', '/processar-login', '/sobre', '/termos-de-uso', '/politica-privacidade', '/test-links', '/centro-avaliacao', '/tdah-asrs18', '/gad7-ansiedade', '/phq9-depressao', '/mdq-bipolar', '/pss10-stress', '/triagem-psiquiatrica', '/ansiedade-gad7', '/depressao-phq9', '/bipolar-mdq', '/stress-pss10', '/telemonitoramento-enfermagem'];
 app.get('*', (req, res, next) => {
   // Skip static routes and API routes
   if (req.path.startsWith('/api') || req.path.includes('.') || staticRoutes.includes(req.path)) {
