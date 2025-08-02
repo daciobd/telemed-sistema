@@ -2949,7 +2949,21 @@ app.get('/stress-pss10', (req, res) => {
   }
 });
 
-// 17. TELEMONITORAMENTO DE ENFERMAGEM - Sistema de monitoramento remoto
+// 17. TELEMONITORAMENTO - Sistema de monitoramento remoto (rota principal)
+app.get('/telemonitoramento', (req, res) => {
+  console.log('👩‍⚕️ Serving Telemonitoramento for:', req.path);
+  
+  try {
+    const filePath = path.join(__dirname, '../telemonitoramento-enfermagem.html');
+    const htmlContent = fs.readFileSync(filePath, 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error reading telemonitoramento-enfermagem.html:', error);
+    res.status(500).send('Erro ao carregar Telemonitoramento');
+  }
+});
+
+// 17b. TELEMONITORAMENTO DE ENFERMAGEM - Sistema de monitoramento remoto (rota específica)
 app.get('/telemonitoramento-enfermagem', (req, res) => {
   console.log('👩‍⚕️ Serving Telemonitoramento de Enfermagem for:', req.path);
   
