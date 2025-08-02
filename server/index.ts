@@ -17,8 +17,8 @@ async function startServer() {
   app.use(express.json());
   app.use(express.static(path.join(__dirname, '../public')));
 
-  // Setup Vite in development mode
-  await setupVite(app, server);
+  // Define all specific routes BEFORE setting up Vite middleware
+  // This is critical - Vite's catch-all middleware must come last
 
   // Health check
   app.get('/health', (req, res) => {
@@ -3134,7 +3134,8 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   res.redirect('/patient-dashboard');
 });
 
-  // Note: Vite middleware handles SPA fallback automatically
+  // Setup Vite middleware LAST - this handles SPA fallback for React routes
+  await setupVite(app, server);
 
   // Start server
   const port = parseInt(process.env.PORT || '5000');
