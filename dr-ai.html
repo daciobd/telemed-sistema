@@ -650,5 +650,78 @@ Posso fazer mais perguntas para ajudar na triagem. Continue descrevendo seus sin
             console.log('🛡️ Sistema de segurança ativo');
         });
     </script>
+
+    <!-- JAVASCRIPT RESPONSIVO AVANÇADO -->
+    <script>
+        function isMobile(){return window.innerWidth<=768;}
+        function isTablet(){return window.innerWidth>768 && window.innerWidth<=1024;}
+        function isDesktop(){return window.innerWidth>1024;}
+        function adjustLayout(){
+            const cards=document.querySelectorAll('.card,.ai-card,.pdf-card,.ai-feature-card');
+            if(isMobile()){
+                cards.forEach(card=>{
+                    card.style.width='100%';
+                    card.style.margin='8px 0';
+                    card.style.padding='16px';
+                });
+                const buttons=document.querySelectorAll('button,.btn');
+                buttons.forEach(btn=>{
+                    btn.style.minHeight='44px';
+                    btn.style.fontSize='16px';
+                    btn.style.width='100%';
+                });
+            }else if(isTablet()){
+                cards.forEach(card=>{
+                    card.style.width='calc(50% - 10px)';
+                    card.style.padding='20px';
+                });
+            }else{
+                cards.forEach(card=>{
+                    card.style.width='calc(33.33% - 15px)';
+                    card.style.padding='24px';
+                });
+            }
+        }
+        function optimizeForMobile(){
+            if(isMobile()){
+                const style=document.createElement('style');
+                style.textContent=`*{transition-duration:0.2s !important;animation-duration:0.2s !important;}`;
+                document.head.appendChild(style);
+                const images=document.querySelectorAll('img');
+                images.forEach(img=>{
+                    img.loading='lazy';
+                });
+            }
+        }
+        function handleOrientationChange(){
+            setTimeout(()=>{
+                adjustLayout();
+                const notifications=document.querySelectorAll('.notification');
+                notifications.forEach(notif=>{
+                    notif.style.maxWidth=isMobile()? '90vw':'320px';
+                });
+            },100);
+        }
+        window.addEventListener('resize',adjustLayout);
+        window.addEventListener('orientationchange',handleOrientationChange);
+        document.addEventListener('DOMContentLoaded',function(){
+            adjustLayout();
+            optimizeForMobile();
+            if('ontouchstart' in window){
+                document.body.classList.add('touch-device');
+            }
+        });
+        function preventIOSZoom(){
+            const inputs=document.querySelectorAll('input,select,textarea');
+            inputs.forEach(input=>{
+                if(input.style.fontSize !=='16px'){
+                    input.style.fontSize='16px';
+                }
+            });
+        }
+        if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
+            document.addEventListener('DOMContentLoaded',preventIOSZoom);
+        }
+    </script>
 </body>
 </html>
