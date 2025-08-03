@@ -3724,7 +3724,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   `);
 });
 
-  // 20. PROTOCOLOS CLÍNICOS - Sistema de protocolos médicos
+  // 20. PROTOCOLOS CLÍNICOS - Sistema completo de protocolos médicos
   app.get('/protocolos-clinicos', (req, res) => {
   console.log('📋 Serving Protocolos Clínicos for:', req.path);
   
@@ -3744,7 +3744,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
 
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #2E8B57 0%, #228B22 100%);
+                background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
                 min-height: 100vh;
                 padding: 20px;
             }
@@ -3759,7 +3759,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
             }
 
             .header {
-                background: linear-gradient(45deg, #32CD32 0%, #00FF7F 100%);
+                background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
                 color: white;
                 padding: 30px;
                 text-align: center;
@@ -3770,203 +3770,498 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
                 margin-bottom: 10px;
             }
 
-            .content {
-                padding: 40px;
+            .header p {
+                font-size: 1.1em;
+                opacity: 0.9;
+            }
+
+            .back-btn {
+                background: rgba(255,255,255,0.2);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                margin-bottom: 20px;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .search-section {
+                padding: 30px;
+                background: #f8f9ff;
+                border-bottom: 1px solid #e1e5e9;
+            }
+
+            .search-bar {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .search-input {
+                flex: 1;
+                padding: 15px;
+                border: 2px solid #e1e5e9;
+                border-radius: 10px;
+                font-size: 1em;
+            }
+
+            .search-input:focus {
+                outline: none;
+                border-color: #43e97b;
+            }
+
+            .filter-select {
+                padding: 15px;
+                border: 2px solid #e1e5e9;
+                border-radius: 10px;
+                background: white;
+                min-width: 200px;
+            }
+
+            .search-btn {
+                background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 600;
             }
 
             .protocols-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 25px;
-                margin-top: 30px;
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 20px;
+                padding: 30px;
             }
 
             .protocol-card {
-                background: #f8f9ff;
+                background: white;
+                border: 1px solid #e1e5e9;
                 border-radius: 15px;
                 padding: 25px;
-                border-left: 5px solid #32CD32;
                 transition: all 0.3s ease;
                 cursor: pointer;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
             }
 
             .protocol-card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(50, 205, 50, 0.2);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+                border-color: #43e97b;
+            }
+
+            .protocol-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .protocol-icon {
+                font-size: 2em;
+                margin-right: 15px;
             }
 
             .protocol-title {
-                font-size: 1.4em;
+                font-size: 1.3em;
                 font-weight: 600;
                 color: #333;
+            }
+
+            .protocol-specialty {
+                background: #e8f4fd;
+                color: #0066cc;
+                padding: 5px 12px;
+                border-radius: 15px;
+                font-size: 0.85em;
+                font-weight: 600;
                 margin-bottom: 15px;
+                display: inline-block;
             }
 
             .protocol-description {
                 color: #666;
-                margin-bottom: 20px;
                 line-height: 1.6;
-            }
-
-            .protocol-tags {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
                 margin-bottom: 15px;
             }
 
-            .tag {
-                background: #e8f5e8;
-                color: #2E8B57;
-                padding: 4px 12px;
-                border-radius: 15px;
-                font-size: 0.85em;
-                font-weight: 500;
+            .protocol-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 1px solid #f0f0f0;
+                padding-top: 15px;
             }
 
-            .back-btn {
-                background: #6c757d;
+            .protocol-updated {
+                color: #888;
+                font-size: 0.9em;
+            }
+
+            .protocol-actions {
+                display: flex;
+                gap: 10px;
+            }
+
+            .view-btn {
+                background: #43e97b;
                 color: white;
                 border: none;
-                padding: 12px 25px;
+                padding: 8px 15px;
                 border-radius: 20px;
                 cursor: pointer;
-                margin-bottom: 30px;
-                font-size: 1em;
+                font-size: 0.9em;
+                text-decoration: none;
             }
 
-            .search-box {
+            .download-btn {
+                background: #38f9d7;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 0.9em;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
                 width: 100%;
-                padding: 15px;
-                border: 2px solid #e1e5e9;
-                border-radius: 10px;
-                font-size: 1.1em;
-                margin-bottom: 20px;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 1000;
             }
 
-            .search-box:focus {
-                outline: none;
-                border-color: #32CD32;
+            .modal-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 40px;
+                border-radius: 20px;
+                max-width: 800px;
+                max-height: 80vh;
+                overflow-y: auto;
+                width: 90%;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 25px;
+                border-bottom: 2px solid #f0f0f0;
+                padding-bottom: 15px;
+            }
+
+            .close-modal {
+                background: none;
+                border: none;
+                font-size: 1.5em;
+                cursor: pointer;
+                color: #666;
+            }
+
+            .protocol-content {
+                line-height: 1.8;
+            }
+
+            .protocol-section {
+                margin-bottom: 25px;
+            }
+
+            .protocol-section h3 {
+                color: #43e97b;
+                margin-bottom: 10px;
+                font-size: 1.2em;
+            }
+
+            .protocol-list {
+                list-style: none;
+                padding-left: 0;
+            }
+
+            .protocol-list li {
+                padding: 5px 0;
+                border-left: 3px solid #43e97b;
+                padding-left: 15px;
+                margin-bottom: 8px;
+            }
+
+            @media (max-width: 768px) {
+                .search-bar {
+                    flex-direction: column;
+                }
+                
+                .protocols-grid {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                }
+                
+                .modal-content {
+                    padding: 20px;
+                    margin: 20px;
+                    width: calc(100% - 40px);
+                }
             }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
+                <a href="javascript:history.back()" class="back-btn">← Voltar</a>
                 <h1>📋 Protocolos Clínicos</h1>
                 <p>Diretrizes médicas baseadas em evidências científicas</p>
             </div>
 
-            <div class="content">
-                <button class="back-btn" onclick="window.history.back()">← Voltar ao Dr. AI</button>
-                
-                <input type="text" class="search-box" placeholder="🔍 Buscar protocolos..." onkeyup="filtrarProtocolos(this.value)">
+            <div class="search-section">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar protocolos...">
+                    <select class="filter-select" id="specialtyFilter">
+                        <option value="">Todas as Especialidades</option>
+                        <option value="cardiologia">Cardiologia</option>
+                        <option value="pneumologia">Pneumologia</option>
+                        <option value="endocrinologia">Endocrinologia</option>
+                        <option value="neurologia">Neurologia</option>
+                        <option value="emergencia">Emergência</option>
+                        <option value="pediatria">Pediatria</option>
+                        <option value="psiquiatria">Psiquiatria</option>
+                    </select>
+                    <button class="search-btn" onclick="filterProtocols()">🔍 Buscar</button>
+                </div>
+            </div>
 
-                <div class="protocols-grid" id="protocolsGrid">
-                    <div class="protocol-card" onclick="abrirProtocolo('hipertensao')">
-                        <div class="protocol-title">🔴 Hipertensão Arterial</div>
-                        <div class="protocol-description">
-                            Protocolo completo para diagnóstico e manejo da hipertensão arterial sistêmica, incluindo critérios diagnósticos e tratamento.
-                        </div>
-                        <div class="protocol-tags">
-                            <span class="tag">Cardiologia</span>
-                            <span class="tag">Clínica Médica</span>
-                            <span class="tag">Emergência</span>
-                        </div>
-                    </div>
+            <div class="protocols-grid" id="protocolsGrid">
+                <!-- Protocolos serão inseridos aqui via JavaScript -->
+            </div>
+        </div>
 
-                    <div class="protocol-card" onclick="abrirProtocolo('diabetes')">
-                        <div class="protocol-title">🍯 Diabetes Mellitus</div>
-                        <div class="protocol-description">
-                            Diretrizes para diagnóstico, tratamento e acompanhamento de pacientes com diabetes tipos 1 e 2.
-                        </div>
-                        <div class="protocol-tags">
-                            <span class="tag">Endocrinologia</span>
-                            <span class="tag">Clínica Médica</span>
-                            <span class="tag">Crônico</span>
-                        </div>
-                    </div>
-
-                    <div class="protocol-card" onclick="abrirProtocolo('infarto')">
-                        <div class="protocol-title">💔 Síndrome Coronariana Aguda</div>
-                        <div class="protocol-description">
-                            Protocolo de emergência para diagnóstico e tratamento inicial do infarto agudo do miocárdio.
-                        </div>
-                        <div class="protocol-tags">
-                            <span class="tag">Cardiologia</span>
-                            <span class="tag">Emergência</span>
-                            <span class="tag">UTI</span>
-                        </div>
-                    </div>
-
-                    <div class="protocol-card" onclick="abrirProtocolo('pneumonia')">
-                        <div class="protocol-title">🫁 Pneumonia Comunitária</div>
-                        <div class="protocol-description">
-                            Protocolo para diagnóstico e tratamento de pneumonia adquirida na comunidade em adultos.
-                        </div>
-                        <div class="protocol-tags">
-                            <span class="tag">Pneumologia</span>
-                            <span class="tag">Infectologia</span>
-                            <span class="tag">Antibiótico</span>
-                        </div>
-                    </div>
-
-                    <div class="protocol-card" onclick="abrirProtocolo('sepse')">
-                        <div class="protocol-title">🦠 Sepse e Choque Séptico</div>
-                        <div class="protocol-description">
-                            Protocolo de identificação e manejo precoce da sepse e choque séptico em ambiente hospitalar.
-                        </div>
-                        <div class="protocol-tags">
-                            <span class="tag">UTI</span>
-                            <span class="tag">Emergência</span>
-                            <span class="tag">Infectologia</span>
-                        </div>
-                    </div>
-
-                    <div class="protocol-card" onclick="abrirProtocolo('avc')">
-                        <div class="protocol-title">🧠 Acidente Vascular Cerebral</div>
-                        <div class="protocol-description">
-                            Protocolo de atendimento ao AVC agudo, incluindo critérios para trombólise e procedimentos.
-                        </div>
-                        <div class="protocol-tags">
-                            <span class="tag">Neurologia</span>
-                            <span class="tag">Emergência</span>
-                            <span class="tag">Trombólise</span>
-                        </div>
-                    </div>
+        <!-- Modal para visualizar protocolo -->
+        <div class="modal" id="protocolModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Título do Protocolo</h2>
+                    <button class="close-modal" onclick="closeModal()">×</button>
+                </div>
+                <div class="protocol-content" id="modalContent">
+                    <!-- Conteúdo do protocolo -->
                 </div>
             </div>
         </div>
 
         <script>
-            function abrirProtocolo(tipo) {
-                alert(\`📋 Protocolo de \${tipo} será implementado em breve!\\n\\nEsta funcionalidade incluirá:\\n• Diretrizes completas\\n• Fluxogramas de decisão\\n• Critérios diagnósticos\\n• Opções terapêuticas\`);
+        // Base de dados de protocolos
+        const protocolos = [
+            {
+                id: 1,
+                title: "Hipertensão Arterial Sistêmica",
+                specialty: "cardiologia",
+                icon: "💓",
+                description: "Protocolo para diagnóstico e manejo da hipertensão arterial em adultos",
+                updated: "Janeiro 2025",
+                content: {
+                    indicacoes: ["PA ≥ 140/90 mmHg em duas medidas", "História familiar de HAS", "Fatores de risco cardiovascular"],
+                    diagnostico: ["Medição adequada da PA", "MAPA ou MRPA quando indicado", "Avaliação de lesões em órgãos-alvo"],
+                    tratamento: ["Mudanças no estilo de vida", "Medicação anti-hipertensiva", "Monitoramento regular"],
+                    monitoramento: ["Consultas regulares", "Exames laboratoriais", "Avaliação de complicações"]
+                }
+            },
+            {
+                id: 2,
+                title: "Diabetes Mellitus Tipo 2",
+                specialty: "endocrinologia",
+                icon: "🩸",
+                description: "Diretrizes para manejo do diabetes tipo 2 em adultos",
+                updated: "Dezembro 2024",
+                content: {
+                    indicacoes: ["Glicemia de jejum ≥ 126 mg/dL", "HbA1c ≥ 6,5%", "Sintomas clássicos + glicemia ≥ 200 mg/dL"],
+                    diagnostico: ["Glicemia de jejum", "Teste de tolerância à glicose", "Hemoglobina glicada"],
+                    tratamento: ["Metformina como primeira linha", "Insulina quando necessário", "Controle de comorbidades"],
+                    monitoramento: ["HbA1c trimestral", "Exame oftalmológico anual", "Avaliação renal"]
+                }
+            },
+            {
+                id: 3,
+                title: "Pneumonia Comunitária",
+                specialty: "pneumologia",
+                icon: "🫁",
+                description: "Protocolo para diagnóstico e tratamento de pneumonia adquirida na comunidade",
+                updated: "Novembro 2024",
+                content: {
+                    indicacoes: ["Sintomas respiratórios agudos", "Febre e tosse produtiva", "Alterações no raio-X de tórax"],
+                    diagnostico: ["Raio-X de tórax", "Hemograma completo", "Culturas quando indicado"],
+                    tratamento: ["Antibioticoterapia empírica", "Suporte respiratório", "Hidratação adequada"],
+                    monitoramento: ["Sinais vitais", "Saturação de oxigênio", "Resposta ao tratamento"]
+                }
+            },
+            {
+                id: 4,
+                title: "Infarto Agudo do Miocárdio",
+                specialty: "emergencia",
+                icon: "🚨",
+                description: "Protocolo de emergência para manejo do IAM com supradesnivelamento do ST",
+                updated: "Janeiro 2025",
+                content: {
+                    indicacoes: ["Dor torácica característica", "Alterações no ECG", "Biomarcadores elevados"],
+                    diagnostico: ["ECG de 12 derivações", "Troponina cardíaca", "Ecocardiograma"],
+                    tratamento: ["Reperfusão precoce", "Antiagregação plaquetária", "Anticoagulação"],
+                    monitoramento: ["Monitorização cardíaca", "Sinais de complicações", "Reabilitação"]
+                }
+            },
+            {
+                id: 5,
+                title: "Depressão Maior",
+                specialty: "psiquiatria",
+                icon: "🧠",
+                description: "Protocolo para diagnóstico e tratamento da depressão maior em adultos",
+                updated: "Outubro 2024",
+                content: {
+                    indicacoes: ["Humor deprimido por ≥ 2 semanas", "Perda de interesse", "Sintomas neurovegetativos"],
+                    diagnostico: ["Avaliação clínica estruturada", "Escalas de depressão", "Exclusão de causas orgânicas"],
+                    tratamento: ["Psicoterapia", "Antidepressivos", "Terapia combinada"],
+                    monitoramento: ["Resposta ao tratamento", "Efeitos adversos", "Risco de suicídio"]
+                }
+            },
+            {
+                id: 6,
+                title: "Asma Brônquica",
+                specialty: "pneumologia",
+                icon: "💨",
+                description: "Diretrizes para manejo da asma em adolescentes e adultos",
+                updated: "Setembro 2024",
+                content: {
+                    indicacoes: ["Sibilos recorrentes", "Dispneia variável", "Tosse noturna"],
+                    diagnostico: ["Espirometria", "Teste de broncodilatador", "Peak flow"],
+                    tratamento: ["Broncodilatadores", "Corticosteroides inalatórios", "Controle de gatilhos"],
+                    monitoramento: ["Função pulmonar", "Controle dos sintomas", "Adesão ao tratamento"]
+                }
             }
+        ];
 
-            function filtrarProtocolos(termo) {
-                const cards = document.querySelectorAll('.protocol-card');
-                termo = termo.toLowerCase();
+        function renderProtocols(protocolsToRender = protocolos) {
+            const grid = document.getElementById('protocolsGrid');
+            grid.innerHTML = '';
+
+            protocolsToRender.forEach(protocol => {
+                const card = document.createElement('div');
+                card.className = 'protocol-card';
+                card.onclick = () => openModal(protocol);
+
+                card.innerHTML = \`
+                    <div class="protocol-header">
+                        <div class="protocol-icon">\${protocol.icon}</div>
+                        <div class="protocol-title">\${protocol.title}</div>
+                    </div>
+                    <div class="protocol-specialty">\${protocol.specialty.charAt(0).toUpperCase() + protocol.specialty.slice(1)}</div>
+                    <div class="protocol-description">\${protocol.description}</div>
+                    <div class="protocol-meta">
+                        <span class="protocol-updated">Atualizado: \${protocol.updated}</span>
+                        <div class="protocol-actions">
+                            <button class="view-btn" onclick="event.stopPropagation(); openModal(protocolos.find(p => p.id === \${protocol.id}))">Ver</button>
+                            <button class="download-btn" onclick="event.stopPropagation(); downloadProtocol(\${protocol.id})">PDF</button>
+                        </div>
+                    </div>
+                \`;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function filterProtocols() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedSpecialty = document.getElementById('specialtyFilter').value;
+
+            const filtered = protocolos.filter(protocol => {
+                const matchesSearch = protocol.title.toLowerCase().includes(searchTerm) || 
+                                    protocol.description.toLowerCase().includes(searchTerm);
+                const matchesSpecialty = !selectedSpecialty || protocol.specialty === selectedSpecialty;
+
+                return matchesSearch && matchesSpecialty;
+            });
+
+            renderProtocols(filtered);
+        }
+
+        function openModal(protocol) {
+            const modal = document.getElementById('protocolModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+
+            title.textContent = protocol.title;
+            
+            content.innerHTML = \`
+                <div class="protocol-section">
+                    <h3>📌 Indicações</h3>
+                    <ul class="protocol-list">
+                        \${protocol.content.indicacoes.map(item => \`<li>\${item}</li>\`).join('')}
+                    </ul>
+                </div>
                 
-                cards.forEach(card => {
-                    const titulo = card.querySelector('.protocol-title').textContent.toLowerCase();
-                    const descricao = card.querySelector('.protocol-description').textContent.toLowerCase();
-                    
-                    if (titulo.includes(termo) || descricao.includes(termo)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            }
+                <div class="protocol-section">
+                    <h3>🔍 Diagnóstico</h3>
+                    <ul class="protocol-list">
+                        \${protocol.content.diagnostico.map(item => \`<li>\${item}</li>\`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="protocol-section">
+                    <h3>💊 Tratamento</h3>
+                    <ul class="protocol-list">
+                        \${protocol.content.tratamento.map(item => \`<li>\${item}</li>\`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="protocol-section">
+                    <h3>📊 Monitoramento</h3>
+                    <ul class="protocol-list">
+                        \${protocol.content.monitoramento.map(item => \`<li>\${item}</li>\`).join('')}
+                    </ul>
+                </div>
+            \`;
 
-            console.log('📋 Protocolos Clínicos carregados');
-        </script>
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('protocolModal').style.display = 'none';
+        }
+
+        function downloadProtocol(protocolId) {
+            const protocol = protocolos.find(p => p.id === protocolId);
+            alert(\`Baixando PDF: \${protocol.title}\`);
+            // Aqui você implementaria a geração real do PDF
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                filterProtocols();
+            }
+        });
+
+        // Fechar modal clicando fora
+        document.getElementById('protocolModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Inicializar página
+        renderProtocols();
+        console.log('📋 Protocolos Clínicos carregados');
+    </script>
     </body>
     </html>
   `);
 });
 
-  // 21. PRESCRIÇÕES INTELIGENTES - Sistema de prescrições com IA
+  // 21. PRESCRIÇÕES INTELIGENTES - Sistema completo de prescrições com IA
   app.get('/prescricoes-inteligentes', (req, res) => {
   console.log('💊 Serving Prescrições Inteligentes for:', req.path);
   
@@ -3986,7 +4281,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
 
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+                background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
                 min-height: 100vh;
                 padding: 20px;
             }
@@ -4001,7 +4296,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
             }
 
             .header {
-                background: linear-gradient(45deg, #FF8C42 0%, #FFA726 100%);
+                background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
                 color: white;
                 padding: 30px;
                 text-align: center;
