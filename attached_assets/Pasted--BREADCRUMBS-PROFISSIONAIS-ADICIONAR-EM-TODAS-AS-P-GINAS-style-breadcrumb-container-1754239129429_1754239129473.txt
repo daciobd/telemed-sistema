@@ -1,0 +1,211 @@
+<!-- BREADCRUMBS PROFISSIONAIS - ADICIONAR EM TODAS AS PÁGINAS -->
+
+<style>
+.breadcrumb-container {
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+    padding: 15px 20px;
+    border-bottom: 1px solid #e1e5e9;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 14px;
+    color: #666;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb-item a {
+    color: #4facfe;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+    background: rgba(79, 172, 254, 0.1);
+    color: #2c5282;
+    transform: translateY(-1px);
+}
+
+.breadcrumb-item.active {
+    color: #2d3748;
+    font-weight: 600;
+    background: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+    color: #cbd5e0;
+    font-size: 16px;
+}
+
+.breadcrumb-icon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .breadcrumb {
+        font-size: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .breadcrumb-item {
+        margin: 2px 0;
+    }
+}
+</style>
+
+<!-- BREADCRUMB PARA PÁGINA PRINCIPAL -->
+<div class="breadcrumb-container">
+    <nav class="breadcrumb">
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-icon">🏠</span>
+            Dashboard Principal
+        </div>
+    </nav>
+</div>
+
+<!-- BREADCRUMB PARA DR. AI -->
+<div class="breadcrumb-container">
+    <nav class="breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="javascript:history.back()">
+                <span class="breadcrumb-icon">🏠</span>
+                Dashboard
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-icon">🤖</span>
+            Dr. AI - Assistente Médico
+        </div>
+    </nav>
+</div>
+
+<!-- BREADCRUMB PARA TRIAGEM -->
+<div class="breadcrumb-container">
+    <nav class="breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="javascript:history.back()">
+                <span class="breadcrumb-icon">🏠</span>
+                Dashboard
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="javascript:history.back()">
+                <span class="breadcrumb-icon">🤖</span>
+                Dr. AI
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-icon">🩺</span>
+            Triagem Inteligente
+        </div>
+    </nav>
+</div>
+
+<!-- BREADCRUMB PARA PDF -->
+<div class="breadcrumb-container">
+    <nav class="breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="javascript:history.back()">
+                <span class="breadcrumb-icon">🏠</span>
+                Dashboard
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-icon">📄</span>
+            Gerador de PDF
+        </div>
+    </nav>
+</div>
+
+<!-- BREADCRUMB PARA AVALIAÇÕES -->
+<div class="breadcrumb-container">
+    <nav class="breadcrumb">
+        <div class="breadcrumb-item">
+            <a href="javascript:history.back()">
+                <span class="breadcrumb-icon">🏠</span>
+                Dashboard
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item">
+            <a href="javascript:history.back()">
+                <span class="breadcrumb-icon">🧠</span>
+                Centro de Avaliação
+            </a>
+        </div>
+        <span class="breadcrumb-separator">›</span>
+        <div class="breadcrumb-item active">
+            <span class="breadcrumb-icon">📋</span>
+            GAD-7 - Ansiedade
+        </div>
+    </nav>
+</div>
+
+<!-- JAVASCRIPT PARA BREADCRUMBS DINÂMICOS -->
+<script>
+function createBreadcrumb(path) {
+    const breadcrumbData = {
+        'dashboard': { icon: '🏠', name: 'Dashboard' },
+        'dr-ai': { icon: '🤖', name: 'Dr. AI' },
+        'triagem': { icon: '🩺', name: 'Triagem Inteligente' },
+        'protocolos': { icon: '📋', name: 'Protocolos Clínicos' },
+        'prescricoes': { icon: '💊', name: 'Prescrições' },
+        'pdf': { icon: '📄', name: 'Gerador de PDF' },
+        'avaliacao': { icon: '🧠', name: 'Centro de Avaliação' },
+        'gad7': { icon: '😰', name: 'GAD-7 - Ansiedade' },
+        'phq9': { icon: '😔', name: 'PHQ-9 - Depressão' }
+    };
+    
+    let breadcrumbHTML = '<div class="breadcrumb-container"><nav class="breadcrumb">';
+    
+    path.forEach((item, index) => {
+        const data = breadcrumbData[item];
+        const isLast = index === path.length - 1;
+        
+        if (isLast) {
+            breadcrumbHTML += `
+                <div class="breadcrumb-item active">
+                    <span class="breadcrumb-icon">${data.icon}</span>
+                    ${data.name}
+                </div>
+            `;
+        } else {
+            breadcrumbHTML += `
+                <div class="breadcrumb-item">
+                    <a href="javascript:history.back()">
+                        <span class="breadcrumb-icon">${data.icon}</span>
+                        ${data.name}
+                    </a>
+                </div>
+                <span class="breadcrumb-separator">›</span>
+            `;
+        }
+    });
+    
+    breadcrumbHTML += '</nav></div>';
+    return breadcrumbHTML;
+}
+
+// Exemplo de uso:
+// document.body.insertAdjacentHTML('afterbegin', createBreadcrumb(['dashboard', 'dr-ai', 'triagem']));
+</script>

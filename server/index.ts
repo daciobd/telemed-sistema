@@ -3206,9 +3206,94 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
                 background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
                 min-height: 100vh;
             }
+            
+            /* BREADCRUMBS PROFISSIONAIS */
+            .breadcrumb-container {
+                background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+                padding: 15px 20px;
+                border-bottom: 1px solid #e1e5e9;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            }
+
+            .breadcrumb {
+                display: flex;
+                align-items: center;
+                max-width: 1200px;
+                margin: 0 auto;
+                font-size: 14px;
+                color: #666;
+            }
+
+            .breadcrumb-item {
+                display: flex;
+                align-items: center;
+                transition: all 0.3s ease;
+            }
+
+            .breadcrumb-item a {
+                color: #4facfe;
+                text-decoration: none;
+                padding: 5px 10px;
+                border-radius: 15px;
+                transition: all 0.3s ease;
+            }
+
+            .breadcrumb-item a:hover {
+                background: rgba(79, 172, 254, 0.1);
+                color: #2c5282;
+                transform: translateY(-1px);
+            }
+
+            .breadcrumb-item.active {
+                color: #2d3748;
+                font-weight: 600;
+                background: white;
+                padding: 5px 15px;
+                border-radius: 15px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .breadcrumb-separator {
+                margin: 0 8px;
+                color: #cbd5e0;
+                font-size: 16px;
+            }
+
+            .breadcrumb-icon {
+                margin-right: 8px;
+                font-size: 16px;
+            }
+
+            @media (max-width: 768px) {
+                .breadcrumb {
+                    font-size: 12px;
+                    flex-wrap: wrap;
+                }
+                
+                .breadcrumb-item {
+                    margin: 2px 0;
+                }
+            }
         </style>
     </head>
     <body>
+        <!-- BREADCRUMB PARA DR. AI -->
+        <div class="breadcrumb-container">
+            <nav class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <a href="/" onclick="window.history.back(); return false;">
+                        <span class="breadcrumb-icon">🏠</span>
+                        Dashboard
+                    </a>
+                </div>
+                <span class="breadcrumb-separator">›</span>
+                <div class="breadcrumb-item active">
+                    <span class="breadcrumb-icon">🤖</span>
+                    Dr. AI - Assistente Médico
+                </div>
+            </nav>
+        </div>
+        
         <div class="min-h-screen p-6">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-8">
