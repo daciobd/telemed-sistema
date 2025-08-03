@@ -1682,6 +1682,10 @@ function logSecurityEvent(type, details, ip) {
   app.get('/medical-dashboard-pro.html', (req, res) => {
     console.log('🏥 Serving medical dashboard for:', req.path);
     const filePath = path.join(__dirname, '../medical-dashboard-pro.html');
+    // Ensure no caching for this critical page
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
     res.sendFile(filePath);
   });
 
