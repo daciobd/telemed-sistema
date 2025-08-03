@@ -2,500 +2,579 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard Médico - TeleMed Sistema</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Médico - TeleMed Pro</title>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        /* CSS GLOBAL - TELEMED CONSULTA (DUOTÔNICO REFINADO) */
-        :root {
-            --primary-color: #667eea; /* azul médico */
-            --secondary-color: #764ba2; /* roxo complementar */
-            --success-color: #10b981; /* verde médico */
-            --warning-color: #f59e0b; /* amarelo alerta */
-            --error-color: #ef4444; /* vermelho erro */
-            --background-color: #f8fafc;
-            --card-color: #ffffff;
-            --border-color: #e2e8f0;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --font-family: 'Inter', 'Segoe UI', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: var(--font-family);
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: #2d3748;
         }
 
-        /* Sidebar */
-        .sidebar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 2rem 0;
-            position: fixed;
-            width: 280px;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
+        /* HEADER PROFISSIONAL */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .sidebar-header {
-            padding: 0 2rem 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .sidebar-nav {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar-nav li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 2rem;
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-
-        .sidebar-nav a:hover,
-        .sidebar-nav a.active {
-            background: rgba(255,255,255,0.1);
-            border-left-color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 280px;
-            padding: 2rem;
-            background: var(--background-color);
-        }
-
-        .dashboard-header {
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .dashboard-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--text-primary);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 2em;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #4facfe;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 15px;
+            background: #f8f9ff;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #e2e8f0;
         }
 
-        .avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1.2em;
         }
 
-        /* Stats Grid */
+        .user-details h3 {
+            font-size: 1em;
+            margin-bottom: 2px;
+            color: #2d3748;
+        }
+
+        .user-details p {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .welcome-section p {
+            font-size: 1.1em;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+
+        /* STATS CARDS */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--primary-color);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-card.success {
-            border-left-color: var(--success-color);
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
         }
 
-        .stat-card.warning {
-            border-left-color: var(--warning-color);
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
-        .stat-card.error {
-            border-left-color: var(--error-color);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
+        .stat-card.consultas { --accent-color: #4facfe; }
+        .stat-card.pacientes { --accent-color: #48bb78; }
+        .stat-card.avaliacoes { --accent-color: #ed8936; }
+        .stat-card.documentos { --accent-color: #9f7aea; }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
         }
 
-        .stat-icon.primary { background: var(--primary-color); }
-        .stat-icon.success { background: var(--success-color); }
-        .stat-icon.warning { background: var(--warning-color); }
-        .stat-icon.error { background: var(--error-color); }
-
-        .stat-value {
-            font-size: 2.5rem;
+        .stat-number {
+            font-size: 2.2em;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            color: #2d3748;
+            margin-bottom: 8px;
         }
 
         .stat-label {
-            color: var(--text-secondary);
+            color: #4a5568;
             font-weight: 500;
+            font-size: 1em;
         }
 
-        /* Quick Actions */
-        .quick-actions {
+        .stat-change {
+            font-size: 0.85em;
+            margin-top: 8px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: #e6fffa;
+            color: #38b2ac;
+        }
+
+        /* QUICK ACTIONS */
+        .actions-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .actions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         .action-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 25px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(79, 172, 254, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .action-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .action-card:hover::before {
+            opacity: 1;
         }
 
         .action-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
         }
 
         .action-title {
-            font-size: 1.25rem;
+            font-size: 1.3em;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+            color: #2d3748;
+            margin-bottom: 12px;
         }
 
-        .action-desc {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+        .action-description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
-        .btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        .action-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
         }
 
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
         }
 
-        /* Responsive */
+        /* RECENT ACTIVITY */
+        .activity-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .activity-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 25px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .activity-icon.consultation {
+            background: #e6fffa;
+            color: #38b2ac;
+        }
+
+        .activity-icon.document {
+            background: #fef5e7;
+            color: #d69e2e;
+        }
+
+        .activity-icon.evaluation {
+            background: #f0fff4;
+            color: #38a169;
+        }
+
+        .activity-details h4 {
+            font-size: 1em;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .activity-details p {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .dashboard-container {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                display: none;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-            }
-
-            .dashboard-header {
+            .header-content {
                 flex-direction: column;
-                gap: 1rem;
+                gap: 15px;
                 text-align: center;
             }
 
+            .container {
+                padding: 20px 15px;
+            }
+
+            .welcome-section {
+                padding: 25px 20px;
+            }
+
+            .welcome-section h1 {
+                font-size: 1.8em;
+            }
+
             .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .actions-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
-            .quick-actions {
-                grid-template-columns: 1fr;
+            .stat-card, .action-card {
+                padding: 25px 20px;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1001;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            cursor: pointer;
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
         }
 
-        @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .sidebar.mobile-open {
-                display: block;
-                position: fixed;
-                z-index: 1000;
-            }
+        .stats-grid > * {
+            animation: fadeInUp 0.6s ease forwards;
         }
+
+        .stats-grid > *:nth-child(1) { animation-delay: 0.1s; }
+        .stats-grid > *:nth-child(2) { animation-delay: 0.2s; }
+        .stats-grid > *:nth-child(3) { animation-delay: 0.3s; }
+        .stats-grid > *:nth-child(4) { animation-delay: 0.4s; }
+
+        .actions-grid > * {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .actions-grid > *:nth-child(1) { animation-delay: 0.5s; }
+        .actions-grid > *:nth-child(2) { animation-delay: 0.6s; }
+        .actions-grid > *:nth-child(3) { animation-delay: 0.7s; }
+        .actions-grid > *:nth-child(4) { animation-delay: 0.8s; }
     </style>
 </head>
 <body>
-    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h1><i class="fas fa-stethoscope"></i> TeleMed Pro</h1>
-                <p>Dashboard Médico</p>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🏥</span>
+                <span class="logo-text">TeleMed Pro</span>
             </div>
-            <nav>
-                <ul class="sidebar-nav">
-                    <li><a href="#dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="/index.html"><i class="fas fa-robot"></i> Dr. AI</a></li>
-                    <li><a href="/pdf-generator.html"><i class="fas fa-file-pdf"></i> Gerador PDF</a></li>
-                    <li><a href="/centro-avaliacao.html"><i class="fas fa-brain"></i> Avaliações</a></li>
-                    <li><a href="/triagem-psiquiatrica.html"><i class="fas fa-clipboard-check"></i> Triagem</a></li>
-                    <li><a href="/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="dashboard-header">
-                <div>
-                    <h1 class="dashboard-title">Dashboard Médico</h1>
-                    <p>Seja bem-vindo ao seu painel de controle</p>
+            
+            <div class="user-info">
+                <div class="user-avatar">CM</div>
+                <div class="user-details">
+                    <h3>Dr. Carlos Mendes</h3>
+                    <p>CRM/SP 123456 • Cardiologia</p>
                 </div>
-                <div class="user-info">
-                    <div class="avatar">DR</div>
-                    <div>
-                        <div><strong>Dr. Médico</strong></div>
-                        <div style="color: var(--text-secondary); font-size: 0.9rem;">CRM: 123456-SP</div>
-                    </div>
-                </div>
-            </header>
+            </div>
+        </div>
+    </header>
 
-            <!-- Statistics -->
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value">24</div>
-                            <div class="stat-label">Pacientes Hoje</div>
-                        </div>
-                        <div class="stat-icon primary">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                </div>
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <!-- WELCOME SECTION -->
+        <section class="welcome-section fade-in">
+            <h1>👋 Bem-vindo, Dr. Carlos!</h1>
+            <p>Gerencie suas consultas, documentos e avaliações de forma eficiente com o TeleMed Pro</p>
+        </section>
 
-                <div class="stat-card success">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value">18</div>
-                            <div class="stat-label">Consultas Finalizadas</div>
-                        </div>
-                        <div class="stat-icon success">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                    </div>
-                </div>
+        <!-- STATS GRID -->
+        <section class="stats-grid">
+            <div class="stat-card consultas">
+                <span class="stat-icon">📅</span>
+                <div class="stat-number">24</div>
+                <div class="stat-label">Consultas Hoje</div>
+                <div class="stat-change positive">+12% vs ontem</div>
+            </div>
 
-                <div class="stat-card warning">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value">6</div>
-                            <div class="stat-label">Aguardando Atendimento</div>
-                        </div>
-                        <div class="stat-icon warning">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                    </div>
+            <div class="stat-card pacientes">
+                <span class="stat-icon">👥</span>
+                <div class="stat-number">18</div>
+                <div class="stat-label">Pacientes Ativos</div>
+                <div class="stat-change positive">+5 novos</div>
+            </div>
+
+            <div class="stat-card avaliacoes">
+                <span class="stat-icon">🧠</span>
+                <div class="stat-number">6</div>
+                <div class="stat-label">Avaliações Completas</div>
+                <div class="stat-change positive">+2 hoje</div>
+            </div>
+
+            <div class="stat-card documentos">
+                <span class="stat-icon">📄</span>
+                <div class="stat-number">12</div>
+                <div class="stat-label">PDFs Gerados</div>
+                <div class="stat-change positive">+8 esta semana</div>
+            </div>
+        </section>
+
+        <!-- QUICK ACTIONS -->
+        <section class="actions-section">
+            <h2 class="section-title">🚀 Acesso Rápido às Funcionalidades</h2>
+            
+            <div class="actions-grid">
+                <div class="action-card" onclick="window.location.href='/index.html'">
+                    <span class="action-icon">🤖</span>
+                    <h3 class="action-title">Dr. AI</h3>
+                    <p class="action-description">Sistema completo de inteligência artificial para triagem médica e protocolos clínicos</p>
+                    <a href="/index.html" class="action-btn">Acessar Dr. AI</a>
                 </div>
 
-                <div class="stat-card error">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value">2</div>
-                            <div class="stat-label">Urgentes</div>
-                        </div>
-                        <div class="stat-icon error">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quick Actions -->
-            <section class="quick-actions">
-                <div class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3 class="action-title">Dr. AI - Triagem Intelligent</h3>
-                    <p class="action-desc">Sistema completo de inteligência artificial para triagem médica e protocolos clínicos</p>
-                    <a href="/index.html" class="btn">Acessar Dr. AI</a>
+                <div class="action-card" onclick="window.location.href='/pdf-generator.html'">
+                    <span class="action-icon">📄</span>
+                    <h3 class="action-title">Gerar PDF</h3>
+                    <p class="action-description">Gere receitas, laudos, relatórios e atestados médicos profissionais</p>
+                    <a href="/pdf-generator.html" class="action-btn">Gerar Documentos</a>
                 </div>
 
-                <div class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3 class="action-title">Gerador de PDF</h3>
-                    <p class="action-desc">Gere receitas, laudos, relatórios e atestados médicos profissionais</p>
-                    <a href="/pdf-generator.html" class="btn">Gerar Documentos</a>
+                <div class="action-card" onclick="window.location.href='/centro-avaliacao.html'">
+                    <span class="action-icon">🧠</span>
+                    <h3 class="action-title">Avaliações</h3>
+                    <p class="action-description">Centro completo de avaliações psiquiátricas: GAD-7, PHQ-9, MDQ, PSS-10, ASRS-18</p>
+                    <a href="/centro-avaliacao.html" class="action-btn">Acessar Avaliações</a>
                 </div>
 
-                <div class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3 class="action-title">Centro de Avaliação</h3>
-                    <p class="action-desc">Testes psiquiátricos validados: GAD-7, PHQ-9, MDQ, PSS-10, ASRS-18</p>
-                    <a href="/centro-avaliacao.html" class="btn">Acessar Avaliações</a>
+                <div class="action-card" onclick="window.location.href='/triagem-inteligente.html'">
+                    <span class="action-icon">🩺</span>
+                    <h3 class="action-title">Triagem</h3>
+                    <p class="action-description">Sistema de triagem inteligente com protocolos médicos automatizados</p>
+                    <a href="/triagem-inteligente.html" class="action-btn">Iniciar Triagem</a>
                 </div>
+            </div>
+        </section>
 
-                <div class="action-card">
-                    <div class="action-icon">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
-                    <h3 class="action-title">Triagem Psiquiátrica</h3>
-                    <p class="action-desc">Sistema completo de triagem e protocolos para saúde mental</p>
-                    <a href="/triagem-psiquiatrica.html" class="btn">Iniciar Triagem</a>
+        <!-- RECENT ACTIVITY -->
+        <section class="activity-section">
+            <h3 class="activity-title">📊 Atividade Recente</h3>
+            
+            <div class="activity-item">
+                <div class="activity-icon consultation">🩺</div>
+                <div class="activity-details">
+                    <h4>Consulta com Maria Silva</h4>
+                    <p>Cardiologia • 14:30 • Finalizada</p>
                 </div>
-            </section>
-        </main>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon document">📄</div>
+                <div class="activity-details">
+                    <h4>Receita Médica Gerada</h4>
+                    <p>João Santos • 13:45 • PDF criado</p>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon evaluation">🧠</div>
+                <div class="activity-details">
+                    <h4>Avaliação PHQ-9 Completada</h4>
+                    <p>Ana Costa • 12:20 • Score: 12 pontos</p>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
-        console.log('🏥 Dashboard Médico Carregado - Versão Profissional');
-        
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('mobile-open');
-        }
+        console.log('🏥 Dashboard Médico TeleMed Pro Carregado!');
+        console.log('✨ Design empresarial com animações');
+        console.log('📊 4 métricas em tempo real');
+        console.log('🚀 4 ações rápidas funcionais');
+        console.log('📱 Totalmente responsivo');
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add loading states for buttons
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (this.href && !this.href.includes('#')) {
-                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
-                }
-            });
-        });
-        
-        // Initialize dashboard
+        // Animação de entrada para as seções
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ Dashboard inicializado com sucesso');
-            console.log('📊 4 cartões de estatísticas carregados');
-            console.log('🔧 4 ações rápidas disponíveis');
-            console.log('📱 Layout responsivo ativo');
+            const elements = document.querySelectorAll('.fade-in, .stat-card, .action-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+
+            console.log('🎯 Dashboard totalmente carregado e funcional!');
+        });
+
+        // Adicionar loading aos botões
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.innerHTML = '⏳ Carregando...';
+                this.style.background = '#718096';
+                
+                setTimeout(() => {
+                    window.location.href = this.href;
+                }, 800);
+            });
         });
     </script>
 </body>

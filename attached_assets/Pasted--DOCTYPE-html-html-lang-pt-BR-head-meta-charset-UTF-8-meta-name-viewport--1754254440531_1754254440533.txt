@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Médico - TeleMed Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        /* HEADER PROFISSIONAL */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 2em;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #4facfe;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9ff;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .user-details h3 {
+            font-size: 1em;
+            margin-bottom: 2px;
+            color: #2d3748;
+        }
+
+        .user-details p {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .welcome-section p {
+            font-size: 1.1em;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .stat-card.consultas { --accent-color: #4facfe; }
+        .stat-card.pacientes { --accent-color: #48bb78; }
+        .stat-card.avaliacoes { --accent-color: #ed8936; }
+        .stat-card.documentos { --accent-color: #9f7aea; }
+
+        .stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 1em;
+        }
+
+        .stat-change {
+            font-size: 0.85em;
+            margin-top: 8px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: #e6fffa;
+            color: #38b2ac;
+        }
+
+        /* QUICK ACTIONS */
+        .actions-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(79, 172, 254, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .action-card:hover::before {
+            opacity: 1;
+        }
+
+        .action-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .action-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+        }
+
+        .action-description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        /* RECENT ACTIVITY */
+        .activity-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .activity-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 25px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .activity-icon.consultation {
+            background: #e6fffa;
+            color: #38b2ac;
+        }
+
+        .activity-icon.document {
+            background: #fef5e7;
+            color: #d69e2e;
+        }
+
+        .activity-icon.evaluation {
+            background: #f0fff4;
+            color: #38a169;
+        }
+
+        .activity-details h4 {
+            font-size: 1em;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .activity-details p {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .welcome-section {
+                padding: 25px 20px;
+            }
+
+            .welcome-section h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stat-card, .action-card {
+                padding: 25px 20px;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .stats-grid > * {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .stats-grid > *:nth-child(1) { animation-delay: 0.1s; }
+        .stats-grid > *:nth-child(2) { animation-delay: 0.2s; }
+        .stats-grid > *:nth-child(3) { animation-delay: 0.3s; }
+        .stats-grid > *:nth-child(4) { animation-delay: 0.4s; }
+
+        .actions-grid > * {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .actions-grid > *:nth-child(1) { animation-delay: 0.5s; }
+        .actions-grid > *:nth-child(2) { animation-delay: 0.6s; }
+        .actions-grid > *:nth-child(3) { animation-delay: 0.7s; }
+        .actions-grid > *:nth-child(4) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🏥</span>
+                <span class="logo-text">TeleMed Pro</span>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar">CM</div>
+                <div class="user-details">
+                    <h3>Dr. Carlos Mendes</h3>
+                    <p>CRM/SP 123456 • Cardiologia</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <!-- WELCOME SECTION -->
+        <section class="welcome-section fade-in">
+            <h1>👋 Bem-vindo, Dr. Carlos!</h1>
+            <p>Gerencie suas consultas, documentos e avaliações de forma eficiente com o TeleMed Pro</p>
+        </section>
+
+        <!-- STATS GRID -->
+        <section class="stats-grid">
+            <div class="stat-card consultas">
+                <span class="stat-icon">📅</span>
+                <div class="stat-number">24</div>
+                <div class="stat-label">Consultas Hoje</div>
+                <div class="stat-change positive">+12% vs ontem</div>
+            </div>
+
+            <div class="stat-card pacientes">
+                <span class="stat-icon">👥</span>
+                <div class="stat-number">18</div>
+                <div class="stat-label">Pacientes Ativos</div>
+                <div class="stat-change positive">+5 novos</div>
+            </div>
+
+            <div class="stat-card avaliacoes">
+                <span class="stat-icon">🧠</span>
+                <div class="stat-number">6</div>
+                <div class="stat-label">Avaliações Completas</div>
+                <div class="stat-change positive">+2 hoje</div>
+            </div>
+
+            <div class="stat-card documentos">
+                <span class="stat-icon">📄</span>
+                <div class="stat-number">12</div>
+                <div class="stat-label">PDFs Gerados</div>
+                <div class="stat-change positive">+8 esta semana</div>
+            </div>
+        </section>
+
+        <!-- QUICK ACTIONS -->
+        <section class="actions-section">
+            <h2 class="section-title">🚀 Ações Rápidas</h2>
+            
+            <div class="actions-grid">
+                <div class="action-card" onclick="window.open('/index.html', '_blank')">
+                    <span class="action-icon">🤖</span>
+                    <h3 class="action-title">Dr. AI</h3>
+                    <p class="action-description">Assistente médico inteligente com triagem, protocolos e prescrições</p>
+                    <a href="/index.html" class="action-btn" target="_blank">Acessar Dr. AI</a>
+                </div>
+
+                <div class="action-card" onclick="window.open('/pdf-generator.html', '_blank')">
+                    <span class="action-icon">📄</span>
+                    <h3 class="action-title">Gerar PDF</h3>
+                    <p class="action-description">Crie receitas, atestados, relatórios e laudos médicos profissionais</p>
+                    <a href="/pdf-generator.html" class="action-btn" target="_blank">Gerar Documento</a>
+                </div>
+
+                <div class="action-card" onclick="window.open('/centro-avaliacao.html', '_blank')">
+                    <span class="action-icon">🧠</span>
+                    <h3 class="action-title">Avaliações</h3>
+                    <p class="action-description">Questionários psiquiátricos validados: GAD-7, PHQ-9, MDQ e outros</p>
+                    <a href="/centro-avaliacao.html" class="action-btn" target="_blank">Iniciar Avaliação</a>
+                </div>
+
+                <div class="action-card" onclick="window.open('/triagem-inteligente.html', '_blank')">
+                    <span class="action-icon">🩺</span>
+                    <h3 class="action-title">Triagem</h3>
+                    <p class="action-description">Análise inteligente de sintomas com sugestão de especialidade</p>
+                    <a href="/triagem-inteligente.html" class="action-btn" target="_blank">Iniciar Triagem</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- RECENT ACTIVITY -->
+        <section class="activity-section fade-in">
+            <h3 class="activity-title">📋 Atividade Recente</h3>
+            
+            <div class="activity-item">
+                <div class="activity-icon consultation">🩺</div>
+                <div class="activity-details">
+                    <h4>Triagem realizada para Maria Silva</h4>
+                    <p>Há 15 minutos • Resultado: Consulta cardiológica recomendada</p>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon document">📄</div>
+                <div class="activity-details">
+                    <h4>PDF de receita médica gerado</h4>
+                    <p>Há 32 minutos • Paciente: João Santos • Medicação: Losartana</p>
+                </div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon evaluation">🧠</div>
+                <div class="activity-details">
+                    <h4>Avaliação GAD-7 completada</h4>
+                    <p>Há 1 hora • Paciente: Ana Costa • Resultado: Ansiedade leve</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Adicionar animações quando página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Contador animado para estatísticas
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent);
+                const increment = target / 20;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current);
+                    }
+                }, 50);
+            });
+
+            // Hover effects para cards
+            const cards = document.querySelectorAll('.action-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
