@@ -440,8 +440,18 @@
                 <span>ou entre com email</span>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm">
+            <!-- Login Type Toggle -->
+            <div class="login-type-toggle" style="display: flex; margin-bottom: 20px; background: #f8f9fa; border-radius: 10px; padding: 5px;">
+                <button type="button" class="toggle-btn active" id="patientTab" onclick="switchLoginType('patient')" style="flex: 1; padding: 12px; border: none; border-radius: 8px; background: var(--primary-color); color: white; cursor: pointer; font-weight: 600;">
+                    👤 Paciente
+                </button>
+                <button type="button" class="toggle-btn" id="doctorTab" onclick="switchLoginType('doctor')" style="flex: 1; padding: 12px; border: none; border-radius: 8px; background: transparent; color: #64748b; cursor: pointer; font-weight: 600;">
+                    👨‍⚕️ Médico
+                </button>
+            </div>
+
+            <!-- Patient Login Form -->
+            <form id="patientForm" class="login-form-type">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required placeholder="seu@email.com">
@@ -451,11 +461,37 @@
                     <label for="password">Senha</label>
                     <div class="password-container">
                         <input type="password" id="password" name="password" required placeholder="Sua senha">
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')">
                             <i class="fas fa-eye" id="passwordIcon"></i>
                         </button>
                     </div>
                 </div>
+            </form>
+
+            <!-- Doctor Login Form -->
+            <form id="doctorForm" class="login-form-type" style="display: none;">
+                <div class="form-group">
+                    <label for="crm">CRM</label>
+                    <input type="text" id="crm" name="crm" required placeholder="123456-SP">
+                </div>
+
+                <div class="form-group">
+                    <label for="doctorPassword">Senha</label>
+                    <div class="password-container">
+                        <input type="password" id="doctorPassword" name="doctorPassword" required placeholder="Sua senha médica">
+                        <button type="button" class="password-toggle" onclick="togglePassword('doctorPassword')">
+                            <i class="fas fa-eye" id="doctorPasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Demo Credentials Helper -->
+                <div style="background: #e8f4fd; border: 1px solid #bee5eb; border-radius: 8px; padding: 12px; margin: 10px 0; font-size: 0.85rem;">
+                    <strong>💡 Credenciais Demo:</strong><br>
+                    CRM: <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">123456-SP</code><br>
+                    Senha: <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">medico123</code>
+                </div>
+            </form>
 
                 <div class="form-options">
                     <label class="remember-me">
@@ -466,9 +502,8 @@
                 </div>
 
                 <button type="submit" class="btn-login" id="loginBtn">
-                    Entrar
+                    <span id="loginBtnText">Entrar</span>
                 </button>
-            </form>
 
             <div class="signup-link">
                 Não tem uma conta? <a href="/register.html">Criar conta grátis</a>
@@ -496,10 +531,42 @@
             }
         };
 
+        let currentLoginType = 'patient';
+
+        // Switch between patient and doctor login
+        function switchLoginType(type) {
+            currentLoginType = type;
+            const patientTab = document.getElementById('patientTab');
+            const doctorTab = document.getElementById('doctorTab');
+            const patientForm = document.getElementById('patientForm');
+            const doctorForm = document.getElementById('doctorForm');
+            const loginBtnText = document.getElementById('loginBtnText');
+
+            if (type === 'patient') {
+                patientTab.style.background = 'var(--primary-color)';
+                patientTab.style.color = 'white';
+                doctorTab.style.background = 'transparent';
+                doctorTab.style.color = '#64748b';
+                
+                patientForm.style.display = 'block';
+                doctorForm.style.display = 'none';
+                loginBtnText.textContent = 'Entrar como Paciente';
+            } else {
+                doctorTab.style.background = 'var(--primary-color)';
+                doctorTab.style.color = 'white';
+                patientTab.style.background = 'transparent';
+                patientTab.style.color = '#64748b';
+                
+                patientForm.style.display = 'none';
+                doctorForm.style.display = 'block';
+                loginBtnText.textContent = 'Entrar como Médico';
+            }
+        }
+
         // Toggle password visibility
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const passwordIcon = document.getElementById('passwordIcon');
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const passwordIcon = document.getElementById(fieldId === 'password' ? 'passwordIcon' : 'doctorPasswordIcon');
             
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
@@ -552,45 +619,68 @@
         }
 
         // Form submission
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginBtn').addEventListener('click', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-            
             const loginBtn = document.getElementById('loginBtn');
-            const originalText = loginBtn.textContent;
+            const originalText = loginBtn.innerHTML;
             
             // Show loading state
-            loginBtn.textContent = 'Entrando...';
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
             loginBtn.classList.add('loading');
             loginBtn.disabled = true;
             
             try {
-                // Simular verificação de credenciais
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                const user = demoUsers[email];
-                
-                if (!user || user.password !== password) {
-                    throw new Error('Email ou senha incorretos');
+                if (currentLoginType === 'patient') {
+                    // Patient login
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const rememberMe = document.getElementById('rememberMe').checked;
+                    
+                    if (!email || !password) {
+                        throw new Error('Por favor, preencha todos os campos');
+                    }
+                    
+                    // Use existing patient logic
+                    const user = demoUsers[email];
+                    if (!user || user.password !== password) {
+                        throw new Error('Email ou senha incorretos');
+                    }
+                    
+                    completeLogin({
+                        email: email,
+                        name: user.name,
+                        type: user.type,
+                        rememberMe: rememberMe
+                    });
+                    
+                } else {
+                    // Doctor login - redirect to processar-login
+                    const crm = document.getElementById('crm').value;
+                    const password = document.getElementById('doctorPassword').value;
+                    
+                    if (!crm || !password) {
+                        throw new Error('Por favor, preencha CRM e senha');
+                    }
+                    
+                    // Redirect to secure login endpoint
+                    const loginUrl = `/processar-login?crm=${encodeURIComponent(crm)}&senha=${encodeURIComponent(password)}`;
+                    
+                    showMessage('Verificando credenciais médicas...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = loginUrl;
+                    }, 1000);
                 }
-                
-                // Login successful
-                completeLogin({
-                    email: email,
-                    name: user.name,
-                    type: user.type,
-                    rememberMe: rememberMe
-                });
                 
             } catch (error) {
                 showMessage(error.message, 'error');
             } finally {
-                loginBtn.textContent = originalText;
-                loginBtn.classList.remove('loading');
-                loginBtn.disabled = false;
+                setTimeout(() => {
+                    loginBtn.innerHTML = originalText;
+                    loginBtn.classList.remove('loading');
+                    loginBtn.disabled = false;
+                }, 1000);
             }
         });
 
