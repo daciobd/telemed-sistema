@@ -582,10 +582,33 @@
                 </button>
             </div>
 
-            <button class="generate-btn" id="generateBtn" onclick="generatePDF()">
+            <button class="generate-btn btn-animated ripple" id="generateBtn" onclick="generatePDFWithLoading()">
                 📄 Gerar PDF
             </button>
         </div>
+    </div>
+
+    <!-- COMPONENTES MEDICAL LOADING -->
+    <div id="loadingOverlay" class="loading-overlay" style="display:none">
+        <div class="loading-content">
+            <div class="medical-loader"></div>
+            <div class="loading-text">Carregando...</div>
+        </div>
+    </div>
+
+    <div class="skeleton-card" style="display:none" id="skeletonLoading">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text short"></div>
+        <div class="skeleton skeleton-text"></div>
+    </div>
+
+    <div id="notification" class="notification">
+        <div id="notificationContent"><strong>Sucesso!</strong></div>
+    </div>
+
+    <div class="progress-bar" style="display:none" id="progressBar">
+        <div class="progress-fill"></div>
     </div>
 
     <script>
@@ -660,6 +683,46 @@
             });
             
             return isValid;
+        }
+
+        // FUNÇÕES MEDICAL LOADING
+        function showLoading(text = "Carregando...") {
+            let overlay = document.getElementById("loadingOverlay");
+            overlay.querySelector(".loading-text").textContent = text;
+            overlay.style.display = "flex";
+        }
+
+        function hideLoading() {
+            document.getElementById("loadingOverlay").style.display = "none";
+        }
+
+        function showNotification(text, type = "success", duration = 3000) {
+            let notification = document.getElementById("notification");
+            let content = document.getElementById("notificationContent");
+            notification.className = "notification " + type;
+            content.innerHTML = text;
+            notification.classList.add("show");
+            setTimeout(() => {
+                notification.classList.remove("show");
+            }, duration);
+        }
+
+        function showProgress() {
+            let progressBar = document.getElementById("progressBar");
+            progressBar.style.display = "block";
+            setTimeout(() => {
+                progressBar.style.display = "none";
+            }, 2000);
+        }
+
+        function generatePDFWithLoading() {
+            showLoading("Gerando PDF médico...");
+            showProgress();
+            setTimeout(() => {
+                generatePDF();
+                hideLoading();
+                showNotification("📄 PDF gerado com sucesso!", "success");
+            }, 2000);
         }
 
         // Gerar PDF
