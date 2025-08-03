@@ -1678,15 +1678,10 @@ function logSecurityEvent(type, details, ip) {
   console.log(`🔒 [SECURITY] ${timestamp} - ${type} from ${ip}:`, details);
 }
 
-  // DASHBOARD MÉDICO PRO - Área médica protegida
+  // REDIRECT MEDICAL DASHBOARD TO MAIN DR AI PAGE
   app.get('/medical-dashboard-pro.html', (req, res) => {
-    console.log('🏥 Serving medical dashboard for:', req.path);
-    const filePath = path.join(__dirname, '../medical-dashboard-pro.html');
-    // Ensure no caching for this critical page
-    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-    res.sendFile(filePath);
+    console.log('🔄 Redirecting medical dashboard to Dr. AI:', req.path);
+    res.redirect('/index.html');
   });
 
   // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
