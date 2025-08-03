@@ -3252,6 +3252,15 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
                                 Ajudar Prescrição
                             </button>
                         </div>
+
+                        <div class="feature-card p-6 bg-red-50 rounded-xl">
+                            <div class="text-3xl mb-4">📄</div>
+                            <h3 class="text-xl font-semibold mb-2">Relatórios PDF</h3>
+                            <p class="text-gray-600 mb-4">Gere documentos médicos profissionais</p>
+                            <button onclick="generatePDF()" class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                Gerar PDF
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3272,6 +3281,10 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
 
             function prescriptionHelper() {
                 window.location.href = '/prescricoes-inteligentes';
+            }
+
+            function generatePDF() {
+                window.location.href = '/pdf-generator.html';
             }
             
             // SCRIPT DE CORREÇÃO FORÇADA DOS LINKS
@@ -3312,6 +3325,14 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
                                 e.stopPropagation();
                                 console.log('💊 Redirecionando para Prescrições Inteligentes');
                                 window.location.href = '/prescricoes-inteligentes';
+                            };
+                        }
+                        if (btn.textContent.includes('Gerar PDF')) {
+                            btn.onclick = function(e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('📄 Redirecionando para Gerador de PDF');
+                                window.location.href = '/pdf-generator.html';
                             };
                         }
                     });
@@ -4234,8 +4255,15 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
 
         function downloadProtocol(protocolId) {
             const protocol = protocolos.find(p => p.id === protocolId);
-            alert(\`Baixando PDF: \${protocol.title}\`);
-            // Aqui você implementaria a geração real do PDF
+            // Salvar dados para o gerador de PDF
+            const pdfData = {
+                tipo: 'consulta',
+                paciente: 'Paciente do Protocolo',
+                protocolo: protocol.title,
+                diagnostico: protocol.content.tratamento.join(', ')
+            };
+            localStorage.setItem('pdfData', JSON.stringify(pdfData));
+            window.location.href = '/pdf-generator.html';
         }
 
         // Event listeners
@@ -4642,7 +4670,23 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   `);
 });
 
-  // 22. ANÁLISE DE EXAMES - Sistema de análise de exames com IA
+  // 22. GERADOR DE PDF - Sistema completo de geração de PDFs médicos
+  app.get('/pdf-generator.html', (req, res) => {
+    console.log('📄 Serving PDF Generator for:', req.path);
+    
+    const fs = require('fs');
+    const path = require('path');
+    
+    try {
+      const pdfGeneratorPath = path.join(__dirname, '..', 'pdf-generator.html');
+      const htmlContent = fs.readFileSync(pdfGeneratorPath, 'utf8');
+      res.send(htmlContent);
+    } catch (error) {
+      res.status(404).send('PDF Generator não encontrado');
+    }
+  });
+
+  // 23. ANÁLISE DE EXAMES - Sistema de análise de exames com IA
   app.get('/analise-exames', (req, res) => {
   console.log('🔬 Serving Análise de Exames for:', req.path);
   

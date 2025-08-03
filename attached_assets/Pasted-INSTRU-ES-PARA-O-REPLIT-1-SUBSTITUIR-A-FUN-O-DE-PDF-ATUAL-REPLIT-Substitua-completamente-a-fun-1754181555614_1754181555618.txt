@@ -1,0 +1,91 @@
+INSTRUÇÕES PARA O REPLIT:
+1. SUBSTITUIR A FUNÇÃO DE PDF ATUAL:
+REPLIT: Substitua completamente a funcionalidade de PDF atual por este código.
+Salve como: pdf-generator.html
+2. ATUALIZAR OS LINKS QUE CHAMAM PDF:
+javascript// Onde há "Gerar PDF" ou "Relatórios PDF", substitua por:
+window.location.href = 'pdf-generator.html';
+
+// Ou se preferir abrir em nova aba:
+window.open('pdf-generator.html', '_blank');
+3. BIBLIOTECAS NECESSÁRIAS (já incluídas no código):
+html<!-- jsPDF - para gerar PDFs -->Tentar novamenteDBContinuarEditarCONTINUANDO AS INSTRUÇÕES PARA O REPLIT:
+3. BIBLIOTECAS NECESSÁRIAS (já incluídas no código):
+html<!-- jsPDF - para gerar PDFs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- html2canvas - para converter HTML em imagem (se necessário) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+4. TESTAR CADA TIPO DE PDF:
+✅ TESTE 1: Relatório de Consulta
+✅ TESTE 2: Laudo de Exame  
+✅ TESTE 3: Receita Médica
+✅ TESTE 4: Atestado Médico
+
+Para cada teste:
+1. Preencha os campos obrigatórios
+2. Clique em "Gerar PDF"
+3. Verifique se o download inicia
+4. Abra o PDF e verifique o conteúdo
+5. INTEGRAR COM AS PÁGINAS EXISTENTES:
+No dashboard principal, substitua:
+javascript// ❌ REMOVER:
+onclick="alert('Função de PDF em desenvolvimento!')"
+
+// ✅ ADICIONAR:
+onclick="window.location.href='pdf-generator.html'"
+Na página de Análise de Exames:
+html<!-- Adicionar botão de PDF funcional -->
+<button onclick="redirectToPdfGenerator('exame')" class="pdf-btn">
+    📄 Gerar Laudo em PDF
+</button>
+
+<script>
+function redirectToPdfGenerator(type) {
+    // Salvar dados no localStorage temporariamente
+    const dados = {
+        tipo: type,
+        paciente: document.getElementById('pacienteNome')?.value || '',
+        // outros dados relevantes
+    };
+    localStorage.setItem('pdfData', JSON.stringify(dados));
+    window.location.href = 'pdf-generator.html';
+}
+</script>
+6. MELHORIAS ADICIONAIS (OPCIONAIS):Melhorias PDF - Código Adicional 7. ADICIONAR BOTÕES DE FUNCIONALIDADES EXTRAS:
+html<!-- REPLIT: Adicione estes botões na seção .generate-section -->
+
+<div class="extra-functions" style="margin: 20px 0;">
+    <button onclick="previewPDF()" class="action-btn" style="background: #17a2b8;">
+        👁️ Preview
+    </button>
+    
+    <button onclick="showHistory()" class="action-btn" style="background: #6c757d;">
+        📋 Histórico
+    </button>
+    
+    <button onclick="loadTemplate(selectedPdfType)" class="action-btn" style="background: #28a745;">
+        📝 Template
+    </button>
+</div>
+8. TESTE COMPLETO - CHECKLIST:
+REPLIT: Execute estes testes obrigatoriamente:
+
+✅ 1. Criar página pdf-generator.html
+✅ 2. Testar cada tipo de PDF (4 tipos)
+✅ 3. Verificar se download funciona
+✅ 4. Abrir PDF gerado e verificar conteúdo
+✅ 5. Testar campos obrigatórios
+✅ 6. Testar responsividade mobile
+✅ 7. Integrar links do dashboard
+✅ 8. Testar botão "Voltar"
+
+CONFIRME: "Todos os testes passaram ✅"
+9. REMOÇÃO DA MENSAGEM ANTIGA:
+javascript// REPLIT: Encontre e REMOVA estas linhas em TODOS os arquivos:
+"Função de PDF em desenvolvimento!"
+"alert('PDF em desenvolvimento')"
+"console.log('PDF function placeholder')"
+
+// E substitua por:
+"window.location.href='pdf-generator.html'"
+REPLIT: Após implementar tudo, teste gerando um PDF de cada tipo e confirme que está funcionando perfeitamente! 🎯

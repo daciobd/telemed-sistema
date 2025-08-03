@@ -1,0 +1,228 @@
+// REPLIT: Adicione estas melhorias ao código do PDF
+
+// 1. CARREGAR DADOS SALVOS (se vier de outra página)
+document.addEventListener('DOMContentLoaded', function() {
+    const savedData = localStorage.getItem('pdfData');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        
+        // Pré-selecionar tipo de PDF
+        if (data.tipo) {
+            selectPdfType(data.tipo);
+        }
+        
+        // Pré-preencher campos
+        if (data.paciente) {
+            document.getElementById('pacienteNome').value = data.paciente;
+        }
+        
+        // Limpar dados salvos
+        localStorage.removeItem('pdfData');
+    }
+});
+
+// 2. VALIDAÇÃO AVANÇADA DE CAMPOS
+function validateForm() {
+    const requiredFields = document.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.style.borderColor = '#dc3545';
+            isValid = false;
+        } else {
+            field.style.borderColor = '#e1e5e9';
+        }
+    });
+    
+    return isValid;
+}
+
+// 3. PREVIEW DO PDF ANTES DE GERAR
+function previewPDF() {
+    if (!validateForm()) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+    }
+    
+    // Mostrar modal de preview
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); z-index: 1000; display: flex;
+        align-items: center; justify-content: center;
+    `;
+    
+    const preview = document.createElement('div');
+    preview.style.cssText = `
+        background: white; padding: 20px; border-radius: 10px;
+        max-width: 600px; max-height: 80vh; overflow-y: auto;
+    `;
+    
+    preview.innerHTML = `
+        <h3>Preview do PDF</h3>
+        <p>Paciente: ${document.getElementById('pacienteNome').value}</p>
+        <p>Médico: ${document.getElementById('medicoNome').value}</p>
+        <hr>
+        <div style="margin: 20px 0;">
+            <button onclick="this.closest('[style*=fixed]').remove(); generatePDF();" 
+                    style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-right: 10px;">
+                ✅ Confirmar e Gerar
+            </button>
+            <button onclick="this.closest('[style*=fixed]').remove();" 
+                    style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                ❌ Cancelar
+            </button>
+        </div>
+    `;
+    
+    modal.appendChild(preview);
+    document.body.appendChild(modal);
+}
+
+// 4. SALVAR DADOS LOCALMENTE (para não perder ao navegar)
+function saveFormData() {
+    const formData = {};
+    const inputs = document.querySelectorAll('input, select, textarea');
+    
+    inputs.forEach(input => {
+        if (input.id) {
+            formData[input.id] = input.value;
+        }
+    });
+    
+    localStorage.setItem('pdfFormData', JSON.stringify(formData));
+}
+
+// 5. RESTAURAR DADOS SALVOS
+function loadFormData() {
+    const savedData = localStorage.getItem('pdfFormData');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        
+        Object.keys(data).forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.value = data[fieldId];
+            }
+        });
+    }
+}
+
+// 6. AUTO-SAVE A CADA MUDANÇA
+function setupAutoSave() {
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('change', saveFormData);
+        input.addEventListener('input', saveFormData);
+    });
+}
+
+// 7. HISTÓRICO DE PDFs GERADOS
+function saveToHistory(pdfInfo) {
+    let history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+    
+    const newEntry = {
+        id: Date.now(),
+        tipo: selectedPdfType,
+        paciente: document.getElementById('pacienteNome').value,
+        medico: document.getElementById('medicoNome').value,
+        data: new Date().toISOString(),
+        ...pdfInfo
+    };
+    
+    history.unshift(newEntry);
+    
+    // Manter apenas os últimos 50
+    if (history.length > 50) {
+        history = history.slice(0, 50);
+    }
+    
+    localStorage.setItem('pdfHistory', JSON.stringify(history));
+}
+
+// 8. MOSTRAR HISTÓRICO
+function showHistory() {
+    const history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+    
+    if (history.length === 0) {
+        alert('Nenhum PDF gerado ainda.');
+        return;
+    }
+    
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); z-index: 1000; display: flex;
+        align-items: center; justify-content: center;
+    `;
+    
+    const historyDiv = document.createElement('div');
+    historyDiv.style.cssText = `
+        background: white; padding: 20px; border-radius: 10px;
+        max-width: 800px; max-height: 80vh; overflow-y: auto;
+    `;
+    
+    let historyHTML = '<h3>📋 Histórico de PDFs</h3>';
+    history.forEach(item => {
+        historyHTML += `
+            <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                <strong>${item.tipo.toUpperCase()}</strong> - ${item.paciente}<br>
+                <small>Médico: ${item.medico} | ${new Date(item.data).toLocaleString('pt-BR')}</small>
+            </div>
+        `;
+    });
+    
+    historyHTML += `
+        <button onclick="this.closest('[style*=fixed]').remove();" 
+                style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 20px;">
+            Fechar
+        </button>
+    `;
+    
+    historyDiv.innerHTML = historyHTML;
+    modal.appendChild(historyDiv);
+    document.body.appendChild(modal);
+}
+
+// 9. TEMPLATES PRÉ-DEFINIDOS
+const templates = {
+    consulta: {
+        diagnostico: "Consulta de rotina - Paciente sem queixas específicas",
+        sintomas: "Paciente refere estar se sentindo bem",
+        tratamento: "Manter cuidados habituais, retorno em 6 meses",
+        observacoes: "Paciente orientado sobre prevenção"
+    },
+    receita: {
+        medicamentos: "1. Paracetamol 500mg - 1 comprimido de 6/6h se dor ou febre",
+        orientacoes: "Tomar os medicamentos conforme prescrição médica",
+        validadeReceita: "30"
+    }
+};
+
+function loadTemplate(tipo) {
+    if (templates[tipo]) {
+        Object.keys(templates[tipo]).forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.value = templates[tipo][fieldId];
+            }
+        });
+    }
+}
+
+// 10. BOTÃO DE TEMPLATE (adicionar ao HTML)
+function addTemplateButton() {
+    const generateSection = document.querySelector('.generate-section');
+    if (generateSection && selectedPdfType && templates[selectedPdfType]) {
+        const templateBtn = document.createElement('button');
+        templateBtn.textContent = '📋 Usar Template';
+        templateBtn.style.cssText = `
+            background: #17a2b8; color: white; border: none;
+            padding: 10px 20px; border-radius: 20px; margin: 10px;
+            cursor: pointer;
+        `;
+        templateBtn.onclick = () => loadTemplate(selectedPdfType);
+        generateSection.insertBefore(templateBtn, generateSection.firstChild);
+    }
+}
