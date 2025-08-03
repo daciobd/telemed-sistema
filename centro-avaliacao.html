@@ -6,6 +6,25 @@
     <title>Centro de Avaliação Psiquiátrica - TeleMed Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* NOTIFICAÇÕES MÉDICAS AVANÇADAS */
+        .notifications-container{position:fixed;top:20px;right:20px;z-index:10000;pointer-events:none}
+        .notification{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);border-left:4px solid #4facfe;transform:translateX(400px);transition:.4s cubic-bezier(.4,0,.2,1);pointer-events:auto;max-width:320px;font-family:'Segoe UI',sans-serif;position:relative;overflow:hidden}
+        .notification.show{transform:translateX(0)}
+        .notification.success{border-left-color:#48bb78}
+        .notification.error{border-left-color:#f56565}
+        .notification.warning{border-left-color:#ed8936}
+        .notification.info{border-left-color:#4facfe}
+        .notification.medical{border-left-color:#667eea}
+        .notification-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+        .notification-title{display:flex;align-items:center;font-weight:600;font-size:14px;color:#2d3748}
+        .notification-icon{margin-right:8px;font-size:16px}
+        .notification-close{background:none;border:none;font-size:18px;color:#a0aec0;cursor:pointer;padding:0;width:20px;height:20px}
+        .notification-message{font-size:13px;color:#4a5568;line-height:1.4;margin-bottom:10px}
+        .notification-progress{position:absolute;bottom:0;left:0;height:3px;width:100%;background:rgba(79,172,254,0.1)}
+        .notification-progress-bar{height:100%;background:rgba(79,172,254,0.5);animation:progress-countdown linear;transform-origin:left}
+        @keyframes progress-countdown{from{width:100%}to{width:0%}}
+        @media(max-width:768px){.notifications-container{right:10px;left:10px;top:10px}.notification{max-width:none;transform:translateY(-100px)}.notification.show{transform:translateY(0)}}
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -410,9 +429,8 @@
         </div>
     </div>
 
-    <div id="notification" class="notification">
-        <div id="notificationContent"><strong>Sucesso!</strong></div>
-    </div>
+    <!-- SISTEMA DE NOTIFICAÇÕES MÉDICAS AVANÇADO -->
+    <div class="notifications-container" id="notificationsContainer"></div>
 
     <div class="progress-bar" style="display:none" id="progressBar">
         <div class="progress-fill"></div>
@@ -432,23 +450,62 @@
             document.getElementById("loadingOverlay").style.display = "none";
         }
 
-        function showNotification(text, type = "success", duration = 3000) {
-            let notification = document.getElementById("notification");
-            let content = document.getElementById("notificationContent");
-            notification.className = "notification " + type;
-            content.innerHTML = text;
-            notification.classList.add("show");
-            setTimeout(() => {
+        function showNotification(title, message, type = "success", duration = 4000) {
+            const container = document.getElementById("notificationsContainer");
+            const notificationId = "notification-" + Date.now();
+            
+            const notification = document.createElement("div");
+            notification.className = `notification ${type}`;
+            notification.id = notificationId;
+            
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <div class="notification-icon">${getNotificationIcon(type)}</div>
+                    <div class="notification-title">${title}</div>
+                    <button class="notification-close" onclick="removeNotification('${notificationId}')">&times;</button>
+                </div>
+                <div class="notification-message">${message}</div>
+                <div class="notification-progress">
+                    <div class="notification-progress-bar" style="animation-duration: ${duration}ms;"></div>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => notification.classList.add("show"), 100);
+            
+            // Auto remove
+            setTimeout(() => removeNotification(notificationId), duration);
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                success: "✅",
+                error: "❌", 
+                warning: "⚠️",
+                info: "ℹ️",
+                medical: "🩺"
+            };
+            return icons[type] || icons.info;
+        }
+
+        function removeNotification(id) {
+            const notification = document.getElementById(id);
+            if (notification) {
                 notification.classList.remove("show");
-            }, duration);
+                setTimeout(() => notification.remove(), 400);
+            }
         }
 
         function startTriagemWithLoading(testUrl) {
             showLoading("Iniciando avaliação psiquiátrica...");
+            showNotification("Preparando", "Carregando instrumento de avaliação...", "info", 1500);
+            
             setTimeout(() => {
                 hideLoading();
                 window.open(testUrl + '.html', '_blank');
-                showNotification("🧠 Teste aberto em nova aba", "success");
+                showNotification("Teste Iniciado", "Avaliação psiquiátrica aberta em nova aba", "medical", 4000);
             }, 1500);
         }
         
