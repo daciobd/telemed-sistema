@@ -1,0 +1,100 @@
+# 🔧 LIMPEZA CIRÚRGICA - REPLIT
+
+## 🎯 OBJETIVO
+Limpar arquivos duplicados e restaurar funcionamento original sem quebrar o sistema principal.
+
+---
+
+## 🚨 INSTRUÇÃO PARA REPLIT
+
+### PASSO 1: MAPEAMENTO DE ARQUIVOS
+**REPLIT: Liste TODOS os arquivos HTML no projeto:**
+
+```bash
+find . -name "*.html" -type f | sort
+```
+
+**Confirme exatamente quais arquivos existem.**
+
+### PASSO 2: IDENTIFICAR DUPLICADOS
+**REPLIT: Procure por arquivos duplicados ou conflitantes:**
+
+```bash
+# Buscar medical-dashboard
+find . -name "*medical*" -type f
+
+# Buscar dashboard
+find . -name "*dashboard*" -type f
+
+# Buscar login
+find . -name "*login*" -type f
+```
+
+### PASSO 3: LIMPAR ARQUIVOS PROBLEMÁTICOS
+
+**REPLIT: REMOVA APENAS estes arquivos específicos:**
+
+```bash
+# Remover arquivos duplicados/problemáticos
+rm -f public/medical-dashboard-pro.html
+rm -f medical-dashboard-pro.html
+rm -f public/login.html (se houver conflito)
+
+# NÃO REMOVER OS ARQUIVOS PRINCIPAIS:
+# - index.html (Dr. AI principal)
+# - pdf-generator.html
+# - triagem-inteligente.html
+# - protocolos-clinicos.html
+# - ansiedade-gad7.html
+# - depressao-phq9.html
+# etc.
+```
+
+### PASSO 4: VERIFICAR INTEGRIDADE
+**REPLIT: Confirme que estes arquivos AINDA EXISTEM:**
+
+```bash
+ls -la index.html                    # Dr. AI principal
+ls -la pdf-generator.html           # Gerador PDF
+ls -la triagem-inteligente.html     # Triagem
+ls -la ansiedade-gad7.html          # GAD-7
+ls -la depressao-phq9.html          # PHQ-9
+```
+
+### PASSO 5: TESTAR FUNCIONALIDADES PRINCIPAIS
+**REPLIT: Teste estas URLs no navegador:**
+
+```
+https://[SEU_REPLIT]/index.html              → Dr. AI
+https://[SEU_REPLIT]/pdf-generator.html      → PDF
+https://[SEU_REPLIT]/triagem-inteligente.html → Triagem
+```
+
+### PASSO 6: CONFIRMAR LIMPEZA
+**REPLIT: Responda exatamente:**
+
+"🧹 LIMPEZA CONCLUÍDA
+- Arquivos duplicados removidos: SIM/NÃO
+- Funcionalidades principais intactas: SIM/NÃO
+- Dr. AI funcionando: SIM/NÃO
+- PDF Generator funcionando: SIM/NÃO
+- Triagem funcionando: SIM/NÃO
+- Avaliações funcionando: SIM/NÃO
+- Sistema limpo: SIM/NÃO"
+
+---
+
+## ⚠️ REGRAS ABSOLUTAS
+
+### NÃO FAÇA:
+❌ Criar novos arquivos sem autorização
+❌ Modificar arquivos que estão funcionando
+❌ Adicionar sistemas de login não solicitados
+❌ Duplicar arquivos existentes
+❌ "Melhorar" funcionalidades sem pedir
+
+### FAÇA APENAS:
+✅ Remover arquivos problemáticos identificados
+✅ Manter arquivos principais intactos
+✅ Confirmar funcionamento dos links
+✅ Reportar status exato
