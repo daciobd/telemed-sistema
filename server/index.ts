@@ -1678,10 +1678,11 @@ function logSecurityEvent(type, details, ip) {
   console.log(`🔒 [SECURITY] ${timestamp} - ${type} from ${ip}:`, details);
 }
 
-  // REDIRECT MEDICAL DASHBOARD TO MAIN DR AI PAGE
+  // DASHBOARD MÉDICO PRO - Área médica funcional
   app.get('/medical-dashboard-pro.html', (req, res) => {
-    console.log('🔄 Redirecting medical dashboard to Dr. AI:', req.path);
-    res.redirect('/index.html');
+    console.log('🏥 Serving medical dashboard for:', req.path);
+    const filePath = path.join(__dirname, '../medical-dashboard-pro.html');
+    res.sendFile(filePath);
   });
 
   // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
