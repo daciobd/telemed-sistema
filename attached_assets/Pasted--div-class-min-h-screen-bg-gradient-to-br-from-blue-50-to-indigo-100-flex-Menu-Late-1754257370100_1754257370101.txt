@@ -1,0 +1,162 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex">
+        <!-- Menu Lateral -->
+        <aside id="sidebar">
+            <!-- Logo Header -->
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 style="font-size: 18px; font-weight: bold; margin: 0;">TeleMed Pro</h2>
+                    <p style="font-size: 12px; opacity: 0.8; margin: 0;">Dashboard Médico</p>
+                </div>
+            </div>
+
+            <!-- Menu Navigation -->
+            <nav class="sidebar-nav">
+                <!-- Principal -->
+                <div class="nav-section">
+                    <h3>Principal</h3>
+                    <a href="#" onclick="showSection('dashboard')" class="sidebar-link active">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="#" onclick="showSection('dr-ai')" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        Dr. AI
+                        <span class="badge" style="background: #DBEAFE; color: #2563EB;">4</span>
+                    </a>
+                    <a href="#" onclick="showSection('generate-pdf')" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        Gerar PDF
+                    </a>
+                </div>
+
+                <!-- Avaliações -->
+                <div class="nav-section">
+                    <h3>Avaliações</h3>
+                    <a href="#" onclick="showSection('assessment-center')" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+                        </svg>
+                        Centro de Avaliações
+                        <span class="badge" style="background: #DCFCE7; color: #16A34A;">6</span>
+                    </a>
+                    <div class="sub-links">
+                        <a href="#" onclick="showSection('phq9')" class="sidebar-link">PHQ-9</a>
+                        <a href="#" onclick="showSection('gad7')" class="sidebar-link">GAD-7</a>
+                        <a href="#" onclick="showSection('beck')" class="sidebar-link">Beck</a>
+                        <a href="#" onclick="showSection('dass21')" class="sidebar-link">DASS-21</a>
+                        <a href="#" onclick="showSection('who5')" class="sidebar-link">WHO-5</a>
+                        <a href="#" onclick="showSection('pcl5')" class="sidebar-link">PCL-5</a>
+                    </div>
+                </div>
+
+                <!-- Ferramentas -->
+                <div class="nav-section">
+                    <h3>Ferramentas</h3>
+                    <a href="#" onclick="showSection('triage')" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        Triagem
+                    </a>
+                    <a href="#" onclick="showSection('protocols')" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                        </svg>
+                        Protocolos
+                    </a>
+                    <a href="#" onclick="showSection('prescriptions')" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z" clip-rule="evenodd"/>
+                        </svg>
+                        Prescrições
+                    </a>
+                </div>
+
+                <!-- Sistema -->
+                <div class="nav-section">
+                    <h3>Sistema</h3>
+                    <a href="#" onclick="showProfile()" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                        Perfil
+                    </a>
+                    <a href="#" onclick="showSettings()" class="sidebar-link">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                        </svg>
+                        Configurações
+                    </a>
+                    <a href="#" onclick="logout()" class="sidebar-link" style="color: #DC2626;">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+                        </svg>
+                        Sair
+                    </a>
+                </div>
+            </nav>
+        </aside>1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                        </svg>
+                        Configurações
+                    </a>
+                    <a href="#" onclick="logout()" class="sidebar-link flex items-center p-3 rounded-lg text-red-700 hover:bg-red-50 hover:text-red-600 transition-colors group">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+                        </svg>
+                        Sair
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Overlay para mobile -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header Mobile -->
+            <header class="bg-white shadow-lg border-b-4 border-blue-600 block lg:hidden">
+                <div class="flex justify-between items-center p-4">
+                    <button onclick="toggleSidebar()" class="text-gray-700 hover:text-blue-600">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-700 text-sm">Dr. Carlos Mendes</span>
+                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                            CM
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Header Desktop -->
+            <header class="bg-white shadow-lg border-b-4 border-blue-600 hidden lg:block">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center py-4">
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Dashboard Médico</h1>
+                            <p class="text-sm text-gray-600">Sistema integrado de telemedicina</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-700">Dr. Carlos Mendes</span>
+                            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                                CM
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
