@@ -16,6 +16,12 @@ async function startServer() {
   // Basic middleware
   app.use(express.json());
   app.use(express.static(path.join(__dirname, '../public')));
+  
+  // SOLUÇÃO CRÍTICA: Servir arquivos HTML da raiz para resolver problema de nova aba
+  app.use(express.static(path.join(__dirname, '../'), {
+    extensions: ['html'],
+    index: false
+  }));
 
   // Define all specific routes BEFORE setting up Vite middleware
   // This is critical - Vite's catch-all middleware must come last
