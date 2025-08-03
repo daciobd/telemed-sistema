@@ -4670,20 +4670,396 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   `);
 });
 
-  // 22. GERADOR DE PDF - Sistema completo de geração de PDFs médicos
+  // 22. GERADOR DE PDF - Sistema completo de geração de PDFs médicos  
   app.get('/pdf-generator.html', (req, res) => {
     console.log('📄 Serving PDF Generator for:', req.path);
     
-    const fs = require('fs');
-    const path = require('path');
+    res.send(`
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de PDF - TeleMed Sistema</title>
     
-    try {
-      const pdfGeneratorPath = path.join(__dirname, '..', 'pdf-generator.html');
-      const htmlContent = fs.readFileSync(pdfGeneratorPath, 'utf8');
-      res.send(htmlContent);
-    } catch (error) {
-      res.status(404).send('PDF Generator não encontrado');
-    }
+    <!-- Bibliotecas para PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .pdf-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9ff;
+        }
+
+        .pdf-type-card {
+            background: white;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pdf-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .pdf-type-card.active {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .pdf-type-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .form-section {
+            padding: 40px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        .generate-section {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="javascript:history.back()" class="back-btn">← Voltar</a>
+            <h1>📄 Gerador de PDF</h1>
+            <p>Sistema completo de geração de documentos médicos</p>
+        </div>
+
+        <div class="pdf-types">
+            <div class="pdf-type-card" onclick="selectPdfType('consulta')">
+                <div class="pdf-type-icon">🩺</div>
+                <h3>Relatório de Consulta</h3>
+                <p>Prontuário completo da consulta médica</p>
+            </div>
+            <div class="pdf-type-card" onclick="selectPdfType('receita')">
+                <div class="pdf-type-icon">💊</div>
+                <h3>Receita Médica</h3>
+                <p>Prescrição de medicamentos</p>
+            </div>
+            <div class="pdf-type-card" onclick="selectPdfType('atestado')">
+                <div class="pdf-type-icon">📋</div>
+                <h3>Atestado Médico</h3>
+                <p>Atestado de saúde ou incapacidade</p>
+            </div>
+        </div>
+
+        <!-- Formulário Consulta -->
+        <div class="form-section" id="consultaForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-group">
+                    <label for="pacienteNome">Nome Completo *</label>
+                    <input type="text" id="pacienteNome" required>
+                </div>
+                <div class="input-group">
+                    <label for="pacienteCpf">CPF</label>
+                    <input type="text" id="pacienteCpf">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>👨‍⚕️ Dados do Médico</h3>
+                <div class="input-group">
+                    <label for="medicoNome">Nome do Médico *</label>
+                    <input type="text" id="medicoNome" required>
+                </div>
+                <div class="input-group">
+                    <label for="medicoCrm">CRM</label>
+                    <input type="text" id="medicoCrm">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>📋 Consulta</h3>
+                <div class="input-group">
+                    <label for="diagnostico">Diagnóstico *</label>
+                    <textarea id="diagnostico" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="tratamento">Tratamento</label>
+                    <textarea id="tratamento"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário Receita -->
+        <div class="form-section" id="receitaForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-group">
+                    <label for="receitaPacienteNome">Nome Completo *</label>
+                    <input type="text" id="receitaPacienteNome" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>💊 Prescrição</h3>
+                <div class="input-group">
+                    <label for="medicamentos">Medicamentos *</label>
+                    <textarea id="medicamentos" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="orientacoes">Orientações</label>
+                    <textarea id="orientacoes"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário Atestado -->
+        <div class="form-section" id="atestadoForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-group">
+                    <label for="atestadoPacienteNome">Nome Completo *</label>
+                    <input type="text" id="atestadoPacienteNome" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>📋 Atestado</h3>
+                <div class="input-group">
+                    <label for="motivoAtestado">Motivo *</label>
+                    <textarea id="motivoAtestado" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="diasAfastamento">Dias de Afastamento</label>
+                    <input type="number" id="diasAfastamento" min="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="generate-section" id="generateSection">
+            <button class="generate-btn" onclick="generatePDF()">📄 Gerar PDF</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedPdfType = null;
+        const { jsPDF } = window.jspdf;
+
+        function selectPdfType(type) {
+            selectedPdfType = type;
+            
+            document.querySelectorAll('.pdf-type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.target.closest('.pdf-type-card').classList.add('active');
+            
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(type + 'Form').classList.add('active');
+            document.getElementById('generateSection').style.display = 'block';
+        }
+
+        function generatePDF() {
+            if (!selectedPdfType) {
+                alert('Selecione um tipo de PDF');
+                return;
+            }
+
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.width;
+            let yPos = 20;
+
+            doc.setFontSize(20);
+            doc.setTextColor(102, 126, 234);
+            doc.text('TeleMed Sistema', pageWidth/2, yPos, { align: 'center' });
+            
+            yPos += 10;
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            
+            if (selectedPdfType === 'consulta') {
+                doc.text('RELATÓRIO DE CONSULTA MÉDICA', pageWidth/2, yPos, { align: 'center' });
+                yPos += 20;
+                
+                doc.setFontSize(12);
+                doc.text('Paciente: ' + document.getElementById('pacienteNome').value, 20, yPos);
+                yPos += 8;
+                doc.text('Médico: ' + document.getElementById('medicoNome').value, 20, yPos);
+                yPos += 8;
+                doc.text('CRM: ' + document.getElementById('medicoCrm').value, 20, yPos);
+                yPos += 15;
+                
+                doc.text('DIAGNÓSTICO:', 20, yPos);
+                yPos += 8;
+                const diagnostico = doc.splitTextToSize(document.getElementById('diagnostico').value, 170);
+                doc.text(diagnostico, 20, yPos);
+                yPos += (diagnostico.length * 6) + 10;
+                
+                if (document.getElementById('tratamento').value) {
+                    doc.text('TRATAMENTO:', 20, yPos);
+                    yPos += 8;
+                    const tratamento = doc.splitTextToSize(document.getElementById('tratamento').value, 170);
+                    doc.text(tratamento, 20, yPos);
+                }
+                
+                doc.save('consulta_' + new Date().toISOString().split('T')[0] + '.pdf');
+                
+            } else if (selectedPdfType === 'receita') {
+                doc.text('RECEITA MÉDICA', pageWidth/2, yPos, { align: 'center' });
+                yPos += 20;
+                
+                doc.setFontSize(12);
+                doc.text('Paciente: ' + document.getElementById('receitaPacienteNome').value, 20, yPos);
+                yPos += 15;
+                
+                doc.text('USO INTERNO:', 20, yPos);
+                yPos += 10;
+                const medicamentos = doc.splitTextToSize(document.getElementById('medicamentos').value, 170);
+                doc.text(medicamentos, 20, yPos);
+                yPos += (medicamentos.length * 6) + 10;
+                
+                if (document.getElementById('orientacoes').value) {
+                    doc.text('ORIENTAÇÕES:', 20, yPos);
+                    yPos += 8;
+                    const orientacoes = doc.splitTextToSize(document.getElementById('orientacoes').value, 170);
+                    doc.text(orientacoes, 20, yPos);
+                }
+                
+                doc.save('receita_' + new Date().toISOString().split('T')[0] + '.pdf');
+                
+            } else if (selectedPdfType === 'atestado') {
+                doc.text('ATESTADO MÉDICO', pageWidth/2, yPos, { align: 'center' });
+                yPos += 30;
+                
+                doc.setFontSize(12);
+                doc.text('Atesto para os devidos fins que o(a) Sr(a):', 20, yPos);
+                yPos += 15;
+                
+                doc.setFont(undefined, 'bold');
+                doc.text(document.getElementById('atestadoPacienteNome').value.toUpperCase(), 20, yPos);
+                yPos += 20;
+                
+                doc.setFont(undefined, 'normal');
+                const motivo = doc.splitTextToSize(document.getElementById('motivoAtestado').value, 170);
+                doc.text(motivo, 20, yPos);
+                yPos += (motivo.length * 6) + 15;
+                
+                const dias = document.getElementById('diasAfastamento').value;
+                if (dias && dias > 0) {
+                    doc.text('Necessitando de afastamento de suas atividades por ' + dias + ' dias.', 20, yPos);
+                }
+                
+                yPos += 20;
+                doc.text(new Date().toLocaleDateString('pt-BR'), 20, yPos);
+                
+                doc.save('atestado_' + new Date().toISOString().split('T')[0] + '.pdf');
+            }
+            
+            alert('PDF gerado com sucesso!');
+        }
+
+        console.log('📄 Gerador de PDF carregado');
+    </script>
+</body>
+</html>
+    `);
   });
 
   // 23. ANÁLISE DE EXAMES - Sistema de análise de exames com IA

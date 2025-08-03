@@ -1,0 +1,71 @@
+
+🔧 INSTRUÇÕES PARA REPLIT
+CORREÇÃO 1: PDF Generator
+PROBLEMA: O arquivo está tentando usar require() que não funciona no browser.
+SOLUÇÃO:
+
+Abra o arquivo pdf-generator.html
+REMOVA todas as linhas que contenham require
+SUBSTITUA por bibliotecas CDN (que já estão no código)
+
+Código que deve ser REMOVIDO:
+javascript// DELETAR estas linhas:
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+// Qualquer linha com require()
+Código que deve PERMANECER:
+html<!-- MANTER estas linhas: -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+CORREÇÃO 2: Triagem Inteligente
+PROBLEMA: Arquivo triagem-inteligente.html não existe.
+VERIFICAR:
+
+O arquivo existe no projeto?
+Nome está correto? (pode ser triagem.html ou outro nome)
+Está na pasta correta?
+
+SOLUÇÕES:
+
+SE o arquivo não existe: Crie usando o template fornecido anteriormente
+SE tem nome diferente: Renomeie para triagem-inteligente.html
+SE está em subpasta: Mova para a pasta raiz
+
+CORREÇÃO 3: Verificar Estrutura de Arquivos
+REPLIT: Liste todos os arquivos HTML no seu projeto:
+Formato esperado:
+- index.html ✅
+- pdf-generator.html ❌ (com erro)
+- triagem-inteligente.html ❌ (não encontrado)
+- protocolos-clinicos.html ? (verificar)
+- prescricoes-inteligentes.html ? (verificar)
+
+📋 PASSOS DE EXECUÇÃO OBRIGATÓRIOS
+PASSO 1: Corrigir PDF Generator
+1. Abra pdf-generator.html
+2. Procure por linhas com "require"
+3. DELETE todas essas linhas
+4. SALVE o arquivo
+5. TESTE a URL novamente
+PASSO 2: Verificar/Criar Triagem
+1. Verifique se triagem-inteligente.html existe
+2. SE NÃO: Crie o arquivo com o código fornecido
+3. SE SIM: Verifique se não há erros de sintaxe
+4. TESTE a URL novamente
+PASSO 3: Testar Todas as URLs
+TESTE estas URLs e CONFIRME o status:
+- [BASE_URL]/index.html → STATUS: ___
+- [BASE_URL]/pdf-generator.html → STATUS: ___  
+- [BASE_URL]/triagem-inteligente.html → STATUS: ___
+
+🎯 RESPOSTA OBRIGATÓRIA
+REPLIT: Responda EXATAMENTE assim:
+"✅ CORREÇÕES APLICADAS
+
+PDF Generator corrigido: SIM/NÃO
+Linhas 'require' removidas: SIM/NÃO
+Triagem Inteligente criado/corrigido: SIM/NÃO
+Teste PDF: FUNCIONA/ERRO/404
+Teste Triagem: FUNCIONA/ERRO/404
+Arquivos HTML encontrados: [liste todos]
