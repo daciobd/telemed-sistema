@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard Médico Pro - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* CSS RESPONSIVO GLOBAL AVANÇADO */
+        *{box-sizing:border-box;}html{scroll-behavior:smooth;}body{margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}.container{max-width:1200px;margin:0 auto;padding:0 16px;}.cards-grid,.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;padding:20px 0;}@media (max-width:480px){.container{padding:0 12px;}.cards-grid,.grid{grid-template-columns:1fr;gap:16px;padding:16px 0;}.card,.ai-card,.pdf-card,.protocol-card,.symptom-card{padding:16px;margin:0;border-radius:12px;min-height:auto;}.card h3,.ai-card h3{font-size:1.1em;margin-bottom:8px;}.card p,.ai-card p{font-size:0.9em;line-height:1.4;}.header h1{font-size:1.8em !important;text-align:center;margin-bottom:10px;}.header p{font-size:1em !important;text-align:center;}.btn,button,.ai-btn,.pdf-btn,.analyze-btn,.generate-btn{padding:14px 20px !important;font-size:16px !important;min-height:44px !important;border-radius:12px !important;width:100% !important;margin:8px 0 !important;box-sizing:border-box;}.form-section,.question-group{padding:20px 16px !important;}.input-group input,.input-group select,.input-group textarea{font-size:16px !important;padding:12px 16px !important;border-radius:8px !important;width:100% !important;}.input-row,.form-row{grid-template-columns:1fr !important;gap:16px !important;}.breadcrumb{font-size:12px !important;flex-wrap:wrap;gap:4px;}.breadcrumb-item{margin:2px 0;}.breadcrumb-separator{margin:0 4px;}.stats-grid{grid-template-columns:repeat(2,1fr) !important;gap:12px !important;}.stat-card{padding:16px !important;text-align:center;}.modal{margin:20px !important;padding:20px !important;max-width:none !important;width:calc(100% - 40px) !important;max-height:80vh !important;overflow-y:auto;}.modal-actions{flex-direction:column-reverse !important;gap:8px !important;}.modal-actions button{width:100% !important;min-height:44px !important;}.notifications-container{right:10px !important;left:10px !important;top:10px !important;}.notification{max-width:none !important;transform:translateY(-100px) !important;}.notification.show{transform:translateY(0) !important;}}@media (min-width:481px) and (max-width:768px){.cards-grid,.grid{grid-template-columns:repeat(2,1fr);gap:18px;}.card,.ai-card,.pdf-card{padding:20px;border-radius:14px;}.header h1{font-size:2.2em !important;}.stats-grid{grid-template-columns:repeat(4,1fr) !important;gap:16px !important;}.input-row,.form-row{grid-template-columns:repeat(2,1fr) !important;gap:20px !important;}}@media (min-width:769px) and (max-width:1024px){.cards-grid,.grid{grid-template-columns:repeat(3,1fr);gap:20px;}.container{padding:0 24px;}.input-row,.form-row{grid-template-columns:repeat(2,1fr) !important;gap:24px !important;}}@media (min-width:1025px) and (max-width:1200px){.cards-grid,.grid{grid-template-columns:repeat(4,1fr);gap:24px;}}@media (min-width:1201px){.cards-grid,.grid{grid-template-columns:repeat(4,1fr);gap:30px;}.container{padding:0 40px;}}@media (max-height:500px) and (orientation:landscape){.header{padding:15px !important;}.header h1{font-size:1.6em !important;margin-bottom:5px !important;}.header p{font-size:0.9em !important;}.cards-grid,.grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr)) !important;gap:16px !important;padding:16px 0 !important;}.card,.ai-card{padding:12px !important;min-height:100px !important;}.form-section{padding:20px 16px !important;}}.touch-target{min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;}@media (max-width:768px){.table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;}table{min-width:600px;}.mobile-stack{display:block !important;width:100%;}.mobile-stack tr{display:block !important;border:1px solid #ddd;margin-bottom:10px;border-radius:8px;padding:10px;}.mobile-stack td{display:block !important;text-align:left !important;padding:5px 0 !important;border:none !important;}.mobile-stack td::before{content:attr(data-label) ":";font-weight:bold;color:#333;}}@media (max-width:768px){.fab{bottom:20px !important;right:20px !important;width:48px !important;height:48px !important;font-size:20px !important;}}.card,.ai-card,.pdf-card{will-change:transform;backface-visibility:hidden;perspective:1000px;}@media (prefers-color-scheme:dark){.card,.ai-card,.pdf-card{background:#2d3748 !important;color:#e2e8f0 !important;border-color:#4a5568 !important;}.notification{background:#2d3748 !important;color:#e2e8f0 !important;}.modal{background:#2d3748 !important;color:#e2e8f0 !important;}}@media (prefers-reduced-motion:reduce){*{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}}@media print{.fab,.notification,.nav-menu,.modal-overlay,.loading-overlay{display:none !important;}.card{break-inside:avoid;margin-bottom:20px;}body{font-size:12pt;line-height:1.4;}}
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .logo h2 {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #64748b;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #f1f5f9;
+            color: #667eea;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #1e293b;
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .header p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card h3 {
+            color: #1e293b;
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            color: #1e293b;
+            margin: 0 0 1rem 0;
+            font-size: 1.25rem;
+        }
+
+        .appointment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .appointment-info h4 {
+            margin: 0 0 0.25rem 0;
+            color: #1e293b;
+        }
+
+        .appointment-info p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-confirmed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-urgent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                order: 2;
+                position: fixed;
+                bottom: 0;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 1rem 0;
+            }
+
+            .nav-menu {
+                display: flex;
+                width: 100%;
+                justify-content: space-around;
+                padding: 0;
+            }
+
+            .nav-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 8px;
+                margin: 0;
+                min-width: 60px;
+            }
+
+            .nav-item i {
+                margin: 0 0 4px 0;
+            }
+
+            .nav-item span {
+                font-size: 0.75rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+                padding-bottom: 100px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>🏥 TeleMed Pro</h2>
+                <p style="color: #64748b; font-size: 0.875rem; margin: 0.5rem 0 0 0;">Dashboard Médico</p>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showSection('appointments')">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Consultas</span>
+                </div>
+                <div class="nav-item" onclick="showSection('patients')">
+                    <i class="fas fa-users"></i>
+                    <span>Pacientes</span>
+                </div>
+                <div class="nav-item" onclick="showSection('prescriptions')">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    <span>Prescrições</span>
+                </div>
+                <div class="nav-item" onclick="showSection('telemedicine')">
+                    <i class="fas fa-video"></i>
+                    <span>Telemedicina</span>
+                </div>
+                <div class="nav-item" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </div>
+                <div class="nav-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section">
+                <div class="header">
+                    <h1>Bem-vindo, Dr. Silva</h1>
+                    <p>Aqui está um resumo da sua prática médica hoje</p>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>12</h3>
+                        <p>Consultas Hoje</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>245</h3>
+                        <p>Pacientes Ativos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>8</h3>
+                        <p>Prescrições Emitidas</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>2</h3>
+                        <p>Casos Urgentes</p>
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="content-grid">
+                    <div class="main-column">
+                        <div class="card">
+                            <h3>📅 Próximas Consultas</h3>
+                            
+                            <div class="appointment-item">
+                                <div class="appointment-info">
+                                    <h4>Maria Silva</h4>
+                                    <p>09:30 - Consulta de Retorno</p>
+                                </div>
+                                <span class="status-badge status-confirmed">Confirmado</span>
+                            </div>
+
+                            <div class="appointment-item">
+                                <div class="appointment-info">
+                                    <h4>João Santos</h4>
+                                    <p>10:15 - Primeira Consulta</p>
+                                </div>
+                                <span class="status-badge status-pending">Pendente</span>
+                            </div>
+
+                            <div class="appointment-item">
+                                <div class="appointment-info">
+                                    <h4>Ana Costa</h4>
+                                    <p>11:00 - Emergência</p>
+                                </div>
+                                <span class="status-badge status-urgent">Urgente</span>
+                            </div>
+
+                            <button class="btn" style="margin-top: 1rem;">Ver Todas as Consultas</button>
+                        </div>
+
+                        <div class="card">
+                            <h3>📊 Atividade Recente</h3>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                                    <strong>Prescrição emitida</strong> para Pedro Lima - Hipertensão
+                                    <br><small style="color: #64748b;">Há 15 minutos</small>
+                                </li>
+                                <li style="padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0;">
+                                    <strong>Consulta finalizada</strong> com Carla Mendes - Diabetes
+                                    <br><small style="color: #64748b;">Há 45 minutos</small>
+                                </li>
+                                <li style="padding: 0.75rem 0;">
+                                    <strong>Exame revisado</strong> para Roberto Silva - Cardiologia
+                                    <br><small style="color: #64748b;">Há 1 hora</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-column">
+                        <div class="card">
+                            <h3>🚨 Alertas Médicos</h3>
+                            <div style="padding: 1rem; background: #fee2e2; border-radius: 8px; margin-bottom: 1rem;">
+                                <h4 style="color: #991b1b; margin: 0 0 0.5rem 0;">Paciente Crítico</h4>
+                                <p style="color: #991b1b; margin: 0; font-size: 0.875rem;">
+                                    José Lima apresenta sinais vitais alterados
+                                </p>
+                            </div>
+                            <div style="padding: 1rem; background: #fef3c7; border-radius: 8px;">
+                                <h4 style="color: #92400e; margin: 0 0 0.5rem 0;">Renovação de Receita</h4>
+                                <p style="color: #92400e; margin: 0; font-size: 0.875rem;">
+                                    3 pacientes precisam renovar medicações
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>⚡ Ações Rápidas</h3>
+                            <button class="btn" style="width: 100%; margin-bottom: 0.75rem;">
+                                <i class="fas fa-plus"></i> Nova Consulta
+                            </button>
+                            <button class="btn btn-secondary" style="width: 100%; margin-bottom: 0.75rem;">
+                                <i class="fas fa-prescription"></i> Emitir Receita
+                            </button>
+                            <button class="btn btn-secondary" style="width: 100%;">
+                                <i class="fas fa-file-medical"></i> Novo Laudo
+                            </button>
+                        </div>
+
+                        <div class="card">
+                            <h3>📈 Performance Semanal</h3>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; color: #667eea; font-weight: bold;">4.9⭐</div>
+                                <p style="margin: 0.5rem 0;">Avaliação Média</p>
+                                <div style="font-size: 1.5rem; color: #10b981; font-weight: bold;">87</div>
+                                <p style="margin: 0;">Consultas esta semana</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other sections would be hidden initially -->
+            <div id="appointments-section" style="display: none;">
+                <div class="header">
+                    <h1>Gerenciar Consultas</h1>
+                    <p>Visualize e gerencie todas as suas consultas</p>
+                </div>
+                <!-- Appointments content here -->
+            </div>
+
+            <div id="patients-section" style="display: none;">
+                <div class="header">
+                    <h1>Meus Pacientes</h1>
+                    <p>Lista completa de pacientes ativos</p>
+                </div>
+                <!-- Patients content here -->
+            </div>
+
+            <!-- More sections... -->
+        </main>
+    </div>
+
+    <!-- JavaScript Responsivo Avançado -->
+    <script>
+        function isMobile(){return window.innerWidth<=768;}
+        function isTablet(){return window.innerWidth>768 && window.innerWidth<=1024;}
+        function isDesktop(){return window.innerWidth>1024;}
+        function adjustLayout(){
+            const cards=document.querySelectorAll('.card,.stat-card');
+            if(isMobile()){
+                cards.forEach(card=>{
+                    card.style.width='100%';
+                    card.style.margin='8px 0';
+                    card.style.padding='16px';
+                });
+                const buttons=document.querySelectorAll('button,.btn');
+                buttons.forEach(btn=>{
+                    btn.style.minHeight='44px';
+                    btn.style.fontSize='16px';
+                });
+            }else if(isTablet()){
+                cards.forEach(card=>{
+                    card.style.padding='20px';
+                });
+            }else{
+                cards.forEach(card=>{
+                    card.style.padding='24px';
+                });
+            }
+        }
+        function optimizeForMobile(){
+            if(isMobile()){
+                const style=document.createElement('style');
+                style.textContent=`*{transition-duration:0.2s !important;animation-duration:0.2s !important;}`;
+                document.head.appendChild(style);
+            }
+        }
+        function handleOrientationChange(){
+            setTimeout(()=>{
+                adjustLayout();
+            },100);
+        }
+        window.addEventListener('resize',adjustLayout);
+        window.addEventListener('orientationchange',handleOrientationChange);
+        document.addEventListener('DOMContentLoaded',function(){
+            adjustLayout();
+            optimizeForMobile();
+            if('ontouchstart' in window){
+                document.body.classList.add('touch-device');
+            }
+        });
+        function preventIOSZoom(){
+            const inputs=document.querySelectorAll('input,select,textarea');
+            inputs.forEach(input=>{
+                if(input.style.fontSize !=='16px'){
+                    input.style.fontSize='16px';
+                }
+            });
+        }
+        if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
+            document.addEventListener('DOMContentLoaded',preventIOSZoom);
+        }
+
+        // Dashboard Functions
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('[id$="-section"]');
+            sections.forEach(section => section.style.display = 'none');
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        function logout() {
+            if(confirm('Tem certeza que deseja sair?')) {
+                window.location.href = '/';
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏥 Dashboard Médico Pro carregado');
+            console.log('✅ Sistema médico inicializado');
+        });
+    </script>
+</body>
+</html>

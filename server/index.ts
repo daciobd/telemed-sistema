@@ -1678,6 +1678,13 @@ function logSecurityEvent(type, details, ip) {
   console.log(`🔒 [SECURITY] ${timestamp} - ${type} from ${ip}:`, details);
 }
 
+  // DASHBOARD MÉDICO PRO - Área médica protegida
+  app.get('/medical-dashboard-pro.html', (req, res) => {
+    console.log('🏥 Serving medical dashboard for:', req.path);
+    const filePath = path.join(__dirname, '../medical-dashboard-pro.html');
+    res.sendFile(filePath);
+  });
+
   // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
   app.get('/processar-login', (req, res) => {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
@@ -1770,7 +1777,7 @@ function logSecurityEvent(type, details, ip) {
     if (validDoctors[credentials.crm] === credentials.senha) {
       isValidCredentials = true;
       userType = 'medico';
-      redirectUrl = `${customRedirectBase}/doctor-dashboard`;
+      redirectUrl = `${customRedirectBase}/medical-dashboard-pro.html`;
       logSecurityEvent('DOCTOR_LOGIN_SUCCESS', userIdentifier, clientIP);
     } else {
       logSecurityEvent('DOCTOR_LOGIN_FAILED', userIdentifier, clientIP);
