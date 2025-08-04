@@ -109,13 +109,274 @@
             padding: 20px;
         }
 
-        /* Override conflicting styles */
-        .welcome-section,
-        .stats-grid,
-        .actions-section,
-        .activity-section {
+        /* WELCOME SECTION ENHANCED */
+        .welcome-section {
+            margin: 20px 0;
+            animation: fadeInUp 0.8s ease-out;
             position: relative;
             z-index: 1;
+        }
+
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .welcome-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+        }
+
+        .welcome-text h1 {
+            font-size: 2.2em;
+            color: #2d3748;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-text p {
+            font-size: 1.1em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 25px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            font-size: 0.9em;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-item strong {
+            color: #374151;
+        }
+
+        .welcome-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 200px;
+        }
+
+        .quick-btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .quick-btn.primary {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .quick-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .quick-btn.secondary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .quick-btn.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* ENHANCED ACTIVITY SECTION */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8em;
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .view-all-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-all-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .activity-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .activity-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .activity-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .activity-item.urgent {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, rgba(254, 242, 242, 0.8), rgba(255, 255, 255, 0.8));
+        }
+
+        .activity-item.completed {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, rgba(236, 253, 245, 0.8), rgba(255, 255, 255, 0.8));
+        }
+
+        .activity-item.pending {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(255, 251, 235, 0.8), rgba(255, 255, 255, 0.8));
+        }
+
+        .activity-item.info {
+            border-left-color: #3b82f6;
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.8), rgba(255, 255, 255, 0.8));
+        }
+
+        .activity-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .activity-content h4 {
+            margin: 0 0 5px 0;
+            color: #2d3748;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .activity-content p {
+            margin: 0 0 8px 0;
+            color: #6b7280;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .activity-status {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-status.urgent {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .activity-status.completed {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .activity-status.pending {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .activity-status.info {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .activity-time {
+            font-size: 0.8em;
+            color: #9ca3af;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        /* Override conflicting styles */
+        .stats-grid,
+        .actions-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .quick-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .welcome-actions {
+                width: 100%;
+            }
+            
+            .activity-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .activity-time {
+                text-align: center;
+            }
         }
 
         /* Tailwind compatibility */
@@ -735,9 +996,27 @@
     <!-- MAIN CONTENT -->
     <div class="container">
         <!-- WELCOME SECTION -->
-        <section class="welcome-section fade-in">
-            <h1>👋 Bem-vindo, Dr. Carlos!</h1>
-            <p>Gerencie suas consultas, documentos e avaliações de forma eficiente com o TeleMed Pro</p>
+        <section class="welcome-section">
+            <div class="welcome-card">
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <h1>👋 Bem-vindo, Dr. Carlos!</h1>
+                        <p>Continue oferecendo os melhores cuidados através da nossa plataforma de telemedicina.</p>
+                        <div class="quick-stats">
+                            <span class="stat-item">📅 <strong>Próxima consulta:</strong> 14:30</span>
+                            <span class="stat-item">⏰ <strong>Tempo online:</strong> <span id="online-time">2h 15min</span></span>
+                        </div>
+                    </div>
+                    <div class="welcome-actions">
+                        <button class="quick-btn primary" onclick="startEmergencyConsult()">
+                            🚨 Consulta Urgente
+                        </button>
+                        <button class="quick-btn secondary" onclick="viewSchedule()">
+                            📋 Ver Agenda
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- STATS GRID -->
@@ -806,35 +1085,72 @@
             </div>
         </section>
 
-        <!-- RECENT ACTIVITY -->
+        <!-- ACTIVITY SECTION -->
         <section class="activity-section">
-            <h3 class="activity-title">📊 Atividade Recente</h3>
-            
-            <div class="activity-item">
-                <div class="activity-icon consultation">🩺</div>
-                <div class="activity-details">
-                    <h4>Consulta com Maria Silva</h4>
-                    <p>Cardiologia • 14:30 • Finalizada</p>
-                </div>
+            <div class="section-header">
+                <h2>📋 Atividade Recente</h2>
+                <button class="view-all-btn" onclick="viewAllActivity()">Ver Todas</button>
             </div>
-
-            <div class="activity-item">
-                <div class="activity-icon document">📄</div>
-                <div class="activity-details">
-                    <h4>Receita Médica Gerada</h4>
-                    <p>João Santos • 13:45 • PDF criado</p>
+            <div class="activity-grid">
+                <div class="activity-item urgent">
+                    <div class="activity-icon">🚨</div>
+                    <div class="activity-content">
+                        <h4>Consulta Urgente Agendada</h4>
+                        <p>Maria Silva • Cardiologia • 15:30</p>
+                        <span class="activity-status urgent">Urgente</span>
+                    </div>
+                    <div class="activity-time">Agora</div>
                 </div>
-            </div>
-
-            <div class="activity-item">
-                <div class="activity-icon evaluation">🧠</div>
-                <div class="activity-details">
-                    <h4>Avaliação PHQ-9 Completada</h4>
-                    <p>Ana Costa • 12:20 • Score: 12 pontos</p>
+                <div class="activity-item completed">
+                    <div class="activity-icon">✅</div>
+                    <div class="activity-content">
+                        <h4>Avaliação PHQ-9 Finalizada</h4>
+                        <p>Ana Costa • Score: 12 pontos</p>
+                        <span class="activity-status completed">Concluída</span>
+                    </div>
+                    <div class="activity-time">13:15</div>
+                </div>
+                <div class="activity-item pending">
+                    <div class="activity-icon">📄</div>
+                    <div class="activity-content">
+                        <h4>PDF Gerado com Sucesso</h4>
+                        <p>Relatório de Exames - João Santos</p>
+                        <span class="activity-status pending">Enviado</span>
+                    </div>
+                    <div class="activity-time">12:45</div>
+                </div>
+                <div class="activity-item info">
+                    <div class="activity-icon">🧠</div>
+                    <div class="activity-content">
+                        <h4>Triagem Inteligente Iniciada</h4>
+                        <p>Carlos Oliveira • Psiquiatria</p>
+                        <span class="activity-status info">Em Andamento</span>
+                    </div>
+                    <div class="activity-time">11:30</div>
                 </div>
             </div>
         </section>
     </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: none;">
+        <div class="notification success" style="
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        ">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.2em;">✅</span>
+                <span>Dashboard carregado com sucesso!</span>
+            </div>
         </div>
     </div>
 
@@ -873,6 +1189,86 @@
                 window.location.href = '/login.html';
             }
         }
+
+        // Enhanced Dashboard Functions
+        function startEmergencyConsult() {
+            alert('🚨 Iniciando processo de consulta urgente...\n\nEncaminhando para sistema de emergência.');
+            // Here would integrate with emergency consultation system
+        }
+
+        function viewSchedule() {
+            alert('📋 Abrindo agenda médica...\n\nVisualizando compromissos do dia.');
+            // Here would open the medical schedule interface
+        }
+
+        function viewAllActivity() {
+            alert('📊 Carregando histórico completo de atividades...\n\nAbrindo relatório detalhado.');
+            // Here would open comprehensive activity log
+        }
+
+        // Online Time Counter
+        let onlineMinutes = 135; // 2h 15min
+        setInterval(() => {
+            onlineMinutes++;
+            const hours = Math.floor(onlineMinutes / 60);
+            const mins = onlineMinutes % 60;
+            const timeElement = document.getElementById('online-time');
+            if (timeElement) {
+                timeElement.textContent = `${hours}h ${mins}min`;
+            }
+        }, 60000); // Update every minute
+
+        // Notification System
+        function showNotification(message, type = 'success', duration = 3000) {
+            const container = document.getElementById('notification-container');
+            const notification = container.querySelector('.notification');
+            
+            notification.className = `notification ${type}`;
+            notification.querySelector('span:last-child').textContent = message;
+            
+            container.style.display = 'block';
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    container.style.display = 'none';
+                }, 300);
+            }, duration);
+        }
+
+        // Enhanced animations on load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏥 Dashboard Médico TeleMed Pro Carregado!');
+            console.log('✨ Design empresarial com animações');
+            console.log('📊 4 métricas em tempo real');
+            console.log('🚀 4 ações rápidas funcionais');
+            console.log('📱 Totalmente responsivo');
+            console.log('🎯 Dashboard totalmente carregado e funcional!');
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('Dashboard médico carregado com sucesso!', 'success', 4000);
+            }, 1000);
+            
+            // Animate stats on load
+            setTimeout(() => {
+                document.querySelectorAll('.stat-number').forEach(el => {
+                    el.style.animation = 'pulse 2s infinite';
+                });
+            }, 1500);
+            
+            // Add pulse animation to badges
+            setTimeout(() => {
+                document.querySelectorAll('.badge').forEach(badge => {
+                    badge.style.animation = 'pulse 3s infinite';
+                });
+            }, 2000);
+        });
         console.log('🏥 Dashboard Médico TeleMed Pro Carregado!');
         console.log('✨ Design empresarial com animações');
         console.log('📊 4 métricas em tempo real');
