@@ -844,6 +844,237 @@
         .reschedule-reason {
             margin-top: 20px;
         }
+        /* BREADCRUMBS */
+        .breadcrumbs-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 30px;
+            border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .breadcrumbs {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            color: #007BFF;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(0, 123, 255, 0.1);
+            color: #0056B3;
+        }
+
+        .breadcrumb-separator {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .breadcrumb-current {
+            color: #495057;
+            font-weight: 600;
+        }
+
+        /* CSS DOS MODALS DE REMARCAÇÃO */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #6c757d;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .patient-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .patient-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .patient-details {
+            font-size: 14px;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .current-appointment {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .current-time {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-slot {
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .time-slot.available {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .time-slot.available:hover {
+            background: #c3e6cb;
+            transform: translateY(-1px);
+        }
+
+        .time-slot.occupied {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+            cursor: not-allowed;
+        }
+
+        .time-slot.selected {
+            background: #cce5ff;
+            color: #004085;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .modal-btn.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .modal-btn.success:hover {
+            background: linear-gradient(135deg, #218838, #1ca085);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.success:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumbs-container {
+                padding: 8px 15px;
+            }
+
+            .breadcrumbs {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .breadcrumb-item {
+                padding: 4px 8px;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .time-slot {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -874,6 +1105,25 @@
             </div>
         </div>
     </header>
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumbs-container">
+        <nav class="breadcrumbs">
+            <a href="#" onclick="window.scrollTo(0,0); return false;" class="breadcrumb-item">
+                <i class="fas fa-arrow-up"></i> Topo
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <a href="/dashboard-medical.html" class="breadcrumb-item">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <a href="javascript:history.back()" class="breadcrumb-item">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-current">Agenda Médica</span>
+        </nav>
+    </div>
 
     <!-- MAIN CONTAINER -->
     <div class="container">
