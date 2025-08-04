@@ -2,9 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Centro de Avaliação Psiquiátrica - TeleMed Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,1304 +15,817 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #f8f9fa;
             color: #333;
+            line-height: 1.6;
         }
 
         /* HEADER */
-        header {
-            background: linear-gradient(135deg, #007BFF, #0056B3);
-            color: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 15px rgba(0, 123, 255, 0.2);
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 20px;
+            gap: 10px;
+            font-size: 18px;
             font-weight: 700;
+            color: #007BFF;
         }
 
-        .back-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #007BFF;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
             color: white;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 14px;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-
-        /* MAIN CONTAINER */
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px 20px;
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         }
 
         /* HERO SECTION */
         .hero-section {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .professional-badge {
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            color: #92400e;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
+            background: linear-gradient(135deg, #8B5CF6, #A855F7, #C084FC);
             color: white;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 15px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-description {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* STATS SECTION */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 50px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 25px;
+            padding: 60px 0;
             text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* TESTS GRID */
-        .tests-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .test-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
             overflow: hidden;
         }
 
-        .test-card::before {
+        .hero-section::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="80" r="1" fill="white" opacity="0.1"/><circle cx="40" cy="60" r="1" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
         }
 
-        .test-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
-        .test-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .test-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .test-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #2D3748;
-            margin-bottom: 8px;
-        }
-
-        .test-subtitle {
-            font-size: 0.9rem;
-            color: #667eea;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .test-description {
-            color: #4A5568;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .test-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #F7FAFC;
-            border-radius: 10px;
-        }
-
-        .test-duration {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #667eea;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-available {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-
-        .status-beta {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-        }
-
-        .status-coming-soon {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .test-features {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
-        .test-features li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            color: #4A5568;
-            font-size: 0.9rem;
-        }
-
-        .test-features li i {
-            color: #10b981;
-            width: 16px;
-        }
-
-        .test-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            font-size: 1rem;
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-        }
-
-        .test-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .test-btn:disabled {
-            background: #E2E8F0;
-            color: #A0ADB8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* ADDITIONAL FEATURES */
-        .features-section {
-            background: rgba(255, 255, 255, 0.1);
+            margin: 0 auto 20px;
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-top: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .features-title {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
+        .hero-icon i {
+            font-size: 36px;
             color: white;
-            margin-bottom: 30px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-weight: 400;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            background: #EF4444;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .cta-primary:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .cta-secondary {
+            background: #EC4899;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+        }
+
+        .cta-secondary:hover {
+            background: #DB2777;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        /* ASSESSMENTS GRID */
+        .assessments-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .assessments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .assessment-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .assessment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-image {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image.tdah {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+        }
+
+        .card-image.ansiedade {
+            background: linear-gradient(135deg, #059669, #10B981);
+        }
+
+        .card-image.depressao {
+            background: linear-gradient(135deg, #DC2626, #EF4444);
+        }
+
+        .card-image.bipolar {
+            background: linear-gradient(135deg, #EA580C, #F97316);
+        }
+
+        .card-image.estresse {
+            background: linear-gradient(135deg, #7C2D12, #EA580C);
+        }
+
+        .card-image.stress {
+            background: linear-gradient(135deg, #BE185D, #EC4899);
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="white" opacity="0.1"/></pattern></defs><rect width="200" height="200" fill="url(%23dots)"/></svg>');
+        }
+
+        .card-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-button {
+            width: 100%;
+            padding: 12px 0;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-tdah {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+        }
+
+        .btn-ansiedade {
+            background: linear-gradient(135deg, #059669, #10B981);
+            color: white;
+        }
+
+        .btn-depressao {
+            background: linear-gradient(135deg, #DC2626, #EF4444);
+            color: white;
+        }
+
+        .btn-bipolar {
+            background: linear-gradient(135deg, #EA580C, #F97316);
+            color: white;
+        }
+
+        .btn-estresse {
+            background: linear-gradient(135deg, #7C2D12, #EA580C);
+            color: white;
+        }
+
+        .btn-stress {
+            background: linear-gradient(135deg, #BE185D, #EC4899);
+            color: white;
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* PROFESSIONAL SECTION */
+        .professional-section {
+            background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+            padding: 60px 0;
+        }
+
+        .professional-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .professional-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 50px;
+        }
+
+        .professional-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .professional-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .professional-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .professional-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .professional-icon.purple {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+        }
+
+        .professional-icon.blue {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        }
+
+        .professional-icon.pink {
+            background: linear-gradient(135deg, #EC4899, #BE185D);
+        }
+
+        .professional-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .professional-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .professional-card p {
+            color: #6B7280;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* FEATURES SECTION */
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
         }
 
-        .feature-card {
-            text-align: center;
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .features-column h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
         }
 
-        .feature-icon {
-            font-size: 3rem;
-            color: #ffd700;
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 15px;
-        }
-
-        .feature-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .feature-description {
-            color: rgba(255, 255, 255, 0.8);
+            color: #4B5563;
             line-height: 1.5;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 1024px) {
-            .tests-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 20px;
-            }
+        .features-list li i {
+            color: #10B981;
+            margin-top: 2px;
+            font-size: 14px;
+        }
 
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
             }
-        }
 
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 20px 15px;
-            }
-
-            .hero-title {
-                font-size: 2rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-
-            .tests-grid {
+            .assessments-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
 
-            .test-card {
-                padding: 25px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-
-            .stat-card {
-                padding: 20px;
-            }
-
-            .features-section {
-                padding: 30px 20px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 1.8rem;
-            }
-
-            .test-meta {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .stats-grid {
+            .professional-grid {
                 grid-template-columns: 1fr;
             }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
         }
 
-        /* LOADING ANIMATION */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .assessment-card {
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        /* NOTIFICATIONS */
-        .notifications-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            pointer-events: none;
-        }
-
-        .notification {
-            background: white;
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border-left: 4px solid #667eea;
-            transform: translateX(400px);
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: auto;
-            max-width: 320px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            border-left-color: #10b981;
-        }
-
-        .notification.error {
-            border-left-color: #ef4444;
-        }
-
-        .notification.warning {
-            border-left-color: #f59e0b;
-        }
-
-        .notification-title {
-            font-weight: 600;
-            color: #2D3748;
-            margin-bottom: 5px;
-        }
-
-        .notification-message {
-            color: #4A5568;
-            font-size: 14px;
-        }
+        .assessment-card:nth-child(1) { animation-delay: 0.1s; }
+        .assessment-card:nth-child(2) { animation-delay: 0.2s; }
+        .assessment-card:nth-child(3) { animation-delay: 0.3s; }
+        .assessment-card:nth-child(4) { animation-delay: 0.4s; }
+        .assessment-card:nth-child(5) { animation-delay: 0.5s; }
+        .assessment-card:nth-child(6) { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
-    <header>
+    <!-- HEADER -->
+    <header class="header">
         <div class="header-content">
             <div class="logo">
-                <i class="fas fa-brain"></i>
-                TeleMed Pro - Centro de Avaliação
+                <i class="fas fa-user-md"></i>
+                TeleMed consultas
             </div>
-            <a href="/dashboard-aquarela.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Voltar ao Dashboard
-            </a>
+            <nav class="nav-links">
+                <a href="/agenda-medica.html">Agenda</a>
+                <a href="#avaliacoes">Avaliações</a>
+                <a href="#especialistas">Especialistas</a>
+                <a href="#contato">Contato</a>
+                <a href="/login.html" class="nav-button">Entrar</a>
+            </nav>
         </div>
     </header>
 
-    <div class="main-container">
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <div class="professional-badge">
-                <i class="fas fa-user-md"></i> ACESSO PROFISSIONAL COMPLETO
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-brain"></i>
             </div>
-            <h1 class="hero-title">
-                <i class="fas fa-brain"></i> Centro de Avaliação Psiquiátrica
-            </h1>
+            <h1 class="hero-title">Centro de Avaliação Psiquiátrica</h1>
             <p class="hero-subtitle">
-                Ferramentas de Triagem e Avaliação para Profissionais de Saúde Mental
+                Avaliações de Inteligência e Comportamento clínico online com Profissionais Médicos Especialistas
             </p>
-            <p class="hero-description">
-                Instrumentos validados cientificamente para auxiliar no diagnóstico e acompanhamento de transtornos mentais
-            </p>
-        </div>
-
-        <!-- Stats Section -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-number">6</span>
-                <span class="stat-label">Testes Disponíveis</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">DSM-5</span>
-                <span class="stat-label">Baseado em Critérios</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">PDF</span>
-                <span class="stat-label">Relatórios Gerados</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">24/7</span>
-                <span class="stat-label">Disponível Online</span>
+            <div class="cta-buttons">
+                <a href="#avaliacoes" class="cta-primary">PDF</a>
+                <a href="#profissionais" class="cta-secondary">Profissionais</a>
             </div>
         </div>
+    </section>
 
-        <!-- Tests Grid -->
-        <div class="tests-grid">
-            <!-- TDAH - ASRS-18 -->
-            <div class="test-card" onclick="openTest('tdah-asrs18')">
-                <div class="test-icon">🧠</div>
-                <div class="test-header">
-                    <div>
-                        <h3 class="test-title">TDAH - ASRS-18</h3>
-                        <p class="test-subtitle">Escala de Auto-Avaliação</p>
+    <!-- ASSESSMENTS SECTION -->
+    <section class="assessments-section" id="avaliacoes">
+        <div class="assessments-grid">
+            <!-- TDAH Card -->
+            <div class="assessment-card">
+                <div class="card-image tdah">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <span class="status-badge status-available">Disponível</span>
                 </div>
-                <p class="test-description">
-                    Ferramenta de triagem para Transtorno de Déficit de Atenção e Hiperatividade em adultos baseada nos critérios do DSM-5.
-                </p>
-                <div class="test-meta">
-                    <div class="test-duration">
-                        <i class="fas fa-clock"></i>
-                        3-5 minutos
-                    </div>
-                    <div>18 questões</div>
+                <div class="card-content">
+                    <h3 class="card-title">TDAH - ASRS-18</h3>
+                    <p class="card-subtitle">Escala de Autoavaliação do Transtorno de Déficit de Atenção/Hiperatividade</p>
+                    <p class="card-description">
+                        Questionário padronizado para identificar sintomas de TDAH em adultos, 
+                        com 18 questões baseadas nos critérios do DSM-5.
+                    </p>
+                    <button class="card-button btn-tdah" onclick="openAssessment('tdah')">
+                        Realizar Avaliação
+                    </button>
                 </div>
-                <ul class="test-features">
-                    <li><i class="fas fa-check"></i> Validação científica</li>
-                    <li><i class="fas fa-check"></i> Critérios DSM-5</li>
-                    <li><i class="fas fa-check"></i> Relatório em PDF</li>
-                    <li><i class="fas fa-check"></i> Interpretação automática</li>
-                </ul>
-                <button class="test-btn">
-                    <i class="fas fa-play"></i>
-                    Iniciar Avaliação
-                </button>
             </div>
 
-            <!-- GAD-7 Ansiedade -->
-            <div class="test-card" onclick="openTest('gad7-ansiedade')">
-                <div class="test-icon">😰</div>
-                <div class="test-header">
-                    <div>
-                        <h3 class="test-title">GAD-7</h3>
-                        <p class="test-subtitle">Transtorno de Ansiedade Generalizada</p>
+            <!-- Triagem Diagnóstica Card -->
+            <div class="assessment-card">
+                <div class="card-image ansiedade">
+                    <div class="card-icon">
+                        <i class="fas fa-clipboard-check"></i>
                     </div>
-                    <span class="status-badge status-available">Disponível</span>
                 </div>
-                <p class="test-description">
-                    Escala amplamente utilizada para triagem e monitoramento da severidade do Transtorno de Ansiedade Generalizada.
-                </p>
-                <div class="test-meta">
-                    <div class="test-duration">
-                        <i class="fas fa-clock"></i>
-                        2-3 minutos
-                    </div>
-                    <div>7 questões</div>
+                <div class="card-content">
+                    <h3 class="card-title">Triagem Diagnóstica</h3>
+                    <p class="card-subtitle">Avaliação inicial completa para identificação de transtornos mentais</p>
+                    <p class="card-description">
+                        Ferramenta abrangente que combina múltiplos instrumentos para 
+                        uma avaliação psiquiátrica inicial completa.
+                    </p>
+                    <button class="card-button btn-ansiedade" onclick="openAssessment('triagem')">
+                        Iniciar Triagem
+                    </button>
                 </div>
-                <ul class="test-features">
-                    <li><i class="fas fa-check"></i> Amplamente validado</li>
-                    <li><i class="fas fa-check"></i> Pontuação automática</li>
-                    <li><i class="fas fa-check"></i> Classificação de severidade</li>
-                    <li><i class="fas fa-check"></i> Acompanhamento temporal</li>
-                </ul>
-                <button class="test-btn">
-                    <i class="fas fa-play"></i>
-                    Iniciar Avaliação
-                </button>
             </div>
 
-            <!-- PHQ-9 Depressão -->
-            <div class="test-card" onclick="openTest('phq9-depressao')">
-                <div class="test-icon">😔</div>
-                <div class="test-header">
-                    <div>
-                        <h3 class="test-title">PHQ-9</h3>
-                        <p class="test-subtitle">Questionário de Saúde do Paciente</p>
+            <!-- Ansiedade GAD-7 Card -->
+            <div class="assessment-card">
+                <div class="card-image depressao">
+                    <div class="card-icon">
+                        <i class="fas fa-heart-pulse"></i>
                     </div>
-                    <span class="status-badge status-available">Disponível</span>
                 </div>
-                <p class="test-description">
-                    Instrumento padrão-ouro para triagem, diagnóstico e monitoramento da gravidade de episódios depressivos maiores.
-                </p>
-                <div class="test-meta">
-                    <div class="test-duration">
-                        <i class="fas fa-clock"></i>
-                        3-4 minutos
-                    </div>
-                    <div>9 questões</div>
+                <div class="card-content">
+                    <h3 class="card-title">Ansiedade - GAD-7</h3>
+                    <p class="card-subtitle">Escala de Ansiedade Generalizada</p>
+                    <p class="card-description">
+                        Questionário de 7 itens para detecção e monitoramento 
+                        da gravidade dos sintomas de ansiedade generalizada.
+                    </p>
+                    <button class="card-button btn-depressao" onclick="openAssessment('ansiedade')">
+                        Avaliar Ansiedade
+                    </button>
                 </div>
-                <ul class="test-features">
-                    <li><i class="fas fa-check"></i> Padrão internacional</li>
-                    <li><i class="fas fa-check"></i> Critérios diagnósticos</li>
-                    <li><i class="fas fa-check"></i> Monitoramento de resposta</li>
-                    <li><i class="fas fa-check"></i> Sugestões clínicas</li>
-                </ul>
-                <button class="test-btn">
-                    <i class="fas fa-play"></i>
-                    Iniciar Avaliação
-                </button>
             </div>
 
-            <!-- MDQ Bipolar -->
-            <div class="test-card" onclick="openTest('mdq-bipolar')">
-                <div class="test-icon">🔄</div>
-                <div class="test-header">
-                    <div>
-                        <h3 class="test-title">MDQ</h3>
-                        <p class="test-subtitle">Questionário de Transtorno do Humor</p>
+            <!-- Depressão PHQ-9 Card -->
+            <div class="assessment-card">
+                <div class="card-image bipolar">
+                    <div class="card-icon">
+                        <i class="fas fa-cloud-rain"></i>
                     </div>
-                    <span class="status-badge status-available">Disponível</span>
                 </div>
-                <p class="test-description">
-                    Ferramenta de triagem específica para identificar histórico de episódios maníacos ou hipomaníacos no transtorno bipolar.
-                </p>
-                <div class="test-meta">
-                    <div class="test-duration">
-                        <i class="fas fa-clock"></i>
-                        4-6 minutos
-                    </div>
-                    <div>13 questões</div>
+                <div class="card-content">
+                    <h3 class="card-title">Depressão - PHQ-9</h3>
+                    <p class="card-subtitle">Questionário de Saúde do Paciente para Depressão</p>
+                    <p class="card-description">
+                        Instrumento de triagem e diagnóstico para episódios 
+                        depressivos maiores, amplamente validado.
+                    </p>
+                    <button class="card-button btn-bipolar" onclick="openAssessment('depressao')">
+                        Avaliar Depressão
+                    </button>
                 </div>
-                <ul class="test-features">
-                    <li><i class="fas fa-check"></i> Específico para bipolaridade</li>
-                    <li><i class="fas fa-check"></i> Histórico de episódios</li>
-                    <li><i class="fas fa-check"></i> Triagem eficaz</li>
-                    <li><i class="fas fa-check"></i> Orientações clínicas</li>
-                </ul>
-                <button class="test-btn">
-                    <i class="fas fa-play"></i>
-                    Iniciar Avaliação
-                </button>
             </div>
 
-            <!-- PSS-10 Estresse -->
-            <div class="test-card" onclick="openTest('pss10-stress')">
-                <div class="test-icon">😤</div>
-                <div class="test-header">
-                    <div>
-                        <h3 class="test-title">PSS-10</h3>
-                        <p class="test-subtitle">Escala de Estresse Percebido</p>
+            <!-- Bipolar MDQ Card -->
+            <div class="assessment-card">
+                <div class="card-image estresse">
+                    <div class="card-icon">
+                        <i class="fas fa-balance-scale"></i>
                     </div>
-                    <span class="status-badge status-available">Disponível</span>
                 </div>
-                <p class="test-description">
-                    Avalia o grau em que situações da vida são percebidas como estressantes, considerando imprevisibilidade e sobrecarga.
-                </p>
-                <div class="test-meta">
-                    <div class="test-duration">
-                        <i class="fas fa-clock"></i>
-                        3-5 minutos
-                    </div>
-                    <div>10 questões</div>
+                <div class="card-content">
+                    <h3 class="card-title">Bipolar - MDQ</h3>
+                    <p class="card-subtitle">Questionário de Transtorno do Humor</p>
+                    <p class="card-description">
+                        Ferramenta de triagem para identificação de episódios 
+                        maníacos ou hipomaníacos em transtorno bipolar.
+                    </p>
+                    <button class="card-button btn-estresse" onclick="openAssessment('bipolar')">
+                        Avaliar Bipolar
+                    </button>
                 </div>
-                <ul class="test-features">
-                    <li><i class="fas fa-check"></i> Estresse percebido</li>
-                    <li><i class="fas fa-check"></i> Validação internacional</li>
-                    <li><i class="fas fa-check"></i> Prevenção burnout</li>
-                    <li><i class="fas fa-check"></i> Intervenções direcionadas</li>
-                </ul>
-                <button class="test-btn">
-                    <i class="fas fa-play"></i>
-                    Iniciar Avaliação
-                </button>
             </div>
 
-            <!-- Avaliação Completa - Em Desenvolvimento -->
-            <div class="test-card">
-                <div class="test-icon">📋</div>
-                <div class="test-header">
-                    <div>
-                        <h3 class="test-title">Avaliação Completa</h3>
-                        <p class="test-subtitle">Bateria Psicológica Integrada</p>
+            <!-- Stress PSS-10 Card -->
+            <div class="assessment-card">
+                <div class="card-image stress">
+                    <div class="card-icon">
+                        <i class="fas fa-thermometer-half"></i>
                     </div>
-                    <span class="status-badge status-coming-soon">Em Breve</span>
                 </div>
-                <p class="test-description">
-                    Bateria completa combinando múltiplos instrumentos para avaliação abrangente da saúde mental do paciente.
-                </p>
-                <div class="test-meta">
-                    <div class="test-duration">
-                        <i class="fas fa-clock"></i>
-                        15-20 minutos
-                    </div>
-                    <div>Múltiplos testes</div>
+                <div class="card-content">
+                    <h3 class="card-title">Stress - PSS-10</h3>
+                    <p class="card-subtitle">Escala de Estresse Percebido</p>
+                    <p class="card-description">
+                        Medida global de estresse percebido com 10 questões 
+                        sobre sentimentos e pensamentos do último mês.
+                    </p>
+                    <button class="card-button btn-stress" onclick="openAssessment('stress')">
+                        Medir Stress
+                    </button>
                 </div>
-                <ul class="test-features">
-                    <li><i class="fas fa-clock"></i> Avaliação integrada</li>
-                    <li><i class="fas fa-clock"></i> Relatório completo</li>
-                    <li><i class="fas fa-clock"></i> Múltiplas escalas</li>
-                    <li><i class="fas fa-clock"></i> Perfil psicológico</li>
-                </ul>
-                <button class="test-btn" disabled>
-                    <i class="fas fa-hammer"></i>
-                    Em Desenvolvimento
-                </button>
             </div>
         </div>
+    </section>
 
-        <!-- Features Section -->
-        <div class="features-section">
-            <h2 class="features-title">Recursos Avançados</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3 class="feature-title">Relatórios PDF</h3>
-                    <p class="feature-description">
-                        Gere relatórios profissionais em PDF com resultados detalhados e interpretações clínicas
+    <!-- PROFESSIONAL SECTION -->
+    <section class="professional-section" id="profissionais">
+        <div class="professional-content">
+            <h2 class="professional-title">Diferenciais Profissionais</h2>
+            <div class="professional-grid">
+                <div class="professional-card">
+                    <div class="professional-icon purple">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Avaliação PDF</h3>
+                    <p>
+                        Relatórios completos em PDF com análise detalhada dos resultados, 
+                        gráficos interpretativos e recomendações clínicas personalizadas.
                     </p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3 class="feature-title">Dados Seguros</h3>
-                    <p class="feature-description">
-                        Toda informação é processada com segurança máxima e criptografia de ponta a ponta
+
+                <div class="professional-card">
+                    <div class="professional-icon blue">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Equipe Qualificada</h3>
+                    <p>
+                        Psiquiatras e psicólogos especializados em saúde mental digital, 
+                        com experiência em avaliações online e telemedicina.
                     </p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">Resultados Instantâneos</h3>
-                    <p class="feature-description">
-                        Obtenha pontuações e interpretações imediatamente após completar cada avaliação
-                    </p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="feature-title">Multiplataforma</h3>
-                    <p class="feature-description">
-                        Acesse de qualquer dispositivo - computador, tablet ou smartphone
+
+                <div class="professional-card">
+                    <div class="professional-icon pink">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Avaliação de Risco</h3>
+                    <p>
+                        Sistema inteligente de avaliação de risco suicida e 
+                        emergências psiquiátricas com protocolo de intervenção imediata.
                     </p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Notifications Container -->
-    <div class="notifications-container"></div>
+    <!-- FEATURES SECTION -->
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="features-column">
+                <h3>Nosso Produto</h3>
+                <ul class="features-list">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Avaliações padronizadas e validadas cientificamente
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Interface intuitiva e responsiva para todos os dispositivos
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Resultados imediatos com interpretação profissional
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Integração com prontuário eletrônico
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Conformidade com LGPD e normas de sigilo médico
+                    </li>
+                </ul>
+            </div>
+
+            <div class="features-column">
+                <h3>Nossos Valores</h3>
+                <ul class="features-list">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Compromisso com a excelência em saúde mental
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Transparência nos processos e metodologias
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Acessibilidade e democratização da saúde mental
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Inovação constante em tecnologia médica
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Ética profissional e respeito ao paciente
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
     <script>
-        // Função para abrir testes
-        function openTest(testType) {
-            const testUrls = {
-                'tdah-asrs18': '/ansiedade-gad7.html', // Temporário - usar página existente
-                'gad7-ansiedade': '/ansiedade-gad7.html',
-                'phq9-depressao': '/depressao-phq9.html',
-                'mdq-bipolar': '/bipolar-mdq.html',
-                'pss10-stress': '/pss10-stress.html'
+        function openAssessment(type) {
+            const assessmentUrls = {
+                'tdah': '/tdah-asrs18.html',
+                'triagem': '/centro-avaliacao.html',
+                'ansiedade': '/ansiedade-gad7.html',
+                'depressao': '/depressao-phq9.html',
+                'bipolar': '/bipolar-mdq.html',
+                'stress': '/pss10-stress.html'
             };
 
-            const url = testUrls[testType];
+            const url = assessmentUrls[type];
             if (url) {
-                showNotification('Carregando avaliação...', 'info');
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 1000);
+                window.location.href = url;
             } else {
-                showNotification('Teste ainda não implementado', 'warning');
+                alert('Avaliação em desenvolvimento. Em breve estará disponível!');
             }
         }
 
-        // Sistema de notificações
-        function showNotification(message, type = 'info') {
-            const container = document.querySelector('.notifications-container');
-            const notification = document.createElement('div');
-            
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-title">
-                    ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'} 
-                    ${type.charAt(0).toUpperCase() + type.slice(1)}
-                </div>
-                <div class="notification-message">${message}</div>
-            `;
-            
-            container.appendChild(notification);
-            
-            // Mostrar notificação
-            setTimeout(() => notification.classList.add('show'), 100);
-            
-            // Remover após 3 segundos
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 400);
-            }, 3000);
-        }
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🧠 Centro de Avaliação Psiquiátrica carregado!');
-            console.log('📋 6 testes de triagem disponíveis');
-            console.log('🔒 Sistema seguro e validado');
-            console.log('📱 Interface responsiva ativa');
-            
-            // Mostrar notificação de boas-vindas
-            setTimeout(() => {
-                showNotification('Centro de Avaliação Psiquiátrica carregado com sucesso!', 'success');
-            }, 500);
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
 
-        // Adicionar efeitos visuais aos cards
-        document.querySelectorAll('.test-card').forEach(card => {
+        // Add loading animation on card hover
+        document.querySelectorAll('.assessment-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
+                this.style.transform = 'translateY(-5px) scale(1.02)';
             });
             
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
-    </script>
-</body>
-</html>
 
-            <!-- Header -->
-            <div class="text-center mb-12">
-                <div class="inline-block professional-badge text-sm font-bold px-4 py-2 rounded-full mb-4">
-                    👨‍⚕️ ACESSO PROFISSIONAL COMPLETO
-                </div>
-                <h1 class="text-5xl font-bold text-white mb-4">
-                    🧠 Centro de Avaliação Psiquiátrica
-                </h1>
-                <p class="text-xl text-white/90 max-w-3xl mx-auto mb-4">
-                    Ferramentas de Triagem e Avaliação para Profissionais de Saúde Mental
-                </p>
-                <p class="text-white/70 max-w-2xl mx-auto">
-                    Instrumentos validados cientificamente para auxiliar no diagnóstico e acompanhamento de transtornos mentais
-                </p>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white">6</div>
-                    <div class="text-white/80 text-sm">Testes Disponíveis</div>
-                </div>
-                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white">DSM-5</div>
-                    <div class="text-white/80 text-sm">Baseado em Critérios</div>
-                </div>
-                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white">PDF</div>
-                    <div class="text-white/80 text-sm">Relatórios Gerados</div>
-                </div>
-                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white">24/7</div>
-                    <div class="text-white/80 text-sm">Disponível Online</div>
-                </div>
-            </div>
-
-            <!-- Main Tests Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                
-                <!-- TDAH - ASRS-18 -->
-                <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('tdah-asrs18')">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="text-5xl">🎯</div>
-                        <span class="status-indicator available"></span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-3">TDAH - ASRS-18</h3>
-                    <p class="text-gray-600 mb-4">
-                        Escala de Auto-Avaliação para Transtorno do Déficit de Atenção e Hiperatividade
-                    </p>
-                    <div class="space-y-2 text-sm text-gray-500 mb-6">
-                        <div>⏱️ Tempo: 5-8 minutos</div>
-                        <div>📊 18 questões</div>
-                        <div>🎯 Desatenção + Hiperatividade</div>
-                    </div>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Iniciar Teste TDAH
-                    </button>
-                </div>
-
-                <!-- Triagem Psiquiátrica Geral -->
-                <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('triagem-geral')">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="text-5xl">🧠</div>
-                        <span class="status-indicator available"></span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Triagem Psiquiátrica</h3>
-                    <p class="text-gray-600 mb-4">
-                        Avaliação inicial abrangente para identificação de transtornos mentais comuns
-                    </p>
-                    <div class="space-y-2 text-sm text-gray-500 mb-6">
-                        <div>⏱️ Tempo: 10-15 minutos</div>
-                        <div>📊 20 questões</div>
-                        <div>🎯 6 categorias diagnósticas</div>
-                    </div>
-                    <button class="bg-slate-600 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Iniciar Triagem Geral
-                    </button>
-                </div>
-
-                <!-- Ansiedade - GAD-7 -->
-                <div class="test-card bg-white rounded-2xl p-8 cursor-pointer hover-lift btn-animated ripple" onclick="startTriagemWithLoading('ansiedade-gad7')">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="text-5xl">😰</div>
-                        <span class="status-indicator available"></span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Ansiedade - GAD-7</h3>
-                    <p class="text-gray-600 mb-4">
-                        Escala de Transtorno de Ansiedade Generalizada com 7 itens
-                    </p>
-                    <div class="space-y-2 text-sm text-gray-500 mb-6">
-                        <div>⏱️ Tempo: 3-5 minutos</div>
-                        <div>📊 7 questões</div>
-                        <div>🎯 Ansiedade generalizada</div>
-                    </div>
-                    <button class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Iniciar Teste GAD-7
-                    </button>
-                </div>
-
-                <!-- Depressão - PHQ-9 -->
-                <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('depressao-phq9')">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="text-5xl">😔</div>
-                        <span class="status-indicator available"></span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Depressão - PHQ-9</h3>
-                    <p class="text-gray-600 mb-4">
-                        Questionário de Saúde do Paciente para rastreio de depressão
-                    </p>
-                    <div class="space-y-2 text-sm text-gray-500 mb-6">
-                        <div>⏱️ Tempo: 3-5 minutos</div>
-                        <div>📊 9 questões</div>
-                        <div>🎯 Episódio depressivo</div>
-                    </div>
-                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Iniciar Teste PHQ-9
-                    </button>
-                </div>
-
-                <!-- Transtorno Bipolar - MDQ -->
-                <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('bipolar-mdq')">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="text-5xl">🔄</div>
-                        <span class="status-indicator available"></span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Bipolar - MDQ</h3>
-                    <p class="text-gray-600 mb-4">
-                        Questionário de Transtorno do Humor para detecção de episódios maníacos
-                    </p>
-                    <div class="space-y-2 text-sm text-gray-500 mb-6">
-                        <div>⏱️ Tempo: 5-7 minutos</div>
-                        <div>📊 13 questões principais</div>
-                        <div>🎯 Episódios maníacos</div>
-                    </div>
-                    <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Iniciar Teste MDQ
-                    </button>
-                </div>
-
-                <!-- Stress - PSS-10 -->
-                <div class="test-card bg-white rounded-2xl p-8 cursor-pointer" onclick="openTest('stress-pss10')">
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="text-5xl">💭</div>
-                        <span class="status-indicator available"></span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Stress - PSS-10</h3>
-                    <p class="text-gray-600 mb-4">
-                        Escala de Stress Percebido versão reduzida com 10 itens
-                    </p>
-                    <div class="space-y-2 text-sm text-gray-500 mb-6">
-                        <div>⏱️ Tempo: 3-5 minutos</div>
-                        <div>📊 10 questões</div>
-                        <div>🎯 Níveis de stress</div>
-                    </div>
-                    <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold w-full transition-colors">
-                        Iniciar Teste PSS-10
-                    </button>
-                </div>
-            </div>
-
-            <!-- Professional Tools Section -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6">🛠️ Ferramentas Profissionais</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white/10 rounded-xl p-6 text-center">
-                        <div class="text-3xl mb-3">📊</div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Relatórios PDF</h3>
-                        <p class="text-white/70 text-sm">Gere relatórios profissionais para impressão e arquivo</p>
-                    </div>
-                    <div class="bg-white/10 rounded-xl p-6 text-center">
-                        <div class="text-3xl mb-3">📈</div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Análise Estatística</h3>
-                        <p class="text-white/70 text-sm">Gráficos e análises detalhadas dos resultados</p>
-                    </div>
-                    <div class="bg-white/10 rounded-xl p-6 text-center">
-                        <div class="text-3xl mb-3">🗂️</div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Histórico do Paciente</h3>
-                        <p class="text-white/70 text-sm">Acompanhe a evolução ao longo do tempo</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Guidelines Section -->
-            <div class="bg-white rounded-2xl p-8 mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">📋 Diretrizes de Uso</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">✅ Boas Práticas</h3>
-                        <ul class="space-y-2 text-gray-600">
-                            <li>• Use os testes como ferramentas de triagem, não diagnóstico definitivo</li>
-                            <li>• Considere sempre o contexto clínico e histórico do paciente</li>
-                            <li>• Aplique múltiplos instrumentos para avaliação mais completa</li>
-                            <li>• Documente os resultados no prontuário eletrônico</li>
-                            <li>• Realize reavaliações periódicas para acompanhar evolução</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">⚠️ Importantes</h3>
-                        <ul class="space-y-2 text-gray-600">
-                            <li>• Instrumentos validados para população brasileira</li>
-                            <li>• Resultados devem ser interpretados por profissional qualificado</li>
-                            <li>• Não substitui avaliação clínica presencial quando necessária</li>
-                            <li>• Mantenha confidencialidade dos dados do paciente</li>
-                            <li>• Siga protocolos institucionais de sua organização</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-blue-600 rounded-2xl p-8 text-white">
-                    <h3 class="text-xl font-bold mb-4">🚀 Avaliação Rápida</h3>
-                    <p class="mb-6">Inicie uma triagem psiquiátrica completa em 15 minutos</p>
-                    <button class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                        Começar Triagem
-                    </button>
-                </div>
-                <div class="bg-purple-600 rounded-2xl p-8 text-white">
-                    <h3 class="text-xl font-bold mb-4">📊 Histórico Completo</h3>
-                    <p class="mb-6">Visualize o histórico de avaliações de todos os pacientes</p>
-                    <button class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors">
-                        Ver Histórico
-                    </button>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="text-center text-white/70">
-                <p class="mb-4">
-                    © 2025 TeleMed Pro - Centro de Avaliação Psiquiátrica 
-                    | Instrumentos validados cientificamente
-                </p>
-                <div class="flex justify-center space-x-6 text-sm">
-                    <a href="/dashboard" class="hover:text-white transition-colors">← Voltar ao Dashboard</a>
-                    <a href="/doctor-dashboard" class="hover:text-white transition-colors">Dashboard Médico</a>
-                    <a href="/sobre" class="hover:text-white transition-colors">Sobre o Sistema</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- COMPONENTES MEDICAL LOADING -->
-    <div id="loadingOverlay" class="loading-overlay" style="display:none">
-        <div class="loading-content">
-            <div class="medical-loader"></div>
-            <div class="loading-text">Carregando...</div>
-        </div>
-    </div>
-
-    <!-- SISTEMA DE NOTIFICAÇÕES MÉDICAS AVANÇADO -->
-    <div class="notifications-container" id="notificationsContainer"></div>
-
-    <div class="progress-bar" style="display:none" id="progressBar">
-        <div class="progress-fill"></div>
-    </div>
-
-    <script>
-        console.log('🧠 Centro de Avaliação Psiquiátrica - TeleMed Pro carregado');
-        
-        // FUNÇÕES MEDICAL LOADING
-        function showLoading(text = "Carregando...") {
-            let overlay = document.getElementById("loadingOverlay");
-            overlay.querySelector(".loading-text").textContent = text;
-            overlay.style.display = "flex";
-        }
-
-        function hideLoading() {
-            document.getElementById("loadingOverlay").style.display = "none";
-        }
-
-        function showNotification(title, message, type = "success", duration = 4000) {
-            const container = document.getElementById("notificationsContainer");
-            const notificationId = "notification-" + Date.now();
-            
-            const notification = document.createElement("div");
-            notification.className = `notification ${type}`;
-            notification.id = notificationId;
-            
-            notification.innerHTML = `
-                <div class="notification-header">
-                    <div class="notification-icon">${getNotificationIcon(type)}</div>
-                    <div class="notification-title">${title}</div>
-                    <button class="notification-close" onclick="removeNotification('${notificationId}')">&times;</button>
-                </div>
-                <div class="notification-message">${message}</div>
-                <div class="notification-progress">
-                    <div class="notification-progress-bar" style="animation-duration: ${duration}ms;"></div>
-                </div>
-            `;
-            
-            container.appendChild(notification);
-            
-            // Trigger animation
-            setTimeout(() => notification.classList.add("show"), 100);
-            
-            // Auto remove
-            setTimeout(() => removeNotification(notificationId), duration);
-        }
-
-        function getNotificationIcon(type) {
-            const icons = {
-                success: "✅",
-                error: "❌", 
-                warning: "⚠️",
-                info: "ℹ️",
-                medical: "🩺"
-            };
-            return icons[type] || icons.info;
-        }
-
-        function removeNotification(id) {
-            const notification = document.getElementById(id);
-            if (notification) {
-                notification.classList.remove("show");
-                setTimeout(() => notification.remove(), 400);
-            }
-        }
-
-        function startTriagemWithLoading(testUrl) {
-            showLoading("Iniciando avaliação psiquiátrica...");
-            showNotification("Preparando", "Carregando instrumento de avaliação...", "info", 1500);
-            
-            setTimeout(() => {
-                hideLoading();
-                window.open(testUrl + '.html', '_blank');
-                showNotification("Teste Iniciado", "Avaliação psiquiátrica aberta em nova aba", "medical", 4000);
-            }, 1500);
-        }
-        
-        function openTest(testType) {
-            console.log('Iniciando teste:', testType);
-            
-            switch(testType) {
-                case 'tdah-asrs18':
-                    console.log('🎯 Redirecionando para teste TDAH-ASRS18');
-                    window.location.href = '/tdah-asrs18';
-                    break;
-                case 'triagem-geral':
-                    console.log('🧠 Redirecionando para Triagem Psiquiátrica Geral');
-                    window.location.href = '/triagem-psiquiatrica';
-                    break;
-                case 'ansiedade-gad7':
-                    console.log('😰 Redirecionando para teste GAD-7 Ansiedade');
-                    window.location.href = '/gad7-ansiedade';
-                    break;
-                case 'depressao-phq9':
-                    console.log('😔 Redirecionando para teste PHQ-9 Depressão');
-                    window.location.href = '/phq9-depressao';
-                    break;
-                case 'bipolar-mdq':
-                    console.log('🔄 Redirecionando para teste MDQ Transtorno Bipolar');
-                    window.location.href = '/mdq-bipolar';
-                    break;
-                case 'stress-pss10':
-                    console.log('💭 Redirecionando para teste PSS-10 Stress');
-                    window.location.href = '/pss10-stress';
-                    break;
-                default:
-                    alert('⚠️ Teste não encontrado!');
-            }
-        }
-
-        // Simular carregamento dos dados
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ Centro de Avaliação Psiquiátrica iniciado com sucesso');
-            console.log('📊 6 instrumentos de avaliação disponíveis');
-            console.log('🎯 Sistema pronto para uso profissional');
-        });
-
-        // Função para voltar ao dashboard
-        function goBack() {
-            window.location.href = '/dashboard';
-        }
-
-        // Função para acessar histórico (placeholder)
-        function viewHistory() {
-            alert('📊 Funcionalidade de Histórico será implementada em breve!\n\nPermitirá visualizar todas as avaliações realizadas.');
-        }
-
-        // Função para triagem rápida (placeholder)
-        function quickScreening() {
-            alert('🚀 Triagem Rápida será implementada em breve!\n\nAvaliação completa em 15 minutos com múltiplos instrumentos.');
-        }
-    </script>
-
-    <!-- JAVASCRIPT RESPONSIVO AVANÇADO -->
-    <script>
-        function isMobile(){return window.innerWidth<=768;}
-        function isTablet(){return window.innerWidth>768 && window.innerWidth<=1024;}
-        function isDesktop(){return window.innerWidth>1024;}
-        function adjustLayout(){
-            const cards=document.querySelectorAll('.card,.ai-card,.pdf-card,.test-card');
-            if(isMobile()){
-                cards.forEach(card=>{
-                    card.style.width='100%';
-                    card.style.margin='8px 0';
-                });
-                const buttons=document.querySelectorAll('button,.btn');
-                buttons.forEach(btn=>{
-                    btn.style.minHeight='44px';
-                    btn.style.fontSize='16px';
-                });
-            }else if(isTablet()){
-                cards.forEach(card=>{
-                    card.style.width='calc(50% - 10px)';
-                });
-            }else{
-                cards.forEach(card=>{
-                    card.style.width='calc(33.33% - 15px)';
-                });
-            }
-        }
-        function optimizeForMobile(){
-            if(isMobile()){
-                const style=document.createElement('style');
-                style.textContent=`*{transition-duration:0.2s !important;animation-duration:0.2s !important;}`;
-                document.head.appendChild(style);
-                const images=document.querySelectorAll('img');
-                images.forEach(img=>{
-                    img.loading='lazy';
-                });
-            }
-        }
-        function handleOrientationChange(){
-            setTimeout(()=>{
-                adjustLayout();
-                const notifications=document.querySelectorAll('.notification');
-                notifications.forEach(notif=>{
-                    notif.style.maxWidth=isMobile()? '90vw':'320px';
-                });
-            },100);
-        }
-        window.addEventListener('resize',adjustLayout);
-        window.addEventListener('orientationchange',handleOrientationChange);
-        document.addEventListener('DOMContentLoaded',function(){
-            adjustLayout();
-            optimizeForMobile();
-            if('ontouchstart' in window){
-                document.body.classList.add('touch-device');
-            }
-        });
-        function preventIOSZoom(){
-            const inputs=document.querySelectorAll('input,select,textarea');
-            inputs.forEach(input=>{
-                if(input.style.fontSize !=='16px'){
-                    input.style.fontSize='16px';
-                }
-            });
-        }
-        if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
-            document.addEventListener('DOMContentLoaded',preventIOSZoom);
-        }
+        console.log('🧠 Centro de Avaliação Psiquiátrica TeleMed Pro carregado!');
+        console.log('🔬 6 instrumentos de avaliação disponíveis');
+        console.log('👨‍⚕️ Sistema profissional de triagem ativo');
+        console.log('📊 Relatórios PDF integrados');
     </script>
 </body>
 </html>
