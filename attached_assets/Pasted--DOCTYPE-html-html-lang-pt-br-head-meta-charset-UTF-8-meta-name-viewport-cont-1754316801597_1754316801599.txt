@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta Médica</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 20px;
+    }
+    .video-section {
+      flex: 1;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .video-section button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .video-section button:hover {
+      background-color: #45a049;
+    }
+    .prontuario-section {
+      flex: 2;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .prontuario-section h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    .prontuario-section .campo {
+      margin-bottom: 20px;
+    }
+    .prontuario-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .prontuario-section textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      resize: vertical;
+      font-size: 14px;
+    }
+    .prontuario-section a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .prontuario-section a:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="video-section">
+      <h2>Videoconsulta</h2>
+      <p>Clique para iniciar a chamada com o paciente.</p>
+      <button onclick="startVideoCall()">Iniciar Videoconsulta</button>
+      <p><em>(Simulação - substitua por link real de videoconferência)</em></p>
+    </div>
+    <div class="prontuario-section">
+      <h2>Prontuário do Paciente</h2>
+      <div class="campo">
+        <label>Queixa</label>
+        <textarea placeholder="Descreva a queixa do paciente..."></textarea>
+      </div>
+      <div class="campo">
+        <label>Hipótese Diagnóstica</label>
+        <textarea placeholder="Registre a hipótese diagnóstica..."></textarea>
+      </div>
+      <div class="campo">
+        <label>Conduta</label>
+        <textarea placeholder="Defina a conduta a ser seguida..."></textarea>
+      </div>
+      <div class="campo">
+        <label>Receita</label>
+        <a href="https://exemplo.com/gerar-receita" target="_blank">Gerar Receita</a>
+        <p><em>(Substitua pelo link real do sistema de receita)</em></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function startVideoCall() {
+      alert("Videoconsulta iniciada! Substitua esta função por uma integração real (ex.: Zoom, Google Meet).");
+    }
+  </script>
+</body>
+</html>

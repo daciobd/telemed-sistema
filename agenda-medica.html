@@ -1136,7 +1136,7 @@
                 row.innerHTML = `
                     <td class="patient-time">${patient.time}</td>
                     <td>
-                        <div class="patient-name">${patient.name}</div>
+                        <div class="patient-name" onclick="startConsultation('${patient.name}')" style="cursor: pointer; color: #007BFF;" title="Clique para iniciar atendimento">${patient.name}</div>
                         <div class="patient-specialty">${patient.insurance}</div>
                     </td>
                     <td>${patient.specialty}</td>
@@ -1192,7 +1192,24 @@
         }
 
         function startConsultation(name) {
-            alert(`🎥 Iniciando consulta com: ${name}\nAbrindo sala de videoconferência...`);
+            // Encontrar dados do paciente
+            const patient = patientsData.find(p => p.name === name);
+            if (!patient) {
+                alert('Paciente não encontrado!');
+                return;
+            }
+            
+            // Construir URL com parâmetros do paciente
+            const params = new URLSearchParams({
+                name: patient.name,
+                time: patient.time,
+                specialty: patient.specialty,
+                insurance: patient.insurance,
+                phone: patient.phone
+            });
+            
+            // Redirecionar para página de atendimento
+            window.location.href = `/atendimento-medico.html?${params.toString()}`;
         }
     </script>
 </body>
