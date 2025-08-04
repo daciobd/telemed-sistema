@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Médica</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    #calendario {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    #dataSelecionada {
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    #pacientes-dia table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    #pacientes-dia th, #pacientes-dia td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    #pacientes-dia th {
+      background-color: #f4f4f4;
+    }
+    #pacientes-dia tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    #pacientes-dia tr:hover {
+      background-color: #ddd;
+      cursor: pointer;
+    }
+    .action-buttons {
+      margin-top: 10px;
+    }
+    .action-buttons button {
+      padding: 8px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .action-buttons .atender {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .action-buttons .remarcar {
+      background-color: #3498db;
+      color: white;
+    }
+    .action-buttons .cancelar {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .action-buttons button:hover {
+      opacity: 0.9;
+    }
+    /* Estilo do Modal de Agenda */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 500px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(#e0eafc, #cfdef3);
+    }
+    .agenda {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .horario {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      background-color: #fff;
+    }
+    .horario:hover {
+      background-color: #ecf0f1;
+    }
+    .horario.ocupado {
+      background-color: #e74c3c;
+      color: white;
+      cursor: not-allowed;
+    }
+    .close {
+      color: #e74c3c;
+      float: right;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="calendario">
+      <h2>Selecionar Data</h2>
+      <input type="date" id="dataSelecionada" onchange="atualizarAgenda()">
+    </div>
+    <section id="pacientes-dia">
+      <h2>Pacientes do Dia</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Hora</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="invitePatient(1, 'João Silva')">
+            <td>João Silva</td>
+            <td>09:00</td>
+            <td>Agendado</td>
+            <td class="action-buttons">
+              <button class="atender" onclick="startConsulta(1, event)">Atender</button>
+              <button class="remarcar" onclick="abrirAgenda(1, event)">Remarcar</button>
+              <button class="cancelar" onclick="cancelarConsulta(1, event)">Cancelar</button>
+            </td>
+          </tr>
+          <tr onclick="invitePatient(2, 'Maria Oliveira')">
+            <td>Maria Oliveira</td>
+            <td>10:30</td>
+            <td>Confirmado</td>
+            <td class="action-buttons">
+              <button class="atender" onclick="startConsulta(2, event)">Atender</button>
+              <button class="remarcar" onclick="abrirAgenda(2, event)">Remarcar</button>
+              <button class="cancelar" onclick="cancelarConsulta(2, event)">Cancelar</button>
+            </td>
+          </tr>
+          <tr onclick="invitePatient(3, 'Pedro Souza')">
+            <td>Pedro Souza</td>
+            <td>14:00</td>
+            <td>Pendente</td>
+            <td class="action-buttons">
+              <button class="atender" onclick="startConsulta(3, event)">Atender</button>
+              <button class="remarcar" onclick="abrirAgenda(3, event)">Remarcar</button>
+              <button class="cancelar" onclick="cancelarConsulta(3, event)">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <div id="modalAgenda" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="fecharAgenda()">&times;</span>
+      <h2>Escolha um Novo Horário</h2>
+      <div class="agenda" id="horariosDisponiveis"></div>
+    </div>
+  </div>
+
+  <script>
+    let patientResponse = null;
+    let pacienteIdRemarcar = null;
+
+    function atualizarAgenda() {
+      const data = document.getElementById('dataSelecionada').value;
+      alert(`Agenda atualizada para ${data}. Integre com o banco para carregar pacientes.`);
+    }
+
+    function invitePatient(patientId, patientName) {
+      patientResponse = null;
+      alert(`Convite enviado para ${patientName} para a teleconsulta às ${new Date().toLocaleTimeString()}. Aguardando resposta...`);
+      
+      setTimeout(() => {
+        if (!patientResponse) {
+          if (confirm(`O paciente ${patientName} não respondeu ao convite. Deseja remarcar, cancelar ou insistir?`)) {
+            if (confirm("Remarcar consulta?")) {
+              abrirAgenda(patientId);
+            } else {
+              cancelarConsulta(patientId);
+            }
+          } else {
+            alert("Insistindo no convite...");
+            invitePatient(patientId, patientName);
+          }
+        }
+      }, 5000);
+    }
+
+    function startConsulta(patientId, event) {
+      event.stopPropagation();
+      window.location.href = `consulta.html?id=${patientId}`;
+    }
+
+    function cancelarConsulta(patientId, event) {
+      event?.stopPropagation();
+      if (confirm(`Deseja cancelar a consulta do paciente ID ${patientId}?`)) {
+        alert(`Consulta do paciente ID ${patientId} cancelada.`);
+      }
+    }
+
+    function abrirAgenda(patientId, event) {
+      event?.stopPropagation();
+      pacienteIdRemarcar = patientId;
+      document.getElementById('modalAgenda').style.display = 'block';
+
+      // Simulação de horários disponíveis (substituir por banco de dados)
+      const horarios = [
+        { hora: '09:00', disponivel: true },
+        { hora: '10:30', disponivel: false }, // Ocupado
+        { hora: '14:00', disponivel: true },
+        { hora: '15:30', disponivel: true }
+      ];
+
+      const agenda = document.getElementById('horariosDisponiveis');
+      agenda.innerHTML = horarios.map(h => `
+        <div class="horario ${!h.disponivel ? 'ocupado' : ''}" onclick="${h.disponivel ? `remarcarConsulta(${patientId}, '${h.hora}')` : ''}">
+          ${h.hora} ${!h.disponivel ? '(Ocupado)' : ''}
+        </div>
+      `).join('');
+    }
+
+    function fecharAgenda() {
+      document.getElementById('modalAgenda').style.display = 'none';
+    }
+
+    function remarcarConsulta(patientId, novoHorario) {
+      alert(`Consulta do paciente ID ${patientId} remarcada para ${novoHorario} de ${document.getElementById('dataSelecionada').value || 'data selecionada'}.`);
+      fecharAgenda();
+      // Em produção, atualize o banco de dados aqui
+    }
+
+    window.addEventListener('click', () => {
+      if (!patientResponse) patientResponse = true;
+    });
+  </script>
+</body>
+</html>

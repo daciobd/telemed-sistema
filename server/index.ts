@@ -482,6 +482,121 @@ async function startServer() {
     }
   });
 
+  // Enhanced rescheduling system with detailed tracking
+  app.patch('/api/pacientes/:id/remarcar', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { 
+        nova_data, 
+        nova_hora, 
+        motivo, 
+        observacoes, 
+        data_anterior, 
+        hora_anterior 
+      } = req.body;
+
+      if (!nova_data || !nova_hora || !motivo) {
+        return res.status(400).json({ 
+          error: 'Nova data, hora e motivo são obrigatórios' 
+        });
+      }
+
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      // Update patient appointment
+      const result = await client.query(`
+        UPDATE pacientes 
+        SET 
+          data_consulta = $1,
+          hora_consulta = $2,
+          status = 'Reagendado',
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = $3
+        RETURNING *
+      `, [nova_data, nova_hora, id]);
+
+      if (result.rows.length === 0) {
+        await client.end();
+        return res.status(404).json({ error: 'Paciente não encontrado' });
+      }
+
+      const patient = result.rows[0];
+
+      // Log rescheduling history
+      await client.query(`
+        INSERT INTO historico_remarcacoes (
+          paciente_id, 
+          data_anterior, 
+          hora_anterior, 
+          nova_data, 
+          nova_hora, 
+          motivo, 
+          observacoes,
+          created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
+      `, [
+        id, 
+        data_anterior, 
+        hora_anterior, 
+        nova_data, 
+        nova_hora, 
+        motivo, 
+        observacoes
+      ]);
+
+      await client.end();
+
+      res.json(patient);
+      console.log(`📅 Consulta remarcada: ${patient.nome} de ${data_anterior} ${hora_anterior} para ${nova_data} ${nova_hora}`);
+
+    } catch (error) {
+      console.error('Erro ao remarcar consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Get available time slots for a date
+  app.get('/api/horarios-disponiveis/:date', async (req, res) => {
+    try {
+      const { date } = req.params;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      // Get occupied slots for the date
+      const occupiedResult = await client.query(`
+        SELECT hora_consulta 
+        FROM pacientes 
+        WHERE data_consulta = $1 
+        AND status != 'Cancelado'
+      `, [date]);
+
+      await client.end();
+
+      const occupiedTimes = occupiedResult.rows.map(row => row.hora_consulta);
+
+      // Generate time slots
+      const timeSlots = [
+        '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+        '11:00', '11:30', '14:00', '14:30', '15:00', '15:30',
+        '16:00', '16:30', '17:00', '17:30', '18:00'
+      ];
+
+      const availableSlots = timeSlots.map(time => ({
+        time: time,
+        available: !occupiedTimes.includes(time),
+        patientName: occupiedTimes.includes(time) ? 'Ocupado' : null
+      }));
+
+      res.json(availableSlots);
+
+    } catch (error) {
+      console.error('Erro ao buscar horários disponíveis:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
   app.get('/sobre', (req, res) => {
   console.log('📄 Serving página Sobre Nós for:', req.path);
