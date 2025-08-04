@@ -330,6 +330,158 @@ async function startServer() {
     }
   });
 
+  // MEMED Integration Routes - Digital Prescriptions
+  
+  // Generate digital prescription
+  app.post('/api/memed/gerar-receita', async (req, res) => {
+    try {
+      const { pacienteId, medicamentos, observacoes } = req.body;
+
+      if (!pacienteId || !medicamentos || !Array.isArray(medicamentos)) {
+        return res.status(400).json({
+          error: 'Dados inválidos. Forneça pacienteId e array de medicamentos'
+        });
+      }
+
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const pacienteResult = await client.query('SELECT * FROM pacientes WHERE id = $1', [pacienteId]);
+      
+      if (pacienteResult.rows.length === 0) {
+        await client.end();
+        return res.status(404).json({ error: 'Paciente não encontrado' });
+      }
+
+      const paciente = pacienteResult.rows[0];
+
+      // Simular integração MEMED (será atualizada com API real)
+      const receita = {
+        prescriptionId: `MEMED_${Date.now()}`,
+        url: `https://receita.memed.com.br/view/${Date.now()}`,
+        qrCode: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==`,
+        validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'active'
+      };
+
+      // Salvar receita no banco
+      const receitaInsert = await client.query(`
+        INSERT INTO receitas_digitais (
+          paciente_id, prescription_id, url_receita, qr_code, 
+          medicamentos, status, valida_ate, observacoes, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP)
+        RETURNING *
+      `, [
+        pacienteId,
+        receita.prescriptionId,
+        receita.url,
+        receita.qrCode,
+        JSON.stringify(medicamentos),
+        receita.status,
+        receita.validUntil,
+        observacoes || ''
+      ]);
+
+      await client.end();
+
+      res.json({
+        success: true,
+        receita: {
+          id: receitaInsert.rows[0].id,
+          prescriptionId: receita.prescriptionId,
+          url: receita.url,
+          qrCode: receita.qrCode,
+          validUntil: receita.validUntil,
+          status: receita.status,
+          paciente: paciente.nome,
+          medicamentos: medicamentos
+        }
+      });
+
+      console.log(`📋 Receita digital gerada: ${receita.prescriptionId} para ${paciente.nome}`);
+
+    } catch (error) {
+      console.error('Erro ao gerar receita:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Get patient prescriptions
+  app.get('/api/memed/paciente/:id/receitas', async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const result = await client.query(`
+        SELECT r.*, p.nome as paciente_nome 
+        FROM receitas_digitais r
+        JOIN pacientes p ON r.paciente_id = p.id
+        WHERE r.paciente_id = $1
+        ORDER BY r.created_at DESC
+      `, [id]);
+
+      await client.end();
+      res.json(result.rows);
+
+    } catch (error) {
+      console.error('Erro ao buscar receitas:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Get all prescriptions
+  app.get('/api/memed/receitas', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const result = await client.query(`
+        SELECT r.*, p.nome as paciente_nome 
+        FROM receitas_digitais r
+        JOIN pacientes p ON r.paciente_id = p.id
+        ORDER BY r.created_at DESC
+      `);
+
+      await client.end();
+      res.json(result.rows);
+
+    } catch (error) {
+      console.error('Erro ao buscar receitas:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Invalidate prescription
+  app.patch('/api/memed/receita/:id/invalidar', async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const result = await client.query(`
+        UPDATE receitas_digitais 
+        SET status = 'invalidated', updated_at = CURRENT_TIMESTAMP
+        WHERE id = $1
+        RETURNING *
+      `, [id]);
+
+      await client.end();
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Receita não encontrada' });
+      }
+
+      res.json({ success: true, receita: result.rows[0] });
+
+    } catch (error) {
+      console.error('Erro ao invalidar receita:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
   app.get('/sobre', (req, res) => {
   console.log('📄 Serving página Sobre Nós for:', req.path);

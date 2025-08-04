@@ -1,0 +1,79 @@
+Passos no Replit
+
+Crie um Novo Projeto:
+
+No Replit, clique em "Create" e selecione "Node.js" como o ambiente.
+
+
+Instale Dependências:
+
+No terminal do Replit, execute:
+textnpm init -y
+npm install express axios dotenv
+
+express para criar o servidor, axios para fazer requisições à API do Memed, e dotenv para gerenciar variáveis de ambiente (credenciais da API).
+
+
+Estruture os Arquivos:
+
+Crie um arquivo .env para armazenar as credenciais (ex.: chave de API e token).
+Crie index.js como o ponto de entrada do servidor.
+Crie uma pasta routes com um arquivo prescrever.js para a lógica de prescrição.
+
+
+Configure o Código:
+
+O código abaixo simula a integração com a API do Memed, usando placeholders para credenciais e endpoints. Quando a Memed autorizar, você só precisará substituir os valores e ajustar o endpoint real.
+
+
+
+Código Preparado
+Aqui está o conteúdo para os arquivos:
+.env.envplain•
+Nota: Deixe os valores como placeholders (your_api_key_here, etc.). Após a autorização, substitua pelos dados reais fornecidos pela Memed.
+
+index.jsindex.jsjavascript•
+Explicação: Configura um servidor Express que escuta na porta padrão do Replit e roteia requisições para a rota de prescrição.
+
+routes/prescrever.jsprescrever.jsjavascript•
+Explicação:
+
+A rota /prescrever/gerar aceita uma requisição POST com pacienteId, medicamento e dosagem.
+Os dados do paciente são simulados (substitua por uma consulta ao banco de dados).
+A chamada à API do Memed é um placeholder; substitua MEMED_API_URL e ajuste o payload conforme a documentação da Memed após a autorização.
+O retorno simula uma URL de receita; na integração real, use a resposta da API.
+
+
+
+Como Usar no Replit
+
+Adicione os Arquivos:
+
+Crie .env, index.js e a pasta routes com prescrever.js.
+Copie os códigos acima para os respectivos arquivos.
+
+
+Teste Localmente:
+
+No terminal, execute node index.js.
+Use uma ferramenta como Postman ou cURL para enviar uma requisição POST para http://localhost:3000/prescrever/gerar com um JSON como:
+json{
+  "pacienteId": 1,
+  "medicamento": "Paracetamol",
+  "dosagem": "1g, 2x ao dia"
+}
+
+Você verá uma resposta simulada até a integração real.
+
+
+Ajuste Após Autorização:
+
+Substitua os valores no .env com as credenciais fornecidas pela Memed.
+Acesse a documentação da API do Memed (disponível após o registro) para ajustar o endpoint e o formato do payload.
+
+
+
+Próximos Passos
+
+Registro na Memed: Solicite acesso à API no site deles (pode levar dias).
+Banco de Dados: Integre com sua tabela pacientes para puxar dados reais.
