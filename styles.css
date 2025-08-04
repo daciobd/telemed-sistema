@@ -1,4 +1,4 @@
-/* Dashboard Médico - Minimal Styles */
+/* Dashboard Médico - Estilo Aquarela Suave */
 * {
     margin: 0;
     padding: 0;
@@ -6,83 +6,157 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-    color: #334155;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #F5E8C7, #E0D7B9);
+    background-image: url('https://www.transparenttextures.com/patterns/watercolor-texture.png');
+    background-size: cover;
+    background-position: center;
     min-height: 100vh;
+    overflow-x: hidden;
     display: flex;
 }
 
-/* SIDEBAR */
+/* SIDEBAR AQUARELA */
 .sidebar {
-    width: 280px;
-    background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
-    color: white;
-    padding: 30px 25px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     position: fixed;
-    height: 100vh;
-    overflow-y: auto;
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(135deg, #B3D9E0, #D1E8E2);
+    padding: 20px;
+    color: #2A4066;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 8px 0 0;
+    z-index: 1000;
 }
 
 .sidebar h2 {
-    font-size: 20px;
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #2A4066;
     font-weight: 600;
-    margin-bottom: 8px;
-    color: #f8fafc;
 }
 
 .sidebar p {
     font-size: 14px;
-    color: #94a3b8;
+    color: #4A6A8A;
     margin-bottom: 30px;
     font-weight: 300;
 }
 
-/* CONTENT */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    color: #4A6A8A;
+}
+
+.sidebar ul li a {
+    color: #4A6A8A;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #2A4066;
+}
+
+/* CONTENT AQUARELA */
 .content {
-    flex: 1;
-    margin-left: 280px;
-    padding: 30px;
+    margin-left: 270px;
+    padding: 20px;
     min-height: 100vh;
+    background: linear-gradient(135deg, #F0F0E8, #D9D9C7);
+    background-image: url('https://www.transparenttextures.com/patterns/watercolor-texture.png');
+    background-size: cover;
+    border-radius: 15px;
+    flex: 1;
 }
 
 .content h1 {
     font-size: 28px;
     font-weight: 700;
-    color: #1e293b;
+    color: #2A4066;
     margin-bottom: 30px;
-    background: linear-gradient(135deg, #1e293b, #3b82f6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
+/* CARDS AQUARELA */
 .card {
-    background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
+    display: inline-block;
+    width: 200px;
+    height: 150px;
+    background: linear-gradient(135deg, #E8D4C9, #F1EDEB);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    text-align: center;
+    padding: 20px;
+    color: #2A4066;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #3b82f6, #2563eb);
 }
 
 .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card.welcome {
+    width: 100%;
+    height: auto;
+    text-align: left;
+    background: linear-gradient(135deg, #C1E1C5, #D4F4D4);
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 24px;
+    margin: 10px 0;
+    font-weight: 600;
+}
+
+.card span {
+    color: #4A6A8A;
+    font-size: 12px;
+}
+
+/* BOTÕES AQUARELA */
+button {
+    background: linear-gradient(135deg, #C1E1C5, #D4F4D4);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    color: #2A4066;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+button.red {
+    background: linear-gradient(135deg, #FF9999, #FFCCCC);
+    color: #8B2635;
+}
+
+button.blue {
+    background: linear-gradient(135deg, #99CCFF, #CCE5FF);
+    color: #1E3A8A;
+}
+
+button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* RESPONSIVE */
@@ -90,20 +164,21 @@ body {
     .sidebar {
         transform: translateX(-100%);
         transition: transform 0.3s ease;
-        z-index: 1000;
     }
 
     .content {
         margin-left: 0;
+        border-radius: 0;
     }
 }
 
 @media (max-width: 768px) {
     .content {
-        padding: 20px 15px;
+        padding: 15px;
     }
 
-    .content h1 {
-        font-size: 24px;
+    .card {
+        width: 100%;
+        margin: 10px 0;
     }
 }
