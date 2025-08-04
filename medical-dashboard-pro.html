@@ -346,8 +346,314 @@
             text-align: right;
         }
 
+        /* PREMIUM STATS ENHANCEMENTS */
+        .stats-grid .stat-card.consultas { --accent-color: linear-gradient(90deg, #3B82F6, #2563EB); }
+        .stats-grid .stat-card.pacientes { --accent-color: linear-gradient(90deg, #10B981, #059669); }
+        .stats-grid .stat-card.avaliacoes { --accent-color: linear-gradient(90deg, #8B5CF6, #7C3AED); }
+        .stats-grid .stat-card.documentos { --accent-color: linear-gradient(90deg, #F59E0B, #D97706); }
+
+        .stats-grid .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-grid .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stats-grid .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-grid .stat-icon.blue { 
+            background: linear-gradient(135deg, #DBEAFE 0%, #EBF4FF 100%); 
+            color: #2563EB; 
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            font-size: 1.8em;
+        }
+
+        .stats-grid .stat-icon.green { 
+            background: linear-gradient(135deg, #DCFCE7 0%, #F0FDF4 100%); 
+            color: #16A34A; 
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            font-size: 1.8em;
+        }
+
+        .stats-grid .stat-icon.purple { 
+            background: linear-gradient(135deg, #EDE9FE 0%, #F3F4F6 100%); 
+            color: #8B5CF6; 
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            font-size: 1.8em;
+        }
+
+        .stats-grid .stat-icon.orange { 
+            background: linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%); 
+            color: #D97706; 
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            font-size: 1.8em;
+        }
+
+        .stats-grid .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1F2937;
+            margin-bottom: 8px;
+            font-feature-settings: 'tnum';
+        }
+
+        .stats-grid .stat-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .stats-grid .stat-change {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .stats-grid .stat-change.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .stats-grid .stat-change.neutral {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6B7280;
+        }
+
+        /* PREMIUM ACTION CARDS */
+        .actions-section .action-card.premium {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .actions-section .action-card.premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .actions-section .action-card.premium:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .actions-section .action-card.premium:hover::before {
+            opacity: 1;
+        }
+
+        .actions-section .action-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .actions-section .action-icon.ai { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        }
+        .actions-section .action-icon.pdf { 
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%); 
+        }
+        .actions-section .action-icon.assessment { 
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); 
+        }
+        .actions-section .action-icon.medical { 
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); 
+        }
+
+        .actions-section .action-icon svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .actions-section .action-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .actions-section .action-description {
+            color: #6B7280;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .actions-section .action-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+
+        .actions-section .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* QUICK ACCESS PANEL */
+        .quick-access-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: slideInUp 0.8s ease-out 1.2s both;
+        }
+
+        .panel-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin: 0 0 4px 0;
+        }
+
+        .panel-header p {
+            font-size: 14px;
+            color: #6B7280;
+            margin: 0;
+        }
+
+        .quick-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+        }
+
+        .quick-access-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-access-btn.urgent {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+        }
+
+        .quick-access-btn.primary {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+        }
+
+        .quick-access-btn.secondary {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+
+        .quick-access-btn.success {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            color: white;
+        }
+
+        .quick-access-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-icon {
+            font-size: 20px;
+        }
+
+        .btn-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
         /* Override conflicting styles */
-        .stats-grid,
         .actions-section {
             position: relative;
             z-index: 1;
@@ -1019,68 +1325,85 @@
             </div>
         </section>
 
-        <!-- STATS GRID -->
+        <!-- STATS GRID PREMIUM -->
         <section class="stats-grid">
             <div class="stat-card consultas">
-                <span class="stat-icon">📅</span>
+                <div class="stat-icon blue">📅</div>
                 <div class="stat-number">24</div>
                 <div class="stat-label">Consultas Hoje</div>
                 <div class="stat-change positive">+12% vs ontem</div>
             </div>
 
             <div class="stat-card pacientes">
-                <span class="stat-icon">👥</span>
+                <div class="stat-icon green">👥</div>
                 <div class="stat-number">18</div>
                 <div class="stat-label">Pacientes Ativos</div>
                 <div class="stat-change positive">+5 novos</div>
             </div>
 
             <div class="stat-card avaliacoes">
-                <span class="stat-icon">🧠</span>
+                <div class="stat-icon purple">🧠</div>
                 <div class="stat-number">6</div>
                 <div class="stat-label">Avaliações Completas</div>
                 <div class="stat-change positive">+2 hoje</div>
             </div>
 
             <div class="stat-card documentos">
-                <span class="stat-icon">📄</span>
+                <div class="stat-icon orange">📄</div>
                 <div class="stat-number">12</div>
                 <div class="stat-label">PDFs Gerados</div>
                 <div class="stat-change positive">+8 esta semana</div>
             </div>
         </section>
 
-        <!-- QUICK ACTIONS -->
+        <!-- QUICK ACTIONS PREMIUM -->
         <section class="actions-section">
             <h2 class="section-title">🚀 Acesso Rápido às Funcionalidades</h2>
             
             <div class="actions-grid">
-                <div class="action-card" onclick="window.location.href='/index.html'">
-                    <span class="action-icon">🤖</span>
+                <div class="action-card premium" onclick="window.location.href='/index.html'">
+                    <div class="action-icon ai">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                    </div>
                     <h3 class="action-title">Dr. AI</h3>
                     <p class="action-description">Sistema completo de inteligência artificial para triagem médica e protocolos clínicos</p>
-                    <a href="/index.html" class="action-btn">Acessar Dr. AI</a>
+                    <a href="/index.html" class="action-button">Acessar Dr. AI</a>
                 </div>
 
-                <div class="action-card" onclick="window.location.href='/pdf-generator.html'">
-                    <span class="action-icon">📄</span>
+                <div class="action-card premium" onclick="window.location.href='/pdf-generator.html'">
+                    <div class="action-icon pdf">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z"/>
+                        </svg>
+                    </div>
                     <h3 class="action-title">Gerar PDF</h3>
                     <p class="action-description">Gere receitas, laudos, relatórios e atestados médicos profissionais</p>
-                    <a href="/pdf-generator.html" class="action-btn">Gerar Documentos</a>
+                    <a href="/pdf-generator.html" class="action-button">Gerar Documentos</a>
                 </div>
 
-                <div class="action-card" onclick="window.location.href='/centro-avaliacao.html'">
-                    <span class="action-icon">🧠</span>
+                <div class="action-card premium" onclick="window.location.href='/centro-avaliacao.html'">
+                    <div class="action-icon assessment">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 3a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"/>
+                        </svg>
+                    </div>
                     <h3 class="action-title">Avaliações</h3>
                     <p class="action-description">Centro completo de avaliações psiquiátricas: GAD-7, PHQ-9, MDQ, PSS-10, ASRS-18</p>
-                    <a href="/centro-avaliacao.html" class="action-btn">Acessar Avaliações</a>
+                    <a href="/centro-avaliacao.html" class="action-button">Acessar Avaliações</a>
                 </div>
 
-                <div class="action-card" onclick="window.location.href='/triagem-inteligente.html'">
-                    <span class="action-icon">🩺</span>
+                <div class="action-card premium" onclick="window.location.href='/triagem-inteligente.html'">
+                    <div class="action-icon medical">
+                        <svg fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                        </svg>
+                    </div>
                     <h3 class="action-title">Triagem</h3>
                     <p class="action-description">Sistema de triagem inteligente com protocolos médicos automatizados</p>
-                    <a href="/triagem-inteligente.html" class="action-btn">Iniciar Triagem</a>
+                    <a href="/triagem-inteligente.html" class="action-button">Iniciar Triagem</a>
                 </div>
             </div>
         </section>
@@ -1128,6 +1451,32 @@
                     </div>
                     <div class="activity-time">11:30</div>
                 </div>
+            </div>
+        </section>
+
+        <!-- QUICK ACCESS PANEL -->
+        <section class="quick-access-panel">
+            <div class="panel-header">
+                <h3>⚡ Acesso Ultra-Rápido</h3>
+                <p>Ferramentas mais utilizadas</p>
+            </div>
+            <div class="quick-buttons">
+                <button class="quick-access-btn urgent" onclick="startEmergencyConsult()">
+                    <span class="btn-icon">🚨</span>
+                    <span class="btn-text">Emergência</span>
+                </button>
+                <button class="quick-access-btn primary" onclick="window.location.href='/centro-avaliacao.html'">
+                    <span class="btn-icon">🧠</span>
+                    <span class="btn-text">Avaliações</span>
+                </button>
+                <button class="quick-access-btn secondary" onclick="window.location.href='/pdf-generator.html'">
+                    <span class="btn-icon">📄</span>
+                    <span class="btn-text">PDF</span>
+                </button>
+                <button class="quick-access-btn success" onclick="showSettings()">
+                    <span class="btn-icon">⚙️</span>
+                    <span class="btn-text">Configurações</span>
+                </button>
             </div>
         </section>
     </div>
@@ -1268,7 +1617,55 @@
                     badge.style.animation = 'pulse 3s infinite';
                 });
             }, 2000);
+
+            // Add premium card animations
+            setTimeout(() => {
+                document.querySelectorAll('.action-card.premium').forEach((card, index) => {
+                    card.style.animation = `slideInUp 0.6s ease-out ${0.5 + index * 0.1}s both`;
+                });
+            }, 1000);
+
+            // Add staggered animations to stat cards
+            setTimeout(() => {
+                document.querySelectorAll('.stat-card').forEach((card, index) => {
+                    card.style.animation = `slideInUp 0.6s ease-out ${0.2 + index * 0.1}s both`;
+                });
+            }, 500);
         });
+
+        // Add premium keyframes
+        const premiumStyles = document.createElement('style');
+        premiumStyles.textContent = `
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+            }
+            
+            .animate-slide-up {
+                animation: slideInUp 0.6s ease-out;
+            }
+            
+            .animate-fade-in {
+                animation: fadeIn 0.4s ease-out;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(premiumStyles);
         console.log('🏥 Dashboard Médico TeleMed Pro Carregado!');
         console.log('✨ Design empresarial com animações');
         console.log('📊 4 métricas em tempo real');
