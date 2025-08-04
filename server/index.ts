@@ -6164,9 +6164,9 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
 });
 
   app.get('/dashboard', (req, res) => {
-  console.log('🎯 Redirecting /dashboard to /patient-dashboard');
-  res.redirect('/patient-dashboard');
-});
+    console.log('🎯 Redirecting /dashboard to /index.html (Aquarela)');
+    res.redirect('/index.html');
+  });
 
   // SISTEMA DE NOTIFICAÇÕES MÉDICAS - SMS/WhatsApp
   
