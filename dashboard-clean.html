@@ -14,9 +14,9 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
       min-height: 100vh;
-      color: #333;
+      color: #1F2937;
     }
 
     .container {
@@ -40,7 +40,7 @@
     .dashboard-header h1 {
       font-size: 2.5rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -61,9 +61,9 @@
       flex-wrap: wrap;
     }
 
-    /* BUTTONS */
+    /* BUTTONS MODERN */
     .btn-red {
-      background: linear-gradient(135deg, #EF4444, #DC2626);
+      background: linear-gradient(135deg, #FF4B5C 0%, #FF6B7A 100%);
       color: white;
       border: none;
       padding: 16px 32px;
@@ -72,11 +72,13 @@
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 4px 20px rgba(255, 75, 92, 0.4);
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-blue {
-      background: linear-gradient(135deg, #3B82F6, #2563EB);
+      background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
       color: white;
       border: none;
       padding: 16px 32px;
@@ -85,11 +87,13 @@
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-green {
-      background: linear-gradient(135deg, #10B981, #059669);
+      background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
       color: white;
       border: none;
       padding: 16px 32px;
@@ -98,11 +102,13 @@
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-purple {
-      background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+      background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%);
       color: white;
       border: none;
       padding: 16px 32px;
@@ -111,7 +117,9 @@
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-outline {
@@ -127,9 +135,24 @@
       backdrop-filter: blur(10px);
     }
 
+    .btn-red::before, .btn-blue::before, .btn-green::before, .btn-purple::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
     .btn-red:hover, .btn-blue:hover, .btn-green:hover, .btn-purple:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-red:hover::before, .btn-blue:hover::before, .btn-green:hover::before, .btn-purple:hover::before {
+      left: 100%;
     }
 
     .btn-outline:hover {
@@ -168,7 +191,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
+      background: linear-gradient(90deg, #4F46E5, #7C3AED, #EC4899);
       transform: scaleX(0);
       transition: transform 0.3s ease;
     }
@@ -186,12 +209,33 @@
       font-size: 3rem;
       width: 80px;
       height: 80px;
-      background: linear-gradient(135deg, #F3F4F6, #E5E7EB);
+      background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
       border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(79, 70, 229, 0.1);
+    }
+
+    .card:nth-child(1) .card-icon {
+      background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+      color: #1D4ED8;
+    }
+
+    .card:nth-child(2) .card-icon {
+      background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%);
+      color: #15803D;
+    }
+
+    .card:nth-child(3) .card-icon {
+      background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
+      color: #7C2D12;
+    }
+
+    .card:nth-child(4) .card-icon {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      color: #92400E;
     }
 
     .card-value {
@@ -245,7 +289,10 @@
     .online-time {
       font-size: 2rem;
       font-weight: 700;
-      color: #059669;
+      background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     /* RESPONSIVE */
