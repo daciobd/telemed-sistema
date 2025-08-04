@@ -1,0 +1,88 @@
+preparação do banco de dados para as consultas teste, você pode seguir estas etapas gerais e fornecer instruções claras. Vou assumir que o banco de dados será usado para simular os pacientes e consultas que criamos anteriormente. Aqui está uma sugestão de abordagem:
+Instruções para o Agente:
+
+Definir a Estrutura do Banco de Dados:
+
+Crie uma tabela chamada pacientes com os seguintes campos:
+
+id (inteiro, chave primária, auto-incremento)
+nome (texto, ex.: "João Silva")
+hora_consulta (texto ou horário, ex.: "09:00")
+status (texto, ex.: "Agendado", "Confirmado", "Pendente", "Cancelado")
+
+
+Crie uma tabela chamada prontuarios com:
+
+id (inteiro, chave primária, auto-incremento)
+paciente_id (inteiro, referência à tabela pacientes)
+queixa (texto)
+hipotese_diagnostica (texto)
+conduta (texto)
+data_consulta (data, ex.: "2025-08-04")
+
+
+
+
+População com Dados Fictícios:
+
+Insira alguns registros de teste na tabela pacientes, como:
+
+João Silva, 09:00, Agendado
+Maria Oliveira, 10:30, Confirmado
+Pedro Souza, 14:00, Pendente
+
+
+Na tabela prontuarios, associe os pacientes e adicione dados simulados, como:
+
+queixa: "Dor de cabeça persistente", hipotese_diagnostica: "Possível enxaqueca", conduta: "Encaminhar a neurologista", data_consulta: "2025-08-04"
+
+
+
+
+Ferramenta e Conexão:
+
+Use um banco de dados como MySQL, SQLite ou PostgreSQL (escolha conforme o ambiente, ex.: Replit suporta SQLite).
+Configure a conexão no código da aplicação (ex.: via PHP, Python ou JavaScript com Node.js), garantindo que o agente tenha as credenciais de acesso.
+
+
+Testes Iniciais:
+
+Verifique se os dados podem ser recuperados (ex.: listar pacientes por horário).
+Simule a abertura de uma consulta clicando em um paciente e exiba os dados do prontuário na página consulta.html.
+
+
+Documentação:
+
+O agente deve anotar o esquema do banco, credenciais e instruções de acesso em um arquivo (ex.: README.md) para referência futura.
+
+
+
+Exemplo de Script SQL (SQLite):
+sqlCREATE TABLE pacientes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nome TEXT NOT NULL,
+  hora_consulta TEXT,
+  status TEXT
+);
+
+CREATE TABLE prontuarios (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  paciente_id INTEGER,
+  queixa TEXT,
+  hipotese_diagnostica TEXT,
+  conduta TEXT,
+  data_consulta DATE,
+  FOREIGN KEY (paciente_id) REFERENCES pacientes(id)
+);
+
+INSERT INTO pacientes (nome, hora_consulta, status) VALUES
+('João Silva', '09:00', 'Agendado'),
+('Maria Oliveira', '10:30', 'Confirmado'),
+('Pedro Souza', '14:00', 'Pendente');
+
+INSERT INTO prontuarios (paciente_id, queixa, hipotese_diagnostica, conduta, data_consulta) VALUES
+(1, 'Dor de cabeça persistente', 'Possível enxaqueca', 'Encaminhar a neurologista', '2025-08-04');
+Próximos Passos:
+
+Peça ao agente para executar o script em um ambiente de teste (ex.: Replit ou local).
+Teste a integração com a página consulta.html, ajustando o JavaScript para buscar os dados do banco.
