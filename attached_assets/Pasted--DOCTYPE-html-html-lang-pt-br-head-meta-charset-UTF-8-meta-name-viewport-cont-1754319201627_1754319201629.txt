@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Médica</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    #pacientes-dia table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    #pacientes-dia th, #pacientes-dia td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    #pacientes-dia th {
+      background-color: #f4f4f4;
+    }
+    #pacientes-dia tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    #pacientes-dia tr:hover {
+      background-color: #ddd;
+      cursor: pointer;
+    }
+    .action-buttons {
+      margin-top: 10px;
+    }
+    .action-buttons button {
+      padding: 8px 15px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .action-buttons .atender {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .action-buttons .remarcar {
+      background-color: #3498db;
+      color: white;
+    }
+    .action-buttons .cancelar {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .action-buttons button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section id="pacientes-dia">
+      <h2>Pacientes do Dia</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Hora</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="invitePatient(1, 'João Silva')">
+            <td>João Silva</td>
+            <td>09:00</td>
+            <td>Agendado</td>
+            <td class="action-buttons">
+              <button class="atender" onclick="startConsulta(1, event)">Atender</button>
+              <button class="remarcar" onclick="remarcarConsulta(1, event)">Remarcar</button>
+              <button class="cancelar" onclick="cancelarConsulta(1, event)">Cancelar</button>
+            </td>
+          </tr>
+          <tr onclick="invitePatient(2, 'Maria Oliveira')">
+            <td>Maria Oliveira</td>
+            <td>10:30</td>
+            <td>Confirmado</td>
+            <td class="action-buttons">
+              <button class="atender" onclick="startConsulta(2, event)">Atender</button>
+              <button class="remarcar" onclick="remarcarConsulta(2, event)">Remarcar</button>
+              <button class="cancelar" onclick="cancelarConsulta(2, event)">Cancelar</button>
+            </td>
+          </tr>
+          <tr onclick="invitePatient(3, 'Pedro Souza')">
+            <td>Pedro Souza</td>
+            <td>14:00</td>
+            <td>Pendente</td>
+            <td class="action-buttons">
+              <button class="atender" onclick="startConsulta(3, event)">Atender</button>
+              <button class="remarcar" onclick="remarcarConsulta(3, event)">Remarcar</button>
+              <button class="cancelar" onclick="cancelarConsulta(3, event)">Cancelar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    let patientResponse = null;
+
+    function invitePatient(patientId, patientName) {
+      patientResponse = null; // Reseta a resposta
+      alert(`Convite enviado para ${patientName} para a teleconsulta às ${new Date().toLocaleTimeString()}. Aguardando resposta...`);
+      
+      // Simula atraso na resposta do paciente (5 segundos)
+      setTimeout(() => {
+        if (!patientResponse) {
+          if (confirm(`O paciente ${patientName} não respondeu ao convite. Deseja remarcar, cancelar ou insistir?`)) {
+            // O médico decide: true = remarcar, false = cancelar
+            if (confirm("Remarcar consulta?")) {
+              remarcarConsulta(patientId);
+            } else {
+              cancelarConsulta(patientId);
+            }
+          } else {
+            alert("Insistindo no convite...");
+            invitePatient(patientId, patientName); // Tenta novamente
+          }
+        }
+      }, 5000);
+    }
+
+    function startConsulta(patientId, event) {
+      event.stopPropagation(); // Evita o clique na linha
+      window.location.href = `consulta.html?id=${patientId}`;
+    }
+
+    function remarcarConsulta(patientId, event) {
+      event?.stopPropagation();
+      alert(`Consulta do paciente ID ${patientId} remarcada para outra data.`);
+      // Aqui você pode integrar com o banco para atualizar o horário
+    }
+
+    function cancelarConsulta(patientId, event) {
+      event?.stopPropagation();
+      if (confirm(`Deseja cancelar a consulta do paciente ID ${patientId}?`)) {
+        alert(`Consulta do paciente ID ${patientId} cancelada.`);
+        // Integre com o banco para remover ou marcar como cancelado
+      }
+    }
+
+    // Simulação de resposta do paciente (para teste, remova em produção)
+    window.addEventListener('click', () => {
+      if (!patientResponse) patientResponse = true; // Simula aceitação
+    });
+  </script>
+</body>
+</html>
