@@ -20,6 +20,7 @@ Preferred communication style: Simple, everyday language.
 - **Agenda Médica**: Created comprehensive medical calendar system with month selection, appointment management, and responsive design featuring blue color scheme (#007BFF), interactive calendar, schedule list with patient details, and add/edit functionality
 - **Dashboard Aquarela**: Implemented watercolor-style dashboard with soft gradients, watercolor textures, and aquarela aesthetic using pastel colors (#F5E8C7, #B3D9E0, #E8D4C9) as requested by user for enhanced visual appeal
 - **Database Integration Complete (January 2025)**: Successfully connected PostgreSQL database to front-end with real-time data synchronization. Implemented comprehensive API endpoints for patient management, medical records, consultation scheduling, and statistical reporting. Added calendar functionality with date-based patient filtering, real-time status updates, appointment rescheduling, and consultation cancellation with database persistence.
+- **Auction System for Consultations (January 2025)**: Implemented innovative bidding system where patients propose consultation values starting at R$ 150. Features dynamic pricing with urgent category (+35% markup), future appointment scheduling for lower bids, doctor continuity (patients can rebook with same doctor), and comprehensive status tracking (waiting, accepted, scheduled). Includes PostgreSQL integration with real-time notifications and mobile-responsive design.
 
 ## System Architecture
 

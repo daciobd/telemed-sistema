@@ -284,6 +284,11 @@
             color: #155724;
         }
 
+        .status-agendado {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
         .status-urgente {
             background: #f8d7da;
             color: #721c24;
@@ -449,7 +454,7 @@
                 <i class="fas fa-bullseye"></i>
                 Defina o Valor da Sua Consulta
             </h2>
-            <p>Ofereça um valor a partir de <strong>R$ 150,00</strong> e médicos experientes com RQE do CRM competirão por sua consulta. Valores maiores garantem atendimento mais rápido!</p>
+            <p>Ofereça a partir de <strong>R$ 150,00</strong> e médicos experientes com RQE do CRM competirão por sua consulta. Valores maiores garantem atendimento mais rápido! Diferente do PicDoc, você pode agendar com o mesmo médico futuramente se gostar do atendimento.</p>
             
             <div class="highlight-box">
                 <strong>💡 Dica:</strong> Consultas urgentes têm aceitação prioritária. Valores acima de R$ 200,00 são aceitos em 30-60 minutos, enquanto R$ 280,00+ são aceitos em 5-15 minutos.
@@ -461,14 +466,14 @@
                 <i class="fas fa-info-circle"></i>
                 Como Funciona o Sistema
             </h2>
-            <p><strong>🎯 Mecânica do Lance:</strong> Escolha sua especialidade, defina um valor inicial e envie sua proposta. Médicos veem sua oferta e o primeiro a aceitar fica com a consulta.</p>
-            <p><strong>⚖️ Equilíbrio Preço × Velocidade:</strong></p>
+            <p><strong>🎯 Mecânica do Lance:</strong> Escolha sua especialidade, defina um valor inicial e envie sua proposta. Médicos veem sua oferta e o primeiro a aceitar fica com a consulta. Valores maiores (ex.: R$ 200+) são aceitos em 5-15 minutos. Para valores menores, médicos podem marcar consultas futuras.</p>
+            <p><strong>⚖️ Equilíbrio Preço × Velocidade:</strong> R$ 150,00 pode demorar 1-2 horas ou ser agendado para outro horário; R$ 200,00 em 30-60 minutos; R$ 280,00 em 5-15 minutos. Para urgência, adicione 30-40%.</p>
             
             <div class="pricing-grid">
                 <div class="pricing-card">
                     <h3>Economia</h3>
                     <div class="price">R$ 150-180</div>
-                    <div class="time">1-2 horas</div>
+                    <div class="time">1-2 horas ou agendamento futuro</div>
                 </div>
                 <div class="pricing-card">
                     <h3>Padrão</h3>
@@ -642,6 +647,8 @@
 
             if (urgente) {
                 showNotification(`🚨 URGÊNCIA ATIVADA! Novo valor: R$ ${valor},00. Aceitação prevista em 5-15 minutos.`, 'warning');
+            } else if (valorOriginal === 150) {
+                showNotification(`✅ Valor R$ ${valor},00 enviado! Pode ser agendado para outro horário ou demorar 1-2 horas.`, 'info');
             } else {
                 const tempoEstimado = valor >= 280 ? '5-15 min' : valor >= 200 ? '30-60 min' : '1-2 horas';
                 showNotification(`✅ Proposta enviada! Especialidade: ${lance.especialidadeNome}. Aceitação estimada: ${tempoEstimado}.`, 'success');
@@ -683,6 +690,7 @@
             switch(status) {
                 case 'aguardando': return '⏳ Aguardando';
                 case 'aceito': return '✅ Aceito';
+                case 'agendado': return '📅 Agendado';
                 case 'urgente': return '🚨 Urgente';
                 default: return status;
             }
@@ -710,7 +718,7 @@
                     
                     const medicoEscolhido = medicos[Math.floor(Math.random() * medicos.length)];
                     
-                    showNotification(`🎉 CONSULTA ACEITA! ${medicoEscolhido} aceitou sua proposta de R$ ${lance.valor},00 para ${lance.especialidadeNome}. Você será contatado em breve!`, 'success');
+                    showNotification(`🎉 CONSULTA ACEITA! ${medicoEscolhido} aceitou sua proposta de R$ ${lance.valor},00 para ${lance.especialidadeNome}. Você pode agendar com este médico novamente!`, 'success');
                     
                     // Redirecionar para página de agendamento após 3 segundos
                     setTimeout(() => {
@@ -718,6 +726,11 @@
                             window.location.href = '/agenda-medica.html';
                         }
                     }, 3000);
+                } else if (lance.valorOriginal === 150) {
+                    lance.status = 'agendado';
+                    saveLances();
+                    atualizarLances();
+                    showNotification(`📅 Nenhum médico disponível agora. Consulta agendada para amanhã às 10:00. Você pode agendar com este médico novamente.`, 'info');
                 } else {
                     showNotification(`⏱️ Ainda aguardando médico para ${lance.especialidadeNome}. Considere aumentar o valor ou aguardar mais um pouco.`, 'info');
                 }
