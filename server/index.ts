@@ -252,6 +252,84 @@ async function startServer() {
     }
   });
 
+  // Leilão de Consultas - Save bid
+  app.post('/api/leilao-consultas', async (req, res) => {
+    try {
+      const { nome, telefone, especialidade, especialidadeNome, valor, valorOriginal, descricao, urgente } = req.body;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        INSERT INTO leilao_consultas (
+          paciente_nome, telefone, especialidade, especialidade_nome, 
+          valor_oferecido, valor_original, descricao, urgente, 
+          status, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'aguardando', CURRENT_TIMESTAMP)
+        RETURNING *
+      `, [nome, telefone, especialidade, especialidadeNome, valor, valorOriginal, descricao, urgente]);
+      
+      await client.end();
+      res.json(result.rows[0]);
+      
+      console.log(`💰 Nova proposta de leilão: ${nome} - ${especialidadeNome} - R$ ${valor}`);
+      
+    } catch (error) {
+      console.error('Erro ao salvar proposta de leilão:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Get all auction bids
+  app.get('/api/leilao-consultas', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        SELECT * FROM leilao_consultas 
+        ORDER BY created_at DESC
+      `);
+      
+      await client.end();
+      res.json(result.rows);
+      
+    } catch (error) {
+      console.error('Erro ao buscar propostas de leilão:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Update auction bid status
+  app.patch('/api/leilao-consultas/:id/status', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status, medico_nome, medico_crm } = req.body;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        UPDATE leilao_consultas 
+        SET status = $1, medico_nome = $2, medico_crm = $3, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $4
+        RETURNING *
+      `, [status, medico_nome, medico_crm, id]);
+      
+      await client.end();
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Proposta não encontrada' });
+      }
+      
+      res.json(result.rows[0]);
+      
+    } catch (error) {
+      console.error('Erro ao atualizar status da proposta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
   app.get('/sobre', (req, res) => {
   console.log('📄 Serving página Sobre Nós for:', req.path);
