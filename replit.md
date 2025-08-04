@@ -23,6 +23,7 @@ Preferred communication style: Simple, everyday language.
 - **Auction System for Consultations (January 2025)**: Implemented innovative bidding system where patients propose consultation values starting at R$ 150. Features dynamic pricing with urgent category (+35% markup), future appointment scheduling for lower bids, doctor continuity (patients can rebook with same doctor), and comprehensive status tracking (waiting, accepted, scheduled). Includes PostgreSQL integration with real-time notifications and mobile-responsive design.
 - **MEMED Digital Prescriptions Integration (January 2025)**: Complete digital prescription system implemented with MEMED API preparation. Features include prescription generation with multiple medications, QR codes for verification, prescription validation periods, patient-specific prescription history, and professional prescription management interface. System includes PostgreSQL storage, real-time notifications, and responsive design. Currently in simulation mode awaiting MEMED API credentials for full activation.
 - **Advanced Consultation Rescheduling System (January 2025)**: Complete overhaul of the appointment rescheduling system with modern modal interface, real-time availability checking, categorized rescheduling reasons, detailed observation fields, and comprehensive audit trail. Features include visual time slot selection, automatic conflict detection, rescheduling history tracking in PostgreSQL, and responsive design for all devices. System integrates seamlessly with existing patient management and provides detailed analytics for medical practice optimization.
+- **Medical Notifications System via SMS/WhatsApp (August 2025)**: Complete SMS and WhatsApp notification system for medical offers implemented with PostgreSQL integration. Features include automatic medical offer distribution to registered doctors by specialty, bidding system with minimum R$ 150 value, urgent consultation markup (+35%), doctor response processing (ACCEPT/REJECT), comprehensive offer tracking and analytics. System includes 5 registered doctors across multiple specialties, simulation mode for testing without Twilio costs, and full preparation for real Twilio API integration. Responsive web interface (sistema-notificacoes-medicas.html) with breadcrumb navigation and real-time status updates.
 
 ## System Architecture
 
@@ -33,7 +34,7 @@ Preferred communication style: Simple, everyday language.
 - **State Management**: React Query for server state management.
 - **Routing**: React Router for client-side navigation (or Next.js App Router).
 - **Design Principles**: Duotone color scheme (#A7C7E7, #F4D9B4, #E9967A), professional gradients, subtle micro-animations, consistent border-radius (20px), mobile-first approach.
-- **Key Features**: Professional login/registration, patient/doctor dashboards, medical specialty pages, appointment scheduling, bidding system, AI-powered psychiatric triage (TDAH-ASRS18, GAD-7, PHQ-9, MDQ, PSS-10), notification center, and comprehensive medical profile management.
+- **Key Features**: Professional login/registration, patient/doctor dashboards, medical specialty pages, appointment scheduling, bidding system, AI-powered psychiatric triage (TDAH-ASRS18, GAD-7, PHQ-9, MDQ, PSS-10), notification center, comprehensive medical profile management, and SMS/WhatsApp medical notifications system.
 - **Accessibility**: WCAG 2.1 conformity with ARIA labels, keyboard navigation, and screen reader support.
 - **Performance**: Optimized images (WebP), lazy loading, CSS variables, and GPU-accelerated animations.
 
@@ -49,7 +50,7 @@ Preferred communication style: Simple, everyday language.
 - **Primary Database**: PostgreSQL (configured via Drizzle ORM).
 - **ORM**: Drizzle for type-safe database operations.
 - **Session Storage**: PostgreSQL-backed session store for authentication.
-- **Schema**: Comprehensive medical data models including users, patients, doctors, appointments, prescriptions, and medical records.
+- **Schema**: Comprehensive medical data models including users, patients, doctors, appointments, prescriptions, medical records, medical notifications (medicos_cadastrados, ofertas_medicas, respostas_ofertas).
 
 ### Development & Deployment
 - **Environments**: Optimized for Replit development and multi-platform production deployment (Render, Heroku, Vercel).
