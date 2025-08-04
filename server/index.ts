@@ -31,6 +31,94 @@ async function startServer() {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+  // API Routes for database integration
+  const { Client } = await import('pg');
+  
+  // Get all patients
+  app.get('/api/pacientes', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        SELECT id, nome, hora_consulta, status, especialidade, convenio, telefone, email, idade 
+        FROM pacientes 
+        ORDER BY hora_consulta
+      `);
+      
+      await client.end();
+      res.json(result.rows);
+    } catch (error) {
+      console.error('Erro ao buscar pacientes:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Get patient by ID
+  app.get('/api/pacientes/:id', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        SELECT p.*, pr.queixa, pr.exame_fisico, pr.hipotese_diagnostica, pr.conduta, pr.observacoes
+        FROM pacientes p
+        LEFT JOIN prontuarios pr ON p.id = pr.paciente_id
+        WHERE p.id = $1
+      `, [req.params.id]);
+      
+      await client.end();
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Paciente não encontrado' });
+      }
+      
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Erro ao buscar paciente:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Save or update prontuario
+  app.post('/api/prontuarios', async (req, res) => {
+    try {
+      const { paciente_id, queixa, exame_fisico, hipotese_diagnostica, conduta, observacoes } = req.body;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      // Check if prontuario already exists
+      const existingResult = await client.query(`
+        SELECT id FROM prontuarios WHERE paciente_id = $1
+      `, [paciente_id]);
+      
+      let result;
+      if (existingResult.rows.length > 0) {
+        // Update existing prontuario
+        result = await client.query(`
+          UPDATE prontuarios 
+          SET queixa = $1, exame_fisico = $2, hipotese_diagnostica = $3, conduta = $4, observacoes = $5, updated_at = CURRENT_TIMESTAMP
+          WHERE paciente_id = $6
+          RETURNING *
+        `, [queixa, exame_fisico, hipotese_diagnostica, conduta, observacoes, paciente_id]);
+      } else {
+        // Create new prontuario
+        result = await client.query(`
+          INSERT INTO prontuarios (paciente_id, queixa, exame_fisico, hipotese_diagnostica, conduta, observacoes, data_consulta, medico_crm)
+          VALUES ($1, $2, $3, $4, $5, $6, CURRENT_DATE, '123456-SP')
+          RETURNING *
+        `, [paciente_id, queixa, exame_fisico, hipotese_diagnostica, conduta, observacoes]);
+      }
+      
+      await client.end();
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Erro ao salvar prontuário:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
   app.get('/sobre', (req, res) => {
   console.log('📄 Serving página Sobre Nós for:', req.path);

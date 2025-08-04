@@ -107,13 +107,39 @@ As páginas `agenda-medica.html` e `atendimento-medico.html` podem ser integrada
 2. **atendimento-medico.html**: Carregar e salvar prontuários no banco
 3. **Parâmetros URL**: Passar `paciente_id` em vez de dados inline
 
+## API Endpoints Implementados
+
+### GET /api/pacientes
+Retorna lista completa de pacientes com todos os dados.
+
+### GET /api/pacientes/:id  
+Retorna dados completos de um paciente específico incluindo prontuário (se existir).
+
+### POST /api/prontuarios
+Salva ou atualiza prontuário médico no banco.
+Body: { paciente_id, queixa, exame_fisico, hipotese_diagnostica, conduta, observacoes }
+
+## Integração Realizada
+
+✅ **agenda-medica.html**: Carrega pacientes reais do banco PostgreSQL
+✅ **atendimento-medico.html**: Busca dados do paciente por ID e salva prontuários no banco
+✅ **Workflow completo**: Agenda → Atendimento → Salvamento no banco
+✅ **API funcionando**: Endpoints testados e operacionais
+
+## Fluxo de Dados
+
+1. **Agenda**: Carrega lista de pacientes do banco via `/api/pacientes`
+2. **Consulta**: Passa `paciente_id` via URL para atendimento-medico.html
+3. **Atendimento**: Carrega dados via `/api/pacientes/:id`
+4. **Salvamento**: Envia prontuário via POST `/api/prontuarios`
+
 ## Próximos Passos
 
-1. Integrar agenda com dados reais do banco
-2. Implementar salvamento de prontuários
+1. ✅ ~~Integrar agenda com dados reais do banco~~
+2. ✅ ~~Implementar salvamento de prontuários~~
 3. Adicionar funcionalidades de busca e filtros
-4. Criar API endpoints para operações CRUD
+4. ✅ ~~Criar API endpoints para operações CRUD~~
 5. Implementar autenticação de médicos
 
 ## Última Atualização
-04 de Janeiro de 2025 - Configuração inicial completa
+04 de Janeiro de 2025 - Integração completa com PostgreSQL realizada

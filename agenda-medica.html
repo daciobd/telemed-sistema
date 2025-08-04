@@ -813,85 +813,68 @@
             ]
         };
 
-        // Dados dos pacientes do dia
-        let patientsData = [
-            {
-                time: '08:20',
-                name: 'João Silva Santos',
-                specialty: 'Cardiologia',
-                status: 'confirmado',
-                insurance: 'Prudential',
-                phone: '(11) 99999-1234'
-            },
-            {
-                time: '09:00',
-                name: 'Maria Oliveira Costa',
-                specialty: 'Dermatologia',
-                status: 'confirmado',
-                insurance: 'Blue',
-                phone: '(11) 98888-5678'
-            },
-            {
-                time: '10:30',
-                name: 'Pedro Souza Lima',
-                specialty: 'Psiquiatria',
-                status: 'agendado',
-                insurance: 'Particular',
-                phone: '(11) 97777-9012'
-            },
-            {
-                time: '11:15',
-                name: 'Ana Costa Ferreira',
-                specialty: 'Ginecologia',
-                status: 'pendente',
-                insurance: 'Mell-br',
-                phone: '(11) 96666-3456'
-            },
-            {
-                time: '14:00',
-                name: 'Carlos Pereira Dias',
-                specialty: 'Neurologia',
-                status: 'confirmado',
-                insurance: 'SIAZE',
-                phone: '(11) 95555-7890'
-            },
-            {
-                time: '15:30',
-                name: 'Lucia Almeida Silva',
-                specialty: 'Endocrinologia',
-                status: 'cancelado',
-                insurance: 'Blue',
-                phone: '(11) 94444-2345'
-            },
-            {
-                time: '16:15',
-                name: 'Roberto Santos Moraes',
-                specialty: 'Ortopedia',
-                status: 'confirmado',
-                insurance: 'Prudential',
-                phone: '(11) 93333-6789'
-            },
-            {
-                time: '17:00',
-                name: 'Fernanda Lima Rocha',
-                specialty: 'Pediatria',
-                status: 'concluido',
-                insurance: 'Particular',
-                phone: '(11) 92222-0123'
+        // Dados dos pacientes carregados do banco PostgreSQL
+        let patientsData = [];
+
+        // Função para carregar pacientes do banco de dados
+        async function loadPatientsFromDatabase() {
+            try {
+                const response = await fetch('/api/pacientes');
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar pacientes');
+                }
+                
+                const patients = await response.json();
+                
+                // Converter dados do banco para formato da interface
+                patientsData = patients.map(patient => ({
+                    id: patient.id,
+                    time: patient.hora_consulta,
+                    name: patient.nome,
+                    specialty: patient.especialidade,
+                    status: patient.status.toLowerCase(),
+                    insurance: patient.convenio,
+                    phone: patient.telefone,
+                    email: patient.email,
+                    age: patient.idade
+                }));
+                
+                // Atualizar a exibição
+                loadPatientsList();
+                updateScheduleDisplay();
+                
+                console.log('✅ Pacientes carregados do banco:', patientsData.length);
+            } catch (error) {
+                console.error('❌ Erro ao carregar pacientes:', error);
+                showNotification('Erro ao carregar dados dos pacientes', 'error');
+                
+                // Fallback para dados de exemplo se houver erro
+                patientsData = [
+                    {
+                        id: 1,
+                        time: '08:20',
+                        name: 'João Silva Santos',
+                        specialty: 'Cardiologia',
+                        status: 'confirmado',
+                        insurance: 'Prudential',
+                        phone: '(11) 99999-1234'
+                    }
+                ];
             }
-        ];
+        }
 
         // Initialize calendar and schedule
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             updateMonthInput();
             generateCalendar();
-            updateScheduleDisplay();
-            loadPatientsList();
+            
+            // Carregar dados do banco de dados
+            await loadPatientsFromDatabase();
             
             console.log('📅 Agenda Médica TeleMed Pro carregada!');
             console.log('🗓️ Calendário interativo funcionando');
             console.log('⏰ Sistema de horários ativo');
-            console.log('👥 Lista de pacientes carregada');
+            console.log('👥 Lista de pacientes carregada do banco PostgreSQL');
             console.log('📱 Layout responsivo implementado');
         });
 
@@ -1136,7 +1119,7 @@
                 row.innerHTML = `
                     <td class="patient-time">${patient.time}</td>
                     <td>
-                        <div class="patient-name" onclick="startConsultation('${patient.name}')" style="cursor: pointer; color: #007BFF;" title="Clique para iniciar atendimento">${patient.name}</div>
+                        <div class="patient-name" onclick="startConsultation(${patient.id})" style="cursor: pointer; color: #007BFF;" title="Clique para iniciar atendimento">${patient.name}</div>
                         <div class="patient-specialty">${patient.insurance}</div>
                     </td>
                     <td>${patient.specialty}</td>
@@ -1149,7 +1132,7 @@
                             <button class="action-btn" onclick="callPatient('${patient.phone}')" title="Ligar">
                                 <i class="fas fa-phone"></i>
                             </button>
-                            <button class="action-btn" onclick="startConsultation('${patient.name}')" title="Iniciar Consulta">
+                            <button class="action-btn" onclick="startConsultation(${patient.id})" title="Iniciar Consulta">
                                 <i class="fas fa-video"></i>
                             </button>
                         </div>
@@ -1191,25 +1174,11 @@
             alert(`📞 Ligando para: ${phone}\nIniciando chamada telefônica...`);
         }
 
-        function startConsultation(name) {
-            // Encontrar dados do paciente
-            const patient = patientsData.find(p => p.name === name);
-            if (!patient) {
-                alert('Paciente não encontrado!');
-                return;
-            }
+        function startConsultation(patientId) {
+            console.log(`🎥 Iniciando consulta para paciente ID: ${patientId}`);
             
-            // Construir URL com parâmetros do paciente
-            const params = new URLSearchParams({
-                name: patient.name,
-                time: patient.time,
-                specialty: patient.specialty,
-                insurance: patient.insurance,
-                phone: patient.phone
-            });
-            
-            // Redirecionar para página de atendimento
-            window.location.href = `/atendimento-medico.html?${params.toString()}`;
+            // Redirecionar para página de atendimento com ID do paciente
+            window.location.href = `/atendimento-medico.html?paciente_id=${patientId}`;
         }
     </script>
 </body>

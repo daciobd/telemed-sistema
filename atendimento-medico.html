@@ -609,29 +609,67 @@
         let callStartTime = null;
         let timerInterval = null;
 
-        // Parâmetros da URL para dados do paciente
-        const urlParams = new URLSearchParams(window.location.search);
-        const patientData = {
-            name: urlParams.get('name') || 'João Silva Santos',
-            time: urlParams.get('time') || '08:20',
-            specialty: urlParams.get('specialty') || 'Cardiologia',
-            insurance: urlParams.get('insurance') || 'Prudential',
-            age: urlParams.get('age') || '35 anos',
-            phone: urlParams.get('phone') || '(11) 99999-1234',
-            email: urlParams.get('email') || 'joao@email.com'
-        };
+        // Dados do paciente carregados do banco
+        let patientData = {};
+
+        // Função para carregar dados do paciente do banco
+        async function loadPatientFromDatabase() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pacienteId = urlParams.get('paciente_id');
+            
+            if (!pacienteId) {
+                showNotification('ID do paciente não fornecido', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/pacientes/${pacienteId}`);
+                if (!response.ok) {
+                    throw new Error('Paciente não encontrado');
+                }
+                
+                const patient = await response.json();
+                
+                // Converter dados do banco para formato da interface
+                patientData = {
+                    id: patient.id,
+                    name: patient.nome,
+                    time: patient.hora_consulta,
+                    specialty: patient.especialidade,
+                    insurance: patient.convenio,
+                    age: patient.idade ? `${patient.idade} anos` : 'Não informado',
+                    phone: patient.telefone,
+                    email: patient.email,
+                    // Dados do prontuário se existir
+                    queixa: patient.queixa || '',
+                    exame_fisico: patient.exame_fisico || '',
+                    hipotese_diagnostica: patient.hipotese_diagnostica || '',
+                    conduta: patient.conduta || '',
+                    observacoes: patient.observacoes || ''
+                };
+                
+                // Atualizar interface com dados do paciente
+                updatePatientInterface();
+                loadExistingProntuario();
+                
+                console.log('✅ Dados do paciente carregados do banco:', patientData.name);
+            } catch (error) {
+                console.error('❌ Erro ao carregar paciente:', error);
+                showNotification('Erro ao carregar dados do paciente', 'error');
+            }
+        }
 
         // Inicializar dados do paciente
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPatientData();
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadPatientFromDatabase();
             
             console.log('🎥 Sistema de Atendimento TeleMed carregado!');
-            console.log('👨‍⚕️ Dados do paciente carregados');
+            console.log('👨‍⚕️ Dados do paciente carregados do banco PostgreSQL');
             console.log('📋 Prontuário eletrônico ativo');
             console.log('🔒 Sistema seguro e criptografado');
         });
 
-        function loadPatientData() {
+        function updatePatientInterface() {
             document.getElementById('patient-name').textContent = patientData.name;
             document.getElementById('patient-time').textContent = patientData.time;
             document.getElementById('patient-specialty').textContent = patientData.specialty;
@@ -639,6 +677,25 @@
             document.getElementById('patient-age').textContent = patientData.age;
             document.getElementById('patient-phone').textContent = patientData.phone;
             document.getElementById('patient-email').textContent = patientData.email;
+        }
+
+        function loadExistingProntuario() {
+            // Preencher campos do prontuário se existir
+            if (patientData.queixa) {
+                document.getElementById('queixa').value = patientData.queixa;
+            }
+            if (patientData.exame_fisico) {
+                document.getElementById('exame-fisico').value = patientData.exame_fisico;
+            }
+            if (patientData.hipotese_diagnostica) {
+                document.getElementById('diagnostico').value = patientData.hipotese_diagnostica;
+            }
+            if (patientData.conduta) {
+                document.getElementById('conduta').value = patientData.conduta;
+            }
+            if (patientData.observacoes) {
+                document.getElementById('observacoes').value = patientData.observacoes;
+            }
         }
 
         // Funções de videochamada
@@ -727,37 +784,77 @@
         }
 
         // Funções do prontuário
-        function salvarProntuario() {
+        async function salvarProntuario() {
             const queixa = document.getElementById('queixa').value;
-            const exame = document.getElementById('exame-fisico').value;
-            const diagnostico = document.getElementById('diagnostico').value;
+            const exame_fisico = document.getElementById('exame-fisico').value;
+            const hipotese_diagnostica = document.getElementById('diagnostico').value;
             const conduta = document.getElementById('conduta').value;
+            const observacoes = document.getElementById('observacoes').value;
             
-            if (!queixa && !diagnostico && !conduta) {
+            if (!queixa && !hipotese_diagnostica && !conduta) {
                 showNotification('Preencha pelo menos um campo do prontuário', 'warning');
                 return;
             }
             
-            // Simular salvamento
+            if (!patientData.id) {
+                showNotification('Dados do paciente não carregados', 'error');
+                return;
+            }
+            
             const saveBtn = document.querySelector('.save-btn');
             const originalText = saveBtn.innerHTML;
             
             saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
             saveBtn.disabled = true;
             
-            setTimeout(() => {
+            try {
+                const response = await fetch('/api/prontuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        paciente_id: patientData.id,
+                        queixa,
+                        exame_fisico,
+                        hipotese_diagnostica,
+                        conduta,
+                        observacoes
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar prontuário');
+                }
+                
+                const result = await response.json();
+                
                 saveBtn.innerHTML = '<i class="fas fa-check"></i> Salvo com Sucesso!';
                 saveBtn.style.background = 'linear-gradient(135deg, #28A745, #1E7E34)';
                 
                 setTimeout(() => {
                     saveBtn.innerHTML = originalText;
                     saveBtn.disabled = false;
-                    saveBtn.style.background = 'linear-gradient(135deg, #28A745, #1E7E34)';
+                    saveBtn.style.background = 'linear-gradient(135deg, #007BFF, #0056B3)';
                 }, 2000);
                 
-                showNotification('Prontuário salvo com sucesso!', 'success');
-                console.log('💾 Prontuário salvo no sistema');
-            }, 1500);
+                showNotification('Prontuário salvo no banco PostgreSQL!', 'success');
+                console.log('💾 Prontuário salvo no banco de dados:', result);
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar prontuário:', error);
+                
+                saveBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro ao Salvar';
+                saveBtn.style.background = 'linear-gradient(135deg, #DC3545, #B02A37)';
+                
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                    saveBtn.style.background = 'linear-gradient(135deg, #007BFF, #0056B3)';
+                }, 2000);
+                
+                showNotification('Erro ao salvar prontuário', 'error');
+            }
         }
 
         function solicitarExame() {
