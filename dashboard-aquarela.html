@@ -346,6 +346,321 @@
             transform: translateY(-8px) scale(1.05);
         }
 
+        /* SEÇÃO ATIVIDADE RECENTE */
+        .activity-section {
+            background: rgba(255, 255, 255, 0.95);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(179, 217, 224, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(209, 232, 226, 0.06) 0%, transparent 50%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(42, 64, 102, 0.1);
+            border: 1px solid rgba(179, 217, 224, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(179, 217, 224, 0.2);
+        }
+
+        .activity-header h2 {
+            font-size: 1.8rem;
+            color: #2A4066;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-view-all {
+            background: linear-gradient(135deg, #B3D9E0, #D1E8E2);
+            color: #2A4066;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-view-all:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(179, 217, 224, 0.3);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .activity-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-item.urgent {
+            border-left-color: #FF6B6B;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(255, 255, 255, 0.9));
+        }
+
+        .activity-item.completed {
+            border-left-color: #4ECDC4;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.05), rgba(255, 255, 255, 0.9));
+        }
+
+        .activity-item.sent {
+            border-left-color: #FFD93D;
+            background: linear-gradient(135deg, rgba(255, 217, 61, 0.05), rgba(255, 255, 255, 0.9));
+        }
+
+        .activity-item.in-progress {
+            border-left-color: #6BCF7F;
+            background: linear-gradient(135deg, rgba(107, 207, 127, 0.05), rgba(255, 255, 255, 0.9));
+        }
+
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .activity-item.urgent .activity-icon {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+        }
+
+        .activity-item.completed .activity-icon {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+        }
+
+        .activity-item.sent .activity-icon {
+            background: linear-gradient(135deg, #FFD93D, #FF6B6B);
+            color: white;
+        }
+
+        .activity-item.in-progress .activity-icon {
+            background: linear-gradient(135deg, #6BCF7F, #4ECDC4);
+            color: white;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content h4 {
+            font-size: 1rem;
+            color: #2A4066;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .activity-content p {
+            color: #4A6A8A;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .activity-time {
+            color: #6B8A6B;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .activity-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-status.urgent {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .activity-status.completed {
+            background: #4ECDC4;
+            color: white;
+        }
+
+        .activity-status.sent {
+            background: #FFD93D;
+            color: #2A4066;
+        }
+
+        .activity-status.in-progress {
+            background: #6BCF7F;
+            color: white;
+        }
+
+        /* SEÇÃO ACESSO ULTRA-RÁPIDO */
+        .quick-access-section {
+            background: rgba(255, 255, 255, 0.95);
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(179, 217, 224, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(209, 232, 226, 0.06) 0%, transparent 50%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(42, 64, 102, 0.1);
+            border: 1px solid rgba(179, 217, 224, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-access-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(179, 217, 224, 0.2);
+        }
+
+        .quick-access-header h2 {
+            font-size: 1.8rem;
+            color: #2A4066;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quick-access-header p {
+            color: #4A6A8A;
+            font-size: 1rem;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .quick-access-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .quick-access-card.emergency::before {
+            background: linear-gradient(90deg, #FF6B6B, #FF8E53);
+        }
+
+        .quick-access-card.assessments::before {
+            background: linear-gradient(90deg, #4ECDC4, #44A08D);
+        }
+
+        .quick-access-card.pdf::before {
+            background: linear-gradient(90deg, #FFD93D, #FF6B6B);
+        }
+
+        .quick-access-card.config::before {
+            background: linear-gradient(90deg, #6BCF7F, #4ECDC4);
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(42, 64, 102, 0.15);
+        }
+
+        .quick-access-card.emergency:hover {
+            border-color: #FF6B6B;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .quick-access-card.assessments:hover {
+            border-color: #4ECDC4;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .quick-access-card.pdf:hover {
+            border-color: #FFD93D;
+            background: linear-gradient(135deg, rgba(255, 217, 61, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .quick-access-card.config:hover {
+            border-color: #6BCF7F;
+            background: linear-gradient(135deg, rgba(107, 207, 127, 0.1), rgba(255, 255, 255, 0.95));
+        }
+
+        .quick-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .quick-access-card.emergency .quick-icon {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+        }
+
+        .quick-access-card.assessments .quick-icon {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+        }
+
+        .quick-access-card.pdf .quick-icon {
+            background: linear-gradient(135deg, #FFD93D, #FF6B6B);
+        }
+
+        .quick-access-card.config .quick-icon {
+            background: linear-gradient(135deg, #6BCF7F, #4ECDC4);
+        }
+
+        .quick-access-card h3 {
+            font-size: 1.1rem;
+            color: #2A4066;
+            font-weight: 600;
+            margin: 0;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .sidebar {
@@ -393,6 +708,31 @@
 
             .welcome-actions {
                 flex-direction: column;
+            }
+
+            .activity-section, .quick-access-section {
+                padding: 20px;
+            }
+
+            .activity-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .activity-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .quick-access-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .quick-access-card {
+                padding: 20px 15px;
             }
         }
 
@@ -471,9 +811,10 @@
             <li><a href="/pdf-generator.html"><i class="fas fa-file-pdf"></i> Gerar PDF</a></li>
             <li><a href="/centro-avaliacao.html"><i class="fas fa-brain"></i> Centro de Avaliações</a></li>
             <li><a href="/phq9-depressao.html"><i class="fas fa-sad-tear"></i> PHQ-9</a></li>
-            <li><a href="/gad7-ansiedade.html"><i class="fas fa-heart-broken"></i> GAD-7</a></li>
+            <li><a href="/ansiedade-gad7.html"><i class="fas fa-heart-broken"></i> GAD-7</a></li>
             <li><a href="/pss10-stress.html"><i class="fas fa-bolt"></i> PSS-10</a></li>
-            <li><a href="/triagem-inteligente.html"><i class="fas fa-stethoscope"></i> Triagem</a></li>
+            <li><a href="/triagem-psiquiatrica.html"><i class="fas fa-stethoscope"></i> Triagem</a></li>
+            <li><a href="/agenda-medica.html"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
             <li><a href="#"><i class="fas fa-clipboard-list"></i> Protocolos</a></li>
             <li><a href="#"><i class="fas fa-prescription-bottle"></i> Prescrições</a></li>
             <li><a href="#"><i class="fas fa-user-circle"></i> Perfil</a></li>
@@ -545,6 +886,102 @@
                 <p>Avaliações</p>
             </div>
         </div>
+
+        <!-- Seção Atividade Recente -->
+        <div class="activity-section">
+            <div class="activity-header">
+                <h2><i class="fas fa-clock"></i> Atividade Recente</h2>
+                <button class="btn-view-all">Ver Todas</button>
+            </div>
+            
+            <div class="activity-list">
+                <div class="activity-item urgent">
+                    <div class="activity-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>Consulta Urgente Agendada</h4>
+                        <p>Maria Silva • Cardiologia • 15:30</p>
+                        <span class="activity-time">Agora</span>
+                    </div>
+                    <div class="activity-status urgent">URGENTE</div>
+                </div>
+
+                <div class="activity-item completed">
+                    <div class="activity-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>Avaliação PHQ-9 Finalizada</h4>
+                        <p>Ana Costa • Score: 12 pontos</p>
+                        <span class="activity-time">12:15</span>
+                    </div>
+                    <div class="activity-status completed">CONCLUÍDA</div>
+                </div>
+
+                <div class="activity-item sent">
+                    <div class="activity-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>PDF Gerado com Sucesso</h4>
+                        <p>Relatório de Exames - João Santos</p>
+                        <span class="activity-time">12:45</span>
+                    </div>
+                    <div class="activity-status sent">ENVIADO</div>
+                </div>
+
+                <div class="activity-item in-progress">
+                    <div class="activity-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>Triagem Inteligente Iniciada</h4>
+                        <p>Carlos Oliveira • Psiquiatria</p>
+                        <span class="activity-time">11:30</span>
+                    </div>
+                    <div class="activity-status in-progress">EM ANDAMENTO</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção Acesso Ultra-Rápido -->
+        <div class="quick-access-section">
+            <div class="quick-access-header">
+                <h2><i class="fas fa-bolt"></i> Acesso Ultra-Rápido</h2>
+                <p>Ferramentas mais utilizadas</p>
+            </div>
+            
+            <div class="quick-access-grid">
+                <div class="quick-access-card emergency" onclick="startEmergencyConsult()">
+                    <div class="quick-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Emergência</h3>
+                </div>
+
+                <div class="quick-access-card assessments" onclick="window.location.href='/centro-avaliacao.html'">
+                    <div class="quick-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Avaliações</h3>
+                </div>
+
+                <div class="quick-access-card pdf" onclick="window.location.href='/pdf-generator.html'">
+                    <div class="quick-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>PDF</h3>
+                </div>
+
+                <div class="quick-access-card config" onclick="showConfigModal()">
+                    <div class="quick-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Configurações</h3>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -585,6 +1022,10 @@
             setTimeout(() => {
                 window.location.href = '/agenda-medica.html';
             }, 1000);
+        }
+
+        function showConfigModal() {
+            alert('⚙️ Abrindo configurações do sistema...\nPersonalize sua experiência médica.');
         }
 
         // Console logs
