@@ -119,6 +119,139 @@ async function startServer() {
     }
   });
 
+  // Get patients by date
+  app.get('/api/pacientes/data/:date', async (req, res) => {
+    try {
+      const { date } = req.params;
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        SELECT id, nome, hora_consulta, status, especialidade, convenio, telefone, email, idade 
+        FROM pacientes 
+        WHERE DATE(created_at) = $1 OR $1 = CURRENT_DATE
+        ORDER BY hora_consulta
+      `, [date]);
+      
+      await client.end();
+      res.json(result.rows);
+    } catch (error) {
+      console.error('Erro ao buscar pacientes por data:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Update patient status
+  app.patch('/api/pacientes/:id/status', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        UPDATE pacientes 
+        SET status = $1, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+        RETURNING *
+      `, [status, id]);
+      
+      await client.end();
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Paciente não encontrado' });
+      }
+      
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Erro ao atualizar status do paciente:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Reschedule patient appointment
+  app.patch('/api/pacientes/:id/remarcar', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { nova_hora, nova_data } = req.body;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const result = await client.query(`
+        UPDATE pacientes 
+        SET hora_consulta = $1, status = 'Reagendado', updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+        RETURNING *
+      `, [nova_hora, id]);
+      
+      await client.end();
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Paciente não encontrado' });
+      }
+      
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('Erro ao remarcar consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Delete patient appointment
+  app.delete('/api/pacientes/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      // First delete related prontuarios
+      await client.query('DELETE FROM prontuarios WHERE paciente_id = $1', [id]);
+      
+      // Then delete the patient
+      const result = await client.query(`
+        DELETE FROM pacientes WHERE id = $1 RETURNING *
+      `, [id]);
+      
+      await client.end();
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Paciente não encontrado' });
+      }
+      
+      res.json({ message: 'Consulta cancelada com sucesso', paciente: result.rows[0] });
+    } catch (error) {
+      console.error('Erro ao cancelar consulta:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Get consultation statistics
+  app.get('/api/estatisticas', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+      
+      const stats = await client.query(`
+        SELECT 
+          COUNT(*) as total,
+          COUNT(CASE WHEN status = 'Confirmado' THEN 1 END) as confirmados,
+          COUNT(CASE WHEN status = 'Pendente' THEN 1 END) as pendentes,
+          COUNT(CASE WHEN status = 'Reagendado' THEN 1 END) as reagendados
+        FROM pacientes
+        WHERE DATE(created_at) = CURRENT_DATE
+      `);
+      
+      await client.end();
+      res.json(stats.rows[0]);
+    } catch (error) {
+      console.error('Erro ao buscar estatísticas:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // 1. PÁGINA SOBRE NÓS - Informações institucionais TeleMed
   app.get('/sobre', (req, res) => {
   console.log('📄 Serving página Sobre Nós for:', req.path);

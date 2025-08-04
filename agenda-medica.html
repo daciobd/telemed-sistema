@@ -782,14 +782,20 @@
             try {
                 showNotification('Carregando pacientes...', 'info');
                 
-                const response = await fetch('/api/pacientes');
+                // Se uma data específica foi selecionada, use o endpoint de data
+                const dateStr = formatDateInput(selectedDate);
+                const endpoint = dateStr !== formatDateInput(new Date()) 
+                    ? `/api/pacientes/data/${dateStr}` 
+                    : '/api/pacientes';
+                    
+                const response = await fetch(endpoint);
                 if (!response.ok) {
                     throw new Error('Erro ao carregar pacientes');
                 }
                 
                 patients = await response.json();
                 renderPatients();
-                updateStats();
+                await loadStats();
                 
                 showNotification('Pacientes carregados com sucesso!', 'success');
                 console.log('📋 Pacientes carregados do banco PostgreSQL:', patients.length);
@@ -801,6 +807,26 @@
                 // Fallback para dados de demonstração
                 loadDemoPatients();
             }
+        }
+
+        // Carregar estatísticas do banco
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/estatisticas');
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById('total-patients').textContent = stats.total || 0;
+                    document.getElementById('confirmed-patients').textContent = stats.confirmados || 0;
+                    document.getElementById('pending-patients').textContent = stats.pendentes || 0;
+                    document.getElementById('rescheduled-patients').textContent = stats.reagendados || 0;
+                    return;
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar estatísticas:', error);
+            }
+            
+            // Fallback para cálculo local
+            updateStats();
         }
 
         // Dados de demonstração como fallback
@@ -997,7 +1023,7 @@
         }
 
         // Remarcar consulta
-        function remarcarConsulta(patientId, event) {
+        async function remarcarConsulta(patientId, event) {
             if (event) event.stopPropagation();
             
             const patient = patients.find(p => p.id === patientId);
@@ -1005,28 +1031,72 @@
             
             const newTime = prompt("Digite o novo horário (ex: 14:30):");
             if (newTime) {
-                patient.hora_consulta = newTime;
-                patient.status = "Reagendado";
-                renderPatients();
-                updateStats();
-                showNotification(`Consulta de ${patient.nome} remarcada para ${newTime}`, 'success');
-                console.log(`📅 Consulta remarcada: ${patient.nome} -> ${newTime}`);
+                try {
+                    showNotification('Remarcando consulta...', 'info');
+                    
+                    const response = await fetch(`/api/pacientes/${patientId}/remarcar`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            nova_hora: newTime,
+                            nova_data: formatDateInput(selectedDate)
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const updatedPatient = await response.json();
+                        
+                        // Atualizar localmente
+                        const index = patients.findIndex(p => p.id === patientId);
+                        if (index !== -1) {
+                            patients[index] = updatedPatient;
+                        }
+                        
+                        renderPatients();
+                        await loadStats();
+                        showNotification(`Consulta de ${patient.nome} remarcada para ${newTime}`, 'success');
+                        console.log(`📅 Consulta remarcada no banco: ${patient.nome} -> ${newTime}`);
+                    } else {
+                        throw new Error('Erro ao remarcar consulta');
+                    }
+                } catch (error) {
+                    console.error('❌ Erro ao remarcar consulta:', error);
+                    showNotification('Erro ao remarcar consulta', 'error');
+                }
             }
         }
 
         // Cancelar consulta
-        function cancelarConsulta(patientId, event) {
+        async function cancelarConsulta(patientId, event) {
             if (event) event.stopPropagation();
             
             const patient = patients.find(p => p.id === patientId);
             if (!patient) return;
             
             if (confirm(`Deseja cancelar a consulta de ${patient.nome}?`)) {
-                patients = patients.filter(p => p.id !== patientId);
-                renderPatients();
-                updateStats();
-                showNotification(`Consulta de ${patient.nome} cancelada`, 'error');
-                console.log(`❌ Consulta cancelada: ${patient.nome}`);
+                try {
+                    showNotification('Cancelando consulta...', 'info');
+                    
+                    const response = await fetch(`/api/pacientes/${patientId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        // Remover localmente
+                        patients = patients.filter(p => p.id !== patientId);
+                        renderPatients();
+                        await loadStats();
+                        showNotification(`Consulta de ${patient.nome} cancelada`, 'error');
+                        console.log(`❌ Consulta cancelada no banco: ${patient.nome}`);
+                    } else {
+                        throw new Error('Erro ao cancelar consulta');
+                    }
+                } catch (error) {
+                    console.error('❌ Erro ao cancelar consulta:', error);
+                    showNotification('Erro ao cancelar consulta', 'error');
+                }
             }
         }
 
