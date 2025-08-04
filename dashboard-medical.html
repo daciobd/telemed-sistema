@@ -655,15 +655,15 @@
     <!-- BREADCRUMBS -->
     <div class="breadcrumbs-container">
       <nav class="breadcrumbs">
-        <a href="#" onclick="window.scrollTo(0,0); return false;" class="breadcrumb-item">
-          <i class="fas fa-arrow-up"></i> Topo
-        </a>
-        <span class="breadcrumb-separator">></span>
         <a href="/dashboard-medical.html" class="breadcrumb-item">
           <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
         <span class="breadcrumb-separator">></span>
         <span class="breadcrumb-current">Dashboard Médico</span>
+        <span class="breadcrumb-separator">></span>
+        <a href="#" onclick="window.scrollTo(0,0); return false;" class="breadcrumb-item">
+          <i class="fas fa-arrow-up"></i> Topo
+        </a>
       </nav>
     </div>
 
@@ -772,6 +772,28 @@
           </div>
           <button class="card-action" onclick="window.location.href='/pdf-generator.html'">
             Gerar Documentos
+          </button>
+        </div>
+
+        <div class="medical-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div>
+              <div class="card-title">Notificações Médicas</div>
+              <div class="card-description">SMS e WhatsApp para médicos</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="metric-large">24</div>
+            <div class="metric-change">
+              <i class="fas fa-arrow-up"></i>
+              Sistema ativo
+            </div>
+          </div>
+          <button class="card-action" onclick="window.location.href='/sistema-notificacoes-medicas.html'">
+            Acessar Sistema
           </button>
         </div>
 

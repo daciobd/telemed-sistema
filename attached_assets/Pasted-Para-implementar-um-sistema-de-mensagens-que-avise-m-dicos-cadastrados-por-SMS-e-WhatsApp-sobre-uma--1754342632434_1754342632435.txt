@@ -1,0 +1,264 @@
+Para implementar um sistema de mensagens que avise médicos cadastrados por SMS e WhatsApp sobre uma oferta de consulta de um paciente, permitindo que eles aceitem ou recusem, podemos seguir um plano estruturado que aproveite as ferramentas já disponíveis no seu projeto no Replit e integre serviços de mensagência. Com base no contexto atual (06:18 PM -03, 04/08/2025), vamos criar um fluxo prático e escalável. Aqui está como proceder:
+
+### Passos para Implementação
+
+1. **Definir os Requisitos**:
+   - Os médicos devem receber uma notificação (SMS ou WhatsApp) com detalhes da oferta (ex.: especialidade, valor oferecido, horário sugerido).
+   - Eles devem ter a opção de aceitar ou recusar, com uma resposta simples (ex.: "ACEITAR" ou "RECUSAR").
+   - O sistema deve atualizar o status da oferta no banco de dados após a resposta.
+
+2. **Escolher uma Plataforma de Mensageria**:
+   - **SMS**: Use um serviço como Twilio ou ClickSend, que oferecem APIs para envio e recepção de SMS. Esses serviços suportam automações e rastreamento de respostas.
+   - **WhatsApp**: Utilize a WhatsApp Business API (via provedores como Twilio, Gupshup ou Rasayel), que permite enviar mensagens e coletar respostas via chatbot ou fluxos automáticos.
+   - Como o projeto já usa Node.js no Replit, integre com a biblioteca `axios` para chamadas às APIs.
+
+3. **Atualizar o Banco de Dados**:
+   - Adicione uma tabela `medicos` (se não existir) com colunas como `id`, `nome`, `telefone`, `whatsapp`, `especialidade`, e um campo `disponibilidade` (ex.: true/false).
+   - Crie uma tabela `ofertas` com `id`, `paciente_id`, `valor`, `especialidade`, `horario`, `status` (ex.: "pendente", "aceito", "recusado"), e `medico_id` (NULL até aceitação).
+
+4. **Desenvolver a Lógica no Backend**:
+   - Crie uma rota no `index.js` para disparar notificações quando uma oferta for criada (ex.: via `leilaoForm` de `index.html`).
+   - Implemente um endpoint para receber respostas dos médicos (ex.: "ACEITAR" ou "RECUSAR") e atualizar o banco.
+
+5. **Criar a Interface de Resposta**:
+   - No SMS, use um número curto ou keyword para respostas (ex.: responder "ACEITAR 123" onde 123 é o ID da oferta).
+   - No WhatsApp, configure um chatbot simples para coletar a decisão.
+
+6. **Testar e Implantar**:
+   - Simule envios e respostas com números de teste.
+   - Publique no Replit e monitore o fluxo.
+
+### Código Sugerido
+
+#### Atualização em `index.js`
+```javascript
+const express = require('express');
+const axios = require('axios');
+const dotenv = require('dotenv');
+const { Pool } = require('pg');
+const prescreverRouter = require('./routes/prescrever');
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const pool = new Pool({
+  user: 'your_user',
+  host: 'your_host',
+  database: 'your_database',
+  password: 'your_password',
+  port: 5432,
+});
+
+app.use(express.json());
+app.use('/prescrever', prescreverRouter);
+
+// Rota para enviar oferta aos médicos
+app.post('/enviar-oferta', async (req, res) => {
+  const { especialidade, valor, horario, pacienteId } = req.body;
+
+  try {
+    // Inserir oferta no banco
+    const ofertaResult = await pool.query(
+      'INSERT INTO ofertas (paciente_id, valor, especialidade, horario, status) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      [pacienteId, valor, especialidade, horario, 'pendente']
+    );
+    const ofertaId = ofertaResult.rows[0].id;
+
+    // Buscar médicos disponíveis
+    const medicos = await pool.query(
+      'SELECT telefone, whatsapp FROM medicos WHERE especialidade = $1 AND disponibilidade = true',
+      [especialidade]
+    );
+
+    // Enviar notificação por SMS e WhatsApp
+    for (const medico of medicos.rows) {
+      const mensagem = `Nova oferta: ${especialidade}, R$ ${valor}, ${horario}. Responda ACEITAR ${ofertaId} ou RECUSAR ${ofertaId}.`;
+      
+      // SMS via Twilio (exemplo)
+      await axios.post(`https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`, {
+        To: medico.telefone,
+        From: process.env.TWILIO_PHONE,
+        Body: mensagem,
+      }, {
+        auth: { username: process.env.TWILIO_SID, password: process.env.TWILIO_AUTH_TOKEN },
+      });
+
+      // WhatsApp via Twilio (exemplo)
+      await axios.post(`https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`, {
+        To: `whatsapp:${medico.whatsapp}`,
+        From: `whatsapp:${process.env.TWILIO_WHATSAPP}`,
+        Body: mensagem,
+      }, {
+        auth: { username: process.env.TWILIO_SID, password: process.env.TWILIO_AUTH_TOKEN },
+      });
+    }
+
+    res.json({ sucesso: true, mensagem: 'Ofertas enviadas aos médicos.' });
+  } catch (error) {
+    console.error('Erro ao enviar oferta:', error);
+    res.status(500).json({ sucesso: false, erro: 'Falha ao enviar oferta.' });
+  }
+});
+
+// Rota para receber resposta do médico
+app.post('/responder-oferta', async (req, res) => {
+  const { ofertaId, resposta, medicoTelefone } = req.body;
+
+  try {
+    const medico = await pool.query(
+      'SELECT id FROM medicos WHERE telefone = $1',
+      [medicoTelefone]
+    );
+    const medicoId = medico.rows[0].id;
+
+    if (resposta.toUpperCase() === 'ACEITAR') {
+      await pool.query(
+        'UPDATE ofertas SET status = $1, medico_id = $2 WHERE id = $3 AND status = $4',
+        ['aceito', medicoId, ofertaId, 'pendente']
+      );
+      res.json({ sucesso: true, mensagem: 'Oferta aceita com sucesso.' });
+    } else if (resposta.toUpperCase() === 'RECUSAR') {
+      await pool.query(
+        'UPDATE ofertas SET status = $1 WHERE id = $2 AND status = $3',
+        ['recusado', ofertaId, 'pendente']
+      );
+      res.json({ sucesso: true, mensagem: 'Oferta recusada.' });
+    } else {
+      res.status(400).json({ sucesso: false, erro: 'Resposta inválida.' });
+    }
+  } catch (error) {
+    console.error('Erro ao processar resposta:', error);
+    res.status(500).json({ sucesso: false, erro: 'Falha ao processar resposta.' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
+```
+
+#### Atualização em `index.html` (para disparar a oferta)
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeleMed - Consultas com Especialistas</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; margin: 0; padding: 20px; background: linear-gradient(#e0eafc, #cfdef3); color: #2c3e50; }
+    .container { max-width: 900px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; }
+    .form-group select, .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+    .form-group button { background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    .form-group button:hover { background-color: #2980b9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>TeleMed - Consultas com Especialistas</h1>
+    <div class="section">
+      <form id="leilaoForm" onsubmit="fazerLance(event)">
+        <div class="form-group">
+          <label for="especialidade">Especialidade:</label>
+          <select id="especialidade" required>
+            <option value="clinica">Clínica Geral</option>
+            <option value="psiquiatria">Psiquiatria</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor (mínimo R$ 150,00):</label>
+          <input type="number" id="valor" min="150" step="10" required>
+        </div>
+        <div class="form-group">
+          <label for="horario">Horário Sugerido:</label>
+          <input type="datetime-local" id="horario" required>
+        </div>
+        <div class="form-group">
+          <button type="submit">Enviar Proposta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function fazerLance(event) {
+      event.preventDefault();
+      const especialidade = document.getElementById('especialidade').value;
+      const valor = parseInt(document.getElementById('valor').value);
+      const horario = document.getElementById('horario').value;
+
+      if (valor < 150) {
+        alert("O valor mínimo é R$ 150,00!");
+        return;
+      }
+
+      const response = await fetch('/enviar-oferta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ especialidade, valor, horario, pacienteId: 1 }) // Substitua pacienteId pelo valor real
+      });
+
+      const result = await response.json();
+      alert(result.mensagem);
+    }
+  </script>
+</body>
+</html>
+```
+
+### Configuração no Replit
+1. **Instale Dependências**:
+   - No terminal, execute: `npm install pg axios dotenv`.
+2. **Configure `.env`**:
+   - Adicione:
+     ```
+     TWILIO_SID=your_twilio_sid
+     TWILIO_AUTH_TOKEN=your_twilio_auth_token
+     TWILIO_PHONE=your_twilio_phone_number
+     TWILIO_WHATSAPP=your_twilio_whatsapp_number
+     DATABASE_URL=your_postgres_url
+     ```
+   - Substitua os valores após criar uma conta no Twilio e configurar um número de WhatsApp.
+3. **Crie as Tabelas**:
+   - No PostgreSQL no Replit, execute:
+     ```sql
+     CREATE TABLE medicos (
+       id SERIAL PRIMARY KEY,
+       nome VARCHAR(100),
+       telefone VARCHAR(15),
+       whatsapp VARCHAR(15),
+       especialidade VARCHAR(50),
+       disponibilidade BOOLEAN DEFAULT true
+     );
+
+     CREATE TABLE ofertas (
+       id SERIAL PRIMARY KEY,
+       paciente_id INT,
+       valor DECIMAL(10,2),
+       especialidade VARCHAR(50),
+       horario TIMESTAMP,
+       status VARCHAR(20) DEFAULT 'pendente',
+       medico_id INT
+     );
+     ```
+   - Insira dados de teste para médicos.
+
+### Testes Imediatos
+- **Simulação (06:20 PM - 06:30 PM)**:
+  1. Envie uma oferta em `index.html` com valor R$ 200 e horário para amanhã (05/08/2025, 09:00).
+  2. Verifique se os logs no console indicam envios para os números de teste.
+  3. Responda manualmente com "ACEITAR 1" ou "RECUSAR 1" via SMS/WhatsApp e confirme a atualização no banco.
+- **Ajustes**:
+  - Valide se o status da oferta muda para "aceito" ou "recusado".
+  - Teste com múltiplos médicos.
+
+### Próximos Passos
+- Registre-se no Twilio e obtenha credenciais para ativar SMS/WhatsApp.
+- Adicione lógica de notificação ao paciente após aceitação.
+- Implemente um webhook no Twilio para receber respostas automaticamente.
+
+Esse setup permite iniciar os testes hoje mesmo. Quer detalhar algum passo ou simular um cenário específico?

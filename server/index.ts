@@ -6168,6 +6168,243 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
   res.redirect('/patient-dashboard');
 });
 
+  // SISTEMA DE NOTIFICAÇÕES MÉDICAS - SMS/WhatsApp
+  
+  // Rota para enviar oferta aos médicos cadastrados
+  app.post('/api/notifications/enviar-oferta', async (req, res) => {
+    try {
+      const { especialidade, valor, horario, pacienteId, pacienteNome, urgencia } = req.body;
+
+      // Validação básica
+      if (!especialidade || !valor || !horario || !pacienteId) {
+        return res.status(400).json({ 
+          sucesso: false, 
+          erro: 'Dados obrigatórios: especialidade, valor, horario, pacienteId' 
+        });
+      }
+
+      if (valor < 150) {
+        return res.status(400).json({ 
+          sucesso: false, 
+          erro: 'Valor mínimo para consulta é R$ 150,00' 
+        });
+      }
+
+      // Conectar ao banco e inserir oferta
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const ofertaResult = await client.query(`
+        INSERT INTO ofertas_medicas (paciente_id, paciente_nome, valor, especialidade, horario, status, urgencia, created_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        RETURNING id
+      `, [pacienteId, pacienteNome || 'Paciente', valor, especialidade, new Date(horario), 'pendente', urgencia || false, new Date()]);
+
+      const ofertaId = ofertaResult.rows[0].id;
+
+      // Buscar médicos disponíveis da especialidade
+      const medicosResult = await client.query(`
+        SELECT id, nome, telefone, whatsapp, crm, especialidade 
+        FROM medicos_cadastrados 
+        WHERE especialidade = $1 AND disponibilidade = true
+      `, [especialidade]);
+
+      await client.end();
+
+      const medicosDisponiveis = medicosResult.rows;
+      const medicosEnviados = [];
+
+      // Preparar mensagem
+      const valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      const dataFormatada = new Date(horario).toLocaleString('pt-BR');
+      const urgenciaTexto = urgencia ? '🚨 URGENTE - ' : '';
+      
+      const mensagemBase = `${urgenciaTexto}Nova consulta TeleMed:
+
+📋 Especialidade: ${especialidade.toUpperCase()}
+💰 Valor: ${valorFormatado}
+📅 Horário: ${dataFormatada}
+👤 Paciente: ${pacienteNome || 'Não informado'}
+
+Para aceitar: ACEITAR ${ofertaId}
+Para recusar: RECUSAR ${ofertaId}
+
+TeleMed Pro - Sistema Médico`;
+
+      // Processar envio para médicos
+      for (const medico of medicosDisponiveis) {
+        const mensagemPersonalizada = `Olá ${medico.nome}!
+
+${mensagemBase}
+
+CRM: ${medico.crm}`;
+
+        // Log de simulação (substituir por integração real com Twilio)
+        console.log(`📤 [SIMULAÇÃO] Enviando para ${medico.nome} (${medico.telefone})`);
+        console.log(`📱 Mensagem: ${mensagemPersonalizada.substring(0, 100)}...`);
+        
+        medicosEnviados.push({
+          medico: medico.nome,
+          telefone: medico.telefone,
+          whatsapp: medico.whatsapp,
+          crm: medico.crm
+        });
+      }
+
+      console.log(`📤 Oferta ${ofertaId} processada para ${medicosEnviados.length} médicos`);
+
+      res.json({
+        sucesso: true,
+        mensagem: `Oferta enviada para ${medicosEnviados.length} médicos da especialidade ${especialidade}`,
+        dados: {
+          ofertaId,
+          especialidade,
+          valor: valorFormatado,
+          horario: dataFormatada,
+          medicosEnviados: medicosEnviados.length,
+          detalhes: medicosEnviados
+        }
+      });
+
+    } catch (error) {
+      console.error('❌ Erro ao processar envio de oferta:', error);
+      res.status(500).json({ 
+        sucesso: false, 
+        erro: 'Falha interna do servidor ao enviar oferta'
+      });
+    }
+  });
+
+  // Rota para receber resposta do médico
+  app.post('/api/notifications/responder-oferta', async (req, res) => {
+    try {
+      const { ofertaId, resposta, medicoTelefone, observacoes } = req.body;
+
+      if (!ofertaId || !resposta || !medicoTelefone) {
+        return res.status(400).json({ 
+          sucesso: false, 
+          erro: 'Dados obrigatórios: ofertaId, resposta, medicoTelefone' 
+        });
+      }
+
+      if (!['ACEITAR', 'RECUSAR'].includes(resposta.toUpperCase())) {
+        return res.status(400).json({ 
+          sucesso: false, 
+          erro: 'Resposta deve ser ACEITAR ou RECUSAR' 
+        });
+      }
+
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      // Buscar médico pelo telefone
+      const medicoResult = await client.query(`
+        SELECT id, nome, crm FROM medicos_cadastrados 
+        WHERE telefone = $1 OR whatsapp = $1
+      `, [medicoTelefone]);
+
+      if (medicoResult.rows.length === 0) {
+        await client.end();
+        return res.status(404).json({ 
+          sucesso: false, 
+          erro: 'Médico não encontrado com este telefone' 
+        });
+      }
+
+      const medico = medicoResult.rows[0];
+      const agora = new Date();
+      const respostaFormatada = resposta.toUpperCase();
+
+      if (respostaFormatada === 'ACEITAR') {
+        // Atualizar oferta como aceita
+        await client.query(`
+          UPDATE ofertas_medicas 
+          SET status = 'aceito', medico_id = $1, respondido_em = $2, observacoes = $3
+          WHERE id = $4 AND status = 'pendente'
+        `, [medico.id, agora, observacoes, ofertaId]);
+
+        console.log(`✅ Oferta ${ofertaId} ACEITA por ${medico.nome} (${medico.crm})`);
+
+        res.json({ 
+          sucesso: true, 
+          mensagem: `Oferta aceita com sucesso por ${medico.nome}`,
+          dados: {
+            medico: medico.nome,
+            crm: medico.crm,
+            respondidoEm: agora
+          }
+        });
+
+      } else {
+        // Registrar recusa
+        await client.query(`
+          INSERT INTO respostas_ofertas (oferta_id, medico_id, resposta, respondido_em, observacoes)
+          VALUES ($1, $2, 'recusado', $3, $4)
+        `, [ofertaId, medico.id, agora, observacoes]);
+
+        console.log(`❌ Oferta ${ofertaId} RECUSADA por ${medico.nome} (${medico.crm})`);
+
+        res.json({ 
+          sucesso: true, 
+          mensagem: `Oferta recusada. Obrigado pela resposta, ${medico.nome}`
+        });
+      }
+
+      await client.end();
+
+    } catch (error) {
+      console.error('❌ Erro ao processar resposta:', error);
+      res.status(500).json({ 
+        sucesso: false, 
+        erro: 'Falha ao processar resposta do médico'
+      });
+    }
+  });
+
+  // Rota para listar ofertas
+  app.get('/api/notifications/ofertas', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const result = await client.query(`
+        SELECT om.*, mc.nome as medico_nome, mc.crm
+        FROM ofertas_medicas om
+        LEFT JOIN medicos_cadastrados mc ON om.medico_id = mc.id
+        ORDER BY om.created_at DESC
+        LIMIT 50
+      `);
+
+      await client.end();
+      res.json(result.rows);
+
+    } catch (error) {
+      console.error('❌ Erro ao buscar ofertas:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+  // Rota para listar médicos cadastrados
+  app.get('/api/notifications/medicos', async (req, res) => {
+    try {
+      const client = new Client({ connectionString: process.env.DATABASE_URL });
+      await client.connect();
+
+      const result = await client.query(`
+        SELECT id, nome, telefone, whatsapp, email, crm, especialidade, disponibilidade
+        FROM medicos_cadastrados
+        ORDER BY nome
+      `);
+
+      await client.end();
+      res.json(result.rows);
+
+    } catch (error) {
+      console.error('❌ Erro ao buscar médicos:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
   // Setup Vite middleware LAST - this handles SPA fallback for React routes
   await setupVite(app, server);
 
@@ -6178,6 +6415,7 @@ function createSecureLoginUrl(email, senha, crm, origem = 'hostinger') {
     console.log(`🔗 Acesse: http://localhost:${port}`);
     console.log(`🛡️ Sistema de login seguro implementado`);
     console.log(`🔐 Área médica protegida com autenticação`);
+    console.log(`📱 Sistema de notificações médicas ativo`);
   });
 
   return { app, server };

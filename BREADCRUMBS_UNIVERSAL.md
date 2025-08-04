@@ -228,7 +228,13 @@
 </div>
 ```
 
+### ✅ Sistema de Notificações Médicas
+- Breadcrumbs: Dashboard > Voltar > Sistema de Notificações > Topo
+- CSS: Integrado com tema profissional
+- Posição: Entre header e container principal
+
 ## Status: Sistema Base Implementado
-**Data:** Janeiro 2025
+**Data:** Janeiro 2025 (Atualizado: 04/08/2025)
+**Correção:** Breadcrumb "TOPO" movido para o final em todas as páginas
 **Próximo Passo:** Implementar em todas as páginas restantes
 **Compatibilidade:** Desktop, Tablet, Mobile

@@ -1,0 +1,105 @@
+const express = require('express');
+const axios = require('axios');
+const dotenv = require('dotenv');
+const { Pool } = require('pg');
+const prescreverRouter = require('./routes/prescrever');
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const pool = new Pool({
+  user: 'your_user',
+  host: 'your_host',
+  database: 'your_database',
+  password: 'your_password',
+  port: 5432,
+});
+
+app.use(express.json());
+app.use('/prescrever', prescreverRouter);
+
+// Rota para enviar oferta aos médicos
+app.post('/enviar-oferta', async (req, res) => {
+  const { especialidade, valor, horario, pacienteId } = req.body;
+
+  try {
+    // Inserir oferta no banco
+    const ofertaResult = await pool.query(
+      'INSERT INTO ofertas (paciente_id, valor, especialidade, horario, status) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      [pacienteId, valor, especialidade, horario, 'pendente']
+    );
+    const ofertaId = ofertaResult.rows[0].id;
+
+    // Buscar médicos disponíveis
+    const medicos = await pool.query(
+      'SELECT telefone, whatsapp FROM medicos WHERE especialidade = $1 AND disponibilidade = true',
+      [especialidade]
+    );
+
+    // Enviar notificação por SMS e WhatsApp
+    for (const medico of medicos.rows) {
+      const mensagem = `Nova oferta: ${especialidade}, R$ ${valor}, ${horario}. Responda ACEITAR ${ofertaId} ou RECUSAR ${ofertaId}.`;
+      
+      // SMS via Twilio (exemplo)
+      await axios.post(`https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`, {
+        To: medico.telefone,
+        From: process.env.TWILIO_PHONE,
+        Body: mensagem,
+      }, {
+        auth: { username: process.env.TWILIO_SID, password: process.env.TWILIO_AUTH_TOKEN },
+      });
+
+      // WhatsApp via Twilio (exemplo)
+      await axios.post(`https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`, {
+        To: `whatsapp:${medico.whatsapp}`,
+        From: `whatsapp:${process.env.TWILIO_WHATSAPP}`,
+        Body: mensagem,
+      }, {
+        auth: { username: process.env.TWILIO_SID, password: process.env.TWILIO_AUTH_TOKEN },
+      });
+    }
+
+    res.json({ sucesso: true, mensagem: 'Ofertas enviadas aos médicos.' });
+  } catch (error) {
+    console.error('Erro ao enviar oferta:', error);
+    res.status(500).json({ sucesso: false, erro: 'Falha ao enviar oferta.' });
+  }
+});
+
+// Rota para receber resposta do médico
+app.post('/responder-oferta', async (req, res) => {
+  const { ofertaId, resposta, medicoTelefone } = req.body;
+
+  try {
+    const medico = await pool.query(
+      'SELECT id FROM medicos WHERE telefone = $1',
+      [medicoTelefone]
+    );
+    const medicoId = medico.rows[0].id;
+
+    if (resposta.toUpperCase() === 'ACEITAR') {
+      await pool.query(
+        'UPDATE ofertas SET status = $1, medico_id = $2 WHERE id = $3 AND status = $4',
+        ['aceito', medicoId, ofertaId, 'pendente']
+      );
+      res.json({ sucesso: true, mensagem: 'Oferta aceita com sucesso.' });
+    } else if (resposta.toUpperCase() === 'RECUSAR') {
+      await pool.query(
+        'UPDATE ofertas SET status = $1 WHERE id = $2 AND status = $3',
+        ['recusado', ofertaId, 'pendente']
+      );
+      res.json({ sucesso: true, mensagem: 'Oferta recusada.' });
+    } else {
+      res.status(400).json({ sucesso: false, erro: 'Resposta inválida.' });
+    }
+  } catch (error) {
+    console.error('Erro ao processar resposta:', error);
+    res.status(500).json({ sucesso: false, erro: 'Falha ao processar resposta.' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});

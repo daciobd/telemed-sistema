@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeleMed - Consultas com Especialistas</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; margin: 0; padding: 20px; background: linear-gradient(#e0eafc, #cfdef3); color: #2c3e50; }
+    .container { max-width: 900px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; }
+    .form-group select, .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+    .form-group button { background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    .form-group button:hover { background-color: #2980b9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>TeleMed - Consultas com Especialistas</h1>
+    <div class="section">
+      <form id="leilaoForm" onsubmit="fazerLance(event)">
+        <div class="form-group">
+          <label for="especialidade">Especialidade:</label>
+          <select id="especialidade" required>
+            <option value="clinica">Clínica Geral</option>
+            <option value="psiquiatria">Psiquiatria</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor (mínimo R$ 150,00):</label>
+          <input type="number" id="valor" min="150" step="10" required>
+        </div>
+        <div class="form-group">
+          <label for="horario">Horário Sugerido:</label>
+          <input type="datetime-local" id="horario" required>
+        </div>
+        <div class="form-group">
+          <button type="submit">Enviar Proposta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function fazerLance(event) {
+      event.preventDefault();
+      const especialidade = document.getElementById('especialidade').value;
+      const valor = parseInt(document.getElementById('valor').value);
+      const horario = document.getElementById('horario').value;
+
+      if (valor < 150) {
+        alert("O valor mínimo é R$ 150,00!");
+        return;
+      }
+
+      const response = await fetch('/enviar-oferta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ especialidade, valor, horario, pacienteId: 1 }) // Substitua pacienteId pelo valor real
+      });
+
+      const result = await response.json();
+      alert(result.mensagem);
+    }
+  </script>
+</body>
+</html>
