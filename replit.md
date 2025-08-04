@@ -17,6 +17,7 @@ Preferred communication style: Simple, everyday language.
 - **Dashboard Pastel Design**: Implemented modern pastel design with unique sidebar, Poppins typography, FontAwesome icons, gradient backgrounds, and mobile-responsive layout following user's aesthetic specifications
 - **Dashboard Medical Professional**: Created professional medical dashboard based on user's image template with clean layout, medical-focused design, sidebar navigation, and comprehensive functionality cards
 - **Dashboard Minimal**: Implemented clean minimal dashboard following user's simplified HTML structure with sidebar navigation, stats cards, and responsive design using Inter typography and professional medical color scheme
+- **Agenda Médica**: Created comprehensive medical calendar system with month selection, appointment management, and responsive design featuring blue color scheme (#007BFF), interactive calendar, schedule list with patient details, and add/edit functionality
 
 ## System Architecture
 

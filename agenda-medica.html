@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Médica - TeleMed Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F5F5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: #FFF;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .user-info span {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .user-info span:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* MAIN LAYOUT */
+        main {
+            display: flex;
+            max-width: 1400px;
+            margin: 30px auto;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        /* CALENDAR SECTION */
+        .calendar-section {
+            flex: 1;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E5E5;
+        }
+
+        .calendar-section h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .month-selector {
+            margin-bottom: 20px;
+        }
+
+        .month-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        #month {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E5E5E5;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+
+        #month:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+
+        /* CALENDAR TABLE */
+        .calendar {
+            margin-bottom: 25px;
+        }
+
+        .calendar table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar th {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .calendar td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #E5E5E5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .calendar td:hover {
+            background: #F0F8FF;
+            color: #007BFF;
+        }
+
+        .calendar td.today {
+            background: #007BFF;
+            color: white;
+            font-weight: 700;
+        }
+
+        .calendar td.selected {
+            background: #E3F2FD;
+            color: #007BFF;
+            border-color: #007BFF;
+        }
+
+        .calendar td.other-month {
+            color: #CCC;
+        }
+
+        /* ADD SCHEDULE */
+        .add-schedule {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px dashed #007BFF;
+        }
+
+        .add-schedule label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #007BFF;
+        }
+
+        .time-inputs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .time-inputs input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid #E5E5E5;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .time-inputs input:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+
+        .time-separator {
+            font-size: 18px;
+            font-weight: 700;
+            color: #007BFF;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        /* SCHEDULE SECTION */
+        .schedule-section {
+            flex: 1.2;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E5E5;
+        }
+
+        .schedule-section h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notifications-toggle {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #F8F9FA;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notifications-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #007BFF;
+        }
+
+        .notifications-toggle label {
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+        }
+
+        /* SCHEDULE LIST */
+        #schedule-list {
+            list-style: none;
+        }
+
+        .schedule-item {
+            background: #FAFAFA;
+            border: 1px solid #E5E5E5;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            background: #F0F8FF;
+            border-color: #007BFF;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+        }
+
+        .schedule-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #007BFF;
+        }
+
+        .schedule-time {
+            font-weight: 700;
+            color: #007BFF;
+            font-size: 16px;
+            min-width: 60px;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.prudential { background: linear-gradient(135deg, #6F42C1, #5A2D91); }
+        .badge.blue { background: linear-gradient(135deg, #007BFF, #0056B3); }
+        .badge.mell { background: linear-gradient(135deg, #28A745, #1E7E34); }
+        .badge.siaze { background: linear-gradient(135deg, #FD7E14, #E55A00); }
+
+        .patient-name {
+            flex: 1;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .status {
+            padding: 4px 10px;
+            background: #D4EDDA;
+            color: #155724;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status.pendente {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status.cancelado {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: #F8F9FA;
+            border: 1px solid #DEE2E6;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            background: #007BFF;
+            color: white;
+            border-color: #007BFF;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            main {
+                flex-direction: column;
+                padding: 0 15px;
+            }
+
+            header {
+                padding: 15px 20px;
+            }
+
+            .user-info {
+                font-size: 12px;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendar table {
+                font-size: 14px;
+            }
+
+            .calendar th, .calendar td {
+                padding: 8px 4px;
+            }
+
+            .schedule-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .time-inputs {
+                justify-content: center;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .schedule-item {
+            animation: slideInUp 0.3s ease-out;
+        }
+
+        /* LOADING STATE */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: #007BFF;
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-calendar-medical"></i>
+            TeleMed Pro
+        </div>
+        <div class="user-info">
+            Bem-vindo, Dr. Carlos Mendes
+            <span onclick="openSettings()"><i class="fas fa-cog"></i> Configurações</span>
+            <span onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="calendar-section">
+            <h2><i class="fas fa-calendar-alt"></i> Consultório Virtual</h2>
+            
+            <div class="month-selector">
+                <label for="month">Selecionar Mês:</label>
+                <input type="month" id="month" value="2025-01" onchange="updateSchedule()">
+            </div>
+
+            <div class="calendar">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dom</th>
+                            <th>Seg</th>
+                            <th>Ter</th>
+                            <th>Qua</th>
+                            <th>Qui</th>
+                            <th>Sex</th>
+                            <th>Sáb</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-body">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="add-schedule">
+                <label><i class="fas fa-plus-circle"></i> Adicionar Horário</label>
+                <div class="time-inputs">
+                    <input type="number" id="hour" min="0" max="23" value="10" placeholder="HH">
+                    <span class="time-separator">:</span>
+                    <input type="number" id="minute" min="0" max="59" value="00" placeholder="MM">
+                </div>
+                <button class="add-btn" onclick="addSchedule()">
+                    <i class="fas fa-plus"></i>
+                    Adicionar Horário
+                </button>
+            </div>
+        </section>
+
+        <section class="schedule-section">
+            <h2><i class="fas fa-clock"></i> Horários para <span id="selected-date">04/01/2025</span></h2>
+            
+            <div class="notifications-toggle">
+                <input type="checkbox" id="notifications" checked>
+                <label for="notifications">
+                    <i class="fas fa-bell"></i> Ativar notificações
+                </label>
+            </div>
+
+            <ul id="schedule-list">
+                <!-- Schedule items will be generated by JavaScript -->
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        // Current date and selected date
+        const today = new Date();
+        let selectedDate = new Date();
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Sample schedule data
+        let scheduleData = {
+            '2025-01-04': [
+                {
+                    time: '08:20',
+                    badge: 'Prudential (ML)',
+                    badgeClass: 'prudential',
+                    patient: 'Da Silva Peixoto, Bruno',
+                    status: 'Confirmado'
+                },
+                {
+                    time: '08:40',
+                    badge: 'Blue',
+                    badgeClass: 'blue',
+                    patient: 'Matsushita Saporito, Juliana',
+                    status: 'Confirmado'
+                },
+                {
+                    time: '09:00',
+                    badge: 'Blue',
+                    badgeClass: 'blue',
+                    patient: 'Helena Vicentini Solange',
+                    status: 'Confirmado'
+                },
+                {
+                    time: '09:20',
+                    badge: 'Mell-br',
+                    badgeClass: 'mell',
+                    patient: 'De Oliveira Ribeiro, Moises',
+                    status: 'Confirmado'
+                },
+                {
+                    time: '09:40',
+                    badge: 'SIAZE VIDEO-ORIENTAÇÃO',
+                    badgeClass: 'siaze',
+                    patient: 'Cristina Oliveira Assakuru, Daniele',
+                    status: 'Confirmado'
+                }
+            ]
+        };
+
+        // Initialize calendar and schedule
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMonthInput();
+            generateCalendar();
+            updateScheduleDisplay();
+            
+            console.log('📅 Agenda Médica TeleMed Pro carregada!');
+            console.log('🗓️ Calendário interativo funcionando');
+            console.log('⏰ Sistema de horários ativo');
+            console.log('📱 Layout responsivo implementado');
+        });
+
+        function updateMonthInput() {
+            const monthInput = document.getElementById('month');
+            const year = currentYear;
+            const month = (currentMonth + 1).toString().padStart(2, '0');
+            monthInput.value = `${year}-${month}`;
+        }
+
+        function generateCalendar() {
+            const calendarBody = document.getElementById('calendar-body');
+            calendarBody.innerHTML = '';
+
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            let date = new Date(startDate);
+            
+            for (let week = 0; week < 6; week++) {
+                const row = document.createElement('tr');
+                
+                for (let day = 0; day < 7; day++) {
+                    const cell = document.createElement('td');
+                    cell.textContent = date.getDate();
+                    
+                    // Add classes for styling
+                    if (date.getMonth() !== currentMonth) {
+                        cell.classList.add('other-month');
+                    }
+                    
+                    if (isSameDay(date, today)) {
+                        cell.classList.add('today');
+                    }
+                    
+                    if (isSameDay(date, selectedDate)) {
+                        cell.classList.add('selected');
+                    }
+                    
+                    // Add click event
+                    const cellDate = new Date(date);
+                    cell.addEventListener('click', () => selectDate(cellDate));
+                    
+                    row.appendChild(cell);
+                    date.setDate(date.getDate() + 1);
+                }
+                
+                calendarBody.appendChild(row);
+                
+                // Stop if we've filled the month
+                if (date.getMonth() !== currentMonth && week > 3) {
+                    break;
+                }
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = new Date(date);
+            generateCalendar();
+            updateScheduleDisplay();
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getFullYear() === date2.getFullYear();
+        }
+
+        function updateSchedule() {
+            const monthInput = document.getElementById('month');
+            const [year, month] = monthInput.value.split('-');
+            currentYear = parseInt(year);
+            currentMonth = parseInt(month) - 1;
+            
+            generateCalendar();
+            updateScheduleDisplay();
+        }
+
+        function updateScheduleDisplay() {
+            const selectedDateElement = document.getElementById('selected-date');
+            const scheduleList = document.getElementById('schedule-list');
+            
+            // Format selected date
+            const dateStr = selectedDate.toLocaleDateString('pt-BR');
+            selectedDateElement.textContent = dateStr;
+            
+            // Get schedule for selected date
+            const dateKey = selectedDate.toISOString().split('T')[0];
+            const daySchedule = scheduleData[dateKey] || [];
+            
+            // Clear current schedule
+            scheduleList.innerHTML = '';
+            
+            if (daySchedule.length === 0) {
+                scheduleList.innerHTML = '<li style="text-align: center; color: #666; padding: 20px;">Nenhum horário agendado para este dia</li>';
+                return;
+            }
+            
+            // Generate schedule items
+            daySchedule.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.className = 'schedule-item';
+                li.innerHTML = `
+                    <input type="checkbox" id="schedule-${index}">
+                    <span class="schedule-time">${item.time}</span>
+                    <span class="badge ${item.badgeClass}">${item.badge}</span>
+                    <span class="patient-name">${item.patient}</span>
+                    <span class="status">${item.status}</span>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="reschedule(${index})" title="Reagendar">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <button class="action-btn" onclick="viewDetails(${index})" title="Ver detalhes">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                `;
+                scheduleList.appendChild(li);
+            });
+        }
+
+        function addSchedule() {
+            const hourInput = document.getElementById('hour');
+            const minuteInput = document.getElementById('minute');
+            
+            const hour = hourInput.value.padStart(2, '0');
+            const minute = minuteInput.value.padStart(2, '0');
+            const time = `${hour}:${minute}`;
+            
+            // Validate inputs
+            if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+                alert('Por favor, insira um horário válido!');
+                return;
+            }
+            
+            const dateKey = selectedDate.toISOString().split('T')[0];
+            
+            // Initialize schedule array if doesn't exist
+            if (!scheduleData[dateKey]) {
+                scheduleData[dateKey] = [];
+            }
+            
+            // Check if time already exists
+            const timeExists = scheduleData[dateKey].some(item => item.time === time);
+            if (timeExists) {
+                alert('Este horário já está ocupado!');
+                return;
+            }
+            
+            // Add new schedule item
+            const newItem = {
+                time: time,
+                badge: 'Disponível',
+                badgeClass: 'blue',
+                patient: 'Horário livre',
+                status: 'Disponível'
+            };
+            
+            scheduleData[dateKey].push(newItem);
+            scheduleData[dateKey].sort((a, b) => a.time.localeCompare(b.time));
+            
+            // Update display
+            updateScheduleDisplay();
+            
+            // Reset inputs
+            hourInput.value = '10';
+            minuteInput.value = '00';
+            
+            // Show success message
+            showNotification('Horário adicionado com sucesso!', 'success');
+        }
+
+        function reschedule(index) {
+            alert(`Reagendando consulta do horário ${scheduleData[selectedDate.toISOString().split('T')[0]][index].time}`);
+        }
+
+        function viewDetails(index) {
+            const item = scheduleData[selectedDate.toISOString().split('T')[0]][index];
+            alert(`Detalhes da consulta:\nHorário: ${item.time}\nPaciente: ${item.patient}\nConvênio: ${item.badge}\nStatus: ${item.status}`);
+        }
+
+        function openSettings() {
+            alert('Abrindo configurações da agenda...');
+        }
+
+        function logout() {
+            if (confirm('Deseja realmente sair?')) {
+                window.location.href = '/login.html';
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background: ${type === 'success' ? '#28A745' : '#007BFF'};
+                color: white;
+                border-radius: 8px;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize with current date
+        document.getElementById('month').value = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
+    </script>
+</body>
+</html>

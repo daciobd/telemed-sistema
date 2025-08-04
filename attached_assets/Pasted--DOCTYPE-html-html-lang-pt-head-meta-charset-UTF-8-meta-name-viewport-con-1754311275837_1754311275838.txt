@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Médica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">xdoc24</div>
+        <div class="user-info">Bem-vindo, Dácio Bonoldi Dutra <span>⚙️</span> <span>🚪 Sair</span></div>
+    </header>
+    <main>
+        <section class="calendar-section">
+            <h2>Consultório virtual</h2>
+            <label for="month">Agosto 2025</label>
+            <input type="month" id="month" value="2025-08" onchange="updateSchedule()">
+            <div class="calendar">
+                <table>
+                    <thead>
+                        <tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td>01</td><td>02</td></tr>
+                        <tr><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td><td>08</td><td>09</td></tr>
+                        <tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+                        <tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+                        <tr><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td></tr>
+                        <tr><td>31</td><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="add-schedule">
+                <label for="hour">Adicionar horário</label>
+                <input type="number" id="hour" min="0" max="23" value="10" style="width: 50px;">
+                <span>:</span>
+                <input type="number" id="minute" min="0" max="59" value="00" style="width: 50px;">
+                <button onclick="addSchedule()">Adicionar</button>
+            </div>
+        </section>
+        <section class="schedule-section">
+            <h2>Horários para o dia 08/08/2025</h2>
+            <label><input type="checkbox"> Ativar notificações</label>
+            <ul id="schedule-list">
+                <li><input type="checkbox"> 08:20 <span class="badge">Prudential (ML)</span> - Da Silva Peixoto, Bruno <span>Confirmado</span> <button>↻</button> <button>📅</button></li>
+                <li><input type="checkbox"> 08:40 <span class="badge">Blue</span> - Matsushita Saporito, Juliana <span>Confirmado</span> <button>↻</button> <button>📅</button></li>
+                <li><input type="checkbox"> 09:00 <span class="badge">Blue</span> - Helena Vicentini Solange <span>Confirmado</span> <button>↻</button> <button>📅</button></li>
+                <li><input type="checkbox"> 09:20 <span class="badge">Mell-br</span> - De Oliveira Ribeiro, Moises <span>Confirmado</span> <button>↻</button> <button>📅</button></li>
+                <li><input type="checkbox"> 09:40 <span class="badge">SIAZE VIDEO-ORIENTAÇÃO</span> - Cristina Oliveira Assakuru, Daniele <span>Confirmado</span> <button>↻</button> <button>📅</button></li>
+                <li><input type="checkbox"> 10:00 <span class="badge"></span> - <span>Confirmado</span> <button>↻</button> <button>📅</button></li>
+            </ul>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
