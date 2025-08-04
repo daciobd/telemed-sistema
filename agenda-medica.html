@@ -141,6 +141,104 @@
             font-weight: 500;
         }
 
+        /* CALENDAR SECTION */
+        .calendar-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            background: linear-gradient(135deg, #6f42c1, #5a2d91);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .calendar-content {
+            padding: 30px;
+        }
+
+        .date-selector {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .date-input-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+
+        #dataSelecionada {
+            padding: 12px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        #dataSelecionada:focus {
+            outline: none;
+            border-color: #6f42c1;
+            box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+        }
+
+        .quick-dates {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-date-btn {
+            padding: 8px 16px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quick-date-btn:hover {
+            background: #6f42c1;
+            color: white;
+            border-color: #6f42c1;
+            transform: translateY(-1px);
+        }
+
+        .quick-date-btn.active {
+            background: #6f42c1;
+            color: white;
+            border-color: #6f42c1;
+        }
+
         /* PATIENTS SECTION */
         .patients-section {
             background: white;
@@ -418,6 +516,35 @@
                 gap: 15px;
             }
 
+            .calendar-content {
+                padding: 20px;
+            }
+
+            .date-selector {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .date-input-group {
+                width: 100%;
+            }
+
+            #dataSelecionada {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .quick-dates {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quick-date-btn {
+                flex: 1;
+                min-width: 60px;
+            }
+
             .patients-table {
                 font-size: 14px;
             }
@@ -439,6 +566,12 @@
             .patient-details {
                 flex-direction: column;
                 gap: 5px;
+            }
+
+            .calendar-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
             }
         }
 
@@ -562,6 +695,33 @@
             </div>
         </div>
 
+        <!-- CALENDAR SECTION -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2 class="calendar-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Selecionar Data da Agenda
+                </h2>
+                <div class="current-selected-date" id="selected-date-display">
+                    Hoje
+                </div>
+            </div>
+            <div class="calendar-content">
+                <div class="date-selector">
+                    <div class="date-input-group">
+                        <label for="dataSelecionada">Data da Consulta:</label>
+                        <input type="date" id="dataSelecionada" onchange="atualizarAgenda()">
+                    </div>
+                    <div class="quick-dates">
+                        <button class="quick-date-btn active" onclick="selectQuickDate('today')">Hoje</button>
+                        <button class="quick-date-btn" onclick="selectQuickDate('tomorrow')">Amanhã</button>
+                        <button class="quick-date-btn" onclick="selectQuickDate('week')">Próxima Semana</button>
+                        <button class="quick-date-btn" onclick="selectQuickDate('month')">Próximo Mês</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- PATIENTS SECTION -->
         <div class="patients-section">
             <div class="section-header">
@@ -615,6 +775,7 @@
         let patients = [];
         let currentPatient = null;
         let patientResponse = null;
+        let selectedDate = new Date();
 
         // Carregar pacientes do banco
         async function loadPatients() {
@@ -924,13 +1085,100 @@
             }
         });
 
+        // Atualizar agenda baseada na data selecionada
+        function atualizarAgenda() {
+            const dateInput = document.getElementById('dataSelecionada');
+            const selectedDateStr = dateInput.value;
+            
+            if (selectedDateStr) {
+                selectedDate = new Date(selectedDateStr);
+                updateSelectedDateDisplay();
+                loadPatients();
+                showNotification(`Agenda atualizada para ${formatDateBR(selectedDate)}`, 'info');
+                console.log('📅 Data selecionada:', formatDateBR(selectedDate));
+            }
+        }
+
+        // Selecionar datas rápidas
+        function selectQuickDate(type) {
+            const today = new Date();
+            let targetDate = new Date();
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.quick-date-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            switch(type) {
+                case 'today':
+                    targetDate = today;
+                    break;
+                case 'tomorrow':
+                    targetDate.setDate(today.getDate() + 1);
+                    break;
+                case 'week':
+                    targetDate.setDate(today.getDate() + 7);
+                    break;
+                case 'month':
+                    targetDate.setMonth(today.getMonth() + 1);
+                    break;
+            }
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            selectedDate = targetDate;
+            document.getElementById('dataSelecionada').value = formatDateInput(targetDate);
+            updateSelectedDateDisplay();
+            loadPatients();
+            
+            showNotification(`Agenda carregada para ${formatDateBR(targetDate)}`, 'success');
+        }
+
+        // Formatar data para exibição BR
+        function formatDateBR(date) {
+            return date.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Formatar data para input
+        function formatDateInput(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        // Atualizar display da data selecionada
+        function updateSelectedDateDisplay() {
+            const display = document.getElementById('selected-date-display');
+            const today = new Date();
+            
+            if (selectedDate.toDateString() === today.toDateString()) {
+                display.textContent = 'Hoje';
+            } else {
+                display.textContent = formatDateBR(selectedDate);
+            }
+        }
+
+        // Inicializar calendário
+        function initializeCalendar() {
+            const today = new Date();
+            document.getElementById('dataSelecionada').value = formatDateInput(today);
+            selectedDate = today;
+            updateSelectedDateDisplay();
+        }
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             updateDateTime();
             setInterval(updateDateTime, 1000);
+            initializeCalendar();
             loadPatients();
             
             console.log('🚀 Agenda Médica TeleMed Pro carregada!');
+            console.log('📅 Sistema de calendário ativo');
             console.log('📊 Sistema de estatísticas ativo');
             console.log('🔄 Auto-atualização habilitada');
         });

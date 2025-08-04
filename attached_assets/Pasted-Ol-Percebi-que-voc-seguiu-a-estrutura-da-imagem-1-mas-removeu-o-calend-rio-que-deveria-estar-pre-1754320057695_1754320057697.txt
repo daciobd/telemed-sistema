@@ -1,0 +1,60 @@
+Olá! Percebi que você seguiu a estrutura da imagem 1, mas removeu o calendário que deveria estar presente, conforme mostrado na imagem 2. O calendário é essencial para que o médico possa visualizar e selecionar datas para a agenda. Por favor, adicione uma seção de calendário acima da tabela de pacientes na página agenda-medica.html. Aqui está como fazer:
+
+Adicionar o Calendário:
+
+Insira uma <div> com um calendário simples antes da seção #pacientes-dia. Você pode usar um input de tipo date ou uma biblioteca leve como Flatpickr (se disponível no Replit). Para simplicidade, usarei um input nativo por enquanto.
+Exemplo de código a ser adicionado no <body> antes da tabela:
+html<div id="calendario">
+  <h2>Selecionar Data</h2>
+  <input type="date" id="dataSelecionada" onchange="atualizarAgenda()">
+</div>
+
+
+
+Atualizar o CSS:
+
+Adicione estilos para o calendário na seção <style>:
+css#calendario {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+#dataSelecionada {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+
+
+Adicionar JavaScript:
+
+Crie uma função atualizarAgenda() para simular a atualização da lista de pacientes com base na data selecionada. Por enquanto, será uma simulação (você pode integrá-la ao banco depois):
+javascriptfunction atualizarAgenda() {
+  const data = document.getElementById('dataSelecionada').value;
+  alert(`Agenda atualizada para ${data}. Integre com o banco para carregar pacientes.`);
+  // Aqui você chamaria uma função para buscar os pacientes da data escolhida
+}
+
+
+
+Ajustar o Layout:
+
+Certifique-se de que o calendário fique alinhado com o design clean e moderno, mantendo as três colunas de botões da tabela. Se necessário, use display: flex no .container para alinhar o calendário e a tabela.
+
+
+Testar:
+
+Publique o projeto e verifique se o calendário aparece acima da tabela. Teste a seleção de data para garantir que o alerta funcione.
+
+
+
+Por favor, atualize o código com base nisso e me avise se precisar de ajuda para integrar com o banco de dados ou ajustar o estilo. O objetivo é que a página fique idêntica à imagem 2, com o calendário visível e funcional!"
+Código Atualizado (Exemplo Completo):agenda-medica.htmlhtml•Instruções para o Agente:
+
+Substitua o conteúdo do agenda-medica.html pelo código acima.
+Teste a seleção de data no calendário e verifique se a tabela de pacientes permanece funcional.
+Ajuste o estilo do calendário ou a posição (ex.: ao lado da tabela com flex) conforme a imagem 2, se necessário.
