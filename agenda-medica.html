@@ -443,6 +443,202 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+
+        /* PACIENTES DO DIA */
+        .patients-section {
+            background: white;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E5E5;
+        }
+
+        .patients-section h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #E5E5E5;
+            padding-bottom: 15px;
+        }
+
+        .patients-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .patients-table thead {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+        }
+
+        .patients-table th {
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .patients-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #E5E5E5;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .patients-table tr:hover {
+            background: #F0F8FF;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        .patients-table tr:nth-child(even) {
+            background: #F8F9FA;
+        }
+
+        .patient-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        .patient-status.agendado {
+            background: linear-gradient(135deg, #17A2B8, #138496);
+            color: white;
+        }
+
+        .patient-status.confirmado {
+            background: linear-gradient(135deg, #28A745, #1E7E34);
+            color: white;
+        }
+
+        .patient-status.pendente {
+            background: linear-gradient(135deg, #FFC107, #E0A800);
+            color: #212529;
+        }
+
+        .patient-status.cancelado {
+            background: linear-gradient(135deg, #DC3545, #C82333);
+            color: white;
+        }
+
+        .patient-status.concluido {
+            background: linear-gradient(135deg, #6F42C1, #5A2D91);
+            color: white;
+        }
+
+        .patient-time {
+            font-weight: 700;
+            color: #007BFF;
+            font-size: 16px;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .patient-specialty {
+            color: #6C757D;
+            font-size: 12px;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .patients-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #F8F9FA, #E9ECEF);
+            border-radius: 8px;
+            border-left: 4px solid #007BFF;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-item .number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #007BFF;
+            display: block;
+        }
+
+        .summary-item .label {
+            font-size: 12px;
+            color: #6C757D;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .quick-action-btn.filter {
+            background: linear-gradient(135deg, #28A745, #1E7E34);
+        }
+
+        .quick-action-btn.export {
+            background: linear-gradient(135deg, #17A2B8, #138496);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6C757D;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #DEE2E6;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
     </style>
 </head>
 <body>
@@ -514,6 +710,59 @@
                 <!-- Schedule items will be generated by JavaScript -->
             </ul>
         </section>
+
+        <!-- Seção Pacientes do Dia -->
+        <section class="patients-section">
+            <h2><i class="fas fa-users"></i> Pacientes do Dia</h2>
+            
+            <div class="patients-summary">
+                <div class="summary-item">
+                    <span class="number">8</span>
+                    <span class="label">Total</span>
+                </div>
+                <div class="summary-item">
+                    <span class="number">6</span>
+                    <span class="label">Confirmados</span>
+                </div>
+                <div class="summary-item">
+                    <span class="number">1</span>
+                    <span class="label">Pendentes</span>
+                </div>
+                <div class="summary-item">
+                    <span class="number">1</span>
+                    <span class="label">Cancelados</span>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="addNewPatient()">
+                    <i class="fas fa-user-plus"></i> Novo Paciente
+                </button>
+                <button class="quick-action-btn filter" onclick="filterPatients()">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+                <button class="quick-action-btn export" onclick="exportPatients()">
+                    <i class="fas fa-download"></i> Exportar
+                </button>
+            </div>
+
+            <div id="patients-container">
+                <table class="patients-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-clock"></i> Horário</th>
+                            <th><i class="fas fa-user"></i> Paciente</th>
+                            <th><i class="fas fa-stethoscope"></i> Especialidade</th>
+                            <th><i class="fas fa-info-circle"></i> Status</th>
+                            <th><i class="fas fa-cogs"></i> Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patients-list">
+                        <!-- Dados serão carregados pelo JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
     <script>
@@ -564,15 +813,85 @@
             ]
         };
 
+        // Dados dos pacientes do dia
+        let patientsData = [
+            {
+                time: '08:20',
+                name: 'João Silva Santos',
+                specialty: 'Cardiologia',
+                status: 'confirmado',
+                insurance: 'Prudential',
+                phone: '(11) 99999-1234'
+            },
+            {
+                time: '09:00',
+                name: 'Maria Oliveira Costa',
+                specialty: 'Dermatologia',
+                status: 'confirmado',
+                insurance: 'Blue',
+                phone: '(11) 98888-5678'
+            },
+            {
+                time: '10:30',
+                name: 'Pedro Souza Lima',
+                specialty: 'Psiquiatria',
+                status: 'agendado',
+                insurance: 'Particular',
+                phone: '(11) 97777-9012'
+            },
+            {
+                time: '11:15',
+                name: 'Ana Costa Ferreira',
+                specialty: 'Ginecologia',
+                status: 'pendente',
+                insurance: 'Mell-br',
+                phone: '(11) 96666-3456'
+            },
+            {
+                time: '14:00',
+                name: 'Carlos Pereira Dias',
+                specialty: 'Neurologia',
+                status: 'confirmado',
+                insurance: 'SIAZE',
+                phone: '(11) 95555-7890'
+            },
+            {
+                time: '15:30',
+                name: 'Lucia Almeida Silva',
+                specialty: 'Endocrinologia',
+                status: 'cancelado',
+                insurance: 'Blue',
+                phone: '(11) 94444-2345'
+            },
+            {
+                time: '16:15',
+                name: 'Roberto Santos Moraes',
+                specialty: 'Ortopedia',
+                status: 'confirmado',
+                insurance: 'Prudential',
+                phone: '(11) 93333-6789'
+            },
+            {
+                time: '17:00',
+                name: 'Fernanda Lima Rocha',
+                specialty: 'Pediatria',
+                status: 'concluido',
+                insurance: 'Particular',
+                phone: '(11) 92222-0123'
+            }
+        ];
+
         // Initialize calendar and schedule
         document.addEventListener('DOMContentLoaded', function() {
             updateMonthInput();
             generateCalendar();
             updateScheduleDisplay();
+            loadPatientsList();
             
             console.log('📅 Agenda Médica TeleMed Pro carregada!');
             console.log('🗓️ Calendário interativo funcionando');
             console.log('⏰ Sistema de horários ativo');
+            console.log('👥 Lista de pacientes carregada');
             console.log('📱 Layout responsivo implementado');
         });
 
@@ -791,6 +1110,90 @@
 
         // Initialize with current date
         document.getElementById('month').value = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}`;
+
+        // Função para carregar lista de pacientes
+        function loadPatientsList() {
+            const patientsList = document.getElementById('patients-list');
+            if (!patientsList) return;
+            
+            patientsList.innerHTML = '';
+
+            if (patientsData.length === 0) {
+                patientsList.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <h3>Nenhum paciente agendado</h3>
+                            <p>Não há consultas marcadas para hoje.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            patientsData.forEach(patient => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="patient-time">${patient.time}</td>
+                    <td>
+                        <div class="patient-name">${patient.name}</div>
+                        <div class="patient-specialty">${patient.insurance}</div>
+                    </td>
+                    <td>${patient.specialty}</td>
+                    <td><span class="patient-status ${patient.status}">${getStatusText(patient.status)}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="editPatient('${patient.name}')" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="callPatient('${patient.phone}')" title="Ligar">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                            <button class="action-btn" onclick="startConsultation('${patient.name}')" title="Iniciar Consulta">
+                                <i class="fas fa-video"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                patientsList.appendChild(row);
+            });
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'agendado': 'Agendado',
+                'confirmado': 'Confirmado',
+                'pendente': 'Pendente',
+                'cancelado': 'Cancelado',
+                'concluido': 'Concluído'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Funções para ações dos pacientes
+        function addNewPatient() {
+            alert('➕ Abrindo formulário para novo paciente...\nEm desenvolvimento!');
+        }
+
+        function filterPatients() {
+            alert('🔍 Aplicando filtros na lista de pacientes...\nFuncionalidade em desenvolvimento!');
+        }
+
+        function exportPatients() {
+            alert('📊 Exportando lista de pacientes...\nRelatório em PDF será gerado!');
+        }
+
+        function editPatient(name) {
+            alert(`✏️ Editando dados do paciente: ${name}\nAbrindo formulário de edição...`);
+        }
+
+        function callPatient(phone) {
+            alert(`📞 Ligando para: ${phone}\nIniciando chamada telefônica...`);
+        }
+
+        function startConsultation(name) {
+            alert(`🎥 Iniciando consulta com: ${name}\nAbrindo sala de videoconferência...`);
+        }
     </script>
 </body>
 </html>
