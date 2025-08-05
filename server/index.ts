@@ -2250,6 +2250,12 @@ function logSecurityEvent(type, details, ip) {
     res.redirect('/index.html');
   });
 
+  // DASHBOARD MÉDICO - Redirecionar para index.html
+  app.get('/dashboard-medical.html', (req, res) => {
+    console.log('🏥 Redirecting dashboard-medical.html to index.html (Aquarela)');
+    res.redirect('/index.html');
+  });
+
   // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
   app.get('/processar-login', (req, res) => {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';

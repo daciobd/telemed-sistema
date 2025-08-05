@@ -59,6 +59,18 @@ app.get('/dashboard', (req, res) => {
   res.redirect('/index.html');
 });
 
+// Redirecionamento do arquivo dashboard-medical.html
+app.get('/dashboard-medical.html', (req, res) => {
+  console.log('🏥 Redirecting dashboard-medical.html to index.html (Aquarela)');
+  res.redirect('/index.html');
+});
+
+// Redirecionamento do medical-dashboard-pro.html
+app.get('/medical-dashboard-pro.html', (req, res) => {
+  console.log('🏥 Redirecting medical dashboard to main dashboard');
+  res.redirect('/index.html');
+});
+
 // Login de médicos agora também vai para index.html
 redirectUrl = `${customRedirectBase}/index.html`; // Linha 2349
 ```
