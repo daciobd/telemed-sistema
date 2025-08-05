@@ -1,0 +1,85 @@
+Para replicar o estilo aquarela suave da imagem à direita no Replit, você pode instruir o desenvolvedor a aplicar um design inspirado em aquarela com cores suaves e texturas. Abaixo está um exemplo de código CSS e HTML que você pode passar ao agente Replit para criar um dashboard com essa estética. Este código foca no fundo, sidebar e layout geral, adaptando-se ao estilo minimalista com toque aquarelado:
+Instruções para o Replit:
+
+HTML (estrutura básica do dashboard):
+html<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Médico</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Dashboard Médico</h2>
+        <p>Sistema integrado de telemedicina</p>
+    </div>
+    <div class="content">
+        <h1>Dashboard Médico Dr. Carlos MendesCM</h1>
+        <div class="card"></div>
+    </div>
+</body>
+</html>
+
+CSS (estilo aquarela suave):
+cssbody {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #F5E8C7, #E0D7B9); /* Fundo aquarela claro */
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(135deg, #B3D9E0, #D1E8E2); /* Sidebar com gradiente aquarela */
+    padding: 20px;
+    color: #2A4066;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #2A4066;
+}
+
+.sidebar p {
+    font-size: 14px;
+    color: #4A6A8A;
+}
+
+.content {
+    margin-left: 270px;
+    padding: 20px;
+    height: 100vh;
+    background: url('https://www.transparenttextures.com/patterns/watercolor-texture.png'); /* Textura aquarela */
+    background-size: cover;
+    background-position: center;
+}
+
+.content h1 {
+    font-size: 28px;
+    color: #2A4066;
+    margin-bottom: 20px;
+}
+
+.card {
+    width: 300px;
+    height: 200px;
+    background: linear-gradient(135deg, #E8D4C9, #F1EDEB); /* Card com gradiente aquarela */
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+
+Orientações para o Desenvolvedor no Replit:
+
+Fundo: Use um gradiente suave (ex.: #F5E8C7 a #E0D7B9) para simular o efeito aquarela no corpo da página. Adicione uma textura aquarela (disponível em sites como transparenttextures.com) para dar profundidade.
+Sidebar: Aplique um gradiente pastel (ex.: #B3D9E0 a #D1E8E2) e posicione-o fixo à esquerda. Use sombras sutis para destacar.
+Conteúdo Principal: Ajuste a margem esquerda para evitar sobreposição com o sidebar. Use cards com gradientes suaves (ex.: #E8D4C9 a #F1EDEB) e bordas arredondadas.
+Cores: Mantenha uma paleta de cores pastel (azuis, verdes e rosas suaves) e texto em tons escuros complementares (ex.: #2A4066).
