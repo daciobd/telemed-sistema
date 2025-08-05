@@ -23,13 +23,31 @@ async function startServer() {
     index: false
   }));
 
-  // Define all specific routes BEFORE setting up Vite middleware
-  // This is critical - Vite's catch-all middleware must come last
+  // CONSOLIDAÇÃO DE DASHBOARDS - Redirecionamentos para index.html
+  app.get('/dashboard', (req, res) => {
+    console.log('🎨 Redirecting /dashboard to index.html (Unified)');
+    res.redirect('/index.html');
+  });
+  
+  app.get('/dashboard-medical.html', (req, res) => {
+    console.log('🎨 Redirecting dashboard-medical.html to index.html (Unified)');
+    res.redirect('/index.html');
+  });
+  
+  app.get('/medical-dashboard-pro.html', (req, res) => {
+    console.log('🎨 Redirecting medical-dashboard-pro.html to index.html (Unified)');
+    res.redirect('/index.html');
+  });
+  
+  app.get('/dashboard-aquarela.html', (req, res) => {
+    console.log('🎨 Redirecting dashboard-aquarela.html to index.html (Unified)');
+    res.redirect('/index.html');
+  });
 
   // Health check
   app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
 
   // API Routes for database integration
   const { Client } = await import('pg');

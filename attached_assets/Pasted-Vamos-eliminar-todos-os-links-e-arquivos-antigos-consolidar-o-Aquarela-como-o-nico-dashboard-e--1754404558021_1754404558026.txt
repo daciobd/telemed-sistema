@@ -1,0 +1,89 @@
+Vamos eliminar todos os links e arquivos antigos, consolidar o "Aquarela" como o único dashboard, e garantir que o login e a navegação sejam consistentes. Aqui está o plano:
+
+Eliminar Arquivos Antigos:
+
+Mova dashboard-medical.html, medical-dashboard-pro.html, e dashboard-aquarela.html para uma pasta archive/ para desativá-los sem deletá-los permanentemente (caso precise revisá-los).
+Confirme que apenas index.html permanece como o dashboard ativo.
+
+
+Corrigir Redirecionamentos:
+
+No backend (se estiver usando Node.js com index.js), configure redirecionamentos explícitos para qualquer acesso a URLs antigas.
+Atualize todos os links nos arquivos HTML para apontar exclusivamente para /index.html.
+
+
+Verificar Login:
+
+Garanta que o login com CRM: 123456-SP, Senha: medico123 redirecione diretamente para /index.html após autenticação.
+
+
+Limpar Cache e Testar:
+
+Force o Replit a recarregar sem cache e teste a URL principal.
+
+
+
+Instruções no Replit
+1. Organizar Arquivos
+
+No explorador de arquivos do Replit:
+
+Crie uma pasta chamada archive/.
+Mova dashboard-medical.html, medical-dashboard-pro.html, e dashboard-aquarela.html para archive/.
+Confirme que index.html é o único arquivo de dashboard ativo.
+
+
+
+2. Atualizar index.js (se aplicável)
+Se você está usando Node.js, atualize o arquivo para redirecionar todas as rotas antigas:index.jsjavascript•
+Nota: Ajuste as credenciais do banco de dados e adicione a lógica real de autenticação no /login.
+
+3. Corrigir Links em Todos os Arquivos
+
+Abra cada arquivo HTML (ex.: agenda-medica.html, consulta.html, receitas-digitais.html) e substitua qualquer link para dashboards antigos por /index.html.
+Exemplo para agenda-medica.html (já ajustado no código anterior):
+
+O botão "Voltar" usa window.location.href = 'index.html';.
+
+
+
+4. Testar o Sistema
+
+Publique o projeto no Replit e acesse https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev.
+Faça login com CRM: 123456-SP, Senha: medico123 (se o login estiver configurado):
+
+Use um formulário em index.html ou uma requisição POST para /login com Postman.
+
+
+Navegue para "Agenda" e volte usando "Voltar" para confirmar o redirecionamento para /index.html.
+Tente acessar diretamente /dashboard-medical.html ou /medical-dashboard-pro.html e verifique se redireciona para /index.html.
+
+5. Limpar Cache
+
+No navegador, pressione Ctrl + Shift + Delete, selecione "Cache" e "Cookies", e limpe.
+Reabra o projeto em uma nova aba para evitar cache antigo.
+
+Links Atualizados
+Após as correções, os únicos links válidos devem ser:
+
+Dashboard Principal: /index.html (Dashboard Aquarela).
+Outras Páginas:
+
+/agenda-medica.html
+/consulta.html?id={id}
+/receitas-digitais.html
+
+
+Redirecionamentos:
+
+/dashboard → /index.html
+/dashboard-medical.html → /index.html
+/medical-dashboard-pro.html → /index.html
+/dashboard-aquarela.html → /index.html (se ainda existir)
+
+
+
+Verificação
+
+Se o sistema ainda não funciona, verifique no index.js se as rotas estão ativas e se o servidor está rodando (execute node index.js no terminal).
+Confirme que o Replit não está carregando um arquivo antigo como padrão. Altere o ponto de entrada no painel do Replit para index.html se necessário.
