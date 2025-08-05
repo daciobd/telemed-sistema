@@ -2256,6 +2256,12 @@ function logSecurityEvent(type, details, ip) {
     res.redirect('/index.html');
   });
 
+  // DASHBOARD AQUARELA - Redirecionar para index.html
+  app.get('/dashboard-aquarela.html', (req, res) => {
+    console.log('🎨 Redirecting dashboard-aquarela.html to index.html (Unified)');
+    res.redirect('/index.html');
+  });
+
   // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
   app.get('/processar-login', (req, res) => {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
