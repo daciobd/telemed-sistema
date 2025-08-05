@@ -23,25 +23,31 @@ async function startServer() {
     index: false
   }));
 
+  // Rota principal - servir index.html
+  app.get('/', (req, res) => {
+    console.log('🏥 Servindo Dashboard Aquarela (index.html)');
+    res.sendFile(path.join(__dirname, '../index.html'));
+  });
+
   // CONSOLIDAÇÃO DE DASHBOARDS - Redirecionamentos para index.html
   app.get('/dashboard', (req, res) => {
-    console.log('🎨 Redirecting /dashboard to index.html (Unified)');
-    res.redirect('/index.html');
+    console.log('🎨 Redirecting /dashboard to / (Unified)');
+    res.redirect('/');
   });
   
   app.get('/dashboard-medical.html', (req, res) => {
-    console.log('🎨 Redirecting dashboard-medical.html to index.html (Unified)');
-    res.redirect('/index.html');
+    console.log('🎨 Redirecting dashboard-medical.html to / (Unified)');
+    res.redirect('/');
   });
   
   app.get('/medical-dashboard-pro.html', (req, res) => {
-    console.log('🎨 Redirecting medical-dashboard-pro.html to index.html (Unified)');
-    res.redirect('/index.html');
+    console.log('🎨 Redirecting medical-dashboard-pro.html to / (Unified)');
+    res.redirect('/');
   });
   
   app.get('/dashboard-aquarela.html', (req, res) => {
-    console.log('🎨 Redirecting dashboard-aquarela.html to index.html (Unified)');
-    res.redirect('/index.html');
+    console.log('🎨 Redirecting dashboard-aquarela.html to / (Unified)');
+    res.redirect('/');
   });
 
   // Health check
