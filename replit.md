@@ -6,6 +6,18 @@ TeleMed Sistema is a comprehensive telemedicine platform connecting doctors and 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
+## Agent Configuration
+- **Agent Name**: Assistente TeleMed Consulta
+- **Role**: Agente AI especializado em telemedicina e desenvolvimento contínuo da plataforma TeleMed Consulta
+- **Function**: Copiloto de programação com acesso completo para ler, editar e criar arquivos no projeto
+- **Target Users**: Médicos, secretárias, pacientes e equipe técnica
+- **Capabilities**: 
+  - File read/write access (file_read: true, file_write: true)
+  - Code execution (execute_code: true)
+  - Direct code implementation maintaining TeleMed visual and functional standards
+- **Operational Mode**: Executes requested changes directly in project code, creates new files as needed
+- **Technical Focus**: Senior developer and intelligent support for healthcare platform development
+
 ## Recent Updates
 - **January 2025**: Implemented comprehensive responsive design system with advanced CSS and JavaScript
 - **Mobile Optimization**: Added viewport control, touch targets (44px minimum), iOS zoom prevention
@@ -24,6 +36,7 @@ Preferred communication style: Simple, everyday language.
 - **MEMED Digital Prescriptions Integration (January 2025)**: Complete digital prescription system implemented with MEMED API preparation. Features include prescription generation with multiple medications, QR codes for verification, prescription validation periods, patient-specific prescription history, and professional prescription management interface. System includes PostgreSQL storage, real-time notifications, and responsive design. Currently in simulation mode awaiting MEMED API credentials for full activation.
 - **Advanced Consultation Rescheduling System (January 2025)**: Complete overhaul of the appointment rescheduling system with modern modal interface, real-time availability checking, categorized rescheduling reasons, detailed observation fields, and comprehensive audit trail. Features include visual time slot selection, automatic conflict detection, rescheduling history tracking in PostgreSQL, and responsive design for all devices. System integrates seamlessly with existing patient management and provides detailed analytics for medical practice optimization.
 - **Medical Notifications System via SMS/WhatsApp (August 2025)**: Complete SMS and WhatsApp notification system for medical offers implemented with PostgreSQL integration. Features include automatic medical offer distribution to registered doctors by specialty, bidding system with minimum R$ 150 value, urgent consultation markup (+35%), doctor response processing (ACCEPT/REJECT), comprehensive offer tracking and analytics. System includes 5 registered doctors across multiple specialties, simulation mode for testing without Twilio costs, and full preparation for real Twilio API integration. Responsive web interface (sistema-notificacoes-medicas.html) with breadcrumb navigation and real-time status updates.
+- **Agent Configuration Implementation (August 2025)**: Formalized Assistente TeleMed Consulta configuration with specialized telemedicine development capabilities. Agent configured as senior developer copilot with full file access, code execution, and direct implementation capabilities. Supports medical staff, patients, and technical team with healthcare-focused development approach maintaining TeleMed platform standards.
 
 ## System Architecture
 
