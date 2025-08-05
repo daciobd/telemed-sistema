@@ -36,7 +36,7 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="text-sm text-gray-600">Dr. [Nome do Médico]</span>
-                    <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                    <button onclick="sairSistema()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
                         Sair
                     </button>
                 </div>
@@ -195,9 +195,40 @@
         // Initialize Lucide icons
         lucide.createIcons();
         
+        // Função para sair do sistema
+        function sairSistema() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                console.log('🚪 Fazendo logout do sistema');
+                
+                // Limpar qualquer sessão local
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Redirecionar para página de entrada
+                window.location.href = '/';
+            }
+        }
+        
+        // Função para navegação segura
+        function navegarPara(url) {
+            console.log(`🔗 Navegando para: ${url}`);
+            window.location.href = url;
+        }
+        
+        // Adicionar listener para ESC key (sair rápido)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const resposta = confirm('Pressione ESC novamente para sair do sistema');
+                if (resposta) {
+                    sairSistema();
+                }
+            }
+        });
+        
         console.log('🎨 Dashboard Aquarela carregado com sucesso');
         console.log('✅ Design aquarela ativo');
         console.log('🔗 Links para funcionalidades configurados');
+        console.log('🚪 Função de logout configurada (botão Sair ou tecla ESC)');
     </script>
 </body>
 </html>

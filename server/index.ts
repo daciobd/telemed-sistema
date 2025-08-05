@@ -60,6 +60,12 @@ async function startServer() {
     `);
   });
 
+  // Rota para logout
+  app.get('/logout', (req, res) => {
+    console.log('🚪 Processando logout');
+    res.sendFile(path.join(__dirname, '../logout.html'));
+  });
+
   // CONSOLIDAÇÃO DE DASHBOARDS - Redirecionamentos para dashboard-aquarela
   app.get('/dashboard', (req, res) => {
     console.log('🎨 Redirecting /dashboard to /dashboard-aquarela');
