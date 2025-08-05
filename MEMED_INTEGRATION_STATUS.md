@@ -35,6 +35,13 @@ Atualmente o sistema está em modo de simulação, gerando:
 - QR Codes placeholder
 - Validação de 30 dias a partir da criação
 
+### Integração Baseada em Receita Real:
+- ✅ Análise da receita real FpCSTz do Dr. Dácio Bonoldi Dutra
+- ✅ Formato de código atualizado para padrão MEMED (6 caracteres)
+- ✅ URLs no formato assistant.memed.com.br/p/
+- ✅ Interface de visualização no estilo MEMED real criada
+- ✅ Medicamentos com tarja vermelha, laboratórios e princípios ativos
+
 ### Próximos Passos para Ativação Real:
 
 #### 1. Credenciais MEMED

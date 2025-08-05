@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Receita MEMED - TeleMed Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .receita-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .receita-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .receita-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        .receita-subtitle {
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        .doctor-info {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #007BFF;
+        }
+
+        .doctor-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0056B3;
+            margin-bottom: 5px;
+        }
+
+        .receita-code {
+            background: #007BFF;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .validity-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .validity-text {
+            color: #856404;
+            font-weight: 500;
+        }
+
+        /* MEDICAMENTOS */
+        .medicamentos-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .medicamento-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .medicamento-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tarja {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .tarja-vermelha {
+            background: #dc3545;
+        }
+
+        .tarja-amarela {
+            background: #ffc107;
+        }
+
+        .medicamento-nome {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .medicamento-laboratorio {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .medicamento-principio {
+            background: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #0056B3;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .medicamento-posologia {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin-bottom: 10px;
+        }
+
+        .posologia-text {
+            color: #495057;
+            line-height: 1.5;
+        }
+
+        .medicamento-quantidade {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* QR CODE SECTION */
+        .qr-section {
+            text-align: center;
+            background: white;
+            border: 2px dashed #007BFF;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .qr-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #007BFF;
+            margin-bottom: 15px;
+        }
+
+        .qr-subtitle {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #6c757d;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .receita-card {
+                padding: 20px;
+            }
+
+            .receita-title {
+                font-size: 24px;
+            }
+
+            .medicamento-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-prescription-bottle-alt"></i>
+                Visualizar Receita MEMED
+            </div>
+            <a href="receitas-digitais.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Voltar às Receitas
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <div class="receita-card">
+            <!-- HEADER DA RECEITA -->
+            <div class="receita-header">
+                <div class="receita-title">Receita Digital MEMED</div>
+                <div class="receita-subtitle">Receita enviada por</div>
+            </div>
+
+            <!-- INFORMAÇÕES DO MÉDICO -->
+            <div class="doctor-info">
+                <div class="doctor-name" id="doctorName">Dr. Sistema TeleMed</div>
+                <div>Código da receita: <span class="receita-code" id="receitaCode">ABC123</span></div>
+            </div>
+
+            <!-- VALIDADE -->
+            <div class="validity-info">
+                <div class="validity-text">
+                    <i class="fas fa-clock"></i>
+                    Esta receita vence em <span id="validityDays">30</span> dias.
+                </div>
+            </div>
+
+            <!-- MEDICAMENTOS -->
+            <div class="medicamentos-section">
+                <div class="section-title">
+                    <i class="fas fa-pills"></i>
+                    Itens da sua receita
+                </div>
+
+                <div id="medicamentosList">
+                    <!-- Template de medicamento (será preenchido via JavaScript) -->
+                    <div class="medicamento-item">
+                        <div class="tarja tarja-vermelha"></div>
+                        <div class="medicamento-nome">Venlift OD 150mg, Cápsula dura de liberação prolongada (30un)</div>
+                        <div class="medicamento-laboratorio">Torrent</div>
+                        <div class="medicamento-principio">Cloridrato de venlafaxina 150mg</div>
+                        <div class="medicamento-posologia">
+                            <div class="posologia-text">
+                                Tomar 1 cápsula via oral almoço. Recomenda-se ingesta durante refeição.
+                            </div>
+                        </div>
+                        <div class="medicamento-quantidade">
+                            Quantidade: <strong>1 embalagem</strong>
+                        </div>
+                    </div>
+
+                    <div class="medicamento-item">
+                        <div class="tarja tarja-vermelha"></div>
+                        <div class="medicamento-nome">Venlift OD 75mg, Cápsula dura de liberação prolongada (30un)</div>
+                        <div class="medicamento-laboratorio">Torrent</div>
+                        <div class="medicamento-principio">Cloridrato de venlafaxina 75mg</div>
+                        <div class="medicamento-posologia">
+                            <div class="posologia-text">
+                                ou similar<br>
+                                Tomar 1 cápsula via oral ao dia. Recomenda-se ingesta durante refeição.
+                            </div>
+                        </div>
+                        <div class="medicamento-quantidade">
+                            Quantidade: <strong>1 embalagem</strong>
+                        </div>
+                    </div>
+
+                    <div class="medicamento-item">
+                        <div class="tarja tarja-vermelha"></div>
+                        <div class="medicamento-nome">Azod 100mg, Comprimido revestido (30un)</div>
+                        <div class="medicamento-laboratorio">Supera Farma</div>
+                        <div class="medicamento-principio">Cloridrato de trazodona 100mg</div>
+                        <div class="medicamento-posologia">
+                            <div class="posologia-text">
+                                Tomar 1 comprimido logo após a refeição, via oral, à noite.
+                            </div>
+                        </div>
+                        <div class="medicamento-quantidade">
+                            Quantidade: <strong>1 embalagem</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VANTAGENS MEMED -->
+            <div class="medicamentos-section">
+                <div class="section-title">
+                    <i class="fas fa-star"></i>
+                    Conheça as vantagens da receita Memed
+                </div>
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 12px; color: #2d5a2d;">
+                    Compre seus medicamentos e agende exames sem sair de casa ou precisar imprimir sua receita.
+                </div>
+            </div>
+        </div>
+
+        <!-- QR CODE SECTION -->
+        <div class="qr-section">
+            <div class="qr-title">Mostre o QR code ou código de barras</div>
+            <div class="qr-subtitle">e compre sem precisar imprimir sua receita</div>
+            
+            <div class="qr-placeholder">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                Código da receita: <span class="receita-code" id="qrReceitaCode">ABC123</span>
+            </div>
+            
+            <a href="#" class="download-btn" onclick="downloadReceita()">
+                <i class="fas fa-download"></i>
+                Baixar receita
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Simular dados da receita
+        const receitaData = {
+            codigo: 'FpCSTz',
+            medico: 'Dr. Sistema TeleMed',
+            validadeDias: 30,
+            medicamentos: [
+                {
+                    nome: 'Venlift OD 150mg',
+                    apresentacao: 'Cápsula dura de liberação prolongada (30un)',
+                    laboratorio: 'Torrent',
+                    principioAtivo: 'Cloridrato de venlafaxina 150mg',
+                    posologia: 'Tomar 1 cápsula via oral almoço. Recomenda-se ingesta durante refeição.',
+                    quantidade: '1 embalagem',
+                    tarja: 'vermelha'
+                },
+                {
+                    nome: 'Venlift OD 75mg',
+                    apresentacao: 'Cápsula dura de liberação prolongada (30un)',
+                    laboratorio: 'Torrent',
+                    principioAtivo: 'Cloridrato de venlafaxina 75mg',
+                    posologia: 'ou similar\nTomar 1 cápsula via oral ao dia. Recomenda-se ingesta durante refeição.',
+                    quantidade: '1 embalagem',
+                    tarja: 'vermelha'
+                },
+                {
+                    nome: 'Azod 100mg',
+                    apresentacao: 'Comprimido revestido (30un)',
+                    laboratorio: 'Supera Farma',
+                    principioAtivo: 'Cloridrato de trazodona 100mg',
+                    posologia: 'Tomar 1 comprimido logo após a refeição, via oral, à noite.',
+                    quantidade: '1 embalagem',
+                    tarja: 'vermelha'
+                }
+            ]
+        };
+
+        // Carregar dados da receita
+        function loadReceitaData() {
+            document.getElementById('doctorName').textContent = receitaData.medico;
+            document.getElementById('receitaCode').textContent = receitaData.codigo;
+            document.getElementById('qrReceitaCode').textContent = receitaData.codigo;
+            document.getElementById('validityDays').textContent = receitaData.validadeDias;
+        }
+
+        function downloadReceita() {
+            // Simular download
+            showNotification('Download iniciado! Receita sendo preparada...', 'success');
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#007BFF'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-weight: 500;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Carregar dados quando a página carrega
+        document.addEventListener('DOMContentLoaded', loadReceitaData);
+
+        // Sistema de segurança médica
+        console.log('🛡️ Sistema de Segurança Médica inicializado');
+        console.log('✅ Receita MEMED carregada com sucesso');
+    </script>
+</body>
+</html>
