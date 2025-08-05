@@ -2721,18 +2721,10 @@ function logSecurityEvent(type, details, ip) {
         </div>
 
         <script>
-            // SISTEMA DE AUTENTICAÇÃO - Verificar se está logado
+            // SISTEMA DE AUTENTICAÇÃO REMOVIDO - Acesso livre ao dashboard
             function verificarAutenticacao() {
-                const loggedIn = sessionStorage.getItem('telemed_logged_in');
-                const userType = sessionStorage.getItem('telemed_user_type');
-                
-                if (loggedIn !== 'true' || userType !== 'paciente') {
-                    alert('🔒 Acesso restrito!\\n\\nPor favor, faça login como paciente para acessar esta área.');
-                    window.location.href = '/login';
-                    return false;
-                }
-                
-                return true;
+                console.log('🏥 Acesso livre ao dashboard médico - autenticação desabilitada');
+                return true; // Sempre permitir acesso
             }
 
             // Função de logout
@@ -2749,14 +2741,12 @@ function logSecurityEvent(type, details, ip) {
 
             // Inicialização
             document.addEventListener('DOMContentLoaded', function() {
-                // VERIFICAR AUTENTICAÇÃO PRIMEIRO
-                if (!verificarAutenticacao()) {
-                    return;
-                }
+                // Acesso liberado - sem verificação de autenticação
+                verificarAutenticacao(); // Log apenas
                 
-                console.log('👤 Dashboard Paciente PROTEGIDO carregado com sucesso!');
-                console.log('🔒 Verificação de autenticação ativa');
-                console.log('🎯 Sistema TeleMed operacional');
+                console.log('🏥 Dashboard Médico carregado com ACESSO LIVRE!');
+                console.log('✅ Sistema TeleMed operacional - sem restrições');
+                console.log('🎯 Teste com CRM: 123456-SP, Senha: medico123');
             });
         </script>
     </body>
