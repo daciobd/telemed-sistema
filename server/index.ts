@@ -11,6 +11,8 @@ const PORT = 5000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
+app.use('/public', express.static(path.join(__dirname, '../public')));
+app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
 app.get('/', (req, res) => {
   try {
