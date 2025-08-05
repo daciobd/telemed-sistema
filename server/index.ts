@@ -2246,9 +2246,8 @@ function logSecurityEvent(type, details, ip) {
 
   // DASHBOARD MÉDICO PRO - Área médica funcional
   app.get('/medical-dashboard-pro.html', (req, res) => {
-    console.log('🏥 Serving medical dashboard for:', req.path);
-    const filePath = path.join(__dirname, '../medical-dashboard-pro.html');
-    res.sendFile(filePath);
+    console.log('🏥 Redirecting medical dashboard to main dashboard');
+    res.redirect('/index.html');
   });
 
   // 7. PROCESSAR LOGIN - Endpoint seguro para processamento automático via URL
