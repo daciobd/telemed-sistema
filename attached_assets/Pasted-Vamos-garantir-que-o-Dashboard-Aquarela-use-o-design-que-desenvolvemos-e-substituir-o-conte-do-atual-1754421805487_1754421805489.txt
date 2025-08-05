@@ -1,0 +1,92 @@
+Vamos garantir que o Dashboard Aquarela use o design que desenvolvemos e substituir o conteúdo atual.
+
+Passos para Corrigir
+
+Verificar o Arquivo Atual:
+
+No explorador de arquivos do Replit, localize o arquivo que está sendo servido como /dashboard-aquarela (provavelmente dashboard-aquarela.html ou o index.html original).
+Abra o arquivo e veja o conteúdo. Se for algo genérico (ex.: texto simples ou um layout básico), substitua-o.
+
+
+Restaurar o Design do Dashboard Aquarela:
+
+Crie ou edite o arquivo dashboard-aquarela.html na raiz do projeto com o design que desenvolvemos. Use o exemplo que forneci antes, ajustado conforme necessário:
+
+
+dashboard-aquarela.htmlhtml•
+Salve o arquivo na raiz do projeto.
+
+
+Atualizar o Servidor (server/index.ts):
+
+Certifique-se de que a rota /dashboard-aquarela aponte para o novo arquivo:
+typescriptimport express from 'express';
+import path from 'path';
+
+const app = express();
+const PORT = 5000;
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '..'))); // Serve arquivos estáticos
+
+// Página de entrada
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
+
+// Dashboard Aquarela
+app.get('/dashboard-aquarela', (req, res) => res.sendFile(path.join(__dirname, '../dashboard-aquarela.html')));
+
+// Rota para cadastramento de paciente
+app.get('/cadastrar-paciente', (req, res) => {
+  res.send('Página de Cadastro de Paciente - Em construção');
+});
+
+// Redirecionamentos
+app.get('/dashboard', (req, res) => res.redirect('/dashboard-aquarela'));
+app.get('/dashboard-medical.html', (req, res) => res.redirect('/dashboard-aquarela'));
+app.get('/dashboard-aquarela.html', (req, res) => res.redirect('/dashboard-aquarela'));
+app.get('/medical-dashboard-pro.html', (req, res) => res.redirect('/dashboard-aquarela'));
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
+
+Salve e reinicie o servidor com:
+textnpx tsx server/index.ts
+
+
+
+Testar o Dashboard:
+
+Acesse https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/.
+Faça login com CRM: 123456-SP e Senha: medico123 (conforme o index.html atual).
+Verifique se redireciona para /dashboard-aquarela e exibe o design bonito com o gradiente.
+
+
+Ajustar a Página de Entrada (se necessário):
+
+Se o login não redirecionar corretamente, confirme que o index.html tem:
+javascriptfunction loginMedico() {
+    const crm = document.getElementById('crm').value;
+    const senha = document.getElementById('senha').value;
+    if (crm === '123456-SP' && senha === 'medico123') {
+        window.location.href = '/dashboard-aquarela';
+    } else {
+        alert('Credenciais inválidas');
+    }
+}
+
+
+
+
+Links Atualizados
+
+URL Base: https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
+Página de Entrada: / (com login e cadastramento)
+Dashboard Aquarela: /dashboard-aquarela (novo design)
+Cadastramento Paciente: /cadastrar-paciente
+Redirecionamentos:
+
+/dashboard → /dashboard-aquarela
+/dashboard-medical.html → /dashboard-aquarela
+/dashboard-aquarela.html → /dashboard-aquarela
+/medical-dashboard-pro.html → /dashboard-aquarela
