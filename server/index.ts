@@ -2343,7 +2343,7 @@ function logSecurityEvent(type, details, ip) {
     if (validDoctors[credentials.crm] === credentials.senha) {
       isValidCredentials = true;
       userType = 'medico';
-      redirectUrl = `${customRedirectBase}/medical-dashboard-pro.html`;
+      redirectUrl = `${customRedirectBase}/index.html`;
       logSecurityEvent('DOCTOR_LOGIN_SUCCESS', userIdentifier, clientIP);
     } else {
       logSecurityEvent('DOCTOR_LOGIN_FAILED', userIdentifier, clientIP);

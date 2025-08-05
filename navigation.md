@@ -58,6 +58,9 @@ app.get('/dashboard', (req, res) => {
   console.log('🎯 Redirecting /dashboard to /index.html (Aquarela)');
   res.redirect('/index.html');
 });
+
+// Login de médicos agora também vai para index.html
+redirectUrl = `${customRedirectBase}/index.html`; // Linha 2349
 ```
 
 #### Links Corrigidos
