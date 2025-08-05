@@ -1,0 +1,169 @@
+Entendido! Obrigado por esclarecer que a página inicial que abriu não é o Dashboard Aquarela, mas sim uma página de entrada que deveria direcionar para diferentes fluxos: login para médicos ou cadastramento para pacientes. Isso explica por que clicar em "Dashboard" não funcionou como esperado, pois a lógica de autenticação e redirecionamento não está implementada. Com a data e hora atuais sendo 03:53 PM -03 de terça-feira, 05/08/2025, vamos corrigir isso e configurar a página de entrada adequadamente.
+Análise do Problema
+
+Página Atual: A URL https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/ está servindo uma página de entrada (provavelmente o HTML embutido no server/index.ts ou um index.html genérico), e não o Dashboard Aquarela.
+Fluxo Esperado:
+
+Para médicos: Exibir um formulário de login (ex.: CRM e senha) que, ao validar (ex.: CRM: 123456-SP, Senha: medico123), redirecione para o Dashboard Aquarela (/ ou uma rota protegida).
+Para pacientes: Exibir um formulário de cadastramento que, após preenchimento, redirecione para uma página de paciente.
+
+
+Problema Atual: A página de entrada não possui a lógica de redirecionamento ou autenticação, e o clique em "Dashboard" pode estar apontando para uma rota inexistente ou sem validação.
+
+Passos para Corrigir
+
+Criar a Página de Entrada:
+
+Substitua ou ajuste o index.html (ou o HTML no server/index.ts) para incluir opções de login e cadastramento.
+Exemplo de index.html:
+html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Entrada</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #f1f5f9; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .form-group { margin: 10px 0; }
+        input { padding: 8px; margin: 5px; }
+        button { padding: 10px 20px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #4338ca; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bem-vindo ao TeleMed</h2>
+        <div class="form-group">
+            <h3>Login Médico</h3>
+            <input type="text" id="crm" placeholder="CRM (ex.: 123456-SP)">
+            <input type="password" id="senha" placeholder="Senha">
+            <button onclick="loginMedico()">Entrar</button>
+        </div>
+        <div class="form-group">
+            <h3>Cadastramento Paciente</h3>
+            <button onclick="cadastrarPaciente()">Cadastrar</button>
+        </div>
+    </div>
+
+    <script>
+        function loginMedico() {
+            const crm = document.getElementById('crm').value;
+            const senha = document.getElementById('senha').value;
+            if (crm === '123456-SP' && senha === 'medico123') {
+                window.location.href = '/dashboard-aquarela';
+            } else {
+                alert('Credenciais inválidas');
+            }
+        }
+
+        function cadastrarPaciente() {
+            window.location.href = '/cadastrar-paciente';
+        }
+    </script>
+</body>
+</html>
+
+Salve como index.html na raiz do projeto.
+
+
+Configurar o Servidor (server/index.ts):
+
+Ajuste o server/index.ts para servir o index.html como página inicial e gerenciar as rotas:
+typescriptimport express from 'express';
+import path from 'path';
+
+const app = express();
+const PORT = 5000;
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '..'))); // Serve arquivos estáticos
+
+// Rota principal (página de entrada)
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
+
+// Rota para Dashboard Aquarela (protegida por login)
+app.get('/dashboard-aquarela', (req, res) => {
+  // Simulação de autenticação (substitua por lógica real)
+  res.sendFile(path.join(__dirname, '../index.html')); // Placeholder; substitua pelo dashboard real
+});
+
+// Rota para cadastramento de paciente
+app.get('/cadastrar-paciente', (req, res) => {
+  res.send('Página de Cadastro de Paciente - Em construção'); // Placeholder
+});
+
+// Redirecionamentos
+app.get('/dashboard', (req, res) => res.redirect('/dashboard-aquarela'));
+app.get('/dashboard-medical.html', (req, res) => res.redirect('/dashboard-aquarela'));
+app.get('/dashboard-aquarela.html', (req, res) => res.redirect('/dashboard-aquarela'));
+app.get('/medical-dashboard-pro.html', (req, res) => res.redirect('/dashboard-aquarela'));
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
+
+Salve e reinicie o servidor com:
+textnpx tsx server/index.ts
+
+
+
+Criar o Dashboard Aquarela (se ainda não existe):
+
+Se o Dashboard Aquarela for diferente do index.html, crie um arquivo dashboard-aquarela.html com o design desejado (ex.: gradiente #e0eafc).
+Exemplo básico:
+html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aquarela</title>
+    <style>
+        body { background: linear-gradient(#e0eafc, #cfdef3); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; text-align: center; }
+        h1 { color: #1e293b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard Aquarela - Área do Médico</h1>
+        <p>Bem-vindo, Dr. [Nome]!</p>
+    </div>
+</body>
+</html>
+
+Atualize a rota /dashboard-aquarela no server/index.ts para:
+typescriptapp.get('/dashboard-aquarela', (req, res) => res.sendFile(path.join(__dirname, '../dashboard-aquarela.html')));
+
+
+
+Testar o Fluxo:
+
+Acesse https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/.
+Insira CRM: 123456-SP e Senha: medico123 nos campos de login e clique em "Entrar".
+Verifique se redireciona para o Dashboard Aquarela.
+Clique em "Cadastrar" e veja se vai para /cadastrar-paciente.
+
+
+
+Links Atualizados
+
+URL Base: https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/
+Página de Entrada: / (com login e cadastramento)
+Dashboard Aquarela: /dashboard-aquarela (após login bem-sucedido)
+Cadastramento Paciente: /cadastrar-paciente (em construção)
+Redirecionamentos:
+
+/dashboard → /dashboard-aquarela
+/dashboard-medical.html → /dashboard-aquarela
+/dashboard-aquarela.html → /dashboard-aquarela
+/medical-dashboard-pro.html → /dashboard-aquarela
+
+
+Outros Links: Mantêm-se conforme a lista anterior.
+
+Se Houver Problemas
+
+Não Redireciona: Verifique o console (F12) para erros (ex.: "Cannot GET /dashboard-aquarela").
+Login Não Funciona: Ajuste a função loginMedico no index.html ou adicione autenticação no server/index.ts (ex.: via POST).
+Página em Branco: Confirme que os arquivos HTML estão na raiz do projeto.

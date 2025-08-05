@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aquarela - TeleMed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .aquarela-bg {
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+        }
+        .watercolor-card {
+            background: linear-gradient(135deg, rgba(240,248,255,0.9) 0%, rgba(240,240,240,0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="aquarela-bg">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-sm shadow-sm border-b border-blue-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold gradient-text">TeleMed Sistema</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Dr. [Nome do Médico]</span>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="watercolor-card rounded-2xl p-8 mb-8 shadow-lg">
+            <h2 class="text-3xl font-bold gradient-text mb-4">Dashboard Aquarela</h2>
+            <p class="text-gray-600 text-lg">Bem-vindo ao seu painel médico personalizado com design aquarela</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="watercolor-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100">
+                        <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Pacientes Hoje</p>
+                        <p class="text-2xl font-bold text-gray-900">24</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="watercolor-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100">
+                        <i data-lucide="calendar" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Consultas</p>
+                        <p class="text-2xl font-bold text-gray-900">18</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="watercolor-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100">
+                        <i data-lucide="file-text" class="w-6 h-6 text-yellow-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Receitas</p>
+                        <p class="text-2xl font-bold text-gray-900">12</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="watercolor-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100">
+                        <i data-lucide="activity" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Emergências</p>
+                        <p class="text-2xl font-bold text-gray-900">3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dr. AI -->
+            <div class="watercolor-card rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/dr-ai.html'">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
+                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="ml-4 text-xl font-semibold text-gray-900">Dr. AI</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Copiloto médico com IA para triagem e diagnóstico</p>
+                <button class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                    Acessar
+                </button>
+            </div>
+
+            <!-- Agenda Médica -->
+            <div class="watercolor-card rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/agenda-medica.html'">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-teal-600">
+                        <i data-lucide="calendar-check" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="ml-4 text-xl font-semibold text-gray-900">Agenda Médica</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Gerenciamento completo de consultas e horários</p>
+                <button class="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                    Ver Agenda
+                </button>
+            </div>
+
+            <!-- Receitas MEMED -->
+            <div class="watercolor-card rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/receitas-digitais.html'">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-orange-500 to-red-600">
+                        <i data-lucide="pill" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="ml-4 text-xl font-semibold text-gray-900">Receitas MEMED</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Sistema digital de prescrições médicas</p>
+                <button class="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                    Prescrever
+                </button>
+            </div>
+
+            <!-- Sistema de Lances -->
+            <div class="watercolor-card rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/consulta-por-valor.html'">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-yellow-500 to-orange-600">
+                        <i data-lucide="dollar-sign" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="ml-4 text-xl font-semibold text-gray-900">Sistema de Lances</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Consultas por valor com sistema de ofertas</p>
+                <button class="w-full bg-gradient-to-r from-yellow-500 to-orange-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                    Ver Ofertas
+                </button>
+            </div>
+
+            <!-- Notificações SMS -->
+            <div class="watercolor-card rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/sistema-notificacoes-medicas.html'">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600">
+                        <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="ml-4 text-xl font-semibold text-gray-900">Notificações</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Sistema de SMS e WhatsApp médico</p>
+                <button class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                    Gerenciar
+                </button>
+            </div>
+
+            <!-- Videoconsultas -->
+            <div class="watercolor-card rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='/videoconsulta.html'">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-pink-500 to-rose-600">
+                        <i data-lucide="video" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="ml-4 text-xl font-semibold text-gray-900">Videoconsultas</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Consultas por vídeo WebRTC seguras</p>
+                <button class="w-full bg-gradient-to-r from-pink-500 to-rose-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                    Iniciar
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        console.log('🎨 Dashboard Aquarela carregado com sucesso');
+        console.log('✅ Design aquarela ativo');
+        console.log('🔗 Links para funcionalidades configurados');
+    </script>
+</body>
+</html>

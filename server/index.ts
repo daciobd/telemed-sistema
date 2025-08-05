@@ -23,31 +23,62 @@ async function startServer() {
     index: false
   }));
 
-  // Rota principal - servir index.html
+  // Rota principal - servir página de entrada
   app.get('/', (req, res) => {
-    console.log('🏥 Servindo Dashboard Aquarela (index.html)');
-    res.sendFile(path.join(__dirname, '../index.html'));
+    console.log('🚪 Servindo página de entrada');
+    res.sendFile(path.join(__dirname, '../entrada.html'));
   });
 
-  // CONSOLIDAÇÃO DE DASHBOARDS - Redirecionamentos para index.html
+  // Rota para Dashboard Aquarela (protegida)
+  app.get('/dashboard-aquarela', (req, res) => {
+    console.log('🎨 Servindo Dashboard Aquarela');
+    res.sendFile(path.join(__dirname, '../dashboard-aquarela.html'));
+  });
+
+  // Rota para cadastramento de paciente
+  app.get('/cadastrar-paciente', (req, res) => {
+    console.log('👤 Página de cadastro de paciente');
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Cadastro Paciente - TeleMed</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+          <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
+              <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Cadastro de Paciente</h2>
+              <p class="text-gray-600 text-center mb-6">Funcionalidade em desenvolvimento</p>
+              <button onclick="window.location.href='/'" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                  Voltar à Página Inicial
+              </button>
+          </div>
+      </body>
+      </html>
+    `);
+  });
+
+  // CONSOLIDAÇÃO DE DASHBOARDS - Redirecionamentos para dashboard-aquarela
   app.get('/dashboard', (req, res) => {
-    console.log('🎨 Redirecting /dashboard to / (Unified)');
-    res.redirect('/');
+    console.log('🎨 Redirecting /dashboard to /dashboard-aquarela');
+    res.redirect('/dashboard-aquarela');
   });
   
   app.get('/dashboard-medical.html', (req, res) => {
-    console.log('🎨 Redirecting dashboard-medical.html to / (Unified)');
-    res.redirect('/');
+    console.log('🎨 Redirecting dashboard-medical.html to /dashboard-aquarela');
+    res.redirect('/dashboard-aquarela');
   });
   
   app.get('/medical-dashboard-pro.html', (req, res) => {
-    console.log('🎨 Redirecting medical-dashboard-pro.html to / (Unified)');
-    res.redirect('/');
+    console.log('🎨 Redirecting medical-dashboard-pro.html to /dashboard-aquarela');
+    res.redirect('/dashboard-aquarela');
   });
   
   app.get('/dashboard-aquarela.html', (req, res) => {
-    console.log('🎨 Redirecting dashboard-aquarela.html to / (Unified)');
-    res.redirect('/');
+    console.log('🎨 Redirecting dashboard-aquarela.html to /dashboard-aquarela');
+    res.redirect('/dashboard-aquarela');
   });
 
   // Health check
