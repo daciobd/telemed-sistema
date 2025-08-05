@@ -24,8 +24,14 @@ app.get('/', (req, res) => {
 app.get('/dashboard-aquarela', (req, res) => {
   try {
     const html = fs.readFileSync(path.join(__dirname, '../dashboard-aquarela.html'), 'utf-8');
+    console.log('🎨 Carregando Dashboard Aquarela premium');
+    // Força no-cache para evitar problemas de cache
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.send(html);
   } catch (err) {
+    console.error('❌ Erro ao carregar dashboard:', err);
     res.status(500).send('Erro ao carregar o dashboard');
   }
 });
