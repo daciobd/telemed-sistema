@@ -1,0 +1,80 @@
+2025-08-06T15:25:24.658836535Z ==> Cloning from https://github.com/daciobd/telemed-sistema
+2025-08-06T15:25:27.84817541Z ==> Checking out commit f7962d54a723f2933839dfbd56f6a30a969eb24c in branch main
+2025-08-06T15:25:31.553082988Z ==> Downloading cache...
+2025-08-06T15:25:44.140388817Z ==> Transferred 175MB in 8s. Extraction took 4s.
+2025-08-06T15:25:51.739295103Z ==> Using Node.js version 22.16.0 (default)
+2025-08-06T15:25:51.76555612Z ==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+2025-08-06T15:25:51.955871945Z ==> Using Bun version 1.1.0 (default)
+2025-08-06T15:25:51.955888326Z ==> Docs on specifying a Bun version: https://render.com/docs/bun-version
+2025-08-06T15:25:52.029145473Z ==> Running build command 'npm install && npm run build'...
+2025-08-06T15:25:53.628084579Z 
+2025-08-06T15:25:53.628142362Z up to date, audited 500 packages in 1s
+2025-08-06T15:25:53.628159124Z 
+2025-08-06T15:25:53.628214927Z 68 packages are looking for funding
+2025-08-06T15:25:53.628269221Z   run `npm fund` for details
+2025-08-06T15:25:53.648638098Z 
+2025-08-06T15:25:53.648680541Z 4 moderate severity vulnerabilities
+2025-08-06T15:25:53.648684041Z 
+2025-08-06T15:25:53.648686831Z To address all issues (including breaking changes), run:
+2025-08-06T15:25:53.648689821Z   npm audit fix --force
+2025-08-06T15:25:53.648691851Z 
+2025-08-06T15:25:53.648694891Z Run `npm audit` for details.
+2025-08-06T15:25:53.840946981Z 
+2025-08-06T15:25:53.840975903Z > telemed-sistema@2.0.0 build
+2025-08-06T15:25:53.840979783Z > node build.js
+2025-08-06T15:25:53.840982603Z 
+2025-08-06T15:25:53.876609337Z 🔧 Starting build process...
+2025-08-06T15:25:53.876871874Z 🔧 Building client application...
+2025-08-06T15:25:54.379856643Z vite v6.3.5 building for production...
+2025-08-06T15:25:54.564356112Z transforming...
+2025-08-06T15:26:01.935742093Z ✓ 3853 modules transformed.
+2025-08-06T15:26:02.468897574Z rendering chunks...
+2025-08-06T15:26:03.032730207Z computing gzip size...
+2025-08-06T15:26:03.070744014Z ../dist/public/index.html                              0.69 kB │ gzip:   0.43 kB
+2025-08-06T15:26:03.070773367Z ../dist/public/assets/index-CpbInhY6.css               5.62 kB │ gzip:   1.66 kB
+2025-08-06T15:26:03.070835851Z ../dist/public/assets/purify.es-CQJ0hv7W.js           21.82 kB │ gzip:   8.58 kB
+2025-08-06T15:26:03.071000621Z ../dist/public/assets/index.es-CDdjAlEg.js           159.32 kB │ gzip:  53.39 kB
+2025-08-06T15:26:03.071151861Z ../dist/public/assets/html2canvas.esm-CBrSDip1.js    202.30 kB │ gzip:  48.03 kB
+2025-08-06T15:26:03.071161692Z ../dist/public/assets/pdfGenerator-D66S7NXQ.js       362.82 kB │ gzip: 119.37 kB
+2025-08-06T15:26:03.071202714Z ../dist/public/assets/index-B4nb8sIm.js            1,586.83 kB │ gzip: 402.39 kB
+2025-08-06T15:26:03.071325912Z 
+2025-08-06T15:26:03.071331843Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2025-08-06T15:26:03.071334803Z - Using dynamic import() to code-split the application
+2025-08-06T15:26:03.071337843Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2025-08-06T15:26:03.071340293Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2025-08-06T15:26:03.071576988Z ✓ built in 8.66s
+2025-08-06T15:26:03.214869373Z 🔧 Copying server application...
+2025-08-06T15:26:03.224350296Z 🔧 Copying shared files...
+2025-08-06T15:26:03.225005008Z 🔧 Creating production package.json...
+2025-08-06T15:26:03.225415084Z 🔧 ✅ Build completed successfully!
+2025-08-06T15:26:03.225535682Z 🔧 📦 Client built to: dist/public
+2025-08-06T15:26:03.225580305Z 🔧 🚀 Server built to: dist/server
+2025-08-06T15:26:03.225615217Z 🔧 📄 Production package.json created
+2025-08-06T15:26:05.080320949Z ==> Uploading build...
+2025-08-06T15:26:18.063474269Z ==> Uploaded in 8.7s. Compression took 4.3s
+2025-08-06T15:26:18.12459462Z ==> Build successful 🎉
+2025-08-06T15:26:22.712322748Z ==> Deploying...
+2025-08-06T15:26:50.981658836Z ==> Running 'npm start'
+2025-08-06T15:26:51.991178982Z 
+2025-08-06T15:26:51.991212433Z > telemed-sistema@2.0.0 start
+2025-08-06T15:26:51.991218613Z > node start.js
+2025-08-06T15:26:51.991221253Z 
+2025-08-06T15:26:52.286721247Z 🚀 Starting production server...
+2025-08-06T15:27:00.193086882Z 🔍 DEBUG - process.env.PORT: "PORT"
+2025-08-06T15:27:00.193111652Z 🔍 DEBUG - typeof process.env.PORT: string
+2025-08-06T15:27:00.193116223Z 🔍 DEBUG - Number(process.env.PORT): NaN
+2025-08-06T15:27:00.287455763Z 🚀 TeleMed Sistema v12.5.2 rodando na porta 5000
+2025-08-06T15:27:00.287573405Z 🔗 Ambiente: production
+2025-08-06T15:27:00.287619306Z 🔗 PORT env raw: 'PORT'
+2025-08-06T15:27:00.287628417Z 🔗 PORT final: 5000
+2025-08-06T15:27:00.28781961Z 🔗 Bind: 0.0.0.0:5000
+2025-08-06T15:27:00.28783176Z 🛡️ Sistema de login seguro implementado
+2025-08-06T15:27:00.287978983Z 🔐 Área médica protegida com autenticação
+2025-08-06T15:27:00.287990023Z 📱 Sistema de notificações médicas ativo
+2025-08-06T15:27:03.591746559Z ==> Your service is live 🎉
+2025-08-06T15:27:03.617651336Z ==> 
+2025-08-06T15:27:03.641683804Z ==> ///////////////////////////////////////////////////////////
+2025-08-06T15:27:03.665769341Z ==> 
+2025-08-06T15:27:03.690690148Z ==> Available at your primary URL https://telemed-sistema.onrender.com
+2025-08-06T15:27:03.714761725Z ==> 
+2025-08-06T15:27:03.737057452Z ==> ///////////////////////////////////////////////////////////

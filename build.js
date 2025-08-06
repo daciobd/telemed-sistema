@@ -46,7 +46,7 @@ try {
     version: packageJson.version,
     type: "module",
     scripts: {
-      start: "NODE_ENV=production tsx server/index.ts"
+      start: "PORT=10000 NODE_ENV=production tsx server/index.ts"
     },
     dependencies: {
       // Include production dependencies needed at runtime
