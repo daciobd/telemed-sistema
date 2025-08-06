@@ -7,6 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+// Debug environment variables
+console.log('🔍 DEBUG - process.env.PORT:', JSON.stringify(process.env.PORT));
+console.log('🔍 DEBUG - typeof process.env.PORT:', typeof process.env.PORT);
+console.log('🔍 DEBUG - Number(process.env.PORT):', Number(process.env.PORT));
+
 const PORT = Number(process.env.PORT) || 5000;
 
 app.use(express.json());
@@ -204,8 +209,9 @@ app.get('/login', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${PORT}`);
   console.log(`🔗 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔗 PORT env: ${process.env.PORT || 'not set'}`);
-  console.log(`🔗 Acesse: http://localhost:${PORT}`);
+  console.log(`🔗 PORT env raw: '${process.env.PORT}'`);
+  console.log(`🔗 PORT final: ${PORT}`);
+  console.log(`🔗 Bind: 0.0.0.0:${PORT}`);
   console.log('🛡️ Sistema de login seguro implementado');
   console.log('🔐 Área médica protegida com autenticação');
   console.log('📱 Sistema de notificações médicas ativo');
