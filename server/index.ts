@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
@@ -201,7 +201,7 @@ app.get('/login', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${PORT}`);
   console.log(`🔗 Acesse: http://localhost:${PORT}`);
   console.log('🛡️ Sistema de login seguro implementado');
