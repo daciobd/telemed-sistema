@@ -1,0 +1,26 @@
+COMANDOS GIT PARA CORRIGIR RENDER PORT
+
+# EXECUTE EM SEQUÊNCIA NO TERMINAL:
+
+# 1. Adicionar mudanças
+git add .
+
+# 2. Commit com debug logs
+git commit -m "Fix: Add debug logs for Render PORT diagnosis
+
+- Added environment and PORT logging to server startup
+- Enhanced production environment detection
+- Added NODE_ENV=production to build script
+- Debug logs will show if Render sets process.env.PORT correctly"
+
+# 3. Push para GitHub
+git push origin main
+
+# APÓS O DEPLOY, OS LOGS RENDER VÃO MOSTRAR:
+# - PORT env: 10000 (ou porta do Render)
+# - Ambiente: production
+# - Sistema funcionando na porta correta
+
+# SE AINDA NÃO FUNCIONAR:
+# Os logs debug vão revelar exatamente o que está acontecendo
+# com process.env.PORT no ambiente Render

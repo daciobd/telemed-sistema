@@ -203,6 +203,8 @@ app.get('/login', (req, res) => {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${PORT}`);
+  console.log(`🔗 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 PORT env: ${process.env.PORT || 'not set'}`);
   console.log(`🔗 Acesse: http://localhost:${PORT}`);
   console.log('🛡️ Sistema de login seguro implementado');
   console.log('🔐 Área médica protegida com autenticação');
