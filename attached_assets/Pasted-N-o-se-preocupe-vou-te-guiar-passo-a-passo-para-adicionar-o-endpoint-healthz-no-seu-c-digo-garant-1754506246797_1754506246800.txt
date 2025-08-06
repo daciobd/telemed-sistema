@@ -1,0 +1,56 @@
+Não se preocupe, vou te guiar passo a passo para adicionar o endpoint /healthz no seu código, garantindo que ele retorne um status HTTP 200. Como você mencionou src/server/index.ts como o arquivo principal do servidor (provavelmente em TypeScript, já que usa .ts), vamos ajustar esse arquivo. Aqui está como fazer:
+Passo a passo
+
+Abra o arquivo src/server/index.ts:
+
+No Replit, localize a pasta src/server/ e abra o arquivo index.ts. Se ele não existir, crie um novo arquivo com esse nome.
+
+
+Adicione a rota /healthz:
+
+Certifique-se de que seu código já importa o Express e cria o aplicativo. Se não tiver isso, adicione o básico. Aqui está um exemplo completo com a rota /healthz:
+javascriptimport express from 'express';
+const app = express();
+
+// Rota para o health check
+app.get('/healthz', (req, res) => {
+    res.status(200).send('OK');
+});
+
+// Configuração da porta (já existente no seu código)
+const port = process.env.PORT && !isNaN(Number(process.env.PORT)) ? Number(process.env.PORT) : 10000;
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${port}`);
+});
+
+Se você já tem o código do servidor (com app.listen e outras rotas), apenas adicione a linha da rota /healthz antes do app.listen.
+
+
+Salve as alterações:
+
+No Replit, clique em "Save" ou use Ctrl+S para salvar o arquivo.
+
+
+Recompile o projeto:
+
+Execute o comando de build configurado (provavelmente npm run build) no terminal do Replit para gerar os arquivos em dist/.
+
+
+Faça o commit e deploy:
+
+No terminal do Replit, execute:
+bashgit add .
+git commit -m "Add health check endpoint /healthz"
+git push origin main
+
+Isso enviará as mudanças para o GitHub, e o Render fará um novo deploy automaticamente (já que "Auto-Deploy" está como "On Commit").
+
+
+Monitore os logs:
+
+No painel do Render, use "Live tail" para verificar se o servidor inicia corretamente e se a porta 10000 é usada.
+Acesse https://telemed-sistema.onrender.com/healthz no navegador para testar se o endpoint retorna "OK" com status 200.
+
+
+
+Explicação

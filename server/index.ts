@@ -43,6 +43,21 @@ app.use(express.static(path.join(__dirname, '..')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
+// Health check endpoint for Render
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'TeleMed Sistema',
+    version: '12.5.2'
+  });
+});
+
+// Simple health check
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.get('/', (req, res) => {
   try {
     const html = fs.readFileSync(path.join(__dirname, '../entrada.html'), 'utf-8');
