@@ -78,23 +78,31 @@
             border-color: rgba(179, 217, 224, 0.5);
         }
         .action-card {
-            background: linear-gradient(135deg, rgba(232, 212, 201, 0.85) 0%, rgba(209, 232, 226, 0.8) 100%);
+            background: white;
             border: 2px solid rgba(179, 217, 224, 0.3);
             border-radius: 18px;
             transition: all 0.4s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        .action-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(179, 217, 224, 0.1) 0%, rgba(209, 232, 226, 0.1) 100%);
-            pointer-events: none;
+        .card-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+            background: #f8f9fa;
+        }
+        
+        .card-content {
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
         }
         .action-card:hover {
             transform: translateY(-8px);
@@ -297,6 +305,10 @@
                 <i data-lucide="zap"></i>
                 Teste MDQ
             </a>
+            <a href="/telemonitoramento-enfermagem" class="menu-item">
+                <i data-lucide="monitor-heart"></i>
+                Telemonitoramento
+            </a>
             <a href="/entrada" class="menu-item">
                 <i data-lucide="door-open"></i>
                 Página Entrada
@@ -379,69 +391,85 @@
         </div>
 
         <!-- Action Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/agenda-medica')">
-                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="calendar-days" class="w-6 h-6 text-blue-600"></i>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/agenda-medica')">
+                <img src="/attached_assets/agenda_1754513645555.PNG" alt="Agenda Médica" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Agenda Médica</h3>
+                    <p class="text-aquarela-light text-sm">Gerenciar consultas e horários</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Agenda Médica</h3>
-                <p class="text-aquarela-light text-sm">Gerenciar consultas e horários</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/receitas-digitais')">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="file-text" class="w-6 h-6 text-green-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/receitas-digitais')">
+                <img src="/attached_assets/RECEITA_1754513681279.PNG" alt="Receitas Digitais" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Receitas Digitais</h3>
+                    <p class="text-aquarela-light text-sm">Sistema MEMED integrado</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Receitas Digitais</h3>
-                <p class="text-aquarela-light text-sm">Sistema MEMED integrado</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/videoconsulta')">
-                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="video" class="w-6 h-6 text-purple-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/dr-ai')">
+                <img src="/attached_assets/DR AI 2_1754513826621.PNG" alt="Dr. AI" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Dr. AI</h3>
+                    <p class="text-aquarela-light text-sm">Assistente inteligente</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Videoconsultas</h3>
-                <p class="text-aquarela-light text-sm">Atendimento remoto WebRTC</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/dr-ai')">
-                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="brain" class="w-6 h-6 text-yellow-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/videoconsulta')">
+                <img src="/attached_assets/VIDEO CONSULTA_1754513707007.PNG" alt="Videoconsultas" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Videoconsultas</h3>
+                    <p class="text-aquarela-light text-sm">Atendimento remoto WebRTC</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Dr. AI</h3>
-                <p class="text-aquarela-light text-sm">Assistente inteligente</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/leilao-consultas')">
-                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="gavel" class="w-6 h-6 text-indigo-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/triagem-psiquiatrica')">
+                <img src="/attached_assets/TRIAGEM COM DR.AI PEQUENA_1754513854152.PNG" alt="Triagem IA" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Triagem IA</h3>
+                    <p class="text-aquarela-light text-sm">Avaliação psiquiátrica</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Leilão Consultas</h3>
-                <p class="text-aquarela-light text-sm">Sistema de lances</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/triagem-psiquiatrica')">
-                <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="activity" class="w-6 h-6 text-pink-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/sistema-notificacoes-medicas')">
+                <img src="/attached_assets/NOTIFICAÇÕES_1754513872769.PNG" alt="Notificações" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Notificações</h3>
+                    <p class="text-aquarela-light text-sm">SMS/WhatsApp médicas</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Triagem IA</h3>
-                <p class="text-aquarela-light text-sm">Avaliação psiquiátrica</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/sistema-notificacoes-medicas')">
-                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="bell" class="w-6 h-6 text-orange-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/especialidades')">
+                <img src="/attached_assets/DOCTORS_1754513883959.PNG" alt="Especialidades" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Especialidades</h3>
+                    <p class="text-aquarela-light text-sm">Áreas médicas</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Notificações</h3>
-                <p class="text-aquarela-light text-sm">SMS/WhatsApp médicas</p>
             </div>
 
-            <div class="action-card rounded-xl p-6 shadow-md text-center" onclick="navegarPara('/especialidades')">
-                <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="stethoscope" class="w-6 h-6 text-teal-600"></i>
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/centro-avaliacao')">
+                <img src="/attached_assets/CENTRAL DE TESTES_1754513913866.PNG" alt="Centro de Avaliação" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Centro Avaliação</h3>
+                    <p class="text-aquarela-light text-sm">Testes psicológicos</p>
                 </div>
-                <h3 class="text-lg font-semibold text-aquarela mb-2">Especialidades</h3>
-                <p class="text-aquarela-light text-sm">Áreas médicas</p>
+            </div>
+
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/leilao-consultas')">
+                <img src="/attached_assets/LEILÃO_1754513839437.PNG" alt="Leilão Consultas" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Leilão Consultas</h3>
+                    <p class="text-aquarela-light text-sm">Sistema de lances</p>
+                </div>
+            </div>
+
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/telemonitoramento-enfermagem')">
+                <img src="/attached_assets/ANSIEDADE_1754513926254.PNG" alt="Telemonitoramento" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Telemonitoramento</h3>
+                    <p class="text-aquarela-light text-sm">Monitoramento remoto</p>
+                </div>
             </div>
         </div>
 
@@ -473,6 +501,33 @@
                         </div>
                     </div>
                     <span class="text-xs text-aquarela-light opacity-75">12 min atrás</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Feature Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/centro-avaliacao')">
+                <img src="/attached_assets/CENTRAL DE TESTES_1754513913866.PNG" alt="Centro de Avaliação" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Centro de Avaliação</h3>
+                    <p class="text-aquarela-light text-sm">Testes psicológicos e escalas de avaliação médica</p>
+                </div>
+            </div>
+
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/triagem-psiquiatrica')">
+                <img src="/attached_assets/TRIAGEM COM DR.AI PEQUENA_1754513854152.PNG" alt="Triagem Psiquiátrica" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Triagem Psiquiátrica</h3>
+                    <p class="text-aquarela-light text-sm">Avaliação especializada com IA médica</p>
+                </div>
+            </div>
+
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/telemonitoramento-enfermagem')">
+                <img src="/attached_assets/ANSIEDADE_1754513926254.PNG" alt="Telemonitoramento" class="card-image">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Telemonitoramento</h3>
+                    <p class="text-aquarela-light text-sm">Monitoramento remoto de pacientes</p>
                 </div>
             </div>
         </div>

@@ -226,6 +226,16 @@ app.get('/bipolar-mdq', (req, res) => {
   }
 });
 
+// Telemonitoramento
+app.get('/telemonitoramento-enfermagem', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../telemonitoramento-enfermagem.html'), 'utf-8');
+    res.send(html);
+  } catch (err) {
+    res.status(404).send('Página não encontrada');
+  }
+});
+
 // Entrada e Login
 app.get('/entrada', (req, res) => {
   try {
