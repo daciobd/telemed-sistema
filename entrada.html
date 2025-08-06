@@ -5,98 +5,247 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeleMed - Entrada</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F9FAFB;
+            font-family: 'Inter', sans-serif;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .icon-container {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card-item {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
         }
         .input-field {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: #FFFFFF;
+            border: 2px solid #E5E7EB;
+            border-radius: 0.5rem;
+            transition: border-color 0.2s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         .btn-primary {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            border: none;
+            border-radius: 0.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         .btn-secondary {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border: none;
+            border-radius: 0.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .main-title {
+            color: #111827;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            color: #6B7280;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+        .card-title {
+            color: #6B7280;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .card-description {
+            color: #111827;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        @media (max-width: 768px) {
+            .cards-container {
+                flex-direction: column;
+            }
+            .card-item {
+                width: 100%;
+                max-width: none;
+            }
+            .main-title {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <div class="glass-card rounded-2xl p-8 max-w-md w-full shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-white mb-2">TeleMed Sistema</h1>
-            <p class="text-white/80">Plataforma de Telemedicina Avançada</p>
-        </div>
+<body class="min-h-screen p-6">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="main-title">TeleMed Sistema</h1>
+        <p class="subtitle">Plataforma de Telemedicina Avançada</p>
+    </div>
 
-        <!-- Login Médico -->
-        <div class="mb-8">
-            <h2 class="text-xl font-semibold text-white mb-4 text-center">🩺 Login Médico</h2>
+    <!-- Login Section -->
+    <div class="max-w-md mx-auto mb-12">
+        <div class="card">
+            <div class="text-center mb-6">
+                <div class="icon-container mx-auto" style="background-color: rgba(224, 242, 254, 0.2); width: 60px; height: 60px;">
+                    <i data-feather="user-check" style="width: 30px; height: 30px; color: #3B82F6;"></i>
+                </div>
+                <h2 class="card-title">Login Médico</h2>
+            </div>
             <div class="space-y-4">
                 <input 
                     type="text" 
                     id="crm" 
                     placeholder="CRM (ex.: 123456-SP)" 
-                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    class="input-field w-full px-4 py-3"
                 >
                 <input 
                     type="password" 
                     id="senha" 
                     placeholder="Senha" 
-                    class="input-field w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    class="input-field w-full px-4 py-3"
                 >
                 <button 
                     onclick="loginMedico()" 
-                    class="btn-primary w-full py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
+                    class="btn-primary w-full py-3 text-white font-semibold"
                 >
                     Entrar como Médico
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- Divider -->
-        <div class="flex items-center mb-8">
-            <div class="flex-1 h-px bg-white/30"></div>
-            <span class="px-4 text-white/70 text-sm">ou</span>
-            <div class="flex-1 h-px bg-white/30"></div>
-        </div>
+    <!-- Services Section -->
+    <div class="mb-12">
+        <h2 class="text-center text-2xl font-semibold text-gray-800 mb-8">Nossos Serviços</h2>
+        <div class="cards-container">
+            <div class="card card-item">
+                <div class="text-center">
+                    <div class="icon-container mx-auto" style="background-color: rgba(224, 242, 254, 0.2);">
+                        <i data-feather="video" style="color: #3B82F6;"></i>
+                    </div>
+                    <h3 class="card-title">Videoconsultas</h3>
+                    <p class="card-description">Consultas médicas online com profissionais qualificados, no conforto da sua casa.</p>
+                </div>
+            </div>
 
-        <!-- Cadastramento Paciente -->
-        <div class="text-center">
-            <h2 class="text-xl font-semibold text-white mb-4">👤 Área do Paciente</h2>
-            <button 
-                onclick="cadastrarPaciente()" 
-                class="btn-secondary w-full py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
-            >
-                Cadastrar como Paciente
-            </button>
-        </div>
+            <div class="card card-item">
+                <div class="text-center">
+                    <div class="icon-container mx-auto" style="background-color: rgba(253, 230, 138, 0.2);">
+                        <i data-feather="calendar" style="color: #F59E0B;"></i>
+                    </div>
+                    <h3 class="card-title">Agendamentos</h3>
+                    <p class="card-description">Sistema inteligente de agendamento com disponibilidade em tempo real.</p>
+                </div>
+            </div>
 
-        <!-- Links Rápidos -->
-        <div class="mt-8 text-center">
-            <p class="text-white/60 text-sm mb-2">Acesso Rápido:</p>
-            <div class="flex justify-center space-x-4">
-                <a href="/dr-ai.html" class="text-white/80 hover:text-white text-sm underline">Dr. AI</a>
-                <a href="/consulta-por-valor.html" class="text-white/80 hover:text-white text-sm underline">Consultas</a>
-                <a href="/receitas-digitais.html" class="text-white/80 hover:text-white text-sm underline">Receitas</a>
+            <div class="card card-item">
+                <div class="text-center">
+                    <div class="icon-container mx-auto" style="background-color: rgba(251, 207, 232, 0.2);">
+                        <i data-feather="bell" style="color: #EC4899;"></i>
+                    </div>
+                    <h3 class="card-title">Notificações</h3>
+                    <p class="card-description">Receba alertas sobre consultas, exames e prescrições via SMS e WhatsApp.</p>
+                </div>
+            </div>
+
+            <div class="card card-item">
+                <div class="text-center">
+                    <div class="icon-container mx-auto" style="background-color: rgba(209, 250, 229, 0.2);">
+                        <i data-feather="file-text" style="color: #10B981;"></i>
+                    </div>
+                    <h3 class="card-title">Receitas Digitais</h3>
+                    <p class="card-description">Sistema MEMED integrado para prescrições digitais seguras e validadas.</p>
+                </div>
+            </div>
+
+            <div class="card card-item">
+                <div class="text-center">
+                    <div class="icon-container mx-auto" style="background-color: rgba(233, 213, 255, 0.2);">
+                        <i data-feather="brain" style="color: #8B5CF6;"></i>
+                    </div>
+                    <h3 class="card-title">Dr. AI Assistente</h3>
+                    <p class="card-description">Inteligência artificial médica para triagem e suporte diagnóstico avançado.</p>
+                </div>
+            </div>
+
+            <div class="card card-item">
+                <div class="text-center">
+                    <div class="icon-container mx-auto" style="background-color: rgba(254, 226, 226, 0.2);">
+                        <i data-feather="heart" style="color: #EF4444;"></i>
+                    </div>
+                    <h3 class="card-title">Telemonitoramento</h3>
+                    <p class="card-description">Monitoramento remoto de pacientes com tecnologia de ponta 24/7.</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Patient Access -->
+    <div class="max-w-md mx-auto">
+        <div class="card text-center">
+            <div class="icon-container mx-auto mb-4" style="background-color: rgba(209, 250, 229, 0.2); width: 60px; height: 60px;">
+                <i data-feather="user-plus" style="width: 30px; height: 30px; color: #10B981;"></i>
+            </div>
+            <h2 class="card-title">Área do Paciente</h2>
+            <p class="card-description mb-4">Cadastre-se para acessar nossos serviços médicos</p>
+            <button 
+                onclick="cadastrarPaciente()" 
+                class="btn-secondary w-full py-3 text-white font-semibold"
+            >
+                Cadastrar como Paciente
+            </button>
+        </div>
+    </div>
+
     <!-- Loading Overlay -->
-    <div id="loading" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden">
-        <div class="glass-card rounded-xl p-6 text-center">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
-            <p class="text-white">Entrando no sistema...</p>
+    <div id="loading" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+        <div class="card max-w-xs mx-auto text-center">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p class="text-gray-700">Entrando no sistema...</p>
         </div>
     </div>
 
     <script>
+        // Initialize Feather icons
+        feather.replace();
+
         function showLoading() {
             document.getElementById('loading').classList.remove('hidden');
         }
@@ -147,8 +296,9 @@
             }
         });
 
-        console.log('🚀 Página de entrada TeleMed carregada');
+        console.log('🚀 Página de entrada TeleMed carregada com design atualizado');
         console.log('🔐 Credenciais de teste: CRM: 123456-SP, Senha: medico123');
+        console.log('🎨 Design conforme especificações: fundo #F9FAFB, cards brancos, fonte Inter');
     </script>
 </body>
 </html>

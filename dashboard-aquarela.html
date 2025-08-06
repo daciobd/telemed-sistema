@@ -78,7 +78,7 @@
             border-color: rgba(179, 217, 224, 0.5);
         }
         .action-card {
-            background: white !important;
+            background: linear-gradient(135deg, rgba(232, 212, 201, 0.85) 0%, rgba(209, 232, 226, 0.8) 100%);
             border: 2px solid rgba(179, 217, 224, 0.3);
             border-radius: 18px;
             transition: all 0.4s ease;
@@ -392,7 +392,8 @@
         </div>
 
         <!-- Action Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="bg-white rounded-3xl p-8 shadow-lg">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/agenda-medica')">
                 <img src="/attached_assets/agenda_1754513645555.PNG" alt="Agenda Médica" class="card-image">
                 <div class="card-content">
@@ -426,7 +427,7 @@
             </div>
 
             <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/triagem-psiquiatrica')">
-                <img src="/attached_assets/TRIAGEM COM DR.AI PEQUENA_1754513854152.PNG" alt="Triagem IA" class="card-image">
+                <img src="/attached_assets/ANSIEDADE_1754516735328.PNG" alt="Triagem IA" class="card-image">
                 <div class="card-content">
                     <h3 class="text-lg font-semibold text-aquarela mb-2">Triagem IA</h3>
                     <p class="text-aquarela-light text-sm">Avaliação psiquiátrica</p>
@@ -473,6 +474,7 @@
                 </div>
             </div>
         </div>
+        </div>
 
         <!-- Recent Activity -->
         <div class="watercolor-card rounded-2xl p-8 mt-8 shadow-lg">
@@ -507,7 +509,8 @@
         </div>
 
         <!-- Additional Feature Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-white rounded-3xl p-8 shadow-lg mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/centro-avaliacao')">
                 <img src="/attached_assets/CENTRAL DE TESTES_1754513913866.PNG" alt="Centro de Avaliação" class="card-image">
                 <div class="card-content">
@@ -517,7 +520,7 @@
             </div>
 
             <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/triagem-psiquiatrica')">
-                <img src="/attached_assets/TRIAGEM COM DR.AI PEQUENA_1754513854152.PNG" alt="Triagem Psiquiátrica" class="card-image">
+                <img src="/attached_assets/ANSIEDADE_1754516735328.PNG" alt="Triagem Psiquiátrica" class="card-image">
                 <div class="card-content">
                     <h3 class="text-lg font-semibold text-aquarela mb-2">Triagem Psiquiátrica</h3>
                     <p class="text-aquarela-light text-sm">Avaliação especializada com IA médica</p>
@@ -531,6 +534,7 @@
                     <p class="text-aquarela-light text-sm">Monitoramento remoto de pacientes</p>
                 </div>
             </div>
+        </div>
         </div>
     </main>
 

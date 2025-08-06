@@ -1,0 +1,122 @@
+Plano de Melhoria da Página de Entrada
+1. Paleta de Cores
+
+Plano de fundo: Defina o body com background-color: #F9FAFB.
+Cartões: Use background-color: #FFFFFF com sombras suaves via box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05).
+Ícones e destaques: Aplique tons pastel:
+
+#E0F2FE para ícones ou botões de "Consulta".
+#FDE68A para destaques como "Agendamento".
+#FBCFE8 para seções como "Notificações".
+
+
+
+2. Tipografia
+
+Fonte: Adicione a fonte "Inter" via CDN ou importação no projeto:
+html<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+Ou no CSS:
+css@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+Títulos: Use tamanhos entre 1.25rem e 1.75rem com font-weight: 600 para destaque.
+Texto principal: Defina color: #111827 para legibilidade.
+Títulos dos cartões: Use color: #6B7280 para um cinza suave.
+
+3. Ícones
+
+Biblioteca: Integre a biblioteca Feather Icons via CDN:
+html<script src="https://unpkg.com/feather-icons"></script>
+<script>
+  feather.replace();
+</script>
+
+Estilo: Aplique ícones finos com fundo suave:
+css.icon-container {
+  background-color: rgba(224, 242, 254, 0.2); /* #E0F2FE com opacidade */
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+Uso: Exemplo de ícone de consulta:
+html<span class="icon-container"><i data-feather="user"></i></span>
+
+
+4. Estilo dos Cartões
+
+Bordas e sombras: Defina no CSS:
+css.card {
+  background-color: #FFFFFF;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+Layout responsivo: Use Flexbox ou Grid:
+css.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+}
+
+Estrutura HTML:
+html<div class="cards-container">
+  <div class="card">
+    <h3 style="color: #6B7280;">Consultas</h3>
+    <span class="icon-container" style="background-color: rgba(224, 242, 254, 0.2);"><i data-feather="user"></i></span>
+    <p style="color: #111827;">Agende sua consulta médica.</p>
+  </div>
+  <div class="card">
+    <h3 style="color: #6B7280;">Agendamentos</h3>
+    <span class="icon-container" style="background-color: rgba(253, 230, 138, 0.2);"><i data-feather="calendar"></i></span>
+    <p style="color: #111827;">Gerencie seus horários.</p>
+  </div>
+  <div class="card">
+    <h3 style="color: #6B7280;">Notificações</h3>
+    <span class="icon-container" style="background-color: rgba(251, 207, 232, 0.2);"><i data-feather="bell"></i></span>
+    <p style="color: #111827;">Receba alertas médicos.</p>
+  </div>
+</div>
+
+
+5. Integração no Código
+
+Servidor: Certifique-se de que src/server/index.ts sirva os arquivos estáticos do cliente (ex.: dist/public):
+javascriptimport express from 'express';
+const app = express();
+
+app.use(express.static('dist/public'));
+
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString(), service: 'TeleMed Sistema', version: '12.5.2' });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+app.get('/', (req, res) => {
+  res.sendFile('dist/public/index.html', { root: __dirname });
+});
+
+const port = process.env.PORT && !isNaN(Number(process.env.PORT)) ? Number(process.env.PORT) : 10000;
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Servidor rodando na porta ${port} em ${new Date().toISOString()}`);
+});
+
+Cliente: Atualize o index.html ou o componente principal (ex.: src/App.jsx ou src/App.vue) com o HTML/CSS acima.
