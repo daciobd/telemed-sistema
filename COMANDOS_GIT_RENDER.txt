@@ -1,0 +1,39 @@
+COMANDOS GIT PARA RENDER DEPLOY
+
+# 1. LIMPAR ESTADO GIT
+rm -f .git/index.lock
+rm -f .git/refs/heads/main.lock
+git rebase --abort
+
+# 2. RESET PARA ESTADO LIMPO
+git reset --hard HEAD
+
+# 3. ADICIONAR MUDANÇAS
+git add .
+
+# 4. VERIFICAR STATUS
+git status
+
+# 5. COMMIT COM CORREÇÃO RENDER
+git commit -m "Fix: Configure dynamic PORT and 0.0.0.0 bind for Render deployment
+
+- Server agora usa Number(process.env.PORT) || 5000
+- Bind 0.0.0.0 para aceitar conexões externas
+- TypeScript corrigido para porta numérica
+- Todas as 18 rotas médicas mantidas
+- Sistema compatível com Render deployment"
+
+# 6. PUSH PARA GITHUB (tente na ordem)
+git push origin main
+
+# Se falhar, tente:
+git push origin main --force-with-lease
+
+# Se ainda falhar:
+git push origin main --force
+
+RESULTADO ESPERADO:
+- Commit aparece no GitHub
+- Render detecta mudanças automaticamente
+- Deploy automático inicia no Render
+- Sistema funciona na URL do Render
