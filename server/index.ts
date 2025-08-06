@@ -60,8 +60,16 @@ app.get('/health', (req, res) => {
 
 app.get('/', (req, res) => {
   try {
-    const html = fs.readFileSync(path.join(__dirname, '../entrada.html'), 'utf-8');
-    res.send(html);
+    const indexPath = path.join(__dirname, '../index.html');
+    if (fs.existsSync(indexPath)) {
+      const html = fs.readFileSync(indexPath, 'utf-8');
+      res.send(html);
+      console.log('🏠 Homepage TeleMed carregada - Design conforme mockup');
+    } else {
+      const html = fs.readFileSync(path.join(__dirname, '../entrada.html'), 'utf-8');
+      res.send(html);
+      console.log('⚠️ index.html não encontrado, servindo entrada.html');
+    }
   } catch (err) {
     res.status(500).send('Erro ao carregar a página');
   }
