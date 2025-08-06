@@ -11,27 +11,29 @@ const app = express();
 console.log('🔍 DEBUG - process.env.PORT:', JSON.stringify(process.env.PORT));
 console.log('🔍 DEBUG - All env vars with PORT:', Object.keys(process.env).filter(k => k.includes('PORT')));
 
-// Fix: Handle Render's PORT environment variable properly
-let PORT = 10000; // Changed default from 5000 to 10000 for Render compatibility
-if (process.env.PORT && process.env.PORT !== 'PORT' && !isNaN(Number(process.env.PORT))) {
-  PORT = Number(process.env.PORT);
-} else {
-  // Check for alternative port environment variables
-  const altPorts = [
-    process.env.RENDER_INTERNAL_PORT,
-    process.env.PORT_NUMBER, 
-    process.env.HTTP_PORT,
-    process.env.SERVER_PORT,
-    process.env.WEB_PORT
-  ];
-  
-  for (const port of altPorts) {
-    if (port && !isNaN(Number(port))) {
-      PORT = Number(port);
-      console.log(`🔄 Using alternative port: ${port}`);
-      break;
-    }
+// Render requires us to use their PORT exactly as provided, even if it's problematic
+let PORT;
+
+// In production (Render), force use of their PORT or use a specific fallback
+if (process.env.NODE_ENV === 'production') {
+  // For Render: Try to get a valid port from environment or use 10000
+  if (process.env.PORT && process.env.PORT !== 'PORT' && !isNaN(Number(process.env.PORT))) {
+    PORT = Number(process.env.PORT);
+    console.log('🔄 Using Render provided PORT:', PORT);
+  } else {
+    // Render fallback - use 10000
+    PORT = 10000;
+    console.log('🔄 Using Render fallback PORT:', PORT);
   }
+} else {
+  // Development
+  PORT = 5000;
+}
+
+// Final validation
+if (!PORT || isNaN(PORT)) {
+  PORT = 10000;
+  console.log('🔄 Final fallback PORT:', PORT);
 }
 
 console.log('🔍 FINAL PORT SELECTED:', PORT);
@@ -228,13 +230,29 @@ app.get('/login', (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// Render-specific: Listen on all interfaces with proper error handling
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${PORT}`);
   console.log(`🔗 Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 PORT env raw: '${process.env.PORT}'`);
   console.log(`🔗 PORT final: ${PORT}`);
   console.log(`🔗 Bind: 0.0.0.0:${PORT}`);
+  console.log(`🔗 Server address: ${JSON.stringify(server.address())}`);
   console.log('🛡️ Sistema de login seguro implementado');
   console.log('🔐 Área médica protegida com autenticação');
   console.log('📱 Sistema de notificações médicas ativo');
+  
+  // Test server responsiveness
+  console.log('🔍 Testing server health...');
+});
+
+server.on('error', (err: any) => {
+  console.error('❌ Server error:', err);
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${PORT} is already in use`);
+  }
+});
+
+server.on('listening', () => {
+  console.log('✅ Server is listening and ready for connections');
 });

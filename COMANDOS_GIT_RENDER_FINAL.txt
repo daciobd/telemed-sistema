@@ -1,0 +1,27 @@
+COMANDOS GIT PARA SOLUÇÃO DEFINITIVA DO RENDER
+
+# EXECUTE EM SEQUÊNCIA NO TERMINAL:
+
+# 1. Adicionar mudanças
+git add .
+
+# 2. Commit com solução definitiva
+git commit -m "Fix: Add comprehensive server error handling and Render-specific port logic
+
+- Added server error event handlers to capture issues
+- Implemented production-specific PORT detection logic  
+- Added server address logging for debugging
+- Removed PORT override from start script
+- Enhanced error reporting for port conflicts"
+
+# 3. Push para GitHub
+git push origin main
+
+# APÓS O DEPLOY NO RENDER, OS LOGS VÃO MOSTRAR:
+# - Server address: {"address":"0.0.0.0","family":"IPv4","port":XXXX}
+# - ✅ Server is listening and ready for connections
+# - Qualquer erro específico será capturado e exibido
+
+# SE A PÁGINA AINDA NÃO ABRIR:
+# Os logs de erro vão revelar exatamente o que está impedindo
+# o servidor de responder às requisições HTTP

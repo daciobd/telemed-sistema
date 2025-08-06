@@ -1,0 +1,22 @@
+Os logs do último deploy (2025-08-06T15:40:47Z) mostram que as mudanças implementadas estão funcionando como planejado, mas a página ainda não abre. Vamos analisar:
+
+Porta ajustada para 10000: O debug confirma que process.env.PORT é "PORT", e a lógica implementada selecionou 10000 como porta final ("🔍 FINAL PORT SELECTED: 10000"). O servidor está rodando na porta 10000 ("🚀 TeleMed Sistema v12.5.2 rodando na porta 10000") e o bind está configurado para `0.0.0.0:10000".
+Detecção de variáveis: A lista de variáveis de ambiente com "PORT" foi exibida, mas nenhuma oferece uma porta válida, reforçando a decisão de usar o fallback 10000.
+Serviço live: O Render reconheceu a nova porta 10000 ("Detected a new open port HTTP:10000") e reiniciou o deploy para atualizar a configuração de rede. O serviço está "live" no URL https://telemed-sistema.onrender.com.
+
+Mesmo assim, a página não carrega, o que pode indicar:
+
+Conflito de porta: O Render pode não estar redirecionando corretamente para a porta 10000. O fato de ter detectado a nova porta e reiniciado o deploy sugere que a configuração de rede foi atualizada, mas pode haver um atraso ou erro silencioso.
+Instância gratuita: A pausa por inatividade pode estar interferindo, mesmo após o deploy.
+Erro no servidor: Pode haver um problema após o "Your service is live" que não aparece nos logs.
+
+Ação recomendada:
+
+Confirme a porta no código: Verifique em src/server/index.ts (ou o arquivo principal) se o app.listen está configurado como:
+javascriptconst port = process.env.PORT && !isNaN(Number(process.env.PORT)) ? Number(process.env.PORT) : 10000;
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${port}`);
+});
+Certifique-se de que o bind explícito para '0.0.0.0' está presente.
+Teste imediato: Acesse https://telemed-sistema.onrender.com logo após o deploy atual e monitore os logs em "Live tail" para capturar qualquer erro adicional.
+Ajuste se necessário: Se a porta 10000 ainda falhar, tente definir uma porta padrão diferente (ex.: 3000) no código e no script de produção, e repita o deploy.
