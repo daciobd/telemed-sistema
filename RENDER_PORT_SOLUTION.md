@@ -13,7 +13,7 @@
 
 ### 1. Port Detection Inteligente
 ```javascript
-let PORT = 5000;
+let PORT = 10000; // Changed default from 5000 to 10000 for Render compatibility
 if (process.env.PORT && process.env.PORT !== 'PORT' && !isNaN(Number(process.env.PORT))) {
   PORT = Number(process.env.PORT);
 } else {

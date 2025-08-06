@@ -1,0 +1,26 @@
+COMANDOS GIT PARA CORREÇÃO FINAL DO RENDER
+
+# EXECUTE EM SEQUÊNCIA NO TERMINAL:
+
+# 1. Adicionar mudanças
+git add .
+
+# 2. Commit com correção definitiva
+git commit -m "Fix: Force valid PORT with fallback to 10000 for Render compatibility
+
+- Changed default port from 5000 to 10000
+- Added more alternative port environment variables  
+- Enhanced port detection logic for cloud platforms
+- Debug logs will show if alternative ports are found"
+
+# 3. Push para GitHub
+git push origin main
+
+# APÓS O DEPLOY NO RENDER:
+# - Sistema vai usar porta 10000 em vez de 5000
+# - Logs vão mostrar se encontrou portas alternativas
+# - Página deve abrir em https://telemed-sistema.onrender.com
+
+# SE AINDA NÃO FUNCIONAR:
+# Verifique nos logs do Render se há mensagens de erro específicas
+# O sistema agora tem fallback robusto para múltiplas variáveis de porta

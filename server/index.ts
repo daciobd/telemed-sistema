@@ -12,14 +12,25 @@ console.log('🔍 DEBUG - process.env.PORT:', JSON.stringify(process.env.PORT));
 console.log('🔍 DEBUG - All env vars with PORT:', Object.keys(process.env).filter(k => k.includes('PORT')));
 
 // Fix: Handle Render's PORT environment variable properly
-let PORT = 5000;
+let PORT = 10000; // Changed default from 5000 to 10000 for Render compatibility
 if (process.env.PORT && process.env.PORT !== 'PORT' && !isNaN(Number(process.env.PORT))) {
   PORT = Number(process.env.PORT);
 } else {
-  // Render might use a different port environment variable
-  const renderPort = process.env.RENDER_INTERNAL_PORT || process.env.PORT_NUMBER || process.env.HTTP_PORT;
-  if (renderPort && !isNaN(Number(renderPort))) {
-    PORT = Number(renderPort);
+  // Check for alternative port environment variables
+  const altPorts = [
+    process.env.RENDER_INTERNAL_PORT,
+    process.env.PORT_NUMBER, 
+    process.env.HTTP_PORT,
+    process.env.SERVER_PORT,
+    process.env.WEB_PORT
+  ];
+  
+  for (const port of altPorts) {
+    if (port && !isNaN(Number(port))) {
+      PORT = Number(port);
+      console.log(`🔄 Using alternative port: ${port}`);
+      break;
+    }
   }
 }
 
