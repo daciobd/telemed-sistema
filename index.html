@@ -99,6 +99,14 @@
             align-items: center;
             justify-content: center;
         }
+        .dropdown-menu {
+            transition: all 0.2s ease-in-out;
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
@@ -123,13 +131,23 @@
                 </div>
 
                 <!-- Desktop Navigation -->
-                <nav class="hidden md:flex space-x-8">
+                <nav class="hidden md:flex space-x-6">
                     <a href="/" class="nav-link">Início</a>
                     <div class="relative group">
                         <a href="#" class="nav-link flex items-center">
                             Nossos Serviços
                             <i data-feather="chevron-down" class="w-4 h-4 ml-1"></i>
                         </a>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-2">
+                                <a href="/videoconsulta" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Videoconsultas</a>
+                                <a href="/agenda-medica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Agenda Médica</a>
+                                <a href="/receitas-digitais" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Receitas Digitais</a>
+                                <a href="/especialidades" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Especialidades</a>
+                                <a href="/telemonitoramento-enfermagem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Telemonitoramento</a>
+                            </div>
+                        </div>
                     </div>
                     <a href="#" class="nav-link">Benefícios</a>
                     <div class="relative group">
@@ -137,8 +155,32 @@
                             Para Médicos
                             <i data-feather="chevron-down" class="w-4 h-4 ml-1"></i>
                         </a>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-2">
+                                <a href="/dashboard-aquarela" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Dashboard Médico</a>
+                                <a href="/atendimento-medico" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Atendimento</a>
+                                <a href="/sistema-notificacoes-medicas" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Notificações SMS</a>
+                                <a href="/leilao-consultas" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Leilão Consultas</a>
+                            </div>
+                        </div>
                     </div>
-                    <a href="#" class="nav-link">Testagens</a>
+                    <div class="relative group">
+                        <a href="#" class="nav-link flex items-center">
+                            Testagens
+                            <i data-feather="chevron-down" class="w-4 h-4 ml-1"></i>
+                        </a>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-2">
+                                <a href="/triagem-psiquiatrica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Triagem Psiquiátrica</a>
+                                <a href="/centro-avaliacao" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Centro de Avaliação</a>
+                                <a href="/ansiedade-gad7" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Teste Ansiedade GAD-7</a>
+                                <a href="/depressao-phq9" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Teste Depressão PHQ-9</a>
+                                <a href="/bipolar-mdq" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Teste Bipolar MDQ</a>
+                            </div>
+                        </div>
+                    </div>
                     <a href="#" class="nav-link">Quem Somos</a>
                     <a href="#" class="nav-link">Contato</a>
                     <a href="/entrada" class="nav-link">Login</a>
@@ -164,10 +206,38 @@
         <div id="mobile-menu" class="md:hidden hidden border-t border-gray-light">
             <div class="px-4 pt-2 pb-3 space-y-1 bg-white">
                 <a href="/" class="block px-3 py-2 text-gray-600 font-medium">Início</a>
-                <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Nossos Serviços</a>
+                
+                <!-- Serviços Mobile -->
+                <div class="border-l-2 border-gray-200 ml-2 pl-3 space-y-1">
+                    <p class="text-sm font-semibold text-gray-500 px-3 py-1">Nossos Serviços</p>
+                    <a href="/videoconsulta" class="block px-3 py-1 text-sm text-gray-600">Videoconsultas</a>
+                    <a href="/agenda-medica" class="block px-3 py-1 text-sm text-gray-600">Agenda Médica</a>
+                    <a href="/receitas-digitais" class="block px-3 py-1 text-sm text-gray-600">Receitas Digitais</a>
+                    <a href="/especialidades" class="block px-3 py-1 text-sm text-gray-600">Especialidades</a>
+                    <a href="/telemonitoramento-enfermagem" class="block px-3 py-1 text-sm text-gray-600">Telemonitoramento</a>
+                </div>
+                
                 <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Benefícios</a>
-                <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Para Médicos</a>
-                <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Testagens</a>
+                
+                <!-- Para Médicos Mobile -->
+                <div class="border-l-2 border-gray-200 ml-2 pl-3 space-y-1">
+                    <p class="text-sm font-semibold text-gray-500 px-3 py-1">Para Médicos</p>
+                    <a href="/dashboard-aquarela" class="block px-3 py-1 text-sm text-gray-600">Dashboard Médico</a>
+                    <a href="/atendimento-medico" class="block px-3 py-1 text-sm text-gray-600">Atendimento</a>
+                    <a href="/sistema-notificacoes-medicas" class="block px-3 py-1 text-sm text-gray-600">Notificações SMS</a>
+                    <a href="/leilao-consultas" class="block px-3 py-1 text-sm text-gray-600">Leilão Consultas</a>
+                </div>
+                
+                <!-- Testagens Mobile -->
+                <div class="border-l-2 border-gray-200 ml-2 pl-3 space-y-1">
+                    <p class="text-sm font-semibold text-gray-500 px-3 py-1">Testagens</p>
+                    <a href="/triagem-psiquiatrica" class="block px-3 py-1 text-sm text-gray-600">Triagem Psiquiátrica</a>
+                    <a href="/centro-avaliacao" class="block px-3 py-1 text-sm text-gray-600">Centro de Avaliação</a>
+                    <a href="/ansiedade-gad7" class="block px-3 py-1 text-sm text-gray-600">Teste GAD-7</a>
+                    <a href="/depressao-phq9" class="block px-3 py-1 text-sm text-gray-600">Teste PHQ-9</a>
+                    <a href="/bipolar-mdq" class="block px-3 py-1 text-sm text-gray-600">Teste MDQ</a>
+                </div>
+                
                 <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Quem Somos</a>
                 <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Contato</a>
                 <a href="/entrada" class="block px-3 py-2 text-gray-600 font-medium">Login</a>
@@ -212,6 +282,17 @@
                             Agendar Consulta
                         </button>
                     </div>
+
+                    <!-- Quick Access Links -->
+                    <div class="text-sm text-gray-500">
+                        <p class="mb-2">Acesso Rápido:</p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="/dr-ai" class="text-blue-600 hover:text-blue-700 underline">Dr. AI Assistente</a>
+                            <a href="/receitas-digitais" class="text-blue-600 hover:text-blue-700 underline">Receitas MEMED</a>
+                            <a href="/videoconsulta" class="text-blue-600 hover:text-blue-700 underline">Videoconsultas</a>
+                            <a href="/especialidades" class="text-blue-600 hover:text-blue-700 underline">Especialidades</a>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Right Content - Feature Card -->
@@ -219,7 +300,7 @@
                     <div class="feature-card p-8 max-w-sm w-full">
                         <div class="text-center">
                             <div class="feature-icon mx-auto mb-6">
-                                <i data-feather="brain" class="w-8 h-8 text-white"></i>
+                                <i data-feather="cpu" class="w-8 h-8 text-white"></i>
                             </div>
                             
                             <h3 class="text-purple text-xl font-bold mb-4">
@@ -273,6 +354,8 @@
         console.log('🚀 TeleMed Homepage carregada');
         console.log('🎨 Design conforme mockup: header com navegação, hero com CTA, feature card');
         console.log('📱 Totalmente responsivo para mobile, tablet e desktop');
+        console.log('🔗 Links adicionados: Dashboard, Videoconsultas, Testagens, Especialidades');
+        console.log('📋 Dropdown menus: Nossos Serviços, Para Médicos, Testagens');
     </script>
 </body>
 </html>
