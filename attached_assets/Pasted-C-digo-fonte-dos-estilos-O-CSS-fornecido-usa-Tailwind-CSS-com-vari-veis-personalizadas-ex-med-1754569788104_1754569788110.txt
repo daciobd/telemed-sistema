@@ -1,0 +1,63 @@
+Código-fonte dos estilos:
+
+O CSS fornecido usa Tailwind CSS com variáveis personalizadas (ex.: --medical-blue, --success-green) e animações (ex.: fadeIn, pulseMedical). Ele define temas claro/escuro, componentes como .card-enhanced e .btn-medical, e ajustes para acessibilidade (ex.: prefers-reduced-motion).
+O @import da fonte Inter está correto, assim como os @tailwind directives, sugerindo que o problema não está no conteúdo do CSS em si.
+
+
+Teste dos assets:
+
+/assets/index-CpbInhY6.css: Retorna 404 ("Página não encontrada"). Isso indica que o arquivo não está sendo servido pelo Render, apesar de estar presente em dist/public/assets/ e de o start.js estar configurado com path.join(__dirname, '../dist/public').
+/assets/index-B0AyGGIA.js: Retorna "Onboarding System v2.0 - FUNCIONANDO". Isso é inesperado e sugere que a URL está apontando para um recurso incorreto ou que o Render está servindo algo diferente do esperado (provavelmente um artefato do build ou uma rota mal configurada).
+
+
+Conclusão:
+
+O problema principal é que os assets não estão sendo entregues corretamente pelo Render. O 404 no CSS e a resposta estranha no JS indicam que o mapeamento de express.static pode estar falhando ou que os arquivos foram substituídos/corrompidos durante o build/deploy.
+A página está desconfigurada porque o CSS (responsável pela estética) não carrega, e o JS pode não estar executando o comportamento esperado.
+
+
+
+Ações recomendadas
+
+Valide a estrutura do dist/public no Render:
+
+No Replit, execute após o build:
+bashls -la dist/public/ && echo "=== ASSETS ===" && ls -la dist/public/assets/
+
+Confirme que index-CpbInhY6.css e index-B0AyGGIA.js estão presentes. Se não estiverem, o build.js pode estar falhando na cópia. Ajuste build.js para garantir:
+javascriptimport fs from 'fs-extra';
+
+fs.copySync('src/client', 'dist/public', { dereference: true });
+console.log('🔧 Client assets copied to dist/public!');
+
+Recompile com npm run build, commit, e faça git push origin main.
+
+
+Corrigir o start.js para assets específicos:
+
+O fato de /assets/index-B0AyGGIA.js retornar algo errado sugere que a rota /assets/ pode estar conflitando. Simplifique e force o serviço:
+javascriptimport express from 'express';
+import path from 'path';
+
+const app = express();
+app.use(express.static(path.join(__dirname, '../dist/public')));
+app.get('/', (req, res) => {
+    console.log(`Tentando servir index.html em ${new Date().toISOString()}`);
+    res.sendFile(path.join(__dirname, '../dist/public/index.html'));
+});
+
+const port = process.env.PORT || 10000;
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${port} em ${new Date().toISOString()}`);
+});
+
+Adicione logs para os assets:
+javascriptapp.use((req, res, next) => {
+    console.log(`Requisição para: ${req.path} em ${new Date().toISOString()}`);
+    next();
+});
+
+Recompile, commit com:
+bashgit add .
+git commit -m "Simplificar start.js e adicionar logs para assets"
+git push origin main
