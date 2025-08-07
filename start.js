@@ -13,10 +13,25 @@ console.log('📁 Working directory:', process.cwd());
 
 // Determine the correct static path based on environment
 const staticPath = process.env.NODE_ENV === 'production' 
-    ? path.join(__dirname, 'dist/public')  // For Render: /opt/render/project/src/dist/public
-    : 'dist/public';  // For development
+    ? '/opt/render/project/src/dist/public'  // Absolute path for Render
+    : path.join(__dirname, 'dist/public');  // Relative path for development
 
 console.log('📂 Servindo arquivos estáticos de:', staticPath);
+
+// Check if static path exists
+const fs = require('fs');
+if (fs.existsSync(staticPath)) {
+    console.log('✅ Diretório estático encontrado');
+    const assetsPath = path.join(staticPath, 'assets');
+    if (fs.existsSync(assetsPath)) {
+        const assetsFiles = fs.readdirSync(assetsPath);
+        console.log('📁 Assets encontrados:', assetsFiles);
+    } else {
+        console.log('⚠️ Diretório assets não encontrado');
+    }
+} else {
+    console.log('❌ Diretório estático não encontrado:', staticPath);
+}
 
 // Middleware to log all requests for debugging
 app.use((req, res, next) => {
@@ -24,8 +39,18 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files
-app.use(express.static(staticPath));
+// Serve static files with detailed error handling
+app.use(express.static(staticPath, {
+    dotfiles: 'ignore',
+    etag: false,
+    extensions: ['html', 'js', 'css', 'png', 'jpg', 'gif', 'ico'],
+    index: false,
+    maxAge: '1d',
+    redirect: false,
+    setHeaders: function (res, path, stat) {
+        console.log('📄 Servindo arquivo:', path);
+    }
+}));
 
 // Root route with detailed logging
 app.get('/', (req, res) => {
