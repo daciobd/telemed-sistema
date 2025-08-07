@@ -7,34 +7,82 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-console.log('TeleMed Sistema iniciando...');
-console.log('Diretório:', __dirname);
+console.log('🚀 TeleMed Sistema iniciando...');
+console.log('📁 Diretório atual:', __dirname);
+console.log('📁 Working directory:', process.cwd());
 
-// Simple static serving - no path.join complications
-app.use(express.static('dist/public'));
+// Determine the correct static path based on environment
+const staticPath = process.env.NODE_ENV === 'production' 
+    ? path.join(__dirname, 'dist/public')  // For Render: /opt/render/project/src/dist/public
+    : 'dist/public';  // For development
 
-// Log requests for debugging
+console.log('📂 Servindo arquivos estáticos de:', staticPath);
+
+// Middleware to log all requests for debugging
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path}`);
+    console.log(`📋 ${req.method} ${req.path} em ${new Date().toISOString()}`);
     next();
 });
 
-// Root route
+// Serve static files
+app.use(express.static(staticPath));
+
+// Root route with detailed logging
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('dist/public/index.html'));
+    const indexPath = path.resolve(staticPath, 'index.html');
+    console.log(`📄 Tentando servir index.html em ${new Date().toISOString()} from ${indexPath}`);
+    
+    res.sendFile(indexPath, (err) => {
+        if (err) {
+            console.error('❌ Erro ao servir index.html:', err);
+            res.status(500).send('Erro ao carregar página');
+        } else {
+            console.log('✅ index.html servido com sucesso');
+        }
+    });
 });
 
 // Health check
 app.get('/health', (req, res) => {
-    res.status(200).send('OK');
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        staticPath: staticPath,
+        workingDir: process.cwd()
+    });
+});
+
+// Debug route to check file structure
+app.get('/debug/files', (req, res) => {
+    const fs = require('fs');
+    try {
+        const files = fs.readdirSync(staticPath);
+        const assetsFiles = fs.existsSync(path.join(staticPath, 'assets')) 
+            ? fs.readdirSync(path.join(staticPath, 'assets'))
+            : [];
+        
+        res.json({
+            staticPath,
+            files,
+            assetsFiles,
+            workingDir: process.cwd(),
+            dirname: __dirname
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // Catch-all for SPA
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve('dist/public/index.html'));
+    const indexPath = path.resolve(staticPath, 'index.html');
+    console.log(`🔄 Fallback para: ${req.path} -> servindo index.html de ${indexPath}`);
+    res.sendFile(indexPath);
 });
 
 const port = process.env.PORT || 10000;
 app.listen(port, '0.0.0.0', () => {
-    console.log(`TeleMed rodando na porta ${port}`);
+    console.log(`🚀 TeleMed Sistema rodando na porta ${port} em ${new Date().toISOString()}`);
+    console.log(`🌐 Ambiente: ${process.env.NODE_ENV || 'production'}`);
+    console.log(`📂 Arquivos servidos de: ${staticPath}`);
 });
