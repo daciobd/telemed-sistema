@@ -112,10 +112,13 @@ router.post('/optimize-code', async (req, res) => {
 
 // Rota de status do agent
 router.get('/status', (req, res) => {
+  const apiKeyConfigured = !!process.env.OPENAI_API_KEY;
   res.json({
     service: 'TeleMed ChatGPT Agent',
-    status: 'online',
-    apiKeyConfigured: !!process.env.OPENAI_API_KEY,
+    status: apiKeyConfigured ? 'online' : 'simulation_mode',
+    apiKeyConfigured,
+    mode: apiKeyConfigured ? 'production' : 'simulation',
+    message: apiKeyConfigured ? 'Agent fully operational' : 'Agent configured but running in simulation mode - configure OPENAI_API_KEY for full functionality',
     timestamp: new Date().toISOString(),
     endpoints: [
       '/api/ai-agent/initialize',

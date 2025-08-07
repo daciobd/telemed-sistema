@@ -1,9 +1,17 @@
 import { OpenAI } from 'openai';
 
 // Configuração do ChatGPT Agent para TeleMed Consulta
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // Chave de API da OpenAI
-});
+let openai: OpenAI | null = null;
+
+// Inicializar OpenAI apenas se a API key estiver disponível
+if (process.env.OPENAI_API_KEY) {
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  console.log('🤖 OpenAI Client inicializado com sucesso');
+} else {
+  console.log('⚠️ OPENAI_API_KEY não encontrada - ChatGPT Agent em modo simulação');
+}
 
 // Prompt inicial para configurar o agente
 const telemedPrompt = `
@@ -54,9 +62,15 @@ export class TelemedChatGPTAgent {
   private initialized = false;
 
   async inicializar(): Promise<string> {
+    if (!openai) {
+      const simulatedResponse = 'Olá! Sou o assistente de desenvolvimento do TeleMed Consulta. Estou configurado e pronto para ajudar com desenvolvimento médico, mas estou rodando em modo simulação porque a chave da OpenAI API não está disponível. Para ativação completa, configure a OPENAI_API_KEY.';
+      console.log('🔄 ChatGPT Agent em modo simulação');
+      return simulatedResponse;
+    }
+
     try {
       const response = await openai.chat.completions.create({
-        model: 'gpt-4', // Modelo preferido para desenvolvimento
+        model: 'gpt-3.5-turbo', // Modelo compatível com a maioria das API keys
         messages: [
           { 
             role: 'system', 
@@ -89,9 +103,13 @@ export class TelemedChatGPTAgent {
       await this.inicializar();
     }
 
+    if (!openai) {
+      return `[MODO SIMULAÇÃO] Recebi sua pergunta: "${pergunta}". O ChatGPT Agent está configurado corretamente mas necessita da chave OPENAI_API_KEY para funcionar completamente. Todas as rotas e integrações estão funcionais.`;
+    }
+
     try {
       const response = await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         messages: [
           { role: 'system', content: telemedPrompt },
           { role: 'user', content: pergunta }
