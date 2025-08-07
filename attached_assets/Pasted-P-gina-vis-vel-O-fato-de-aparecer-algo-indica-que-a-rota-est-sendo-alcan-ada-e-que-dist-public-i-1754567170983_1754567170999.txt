@@ -1,0 +1,62 @@
+Página visível: O fato de aparecer algo indica que a rota / está sendo alcançada e que dist/public/index.html está sendo servido, mas a falta de estética sugere que os estilos CSS, fontes ou ícones não estão sendo aplicados corretamente.
+Causa provável:
+
+Falta de arquivos estáticos: Os arquivos CSS, JS ou fontes (ex.: assets/index-CpbInhY6.css, Inter) podem não estar no diretório dist/public ou não estar sendo servidos.
+Caminhos quebrados: Após a reorganização para src/client e src/server, os caminhos relativos no index.html podem estar incorretos.
+Build incompleto: O build (1,586.83 kB no index-B4nb8sIm.js) pode ter falhado em otimizar ou copiar todos os assets.
+Cache do navegador: O navegador pode estar usando uma versão antiga dos arquivos.
+
+
+
+Ações recomendadas
+
+Verifique o index.html servido:
+
+Abra a página no navegador, clique com o botão direito e selecione "Exibir código-fonte" (ou Ctrl+U).
+Procure por:
+
+Links para CSS (ex.: <link href="/assets/index-CpbInhY6.css">).
+Scripts JS (ex.: <script src="/assets/index-B4nb8sIm.js">).
+Fontes (ex.: <link href="https://fonts.googleapis.com/css2?family=Inter...">).
+
+
+Se os caminhos começarem com /assets/ mas não carregarem (404), o problema está nos arquivos estáticos.
+
+
+Corrija os caminhos no servidor:
+
+Certifique-se de que src/server/index.ts (ou start.js) serve o diretório dist/public corretamente:
+javascriptimport express from 'express';
+const app = express();
+
+app.use(express.static('dist/public')); // Serve todos os arquivos estáticos
+app.get('/', (req, res) => {
+    console.log(`Tentando servir index.html em ${new Date().toISOString()}`);
+    res.sendFile('dist/public/index.html', { root: __dirname + '/../' });
+});
+
+const port = process.env.PORT || 10000;
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor rodando na porta ${port} em ${new Date().toISOString()}`);
+});
+
+Recompile com npm run build no Replit, commit com:
+bashgit add .
+git commit -m "Corrigir caminhos de arquivos estáticos no servidor"
+git push origin main
+
+Verifique os logs no "Live Tail" para a mensagem de log adicionada.
+
+
+Valide o build:
+
+No Replit, execute npm run build manualmente e confirme que os arquivos em dist/public (ex.: index.html, assets/) foram gerados.
+Se faltar algo (ex.: assets/index-CpbInhY6.css), o problema está no script build.js. Verifique se ele copia corretamente os assets:
+javascriptimport fs from 'fs-extra';
+
+fs.copySync('src/client', 'dist/public');
+fs.copySync('src/server', 'dist/server');
+fs.copySync('src/shared', 'dist/shared');
+console.log('🔧 Copying completed!');
+
+Ajuste e recompile.
