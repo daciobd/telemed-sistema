@@ -44,6 +44,10 @@ app.use(express.static(path.join(__dirname, '..')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
+// Importar e configurar rotas do ChatGPT Agent
+import aiAgentRoutes from './routes/ai-agent.js';
+app.use('/api/ai-agent', aiAgentRoutes);
+
 // Health check endpoint for Render
 app.get('/healthz', (req, res) => {
   res.status(200).json({ 

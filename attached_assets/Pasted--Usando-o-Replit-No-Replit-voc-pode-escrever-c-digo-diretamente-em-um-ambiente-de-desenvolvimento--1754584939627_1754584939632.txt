@@ -1,0 +1,54 @@
+ Usando o Replit
+No Replit, você pode escrever código diretamente em um ambiente de desenvolvimento online. Para usar o ChatGPT Agent, você vai usar a API da OpenAI para enviar o prompt de inicialização ao agente. Isso geralmente é feito no código do seu projeto.
+
+Passos para Configurar o ChatGPT Agent no Replit:
+Crie um novo projeto no Replit:
+
+Vá para Replit e crie um novo projeto (por exemplo, em Node.js ou Python).
+
+Instale a biblioteca da OpenAI:
+
+Se estiver usando Node.js, instale a biblioteca da OpenAI:
+
+bash
+Copiar
+npm install openai
+Se for Python, instale com:
+
+bash
+Copiar
+pip install openai
+Codifique o Prompt de Inicialização:
+O prompt de inicialização será o primeiro código que você enviará ao ChatGPT para configurá-lo. Esse prompt ajudará o agente a entender o contexto do seu sistema TeleMed.
+
+Exemplo de código (Node.js):
+
+javascript
+Copiar
+const { OpenAI } = require('openai'); // Importa a biblioteca
+const openai = new OpenAI({
+  apiKey: 'YOUR_OPENAI_API_KEY',  // Sua chave de API da OpenAI
+});
+
+// Prompt inicial para configurar o agente
+const prompt = `
+Você é meu assistente de desenvolvimento para o sistema TeleMed Consulta, uma plataforma de telemedicina.
+O sistema envolve funcionalidades como videochamadas seguras, triagem automatizada, prontuário eletrônico, prescrição digital e integrações com laboratórios e farmácias.
+O frontend será desenvolvido com React.js e o backend com Node.js e PostgreSQL.
+A segurança e compliance com LGPD e HIPAA são fundamentais. O design deve ser acessível, responsivo, com cores calmantes e compatível com pacientes de diferentes faixas etárias e níveis de familiaridade com a tecnologia.
+Sua tarefa é fornecer código otimizado, seguir boas práticas de segurança e performance, além de gerar documentos e testes automatizados.
+`;
+
+async function gerarCodigo() {
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4', // Ou o modelo que você escolher
+    messages: [{ role: 'user', content: prompt }],
+  });
+  
+  // Exibe a resposta do ChatGPT
+  console.log(response.choices[0].message.content);
+}
+
+gerarCodigo();
+Executar o código: Quando você executar o código no Replit, o ChatGPT será inicializado com o prompt, e ele entenderá o contexto do TeleMed Consulta para fornecer respostas precisas e úteis no desenvolvimento.
+
