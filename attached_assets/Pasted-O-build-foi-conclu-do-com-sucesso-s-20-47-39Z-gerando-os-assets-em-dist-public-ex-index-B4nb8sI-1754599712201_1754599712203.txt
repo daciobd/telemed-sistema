@@ -1,0 +1,75 @@
+O build foi concluído com sucesso às 20:47:39Z, gerando os assets em dist/public (ex.: index-B4nb8sIm.js, index-CpbInhY6.css) usando Vite v6.3.5. Não há erros no processo de build.
+Deploy: O erro ocorre ao executar npm start (que roda node start.js):
+
+A mensagem ReferenceError: require is not defined in ES module scope indica que o start.js está usando require, mas o ambiente está configurado para tratar arquivos .js como módulos ES (ESM) devido a "type": "module" no package.json.
+O erro ocorre na linha 22 do start.js, onde const fs = require('fs'); é usado.
+O deploy tentou rodar duas vezes (20:48:39Z e 20:48:48Z), mas falhou em ambas com o mesmo erro, saindo com status 1.
+
+
+
+Problema Identificado
+O start.js está escrito em CommonJS (usando require), mas o projeto está configurado para usar ESM (devido a "type": "module" no package.json). Isso é incompatível, pois o Node.js v22.16.0 (usado no deploy) não suporta require em arquivos .js tratados como ESM.
+Ações Recomendadas
+
+Converter start.js para ESM:
+
+Substitua require por import. Por exemplo, altere:
+javascriptconst fs = require('fs');
+para:
+javascriptimport fs from 'fs';
+
+Certifique-se de ajustar todas as outras importações no arquivo (ex.: express, path) para usar import em vez de require.
+Exemplo ajustado baseado no start.js sugerido anteriormente:
+javascriptimport express from 'express';
+import path from 'path';
+
+const app = express();
+const publicPath = path.resolve('/opt/render/project/src/dist/public');
+console.log(`Servindo assets de: ${publicPath}`);
+
+app.use(express.static(publicPath));
+app.get('/', (req, res) => {
+    console.log(`Servindo index.html de: ${path.resolve(`${publicPath}/index.html`)}`);
+    res.sendFile(path.resolve(`${publicPath}/index.html`));
+});
+
+app.use((req, res, next) => {
+    console.log(`Requisição: ${req.method} ${req.url} em ${new Date().toISOString()}`);
+    next();
+});
+
+const port = process.env.PORT || 10000;
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor na porta ${port} em ${new Date().toISOString()}`);
+});
+
+
+
+Alternativa: Usar CommonJS:
+
+Se preferir manter require, renomeie start.js para start.cjs e atualize o script no package.json:
+json"scripts": {
+  "start": "node start.cjs"
+}
+
+Arquivos com extensão .cjs são tratados como CommonJS, evitando o conflito.
+
+
+Teste Localmente:
+
+Antes de fazer o commit, teste localmente com node start.js (ou node start.cjs se renomeado) para garantir que o arquivo ajustado funciona.
+
+
+Deploy Novamente:
+
+Após as alterações, execute:
+bashgit add .
+git commit -m "Converter start.js para ESM ou renomear para .cjs"
+git push origin main
+
+Monitore os logs no "Live Tail" para verificar se o deploy é bem-sucedido.
+
+
+Verificação:
+
+Após o deploy, acesse https://telemed-sistema.onrender.com e confirme se os assets (ex.: /assets/index-B4nb8sIm.js) estão sendo servidos (status 200). Se ainda houver 404, verifique o index.html servido.

@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,7 +20,6 @@ const staticPath = process.env.NODE_ENV === 'production'
 console.log('📂 Servindo arquivos estáticos de:', staticPath);
 
 // Check if static path exists
-const fs = require('fs');
 if (fs.existsSync(staticPath)) {
     console.log('✅ Diretório estático encontrado');
     const assetsPath = path.join(staticPath, 'assets');
@@ -79,7 +79,6 @@ app.get('/health', (req, res) => {
 
 // Debug route to check file structure
 app.get('/debug/files', (req, res) => {
-    const fs = require('fs');
     try {
         const files = fs.readdirSync(staticPath);
         const assetsFiles = fs.existsSync(path.join(staticPath, 'assets')) 
