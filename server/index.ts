@@ -44,20 +44,10 @@ app.use(express.static(path.join(__dirname, '..')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
-// ChatGPT Agent - Configurado mas aguardando instalação OpenAI
-console.log('🤖 ChatGPT Agent configurado (aguardando openai package)');
-
-// Rota temporária de status do agent
-app.get('/api/ai-agent/status', (req, res) => {
-  res.json({
-    service: 'TeleMed ChatGPT Agent',
-    status: 'configured',
-    openaiInstalled: false,
-    message: 'Agent configurado, aguardando instalação do pacote openai',
-    apiKeyConfigured: !!process.env.OPENAI_API_KEY,
-    timestamp: new Date().toISOString()
-  });
-});
+// ChatGPT Agent - Ativado com OpenAI instalado
+import aiAgentRoutes from './routes/ai-agent.js';
+app.use('/api/ai-agent', aiAgentRoutes);
+console.log('🤖 ChatGPT Agent ativado com OpenAI v5.12.1');
 
 // Health check endpoint for Render
 app.get('/healthz', (req, res) => {
