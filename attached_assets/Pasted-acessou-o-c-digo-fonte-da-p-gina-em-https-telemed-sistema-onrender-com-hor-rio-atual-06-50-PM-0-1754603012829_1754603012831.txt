@@ -1,0 +1,61 @@
+acessou o código-fonte da página em https://telemed-sistema.onrender.com (horário atual: 06:50 PM -03, 07/08/2025) e constatou que as tags <link rel="stylesheet" href="/assets/index-CpbInhY6.css"> e <script type="module" src="/assets/index-B4nb8sIm.js"> não estão presentes, o problema está no arquivo index.html servido ou no processo de build que gera esse arquivo. Vamos analisar e resolver isso.
+Análise
+
+Ausência das Tags: Se essas tags não aparecem no código-fonte, o index.html gerado em dist/public/ não está referenciando corretamente os assets. Isso pode ocorrer porque:
+
+O build (via Vite) não está injetando os links automaticamente no index.html.
+O arquivo index.html original (antes do build) pode não estar configurado para incluir esses assets.
+O servidor está servindo um index.html incorreto ou vazio.
+
+
+Contexto do Build: Os logs de build mostram que Vite gerou os arquivos index-CpbInhY6.css e index-B4nb8sIm.js em dist/public/assets/, mas a injeção automática pode não estar funcionando como esperado.
+
+Ações Recomendadas
+
+Verifique o index.html Gerado:
+
+Acesse o diretório dist/public/ localmente após rodar npm run build e abra o arquivo index.html gerado.
+Procure por tags <link> ou <script> relacionadas aos assets. Se elas não estiverem presentes, o problema está no processo de build.
+
+
+Ajuste o index.html Original:
+
+Abra o arquivo index.html original (provavelmente na raiz do projeto ou em public/, dependendo da configuração do Vite).
+Adicione manualmente as tags necessárias no <head>:
+html<link rel="stylesheet" href="/assets/index-CpbInhY6.css">
+<script type="module" src="/assets/index-B4nb8sIm.js"></script>
+
+Certifique-se de que os caminhos correspondam aos arquivos gerados pelo build.
+
+
+Configure o Vite para Injeção Automática (se aplicável):
+
+Verifique o arquivo vite.config.js (ou similar). Por padrão, o Vite injeta os assets no index.html se ele estiver configurado como entrada. Exemplo de configuração básica:
+javascriptexport default {
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+      },
+    },
+  },
+}
+
+Se o index.html não estiver sendo processado, adicione um plugin ou ajuste a configuração para garantir que os assets sejam injetados.
+
+
+Reconstrua e Faça Deploy:
+
+Após ajustar o index.html ou a configuração do Vite, execute:
+bashnpm run build
+git add .
+git commit -m "Adicionar links para assets no index.html"
+git push origin main
+
+Monitore os logs no "Live Tail" para confirmar o sucesso do deploy.
+
+
+Verificação Pós-Deploy:
+
+Após o deploy, acesse novamente o código-fonte em https://telemed-sistema.onrender.com e confirme se as tags agora aparecem.
+Verifique no console do navegador (F12 > Console) se há erros de carregamento dos assets (ex.: 404).
