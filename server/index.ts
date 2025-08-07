@@ -39,6 +39,7 @@ if (!PORT || isNaN(PORT)) {
 console.log('🔍 FINAL PORT SELECTED:', PORT);
 
 app.use(express.json());
+app.use(express.static('dist/public'));
 app.use(express.static(path.join(__dirname, '..')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
@@ -60,10 +61,18 @@ app.get('/health', (req, res) => {
 
 app.get('/', (req, res) => {
   try {
-    const indexPath = path.join(__dirname, '../index.html');
+    // Primeiro, tenta servir de dist/public/index.html
+    let indexPath = path.join(__dirname, '../dist/public/index.html');
     if (fs.existsSync(indexPath)) {
-      const html = fs.readFileSync(indexPath, 'utf-8');
-      res.send(html);
+      res.sendFile(indexPath, { root: '/' });
+      console.log('🏠 Homepage TeleMed carregada de dist/public');
+      return;
+    }
+    
+    // Fallback para index.html na raiz
+    indexPath = path.join(__dirname, '../index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath, { root: '/' });
       console.log('🏠 Homepage TeleMed carregada - Design conforme mockup');
     } else {
       const html = fs.readFileSync(path.join(__dirname, '../entrada.html'), 'utf-8');
