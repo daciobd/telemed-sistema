@@ -1,7 +1,20 @@
-FORCE DEPLOY - July 20, 2025 11:46 UTC
-- Sistema de lances com botões ATENDER AGORA funcionais
-- Dashboard médico com todos os modais funcionais  
-- Videoconsulta WebRTC completa
-- Fluxo completo: Dashboard → Lances → Atender → Videoconsulta
+FORÇA DEPLOY - TIMESTAMP: 2025-08-08T15:07:00.000Z
 
-CACHE BUST: 1753014396
+✅ MUDANÇA TRIVIAL ADICIONADA:
+- Arquivo: client/src/pages/DoctorDashboardInline.tsx
+- Linha 2: // Nova mudança - Forçar deploy Render
+
+✅ CONFIRMAÇÕES:
+- Import React: ✅ PRESENTE
+- SPA Config: ✅ CONFIGURADO
+- Build: ✅ ATUALIZADO
+- AI Agent: ✅ FUNCIONANDO
+
+🚨 COMANDO MANUAL NECESSÁRIO:
+git add client/src/pages/DoctorDashboardInline.tsx
+git commit -m "Forçar deploy com nova mudança"
+git push origin main
+
+📋 MOTIVO:
+Replit bloqueia operações git automáticas.
+Usuário deve executar manualmente no terminal.

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Nova mudança - Forçar deploy Render
 export default function DoctorDashboardInline() {
   // Função para voltar à página anterior
   const goBack = () => {
