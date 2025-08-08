@@ -79,8 +79,32 @@ npm run build
 1. **client/src/pages/DoctorDashboardInline.tsx** - Fix do import React
 2. **server/index.ts** - Configuração SPA com fallback
 3. **dist/public/** - Build de produção atualizado
-4. **RENDER_SYNC_STATUS.md** - Documentação completa
-5. **SPA_CONFIGURATION_SUCCESS.md** - Este arquivo
+4. **scripts/agent-health.sh** - Script de monitoramento AI Agent
+5. **scripts/agent-usage.sh** - Script de estatísticas detalhadas
+6. **scripts/README.md** - Documentação dos scripts
+7. **RENDER_SYNC_STATUS.md** - Documentação completa
+8. **SPA_CONFIGURATION_SUCCESS.md** - Este arquivo
+
+## 🛠️ Scripts de Monitoramento Criados
+
+Como não foi possível editar o `package.json`, foram criados scripts alternativos:
+
+**Comando equivalente a `npm run agent:health`:**
+```bash
+./scripts/agent-health.sh
+```
+
+**Comando equivalente a `npm run agent:usage`:**  
+```bash
+./scripts/agent-usage.sh
+```
+
+### Teste dos Scripts:
+```bash
+🤖 Verificando saúde do AI Agent...
+📊 Health Check: ✅ healthy
+📈 Usage Statistics: 1 request, 0 errors, gpt-4o model
+```
 
 ## 🚀 Próximos Passos
 
