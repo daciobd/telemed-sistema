@@ -59,6 +59,11 @@ app.get('/healthz', (req, res) => {
   });
 });
 
+// Ping endpoint
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
+
 // Simple health check
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
