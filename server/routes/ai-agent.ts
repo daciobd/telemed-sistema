@@ -19,11 +19,32 @@ router.post('/initialize', async (req, res) => {
       agentResponse: response,
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("OPENAI_ERROR - ROUTE /initialize", {
+      status: error?.response?.status || error?.status,
+      data: error?.response?.data || error?.error,
+      code: error?.code,
+      type: error?.type,
+      message: error?.message
+    });
+
+    let errorMessage = 'Falha na inicialização do ChatGPT Agent';
+    let errorCode = 'INITIALIZATION_ERROR';
+
+    if (error?.code === 'insufficient_quota') {
+      errorMessage = 'Quota da OpenAI excedida durante inicialização.';
+      errorCode = 'QUOTA_EXCEEDED';
+    } else if (error?.status === 401) {
+      errorMessage = 'API Key da OpenAI inválida. Configure OPENAI_API_KEY.';
+      errorCode = 'INVALID_API_KEY';
+    }
+
     res.status(500).json({
       success: false,
-      error: 'Falha na inicialização do ChatGPT Agent',
-      details: error instanceof Error ? error.message : 'Erro desconhecido'
+      error: errorMessage,
+      errorCode,
+      details: error instanceof Error ? error.message : 'Erro desconhecido',
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -48,11 +69,39 @@ router.post('/ask', async (req, res) => {
       response,
       timestamp: new Date().toISOString()
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("OPENAI_ERROR - ROUTE /ask", {
+      status: error?.response?.status || error?.status,
+      data: error?.response?.data || error?.error,
+      code: error?.code,
+      type: error?.type,
+      message: error?.message
+    });
+
+    let errorMessage = 'Erro na consulta ao ChatGPT Agent';
+    let errorCode = 'UNKNOWN_ERROR';
+
+    // Classificar o tipo de erro para resposta adequada
+    if (error?.code === 'insufficient_quota') {
+      errorMessage = 'Quota da OpenAI excedida. Verifique seu plano de billing.';
+      errorCode = 'QUOTA_EXCEEDED';
+    } else if (error?.code === 'billing_hard_limit_reached') {
+      errorMessage = 'Limite de cobrança atingido. Configure um limite maior.';
+      errorCode = 'BILLING_LIMIT';
+    } else if (error?.code === 'rate_limit_exceeded' || error?.status === 429) {
+      errorMessage = 'Limite de requisições excedido. Tente novamente em alguns minutos.';
+      errorCode = 'RATE_LIMIT';
+    } else if (error?.status === 401) {
+      errorMessage = 'API Key da OpenAI inválida ou não configurada.';
+      errorCode = 'INVALID_API_KEY';
+    }
+
     res.status(500).json({
       success: false,
-      error: 'Erro na consulta ao ChatGPT Agent',
-      details: error instanceof Error ? error.message : 'Erro desconhecido'
+      error: errorMessage,
+      errorCode,
+      details: error instanceof Error ? error.message : 'Erro desconhecido',
+      timestamp: new Date().toISOString()
     });
   }
 });

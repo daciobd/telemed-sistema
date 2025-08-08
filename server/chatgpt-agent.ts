@@ -104,8 +104,26 @@ export class TelemedChatGPTAgent {
       console.log('📋 Resposta do Agent:', agentResponse);
       
       return formattedResponse;
-    } catch (error) {
-      console.error('❌ Erro ao inicializar ChatGPT Agent:', error);
+    } catch (error: any) {
+      console.error("OPENAI_ERROR - INITIALIZATION", {
+        status: error?.response?.status || error?.status,
+        data: error?.response?.data || error?.error,
+        code: error?.code,
+        type: error?.type,
+        message: error?.message
+      });
+
+      // Log específico para diferentes tipos de erro OpenAI
+      if (error?.code === 'insufficient_quota') {
+        console.error('🚫 QUOTA EXCEDIDA: Limite de uso da OpenAI atingido');
+      } else if (error?.code === 'billing_hard_limit_reached') {
+        console.error('💳 LIMITE DE BILLING: Limite de cobrança atingido');
+      } else if (error?.code === 'rate_limit_exceeded') {
+        console.error('⏱️ RATE LIMIT: Muitas requisições simultâneas');
+      } else if (error?.status === 401) {
+        console.error('🔑 API KEY INVÁLIDA: Verifique OPENAI_API_KEY');
+      }
+
       throw new Error('Falha na inicialização do ChatGPT Agent');
     }
   }
@@ -144,8 +162,29 @@ export class TelemedChatGPTAgent {
         message: content,
         timestamp: new Date().toISOString()
       });
-    } catch (error) {
-      console.error('❌ Erro na consulta ao ChatGPT Agent:', error);
+    } catch (error: any) {
+      console.error("OPENAI_ERROR - QUERY", {
+        status: error?.response?.status || error?.status,
+        data: error?.response?.data || error?.error,
+        code: error?.code,
+        type: error?.type,
+        message: error?.message,
+        question: pergunta
+      });
+
+      // Log específico para diferentes tipos de erro OpenAI
+      if (error?.code === 'insufficient_quota') {
+        console.error('🚫 QUOTA EXCEDIDA: Limite de uso da OpenAI atingido');
+      } else if (error?.code === 'billing_hard_limit_reached') {
+        console.error('💳 LIMITE DE BILLING: Limite de cobrança atingido');
+      } else if (error?.code === 'rate_limit_exceeded') {
+        console.error('⏱️ RATE LIMIT: Muitas requisições simultâneas');
+      } else if (error?.status === 401) {
+        console.error('🔑 API KEY INVÁLIDA: Verifique OPENAI_API_KEY');
+      } else if (error?.status === 429) {
+        console.error('⚠️ RATE LIMIT 429: Limite de requisições por minuto excedido');
+      }
+
       throw new Error('Falha na comunicação com ChatGPT Agent');
     }
   }

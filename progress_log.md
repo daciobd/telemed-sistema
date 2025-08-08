@@ -134,6 +134,29 @@
 **Bibliotecas:** jsPDF, date-fns instaladas e configuradas
 **Padrão TeleMed:** Cabeçalho, dados médicos, achados, conclusão, assinatura
 
+## 📝 2025-08-08T11:22:30.789Z
+**Agent:** replit
+**Route:** PATCH /telemed
+**IP:** 127.0.0.1
+
+**Ação:** Sistema de tratamento de erros OpenAI implementado
+**Melhorias aplicadas:**
+- Logging detalhado com console.error("OPENAI_ERROR", {...})
+- Classificação automática de tipos de erro (quota, billing, rate limit, API key)
+- Respostas estruturadas com errorCode específico
+- Mensagens amigáveis para cada tipo de erro
+- Documentação completa em OPENAI_ERROR_HANDLING.md
+
+**Tipos de erro tratados:**
+- insufficient_quota → QUOTA_EXCEEDED
+- billing_hard_limit_reached → BILLING_LIMIT  
+- rate_limit_exceeded → RATE_LIMIT
+- Status 401 → INVALID_API_KEY
+- Status 429 → RATE_LIMIT
+
+**Status:** ✅ Sistema de error handling robusto implementado
+**Arquivos:** server/chatgpt-agent.ts, server/routes/ai-agent.ts modificados
+
 ---
 
 ## 📊 **MÉTRICAS DE PROGRESSO**
@@ -215,6 +238,18 @@
 
 
 ## 📝 2025-08-08T10:58:00.260Z
+**Agent:** telemed-chatgpt
+**Route:** POST /ask
+**IP:** 127.0.0.1
+
+
+## 📝 2025-08-08T11:21:54.580Z
+**Agent:** telemed-chatgpt
+**Route:** POST /ask
+**IP:** 127.0.0.1
+
+
+## 📝 2025-08-08T11:22:26.410Z
 **Agent:** telemed-chatgpt
 **Route:** POST /ask
 **IP:** 127.0.0.1
