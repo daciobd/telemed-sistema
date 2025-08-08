@@ -49,6 +49,11 @@ import aiAgentRoutes from './routes/ai-agent.js';
 app.use('/api/ai-agent', aiAgentRoutes);
 console.log('🤖 ChatGPT Agent ativado com OpenAI v5.12.1');
 
+// Medical Reports - Sistema de Laudos Médicos
+import medicalReportsRoutes from './routes/medical-reports.js';
+app.use('/api/medical-reports', medicalReportsRoutes);
+console.log('🏥 Sistema de Laudos Médicos ativado');
+
 // Health check endpoint for Render
 app.get('/healthz', (req, res) => {
   res.status(200).json({ 
@@ -276,6 +281,16 @@ app.get('/entrada', (req, res) => {
 app.get('/login', (req, res) => {
   try {
     const html = fs.readFileSync(path.join(__dirname, '../login.html'), 'utf-8');
+    res.send(html);
+  } catch (err) {
+    res.status(404).send('Página não encontrada');
+  }
+});
+
+// Teste de Laudos Médicos
+app.get('/test-medical-report', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../test-medical-report.html'), 'utf-8');
     res.send(html);
   } catch (err) {
     res.status(404).send('Página não encontrada');
