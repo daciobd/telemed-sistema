@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function DoctorDashboardInline() {
   // Função para voltar à página anterior
   const goBack = () => {
