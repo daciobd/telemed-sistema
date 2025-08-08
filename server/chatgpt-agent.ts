@@ -63,7 +63,12 @@ export class TelemedChatGPTAgent {
 
   async inicializar(): Promise<string> {
     if (!openai) {
-      const simulatedResponse = 'Olá! Sou o assistente de desenvolvimento do TeleMed Consulta. Estou configurado e pronto para ajudar com desenvolvimento médico, mas estou rodando em modo simulação porque a chave da OpenAI API não está disponível. Para ativação completa, configure a OPENAI_API_KEY.';
+      const simulatedResponse = JSON.stringify({
+        agent: "telemed-chatgpt",
+        mode: "simulation",
+        message: 'Olá! Sou o assistente de desenvolvimento do TeleMed Consulta. Estou configurado e pronto para ajudar com desenvolvimento médico, mas estou rodando em modo simulação porque a chave da OpenAI API não está disponível. Para ativação completa, configure a OPENAI_API_KEY.',
+        timestamp: new Date().toISOString()
+      });
       console.log('🔄 ChatGPT Agent em modo simulação');
       return simulatedResponse;
     }
@@ -88,10 +93,17 @@ export class TelemedChatGPTAgent {
       this.initialized = true;
       const agentResponse = response.choices[0].message.content || '';
       
+      const formattedResponse = JSON.stringify({
+        agent: "telemed-chatgpt",
+        mode: "production",
+        message: agentResponse,
+        timestamp: new Date().toISOString()
+      });
+      
       console.log('🤖 ChatGPT Agent inicializado para TeleMed Consulta');
       console.log('📋 Resposta do Agent:', agentResponse);
       
-      return agentResponse;
+      return formattedResponse;
     } catch (error) {
       console.error('❌ Erro ao inicializar ChatGPT Agent:', error);
       throw new Error('Falha na inicialização do ChatGPT Agent');
@@ -104,7 +116,13 @@ export class TelemedChatGPTAgent {
     }
 
     if (!openai) {
-      return `[MODO SIMULAÇÃO] Recebi sua pergunta: "${pergunta}". O ChatGPT Agent está configurado corretamente mas necessita da chave OPENAI_API_KEY para funcionar completamente. Todas as rotas e integrações estão funcionais.`;
+      return JSON.stringify({
+        agent: "telemed-chatgpt",
+        mode: "simulation",
+        question: pergunta,
+        message: `[MODO SIMULAÇÃO] Recebi sua pergunta: "${pergunta}". O ChatGPT Agent está configurado corretamente mas necessita da chave OPENAI_API_KEY para funcionar completamente. Todas as rotas e integrações estão funcionais.`,
+        timestamp: new Date().toISOString()
+      });
     }
 
     try {
@@ -118,7 +136,14 @@ export class TelemedChatGPTAgent {
         max_tokens: 2000
       });
 
-      return response.choices[0].message.content || '';
+      const content = response.choices[0].message.content || '';
+      return JSON.stringify({
+        agent: "telemed-chatgpt",
+        mode: "production", 
+        question: pergunta,
+        message: content,
+        timestamp: new Date().toISOString()
+      });
     } catch (error) {
       console.error('❌ Erro na consulta ao ChatGPT Agent:', error);
       throw new Error('Falha na comunicação com ChatGPT Agent');

@@ -1,7 +1,13 @@
 import express from 'express';
 import { telemedAgent } from '../chatgpt-agent.js';
+import { agentLogger, validateAgentInProduction, writeLockCheck } from '../middleware/agent-logger.js';
 
 const router = express.Router();
+
+// Aplicar middlewares de logging e validação
+router.use(agentLogger);
+router.use(validateAgentInProduction);
+router.use(writeLockCheck);
 
 // Rota para inicializar o ChatGPT Agent
 router.post('/initialize', async (req, res) => {
@@ -125,8 +131,29 @@ router.get('/status', (req, res) => {
       '/api/ai-agent/ask',
       '/api/ai-agent/generate-code',
       '/api/ai-agent/optimize-code',
-      '/api/ai-agent/status'
+      '/api/ai-agent/status',
+      '/api/ai-agent/whoami'
     ]
+  });
+});
+
+// Endpoint whoami
+router.get('/whoami', (req, res) => {
+  res.json({
+    agent: "telemed-chatgpt",
+    version: "5.12.1", 
+    uptime: process.uptime(),
+    pid: process.pid,
+    mode: process.env.OPENAI_API_KEY ? 'production' : 'simulation',
+    specialization: "Telemedicine Development - Brazil",
+    capabilities: [
+      "Medical code generation",
+      "LGPD/HIPAA compliance", 
+      "TypeScript/React optimization",
+      "Aquarela design system",
+      "PostgreSQL medical schemas"
+    ],
+    timestamp: new Date().toISOString()
   });
 });
 
