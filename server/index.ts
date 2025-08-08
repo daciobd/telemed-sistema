@@ -299,6 +299,33 @@ app.get('/test-medical-report', (req, res) => {
   }
 });
 
+// SPA Configuration - Fallback para index.html em rotas não encontradas
+app.get('*', (req, res, next) => {
+  // Se é uma rota da API, pula o fallback SPA
+  if (req.path.startsWith('/api/') || 
+      req.path.startsWith('/health') || 
+      req.path.startsWith('/ping') ||
+      req.path.startsWith('/attached_assets/') ||
+      req.path.includes('.')) {
+    return next(); // Deixa outras rotas passarem
+  }
+  
+  // Para todas as outras rotas, serve index.html (SPA)
+  const indexPath = path.join(__dirname, '../dist/public/index.html');
+  
+  if (fs.existsSync(indexPath)) {
+    console.log(`🔄 SPA Fallback: ${req.path} → index.html`);
+    res.sendFile(indexPath);
+  } else {
+    console.log(`❌ index.html não encontrado em: ${indexPath}`);
+    res.status(404).send(`
+      <h1>Página não encontrada</h1>
+      <p>Rota: ${req.path}</p>
+      <p>Build necessário: npm run build</p>
+    `);
+  }
+});
+
 // Render-specific: Listen on all interfaces with proper error handling
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${PORT}`);
