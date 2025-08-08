@@ -1,7 +1,19 @@
 import { OpenAI } from 'openai';
+import { aiUsageTracker } from './utils/aiUsage';
+import { webhookManager } from './utils/webhook';
 
 // Configuração do ChatGPT Agent para TeleMed Consulta
 let openai: OpenAI | null = null;
+
+// Configuração de modelos e retry
+const PRIMARY_MODEL = process.env.OPENAI_MODEL_PRIMARY || 'gpt-4o';
+const FALLBACK_MODEL = process.env.OPENAI_MODEL_FALLBACK || 'gpt-4o-mini';
+const MAX_RETRIES = parseInt(process.env.OPENAI_BACKOFF_MAX_RETRIES || '5');
+
+// Função de delay exponencial
+const exponentialDelay = (attempt: number): number => {
+  return Math.min(1000 * Math.pow(2, attempt), 30000); // Max 30 segundos
+};
 
 // Inicializar OpenAI apenas se a API key estiver disponível
 if (process.env.OPENAI_API_KEY) {
@@ -57,6 +69,111 @@ DESIGN SYSTEM:
 
 Sua tarefa é fornecer código otimizado, seguir boas práticas de segurança e performance, além de gerar documentos e testes automatizados específicos para ambiente médico brasileiro.
 `;
+
+// Wrapper de resiliência para chamadas OpenAI
+async function callOpenAIWithResilience(
+  messages: any[],
+  model: string = PRIMARY_MODEL,
+  attempt: number = 0,
+  useFallback: boolean = false
+): Promise<string> {
+  const currentModel = useFallback ? FALLBACK_MODEL : model;
+  
+  try {
+    // Track da tentativa
+    await aiUsageTracker.trackRequest(currentModel);
+    
+    console.log(`🤖 OpenAI Request: ${currentModel} (attempt ${attempt + 1}/${MAX_RETRIES + 1})`);
+    
+    if (!openai) {
+      throw new Error('OpenAI client não inicializado');
+    }
+    
+    const completion = await openai.chat.completions.create({
+      model: currentModel,
+      messages,
+      max_tokens: 2000,
+      temperature: 0.7,
+    });
+
+    const content = completion.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error('Resposta vazia da OpenAI');
+    }
+
+    // Track sucesso
+    await aiUsageTracker.trackSuccess();
+    
+    // Se usou fallback, alerta
+    if (useFallback) {
+      await aiUsageTracker.trackFallback();
+      await webhookManager.alertFallbackActivated({
+        model: currentModel,
+        attempt,
+        originalModel: model
+      });
+    }
+
+    console.log(`✅ OpenAI Success: ${currentModel} (${content.length} chars)`);
+    return content;
+
+  } catch (error: any) {
+    console.error(`❌ OpenAI Error (${currentModel}, attempt ${attempt + 1}):`, {
+      status: error?.response?.status || error?.status,
+      code: error?.code,
+      type: error?.type,
+      message: error?.message
+    });
+
+    // Track erro
+    await aiUsageTracker.trackError(error?.code || 'unknown', error?.message);
+
+    // Classificar erro e decidir estratégia
+    const errorCode = error?.code;
+    const statusCode = error?.response?.status || error?.status;
+
+    // Erros críticos que não devem fazer retry
+    if (errorCode === 'insufficient_quota') {
+      await webhookManager.alertQuotaExceeded({ error: error?.message, model: currentModel });
+      throw error;
+    }
+    
+    if (errorCode === 'billing_hard_limit_reached') {
+      await webhookManager.alertBillingLimit({ error: error?.message, model: currentModel });
+      throw error;
+    }
+
+    if (statusCode === 401) {
+      await webhookManager.alertAPIError({ error: 'Invalid API Key', model: currentModel });
+      throw error;
+    }
+
+    // Rate limits e erros temporários - tentar fallback ou retry
+    if (errorCode === 'rate_limit_exceeded' || statusCode === 429) {
+      await webhookManager.alertRateLimit({ error: error?.message, model: currentModel, attempt });
+    }
+
+    // Tentar fallback se não está usando ainda
+    if (!useFallback && (errorCode === 'rate_limit_exceeded' || statusCode === 429 || statusCode >= 500)) {
+      console.log(`🔄 Tentando modelo fallback: ${FALLBACK_MODEL}`);
+      return callOpenAIWithResilience(messages, model, attempt, true);
+    }
+
+    // Retry com backoff se ainda há tentativas
+    if (attempt < MAX_RETRIES) {
+      await aiUsageTracker.trackRetry();
+      const delay = exponentialDelay(attempt);
+      console.log(`⏳ Retry em ${delay}ms (attempt ${attempt + 1}/${MAX_RETRIES})`);
+      
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return callOpenAIWithResilience(messages, model, attempt + 1, useFallback);
+    }
+
+    // Esgotou tentativas
+    console.error(`💥 Todas as tentativas falharam para ${currentModel}`);
+    throw error;
+  }
+}
 
 export class TelemedChatGPTAgent {
   private initialized = false;
@@ -144,17 +261,12 @@ export class TelemedChatGPTAgent {
     }
 
     try {
-      const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { role: 'system', content: telemedPrompt },
-          { role: 'user', content: pergunta }
-        ],
-        temperature: 0.7,
-        max_tokens: 2000
-      });
+      const messages = [
+        { role: 'system', content: telemedPrompt },
+        { role: 'user', content: pergunta }
+      ];
 
-      const content = response.choices[0].message.content || '';
+      const content = await callOpenAIWithResilience(messages, PRIMARY_MODEL);
       return JSON.stringify({
         agent: "telemed-chatgpt",
         mode: "production", 
@@ -227,6 +339,14 @@ export class TelemedChatGPTAgent {
 
 // Export da instância singleton
 export const telemedAgent = new TelemedChatGPTAgent();
+
+// Export do método perguntarAgent para uso direto
+export const perguntarAgent = async (pergunta: string): Promise<string> => {
+  return await telemedAgent.perguntarAgent(pergunta);
+};
+
+// Export do wrapper de resiliência para uso avançado
+export { callOpenAIWithResilience };
 
 // Função de inicialização rápida
 export async function inicializarTelemedAgent(): Promise<void> {

@@ -1,0 +1,21 @@
+{
+  "totalRequests": 1,
+  "successfulRequests": 1,
+  "failedRequests": 0,
+  "quotaErrors": 0,
+  "rateLimitErrors": 0,
+  "billingErrors": 0,
+  "fallbackUsage": 0,
+  "lastRequest": "2025-08-08T13:04:31.875Z",
+  "retryCount": 0,
+  "modelUsage": {
+    "gpt-4o": 1
+  },
+  "dailyUsage": {
+    "2025-08-08": {
+      "requests": 1,
+      "errors": 0,
+      "fallbacks": 0
+    }
+  }
+}

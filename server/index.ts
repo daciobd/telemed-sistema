@@ -46,7 +46,9 @@ app.use('/attached_assets', express.static(path.join(__dirname, '../attached_ass
 
 // ChatGPT Agent - Ativado com OpenAI instalado
 import aiAgentRoutes from './routes/ai-agent.js';
+import aiAgentHealthRoutes from './routes/ai-agent-health.js';
 app.use('/api/ai-agent', aiAgentRoutes);
+app.use('/api/ai-agent', aiAgentHealthRoutes);
 console.log('🤖 ChatGPT Agent ativado com OpenAI v5.12.1');
 
 // Medical Reports - Sistema de Laudos Médicos
