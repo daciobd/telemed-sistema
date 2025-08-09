@@ -1,0 +1,82 @@
+SOLUÇÃO DEFINITIVA
+1. Verificar e corrigir o Vite config:
+Crie/atualize o arquivo vite.config.js na raiz do projeto:
+javascriptimport { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/', // IMPORTANTE: Força paths absolutos
+  build: {
+    outDir: 'dist/public',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash].[ext]'
+      }
+    }
+  },
+  server: {
+    port: 3000
+  }
+})
+2. Verificar o index.html:
+No arquivo index.html (provavelmente em public/index.html), certifique-se de que NÃO há paths relativos:
+html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TeleMed Sistema</title>
+  <!-- NÃO deve ter ./ no início -->
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>
+3. Build script atualizado:
+Atualize o build.js para garantir paths corretos:
+javascript// build.js
+import { build } from 'vite'
+import fs from 'fs-extra'
+import path from 'path'
+
+console.log('🔧 Starting build process...')
+
+// Build client
+console.log('🔧 Building client application...')
+await build({
+  base: '/', // CRÍTICO: paths absolutos
+  build: {
+    outDir: 'dist/public',
+    emptyOutDir: true
+  }
+})
+
+// Após o build, verificar se o CSS foi referenciado corretamente
+const indexPath = 'dist/public/index.html'
+if (fs.existsSync(indexPath)) {
+  let indexContent = fs.readFileSync(indexPath, 'utf8')
+  
+  // Garantir que todos os assets usem paths absolutos
+  indexContent = indexContent.replace(/href="\.\/assets\//g, 'href="/assets/')
+  indexContent = indexContent.replace(/src="\.\/assets\//g, 'src="/assets/')
+  
+  fs.writeFileSync(indexPath, indexContent)
+  console.log('🔧 ✅ Index.html paths corrected!')
+}
+
+console.log('🔧 ✅ Build completed successfully!')
+4. Comando rápido para testar:
+Execute isso no terminal do Replit:
+bash# 1. Rebuild com configuração correta
+npm run build
+
+# 2. Verificar se o CSS está sendo referenciado corretamente
+cat dist/public/index.html | grep -E "(css|assets)"
+
+# 3. Commit e deploy
+git add .
+git commit -m "fix: CSS paths for production"
+git push

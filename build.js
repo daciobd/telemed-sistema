@@ -23,7 +23,7 @@ try {
 
   // Step 2: Build client (React/Vite)
   log('Building client application...');
-  execSync('npx vite build', { stdio: 'inherit' });
+  execSync('npx vite build --base=/', { stdio: 'inherit' });
 
   // Step 3: Copy server files (TypeScript, will run with tsx)
   log('Copying server application...');
@@ -81,10 +81,25 @@ try {
 
   fs.writeFileSync('dist/package.json', JSON.stringify(prodPackageJson, null, 2));
 
+  // Step 6: Fix CSS paths in index.html (Critical for Render deployment)
+  log('Fixing CSS/JS paths in index.html...');
+  const indexPath = 'dist/public/index.html';
+  if (fs.existsSync(indexPath)) {
+    let indexContent = fs.readFileSync(indexPath, 'utf8');
+    
+    // Garantir que todos os assets usem paths absolutos
+    indexContent = indexContent.replace(/href="\.\/assets\//g, 'href="/assets/');
+    indexContent = indexContent.replace(/src="\.\/assets\//g, 'src="/assets/');
+    
+    fs.writeFileSync(indexPath, indexContent);
+    log('✅ Index.html CSS/JS paths corrected to absolute paths!');
+  }
+
   log('✅ Build completed successfully!');
   log('📦 Client built to: dist/public');
   log('🚀 Server built to: dist/server');
   log('📄 Production package.json created');
+  log('🎨 CSS paths fixed for production deployment');
 
 } catch (err) {
   error(`Build failed: ${err.message}`);
