@@ -30,7 +30,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-purple-700">
+          <div className="max-w-6xl mx-auto px-4 py-8">
           <Switch>
             <Route path="/" component={LandingPageUnified} />
             <Route path="/login" component={LoginPage} />
@@ -75,6 +76,7 @@ function App() {
               </div>
             </Route>
           </Switch>
+          </div>
         </div>
         <Toaster />
       </ThemeProvider>

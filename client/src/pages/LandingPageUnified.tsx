@@ -137,9 +137,16 @@ export default function LandingPageUnified() {
               Tudo que você precisa para cuidados de saúde modernos
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 features-section">
+            {features.map((feature, index) => {
+              const cardClasses = [
+                "card-teleconsultas", // Teleconsultas Seguras
+                "card-prontuario",    // Prontuário Digital  
+                "card-receitas",      // Receitas Digitais
+                "card-conformidade"   // Conformidade LGPD
+              ];
+              return (
+              <Card key={index} className={`hover:shadow-lg transition-shadow ${cardClasses[index]}`}>
                 <CardHeader>
                   <div className="inline-flex p-3 rounded-lg bg-blue-100 text-blue-600 w-fit">
                     <feature.icon className="h-6 w-6" />
@@ -150,7 +157,8 @@ export default function LandingPageUnified() {
                   <p className="text-gray-600">{feature.description}</p>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
