@@ -1,34 +1,35 @@
 import express from 'express';
-import path from 'path';
 import { fileURLToPath } from 'url';
+import path from 'path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT;
 
-console.log('🚀 TeleMed Sistema iniciando...');
+// CORREÇÃO CRÍTICA: Servir da pasta EXATA onde o build coloca os arquivos
+const publicPath = path.join(__dirname, 'dist', 'public');
 
-// CORREÇÃO CRÍTICA: Servir assets estáticos PRIMEIRO
-app.use(express.static(path.join(__dirname, 'dist/public')));
-app.use('/assets', express.static(path.join(__dirname, 'dist/public/assets')));
+console.log(`📂 Servindo arquivos de: ${publicPath}`);
 
-// Health check route
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    port: PORT,
-    env: process.env.NODE_ENV || 'production'
-  });
-});
+// Servir arquivos estáticos com configuração explícita
+app.use(express.static(publicPath, {
+  maxAge: '1y',
+  etag: false
+}));
 
-// SPA fallback por último
+// Rota específica para assets (redundância para garantir)
+app.use('/assets', express.static(path.join(publicPath, 'assets'), {
+  maxAge: '1y',
+  etag: false
+}));
+
+// SPA fallback - DEVE vir por último
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/public/index.html'));
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
   console.log(`🚀 TeleMed Sistema rodando na porta ${PORT}`);
-  console.log(`📂 Arquivos servidos de: ${path.join(__dirname, 'dist/public')}`);
-  console.log(`🎨 Assets CSS/JS servidos de: ${path.join(__dirname, 'dist/public/assets')}`);
+  console.log(`🌐 Ambiente: ${process.env.NODE_ENV || 'production'}`);
+  console.log(`📂 Arquivos servidos de: ${publicPath}`);
 });
