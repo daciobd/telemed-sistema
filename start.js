@@ -1,37 +1,34 @@
 import express from 'express';
 import path from 'path';
-import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT;
 
-// Static files path
-const staticPath = path.join(__dirname, 'dist/public');
-
 console.log('🚀 TeleMed Sistema iniciando...');
-console.log('📂 Servindo arquivos de:', staticPath);
 
-// Serve static files
-app.use(express.static(staticPath));
+// CORREÇÃO CRÍTICA: Servir assets estáticos PRIMEIRO
+app.use(express.static(path.join(__dirname, 'dist/public')));
+app.use('/assets', express.static(path.join(__dirname, 'dist/public/assets')));
 
-// SPA fallback - catch all routes
+// Health check route
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    port: PORT,
+    env: process.env.NODE_ENV || 'production'
+  });
+});
+
+// SPA fallback por último
 app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, 'dist/public/index.html');
-  console.log(`🔄 SPA Fallback: ${req.path} → index.html`);
-  
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).send('Página não encontrada');
-  }
+  res.sendFile(path.join(__dirname, 'dist/public/index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema rodando na porta ${PORT}`);
-  console.log(`🌐 Ambiente: ${process.env.NODE_ENV || 'production'}`);
-  console.log(`📂 Arquivos servidos de: ${staticPath}`);
+  console.log(`📂 Arquivos servidos de: ${path.join(__dirname, 'dist/public')}`);
+  console.log(`🎨 Assets CSS/JS servidos de: ${path.join(__dirname, 'dist/public/assets')}`);
 });
