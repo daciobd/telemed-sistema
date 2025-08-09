@@ -138,27 +138,41 @@ export default function LandingPageUnified() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 features-section">
-            {features.map((feature, index) => {
-              const cardClasses = [
-                "card-teleconsultas", // Teleconsultas Seguras
-                "card-prontuario",    // Prontuário Digital  
-                "card-receitas",      // Receitas Digitais
-                "card-conformidade"   // Conformidade LGPD
-              ];
-              return (
-              <Card key={index} className={`hover:shadow-lg transition-shadow ${cardClasses[index]}`}>
-                <CardHeader>
-                  <div className="inline-flex p-3 rounded-lg bg-blue-100 text-blue-600 w-fit">
-                    <feature.icon className="h-6 w-6" />
-                  </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
-              );
-            })}
+            {/* Card Teleconsultas - Verde */}
+            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+              <div className="flex items-center mb-2">
+                <span className="text-2xl mr-3">📹</span>
+                <h3 className="text-lg font-semibold">Teleconsultas Seguras</h3>
+              </div>
+              <p>Consulte médicos especialistas através de videochamadas criptografadas e seguras</p>
+            </div>
+
+            {/* Card Prontuário - Azul */}
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+              <div className="flex items-center mb-2">
+                <span className="text-2xl mr-3">📋</span>
+                <h3 className="text-lg font-semibold">Prontuário Digital</h3>
+              </div>
+              <p>Acesse seu histórico médico completo de forma segura e organizada</p>
+            </div>
+
+            {/* Card Receitas - Laranja */}
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+              <div className="flex items-center mb-2">
+                <span className="text-2xl mr-3">💊</span>
+                <h3 className="text-lg font-semibold">Receitas Digitais</h3>
+              </div>
+              <p>Receba prescrições médicas digitais válidas em todo território nacional</p>
+            </div>
+
+            {/* Card Conformidade - Roxo */}
+            <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
+              <div className="flex items-center mb-2">
+                <span className="text-2xl mr-3">🔒</span>
+                <h3 className="text-lg font-semibold">Conformidade LGPD</h3>
+              </div>
+              <p>Seus dados médicos protegidos com máxima segurança e privacidade</p>
+            </div>
           </div>
         </div>
       </section>
