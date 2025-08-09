@@ -38,9 +38,37 @@ if (!PORT || isNaN(PORT)) {
 
 console.log('🔍 FINAL PORT SELECTED:', PORT);
 
-app.use(express.json());
-app.use(express.static('dist/public'));
-app.use(express.static(path.join(__dirname, '..')));
+// CORS and security headers
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('X-Content-Type-Options', 'nosniff');
+  res.header('X-Frame-Options', 'DENY');
+  res.header('X-XSS-Protection', '1; mode=block');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Static file serving with proper headers
+app.use('/assets', express.static(path.join(__dirname, '../dist/public/assets'), {
+  maxAge: '1d',
+  etag: true,
+  lastModified: true
+}));
+
+app.use(express.static(path.join(__dirname, '../dist/public'), {
+  maxAge: '1h',
+  etag: true,
+  lastModified: true
+}));
+
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
@@ -76,28 +104,20 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
+// Serve SPA with proper handling
 app.get('/', (req, res) => {
   try {
-    // Primeiro, tenta servir de dist/public/index.html
-    let indexPath = path.join(__dirname, '../dist/public/index.html');
+    const indexPath = path.join(__dirname, '../dist/public/index.html');
     if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath, { root: '/' });
-      console.log('🏠 Homepage TeleMed carregada de dist/public');
-      return;
-    }
-    
-    // Fallback para index.html na raiz
-    indexPath = path.join(__dirname, '../index.html');
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath, { root: '/' });
-      console.log('🏠 Homepage TeleMed carregada - Design conforme mockup');
+      res.sendFile(indexPath);
+      console.log('🏠 TeleMed Homepage loaded from dist/public');
     } else {
-      const html = fs.readFileSync(path.join(__dirname, '../entrada.html'), 'utf-8');
-      res.send(html);
-      console.log('⚠️ index.html não encontrado, servindo entrada.html');
+      console.error('❌ index.html not found at:', indexPath);
+      res.status(404).send('Application not built. Run npm run build first.');
     }
   } catch (err) {
-    res.status(500).send('Erro ao carregar a página');
+    console.error('❌ Error serving homepage:', err);
+    res.status(500).send('Server error loading homepage');
   }
 });
 
@@ -351,4 +371,31 @@ server.on('error', (err: any) => {
 
 server.on('listening', () => {
   console.log('✅ Server is listening and ready for connections');
+});
+
+// SPA Catch-all handler (must be last)
+app.get('*', (req, res) => {
+  // Skip API routes and specific assets
+  if (req.path.startsWith('/api/') || 
+      req.path.startsWith('/assets/') || 
+      req.path.startsWith('/healthz') || 
+      req.path.startsWith('/ping') ||
+      req.path.includes('.html') ||
+      req.path.includes('.js') ||
+      req.path.includes('.css')) {
+    return res.status(404).send('Not found');
+  }
+  
+  try {
+    const indexPath = path.join(__dirname, '../dist/public/index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+      console.log('🔄 SPA route served:', req.path);
+    } else {
+      res.status(404).send('SPA not built');
+    }
+  } catch (err) {
+    console.error('❌ Error serving SPA route:', err);
+    res.status(500).send('Server error');
+  }
 });

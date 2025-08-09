@@ -6,48 +6,54 @@ export default function LandingPageUnified() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Header Navigation */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-18">
             {/* Logo */}
-            <div className="flex items-center">
-              <img src="/logo-telemed.png" alt="TeleMed" className="h-8 w-auto mr-2" onError={(e) => {(e.target as HTMLElement).style.display = 'none'}} />
-              <span className="text-xl font-bold text-gray-900">TeleMed</span>
-              <span className="text-sm text-gray-500 ml-1">início</span>
+            <div className="flex items-center py-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 shadow-md">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <span className="text-xl font-bold text-gray-900">TeleMed</span>
+                <span className="text-sm text-gray-500 ml-2">início</span>
+              </div>
             </div>
 
             {/* Navigation Menu */}
-            <nav className="hidden md:flex space-x-8">
-              <button onClick={() => handleNavigation('/nossos-servicos')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+            <nav className="hidden lg:flex space-x-6">
+              <button onClick={() => handleNavigation('/nossos-servicos')} className="text-gray-600 hover:text-emerald-600 text-sm font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-emerald-50">
                 Nossos Serviços
               </button>
-              <button onClick={() => handleNavigation('/beneficios')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <button onClick={() => handleNavigation('/beneficios')} className="text-gray-600 hover:text-emerald-600 text-sm font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-emerald-50">
                 Benefícios
               </button>
-              <button onClick={() => handleNavigation('/para-medicos')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <button onClick={() => handleNavigation('/para-medicos')} className="text-gray-600 hover:text-emerald-600 text-sm font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-emerald-50">
                 Para Médicos
               </button>
-              <button onClick={() => handleNavigation('/testagens')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <button onClick={() => handleNavigation('/testagens')} className="text-gray-600 hover:text-emerald-600 text-sm font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-emerald-50">
                 Testagens
               </button>
-              <button onClick={() => handleNavigation('/quem-somos')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <button onClick={() => handleNavigation('/quem-somos')} className="text-gray-600 hover:text-emerald-600 text-sm font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-emerald-50">
                 Quem Somos
               </button>
-              <button onClick={() => handleNavigation('/contato')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <button onClick={() => handleNavigation('/contato')} className="text-gray-600 hover:text-emerald-600 text-sm font-medium transition-colors duration-200 py-2 px-3 rounded-lg hover:bg-emerald-50">
                 Contato
               </button>
             </nav>
 
             {/* Right side buttons */}
             <div className="flex items-center space-x-4">
-              <button onClick={() => handleNavigation('/login')} className="text-gray-600 hover:text-gray-900 text-sm font-medium">
+              <button onClick={() => handleNavigation('/login')} className="text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors duration-200">
                 Login
               </button>
               <button 
                 onClick={() => handleNavigation('/agendar-consulta')} 
-                className="bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-900 transition-colors"
+                className="bg-gray-900 text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 Agendar Consulta
               </button>
@@ -66,17 +72,17 @@ export default function LandingPageUnified() {
       </div>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left Content */}
-          <div>
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
+          <div className="lg:pr-8">
+            <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-8">
               Cuide da Sua<br />
               Saúde com<br />
-              <span className="text-green-500">Inteligência<br />Artificial</span>
+              <span className="text-emerald-500">Inteligência<br />Artificial</span>
             </h1>
             
-            <p className="text-lg text-gray-600 mb-8 max-w-lg">
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
               Acesse consultas rápidas, triagem por IA e monitoramento 24/7 com 
               TeleMed Sistema.
             </p>
@@ -85,55 +91,65 @@ export default function LandingPageUnified() {
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={() => handleNavigation('/triagem-gratis')}
-                className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center justify-center"
+                className="bg-emerald-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-emerald-600 transition-all duration-200 flex items-center justify-center shadow-lg hover:shadow-xl"
               >
-                <span className="mr-2">🩺</span>
+                <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
                 Triagem Grátis
               </button>
               <button 
                 onClick={() => handleNavigation('/agendar-consulta')}
-                className="border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 hover:text-white transition-colors flex items-center justify-center"
+                className="border-2 border-blue-500 text-blue-500 px-8 py-4 rounded-xl font-semibold hover:bg-blue-500 hover:text-white transition-all duration-200 flex items-center justify-center"
               >
-                <span className="mr-2">📅</span>
+                <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                </svg>
                 Agendar Consulta
               </button>
             </div>
           </div>
 
           {/* Right Content - Triagem Card */}
-          <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-3xl shadow-2xl p-10 border border-indigo-100 relative overflow-hidden">
+            {/* Background decorative elements */}
+            <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-emerald-200/30 to-blue-200/30 rounded-full"></div>
+            <div className="absolute bottom-4 left-4 w-16 h-16 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full"></div>
+            
+            <div className="text-center mb-10 relative z-10">
+              {/* Icon with exact colors from image */}
+              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl border-4 border-emerald-100">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Triagem Psiquiátrica IA</h3>
-              <p className="text-gray-600">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4 tracking-tight">Triagem Psiquiátrica IA</h3>
+              <p className="text-gray-600 leading-relaxed text-lg">
                 Primeiro sistema do Brasil com IA especializada em saúde mental.
               </p>
             </div>
 
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                Avaliação em 5 minutos
+            {/* Features list with exact styling from image */}
+            <div className="space-y-5 mb-10">
+              <div className="flex items-center text-gray-800 bg-white/60 rounded-xl p-4 backdrop-blur-sm">
+                <div className="w-4 h-4 bg-emerald-500 rounded-full mr-4 shadow-sm flex-shrink-0"></div>
+                <span className="font-semibold text-lg">Avaliação em 5 minutos</span>
               </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                Relatório médico completo
+              <div className="flex items-center text-gray-800 bg-white/60 rounded-xl p-4 backdrop-blur-sm">
+                <div className="w-4 h-4 bg-emerald-500 rounded-full mr-4 shadow-sm flex-shrink-0"></div>
+                <span className="font-semibold text-lg">Relatório médico completo</span>
               </div>
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                Encaminhamento especializado
+              <div className="flex items-center text-gray-800 bg-white/60 rounded-xl p-4 backdrop-blur-sm">
+                <div className="w-4 h-4 bg-emerald-500 rounded-full mr-4 shadow-sm flex-shrink-0"></div>
+                <span className="font-semibold text-lg">Encaminhamento especializado</span>
               </div>
             </div>
 
             <button 
               onClick={() => handleNavigation('/triagem-psiquiatrica')}
-              className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+              className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-5 rounded-2xl font-bold text-xl hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:scale-95"
             >
               Começar Triagem Grátis
             </button>
