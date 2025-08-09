@@ -30,8 +30,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-purple-700">
-          <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="min-h-screen bg-white">
           <Switch>
             <Route path="/" component={LandingPageUnified} />
             <Route path="/login" component={LoginPage} />
@@ -55,6 +54,21 @@ function App() {
             <Route path="/agenda-dia" component={AgendaDia} />
             <Route path="/agenda" component={AgendaDia} />
             
+            {/* Rotas da Landing Page */}
+            <Route path="/triagem-gratis" component={DiagnosticPage} />
+            <Route path="/triagem-psiquiatrica" component={DiagnosticPage} />
+            <Route path="/agendar-consulta" component={AgendamentoEspecialidade} />
+            <Route path="/teleconsultas" component={PatientDashboardUnified} />
+            <Route path="/prontuario-digital" component={PatientDashboardUnified} />
+            <Route path="/receitas-digitais" component={PatientDashboardUnified} />
+            <Route path="/ia-medica" component={DiagnosticPage} />
+            <Route path="/nossos-servicos" component={LandingPageUnified} />
+            <Route path="/beneficios" component={LandingPageUnified} />
+            <Route path="/para-medicos" component={DoctorDashboardInline} />
+            <Route path="/testagens" component={DiagnosticPage} />
+            <Route path="/quem-somos" component={LandingPageUnified} />
+            <Route path="/contato" component={LandingPageUnified} />
+            
             {/* Dashboards Legados (manter para compatibilidade) */}
             <Route path="/doctor-dashboard-legacy" component={DoctorDashboard} />
             <Route path="/simple-dashboard" component={SimpleDashboard} />
@@ -76,7 +90,6 @@ function App() {
               </div>
             </Route>
           </Switch>
-          </div>
         </div>
         <Toaster />
       </ThemeProvider>
