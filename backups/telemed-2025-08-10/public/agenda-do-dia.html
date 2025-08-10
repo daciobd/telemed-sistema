@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda do Dia - Telemed Consultas</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #A7C7E7; /* Azul duotônico */
+            --secondary-color: #F4D9B4; /* Ocre claro */
+            --alert-soft: #E9967A; /* Coral suave */
+            --background-color: #FAFBFC;
+            --card-color: #FFFFFF;
+            --border-color: #E2E2E2;
+            --text-gray: #888888;
+            --font-family: 'Poppins', 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        // SVG Icons (definidos como strings)
+        const ArrowLeftIcon = () => (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        );
+
+        const CalendarIcon = () => (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+        );
+
+        const ClockIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const VideoIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+        );
+
+        const CheckCircleIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const XCircleIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+
+        const BellIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+        );
+
+        const BellOffIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4l1.405-1.405A2.032 2.032 0 006 12.158V11a6.002 6.002 0 014-5.659V5a2 2 0 114 0v.341C15.67 6.165 17 8.388 17 11v1.159l2 2V17h-5.586l-.707-.707L5.586 15z" />
+            </svg>
+        );
+
+        const ChevronLeftIcon = () => (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+        );
+
+        const ChevronRightIcon = () => (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+        );
+
+        const PlusIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+        );
+
+        const SettingsIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        );
+
+        const AgendaDia = () => {
+          const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 25));
+          const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '00' });
+          const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+          const [showAdvancedFields, setShowAdvancedFields] = useState(false);
+
+          const consultas = [
+            {
+              id: 1,
+              horario: '07:00',
+              status: 'indisponivel',
+              paciente: '',
+              tipo: '',
+              obs: 'Não disponível'
+            },
+            {
+              id: 2,
+              horario: '07:20',
+              status: 'finalizado',
+              paciente: 'Moreira, Carlos Otávio',
+              tipo: 'Médico',
+              obs: 'Finalizado'
+            },
+            {
+              id: 3,
+              horario: '07:40',
+              status: 'confirmado',
+              paciente: 'Ferreira, Carla Patrícia',
+              tipo: 'Médico',
+              obs: 'Confirmado'
+            },
+            {
+              id: 4,
+              horario: '08:00',
+              status: 'confirmado',
+              paciente: 'Cavalcante, Juliana',
+              tipo: 'Psicólogo',
+              obs: 'Confirmado'
+            },
+            {
+              id: 5,
+              horario: '08:20',
+              status: 'confirmado',
+              paciente: 'Diniz Ferreira, Fernando',
+              tipo: 'Doutor Azul',
+              obs: 'Confirmado'
+            },
+            {
+              id: 6,
+              horario: '08:40',
+              status: 'confirmado',
+              paciente: 'Rufino, Aline Amanda De Salles',
+              tipo: 'Médico',
+              obs: 'Confirmado'
+            },
+            {
+              id: 7,
+              horario: '09:00',
+              status: 'confirmado',
+              paciente: 'De Oliveira Canno, Kethelyn',
+              tipo: 'Médico',
+              obs: 'Confirmado'
+            }
+          ];
+
+          const getStatusIcon = (status) => {
+            switch (status) {
+              case 'confirmado':
+                return <CheckCircleIcon style={{color: '#A7C7E7'}} />;
+              case 'finalizado':
+                return <CheckCircleIcon style={{color: '#F4D9B4'}} />;
+              case 'indisponivel':
+                return <XCircleIcon style={{color: '#E9967A'}} />;
+              default:
+                return <ClockIcon style={{color: '#A7C7E7'}} />;
+            }
+          };
+
+          const getTipoColor = (tipo) => {
+            switch (tipo) {
+              case 'Médico':
+                return { backgroundColor: '#A7C7E7', color: 'white' };
+              case 'Psicólogo':
+                return { backgroundColor: '#F4D9B4', color: '#8B4513' };
+              case 'Doutor Azul':
+                return { backgroundColor: '#E9967A', color: 'white' };
+              default:
+                return { backgroundColor: '#D1D5DB', color: '#6B7280' };
+            }
+          };
+
+          const formatDate = (date) => {
+            return date.toLocaleDateString('pt-BR', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          };
+
+          const changeDate = (days) => {
+            const newDate = new Date(currentDate);
+            newDate.setDate(currentDate.getDate() + days);
+            setCurrentDate(newDate);
+          };
+
+          const generateTimeOptions = () => {
+            const hours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+            const minutes = ['00', '15', '30', '45'];
+            return { hours, minutes };
+          };
+
+          const { hours, minutes } = generateTimeOptions();
+
+          return (
+            <div className="max-w-7xl mx-auto p-8 min-h-screen" style={{fontFamily: 'Poppins, Inter, sans-serif', backgroundColor: '#FAFBFC'}}>
+              {/* Header */}
+              <div 
+                className="text-white p-8 mb-8" 
+                style={{
+                  background: 'linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%)',
+                  borderRadius: '20px'
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-6">
+                    <button 
+                      onClick={() => window.location.href = '/index.html'}
+                      className="cursor-pointer hover:opacity-80 rounded-full p-1 transition-opacity"
+                    >
+                      <ArrowLeftIcon />
+                    </button>
+                    <h1 className="text-2xl font-semibold">Agenda de Videoconsultas</h1>
+                  </div>
+                  <div className="text-right">
+                    <p className="opacity-90 font-light">Bem-vindo, Dr. Dácio Bonoldi Dutra</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Content */}
+              <div className="bg-white p-8" style={{borderRadius: '20px'}}>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  
+                  {/* Sidebar */}
+                  <div className="space-y-8">
+                    
+                    {/* Calendar */}
+                    <div className="p-6" style={{backgroundColor: '#F8F9FA', borderRadius: '20px'}}>
+                      <div className="flex items-center justify-between mb-6">
+                        <button 
+                          onClick={() => changeDate(-1)}
+                          className="p-2 hover:opacity-70 transition-opacity"
+                          style={{borderRadius: '12px'}}
+                        >
+                          <ChevronLeftIcon style={{color: '#A7C7E7'}} />
+                        </button>
+                        
+                        <h3 className="font-medium text-gray-700">
+                          {currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                        </h3>
+                        
+                        <button 
+                          onClick={() => changeDate(1)}
+                          className="p-2 hover:opacity-70 transition-opacity"
+                          style={{borderRadius: '12px'}}
+                        >
+                          <ChevronRightIcon style={{color: '#A7C7E7'}} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-1 text-center text-sm mb-3">
+                        {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => 
+                          <div key={day} className="p-3 font-medium text-gray-500">{day}</div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-1 text-center text-sm">
+                        {Array.from({ length: 35 }, (_, i) => {
+                          const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i - 10);
+                          const isToday = date.toDateString() === currentDate.toDateString();
+                          const isCurrentMonth = date.getMonth() === currentDate.getMonth();
+                          
+                          return (
+                            <button
+                              key={i}
+                              onClick={() => setCurrentDate(date)}
+                              className={`p-3 transition-all font-medium ${
+                                isToday 
+                                  ? 'text-white' 
+                                  : isCurrentMonth 
+                                    ? 'hover:opacity-70 text-gray-600' 
+                                    : 'text-gray-300'
+                              }`}
+                              style={{
+                                borderRadius: '12px',
+                                backgroundColor: isToday ? '#A7C7E7' : 'transparent'
+                              }}
+                            >
+                              {date.getDate()}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Add Time */}
+                    <div className="p-6" style={{backgroundColor: '#F8F9FA', borderRadius: '20px'}}>
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="font-medium text-gray-700">Adicionar horário</h3>
+                        <button
+                          onClick={() => setShowAdvancedFields(!showAdvancedFields)}
+                          className="p-2 hover:opacity-70 transition-opacity"
+                          style={{borderRadius: '12px', backgroundColor: '#F4D9B4'}}
+                        >
+                          <SettingsIcon className="text-amber-800" />
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-3 mb-4">
+                        <select
+                          value={selectedTime.hour}
+                          onChange={(e) => setSelectedTime({...selectedTime, hour: e.target.value})}
+                          className="px-4 py-3 font-medium text-gray-700 bg-white border-0 focus:outline-none"
+                          style={{borderRadius: '12px'}}
+                        >
+                          {hours.map(hour => <option key={hour} value={hour}>{hour}</option>)}
+                        </select>
+
+                        <span className="text-gray-500 font-medium">:</span>
+
+                        <select
+                          value={selectedTime.minute}
+                          onChange={(e) => setSelectedTime({...selectedTime, minute: e.target.value})}
+                          className="px-4 py-3 font-medium text-gray-700 bg-white border-0 focus:outline-none"
+                          style={{borderRadius: '12px'}}
+                        >
+                          {minutes.map(minute => <option key={minute} value={minute}>{minute}</option>)}
+                        </select>
+
+                        <button
+                          className="text-white px-5 py-3 font-medium transition-opacity hover:opacity-80 flex items-center gap-2"
+                          style={{backgroundColor: '#A7C7E7', borderRadius: '12px'}}
+                        >
+                          <PlusIcon />
+                          Adicionar
+                        </button>
+                      </div>
+
+                      {/* Advanced Fields */}
+                      {showAdvancedFields && (
+                        <div className="space-y-4 mt-6 pt-6 border-t border-gray-200">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-600 mb-2">Tipo de Consulta</label>
+                            <select
+                              className="w-full px-4 py-3 bg-white border-0 font-medium text-gray-700 focus:outline-none"
+                              style={{borderRadius: '12px'}}
+                            >
+                              <option>Médico</option>
+                              <option>Psicólogo</option>
+                              <option>Doutor Azul</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-600 mb-2">Duração (minutos)</label>
+                            <select
+                              className="w-full px-4 py-3 bg-white border-0 font-medium text-gray-700 focus:outline-none"
+                              style={{borderRadius: '12px'}}
+                            >
+                              <option>15</option>
+                              <option>30</option>
+                              <option>45</option>
+                              <option>60</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Main Content Area */}
+                  <div className="lg:col-span-2">
+                    
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="flex items-center gap-4">
+                        <CalendarIcon style={{color: '#A7C7E7'}} />
+                        <h2 className="text-xl font-medium text-gray-700">
+                          {`Horários para ${formatDate(currentDate)}`}
+                        </h2>
+                      </div>
+
+                      <button
+                        onClick={() => setNotificationsEnabled(!notificationsEnabled)}
+                        className="flex items-center gap-3 px-5 py-3 font-medium transition-opacity hover:opacity-80"
+                        style={{
+                          backgroundColor: notificationsEnabled ? '#A7C7E71A' : '#F8F9FA',
+                          color: notificationsEnabled ? '#5A7A9A' : '#6B7280',
+                          borderRadius: '12px'
+                        }}
+                      >
+                        {notificationsEnabled ? 
+                          <BellIcon style={{color: '#A7C7E7'}} /> : 
+                          <BellOffIcon style={{color: '#9CA3AF'}} />
+                        }
+                        {notificationsEnabled ? 'Notificações Ativas' : 'Ativar notificações'}
+                      </button>
+                    </div>
+
+                    {/* Appointments List */}
+                    <div className="space-y-4">
+                      {consultas.map((consulta) => (
+                        <div
+                          key={consulta.id}
+                          className="p-6 transition-all hover:opacity-80"
+                          style={{
+                            backgroundColor: consulta.status === 'confirmado' ? '#A7C7E71A' :
+                                           consulta.status === 'finalizado' ? '#F4D9B41A' :
+                                           consulta.status === 'indisponivel' ? '#E9967A1A' : '#F8F9FA',
+                            borderRadius: '20px'
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-6">
+                              <div className="flex items-center gap-3">
+                                <input
+                                  type="checkbox"
+                                  className="w-4 h-4 rounded border-gray-300 focus:ring-0"
+                                  style={{accentColor: '#A7C7E7'}}
+                                  disabled={consulta.status === 'indisponivel'}
+                                />
+                                <div className="text-lg font-semibold text-gray-800">{consulta.horario}</div>
+                                {consulta.status === 'confirmado' && <BellIcon style={{color: '#A7C7E7'}} />}
+                              </div>
+
+                              <div className="flex-1">
+                                {consulta.paciente && (
+                                  <div>
+                                    <div className="font-medium text-gray-800 mb-2">{consulta.paciente}</div>
+                                    <div className="flex items-center gap-3">
+                                      {consulta.tipo && (
+                                        <span
+                                          className="px-3 py-1 text-xs font-medium"
+                                          style={{
+                                            ...getTipoColor(consulta.tipo),
+                                            borderRadius: '12px'
+                                          }}
+                                        >
+                                          {consulta.tipo}
+                                        </span>
+                                      )}
+                                      <span className="text-sm text-gray-500 font-light">{consulta.obs}</span>
+                                    </div>
+                                  </div>
+                                )}
+                                {!consulta.paciente && (
+                                  <div className="text-gray-500 font-medium">{consulta.obs}</div>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                              {getStatusIcon(consulta.status)}
+                              {consulta.status === 'confirmado' && (
+                                <div className="flex gap-3">
+                                  <button
+                                    className="text-white p-3 transition-opacity hover:opacity-80"
+                                    style={{backgroundColor: '#A7C7E7', borderRadius: '12px'}}
+                                  >
+                                    <VideoIcon />
+                                  </button>
+                                  
+                                  <button
+                                    className="text-white p-3 transition-opacity hover:opacity-80"
+                                    style={{backgroundColor: '#F4D9B4', borderRadius: '12px'}}
+                                  >
+                                    <CalendarIcon style={{color: '#8B4513'}} />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Back Button */}
+                    <div className="mt-10 flex justify-start">
+                      <button
+                        onClick={() => window.location.href = '/index.html'}
+                        className="flex items-center gap-3 px-8 py-4 text-white font-medium transition-opacity hover:opacity-80"
+                        style={{backgroundColor: '#6B7280', borderRadius: '12px'}}
+                      >
+                        <ArrowLeftIcon />
+                        Voltar ao Dashboard
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        ReactDOM.render(<AgendaDia />, document.getElementById('root'));
+    </script>
+</body>
+</html>

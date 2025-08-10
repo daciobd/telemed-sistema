@@ -1,58 +1,11 @@
 # TeleMed Sistema
 
-**Versão:** 2.1.0 (Otimizada)  
-**Última Atualização:** Agosto 2025  
-**Status:** Produção Otimizada ⚡
-
-## 🚀 **Otimizações Implementadas (v2.1.0)**
-
-### **Performance**
-- ✅ Bundle otimizado: 145KB JS + 6KB CSS (redução de 86%)
-- ✅ Build time: 3.5s (redução de 79% vs 17s anterior)
-- ✅ Code splitting automático via Vite
-- ✅ CSS purging e minificação Terser
-
-### **Segurança**
-- ✅ Helmet.js: CSP, HSTS, XSS protection
-- ✅ CORS configurado para múltiplos domínios
-- ✅ Compression Gzip automática
-- ✅ Cache inteligente: 1 ano assets, no-cache HTML
-
-### **DevOps**
-- ✅ Health check endpoint: /health
-- ✅ Métricas de build automáticas
-- ✅ Sistema de backup automatizado
-- ✅ Dois servidores: dev + produção
-
-## 📦 **Sistema de Backup**
-
-```bash
-# Backup manual
-node scripts/backup-system.js
-
-# Verificar backups
-ls -la backups/
-```
-
-**Arquivos Críticos Monitorados:**
-- ✅ Configurações (package.json, vite.config.ts, components.json)
-- ✅ Frontend (React components, páginas, estilos)
-- ✅ Backend (Express routes, database schemas)
-- ✅ Build system (build.js, start.js otimizados)
-- ✅ Documentação completa e assets
-
-**Último Backup:** 22 arquivos salvos com sucesso em `/backups/telemed-2025-08-10/`
-
-## 🔄 **Controle de Versão**
-
-- **v1.0:** MVP funcional
-- **v2.0:** Design premium + deploy Render
-- **v2.1:** Otimizações performance + backup system ⬅️ **ATUAL**
-- **v2.2:** PWA + funcionalidades médicas avançadas (planejado)
+**Versão:** 12.5.2  
+**Descrição:** Plataforma de telemedicina premium
 
 ## 🏥 Visão Geral
 
-TeleMed Sistema é uma plataforma abrangente de telemedicina com otimizações enterprise-grade que conecta médicos e pacientes através de soluções digitais de saúde. Oferece videoconsultas, prontuários médicos digitais, gestão de prescrições e processamento integrado de pagamentos.
+TeleMed Sistema é uma plataforma abrangente de telemedicina que conecta médicos e pacientes através de soluções digitais de saúde. Oferece videoconsultas, prontuários médicos digitais, gestão de prescrições e processamento integrado de pagamentos.
 
 ## ✨ Principais Funcionalidades
 

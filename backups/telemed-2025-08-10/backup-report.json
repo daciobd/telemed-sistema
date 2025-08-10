@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-10T13:39:14.855Z",
+  "version": "2.0.0",
+  "files": 22,
+  "deployUrl": "https://telemed-sistema.onrender.com",
+  "replitUrl": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev",
+  "lastCommit": "acb1092723c6d3631a23035d16365802d734a73f",
+  "optimizations": {
+    "bundleSize": "145KB JS + 6KB CSS",
+    "buildTime": "~3.5s",
+    "security": "Helmet + CORS + Compression",
+    "caching": "Intelligent cache headers"
+  }
+}
