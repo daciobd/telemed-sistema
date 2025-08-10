@@ -1,12 +1,37 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import helmet from 'helmet';
+import cors from 'cors';
+import compression from 'compression';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Security middlewares
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://replit.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+    },
+  },
+}));
+
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://telemed-sistema.onrender.com', 'https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev']
+    : true,
+  credentials: true
+}));
+
+app.use(compression());
+
 // Debug environment variables
 console.log('🔍 DEBUG - process.env.PORT:', JSON.stringify(process.env.PORT));
 console.log('🔍 DEBUG - All env vars with PORT:', Object.keys(process.env).filter(k => k.includes('PORT')));
@@ -38,19 +63,11 @@ if (!PORT || isNaN(PORT)) {
 
 console.log('🔍 FINAL PORT SELECTED:', PORT);
 
-// CORS and security headers
+// Additional security headers (complementing Helmet)
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('X-Content-Type-Options', 'nosniff');
-  res.header('X-Frame-Options', 'DENY');
-  res.header('X-XSS-Protection', '1; mode=block');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
+  res.header('X-Powered-By', 'TeleMed Sistema v2.0');
+  res.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  next();
 });
 
 app.use(express.json({ limit: '50mb' }));

@@ -1,0 +1,130 @@
+Segurança - start.js
+Problema: Falta configurações de segurança
+Solução Otimizada:
+javascriptimport express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import compression from 'compression';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const app = express();
+
+// Segurança
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      scriptSrc: ["'self'"],
+      connectSrc: ["'self'", "wss:"]
+    }
+  }
+}));
+
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://telemed-sistema.onrender.com'] 
+    : true,
+  credentials: true
+}));
+
+app.use(compression());
+
+// Static files otimizados
+const publicPath = path.join(__dirname, 'dist', 'public');
+
+app.use(express.static(publicPath, {
+  maxAge: process.env.NODE_ENV === 'production' ? '1y' : '0',
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// SPA fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 TeleMed rodando na porta ${PORT}`);
+  console.log(`🌐 Ambiente: ${process.env.NODE_ENV || 'production'}`);
+});
+4. 🗄️ Database - Drizzle Config
+Otimização drizzle.config.ts:
+typescriptimport { defineConfig } from "drizzle-kit";
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is required");
+}
+
+export default defineConfig({
+  out: "./migrations",
+  schema: "./shared/schema.ts",
+  dialect: "postgresql",
+  dbCredentials: {
+    url: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  },
+  verbose: true,
+  strict: true,
+  migrations: {
+    prefix: 'timestamp'
+  }
+});
+5. 🎨 CSS - Tailwind Otimizado
+Criar tailwind.config.ts otimizado:
+typescriptexport default {
+  content: [
+    "./client/src/**/*.{js,ts,jsx,tsx}",
+    "./client/public/index.html"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        medical: {
+          blue: '#3b82f6',
+          green: '#10b981',
+          purple: '#8b5cf6'
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('tailwindcss-animate')
+  ],
+  corePlugins: {
+    preflight: true
+  }
+}
+6. 📊 Monitoramento
+Adicionar ao build.js:
+javascript// Step 7: Bundle analysis
+if (process.env.ANALYZE) {
+  log('Analyzing bundle size...');
+  import('webpack-bundle-analyzer').then(({ analyzeMetafile }) => {
+    // Bundle analysis logic
+  });
+}
+
+// Step 8: Performance metrics
+log('📊 Build Performance:');
+const endTime = Date.now();
+log(`⏱️ Build time: ${(endTime - startTime) / 1000}s`);
