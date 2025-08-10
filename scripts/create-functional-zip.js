@@ -188,23 +188,24 @@ Data: ${new Date().toLocaleDateString('pt-BR')}
         const { promisify } = await import('util');
         const execAsync = promisify(exec);
         
-        // Remove ZIP anterior se existir
-        if (fs.existsSync(zipPath)) {
-            fs.unlinkSync(zipPath);
+        // Remove arquivo anterior se existir
+        const tarPath = zipPath.replace('.zip', '.tar.gz');
+        if (fs.existsSync(tarPath)) {
+            fs.unlinkSync(tarPath);
         }
         
-        // Cria ZIP
-        const zipCommand = `cd "${path.dirname(zipDir)}" && zip -r telemed-functional.zip telemed-functional/`;
-        await execAsync(zipCommand);
+        // Cria TAR.GZ (mais compatível)
+        const tarCommand = `cd "${path.dirname(zipDir)}" && tar -czf telemed-functional.tar.gz telemed-functional/`;
+        await execAsync(tarCommand);
         
         console.log(`\n🎉 ZIP criado com sucesso!`);
-        console.log(`📁 Localização: ${zipPath}`);
+        console.log(`📁 Localização: ${tarPath}`);
         console.log(`📊 Arquivos incluídos: ${copiedFiles + 1} (+ README.txt)`);
         
         // Remove diretório temporário
         fs.rmSync(zipDir, { recursive: true, force: true });
         
-        return zipPath;
+        return tarPath;
         
     } catch (error) {
         console.error('❌ Erro ao criar ZIP:', error.message);
