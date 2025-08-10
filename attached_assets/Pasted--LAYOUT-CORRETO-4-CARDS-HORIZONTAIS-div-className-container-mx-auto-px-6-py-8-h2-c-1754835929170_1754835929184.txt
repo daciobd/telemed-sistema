@@ -1,0 +1,52 @@
+{/* LAYOUT CORRETO - 4 CARDS HORIZONTAIS */}
+<div className="container mx-auto px-6 py-8">
+  <h2 className="text-2xl font-bold text-gray-800 mb-6">Funcionalidades Principais</h2>
+  
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    
+    {/* Card 1 - Agenda Médica */}
+    <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 aspect-square flex flex-col justify-between">
+      <div>
+        <div className="bg-white/20 p-3 rounded-lg w-fit mb-4">
+          📅
+        </div>
+        <h3 className="text-xl font-bold mb-2">Agenda Médica</h3>
+        <p className="text-blue-100 text-sm">Gerencie consultas e horários médicos</p>
+      </div>
+    </div>
+
+    {/* Card 2 - Receitas Digitais */}
+    <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 aspect-square flex flex-col justify-between">
+      <div>
+        <div className="bg-white/20 p-3 rounded-lg w-fit mb-4">
+          💊
+        </div>
+        <h3 className="text-xl font-bold mb-2">Receitas Digitais</h3>
+        <p className="text-green-100 text-sm">Sistema MEMED integrado para prescrições</p>
+      </div>
+    </div>
+
+    {/* Card 3 - Videoconsultas */}
+    <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 aspect-square flex flex-col justify-between">
+      <div>
+        <div className="bg-white/20 p-3 rounded-lg w-fit mb-4">
+          📹
+        </div>
+        <h3 className="text-xl font-bold mb-2">Videoconsultas</h3>
+        <p className="text-orange-100 text-sm">Monitoramento contínuo de pacientes crônicos</p>
+      </div>
+    </div>
+
+    {/* Card 4 - Telemonitoramento */}
+    <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 aspect-square flex flex-col justify-between">
+      <div>
+        <div className="bg-white/20 p-3 rounded-lg w-fit mb-4">
+          📊
+        </div>
+        <h3 className="text-xl font-bold mb-2">Telemonitoramento</h3>
+        <p className="text-purple-100 text-sm">Monitoramento contínuo com Trend IA</p>
+      </div>
+    </div>
+
+  </div>
+</div>
