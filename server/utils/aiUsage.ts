@@ -174,3 +174,47 @@ export class AIUsageTracker {
 }
 
 export const aiUsageTracker = AIUsageTracker.getInstance();
+
+// Rate limit tracking for alerts
+const rateLimitWindow = new Map<string, { count: number; timestamp: number }>();
+
+export function trackRateLimit(): { shouldAlert: boolean; recentCount: number } {
+  const now = Date.now();
+  const key = 'rate_limit';
+  const windowMs = 60000; // 1 minute
+
+  const current = rateLimitWindow.get(key) || { count: 0, timestamp: now };
+  
+  // Reset window if older than 1 minute
+  if (now - current.timestamp > windowMs) {
+    current.count = 0;
+    current.timestamp = now;
+  }
+  
+  current.count++;
+  rateLimitWindow.set(key, current);
+  
+  return {
+    shouldAlert: current.count >= 3,
+    recentCount: current.count
+  };
+}
+
+// Get today's usage for alerts
+export function getUsageToday(): any {
+  const today = new Date().toISOString().split('T')[0];
+  const metrics = aiUsageTracker.getMetrics();
+  const todayUsage = metrics.dailyUsage[today] || { requests: 0, errors: 0, fallbacks: 0 };
+  
+  return {
+    date: today,
+    totalRequests: todayUsage.requests,
+    totalErrors: todayUsage.errors,
+    totalFallbacks: todayUsage.fallbacks,
+    fallbackRate: todayUsage.requests > 0 ? (todayUsage.fallbacks / todayUsage.requests) : 0,
+    errorRate: todayUsage.requests > 0 ? (todayUsage.errors / todayUsage.requests) : 0,
+    quotaErrors: metrics.quotaErrors,
+    rateLimitErrors: metrics.rateLimitErrors,
+    billingErrors: metrics.billingErrors
+  };
+}

@@ -4,7 +4,7 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["unzip"]
+packages = ["unzip", "zip"]
 
 [deployment]
 deploymentTarget = "gce"
@@ -26,6 +26,10 @@ externalPort = 80
 [[ports]]
 localPort = 5001
 externalPort = 3001
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
 
 [[ports]]
 localPort = 10000
@@ -53,4 +57,4 @@ args = "npm run dev"
 waitForPort = 5000
 
 [agent]
-integrations = ["javascript_log_in_with_replit==1.0.0", "javascript_mem_db==1.0.0"]
+integrations = ["javascript_mem_db==1.0.0", "javascript_slack==1.0.0", "javascript_log_in_with_replit==1.0.0"]

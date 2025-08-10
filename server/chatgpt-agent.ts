@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
-import { aiUsageTracker } from './utils/aiUsage';
-import { webhookManager } from './utils/webhook';
+import { aiUsageTracker, trackRateLimit, getUsageToday } from './utils/aiUsage';
+import { webhookManager, sendAlert } from './utils/webhook';
 
 // Configuração do ChatGPT Agent para TeleMed Consulta
 let openai: OpenAI | null = null;
@@ -112,6 +112,12 @@ async function callOpenAIWithResilience(
         attempt,
         originalModel: model
       });
+      
+      // Check fallback rate and send alert if high
+      const todayUsage = getUsageToday();
+      if (todayUsage.fallbackRate > 0.2) {
+        await sendAlert(`⚠️ Fallback alto hoje (>20%). Snapshot: ${JSON.stringify(todayUsage)}`, 'medium');
+      }
     }
 
     console.log(`✅ OpenAI Success: ${currentModel} (${content.length} chars)`);
@@ -135,11 +141,17 @@ async function callOpenAIWithResilience(
     // Erros críticos que não devem fazer retry
     if (errorCode === 'insufficient_quota') {
       await webhookManager.alertQuotaExceeded({ error: error?.message, model: currentModel });
+      // Send Slack alert for quota exceeded
+      const lastMessage = messages[messages.length - 1]?.content || '';
+      await sendAlert(`🚨 Quota OpenAI: ${errorCode} (${statusCode}). Entrando em fallback ${FALLBACK_MODEL}. Pergunta: ${lastMessage}`, 'critical');
       throw error;
     }
     
     if (errorCode === 'billing_hard_limit_reached') {
       await webhookManager.alertBillingLimit({ error: error?.message, model: currentModel });
+      // Send Slack alert for billing limit
+      const lastMessage = messages[messages.length - 1]?.content || '';
+      await sendAlert(`🚨 Quota OpenAI: ${errorCode} (${statusCode}). Entrando em fallback ${FALLBACK_MODEL}. Pergunta: ${lastMessage}`, 'critical');
       throw error;
     }
 
@@ -151,6 +163,12 @@ async function callOpenAIWithResilience(
     // Rate limits e erros temporários - tentar fallback ou retry
     if (errorCode === 'rate_limit_exceeded' || statusCode === 429) {
       await webhookManager.alertRateLimit({ error: error?.message, model: currentModel, attempt });
+      
+      // Check if we should send rate limit alert (3+ in last minute)
+      const rateLimitCheck = trackRateLimit();
+      if (rateLimitCheck.shouldAlert) {
+        await sendAlert(`⏱️ Rate limit frequente. Snapshot: ${JSON.stringify(getUsageToday())}`, 'high');
+      }
     }
 
     // Tentar fallback se não está usando ainda

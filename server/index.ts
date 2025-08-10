@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import { fileURLToPath } from 'url';
+import { getUsageToday } from "./utils/aiUsage";
+import { sendAlert } from "./utils/webhook";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -94,6 +96,31 @@ import aiAgentRoutes from './routes/ai-agent.js';
 import aiAgentHealthRoutes from './routes/ai-agent-health.js';
 app.use('/api/ai-agent', aiAgentRoutes);
 app.use('/api/ai-agent', aiAgentHealthRoutes);
+
+// Slack alerts test route
+app.post('/api/ai-agent/alert-test', async (req, res) => {
+  try {
+    const { msg } = req.body;
+    const testMessage = `🧪 ${msg || 'Teste de alerta manual'}`;
+    
+    await sendAlert(testMessage, 'medium');
+    
+    res.json({ 
+      ok: true, 
+      message: 'Alerta enviado para Slack',
+      testMessage,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('❌ Erro no teste de alerta:', error);
+    res.status(500).json({ 
+      ok: false, 
+      error: 'Falha ao enviar alerta',
+      details: error.message 
+    });
+  }
+});
+
 console.log('🤖 ChatGPT Agent ativado com OpenAI v5.12.1');
 
 // Medical Reports - Sistema de Laudos Médicos
@@ -580,7 +607,49 @@ server.on('error', (err: any) => {
 
 server.on('listening', () => {
   console.log('✅ Server is listening and ready for connections');
+  
+  // Initialize AI usage tracking watchdog
+  startAIUsageWatchdog();
 });
+
+// AI Usage Watchdog - monitors and alerts every 5 minutes
+const watchdogAlerts = {
+  lastQuotaAlert: null as string | null,
+  lastFallbackAlert: null as string | null
+};
+
+function startAIUsageWatchdog(): void {
+  if (!process.env.ALERT_WEBHOOK_URL) {
+    console.log('⚠️ ALERT_WEBHOOK_URL não configurado, watchdog desabilitado');
+    return;
+  }
+
+  console.log('🔍 Iniciando AI Usage Watchdog (5min intervals)');
+  
+  setInterval(async () => {
+    try {
+      const usage = getUsageToday();
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Check for quota errors
+      if (usage.quotaErrors > 0 && watchdogAlerts.lastQuotaAlert !== today) {
+        await sendAlert(`🚨 Quota detectada hoje: ${usage.quotaErrors} erros. Snapshot: ${JSON.stringify(usage)}`, 'critical');
+        watchdogAlerts.lastQuotaAlert = today;
+      }
+      
+      // Check for high fallback rate (>20%)
+      if (usage.fallbackRate > 0.2 && watchdogAlerts.lastFallbackAlert !== today) {
+        await sendAlert(`⚠️ Fallback >20% hoje: ${Math.round(usage.fallbackRate * 100)}%. Snapshot: ${JSON.stringify(usage)}`, 'high');
+        watchdogAlerts.lastFallbackAlert = today;
+      }
+      
+      console.log(`📊 Watchdog check: ${usage.totalRequests} requests, ${Math.round(usage.fallbackRate * 100)}% fallback, ${usage.quotaErrors} quota errors`);
+      
+    } catch (error) {
+      console.error('❌ Erro no watchdog:', error);
+    }
+  }, 5 * 60 * 1000); // 5 minutes
+}
 
 // SPA Catch-all handler (must be last)
 app.get('*', (req, res) => {

@@ -136,3 +136,31 @@ export class WebhookManager {
 }
 
 export const webhookManager = WebhookManager.getInstance();
+
+// Simple alert function for direct use
+export async function sendAlert(message: string, severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'): Promise<void> {
+  if (!process.env.ALERT_WEBHOOK_URL) {
+    console.log('⚠️ ALERT_WEBHOOK_URL não configurado, pulando alerta:', message);
+    return;
+  }
+
+  try {
+    const payload = {
+      text: message,
+      channel: process.env.SLACK_CHANNEL_ID || '#alerts',
+      username: 'TeleMed AI Agent',
+      icon_emoji: ':robot_face:'
+    };
+
+    await axios.post(process.env.ALERT_WEBHOOK_URL, payload, {
+      timeout: 5000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log('✅ Alerta Slack enviado:', message.substring(0, 100) + '...');
+  } catch (error) {
+    console.error('❌ Erro ao enviar alerta Slack:', error);
+  }
+}
