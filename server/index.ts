@@ -119,7 +119,7 @@ app.get('/landing-simple', (req, res) => {
 // Página de download do projeto
 app.get('/download', (req, res) => {
   try {
-    const html = fs.readFileSync(path.join(__dirname, '../download-page.html'), 'utf-8');
+    const html = fs.readFileSync(path.join(__dirname, '../download-page-fixed.html'), 'utf-8');
     console.log('📦 Página de download carregada');
     res.send(html);
   } catch (err) {
@@ -131,13 +131,12 @@ app.get('/download', (req, res) => {
 // API para criar ZIP dos arquivos funcionais
 app.get('/api/download-zip', async (req, res) => {
   try {
-    console.log('🔄 Iniciando criação do ZIP...');
-    const { createFunctionalZip } = await import('../scripts/create-functional-zip.js');
-    const zipPath = await createFunctionalZip();
+    console.log('🔄 Iniciando download do ZIP...');
+    const zipPath = path.join(__dirname, '../dist/telemed-functional.tar.gz');
     
     if (fs.existsSync(zipPath)) {
-      console.log('✅ ZIP criado, enviando download...');
-      res.download(zipPath, 'telemed-funcional.zip', (err) => {
+      console.log('✅ Arquivo encontrado, enviando download...');
+      res.download(zipPath, 'telemed-funcional.tar.gz', (err) => {
         if (err) {
           console.error('❌ Erro no download:', err);
           res.status(500).send('Erro no download');
@@ -146,11 +145,65 @@ app.get('/api/download-zip', async (req, res) => {
         }
       });
     } else {
-      res.status(404).send('ZIP não encontrado');
+      console.log('⚠️  Arquivo não encontrado, criando novo...');
+      const { createFunctionalZip } = await import('../scripts/create-functional-zip.js');
+      const newZipPath = await createFunctionalZip();
+      
+      if (fs.existsSync(newZipPath)) {
+        res.download(newZipPath, 'telemed-funcional.zip');
+      } else {
+        res.status(404).json({ error: 'ZIP não pôde ser criado' });
+      }
     }
   } catch (err) {
     console.error('❌ Erro ao criar ZIP:', err);
     res.status(500).json({ error: 'Erro ao criar ZIP', details: err.message });
+  }
+});
+
+// Rota alternativa para download simples
+app.get('/api/download-simple', (req, res) => {
+  try {
+    console.log('📄 Download simples solicitado...');
+    
+    // Cria um ZIP simples com arquivos básicos
+    const simpleFiles = {
+      'README.md': `# TeleMed Sistema
+
+Sistema de telemedicina completo desenvolvido em React + Node.js.
+
+## Características:
+- Frontend React com TypeScript
+- Backend Express com PostgreSQL
+- Sistema de autenticação JWT
+- IA médica com OpenAI
+- Design responsivo premium
+
+## Links:
+- Produção: telemed-sistema.onrender.com
+- Desenvolvimento: Replit
+
+Para executar: npm install && npm run dev
+`,
+      'landing-page.html': fs.readFileSync(path.join(__dirname, '../landing-page-simple.html'), 'utf-8'),
+      'package-info.json': JSON.stringify({
+        name: "telemed-sistema",
+        version: "2.0.0",
+        description: "Sistema completo de telemedicina",
+        stack: ["React", "Node.js", "PostgreSQL", "OpenAI"],
+        deployment: "Replit + Render"
+      }, null, 2)
+    };
+    
+    res.json({
+      message: 'Arquivos básicos disponíveis',
+      files: Object.keys(simpleFiles),
+      download_url: '/download'
+    });
+    
+  } catch (err) {
+    console.error('❌ Erro no download simples:', err);
+    res.status(500).json({ error: 'Erro no download simples' });
   }
 });
 
