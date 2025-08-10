@@ -116,6 +116,44 @@ app.get('/landing-simple', (req, res) => {
   }
 });
 
+// Página de download do projeto
+app.get('/download', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../download-page.html'), 'utf-8');
+    console.log('📦 Página de download carregada');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar página de download:', err);
+    res.status(500).send('Erro ao carregar página de download');
+  }
+});
+
+// API para criar ZIP dos arquivos funcionais
+app.get('/api/download-zip', async (req, res) => {
+  try {
+    console.log('🔄 Iniciando criação do ZIP...');
+    const { createFunctionalZip } = await import('../scripts/create-functional-zip.js');
+    const zipPath = await createFunctionalZip();
+    
+    if (fs.existsSync(zipPath)) {
+      console.log('✅ ZIP criado, enviando download...');
+      res.download(zipPath, 'telemed-funcional.zip', (err) => {
+        if (err) {
+          console.error('❌ Erro no download:', err);
+          res.status(500).send('Erro no download');
+        } else {
+          console.log('📦 Download concluído');
+        }
+      });
+    } else {
+      res.status(404).send('ZIP não encontrado');
+    }
+  } catch (err) {
+    console.error('❌ Erro ao criar ZIP:', err);
+    res.status(500).json({ error: 'Erro ao criar ZIP', details: err.message });
+  }
+});
+
 // Serve SPA with proper handling
 app.get('/', (req, res) => {
   try {

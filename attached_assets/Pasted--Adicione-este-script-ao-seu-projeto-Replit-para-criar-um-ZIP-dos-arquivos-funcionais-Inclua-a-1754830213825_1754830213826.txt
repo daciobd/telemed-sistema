@@ -1,0 +1,54 @@
+// Adicione este script ao seu projeto Replit para criar um ZIP dos arquivos funcionais
+// Inclua a biblioteca JSZip via CDN no seu HTML: <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+// Coloque este código em um arquivo separado (ex.: download-functional.js) ou no final do seu index.html
+
+function createFunctionalZip() {
+    const zip = new JSZip();
+    
+    // Lista de arquivos funcionais do projeto TeleMed (ajuste conforme necessário)
+    const functionalFiles = {
+        "index.html": `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Consultas Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="hero">
+        <h1>TeleMed - Sua Saúde na Palma da Mão</h1>
+        <p>Consultas médicas online, seguras e acessíveis, a qualquer hora.</p>
+        <button class="cta-button" onclick="window.location.href='https://telemed-sistema.onrender.com'">Comece Agora</button>
+    </section>
+    <!-- Outras seções conforme o código anterior -->
+</body>
+</html>`,
+        "style.css": `/* Estilos funcionais da landing page */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+body { background-color: #f4f4f4; color: #333; }
+.hero { background: linear-gradient(to right, #007bff, #00c4ff); color: white; text-align: center; padding: 80px 20px; }
+.hero h1 { font-size: 2.5em; margin-bottom: 10px; }
+.hero p { font-size: 1.2em; margin-bottom: 20px; }
+.hero .cta-button { background-color: #28a745; color: white; padding: 15px 30px; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer; transition: background-color 0.3s; }
+.hero .cta-button:hover { background-color: #218838; }`
+    };
+
+    // Adiciona arquivos ao ZIP
+    for (const [fileName, content] of Object.entries(functionalFiles)) {
+        zip.file(fileName, content);
+    }
+
+    // Gera o ZIP e cria um link de download
+    zip.generateAsync({ type: "blob" }).then(function(content) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = "telemed-funcional.zip";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+}
+
+// Chama a função quando um botão é clicado (adicione um botão no HTML para disparar isso)
+document.getElementById("download-btn") && document.getElementById("download-btn").addEventListener("click", createFunctionalZip);
