@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aquarela - TeleMed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .aquarela-bg {
+            background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 40%, #d97706 60%, #fbbf24 80%, #fef3c7 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        .aquarela-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="watercolor"><feTurbulence baseFrequency="0.3" numOctaves="4" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="5"/></filter></defs><rect width="100" height="100" fill="rgba(255,255,255,0.1)" filter="url(%23watercolor)"/></svg>') repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .watercolor-card {
+            background: linear-gradient(135deg, rgba(232, 212, 201, 0.9) 0%, rgba(241, 237, 235, 0.85) 100%);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(232, 212, 201, 0.4);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .watercolor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(179, 217, 224, 0.1) 0%, rgba(209, 232, 226, 0.1) 100%);
+            pointer-events: none;
+        }
+        .watercolor-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(42, 64, 102, 0.15);
+            border-color: rgba(179, 217, 224, 0.6);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #2A4066 0%, #4A6A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, rgba(245, 232, 199, 0.9) 0%, rgba(224, 215, 185, 0.85) 100%);
+            border: 1px solid rgba(179, 217, 224, 0.3);
+            border-radius: 15px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(179, 217, 224, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(42, 64, 102, 0.12);
+            border-color: rgba(179, 217, 224, 0.5);
+        }
+        .action-card {
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 1;
+            text-align: center;
+            color: white;
+        }
+        .card-icon {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 12px;
+            width: fit-content;
+            margin-bottom: 16px;
+        }
+
+        .card-content {
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        .breadcrumb {
+            background: linear-gradient(135deg, rgba(245, 232, 199, 0.8) 0%, rgba(232, 212, 201, 0.7) 100%);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #2A4066;
+            border: 1px solid rgba(179, 217, 224, 0.3);
+            font-weight: 500;
+        }
+        .header-aquarela {
+            background: linear-gradient(135deg, rgba(179, 217, 224, 0.9) 0%, rgba(209, 232, 226, 0.85) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(42, 64, 102, 0.1);
+        }
+        .text-aquarela {
+            color: #2A4066;
+        }
+        .text-aquarela-light {
+            color: #4A6A8A;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(179, 217, 224, 0.95) 0%, rgba(209, 232, 226, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(42, 64, 102, 0.2);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(42, 64, 102, 0.1);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #2A4066;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(42, 64, 102, 0.1);
+            border-left-color: #2A4066;
+            color: #2A4066;
+        }
+
+        .menu-item.active {
+            background: rgba(42, 64, 102, 0.15);
+            border-left-color: #2A4066;
+            font-weight: 600;
+        }
+
+        .menu-item i {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(255, 223, 0, 0.8) 0%, rgba(255, 165, 0, 0.6) 50%, rgba(255, 140, 0, 0.8) 100%), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><defs><radialGradient id="sun" cx="85%" cy="25%" r="15%"><stop offset="0%" style="stop-color:%23ffeb3b;stop-opacity:1"/><stop offset="30%" style="stop-color:%23ffc107;stop-opacity:0.9"/><stop offset="100%" style="stop-color:%23ff9800;stop-opacity:0.7"/></radialGradient><linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:%2387ceeb;stop-opacity:0.8"/><stop offset="70%" style="stop-color:%23f0e68c;stop-opacity:0.6"/><stop offset="100%" style="stop-color:%23ffd700;stop-opacity:0.4"/></linearGradient></defs><rect width="1200" height="200" fill="url(%23sky)"/><circle cx="1020" cy="50" r="45" fill="url(%23sun)"/><g stroke="%23ffeb3b" stroke-width="3" opacity="0.7"><line x1="1020" y1="5" x2="1020" y2="25"/><line x1="1020" y1="75" x2="1020" y2="95"/><line x1="975" y1="50" x2="995" y2="50"/><line x1="1045" y1="50" x2="1065" y2="50"/><line x1="988" y1="22" x2="1002" y2="36"/><line x1="1038" y1="64" x2="1052" y2="78"/><line x1="1052" y1="22" x2="1038" y2="36"/><line x1="1002" y1="64" x2="988" y2="78"/></g><path d="M0,140 Q300,120 600,130 T1200,140 L1200,200 L0,200 Z" fill="%2332cd32" opacity="0.4"/><path d="M0,160 Q200,150 400,155 T1200,160 L1200,200 L0,200 Z" fill="%2300ff00" opacity="0.3"/></svg>') center/cover;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(245, 232, 199, 0.7) 0%, rgba(232, 212, 201, 0.6) 50%, rgba(179, 217, 224, 0.5) 100%);
+            pointer-events: none;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2A4066 0%, #4A6A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: #4A6A8A;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="aquarela-bg">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2 class="text-xl font-bold gradient-text">TeleMed Sistema</h2>
+            <p class="text-sm text-aquarela-light mt-1">Plataforma Médica Integrada</p>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="/dashboard-aquarela" class="menu-item active">
+                <i data-lucide="home"></i>
+                Dashboard Principal
+            </a>
+            <a href="/agenda-medica" class="menu-item">
+                <i data-lucide="calendar-days"></i>
+                Agenda Médica
+            </a>
+            <a href="/receitas-digitais" class="menu-item">
+                <i data-lucide="file-text"></i>
+                Receitas Digitais
+            </a>
+            <a href="/videoconsulta" class="menu-item">
+                <i data-lucide="video"></i>
+                Videoconsultas
+            </a>
+            <a href="/dr-ai" class="menu-item">
+                <i data-lucide="brain"></i>
+                Dr. AI Assistente
+            </a>
+            <a href="/leilao-consultas" class="menu-item">
+                <i data-lucide="gavel"></i>
+                Leilão Consultas
+            </a>
+            <a href="/triagem-psiquiatrica" class="menu-item">
+                <i data-lucide="activity"></i>
+                Triagem Psiquiátrica
+            </a>
+            <a href="/centro-avaliacao" class="menu-item">
+                <i data-lucide="brain-circuit"></i>
+                Centro Avaliação
+            </a>
+            <a href="/sistema-notificacoes-medicas" class="menu-item">
+                <i data-lucide="bell"></i>
+                Notificações SMS
+            </a>
+            <a href="/especialidades" class="menu-item">
+                <i data-lucide="stethoscope"></i>
+                Especialidades
+            </a>
+            <a href="/atendimento-medico" class="menu-item">
+                <i data-lucide="user-check"></i>
+                Atendimento Médico
+            </a>
+            <a href="/memed-receita-viewer" class="menu-item">
+                <i data-lucide="pill"></i>
+                MEMED Receitas
+            </a>
+            <a href="/ansiedade-gad7" class="menu-item">
+                <i data-lucide="heart-pulse"></i>
+                Teste GAD-7
+            </a>
+            <a href="/depressao-phq9" class="menu-item">
+                <i data-lucide="brain"></i>
+                Teste PHQ-9
+            </a>
+            <a href="/bipolar-mdq" class="menu-item">
+                <i data-lucide="zap"></i>
+                Teste MDQ
+            </a>
+            <a href="/telemonitoramento-enfermagem" class="menu-item">
+                <i data-lucide="monitor-heart"></i>
+                Telemonitoramento
+            </a>
+            <a href="/entrada" class="menu-item">
+                <i data-lucide="door-open"></i>
+                Página Entrada
+            </a>
+            <a href="/login" class="menu-item">
+                <i data-lucide="log-in"></i>
+                Login Sistema
+            </a>
+
+            <div class="px-5 py-4 mt-8">
+                <div class="border-t border-aquarela-light/30 pt-4">
+                    <button onclick="sairSistema()" class="w-full bg-gradient-to-r from-red-400 to-red-500 text-white px-4 py-2 rounded-xl hover:from-red-500 hover:to-red-600 transition-all duration-300 shadow-lg flex items-center justify-center">
+                        <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+                        Sair do Sistema
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content px-8 py-6">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-content">
+                <h1 class="welcome-title">Bem-vindo, Dr. Carlos Mendes</h1>
+                <p class="welcome-subtitle">Sistema TeleMed - Sua plataforma médica completa para atendimento e gestão de pacientes</p>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100">
+                        <i data-lucide="users" class="w-6 h-6 text-blue-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-aquarela-light">Pacientes Hoje</p>
+                        <p class="text-2xl font-bold text-aquarela">24</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100">
+                        <i data-lucide="calendar" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-aquarela-light">Consultas</p>
+                        <p class="text-2xl font-bold text-aquarela">12</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100">
+                        <i data-lucide="clock" class="w-6 h-6 text-yellow-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-aquarela-light">Pendentes</p>
+                        <p class="text-2xl font-bold text-aquarela">5</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100">
+                        <i data-lucide="heart" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-aquarela-light">Receitas</p>
+                        <p class="text-2xl font-bold text-aquarela">18</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Action Cards - 4 Cards Horizontally -->
+        <div class="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-amber-200/50">
+            <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Funcionalidades Principais</h2>
+
+            <div class="grid grid-cols-4 gap-6">
+                <div class="bg-blue-500 text-white p-6 rounded-xl cursor-pointer hover:bg-blue-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/agenda-medica')">
+                    <div class="text-4xl mb-4">📅</div>
+                    <h3 class="text-xl font-bold mb-2">Agenda Médica</h3>
+                    <p class="text-sm">Consultas e horários</p>
+                </div>
+
+                <div class="bg-green-500 text-white p-6 rounded-xl cursor-pointer hover:bg-green-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/receitas-digitais')">
+                    <div class="text-4xl mb-4">💊</div>
+                    <h3 class="text-xl font-bold mb-2">Receitas Digitais</h3>
+                    <p class="text-sm">Prescrições MEMED</p>
+                </div>
+
+                <div class="bg-orange-500 text-white p-6 rounded-xl cursor-pointer hover:bg-orange-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/videoconsulta')">
+                    <div class="text-4xl mb-4">📹</div>
+                    <h3 class="text-xl font-bold mb-2">Videoconsultas</h3>
+                    <p class="text-sm">Consultas online</p>
+                </div>
+
+                <div class="bg-purple-500 text-white p-6 rounded-xl cursor-pointer hover:bg-purple-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/telemonitoramento-enfermagem')">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold mb-2">Telemonitoramento</h3>
+                    <p class="text-sm">Monitoramento 24/7</p>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="watercolor-card rounded-2xl p-8 mt-8 shadow-lg">
+            <h3 class="text-xl font-bold gradient-text mb-6">Atividade Recente</h3>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-white/50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-aquarela">Nova consulta agendada</p>
+                            <p class="text-xs text-aquarela-light">Ana Silva - 14:30</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-aquarela-light opacity-75">5 min atrás</span>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-white/50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-5 h-5 text-green-600"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-aquarela">Receita digital emitida</p>
+                            <p class="text-xs text-aquarela-light">João Santos - MEMED</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-aquarela-light opacity-75">12 min atrás</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Feature Cards -->
+        <div class="bg-white rounded-3xl p-8 shadow-lg mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/centro-avaliacao')">
+                <img src="/attached_assets/CENTRAL_DE_TESTES_1754513913866.PNG" alt="Centro de Avaliação" class="card-image" onerror="this.style.background='linear-gradient(135deg, #f97316, #ea580c)'; this.innerHTML='<i data-lucide=\'brain-circuit\' class=\'w-8 h-8 text-white\'></i>'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center';">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Centro de Avaliação</h3>
+                    <p class="text-aquarela-light text-sm">Testes psicológicos e escalas de avaliação médica</p>
+                </div>
+            </div>
+
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/triagem-psiquiatrica')">
+                <img src="/attached_assets/ANSIEDADE_1754516735328.PNG" alt="Triagem Psiquiátrica" class="card-image" onerror="this.style.background='linear-gradient(135deg, #ef4444, #dc2626)'; this.innerHTML='<i data-lucide=\'activity\' class=\'w-8 h-8 text-white\'></i>'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center';">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Triagem Psiquiátrica</h3>
+                    <p class="text-aquarela-light text-sm">Avaliação especializada com IA médica</p>
+                </div>
+            </div>
+
+            <div class="action-card rounded-xl shadow-md" onclick="navegarPara('/telemonitoramento-enfermagem')">
+                <img src="/attached_assets/VIDEO_CONSULTA_1754516025745.PNG" alt="Telemonitoramento" class="card-image" onerror="this.style.background='linear-gradient(135deg, #6366f1, #4f46e5)'; this.innerHTML='<i data-lucide=\'monitor-heart\' class=\'w-8 h-8 text-white\'></i>'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center';">
+                <div class="card-content">
+                    <h3 class="text-lg font-semibold text-aquarela mb-2">Telemonitoramento</h3>
+                    <p class="text-aquarela-light text-sm">Monitoramento remoto de pacientes</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Função para sair do sistema
+        function sairSistema() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                console.log('🚪 Fazendo logout do sistema');
+
+                // Limpar qualquer sessão local
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Redirecionar para página de entrada
+                window.location.href = '/';
+            }
+        }
+
+        // Função para navegação segura
+        function navegarPara(url) {
+            console.log(`🔗 Navegando para: ${url}`);
+            window.location.href = url;
+        }
+
+        // Adicionar listener para ESC key (sair rápido)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const resposta = confirm('Pressione ESC novamente para sair do sistema');
+                if (resposta) {
+                    sairSistema();
+                }
+            }
+        });
+
+        console.log('🎨 Dashboard Aquarela carregado com sucesso');
+        console.log('✅ Design aquarela ativo com animações');
+        console.log('🔗 Links para funcionalidades configurados');
+        console.log('🚪 Função de logout configurada (botão Sair ou tecla ESC)');
+    </script>
+</body>
+</html>

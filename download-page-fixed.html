@@ -274,16 +274,30 @@
             status.textContent = 'Preparando download...';
             
             try {
-                status.textContent = 'Iniciando download direto...';
-                progressFill.style.width = '50%';
+                status.textContent = 'Iniciando download...';
+                progressFill.style.width = '30%';
                 
-                // Download direto e simples
-                status.textContent = 'Preparando TeleMed v2.1.0...';
+                // Criar elemento de link para download
+                const link = document.createElement('a');
+                link.href = '/api/download-zip';
+                link.download = 'telemed-funcional.tar.gz';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                
+                status.textContent = 'Preparando arquivo...';
+                progressFill.style.width = '70%';
+                
+                // Simular pequeno delay para feedback visual
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                status.textContent = 'Iniciando download...';
                 progressFill.style.width = '100%';
                 
-                // Força download
-                window.location.href = '/api/download-zip';
-                status.textContent = '✅ Download iniciado!';
+                // Acionar download
+                link.click();
+                document.body.removeChild(link);
+                
+                status.textContent = '✅ Download iniciado! Verifique sua pasta de downloads.';
                 
                 setTimeout(() => {
                     btn.disabled = false;
@@ -293,10 +307,11 @@
                 
             } catch (error) {
                 console.error('Erro no download:', error);
-                status.textContent = 'Erro no download. Tentando método alternativo...';
-                window.location.href = '/api/download-zip';
+                status.textContent = 'Erro no download. Redirecionando...';
+                window.open('/api/download-zip', '_blank');
                 btn.disabled = false;
                 btn.textContent = '📦 Baixar Backup Completo (v2.1.0)';
+                progress.style.display = 'none';
             }
         }
         
