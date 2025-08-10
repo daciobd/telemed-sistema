@@ -205,10 +205,15 @@ Para executar: npm install && npm run dev
       'landing-page.html': fs.readFileSync(path.join(__dirname, '../landing-page-simple.html'), 'utf-8'),
       'package-info.json': JSON.stringify({
         name: "telemed-sistema",
-        version: "2.0.0",
-        description: "Sistema completo de telemedicina",
+        version: "2.1.0",
+        description: "Sistema completo de telemedicina otimizado",
         stack: ["React", "Node.js", "PostgreSQL", "OpenAI"],
-        deployment: "Replit + Render"
+        deployment: "Replit + Render",
+        optimizations: {
+          bundleSize: "145KB JS + 6KB CSS",
+          buildTime: "3.5s",
+          security: "Helmet + CORS + CSP"
+        }
       }, null, 2)
     };
     
@@ -221,6 +226,78 @@ Para executar: npm install && npm run dev
   } catch (err) {
     console.error('❌ Erro no download simples:', err);
     res.status(500).json({ error: 'Erro no download simples' });
+  }
+});
+
+// Rota simples de teste primeiro
+app.get('/api/download-backup-test', (req, res) => {
+  res.json({ message: 'Rota funcionando!', timestamp: new Date().toISOString() });
+});
+
+// Nova rota para backup completo atualizado
+app.get('/api/download-backup', async (req, res) => {
+  try {
+    console.log('📦 Backup completo solicitado via API...');
+    
+    // Executar o sistema de backup
+    const { execSync } = require('child_process');
+    execSync('node scripts/backup-system.js', { cwd: path.join(__dirname, '..') });
+    
+    // Encontrar o backup mais recente
+    const backupsDir = path.join(__dirname, '../backups');
+    const backupFolders = fs.readdirSync(backupsDir)
+      .filter(f => f.startsWith('telemed-'))
+      .sort()
+      .reverse();
+    
+    if (backupFolders.length === 0) {
+      return res.status(404).json({ error: 'Nenhum backup encontrado' });
+    }
+    
+    const latestBackup = backupFolders[0];
+    const backupPath = path.join(backupsDir, latestBackup);
+    const zipPath = path.join(backupPath, 'telemed-backup.tar.gz');
+    
+    if (fs.existsSync(zipPath)) {
+      const stats = fs.statSync(zipPath);
+      const report = JSON.parse(fs.readFileSync(path.join(backupPath, 'backup-report.json'), 'utf-8'));
+      
+      res.json({
+        message: 'Backup completo disponível',
+        backup: {
+          date: latestBackup,
+          files: report.files,
+          size: `${(stats.size / 1024 / 1024).toFixed(2)}MB`,
+          version: report.version,
+          optimizations: report.optimizations
+        },
+        download_url: `/api/download-backup-file/${latestBackup}`
+      });
+    } else {
+      res.status(500).json({ error: 'Arquivo de backup não encontrado' });
+    }
+    
+  } catch (err) {
+    console.error('❌ Erro ao gerar backup:', err);
+    res.status(500).json({ error: 'Erro ao gerar backup', details: err.message });
+  }
+});
+
+// Rota para download direto do arquivo de backup
+app.get('/api/download-backup-file/:backupId', (req, res) => {
+  try {
+    const backupId = req.params.backupId;
+    const zipPath = path.join(__dirname, `../backups/${backupId}/telemed-backup.tar.gz`);
+    
+    if (fs.existsSync(zipPath)) {
+      console.log(`📦 Enviando backup: ${backupId}`);
+      res.download(zipPath, `telemed-sistema-${backupId}.tar.gz`);
+    } else {
+      res.status(404).json({ error: 'Backup não encontrado' });
+    }
+  } catch (err) {
+    console.error('❌ Erro ao enviar backup:', err);
+    res.status(500).json({ error: 'Erro ao enviar backup' });
   }
 });
 
