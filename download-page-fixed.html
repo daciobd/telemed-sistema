@@ -265,6 +265,7 @@
         async function downloadZipDirect() {
             const btn = document.getElementById('download-btn');
             const progress = document.getElementById('progress');
+            const progressFill = document.getElementById('progress-fill');
             const status = document.getElementById('status');
             
             btn.disabled = true;
@@ -273,30 +274,16 @@
             status.textContent = 'Preparando download...';
             
             try {
-                status.textContent = 'Gerando backup atualizado...';
+                status.textContent = 'Iniciando download direto...';
+                progressFill.style.width = '50%';
                 
-                // Executa backup local primeiro (método mais confiável)
-                progressFill.style.width = '30%';
-                status.textContent = 'Usando backup local existente...';
+                // Download direto e simples
+                status.textContent = 'Preparando TeleMed v2.1.0...';
+                progressFill.style.width = '100%';
                 
-                // Verifica se existe backup local
-                const backupResponse = await fetch('/api/download-simple');
-                
-                if (backupResponse.ok) {
-                    progressFill.style.width = '60%';
-                    status.textContent = 'Backup encontrado, preparando download...';
-                    
-                    // Usa o backup do sistema atual
-                    progressFill.style.width = '100%';
-                    window.location.href = '/api/download-zip';
-                    status.textContent = '✅ Download iniciado - TeleMed v2.1.0 otimizado!';
-                } else {
-                    // Fallback direto para método confiável
-                    progressFill.style.width = '80%';
-                    status.textContent = 'Usando método alternativo confiável...';
-                    window.location.href = '/api/download-zip';
-                    status.textContent = '✅ Download iniciado - Sistema TeleMed completo!';
-                }
+                // Força download
+                window.location.href = '/api/download-zip';
+                status.textContent = '✅ Download iniciado!';
                 
                 setTimeout(() => {
                     btn.disabled = false;

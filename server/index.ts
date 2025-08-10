@@ -145,6 +145,18 @@ app.get('/download', (req, res) => {
   }
 });
 
+// Página de teste para debug
+app.get('/test-download', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../test-download.html'), 'utf-8');
+    console.log('🧪 Página de teste carregada');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar página de teste:', err);
+    res.status(500).send('Erro ao carregar página de teste');
+  }
+});
+
 // API para criar ZIP dos arquivos funcionais
 app.get('/api/download-zip', async (req, res) => {
   try {
