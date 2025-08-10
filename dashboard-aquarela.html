@@ -398,51 +398,32 @@
         <div class="bg-white/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-amber-200/50">
             <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Funcionalidades Principais</h2>
             
-            <div class="grid grid-cols-4 gap-6">
-                <!-- Card 1 - Agenda Médica -->
-                <div class="action-card bg-gradient-to-br from-blue-500 to-blue-600 p-6 flex flex-col justify-between" onclick="navegarPara('/agenda-medica')">
-                    <div>
-                        <div class="card-icon">
-                            <i data-lucide="calendar-days" class="w-6 h-6 text-white"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Agenda Médica</h3>
-                        <p class="text-blue-100 text-sm">Gerencie consultas e horários médicos</p>
-                    </div>
+            <div class="grid grid-cols-4 gap-6 p-6">
+                <div class="bg-blue-500 rounded-xl p-6 text-white cursor-pointer hover:bg-blue-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/agenda-medica')">
+                    <div class="text-3xl mb-4">📅</div>
+                    <h3 class="text-xl font-bold">Agenda Médica</h3>
+                    <p>Consultas e horários</p>
                 </div>
-
-                <!-- Card 2 - Receitas Digitais -->
-                <div class="action-card bg-gradient-to-br from-green-500 to-green-600 p-6 flex flex-col justify-between" onclick="navegarPara('/receitas-digitais')">
-                    <div>
-                        <div class="card-icon">
-                            <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Receitas Digitais</h3>
-                        <p class="text-green-100 text-sm">Sistema MEMED integrado para prescrições</p>
-                    </div>
+                
+                <div class="bg-green-500 rounded-xl p-6 text-white cursor-pointer hover:bg-green-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/receitas-digitais')">
+                    <div class="text-3xl mb-4">💊</div>
+                    <h3 class="text-xl font-bold">Receitas Digitais</h3>
+                    <p>Prescrições MEMED</p>
                 </div>
-
-                <!-- Card 3 - Videoconsultas -->
-                <div class="action-card bg-gradient-to-br from-orange-500 to-orange-600 p-6 flex flex-col justify-between" onclick="navegarPara('/videoconsulta')">
-                    <div>
-                        <div class="card-icon">
-                            <i data-lucide="video" class="w-6 h-6 text-white"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Videoconsultas</h3>
-                        <p class="text-orange-100 text-sm">Atendimento médico remoto</p>
-                    </div>
+                
+                <div class="bg-orange-500 rounded-xl p-6 text-white cursor-pointer hover:bg-orange-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/videoconsulta')">
+                    <div class="text-3xl mb-4">📹</div>
+                    <h3 class="text-xl font-bold">Videoconsultas</h3>
+                    <p>Consultas online</p>
                 </div>
-
-                <!-- Card 4 - Telemonitoramento -->
-                <div class="action-card bg-gradient-to-br from-purple-500 to-purple-600 p-6 flex flex-col justify-between" onclick="navegarPara('/telemonitoramento-enfermagem')">
-                    <div>
-                        <div class="card-icon">
-                            <i data-lucide="monitor-heart" class="w-6 h-6 text-white"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Telemonitoramento</h3>
-                        <p class="text-purple-100 text-sm">Monitoramento contínuo com Trend IA</p>
-                    </div>
+                
+                <div class="bg-purple-500 rounded-xl p-6 text-white cursor-pointer hover:bg-purple-600 transition-all duration-300 transform hover:scale-105" onclick="navegarPara('/telemonitoramento-enfermagem')">
+                    <div class="text-3xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold">Telemonitoramento</h3>
+                    <p>Monitoramento 24/7</p>
                 </div>
             </div>
+
         </div>
         </div>
 
