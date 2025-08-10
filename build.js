@@ -13,6 +13,7 @@ const log = (message) => console.log(`🔧 ${message}`);
 const error = (message) => console.error(`❌ ${message}`);
 
 try {
+  const startTime = Date.now();
   log('Starting build process...');
 
   // Step 1: Clean previous build
@@ -95,11 +96,39 @@ try {
     log('✅ Index.html CSS/JS paths corrected to absolute paths!');
   }
 
+  // Performance metrics
+  const endTime = Date.now();
+  const buildTime = ((endTime - startTime) / 1000).toFixed(2);
+  
   log('✅ Build completed successfully!');
   log('📦 Client built to: dist/public');
   log('🚀 Server built to: dist/server');
   log('📄 Production package.json created');
   log('🎨 CSS paths fixed for production deployment');
+  log('📊 Build Performance:');
+  log(`⏱️ Build time: ${buildTime}s`);
+  
+  // Bundle size analysis
+  if (fs.existsSync('dist/public/assets')) {
+    const assetsPath = path.join('dist/public/assets');
+    const files = fs.readdirSync(assetsPath);
+    let totalSize = 0;
+    
+    files.forEach(file => {
+      const filePath = path.join(assetsPath, file);
+      const stats = fs.statSync(filePath);
+      const sizeKB = (stats.size / 1024).toFixed(2);
+      totalSize += stats.size;
+      
+      if (file.endsWith('.js')) {
+        log(`📄 JS Bundle: ${file} - ${sizeKB}KB`);
+      } else if (file.endsWith('.css')) {
+        log(`🎨 CSS Bundle: ${file} - ${sizeKB}KB`);
+      }
+    });
+    
+    log(`📊 Total assets size: ${(totalSize / 1024).toFixed(2)}KB`);
+  }
 
 } catch (err) {
   error(`Build failed: ${err.message}`);
