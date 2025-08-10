@@ -104,6 +104,18 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
+// Landing page simples
+app.get('/landing-simple', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../landing-page-simple.html'), 'utf-8');
+    console.log('🚀 Landing page simples carregada');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar landing page:', err);
+    res.status(500).send('Erro ao carregar a landing page');
+  }
+});
+
 // Serve SPA with proper handling
 app.get('/', (req, res) => {
   try {

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Consultas Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .hero {
+            background: linear-gradient(to right, #007bff, #00c4ff);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .hero .cta-button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .hero .cta-button:hover {
+            background-color: #218838;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 50px 20px;
+            gap: 20px;
+        }
+        .feature-card {
+            background-color: white;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+        .testimonials {
+            background-color: #e9ecef;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .testimonials h2 {
+            margin-bottom: 20px;
+        }
+        .testimonial {
+            max-width: 600px;
+            margin: 0 auto 20px;
+            font-style: italic;
+        }
+        .cta-final {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #007bff;
+            color: white;
+        }
+        .cta-final .cta-button {
+            background-color: #28a745;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .cta-final .cta-button:hover {
+            background-color: #218838;
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8em;
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            .feature-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <h1>TeleMed - Sua Saúde na Palma da Mão</h1>
+        <p>Consultas médicas online, seguras e acessíveis, a qualquer hora.</p>
+        <button class="cta-button" onclick="window.location.href='https://telemed-sistema.onrender.com'">Comece Agora</button>
+    </section>
+    <section class="features">
+        <div class="feature-card">
+            <h3>Consultas Rápidas</h3>
+            <p>Conecte-se com médicos em minutos, de qualquer lugar.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Segurança Total</h3>
+            <p>Seus dados protegidos com criptografia avançada.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Suporte 24/7</h3>
+            <p>Atendimento disponível a qualquer momento.</p>
+        </div>
+    </section>
+    <section class="testimonials">
+        <h2>O que nossos usuários dizem</h2>
+        <div class="testimonial">
+            <p>"O TeleMed mudou minha vida! Consegui uma consulta em minutos." - Ana S.</p>
+        </div>
+        <div class="testimonial">
+            <p>"Super fácil de usar e muito confiável." - João P.</p>
+        </div>
+    </section>
+    <section class="cta-final">
+        <h2>Junte-se ao TeleMed Hoje!</h2>
+        <p>Crie sua conta gratuita e comece a cuidar da sua saúde.</p>
+        <button class="cta-button">Inscreva-se</button>
+    </section>
+</body>
+</html>
