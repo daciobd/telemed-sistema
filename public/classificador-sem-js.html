@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificador Sem JS - TeleMed</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            background: linear-gradient(135deg, #fef3c7, #f59e0b); 
+            padding: 20px; 
+            margin: 0;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+        }
+        h1 {
+            text-align: center;
+            color: #2A4066;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0;
+        }
+        th, td { 
+            padding: 15px 10px; 
+            border: 1px solid #ddd; 
+            vertical-align: top;
+        }
+        th { 
+            background: #f5f5f5; 
+            font-weight: bold;
+        }
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .radio-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .radio-item:hover {
+            background: #e9ecef;
+        }
+        .radio-item input[type="radio"] {
+            margin-right: 8px;
+        }
+        .radio-item input[type="radio"]:checked + label {
+            font-weight: bold;
+        }
+        .status-ok { border-color: #28a745; background: #d4edda; }
+        .status-broken { border-color: #dc3545; background: #f8d7da; }
+        .status-partial { border-color: #ffc107; background: #fff3cd; }
+        .priority-essential { border-color: #dc3545; background: #f8d7da; }
+        .priority-important { border-color: #ffc107; background: #fff3cd; }
+        .priority-secondary { border-color: #007bff; background: #d4edda; }
+        
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .notes {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .export-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            text-align: center;
+        }
+        .manual-export {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 2px dashed #007bff;
+        }
+        .page-row {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Classificador de Páginas TeleMed</h1>
+        
+        <div class="instructions">
+            <strong>📖 Instruções:</strong><br>
+            1. Clique no link 🔗 para abrir cada página<br>
+            2. Marque os botões de STATUS e PRIORIDADE<br>
+            3. Copie manualmente o resultado no final
+        </div>
+
+        <form>
+            <div class="page-row">
+                <h3>📄 <a href="index.html" target="_blank">index.html 🔗</a></h3>
+                
+                <div><strong>⚡ Status:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item status-ok">
+                        <input type="radio" name="status_index" value="ok">
+                        <span>✅ OK</span>
+                    </label>
+                    <label class="radio-item status-broken">
+                        <input type="radio" name="status_index" value="broken">
+                        <span>❌ QUEBRADA</span>
+                    </label>
+                    <label class="radio-item status-partial">
+                        <input type="radio" name="status_index" value="partial">
+                        <span>⚠️ PARCIAL</span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 15px;"><strong>🎯 Prioridade:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item priority-essential">
+                        <input type="radio" name="priority_index" value="essential">
+                        <span>🔥 ESSENCIAL</span>
+                    </label>
+                    <label class="radio-item priority-important">
+                        <input type="radio" name="priority_index" value="important">
+                        <span>📌 IMPORTANTE</span>
+                    </label>
+                    <label class="radio-item priority-secondary">
+                        <input type="radio" name="priority_index" value="secondary">
+                        <span>📂 SECUNDÁRIO</span>
+                    </label>
+                </div>
+                
+                <input type="text" class="notes" name="notes_index" placeholder="📝 Observações...">
+            </div>
+
+            <div class="page-row">
+                <h3>📄 <a href="dashboard-premium-fixed.html" target="_blank">dashboard-premium-fixed.html 🔗</a></h3>
+                
+                <div><strong>⚡ Status:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item status-ok">
+                        <input type="radio" name="status_dashboard" value="ok">
+                        <span>✅ OK</span>
+                    </label>
+                    <label class="radio-item status-broken">
+                        <input type="radio" name="status_dashboard" value="broken">
+                        <span>❌ QUEBRADA</span>
+                    </label>
+                    <label class="radio-item status-partial">
+                        <input type="radio" name="status_dashboard" value="partial">
+                        <span>⚠️ PARCIAL</span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 15px;"><strong>🎯 Prioridade:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item priority-essential">
+                        <input type="radio" name="priority_dashboard" value="essential">
+                        <span>🔥 ESSENCIAL</span>
+                    </label>
+                    <label class="radio-item priority-important">
+                        <input type="radio" name="priority_dashboard" value="important">
+                        <span>📌 IMPORTANTE</span>
+                    </label>
+                    <label class="radio-item priority-secondary">
+                        <input type="radio" name="priority_dashboard" value="secondary">
+                        <span>📂 SECUNDÁRIO</span>
+                    </label>
+                </div>
+                
+                <input type="text" class="notes" name="notes_dashboard" placeholder="📝 Observações...">
+            </div>
+
+            <div class="page-row">
+                <h3>📄 <a href="agenda-do-dia.html" target="_blank">agenda-do-dia.html 🔗</a></h3>
+                
+                <div><strong>⚡ Status:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item status-ok">
+                        <input type="radio" name="status_agenda" value="ok">
+                        <span>✅ OK</span>
+                    </label>
+                    <label class="radio-item status-broken">
+                        <input type="radio" name="status_agenda" value="broken">
+                        <span>❌ QUEBRADA</span>
+                    </label>
+                    <label class="radio-item status-partial">
+                        <input type="radio" name="status_agenda" value="partial">
+                        <span>⚠️ PARCIAL</span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 15px;"><strong>🎯 Prioridade:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item priority-essential">
+                        <input type="radio" name="priority_agenda" value="essential">
+                        <span>🔥 ESSENCIAL</span>
+                    </label>
+                    <label class="radio-item priority-important">
+                        <input type="radio" name="priority_agenda" value="important">
+                        <span>📌 IMPORTANTE</span>
+                    </label>
+                    <label class="radio-item priority-secondary">
+                        <input type="radio" name="priority_agenda" value="secondary">
+                        <span>📂 SECUNDÁRIO</span>
+                    </label>
+                </div>
+                
+                <input type="text" class="notes" name="notes_agenda" placeholder="📝 Observações...">
+            </div>
+
+            <div class="page-row">
+                <h3>📄 <a href="videoconsulta.html" target="_blank">videoconsulta.html 🔗</a></h3>
+                
+                <div><strong>⚡ Status:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item status-ok">
+                        <input type="radio" name="status_video" value="ok">
+                        <span>✅ OK</span>
+                    </label>
+                    <label class="radio-item status-broken">
+                        <input type="radio" name="status_video" value="broken">
+                        <span>❌ QUEBRADA</span>
+                    </label>
+                    <label class="radio-item status-partial">
+                        <input type="radio" name="status_video" value="partial">
+                        <span>⚠️ PARCIAL</span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 15px;"><strong>🎯 Prioridade:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item priority-essential">
+                        <input type="radio" name="priority_video" value="essential">
+                        <span>🔥 ESSENCIAL</span>
+                    </label>
+                    <label class="radio-item priority-important">
+                        <input type="radio" name="priority_video" value="important">
+                        <span>📌 IMPORTANTE</span>
+                    </label>
+                    <label class="radio-item priority-secondary">
+                        <input type="radio" name="priority_video" value="secondary">
+                        <span>📂 SECUNDÁRIO</span>
+                    </label>
+                </div>
+                
+                <input type="text" class="notes" name="notes_video" placeholder="📝 Observações...">
+            </div>
+
+            <div class="page-row">
+                <h3>📄 <a href="dr-ai.html" target="_blank">dr-ai.html 🔗</a></h3>
+                
+                <div><strong>⚡ Status:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item status-ok">
+                        <input type="radio" name="status_ai" value="ok">
+                        <span>✅ OK</span>
+                    </label>
+                    <label class="radio-item status-broken">
+                        <input type="radio" name="status_ai" value="broken">
+                        <span>❌ QUEBRADA</span>
+                    </label>
+                    <label class="radio-item status-partial">
+                        <input type="radio" name="status_ai" value="partial">
+                        <span>⚠️ PARCIAL</span>
+                    </label>
+                </div>
+
+                <div style="margin-top: 15px;"><strong>🎯 Prioridade:</strong></div>
+                <div class="radio-group">
+                    <label class="radio-item priority-essential">
+                        <input type="radio" name="priority_ai" value="essential">
+                        <span>🔥 ESSENCIAL</span>
+                    </label>
+                    <label class="radio-item priority-important">
+                        <input type="radio" name="priority_ai" value="important">
+                        <span>📌 IMPORTANTE</span>
+                    </label>
+                    <label class="radio-item priority-secondary">
+                        <input type="radio" name="priority_ai" value="secondary">
+                        <span>📂 SECUNDÁRIO</span>
+                    </label>
+                </div>
+                
+                <input type="text" class="notes" name="notes_ai" placeholder="📝 Observações...">
+            </div>
+        </form>
+
+        <div class="export-section">
+            <h3>📤 Como Exportar:</h3>
+            <div class="manual-export">
+                <p><strong>Após classificar as páginas:</strong></p>
+                <ol>
+                    <li>Anote manualmente quais você marcou</li>
+                    <li>Ou tire um screenshot da página</li>
+                    <li>Use o formato: <code>página.html | STATUS | PRIORIDADE</code></li>
+                </ol>
+                <p><strong>Exemplo:</strong><br>
+                <code>index.html | ✅ OK | 🔥 ESSENCIAL</code><br>
+                <code>dashboard.html | ⚠️ PARCIAL | 📌 IMPORTANTE</code></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
