@@ -1,0 +1,197 @@
+🎯 Roteiro Detalhado - Opção A: Clone Inteligente
+📋 FASE 1: BASE SÓLIDA (30 min)
+Passo 1.1: Preparação (5 min)
+
+Acesse replit.com
+Create Repl → React JavaScript
+Nome: sistema-telemedicina-v2
+Aguarde carregar completamente
+
+Passo 1.2: Estrutura Básica (10 min)
+Substitua todo conteúdo do src/App.js por:
+jsximport React, { useState, useEffect } from 'react';
+import './App.css';
+
+function App() {
+  const [patient] = useState({
+    name: "Claudio Felipe Montanha Correa",
+    age: 36,
+    phone: "(11) 99945-1628"
+  });
+
+  const [elapsed, setElapsed] = useState(0);
+  const [consultationStatus, setConsultationStatus] = useState("waiting");
+
+  useEffect(() => {
+    const timer = setInterval(() => setElapsed(e => e + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}m ${s.toString().padStart(2, "0")}s`;
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b p-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+              CF
+            </div>
+            <div>
+              <h2 className="font-semibold">{patient.name}, {patient.age} anos</h2>
+              <p className="text-sm text-gray-600">{patient.phone}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-sm">Status: {consultationStatus}</span>
+            <span className="text-sm">Tempo: {formatTime(elapsed)}</span>
+            <button 
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+              onClick={() => setConsultationStatus("active")}
+            >
+              Iniciar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Área Principal */}
+      <div className="flex h-screen">
+        {/* Vídeo */}
+        <div className="flex-1 bg-gray-900 flex items-center justify-center">
+          <div className="text-white text-center">
+            <div className="text-6xl mb-4">📹</div>
+            <h3 className="text-xl">Aguardando Paciente</h3>
+            <p>Sala: #ABC123</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+Passo 1.3: Teste Inicial (5 min)
+
+Clique "Run"
+Verifique se aparece:
+
+Header com info do paciente
+Timer funcionando
+Área de vídeo básica
+
+
+Teste o botão "Iniciar"
+
+Passo 1.4: CSS Básico (10 min)
+Substitua src/App.css:
+css* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.status-waiting { background-color: #f59e0b; }
+.status-active { background-color: #10b981; }
+.status-ended { background-color: #6b7280; }
+
+button {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+📝 FASE 2: FORMULÁRIO INTELIGENTE (45 min)
+Passo 2.1: Painel Lateral (15 min)
+Adicione ao final do JSX (antes da última </div>):
+jsx{/* Painel Lateral */}
+<div className="w-96 bg-white border-l p-4 overflow-y-auto">
+  <h3 className="font-bold text-lg mb-4">Registro do Atendimento</h3>
+  
+  {/* Campos Obrigatórios */}
+  <div className="space-y-4">
+    <div>
+      <label className="block text-sm font-medium mb-1">
+        Queixa Principal *
+      </label>
+      <textarea 
+        className="w-full p-2 border rounded resize-none h-20"
+        placeholder="Descreva o motivo da consulta..."
+      />
+    </div>
+    
+    <div>
+      <label className="block text-sm font-medium mb-1">
+        História da Doença Atual *
+      </label>
+      <textarea 
+        className="w-full p-2 border rounded resize-none h-20"
+        placeholder="Evolução dos sintomas..."
+      />
+    </div>
+    
+    <div>
+      <label className="block text-sm font-medium mb-1">
+        Hipótese Diagnóstica *
+      </label>
+      <input 
+        type="text"
+        className="w-full p-2 border rounded"
+        placeholder="Ex: F41.1 - Ansiedade generalizada"
+      />
+    </div>
+  </div>
+</div>
+Passo 2.2: Estados do Formulário (15 min)
+Adicione no início do componente (após os outros useState):
+jsxconst [formData, setFormData] = useState({
+  chiefComplaint: "",
+  currentIllness: "", 
+  diagnosis: "",
+  indications: ""
+});
+
+const [validationErrors, setValidationErrors] = useState([]);
+
+// Validação em tempo real
+useEffect(() => {
+  const errors = [];
+  if (!formData.chiefComplaint.trim()) errors.push("Queixa principal");
+  if (!formData.currentIllness.trim()) errors.push("História da doença");
+  if (!formData.diagnosis.trim()) errors.push("Diagnóstico");
+  if (!formData.indications.trim()) errors.push("Conduta");
+  setValidationErrors(errors);
+}, [formData]);
+
+const updateForm = (field, value) => {
+  setFormData(prev => ({...prev, [field]: value}));
+};
+Passo 2.3: Campos Controlados (15 min)
+Substitua os inputs por versões controladas:
+jsx<textarea 
+  value={formData.chiefComplaint}
+  onChange={(e) => updateForm('chiefComplaint', e.target.value)}
+  className="w-full p-2 border rounded resize-none h-20"
+  placeholder="Descreva o motivo da consulta..."
+/>

@@ -1,0 +1,11 @@
+run = "npm run dev"
+
+[nix]
+channel = "stable-23_05"
+
+[deployment]
+run = ["sh", "-c", "npm run build && npm run start"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
