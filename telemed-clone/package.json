@@ -4,9 +4,9 @@
   "description": "Sistema de Telemedicina - Clone Inteligente",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 4174",
     "build": "vite build",
-    "start": "vite preview"
+    "start": "vite preview --port 4174"
   },
   "dependencies": {
     "react": "^18.2.0",
