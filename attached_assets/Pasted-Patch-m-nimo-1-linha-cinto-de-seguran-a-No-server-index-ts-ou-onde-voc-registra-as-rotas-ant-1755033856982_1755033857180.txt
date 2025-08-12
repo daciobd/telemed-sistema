@@ -1,0 +1,71 @@
+Patch mínimo (1 linha “cinto de segurança”)
+No server/index.ts (ou onde você registra as rotas), antes de montar o router do ai-agent:
+
+ts
+Copiar
+Editar
+import { requireAiEnabled } from "./guards/ai"; // se ainda não existir, crio abaixo
+
+// aplica a flag em QUALQUER rota /api/ai/* e /api/ai-agent/*
+app.use(/^\/api\/ai(-agent)?\//, requireAiEnabled());
+Isso já garante 403 quando AI_ENABLED=false, tanto em /api/ai/* quanto em /api/ai-agent/*.
+
+Guard completo (caso ainda não tenha)
+Crie server/guards/ai.ts:
+
+ts
+Copiar
+Editar
+import type { Request, Response, NextFunction } from "express";
+import { env } from "../config/env";
+
+// feature opcional: "symptoms" | "icd" | "interactions"
+export function requireAiEnabled(feature?: "symptoms" | "icd" | "interactions") {
+  return (_req: Request, res: Response, next: NextFunction) => {
+    if (!env.AI_ENABLED) return res.status(403).json({ error: "ai_disabled" });
+
+    if (feature === "symptoms" && !env.AI_SYMPTOMS_ENABLED)
+      return res.status(403).json({ error: "ai_feature_disabled" });
+
+    if (feature === "icd" && !env.AI_ICD_SUGGESTION_ENABLED)
+      return res.status(403).json({ error: "ai_feature_disabled" });
+
+    if (feature === "interactions" && !env.AI_DRUG_INTERACTIONS_ENABLED)
+      return res.status(403).json({ error: "ai_feature_disabled" });
+
+    return next();
+  };
+}
+Depois, em endpoints específicos você pode refinar:
+
+ts
+Copiar
+Editar
+app.post("/api/ai/symptoms", requireAiEnabled("symptoms"), controller);
+(Opcional) Restringir por papel + consentimento
+Se quiser travar ainda mais as rotas de IA:
+
+ts
+Copiar
+Editar
+export const requireRole = (role: "doctor" | "admin") =>
+  (req: Request, res: Response, next: NextFunction) =>
+    (req as any).user?.role === role ? next() : res.status(403).json({ error: "forbidden" });
+
+export const requireConsent = (req: Request, res: Response, next: NextFunction) =>
+  (req as any).userConsent ? next() : res.status(428).json({ error: "consent_required" });
+
+// uso
+app.use(/^\/api\/ai(-agent)?\//, requireAiEnabled(), requireRole("doctor"), requireConsent);
+Smoke test (30 segundos)
+Com AI_ENABLED=false:
+
+bash
+Copiar
+Editar
+# deve 403
+curl -i -X POST https://<p1>/api/ai-agent/ask -H 'Content-Type: application/json' -d '{}'
+
+# também 403
+curl -i -X POST https://<p1>/api/ai/analyze -H 'Content-Type: application/json' -d '{}'
+Com AI_ENABLED=true (e, se aplicou, consentimento + papel corretos), as mesmas rotas devem voltar 200/201.

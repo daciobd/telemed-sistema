@@ -60,6 +60,9 @@ app.use('/attached_assets', express.static(path.join(__dirname, '../attached_ass
 // ChatGPT Agent - Ativado com OpenAI instalado
 import aiAgentRoutes from './routes/ai-agent.js';
 import aiAgentHealthRoutes from './routes/ai-agent-health.js';
+
+// 🛡️ PATCH SEGURANÇA: Aplica flag AI_ENABLED em TODAS as rotas AI-Agent ANTES de montar
+app.use('/api/ai-agent', requireAiEnabled());
 app.use('/api/ai-agent', aiAgentRoutes);
 app.use('/api/ai-agent', aiAgentHealthRoutes);
 
