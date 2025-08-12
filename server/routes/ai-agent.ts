@@ -1,8 +1,12 @@
 import express from 'express';
 import { telemedAgent } from '../chatgpt-agent.js';
 import { agentLogger, validateAgentInProduction, writeLockCheck } from '../middleware/agent-logger.js';
+import { requireAiEnabled } from '../guards/ai.js';
 
 const router = express.Router();
+
+// 🔒 PATCH 2: Aplica a flag dentro do próprio router (garante ordem correta)
+router.use(requireAiEnabled());
 
 // Aplicar middlewares de logging e validação
 router.use(agentLogger);

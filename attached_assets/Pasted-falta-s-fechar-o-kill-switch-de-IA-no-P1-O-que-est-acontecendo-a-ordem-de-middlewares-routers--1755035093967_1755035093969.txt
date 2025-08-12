@@ -1,0 +1,85 @@
+falta só fechar o kill-switch de IA no P1. O que está acontecendo aí é ordem de middlewares/routers: o guard não está pegando as rotas do ai-agent. Vamos resolver com “cinto e suspensório”:
+
+Patch 1 (global, 100% garantido)
+Coloque antes de registrar qualquer router (logo após segurança/cookies) em server/index.ts:
+
+ts
+Copiar
+Editar
+// Kill-switch global para IA — pega /api/ai e /api/ai-agent (qualquer método)
+app.use((req, res, next) => {
+  const url = req.originalUrl || req.url || "";
+  const isAi = /^\/api\/ai(?:-agent)?\b/.test(url);
+  if (isAi && !env.AI_ENABLED) {
+    return res.status(403).json({ error: "ai_disabled" });
+  }
+  next();
+});
+Usa req.originalUrl e regex — assim captura chamadas mesmo atrás de sub-routers/proxies.
+
+Patch 2 (local no router do AI-Agent)
+Dentro de server/routes/ai-agent.ts (ou onde você cria o router):
+
+ts
+Copiar
+Editar
+import { Router } from "express";
+import { requireAiEnabled } from "../guards/ai";
+
+export const aiAgent = Router();
+
+// aplica a flag dentro do próprio router (garante ordem correta)
+aiAgent.use(requireAiEnabled());
+
+// ...defina aqui:
+// aiAgent.get("/status", ...)
+// aiAgent.post("/ask", ...)
+
+export default aiAgent;
+E o mount no index.ts deve ser:
+
+ts
+Copiar
+Editar
+import aiAgent from "./routes/ai-agent";
+// ...
+app.use("/api/ai-agent", aiAgent);
+Com isso, mesmo que alguém mude a ordem no index.ts, o router já chega “blindado”.
+
+Smoke-test (deve dar 403 com AI_ENABLED=false)
+bash
+Copiar
+Editar
+curl -i -X POST https://<p1>/api/ai/analyze -H 'Content-Type: application/json' -d '{}'
+curl -i -X POST https://<p1>/api/ai-agent/ask -H 'Content-Type: application/json' -d '{"q":"teste"}'
+curl -i https://<p1>/api/ai-agent/status
+Esperado: HTTP/1.1 403 em todos os três.
+
+Depois, defina AI_ENABLED=true e reinicie → as mesmas rotas devem voltar 200/201 (desde que papel/consentimento estejam ok).
+
+(Se ainda não pegar) 2 checks rápidos
+dotenv/env: garanta que o env (zod) é carregado depois do dotenv.config() e antes de montar os routers.
+
+Rotas realmente montadas nesse app?
+Liste rotas ativas para confirmar ordem:
+
+ts
+Copiar
+Editar
+// debug temporário em dev
+const dump = (app as any)._router?.stack?.map((l:any)=>l.route?.path || l.regexp?.toString()).filter(Boolean);
+console.log("[ROUTES]", dump);
+Extra (fortalecer produção)
+Reaplique os outros dois “filtros” na cadeia do AI:
+
+ts
+Copiar
+Editar
+app.use(/^\/api\/ai(?:-agent)?\//,
+  requireAiEnabled(),     // flag
+  requireRole("doctor"),  // só médico
+  requireConsent          // exige consentimento
+);
+Testes e2e rápidos (Vitest + Supertest) com AI_ENABLED=false garantindo 403 nessas rotas.
+
+Se aplicar os dois patches acima (global + local no router), esse item fecha de vez. Me avisa o resultado do curl (status) e já passo para o próximo passo do Sprint Zero que você escolher (healthcheck/consent DELETE/índices/Sentry) — ou a gente abre o PR-01 de fusão P2→P1.

@@ -57,12 +57,20 @@ app.use(express.static(path.join(__dirname, '../dist/public'), {
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
+// 🔒 PATCH 1: Kill-switch global para IA — pega /api/ai e /api/ai-agent (qualquer método)
+app.use((req, res, next) => {
+  const url = req.originalUrl || req.url || "";
+  const isAi = /^\/api\/ai(?:-agent)?\b/.test(url);
+  if (isAi && !env.AI_ENABLED) {
+    return res.status(403).json({ error: "ai_disabled", message: "AI features are currently disabled" });
+  }
+  next();
+});
+
 // ChatGPT Agent - Ativado com OpenAI instalado
 import aiAgentRoutes from './routes/ai-agent.js';
 import aiAgentHealthRoutes from './routes/ai-agent-health.js';
 
-// 🛡️ PATCH SEGURANÇA: Aplica flag AI_ENABLED em TODAS as rotas AI-Agent ANTES de montar
-app.use('/api/ai-agent', requireAiEnabled());
 app.use('/api/ai-agent', aiAgentRoutes);
 app.use('/api/ai-agent', aiAgentHealthRoutes);
 

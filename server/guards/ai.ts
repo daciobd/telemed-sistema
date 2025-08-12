@@ -3,12 +3,8 @@ import { env } from "../config/env.js";
 
 export function requireAiEnabled(feature?: "symptoms" | "icd" | "interactions") {
   return (req: Request, res: Response, next: NextFunction) => {
-    // 🔍 DEBUG: Log guard execution
-    console.log(`🛡️ AI Guard Check: ${req.method} ${req.path}, AI_ENABLED=${env.AI_ENABLED}`);
-    
     // ✅ PRIMARY CHECK: AI globally enabled 
     if (!env.AI_ENABLED) {
-      console.log(`❌ AI Guard BLOCK: AI_ENABLED=${env.AI_ENABLED}`);
       return res.status(403).json({ error: "ai_disabled", message: "AI features are currently disabled" });
     }
     
