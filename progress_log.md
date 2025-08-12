@@ -123,3 +123,21 @@ curl http://localhost:5000/api/ai-agent/health
 **Route:** GET /health
 **IP:** 127.0.0.1
 
+
+## 📝 2025-08-12T21:20:10.198Z
+**Agent:** unknown
+**Route:** GET /status
+**IP:** 127.0.0.1
+
+
+## 📝 2025-08-12T21:20:11.206Z
+**Agent:** unknown
+**Route:** POST /ask
+**IP:** 127.0.0.1
+
+
+## 📝 2025-08-12T21:20:25.755Z
+**Agent:** unknown
+**Route:** POST /ask
+**IP:** 127.0.0.1
+
