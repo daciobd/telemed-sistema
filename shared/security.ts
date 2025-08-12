@@ -52,7 +52,13 @@ export const auditLogs = pgTable("audit_logs", {
   riskLevel: varchar("risk_level", { enum: ["low", "medium", "high", "critical"] }).default("low"),
   sessionId: varchar("session_id"),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  // Índices para auditoria e performance
+  byUserCreated: index("idx_audit_user_created").on(table.userId, table.createdAt),
+  byActionCreated: index("idx_audit_action_created").on(table.action, table.createdAt),
+  byResourceCreated: index("idx_audit_resource_created").on(table.resourceType, table.createdAt),
+  byCreatedAt: index("idx_audit_created_at").on(table.createdAt), // Para particionamento futuro
+}));
 
 // Tabela de tokens de sessão seguros
 export const secureTokens = pgTable("secure_tokens", {

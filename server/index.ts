@@ -1,69 +1,35 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
-import helmet from 'helmet';
-import cors from 'cors';
-import compression from 'compression';
 import { fileURLToPath } from 'url';
-import { getUsageToday } from "./utils/aiUsage";
-import { sendAlert } from "./utils/webhook";
+import { getUsageToday } from "./utils/aiUsage.js";
+import { sendAlert } from "./utils/webhook.js";
+
+// Import middleware and config
+import { applySecurity } from './middleware/security.js';
+import { applyRequestId } from './middleware/requestId.js';
+import { errorHandler } from './middleware/error.js';
+import { requireAiEnabled } from './guards/ai.js';
+import { checkDbHealth } from './db.js';
+import { env } from './config/env.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Security middlewares
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://replit.com"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
-}));
+// Apply enhanced middlewares in order
+applyRequestId(app);
+applySecurity(app);
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://telemed-sistema.onrender.com', 'https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev']
-    : true,
-  credentials: true
-}));
+// Body parsing with size limits
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
-app.use(compression());
-
-// Debug environment variables
-console.log('🔍 DEBUG - process.env.PORT:', JSON.stringify(process.env.PORT));
-console.log('🔍 DEBUG - All env vars with PORT:', Object.keys(process.env).filter(k => k.includes('PORT')));
-
-// Render requires us to use their PORT exactly as provided, even if it's problematic
-let PORT;
-
-// In production (Render), force use of their PORT or use a specific fallback
-if (process.env.NODE_ENV === 'production') {
-  // For Render: Try to get a valid port from environment or use 10000
-  if (process.env.PORT && process.env.PORT !== 'PORT' && !isNaN(Number(process.env.PORT))) {
-    PORT = Number(process.env.PORT);
-    console.log('🔄 Using Render provided PORT:', PORT);
-  } else {
-    // Render fallback - use 10000
-    PORT = 10000;
-    console.log('🔄 Using Render fallback PORT:', PORT);
-  }
-} else {
-  // Development
-  PORT = 5000;
-}
-
-// Final validation
-if (!PORT || isNaN(PORT)) {
-  PORT = 10000;
-  console.log('🔄 Final fallback PORT:', PORT);
-}
-
-console.log('🔍 FINAL PORT SELECTED:', PORT);
+// Use environment configuration
+const PORT = Number(env.PORT);
+console.log(`🔗 Environment: ${env.NODE_ENV}`);
+console.log(`🔗 PORT final: ${PORT}`);
 
 // Additional security headers (complementing Helmet)
 app.use((req, res, next) => {

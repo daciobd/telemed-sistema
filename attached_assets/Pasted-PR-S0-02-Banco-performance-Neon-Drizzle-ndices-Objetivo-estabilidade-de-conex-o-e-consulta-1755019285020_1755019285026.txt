@@ -1,0 +1,80 @@
+PR S0-02 — Banco & performance (Neon/Drizzle) + índices
+Objetivo: estabilidade de conexão e consultas rápidas.
+
+1) Driver Drizzle para Neon serverless (se ainda não estiver)
+
+ts
+Copiar
+Editar
+// server/db.ts
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
+import { env } from "./config/env";
+
+const sql = neon(env.DATABASE_URL);
+export const db = drizzle(sql);
+2) Índices recomendados (Drizzle Kit)
+
+users.username (unique já existe)
+
+appointments: (doctorId, startsAt), (patientId, startsAt)
+
+consultations: (appointmentId), (createdAt)
+
+audit_logs: (createdAt), particionar por tempo se crescer muito
+
+Exemplo (Drizzle):
+
+ts
+Copiar
+Editar
+// example in schema
+import { index } from "drizzle-orm/pg-core";
+export const appointments = pgTable("appointments", {
+  // ...
+}, (t) => ({
+  byDoctorStart: index("idx_appt_doctor_start").on(t.doctorId, t.startsAt),
+  byPatientStart: index("idx_appt_patient_start").on(t.patientId, t.startsAt),
+}));
+3) Padrões de paginação e limites
+
+Todas as listagens devem aceitar limit (máx 100) e cursor/offset.
+
+Validar com zod na entrada das rotas.
+
+PR S0-03 — Observabilidade e saúde
+Objetivo: ver problemas rápido e evitar regressões silenciosas.
+
+Sentry (front/back) com DSN por env; scrubbing de PII.
+
+GET /api/health → { ok: true, db: true } (fazer SELECT 1).
+
+Logs com request-id; no dev usar pino-pretty (se já não tiver).
+
+Métricas simples: contador de 4xx/5xx por rota (ou expor /metrics depois).
+
+PR S0-04 — Front: cleanup e robustez
+Objetivo: confiabilidade e UX consistente.
+
+Garantir guards por papel (doctor/patient/admin).
+
+React Query com credentials: 'include', retry: 0 em rotas de auth.
+
+ErrorBoundary e toasts padronizados.
+
+Lazy loading em páginas pesadas, e “skeletons” consistentes.
+
+CSP dev: permitir Replit quando necessário; prod: restrito.
+
+Testes rápidos (smoke) — cole no console/terminal
+bash
+Copiar
+Editar
+# Health
+curl -sI https://<p1>/api/health
+
+# Consentimento (status)
+curl -i -b cookies.txt -c cookies.txt https://<p1>/api/medical/consent
+
+# IA desabilitada deve 403
+curl -i -b cookies.txt -X POST https://<p1>/api/ai/analyze -H 'Content-Type: application/json' -d '{}'

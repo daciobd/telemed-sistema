@@ -95,7 +95,12 @@ export const appointments = pgTable("appointments", {
   diagnosis: text("diagnosis"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => ({
+  // Índices para performance
+  byDoctorDate: index("idx_appt_doctor_date").on(table.doctorId, table.appointmentDate),
+  byPatientDate: index("idx_appt_patient_date").on(table.patientId, table.appointmentDate),
+  byStatusCreated: index("idx_appt_status_created").on(table.status, table.createdAt),
+}));
 
 export const medicalRecords = pgTable("medical_records", {
   id: serial("id").primaryKey(),
