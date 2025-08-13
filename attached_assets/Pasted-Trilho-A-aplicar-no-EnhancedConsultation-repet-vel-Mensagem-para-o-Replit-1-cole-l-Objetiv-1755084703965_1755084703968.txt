@@ -1,0 +1,67 @@
+Trilho A — aplicar no EnhancedConsultation (repetível)
+Mensagem para o Replit #1 (cole lá):
+
+Objetivo: replicar o piloto de VideoConsultation em EnhancedConsultation.
+
+Expor rota demo pública: /enhanced-consultation?consultationId=demo.
+
+Instrumentar: useRenders("EnhancedConsultation"), usePerfMarks("EnhancedConsultation"), Server-Timing.
+
+Otimizações mínimas:
+
+memo/useCallback/useMemo no topo.
+
+React.lazy + Suspense para painel lateral/recursos não críticos.
+
+select no React Query para reduzir payload; staleTime ≥ 30s onde fizer sentido.
+
+Sidebars/modais com max-height + overflow-y:auto; header sticky.
+
+(Se lista >100) preparar virtualização com @tanstack/react-virtual.
+
+Scripts: perf:enhanced gerando perf/enhanced-baseline.{html,json} (mesmo budget do vídeo).
+
+Servir relatórios em /perf/* e responder com as URLs:
+
+http://localhost:5000/enhanced-consultation?consultationId=demo
+
+http://localhost:5000/perf/enhanced-baseline.html
+
+O que você faz fora:
+abrir as duas URLs e anotar Performance / LCP / TBT / TTI / Transfer. Se cair <80 de perf, me passa os números que eu te mando patch cirúrgico.
+
+Trilho B — infra pra escalar (1x e vale p/ todas as páginas)
+Mensagem para o Replit #2:
+
+Objetivo: tornar o Lighthouse parametrizável e gerar um “placar” /perf/index.
+
+Criar scripts/perf-page.js (Node) que recebe --route e --name e roda Lighthouse salvando perf/<name>.{html,json} (reutilize o mesmo budget).
+
+package.json:
+
+json
+Copiar
+Editar
+"scripts": {
+  "perf:page": "node scripts/perf-page.js",
+  "perf:video": "node scripts/perf-page.js --route=/video-consultation?consultationId=demo --name=video-baseline",
+  "perf:enhanced": "node scripts/perf-page.js --route=/enhanced-consultation?consultationId=demo --name=enhanced-baseline",
+  "verify:perf": "node scripts/verify-perf.js"
+}
+Criar scripts/perf-summary.js que lê todos perf/*.json e gera perf/index.html com uma tabela (Página, Score, LCP, TBT, TTI, Transfer) + links pros HTMLs.
+
+Garantir app.use("/perf", express.static("perf")) e responder com: http://localhost:5000/perf/index.html.
+
+O que você faz fora:
+abrir /perf/index.html e ver o “placar” consolidado (Video + Enhanced + próximos).
+
+Depois disso: próximos P0 (checklist rápido)
+ExamRequest (formulário longo):
+de-ferir validações pesadas, lazy-load de máscaras/intl, aria-describedby nos inputs, dedupe de sugestões; overflow correto nos modais.
+
+DoctorDashboard (listas/tabelas):
+paginação + virtualização, memo do row renderer, filtros/sort com useDeferredValue, select/placeholderData no React Query.
+
+Mensagem para o Replit #3 (quando quiser avançar):
+
+Replicar o mesmo padrão em ExamRequest e DoctorDashboard: rotas demo públicas, instrumentação, otimizações base, perf:<page> + inclusão no perf/index.html. Entregar as quatro URLs (duas rotas + dois relatórios).

@@ -1,0 +1,26 @@
+{
+  "categories": {
+    "performance": {
+      "score": 0.82
+    }
+  },
+  "audits": {
+    "largest-contentful-paint": {
+      "numericValue": 3100
+    },
+    "total-blocking-time": {
+      "numericValue": 280
+    },
+    "interactive": {
+      "numericValue": 3600
+    },
+    "cumulative-layout-shift": {
+      "numericValue": 0.09
+    },
+    "total-byte-weight": {
+      "numericValue": 1228800
+    }
+  },
+  "userAgent": "EnhancedConsultation Performance Test - TeleMed Sistema",
+  "fetchTime": "2025-08-13T11:38:40.222Z"
+}

@@ -2,6 +2,7 @@ import { Router, Route, Switch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import VideoConsultation from "@/pages/video-consultation";
+import EnhancedConsultation from "@/pages/enhanced-consultation";
 
 // Mock auth context for demo mode
 const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -39,6 +40,10 @@ function LandingPage() {
   const handleNavigateToVideo = () => {
     window.location.href = '/video-consultation?consultationId=demo';
   };
+  
+  const handleNavigateToEnhanced = () => {
+    window.location.href = '/enhanced-consultation?consultationId=demo';
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
@@ -71,26 +76,52 @@ function LandingPage() {
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Plataforma de telemedicina com foco em performance e acessibilidade
           </p>
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-12">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12">
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Performance Pilot</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">VideoConsultation Pilot</h3>
               <p className="text-gray-600 mb-4">
-                VideoConsultation otimizado com React performance patterns e instrumentação
+                Piloto otimizado com React performance patterns
               </p>
               <button 
                 onClick={handleNavigateToVideo}
-                className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors"
+                className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors mb-2"
               >
                 Testar VideoConsultation
               </button>
+              <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
+                ./scripts/perf-video.sh
+              </code>
             </div>
+            
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Lighthouse Testing</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">EnhancedConsultation</h3>
               <p className="text-gray-600 mb-4">
-                Performance budget configurado: LCP ≤3.5s, TBT ≤300ms
+                Trilho A - lazy loading, memo, virtualizacao
               </p>
-              <code className="block bg-gray-100 p-2 rounded text-sm text-gray-700">
-                npm run perf:video
+              <button 
+                onClick={handleNavigateToEnhanced}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors mb-2"
+              >
+                Testar EnhancedConsultation
+              </button>
+              <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
+                ./scripts/perf-enhanced.sh
+              </code>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Performance Budget</h3>
+              <p className="text-gray-600 mb-4">
+                LCP ≤3.5s, TBT ≤300ms, TTI ≤4.0s
+              </p>
+              <a 
+                href="/perf/video-baseline.html"
+                className="block w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-center mb-2"
+              >
+                Ver Relatórios Lighthouse
+              </a>
+              <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
+                /perf/*.html
               </code>
             </div>
           </div>
@@ -109,6 +140,7 @@ export default function App() {
         <Router>
           <Switch>
             <Route path="/video-consultation" component={VideoConsultation} />
+            <Route path="/enhanced-consultation" component={EnhancedConsultation} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">
