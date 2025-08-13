@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
-import { useRenders, useRenderAlert } from '../../dev/useRenders';
-import { usePerfMarks } from '../../dev/usePerfMarks';
+import { useRenders, useRenderAlert } from '../dev/useRenders';
+import { usePerfMarks } from '../dev/usePerfMarks';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

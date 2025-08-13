@@ -1,4 +1,4 @@
-import { useRenders, useRendersAdvanced, useRenderAlert } from "../../dev/useRenders";
+import { useRenders, useRendersAdvanced, useRenderAlert } from "../dev/useRenders";
 import { useState, useEffect, memo, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useParams } from "wouter";
 
-import { usePerfMarks } from "../../dev/usePerfMarks";
+import { usePerfMarks } from "../dev/usePerfMarks";
 
 type Props = {};
 

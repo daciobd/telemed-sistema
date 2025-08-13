@@ -326,20 +326,125 @@ app.get('/api/download-backup-file/:backupId', (req, res) => {
   }
 });
 
-// Serve SPA with proper handling
+// React app routes - servir através do Vite
+app.get(['/app', '/app/*', '/video-consultation', '/enhanced-consultation', '/ai-console'], async (req, res) => {
+  try {
+    console.log('🚀 Loading React App via Vite:', req.path);
+    
+    // Usar o vite dev server se estiver em desenvolvimento
+    if (process.env.NODE_ENV === 'development') {
+      const { vite } = await import('./vite.js');
+      if (vite) {
+        console.log('⚡ Redirecting to Vite dev server');
+        return vite.ssrFixStacktrace(new Error());
+      }
+    }
+    
+    // Fallback HTML simples para desenvolvimento
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TeleMed Sistema - React App</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+      .loading { display: flex; justify-content: center; align-items: center; height: 50vh; }
+      .error { color: red; background: #fee; padding: 20px; border-radius: 8px; margin: 20px 0; }
+      .console-container { max-width: 800px; margin: 0 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="console-container">
+      <h1>TeleMed AI Console</h1>
+      <div class="error">
+        ⚠️ React app não configurado. Use diretamente as APIs do ChatGPT Agent:
+        <br><br>
+        <strong>Status do Agent:</strong><br>
+        <a href="/api/ai-agent/status" target="_blank">/api/ai-agent/status</a>
+        <br><br>
+        <strong>Testar Agent (POST):</strong><br>
+        <code>curl -X POST -H "Content-Type: application/json" -d '{"question":"Olá!"}' ${req.protocol}://${req.get('Host')}/api/ai-agent/ask</code>
+        <br><br>
+        <strong>Gerar Código (POST):</strong><br>
+        <code>curl -X POST -H "Content-Type: application/json" -d '{"specification":"Hook React para login"}' ${req.protocol}://${req.get('Host')}/api/ai-agent/generate-code</code>
+      </div>
+      <div id="manual-test">
+        <h3>Teste Manual do ChatGPT Agent</h3>
+        <textarea id="question" placeholder="Digite sua pergunta aqui..." style="width: 100%; height: 100px; margin: 10px 0;"></textarea>
+        <button onclick="askAgent()" style="background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Perguntar ao Agent</button>
+        <div id="response" style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 4px; min-height: 100px;"></div>
+      </div>
+    </div>
+    
+    <script>
+      async function askAgent() {
+        const question = document.getElementById('question').value;
+        const responseDiv = document.getElementById('response');
+        
+        if (!question.trim()) {
+          responseDiv.innerHTML = '❌ Digite uma pergunta primeiro.';
+          return;
+        }
+        
+        responseDiv.innerHTML = '⏳ Processando...';
+        
+        try {
+          const response = await fetch('/api/ai-agent/ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            try {
+              const parsedResponse = JSON.parse(data.response);
+              responseDiv.innerHTML = '<strong>✅ Resposta do ChatGPT Agent:</strong><br><br>' + 
+                                    (parsedResponse.message || parsedResponse.response || data.response);
+            } catch {
+              responseDiv.innerHTML = '<strong>✅ Resposta do ChatGPT Agent:</strong><br><br>' + data.response;
+            }
+          } else {
+            responseDiv.innerHTML = '❌ Erro: ' + (data.error || 'Falha na consulta');
+          }
+        } catch (error) {
+          responseDiv.innerHTML = '❌ Erro de conexão: ' + error.message;
+        }
+      }
+      
+      // Enter key support
+      document.getElementById('question').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && e.ctrlKey) {
+          askAgent();
+        }
+      });
+    </script>
+  </body>
+</html>`;
+    
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Error loading React app:', err);
+    res.status(500).send('Error loading React application');
+  }
+});
+
+// Serve página estática TeleMed (landing page)
 app.get('/', (req, res) => {
   try {
-    const indexPath = path.join(__dirname, '../dist/public/index.html');
+    const indexPath = path.join(__dirname, '../public/index.html');
     if (fs.existsSync(indexPath)) {
       res.sendFile(indexPath);
-      console.log('🏠 TeleMed Homepage loaded from dist/public');
+      console.log('🏠 TeleMed Landing Page loaded from public/');
     } else {
-      console.error('❌ index.html not found at:', indexPath);
-      res.status(404).send('Application not built. Run npm run build first.');
+      console.error('❌ Landing page not found at:', indexPath);
+      res.status(404).send('Landing page not found.');
     }
   } catch (err) {
-    console.error('❌ Error serving homepage:', err);
-    res.status(500).send('Server error loading homepage');
+    console.error('❌ Error serving landing page:', err);
+    res.status(500).send('Server error loading landing page');
   }
 });
 
