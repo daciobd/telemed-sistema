@@ -1,3 +1,8 @@
+O que fazer agora (2 passos)
+1) Troque o conteúdo da página
+
+Abra client/src/pages/ai-console.tsx e substitua tudo por este código:
+
 // client/src/pages/ai-console.tsx
 import { useEffect, useState } from "react";
 
@@ -104,3 +109,19 @@ export default function AIConsolePage() {
     </main>
   );
 }
+
+
+Esse componente chama /api/ai-agent/status ao carregar e usa /api/ai-agent/ask quando você clica no botão.
+
+2) (Se ainda não fez) Garanta a rota no App
+
+No client/src/App.tsx (ou onde define rotas do wouter), adicione:
+
+import AIConsolePage from "./pages/ai-console";
+import { Route } from "wouter";
+
+// …
+<Route path="/ai-console" component={AIConsolePage} />
+
+
+Salve e recarregue.
