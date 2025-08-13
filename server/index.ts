@@ -569,6 +569,8 @@ app.get('*', (req, res, next) => {
 });
 
 // Render-specific: Listen on all interfaces with proper error handling
+const REPLIT_URL = process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`;
+
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TeleMed Sistema v12.5.2 rodando na porta ${PORT}`);
   console.log(`🔗 Ambiente: ${process.env.NODE_ENV || 'development'}`);
@@ -579,6 +581,20 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log('🛡️ Sistema de login seguro implementado');
   console.log('🔐 Área médica protegida com autenticação');
   console.log('📱 Sistema de notificações médicas ativo');
+  
+  // URLs públicas
+  console.log('');
+  console.log('🌐 ACESSO PÚBLICO DO REPLIT:');
+  console.log(`   Base URL: ${REPLIT_URL}`);
+  console.log('');
+  console.log('🎯 ROTAS ATIVAS:');
+  console.log(`   • Home: ${REPLIT_URL}/`);
+  console.log(`   • VideoConsultation: ${REPLIT_URL}/video-consultation?consultationId=demo`);
+  console.log(`   • EnhancedConsultation: ${REPLIT_URL}/enhanced-consultation?consultationId=demo`);
+  console.log(`   • API Status: ${REPLIT_URL}/api/status`);
+  console.log(`   • Video Report: ${REPLIT_URL}/perf/video-baseline.html`);
+  console.log(`   • Enhanced Report: ${REPLIT_URL}/perf/enhanced-baseline.html`);
+  console.log('');
   
   // Test server responsiveness
   console.log('🔍 Testing server health...');
