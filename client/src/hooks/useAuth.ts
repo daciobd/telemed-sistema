@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 
-// Mock auth hook for demonstration
-// In a real implementation, this would connect to your authentication system
-interface User {
+export interface User {
   id: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   role: 'patient' | 'doctor' | 'admin';
-  hasCompletedOnboarding: boolean;
-  onboardingStep: number;
+  specialty?: string;
+  licenseNumber?: string;
 }
 
 export function useAuth() {
@@ -17,32 +15,52 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate auth check
-    const mockUser: User = {
-      id: 'demo-patient-1',
-      email: 'demo@patient.com',
-      firstName: 'João',
-      lastName: 'Silva',
-      role: 'patient',
-      hasCompletedOnboarding: false, // Set to false to trigger onboarding
-      onboardingStep: 0,
-    };
-
-    setTimeout(() => {
-      setUser(mockUser);
-      setIsLoading(false);
-    }, 1000);
+    // Check for demo mode via URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const consultationId = urlParams.get('consultationId');
+    
+    if (consultationId === 'demo') {
+      // Mock user for demo mode
+      setUser({
+        id: 'demo-user',
+        email: 'demo@telemed.com',
+        firstName: 'Demo',
+        lastName: 'User',
+        role: 'patient'
+      });
+    } else {
+      // Check for real authentication
+      // In a real app, this would call an API
+      setUser(null);
+    }
+    
+    setIsLoading(false);
   }, []);
+
+  const login = async (email: string, password: string) => {
+    // Mock login for demo purposes
+    if (email === 'demo@telemed.com') {
+      setUser({
+        id: 'demo-user',
+        email: 'demo@telemed.com',
+        firstName: 'Demo',
+        lastName: 'User',
+        role: 'patient'
+      });
+      return { success: true };
+    }
+    return { success: false, error: 'Invalid credentials' };
+  };
 
   const logout = () => {
     setUser(null);
-    // In real implementation, clear tokens, etc.
   };
 
   return {
     user,
     isLoading,
-    isAuthenticated: !!user,
+    login,
     logout,
+    isAuthenticated: !!user
   };
 }
