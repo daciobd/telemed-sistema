@@ -1,0 +1,113 @@
+ reduzir re-renders nos cards
+1) Abra o arquivo
+client/src/pages/video-consultation.tsx (ou o caminho equivalente no seu projeto).
+
+2) No map dos appointments, troque o JSX do card
+Antes
+tsx
+Copiar
+Editar
+{appointments.map((appointment) => {
+  const isDoctor = user?.role === 'doctor';
+  const otherParty = isDoctor ? appointment.patient : appointment.doctor;
+  const appointmentDate = new Date(appointment.date);
+
+  return (
+    <AppointmentCard
+      key={appointment.id}
+      appointment={appointment}
+      isDoctor={isDoctor}
+      otherParty={otherParty}
+      appointmentDate={appointmentDate}
+      onStartCall={startVideoCall}
+    />
+  );
+})}
+Depois (mais enxuto, sem Date como prop)
+tsx
+Copiar
+Editar
+{appointments.map((appointment) => (
+  <AppointmentCard
+    key={appointment.id}
+    appointment={appointment}
+    isDoctor={user?.role === 'doctor'}
+    onStartCall={startVideoCall}
+  />
+))}
+3) Ajuste a assinatura do AppointmentCard
+Antes
+tsx
+Copiar
+Editar
+const AppointmentCard = memo(function AppointmentCard({ 
+  appointment, 
+  isDoctor, 
+  otherParty, 
+  appointmentDate, 
+  onStartCall 
+}: {
+  appointment: any;
+  isDoctor: boolean;
+  otherParty: any;
+  appointmentDate: Date;
+  onStartCall: (appointment: any) => void;
+}) {
+Depois (calcula tudo internamente)
+tsx
+Copiar
+Editar
+import { useMemo, useCallback } from "react";
+// opcional para medir renders:
+import { useRenders } from "../../dev/useRenders";
+
+const AppointmentCard = memo(function AppointmentCard({
+  appointment,
+  isDoctor,
+  onStartCall,
+}: {
+  appointment: any;
+  isDoctor: boolean;
+  onStartCall: (appointment: any) => void;
+}) {
+  useRenders("AppointmentCard"); // opcional p/ ver se caiu a contagem
+
+  // calcula uma única vez por mudança de data
+  const appointmentDate = useMemo(
+    () => new Date(appointment.date),
+    [appointment.date]
+  );
+
+  // deriva “outra parte” sem criar objetos novos
+  const otherParty = isDoctor ? appointment.patient : appointment.doctor;
+
+  const handleStart = useCallback(() => {
+    onStartCall(appointment);
+  }, [appointment, onStartCall]);
+
+  return (
+    <Card className="hover:shadow-md transition-shadow">
+      {/* ...resto do card inalterado... */}
+    </Card>
+  );
+});
+Repare que removemos otherParty e appointmentDate das props e passamos a calcular dentro do card. Isso evita re-render por troca de referência.
+
+4) Salve e teste (30s)
+Run o app e abra /video-consultation.
+
+F12 → Console:
+
+Veja [renders] AppointmentCard: … — a contagem deve diminuir quando você interage na página (comparado a antes).
+
+A página toda também tende a renderizar menos.
+
+Replique o padrão na EnhancedConsultation (se houver lista)
+Se a EnhancedConsultation renderiza muitos itens (ex.: protocolos, passos, notas), aplique a mesma regra:
+
+Nunca passe new Date(), arrays ou objetos criados no map como props de um componente memo.
+
+Em vez disso, passe o valor bruto (string, id, isoDate) e calcule dentro com useMemo.
+
+Bônus (só se a lista for grande: 100+ itens)
+Considere virtualização para a lista de consultas (renderiza só o que aparece na tela). Podemos colocar @tanstack/react-virtual depois — por ora, o ajuste acima geralmente é suficiente.

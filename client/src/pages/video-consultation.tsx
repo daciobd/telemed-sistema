@@ -189,22 +189,14 @@ function VideoConsultationImpl(props: Props) {
         </Card>
       ) : (
         <section aria-label="Lista de consultas" className="grid gap-4">
-          {appointments.map((appointment) => {
-            const isDoctor = user?.role === 'doctor';
-            const otherParty = isDoctor ? appointment.patient : appointment.doctor;
-            const appointmentDate = new Date(appointment.date);
-            
-            return (
-              <AppointmentCard
-                key={appointment.id}
-                appointment={appointment}
-                isDoctor={isDoctor}
-                otherParty={otherParty}
-                appointmentDate={appointmentDate}
-                onStartCall={startVideoCall}
-              />
-            );
-          })}
+          {appointments.map((appointment) => (
+            <AppointmentCard
+              key={appointment.id}
+              appointment={appointment}
+              isDoctor={user?.role === 'doctor'}
+              onStartCall={startVideoCall}
+            />
+          ))}
         </section>
       )}
 
@@ -234,19 +226,26 @@ function VideoConsultationImpl(props: Props) {
 }
 
 // Componente de carta isolado para evitar re-render desnecessário
-const AppointmentCard = memo(function AppointmentCard({ 
-  appointment, 
-  isDoctor, 
-  otherParty, 
-  appointmentDate, 
-  onStartCall 
+const AppointmentCard = memo(function AppointmentCard({
+  appointment,
+  isDoctor,
+  onStartCall,
 }: {
   appointment: any;
   isDoctor: boolean;
-  otherParty: any;
-  appointmentDate: Date;
   onStartCall: (appointment: any) => void;
 }) {
+  useRenders("AppointmentCard"); // opcional p/ ver se caiu a contagem
+
+  // calcula uma única vez por mudança de data
+  const appointmentDate = useMemo(
+    () => new Date(appointment.date),
+    [appointment.date]
+  );
+
+  // deriva "outra parte" sem criar objetos novos
+  const otherParty = isDoctor ? appointment.patient : appointment.doctor;
+
   const handleStart = useCallback(() => {
     onStartCall(appointment);
   }, [appointment, onStartCall]);
