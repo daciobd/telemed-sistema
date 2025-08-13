@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import VideoConsultation from "@/pages/video-consultation";
 import EnhancedConsultation from "@/pages/enhanced-consultation";
+import AIConsolePage from "@/pages/ai-console";
 
 // Mock auth context for demo mode
 const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -110,18 +111,18 @@ function LandingPage() {
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Performance Budget</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">ChatGPT Agent Console</h3>
               <p className="text-gray-600 mb-4">
-                LCP ≤3.5s, TBT ≤300ms, TTI ≤4.0s
+                Interface para interagir com o ChatGPT Agent
               </p>
               <a 
-                href="/perf/video-baseline.html"
-                className="block w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-center mb-2"
+                href="/ai-console"
+                className="block w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors text-center mb-2"
               >
-                Ver Relatórios Lighthouse
+                Acessar AI Console
               </a>
               <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
-                /perf/*.html
+                /api/ai-agent/*
               </code>
             </div>
           </div>
@@ -141,6 +142,7 @@ export default function App() {
           <Switch>
             <Route path="/video-consultation" component={VideoConsultation} />
             <Route path="/enhanced-consultation" component={EnhancedConsultation} />
+            <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">
