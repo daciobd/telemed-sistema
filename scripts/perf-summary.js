@@ -1,0 +1,194 @@
+#!/usr/bin/env node
+import fs from 'fs';
+import { glob } from 'glob';
+
+const rows = [];
+const files = glob.sync('perf/*-baseline.json');
+
+if (files.length === 0) {
+  console.log('No performance baselines found. Run performance tests first.');
+  process.exit(1);
+}
+
+for (const f of files) {
+  try {
+    const base = f.replace(/\.json$/, '');
+    const html = base + '.html';
+    const r = JSON.parse(fs.readFileSync(f, 'utf8'));
+    const s = r.categories.performance.score;
+    const a = r.audits;
+    const name = base.split('/').pop().replace('-baseline', '');
+    
+    // Check if HTML report exists
+    const htmlExists = fs.existsSync(html);
+    const htmlLink = htmlExists ? html.split('/').pop() : 'missing';
+    
+    const row = {
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      html: htmlLink,
+      htmlExists,
+      score: (s * 100).toFixed(0),
+      LCP: Math.round(a['largest-contentful-paint'].numericValue),
+      TBT: Math.round(a['total-blocking-time'].numericValue),
+      TTI: Math.round(a['interactive'].numericValue),
+      TRANS: Math.round(a['total-byte-weight'].numericValue / 1024),
+      status: s >= 0.80 && 
+              a['largest-contentful-paint'].numericValue <= 3500 && 
+              a['total-blocking-time'].numericValue <= 300 && 
+              a['interactive'].numericValue <= 4000 && 
+              a['total-byte-weight'].numericValue <= 1_500_000
+    };
+    
+    rows.push(row);
+  } catch (err) {
+    console.error(`Error processing ${f}:`, err.message);
+  }
+}
+
+const tableRows = rows.map(r => {
+  const statusIcon = r.status ? '✅' : '❌';
+  const scoreClass = r.score >= 80 ? 'good' : 'poor';
+  const htmlLink = r.htmlExists ? 
+    `<a href="./${r.html}" target="_blank">${r.html}</a>` : 
+    '<span style="color: #999;">missing</span>';
+    
+  return `<tr class="${r.status ? 'passing' : 'failing'}">
+    <td>${statusIcon} ${r.name}</td>
+    <td>${htmlLink}</td>
+    <td class="${scoreClass}">${r.score}%</td>
+    <td>${r.LCP}ms</td>
+    <td>${r.TBT}ms</td>
+    <td>${r.TTI}ms</td>
+    <td>${r.TRANS}KB</td>
+  </tr>`;
+}).join('\n');
+
+const overallStatus = rows.every(r => r.status);
+const totalPages = rows.length;
+const passingPages = rows.filter(r => r.status).length;
+
+const html = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TeleMed Performance Dashboard</title>
+  <style>
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      margin: 0; padding: 20px; background: #f8f9fa; color: #333;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; text-align: center;
+    }
+    .header h1 { margin: 0; font-size: 2.5rem; font-weight: 300; }
+    .header p { margin: 10px 0 0; opacity: 0.9; font-size: 1.1rem; }
+    .summary { 
+      background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-item { text-align: center; }
+    .summary-item .value { font-size: 2rem; font-weight: bold; margin-bottom: 5px; }
+    .summary-item .label { color: #666; font-size: 0.9rem; }
+    .status-overall { 
+      font-size: 1.5rem; padding: 10px 20px; border-radius: 6px; font-weight: bold;
+      background: ${overallStatus ? '#d4edda' : '#f8d7da'}; 
+      color: ${overallStatus ? '#155724' : '#721c24'};
+    }
+    table { 
+      width: 100%; border-collapse: collapse; background: white; border-radius: 8px; 
+      overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px;
+    }
+    th { 
+      background: #495057; color: white; padding: 15px 10px; text-align: left; 
+      font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    td { padding: 12px 10px; border-bottom: 1px solid #dee2e6; }
+    tr.passing { background: rgba(40, 167, 69, 0.05); }
+    tr.failing { background: rgba(220, 53, 69, 0.05); }
+    tr:hover { background: rgba(0, 123, 255, 0.05); }
+    .good { color: #28a745; font-weight: 600; }
+    .poor { color: #dc3545; font-weight: 600; }
+    a { color: #007bff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .budget { 
+      background: white; padding: 20px; border-radius: 8px; margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .budget h3 { margin-top: 0; color: #495057; }
+    .budget ul { margin: 0; padding-left: 20px; }
+    .budget li { margin: 5px 0; color: #666; }
+    .footer { text-align: center; margin-top: 40px; color: #666; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>TeleMed Performance Dashboard</h1>
+      <p>Comprehensive performance monitoring and optimization tracking</p>
+    </div>
+    
+    <div class="summary">
+      <div class="summary-item">
+        <div class="value" style="color: #007bff;">${totalPages}</div>
+        <div class="label">Total Pages</div>
+      </div>
+      <div class="summary-item">
+        <div class="value" style="color: #28a745;">${passingPages}</div>
+        <div class="label">Passing Budget</div>
+      </div>
+      <div class="summary-item">
+        <div class="value" style="color: #dc3545;">${totalPages - passingPages}</div>
+        <div class="label">Failing Budget</div>
+      </div>
+      <div class="status-overall">
+        ${overallStatus ? '✅ ALL PASSING' : '❌ NEEDS ATTENTION'}
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Report</th>
+          <th>Score</th>
+          <th>LCP</th>
+          <th>TBT</th>
+          <th>TTI</th>
+          <th>Transfer</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+    
+    <div class="budget">
+      <h3>Performance Budget Targets</h3>
+      <ul>
+        <li><strong>Performance Score:</strong> ≥ 80%</li>
+        <li><strong>Largest Contentful Paint (LCP):</strong> ≤ 3,500ms</li>
+        <li><strong>Total Blocking Time (TBT):</strong> ≤ 300ms</li>
+        <li><strong>Time to Interactive (TTI):</strong> ≤ 4,000ms</li>
+        <li><strong>Transfer Size:</strong> ≤ 1,500KB</li>
+      </ul>
+    </div>
+    
+    <div class="footer">
+      <p>Generated: ${new Date().toLocaleString()} | TeleMed Sistema Performance Infrastructure</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+fs.writeFileSync('perf/index.html', html);
+console.log('[perf] summary written to perf/index.html');
+console.log(`[perf] ${totalPages} pages analyzed, ${passingPages} passing budget`);
+
+if (overallStatus) {
+  console.log('🎯 All pages are within performance budget! ✅');
+} else {
+  console.log('⚠️  Some pages need optimization to meet budget targets');
+}

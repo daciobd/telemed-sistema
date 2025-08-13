@@ -1,0 +1,179 @@
+bora seguir com o **Trilho B (infra escalável)** e, em paralelo, manter o Enhanced medido no mesmo padrão. Já deixo tudo pronto pra **copiar e colar** no Replit — e no final tem o que você faz fora do Replit.
+
+---
+
+# Mensagem para o Replit #1 — “perf-page” genérico + scripts
+
+> **Crie um runner genérico para qualquer rota e gere um sumário (/perf/index.html).**
+>
+> 1. Adicione dependências de CLI:
+>
+> ```bash
+> npm i -D minimist
+> ```
+>
+> 2. `scripts/perf-page.js` (usa o Lighthouse CLI por trás):
+>
+> ```js
+> #!/usr/bin/env node
+> const { execSync } = require('node:child_process');
+> const args = require('minimist')(process.argv.slice(2));
+> const port = process.env.PORT || 5000;
+> const route = args.route || '/';
+> const name = args.name || 'page';
+> const url = `http://localhost:${port}${route}`;
+> const out = `perf/${name}`;
+>
+> const cmd = [
+>   'npx lighthouse',
+>   `"${url}"`,
+>   '--only-categories=performance,accessibility,best-practices',
+>   '--form-factor=mobile',
+>   '--screenEmulation.mobile',
+>   '--throttling-method=simulate',
+>   '--output=json',
+>   '--output=html',
+>   '--quiet',
+>   `--chrome-flags="--headless --no-sandbox"`,
+>   '--budget-path=./perf/budget.json',
+>   `--output-path=${out}`,
+>   '--save-assets'
+> ].join(' ');
+>
+> console.log('[perf] running:', cmd);
+> execSync(cmd, { stdio: 'inherit' });
+> console.log(`[perf] saved: ${out}.{html,json}`);
+> ```
+>
+> 3. `scripts/verify-perf.js` (valida budget para 1 ou várias páginas):
+>
+> ```js
+> #!/usr/bin/env node
+> const fs = require('fs');
+> const glob = require('glob');
+> const args = require('minimist')(process.argv.slice(2));
+> const file = args.file;
+>
+> const files = file ? [file] : glob.sync('perf/*-baseline.json');
+> if (!files.length) { console.error('no perf json found'); process.exit(1); }
+>
+> let okAll = true;
+> for (const f of files) {
+>   const r = JSON.parse(fs.readFileSync(f, 'utf8'));
+>   const s = r.categories.performance.score;
+>   const a = r.audits;
+>   const LCP = a['largest-contentful-paint'].numericValue;
+>   const TBT = a['total-blocking-time'].numericValue;
+>   const TTI = a['interactive'].numericValue;
+>   const TRANS = a['total-byte-weight'].numericValue;
+>   const ok = s>=0.80 && LCP<=3500 && TBT<=300 && TTI<=4000 && TRANS<=1_500_000;
+>   console.log(f, {score:s,LCP,TBT,TTI,TRANS, ok});
+>   okAll = okAll && ok;
+> }
+> if (!okAll) process.exit(1);
+> ```
+>
+> 4. `scripts/perf-summary.js` (gera tabela /perf/index.html):
+>
+> ```js
+> #!/usr/bin/env node
+> const fs = require('fs');
+> const glob = require('glob');
+> const rows = [];
+> for (const f of glob.sync('perf/*-baseline.json')) {
+>   const base = f.replace(/\.json$/, '');
+>   const html = base + '.html';
+>   const r = JSON.parse(fs.readFileSync(f, 'utf8'));
+>   const s = r.categories.performance.score;
+>   const a = r.audits;
+>   const name = base.split('/').pop();
+>   rows.push({
+>     name,
+>     html: html.split('/').pop(),
+>     score: (s*100).toFixed(0),
+>     LCP: Math.round(a['largest-contentful-paint'].numericValue),
+>     TBT: Math.round(a['total-blocking-time'].numericValue),
+>     TTI: Math.round(a['interactive'].numericValue),
+>     TRANS: Math.round(a['total-byte-weight'].numericValue/1024)
+>   });
+> }
+> const table = rows.map(r=>`<tr>
+>   <td>${r.name}</td>
+>   <td><a href="./${r.html}">${r.html}</a></td>
+>   <td>${r.score}</td><td>${r.LCP} ms</td><td>${r.TBT} ms</td><td>${r.TTI} ms</td><td>${r.TRANS} KB</td>
+> </tr>`).join('\n');
+> const html = `<!doctype html><meta charset="utf-8">
+> <title>Perf Summary</title>
+> <style>table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:6px}th{background:#f5f5f5}</style>
+> <h1>Perf Summary</h1>
+> <table>
+> <thead><tr><th>Page</th><th>Report</th><th>Score</th><th>LCP</th><th>TBT</th><th>TTI</th><th>Transfer</th></tr></thead>
+> <tbody>${table}</tbody>
+> </table>`;
+> fs.writeFileSync('perf/index.html', html);
+> console.log('[perf] summary written to perf/index.html');
+> ```
+>
+> 5. `package.json` – scripts:
+>
+> ```json
+> {
+>   "scripts": {
+>     "perf:video": "node scripts/perf-page.js --route=/video-consultation?consultationId=demo --name=video-baseline",
+>     "perf:enhanced": "node scripts/perf-page.js --route=/enhanced-consultation?consultationId=demo --name=enhanced-baseline",
+>     "perf:all": "npm run perf:video && npm run perf:enhanced && node scripts/perf-summary.js",
+>     "verify:perf": "node scripts/verify-perf.js"
+>   }
+> }
+> ```
+>
+> 6. Garanta que o servidor já está servindo `/perf` (está), e responda com a URL de `index`:
+>
+> * `https://…/perf/index.html`
+>
+> 7. Rode:
+>
+> ```bash
+> npm run perf:all && npm run verify:perf
+> ```
+
+---
+
+# Mensagem para o Replit #2 — incluir Enhanced no mesmo orçamento
+
+> **Se o Enhanced ainda não tem baseline** (ou quiser regenerar):
+>
+> ```
+> npm run perf:enhanced
+> node scripts/verify-perf.js --file perf/enhanced-baseline.json
+> node scripts/perf-summary.js
+> ```
+>
+> Confirme que `https://…/perf/enhanced-baseline.html` e `…/perf/index.html` estão acessíveis.
+
+---
+
+# Mensagem para o Replit #3 — mini hardening global (vale pra todas as páginas)
+
+> 1. Ative `compression()` no Express e `cache-control` em estáticos (`/static` e bundles).
+> 2. Garanta fallback de SPA para `/video-consultation` e `/enhanced-consultation` (servir `index.html`).
+> 3. Adicione `eslint-plugin-react-hooks` e ative `react-hooks/exhaustive-deps`.
+> 4. Crie uma flag `VIRTUALIZE_CHAT=true` para habilitar `@tanstack/react-virtual` quando a lista passar de 100 itens.
+> 5. Logue `[slow]` do middleware em arquivo rotativo `logs/app.log`.
+
+---
+
+## O que você faz fora do Replit (agora)
+
+1. Abra o **placar**: `…/perf/index.html` — você vê **Video** e **Enhanced** lado a lado.
+2. Abra cada relatório (links na tabela) e confirme que **ambos** estão ≥ 80 de Performance e dentro do budget (LCP/TBT/TTI/Transfer).
+3. Se algum cair, me diga **qual página** e **quais números** (score, LCP, TBT, TTI, Transfer). Eu te devolvo um **patch curto** e específico.
+
+---
+
+## Próximo alvo (quando o placar estiver verde)
+
+* **ExamRequest** (formulário): lazy-load dos widgets pesados, masks/intl sob demanda, `aria-describedby`, overflow correto.
+* **DoctorDashboard** (listas): paginação + virtualização, memo de linhas, filtros com `useDeferredValue`.
+
+Se topar, já mando as mensagens prontas pro Replit replicar o playbook nessas duas páginas também.
