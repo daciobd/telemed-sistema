@@ -11,7 +11,9 @@
     "db:migrate": "drizzle-kit migrate",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "perf\\:all": "npm run perf:video && npm run perf:enhanced && node scripts/perf-summary.cjs",
+    "verify\\:perf": "node scripts/verify-perf.cjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
