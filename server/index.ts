@@ -59,6 +59,13 @@ app.use(express.static(path.join(__dirname, '../dist/public'), {
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
+// Performance reports serving
+app.use('/perf', express.static(path.join(process.cwd(), 'perf'), {
+  maxAge: '1h',
+  etag: true,
+  lastModified: true
+}));
+
 // 🔒 PATCH 1: Kill-switch global para IA — pega /api/ai e /api/ai-agent (qualquer método)
 app.use((req, res, next) => {
   const url = req.originalUrl || req.url || "";
