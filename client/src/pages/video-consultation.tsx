@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -10,8 +10,15 @@ import { Video, Clock, User, Phone, Calendar, Users } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useParams } from "wouter";
+import { useRenders } from "@/dev/useRenders";
+import { usePerfMarks } from "@/dev/usePerfMarks";
 
-export default function VideoConsultation() {
+type Props = {};
+
+function VideoConsultationImpl(props: Props) {
+  useRenders("VideoConsultation");
+  usePerfMarks("VideoConsultation");
+
   const { user } = useAuth();
   const { toast } = useToast();
   const params = useParams();
@@ -46,13 +53,39 @@ export default function VideoConsultation() {
   // Get appointments ready for video consultation
   const { data: appointments = [], isLoading } = useQuery({
     queryKey: ["/api/appointments"],
-    select: (data: any[]) => data.filter(appointment => 
-      appointment.status === 'confirmed' && 
-      appointment.type === 'teleconsult'
-    )
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+    select: (data: any[]) => {
+      // Reduz payload - só os campos necessários
+      const filtered = data.filter(appointment => 
+        appointment.status === 'confirmed' && 
+        appointment.type === 'teleconsult'
+      );
+      return filtered.map(apt => ({
+        id: apt.id,
+        status: apt.status,
+        type: apt.type,
+        date: apt.date,
+        patient: apt.patient ? {
+          id: apt.patient.id,
+          user: {
+            firstName: apt.patient.user.firstName,
+            lastName: apt.patient.user.lastName
+          }
+        } : null,
+        doctor: apt.doctor ? {
+          id: apt.doctor.id,
+          user: {
+            firstName: apt.doctor.user.firstName,
+            lastName: apt.doctor.user.lastName
+          }
+        } : null
+      }));
+    }
   });
 
-  const startVideoCall = (appointment: any) => {
+  // Callbacks estáveis para evitar re-render
+  const startVideoCall = useCallback((appointment: any) => {
     const isDoctor = user?.role === 'doctor';
     const callData = {
       appointmentId: appointment.id,
@@ -66,141 +99,110 @@ export default function VideoConsultation() {
       title: "Videoconsulta iniciada",
       description: "Conectando com o participante...",
     });
-  };
+  }, [user?.role, toast]);
 
-  const endVideoCall = () => {
+  const endVideoCall = useCallback(() => {
     setActiveCall(null);
     toast({
       title: "Videoconsulta encerrada",
       description: "A consulta foi finalizada com sucesso.",
     });
-  };
+  }, [toast]);
+
+  // Derivado memoizado para o header title
+  const headerTitle = useMemo(() => {
+    if (!user) return "Videoconsultas";
+    return user.role === 'doctor' ? 'Atendimentos Médicos' : 'Minhas Consultas';
+  }, [user?.role]);
+
+  const appointmentStats = useMemo(() => {
+    const total = appointments.length;
+    const today = appointments.filter(apt => {
+      const aptDate = new Date(apt.date);
+      const todayDate = new Date();
+      return aptDate.toDateString() === todayDate.toDateString();
+    }).length;
+    return { total, today };
+  }, [appointments]);
 
   if (activeCall) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <main role="main" aria-label="Video Consultation" className="min-h-screen bg-gray-50">
         <VideoRoom
           appointmentId={activeCall.appointmentId}
           patientName={activeCall.patientName}
           doctorName={activeCall.doctorName}
           onEndCall={endVideoCall}
         />
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <main role="main" aria-label="Video Consultation Dashboard" className="max-w-6xl mx-auto p-6 space-y-6">
+      <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Videoconsultas</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{headerTitle}</h1>
           <p className="text-gray-600 mt-2">
             Realize consultas médicas por videoconferência
           </p>
+          {appointmentStats.total > 0 && (
+            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+              <span>{appointmentStats.total} agendadas</span>
+              <span>•</span>
+              <span>{appointmentStats.today} hoje</span>
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-500">
           <Video className="h-4 w-4" />
           <span>Sistema WebRTC</span>
         </div>
-      </div>
+      </header>
 
       {isLoading ? (
-        <div className="grid gap-4">
+        <section aria-label="Carregando consultas" className="grid gap-4">
           {[1, 2, 3].map((i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-6">
-                <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+                <div className="h-10 bg-gray-200 rounded w-32"></div>
               </CardContent>
             </Card>
           ))}
-        </div>
+        </section>
       ) : appointments.length === 0 ? (
         <Card>
-          <CardContent className="py-8 text-center">
-            <Video className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+          <CardContent className="p-12 text-center">
+            <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Nenhuma consulta disponível
+              Nenhuma videoconsulta agendada
             </h3>
-            <p className="text-gray-500">
-              Não há consultas confirmadas para videochamada no momento.
+            <p className="text-gray-600">
+              Suas videoconsultas aparecerão aqui quando agendadas
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4">
-          {appointments.map((appointment: any) => {
+        <section aria-label="Lista de consultas" className="grid gap-4">
+          {appointments.map((appointment) => {
             const isDoctor = user?.role === 'doctor';
             const otherParty = isDoctor ? appointment.patient : appointment.doctor;
-            const appointmentDate = new Date(appointment.appointmentDate);
-
+            const appointmentDate = new Date(appointment.date);
+            
             return (
-              <Card key={appointment.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <User className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900">
-                            {isDoctor 
-                              ? `${otherParty.user.firstName} ${otherParty.user.lastName}`
-                              : `Dr. ${otherParty.user.firstName} ${otherParty.user.lastName}`
-                            }
-                          </h3>
-                          <p className="text-sm text-gray-500">
-                            {isDoctor ? 'Paciente' : otherParty.specialty}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Calendar className="h-4 w-4" />
-                          <span>{format(appointmentDate, "dd/MM/yyyy", { locale: ptBR })}</span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Clock className="h-4 w-4" />
-                          <span>{format(appointmentDate, "HH:mm", { locale: ptBR })}</span>
-                        </div>
-                      </div>
-
-                      {appointment.notes && (
-                        <div className="mb-4">
-                          <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                            {appointment.notes}
-                          </p>
-                        </div>
-                      )}
-
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary" className="bg-green-100 text-green-800">
-                          <Phone className="h-3 w-3 mr-1" />
-                          Teleconsulta
-                        </Badge>
-                        <Badge variant="outline">
-                          {appointment.status === 'confirmed' ? 'Confirmada' : appointment.status}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <div className="ml-6">
-                      <Button
-                        onClick={() => startVideoCall(appointment)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
-                      >
-                        <Video className="h-4 w-4 mr-2" />
-                        Iniciar Videoconsulta
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <AppointmentCard
+                key={appointment.id}
+                appointment={appointment}
+                isDoctor={isDoctor}
+                otherParty={otherParty}
+                appointmentDate={appointmentDate}
+                onStartCall={startVideoCall}
+              />
             );
           })}
-        </div>
+        </section>
       )}
 
       <Card className="bg-blue-50 border-blue-200">
@@ -218,11 +220,86 @@ export default function VideoConsultation() {
                 <li>• Permita acesso à câmera e microfone quando solicitado</li>
                 <li>• Use o chat integrado para comunicação adicional</li>
                 <li>• Compartilhe sua tela se necessário</li>
+                <li>• Finalize a consulta quando concluída</li>
               </ul>
             </div>
           </div>
         </CardContent>
       </Card>
-    </div>
+    </main>
   );
 }
+
+// Componente de carta isolado para evitar re-render desnecessário
+const AppointmentCard = memo(function AppointmentCard({ 
+  appointment, 
+  isDoctor, 
+  otherParty, 
+  appointmentDate, 
+  onStartCall 
+}: {
+  appointment: any;
+  isDoctor: boolean;
+  otherParty: any;
+  appointmentDate: Date;
+  onStartCall: (appointment: any) => void;
+}) {
+  const handleStart = useCallback(() => {
+    onStartCall(appointment);
+  }, [appointment, onStartCall]);
+
+  return (
+    <Card className="hover:shadow-md transition-shadow">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg">
+            {isDoctor ? 'Atendimento' : 'Consulta'} com {" "}
+            {otherParty?.user ? `${otherParty.user.firstName} ${otherParty.user.lastName}` : 'Participante'}
+          </CardTitle>
+          <Badge variant="secondary">
+            {appointment.status === 'confirmed' ? 'Confirmada' : appointment.status}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <Calendar className="h-4 w-4" />
+              <span>
+                {format(appointmentDate, "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <Clock className="h-4 w-4" />
+              <span>
+                {format(appointmentDate, "HH:mm", { locale: ptBR })}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <User className="h-4 w-4" />
+              <span>
+                {isDoctor ? 'Paciente' : 'Médico'}: {" "}
+                {otherParty?.user ? `${otherParty.user.firstName} ${otherParty.user.lastName}` : 'N/A'}
+              </span>
+            </div>
+          </div>
+          <div className="flex space-x-2">
+            <Button 
+              onClick={handleStart}
+              size="sm"
+              className="flex items-center space-x-2"
+              aria-label={`Iniciar videoconsulta com ${otherParty?.user ? `${otherParty.user.firstName} ${otherParty.user.lastName}` : 'participante'}`}
+            >
+              <Video className="h-4 w-4" />
+              <span>Iniciar</span>
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+});
+
+// Evita re-render do topo quando props estáveis
+export default memo(VideoConsultationImpl);

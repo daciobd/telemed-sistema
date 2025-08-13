@@ -10,6 +10,7 @@ import { applySecurity } from './middleware/security.js';
 import { applyRequestId } from './middleware/requestId.js';
 import { errorHandler } from './middleware/error.js';
 import { requireAiEnabled } from './guards/ai.js';
+import { timing } from './middleware/timing.js';
 import { checkDbHealth } from './db.js';
 import { env } from './config/env.js';
 
@@ -21,6 +22,7 @@ const app = express();
 // Apply enhanced middlewares in order
 applyRequestId(app);
 applySecurity(app);
+app.use(timing);
 
 // Body parsing with size limits
 app.use(express.json({ limit: '1mb' }));

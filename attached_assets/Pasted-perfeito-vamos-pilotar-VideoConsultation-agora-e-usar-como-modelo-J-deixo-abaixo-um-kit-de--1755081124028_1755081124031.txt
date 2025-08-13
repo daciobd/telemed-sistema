@@ -1,0 +1,234 @@
+perfeito — vamos pilotar **VideoConsultation** agora e usar como modelo. Já deixo abaixo um “kit de patch” **colável** (layout/perf/a11y), além de instrumentação mínima. Assim você já mede e vê ganhos sem tocar na arquitetura.
+
+# 0) Instrumentação rápida (client + server)
+
+## client: contagem de renders + perf marks
+
+```ts
+// client/src/dev/useRenders.ts
+import { useRef } from "react";
+export function useRenders(name: string) {
+  const c = useRef(0); c.current++;
+  if (process.env.NODE_ENV !== "production") console.debug(`[renders] ${name}:`, c.current);
+}
+```
+
+```ts
+// client/src/dev/usePerfMarks.ts
+import { useEffect } from "react";
+export function usePerfMarks(name: string) {
+  useEffect(() => {
+    performance.mark(`${name}-mount`);
+    return () => {
+      performance.mark(`${name}-unmount`);
+      performance.measure(`${name}-lifetime`, `${name}-mount`, `${name}-unmount`);
+      const m = performance.getEntriesByName(`${name}-lifetime`).pop();
+      if (m && process.env.NODE_ENV !== "production") {
+        // útil para comparar antes/depois de correções
+        console.debug(`[perf] ${name}: ${Math.round(m.duration)}ms`);
+      }
+    };
+  }, [name]);
+}
+```
+
+## server: latência + Server-Timing (aparece no DevTools)
+
+```ts
+// server/middleware/timing.ts
+export const timing = (req,res,next)=>{
+  const t = Date.now();
+  res.on("finish", ()=> {
+    const ms = Date.now()-t;
+    if (ms > 300) console.warn(`[slow] ${req.method} ${req.originalUrl} ${res.statusCode} ${ms}ms`);
+    try {
+      // Chrome DevTools > Network > Timing
+      res.setHeader("Server-Timing", `total;dur=${ms}`);
+    } catch {}
+  });
+  next();
+};
+
+// server/index.ts
+import { timing } from "./middleware/timing";
+app.use(timing);
+```
+
+# 1) Patch base para **VideoConsultation**
+
+> Objetivos: conter re-render, evitar jank de rolagem, reduzir payloads e subir A11y.
+
+```diff
+--- a/client/src/pages/VideoConsultation.tsx
++++ b/client/src/pages/VideoConsultation.tsx
+@@
+-import React from "react";
++import React, { memo, useCallback, useMemo, useRef } from "react";
++import { useQuery } from "@tanstack/react-query";
++import { useRenders } from "@/dev/useRenders";
++import { usePerfMarks } from "@/dev/usePerfMarks";
+// importe seus componentes reais:
+-// import VideoCanvas from "../components/VideoCanvas";
+-// import Controls from "../components/Controls";
+-// import MessageItem from "../components/MessageItem";
++// import VideoCanvas from "../components/VideoCanvas";
++// import Controls from "../components/Controls";
++// import MessageItem from "../components/MessageItem";
++// import api from "@/services/api";
+// Se usar @tanstack/react-virtual para listas grandes:
++// import { useVirtualizer } from "@tanstack/react-virtual";
+ 
+-const VideoConsultation = ({ consultationId }) => {
+-  // estado/efeitos originais...
+-  return <div>...</div>;
+-};
+-export default VideoConsultation;
++type Props = { consultationId: string };
++function VideoConsultationImpl({ consultationId }: Props) {
++  useRenders("VideoConsultation");
++  usePerfMarks("VideoConsultation");
++
++  // ====== Dados (de-dupe + payload enxuto) ======
++  const { data: consultation } = useQuery({
++    queryKey: ["consultation", consultationId],
++    queryFn: () => api.getConsultation(consultationId),
++    staleTime: 30_000,
++    refetchOnWindowFocus: false,
++    select: (d: any) => ({ id: d.id, patient: d.patient, doctor: d.doctor, status: d.status }), // reduz payload
++  });
++
++  const { data: messages = [] } = useQuery({
++    queryKey: ["consultation", consultationId, "messages"],
++    queryFn: () => api.getMessages(consultationId),
++    staleTime: 10_000,
++    refetchInterval: (d) => (consultation?.status === "active" ? 5_000 : false),
++    select: (arr: any[]) => arr.slice(-500), // cap lista para evitar DOM grande
++  });
++
++  // ====== Callbacks estáveis ======
++  const sendMessage = useCallback((text: string) => api.sendMessage(consultationId, text), [consultationId]);
++  const handleEnd = useCallback(() => api.endConsultation(consultationId), [consultationId]);
++
++  // ====== (Opcional) Virtualização do chat se crescer > 100 ======
++  const parentRef = useRef<HTMLDivElement>(null);
++  // const rowVirtualizer = useVirtualizer({
++  //   count: messages.length,
++  //   getScrollElement: () => parentRef.current,
++  //   estimateSize: () => 56,
++  //   overscan: 6,
++  // });
++
++  // ====== Derivados memorizados ======
++  const headerTitle = useMemo(() => {
++    if (!consultation) return "Consultando…";
++    return `${consultation.patient?.name ?? "Paciente"} · ${consultation.status}`;
++  }, [consultation]);
++
++  return (
++    <main role="main" aria-label="Video Consultation" style={{ height: "100vh", display: "grid", gridTemplateColumns: "1fr 360px" }}>
++      {/* Área de vídeo: fixa para evitar layout shift */}
++      <section style={{ position: "relative", overflow: "hidden", background: "#000" }} aria-label="Video area">
++        <VideoCanvas consultationId={consultationId} />
++        <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }} aria-hidden />
++        <Controls
++          onEnd={handleEnd}
++          aria-label="Controles da chamada"
++          style={{ position: "absolute", left: 0, right: 0, bottom: 0 }}
++        />
++      </section>
++
++      {/* Sidebar: rolável sem “jank” */}
++      <aside aria-labelledby="sidebar-title" style={{ borderLeft: "1px solid #e5e7eb", background: "#fff", height: "100%", display: "grid", gridTemplateRows: "auto 1fr auto" }}>
++        <header style={{ position: "sticky", top: 0, background: "#fff", zIndex: 1, borderBottom: "1px solid #e5e7eb", padding: "8px 12px" }}>
++          <h2 id="sidebar-title" style={{ margin: 0, fontSize: 14 }}>{headerTitle}</h2>
++        </header>
++
++        {/* Chat rolável; com virtualização basta trocar o conteúdo interno */}
++        <div ref={parentRef} role="log" aria-live="polite" aria-relevant="additions" style={{ overflowY: "auto" }}>
++          {/* --- Virtualizado (descomente se usar react-virtual) ---
++          <div style={{ height: rowVirtualizer.getTotalSize(), position: "relative" }}>
++            {rowVirtualizer.getVirtualItems().map(vi => {
++              const m = messages[vi.index];
++              return (
++                <div key={m.id} style={{ position: "absolute", top: vi.start, height: vi.size, width: "100%" }}>
++                  <MessageItem {...m} />
++                </div>
++              );
++            })}
++          </div>
++          */}
++          {/* --- Lista simples (default) --- */}
++          {messages.map((m: any) => <MessageItem key={m.id} {...m} />)}
++        </div>
++
++        <form
++          onSubmit={(e)=>{e.preventDefault(); const f=e.currentTarget as any; const v=f.msg?.value?.trim(); if(v){ sendMessage(v); f.reset(); }}}
++          aria-label="Enviar mensagem"
++          style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 8, padding: 8, borderTop: "1px solid #e5e7eb" }}
++        >
++          <label htmlFor="msg" className="sr-only">Mensagem</label>
++          <input id="msg" name="msg" autoComplete="off" placeholder="Escreva…" aria-label="Mensagem" />
++          <button type="submit" aria-label="Enviar">Enviar</button>
++        </form>
++      </aside>
++    </main>
++  );
++}
++
++// Evita re-render do topo quando props estáveis
++export default memo(VideoConsultationImpl);
+```
+
+### Por que esse patch ajuda (direto ao ponto)
+
+* **Re-render**: `memo`, `useCallback`, `useMemo` e cortes de payload nos `select` do React Query.
+* **Jank/rolagem**: sidebar com `overflowY:auto` e header sticky; área de vídeo “travadinha” para evitar layout shift.
+* **Lista grande**: caminho para virtualizar chat quando passar de \~100 itens.
+* **A11y**: regiões nomeadas (`role="main"`, `aria-label`/`aria-labelledby`), `role="log"` no chat, `aria-live` para adições.
+* **Requests**: chaves estáveis + `staleTime` + `select` + `refetchInterval` condicionado ao status.
+* **Métricas**: contagem de render + marks de tempo de vida do componente; `Server-Timing` visível no DevTools.
+
+# 2) Correção rápida de modais/sidebars (overflow e foco)
+
+```diff
+--- a/client/src/components/Modal.tsx
++++ b/client/src/components/Modal.tsx
+@@
+-<div className="ModalBody">{children}</div>
++<div
++  className="ModalBody"
++  role="document"
++  style={{ maxHeight: "70vh", overflowY: "auto" }}
++>
++  {children}
++</div>
+```
+
+Dica extra (foco inicial e escape):
+
+```ts
+// dentro do componente de Modal, ao abrir:
+useEffect(() => {
+  const el = document.getElementById(initialFocusId) ?? modalRef.current;
+  el?.focus?.();
+  const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose?.(); };
+  document.addEventListener("keydown", onKey, { passive: true });
+  return () => document.removeEventListener("keydown", onKey);
+}, [onClose]);
+```
+
+# 3) “Checklist de página” — execução em 15–20 min
+
+1. Abrir **Console/Network** e rodar **Lighthouse (mobile)**, salvar score.
+2. Habilitar `useRenders("VideoConsultation")` e observar picos.
+3. Ver **Network**: duplicidades/concorrência; alinhar `queryKey` e `staleTime`.
+4. Se chat >100 itens, ativar trecho de **virtualização**.
+5. Confirmar **A11y** (tab, foco inicial, `aria-*` nos botões/diálogos).
+6. Definição de pronto (DoD): **0 erros** no console, rolagem fluida, **Lighthouse ≥ 80 (mobile)**, sem regressões.
+
+# 4) Como aplicar agora
+
+* Cole os trechos acima e rode Lighthouse móvel.
+* Se quiser mais cirúrgico, me manda aqui o **arquivo/diff atual de `VideoConsultation`** ou **print + logs do Console + waterfall do Network** e devolvo um patch “linha a linha” com os pontos exatos (render, requests, overflow, a11y) — mantendo o seu estilo e libs.
+
+Assim que **VideoConsultation** estiver ok, repetimos o mesmo padrão em **EnhancedConsultation, ExamRequest, DoctorDashboard** na sequência (P0 → P1).
