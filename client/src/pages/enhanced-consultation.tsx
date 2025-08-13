@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
-import { useRenders } from '@/dev/useRenders';
-import { usePerfMarks } from '@/dev/usePerfMarks';
+import { useRenders, useRenderAlert } from '../../dev/useRenders';
+import { usePerfMarks } from '../../dev/usePerfMarks';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -176,7 +176,9 @@ DoctorInfo.displayName = 'DoctorInfo';
 // Main consultation component
 const EnhancedConsultation: React.FC = () => {
   // Performance monitoring
-  const renderCount = useRenders("EnhancedConsultation");
+  useRenders("EnhancedConsultation");
+  // avisa se re-renderizar demais (ajuda a achar gargalos)
+  useRenderAlert("EnhancedConsultation", 15);
   const { markStart, markEnd } = usePerfMarks("EnhancedConsultation");
   
   markStart("component-init");

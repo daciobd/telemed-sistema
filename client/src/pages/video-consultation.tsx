@@ -1,3 +1,4 @@
+import { useRenders, useRendersAdvanced, useRenderAlert } from "../../dev/useRenders";
 import { useState, useEffect, memo, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,13 +11,15 @@ import { Video, Clock, User, Phone, Calendar, Users } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useParams } from "wouter";
-import { useRenders } from "@/dev/useRenders";
-import { usePerfMarks } from "@/dev/usePerfMarks";
+
+import { usePerfMarks } from "../../dev/usePerfMarks";
 
 type Props = {};
 
 function VideoConsultationImpl(props: Props) {
   useRenders("VideoConsultation");
+  // avisa se re-renderizar demais (ajuda a achar gargalos)
+  useRenderAlert("VideoConsultation", 15);
   usePerfMarks("VideoConsultation");
 
   const { user } = useAuth();
