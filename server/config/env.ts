@@ -9,7 +9,7 @@ export const env = z.object({
   COOKIE_SECRET: z.string().min(16),
   
   // IA flags (desligadas por padrão em prod)
-  AI_ENABLED: z.string().transform(v => v === "true").default("false"),
+  AI_ENABLED: z.string().transform(v => v.toLowerCase() === "true").default("false"),
   AI_SYMPTOMS_ENABLED: z.string().transform(v => v === "true").default("false"),
   AI_ICD_SUGGESTION_ENABLED: z.string().transform(v => v === "true").default("false"),
   AI_DRUG_INTERACTIONS_ENABLED: z.string().transform(v => v === "true").default("false"),

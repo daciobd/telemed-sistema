@@ -1,611 +1,225 @@
-<!doctype html>
-<html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Dr. AI - Triagem Inteligente | TeleMed Pro</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-            rel="stylesheet"
-        />
-        <style>
-            .chat-message {
-                animation: slideInUp 0.3s ease-out;
-            }
-            @keyframes slideInUp {
-                from {
-                    transform: translateY(20px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
-            .typing-indicator {
-                animation: pulse 1.5s infinite;
-            }
-            .risk-low {
-                background: linear-gradient(135deg, #10b981, #34d399);
-            }
-            .risk-medium {
-                background: linear-gradient(135deg, #f59e0b, #fbbf24);
-            }
-            .risk-high {
-                background: linear-gradient(135deg, #ef4444, #f87171);
-            }
-        </style>
-    </head>
-    <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-        <div class="container mx-auto px-4 py-8 max-w-4xl">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
-                    <div class="flex items-center justify-center mb-4">
-                        <div
-                            class="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center"
-                        >
-                            <i class="fas fa-robot text-white text-2xl"></i>
-                        </div>
-                    </div>
-                    <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                        Dr. AI - Triagem Inteligente
-                    </h1>
-                    <p class="text-gray-600">
-                        Sistema de análise de sintomas e recomendações médicas
-                        personalizadas
-                    </p>
-                </div>
-            </div>
+d-xl p-6 border border-purple-100">
+                   <h4 class="text-xl font-semibold text-gray-800 mb-3 flex items-center">
+                       <i class="fas fa-user-md text-purple-600 mr-2"></i>
+                       Especialidade Recomendada
+                   </h4>
+                   <div class="flex items-center justify-between">
+                       <div>
+                           <p class="text-lg text-purple-800 font-medium">${specialties[analysis.specialty]}</p>
+                           <p class="text-sm text-gray-600 mt-1">Baseado na análise dos seus sintomas</p>
+                       </div>
+                       <div class="text-purple-600 text-3xl">
+                           <i class="fas fa-stethoscope"></i>
+                       </div>
+                   </div>
+               </div>
+           `;
 
-            <!-- Chat Interface -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <!-- Chat Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
-                    <div class="flex items-center">
-                        <div
-                            class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-3"
-                        >
-                            <i class="fas fa-user-md text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-semibold">Dr. AI</h3>
-                            <p class="text-blue-100 text-sm">
-                                Assistente de Triagem Online
-                            </p>
-                        </div>
-                        <div class="ml-auto">
-                            <span
-                                class="bg-green-400 w-3 h-3 rounded-full inline-block"
-                            ></span>
-                            <span class="text-white text-sm ml-2">Online</span>
-                        </div>
-                    </div>
-                </div>
+           // Recomendações Personalizadas
+           const recommendationsList = analysis.recommendations
+               .map(rec => `<li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-3 mt-1 flex-shrink-0"></i><span>${rec}</span></li>`)
+               .join("");
 
-                <!-- Chat Messages -->
-                <div
-                    id="chatMessages"
-                    class="h-96 overflow-y-auto p-4 space-y-4"
-                >
-                    <div class="chat-message">
-                        <div class="flex items-start">
-                            <div
-                                class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3"
-                            >
-                                <i class="fas fa-robot text-white text-sm"></i>
-                            </div>
-                            <div class="bg-blue-50 rounded-lg p-3 max-w-xs">
-                                <p class="text-sm text-gray-800">
-                                    Olá! Sou o Dr. AI, seu assistente de triagem
-                                    inteligente. Vou ajudá-lo a analisar seus
-                                    sintomas e recomendar o melhor tipo de
-                                    atendimento. Como você está se sentindo
-                                    hoje?
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+           document.getElementById("personalizedRecommendations").innerHTML = `
+               <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+                   <h4 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                       <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                       Recomendações Personalizadas
+                   </h4>
+                   <ul class="space-y-3">
+                       ${recommendationsList}
+                   </ul>
+                   <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                       <p class="text-sm text-blue-800">
+                           <i class="fas fa-info-circle mr-2"></i>
+                           Análise realizada em ${analysis.analysisDate} • Esta análise não substitui uma consulta médica presencial
+                       </p>
+                   </div>
+               </div>
+           `;
 
-                <!-- Input Area -->
-                <div class="border-t p-4">
-                    <div class="flex space-x-3">
-                        <input
-                            type="text"
-                            id="messageInput"
-                            placeholder="Descreva seus sintomas..."
-                            class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onkeypress="handleKeyPress(event)"
-                        />
-                        <button
-                            onclick="sendMessage()"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors"
-                        >
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+           // Scroll para os resultados
+           document.getElementById("resultsPanel").scrollIntoView({ behavior: "smooth" });
+       }
 
-            <!-- Quick Symptoms -->
-            <div class="mt-6 bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                    Sintomas Comuns - Clique para Análise Rápida
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <button
-                        onclick="quickSymptom('Dor de cabeça')"
-                        class="bg-blue-50 hover:bg-blue-100 p-3 rounded-lg text-sm text-blue-800 transition-colors"
-                    >
-                        <i class="fas fa-head-side-cough mb-2"></i><br />Dor de
-                        Cabeça
-                    </button>
-                    <button
-                        onclick="quickSymptom('Febre')"
-                        class="bg-red-50 hover:bg-red-100 p-3 rounded-lg text-sm text-red-800 transition-colors"
-                    >
-                        <i class="fas fa-thermometer-half mb-2"></i><br />Febre
-                    </button>
-                    <button
-                        onclick="quickSymptom('Tosse')"
-                        class="bg-yellow-50 hover:bg-yellow-100 p-3 rounded-lg text-sm text-yellow-800 transition-colors"
-                    >
-                        <i class="fas fa-lungs mb-2"></i><br />Tosse
-                    </button>
-                    <button
-                        onclick="quickSymptom('Dor no peito')"
-                        class="bg-purple-50 hover:bg-purple-100 p-3 rounded-lg text-sm text-purple-800 transition-colors"
-                    >
-                        <i class="fas fa-heart mb-2"></i><br />Dor no Peito
-                    </button>
-                    <button
-                        onclick="quickSymptom('Náusea')"
-                        class="bg-green-50 hover:bg-green-100 p-3 rounded-lg text-sm text-green-800 transition-colors"
-                    >
-                        <i class="fas fa-dizzy mb-2"></i><br />Náusea
-                    </button>
-                    <button
-                        onclick="quickSymptom('Dor abdominal')"
-                        class="bg-orange-50 hover:bg-orange-100 p-3 rounded-lg text-sm text-orange-800 transition-colors"
-                    >
-                        <i class="fas fa-procedures mb-2"></i><br />Dor
-                        Abdominal
-                    </button>
-                    <button
-                        onclick="quickSymptom('Tontura')"
-                        class="bg-indigo-50 hover:bg-indigo-100 p-3 rounded-lg text-sm text-indigo-800 transition-colors"
-                    >
-                        <i class="fas fa-balance-scale mb-2"></i><br />Tontura
-                    </button>
-                    <button
-                        onclick="window.location.href='/triagem-psiquiatrica.html'"
-                        class="bg-purple-50 hover:bg-purple-100 p-3 rounded-lg text-sm text-purple-800 transition-colors"
-                    >
-                        <i class="fas fa-brain mb-2"></i><br />Triagem
-                        Psiquiátrica
-                    </button>
-                    <button
-                        onclick="quickSymptom('Outros sintomas')"
-                        class="bg-gray-50 hover:bg-gray-100 p-3 rounded-lg text-sm text-gray-800 transition-colors"
-                    >
-                        <i class="fas fa-plus mb-2"></i><br />Outros
-                    </button>
-                </div>
-            </div>
+       function scheduleAppointment() {
+           const analysisData = encodeURIComponent(JSON.stringify(chatState));
+           showNotification('Redirecionando para agendamento...', 'info');
 
-            <!-- Results Panel (Hidden by default) -->
-            <div
-                id="resultsPanel"
-                class="mt-6 bg-white rounded-xl shadow-lg p-6 hidden"
-            >
-                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                    Análise Completa - Dr. AI
-                </h3>
+           setTimeout(() => {
+               window.location.href = `index.html?ai_analysis=${analysisData}`;
+           }, 1500);
+       }
 
-                <!-- Risk Assessment -->
-                <div id="riskAssessment" class="mb-6">
-                    <!-- Dynamic content will be inserted here -->
-                </div>
+       function downloadReport() {
+           try {
+               const analysis = analyzeSymptoms();
+               const reportContent = generatePDFReport(analysis);
 
-                <!-- Recommended Specialty -->
-                <div id="specialtyRecommendation" class="mb-6">
-                    <!-- Dynamic content will be inserted here -->
-                </div>
+               // Criar blob e download
+               const blob = new Blob([reportContent], { type: 'text/plain' });
+               const url = window.URL.createObjectURL(blob);
+               const a = document.createElement('a');
+               a.style.display = 'none';
+               a.href = url;
+               a.download = `relatorio-dr-ai-${new Date().toISOString().split('T')[0]}.txt`;
+               document.body.appendChild(a);
+               a.click();
+               window.URL.revokeObjectURL(url);
+               document.body.removeChild(a);
 
-                <!-- Personalized Recommendations -->
-                <div id="personalizedRecommendations" class="mb-6">
-                    <!-- Dynamic content will be inserted here -->
-                </div>
+               showNotification('Relatório baixado com sucesso!', 'success');
+           } catch (error) {
+               showNotification('Erro ao gerar relatório', 'error');
+           }
+       }
 
-                <!-- Action Buttons -->
-                <div class="text-center space-x-4">
-                    <button
-                        onclick="scheduleAppointment()"
-                        class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        <i class="fas fa-calendar-plus mr-2"></i>Agendar
-                        Consulta
-                    </button>
-                    <button
-                        onclick="newAnalysis()"
-                        class="bg-gray-500 text-white px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors"
-                    >
-                        <i class="fas fa-redo mr-2"></i>Nova Análise
-                    </button>
-                </div>
-            </div>
-        </div>
+       function generatePDFReport(analysis) {
+           const date = new Date().toLocaleDateString('pt-BR');
+           const time = new Date().toLocaleTimeString('pt-BR');
 
-        <script>
-            let chatState = {
-                step: 1,
-                maxSteps: 5,
-                symptoms: [],
-                intensity: "",
-                duration: "",
-                triggers: [],
-                medicalHistory: [],
-                currentSymptom: "",
-            };
+           return `
+RELATÓRIO DE ANÁLISE - DR. AI
+===============================
 
-            const specialties = {
-                cardiology: "Cardiologia",
-                neurology: "Neurologia",
-                gastroenterology: "Gastroenterologia",
-                pulmonology: "Pneumologia",
-                general: "Clínica Geral",
-                emergency: "Emergência",
-                psychiatry: "Psiquiatria",
-                dermatology: "Dermatologia",
-            };
+Data: ${date}
+Hora: ${time}
 
-            function handleKeyPress(event) {
-                if (event.key === "Enter") {
-                    sendMessage();
-                }
-            }
+DADOS DO PACIENTE
+-----------------
+Sintoma Principal: ${chatState.symptoms[0]}
+Intensidade: ${chatState.intensity}/10
+Duração: ${chatState.duration}
+Fatores Desencadeantes: ${chatState.triggers[0]}
+Histórico Médico: ${chatState.medicalHistory[0]}
 
-            function sendMessage() {
-                const input = document.getElementById("messageInput");
-                const message = input.value.trim();
+ANÁLISE DA IA
+-------------
+Nível de Risco: ${analysis.riskLevel === 'low' ? 'Baixo' : analysis.riskLevel === 'medium' ? 'Moderado' : 'Alto'}
+Especialidade Recomendada: ${specialties[analysis.specialty]}
+Confiança da Análise: ${analysis.confidence}%
 
-                if (message) {
-                    addUserMessage(message);
-                    input.value = "";
+RECOMENDAÇÕES
+-------------
+${analysis.recommendations.map((rec, index) => `${index + 1}. ${rec.replace(/[🚨🚫👥📞⏰📊💊📝📅🌡️💧😴]/g, '')}`).join('\n')}
 
-                    setTimeout(() => {
-                        processUserMessage(message);
-                    }, 1000);
-                }
-            }
+AVISO IMPORTANTE
+----------------
+Esta análise foi gerada por inteligência artificial e tem caráter informativo.
+NÃO substitui uma consulta médica presencial.
+Em caso de emergência, procure atendimento médico imediatamente.
 
-            function quickSymptom(symptom) {
-                chatState.currentSymptom = symptom;
-                addUserMessage(symptom);
+TeleMed Pro - Sistema de Triagem Inteligente
+           `;
+       }
 
-                setTimeout(() => {
-                    processUserMessage(symptom);
-                }, 1000);
-            }
+       function newAnalysis() {
+           // Reset do estado do chat
+           chatState = {
+               step: 1,
+               maxSteps: 5,
+               symptoms: [],
+               intensity: "",
+               duration: "",
+               triggers: [],
+               medicalHistory: [],
+               currentSymptom: "",
+               analysisComplete: false
+           };
 
-            function addUserMessage(message) {
-                const chatMessages = document.getElementById("chatMessages");
-                const messageDiv = document.createElement("div");
-                messageDiv.className = "chat-message";
-                messageDiv.innerHTML = `
-                <div class="flex items-start justify-end">
-                    <div class="bg-blue-600 text-white rounded-lg p-3 max-w-xs">
-                        <p class="text-sm">${message}</p>
-                    </div>
-                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center ml-3">
-                        <i class="fas fa-user text-gray-600 text-sm"></i>
-                    </div>
-                </div>
-            `;
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+           // Limpar chat
+           document.getElementById("chatMessages").innerHTML = `
+               <div class="chat-message">
+                   <div class="flex items-start">
+                       <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                           <i class="fas fa-robot text-white text-sm"></i>
+                       </div>
+                       <div class="bg-blue-50 rounded-lg p-3 max-w-xs lg:max-w-md">
+                           <p class="text-sm text-gray-800">Olá! Sou o Dr. AI, seu assistente de triagem inteligente. Vou ajudá-lo a analisar seus sintomas e recomendar o melhor tipo de atendimento. Como você está se sentindo hoje?</p>
+                       </div>
+                   </div>
+               </div>
+           `;
 
-            function addBotMessage(message) {
-                const chatMessages = document.getElementById("chatMessages");
+           // Esconder resultados
+           document.getElementById("resultsPanel").classList.add("hidden");
 
-                // Add typing indicator
-                const typingDiv = document.createElement("div");
-                typingDiv.className = "chat-message typing-indicator";
-                typingDiv.id = "typing";
-                typingDiv.innerHTML = `
-                <div class="flex items-start">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                        <i class="fas fa-robot text-white text-sm"></i>
-                    </div>
-                    <div class="bg-blue-50 rounded-lg p-3">
-                        <div class="flex space-x-1">
-                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-                chatMessages.appendChild(typingDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+           // Reset progress
+           updateProgress();
 
-                setTimeout(() => {
-                    const typing = document.getElementById("typing");
-                    if (typing) typing.remove();
+           // Scroll para o topo
+           window.scrollTo({ top: 0, behavior: "smooth" });
 
-                    const messageDiv = document.createElement("div");
-                    messageDiv.className = "chat-message";
-                    messageDiv.innerHTML = `
-                    <div class="flex items-start">
-                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-robot text-white text-sm"></i>
-                        </div>
-                        <div class="bg-blue-50 rounded-lg p-3 max-w-xs">
-                            <p class="text-sm text-gray-800">${message}</p>
-                        </div>
-                    </div>
-                `;
-                    chatMessages.appendChild(messageDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 1500);
-            }
+           showNotification('Nova análise iniciada', 'info');
+       }
 
-            function processUserMessage(message) {
-                switch (chatState.step) {
-                    case 1:
-                        chatState.symptoms.push(message);
-                        chatState.step = 2;
-                        addBotMessage(
-                            "Entendi. Em uma escala de 1 a 10, qual é a intensidade do seu sintoma? (1 = muito leve, 10 = insuportável)",
-                        );
-                        break;
+       function openTriagePsychiatric() {
+           if (confirm('Deseja acessar a triagem psiquiátrica especializada?')) {
+               window.location.href = 'triagem-psiquiatrica.html';
+           }
+       }
 
-                    case 2:
-                        chatState.intensity = message;
-                        chatState.step = 3;
-                        addBotMessage(
-                            "Há quanto tempo você está sentindo isso? (Ex: 2 horas, 3 dias, 1 semana)",
-                        );
-                        break;
+       function goBack() {
+           if (chatState.step > 1 || chatState.analysisComplete) {
+               if (confirm('Tem certeza que deseja sair? Sua análise atual será perdida.')) {
+                   window.location.href = 'index.html';
+               }
+           } else {
+               window.location.href = 'index.html';
+           }
+       }
 
-                    case 3:
-                        chatState.duration = message;
-                        chatState.step = 4;
-                        addBotMessage(
-                            "Você consegue identificar algo que tenha desencadeado esse sintoma? (Ex: exercício, alimentação, estresse, etc.)",
-                        );
-                        break;
+       // Sistema de notificações
+       function showNotification(message, type = 'info') {
+           const toast = document.getElementById('notificationToast');
+           const colors = {
+               success: 'bg-green-500',
+               error: 'bg-red-500',
+               info: 'bg-blue-500',
+               warning: 'bg-yellow-500'
+           };
 
-                    case 4:
-                        chatState.triggers.push(message);
-                        chatState.step = 5;
-                        addBotMessage(
-                            "Por último, você tem algum problema de saúde conhecido ou toma algum medicamento regularmente?",
-                        );
-                        break;
+           const icons = {
+               success: 'fa-check-circle',
+               error: 'fa-exclamation-circle',
+               info: 'fa-info-circle',
+               warning: 'fa-exclamation-triangle'
+           };
 
-                    case 5:
-                        chatState.medicalHistory.push(message);
-                        setTimeout(() => {
-                            generateAnalysis();
-                        }, 2000);
-                        addBotMessage(
-                            "Perfeito! Agora tenho todas as informações necessárias. Estou analisando seus dados para gerar uma recomendação personalizada. Aguarde alguns segundos...",
-                        );
-                        break;
-                }
-            }
+           toast.className = `fixed top-4 right-4 z-50 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform translate-x-full transition-transform duration-300`;
+           toast.innerHTML = `
+               <i class="fas ${icons[type]}"></i>
+               <span>${message}</span>
+           `;
 
-            function generateAnalysis() {
-                const analysis = analyzeSymptoms();
-                showResults(analysis);
-            }
+           // Mostrar
+           toast.classList.remove('hidden');
+           setTimeout(() => {
+               toast.classList.remove('translate-x-full');
+           }, 100);
 
-            function analyzeSymptoms() {
-                // AI-like analysis logic
-                const symptom = chatState.symptoms[0].toLowerCase();
-                const intensity = parseInt(chatState.intensity) || 5;
-                const duration = chatState.duration.toLowerCase();
+           // Esconder após 4 segundos
+           setTimeout(() => {
+               toast.classList.add('translate-x-full');
+               setTimeout(() => {
+                   toast.classList.add('hidden');
+               }, 300);
+           }, 4000);
+       }
 
-                let riskLevel = "low";
-                let specialty = "general";
-                let urgency = "normal";
+       // Cleanup ao sair da página
+       window.addEventListener('beforeunload', function(e) {
+           if (chatState.step > 1 && !chatState.analysisComplete) {
+               e.preventDefault();
+               e.returnValue = 'Sua análise atual será perdida. Tem certeza que deseja sair?';
+           }
+       });
 
-                // Risk assessment logic
-                if (
-                    intensity >= 8 ||
-                    symptom.includes("dor no peito") ||
-                    symptom.includes("falta de ar") ||
-                    symptom.includes("desmaio")
-                ) {
-                    riskLevel = "high";
-                    urgency = "urgent";
-                } else if (
-                    intensity >= 6 ||
-                    symptom.includes("febre") ||
-                    duration.includes("semana")
-                ) {
-                    riskLevel = "medium";
-                    urgency = "priority";
-                }
-
-                // Specialty recommendation logic
-                if (symptom.includes("coração") || symptom.includes("peito")) {
-                    specialty = "cardiology";
-                } else if (
-                    symptom.includes("cabeça") ||
-                    symptom.includes("tontura")
-                ) {
-                    specialty = "neurology";
-                } else if (
-                    symptom.includes("estômago") ||
-                    symptom.includes("abdominal")
-                ) {
-                    specialty = "gastroenterology";
-                } else if (
-                    symptom.includes("tosse") ||
-                    symptom.includes("respiração")
-                ) {
-                    specialty = "pulmonology";
-                } else if (
-                    symptom.includes("ansiedade") ||
-                    symptom.includes("depressão")
-                ) {
-                    specialty = "psychiatry";
-                }
-
-                return {
-                    riskLevel,
-                    specialty,
-                    urgency,
-                    confidence: Math.floor(Math.random() * 20) + 80, // 80-99%
-                    recommendations: generateRecommendations(
-                        riskLevel,
-                        specialty,
-                        urgency,
-                    ),
-                };
-            }
-
-            function generateRecommendations(riskLevel, specialty, urgency) {
-                const recommendations = [];
-
-                if (riskLevel === "high") {
-                    recommendations.push(
-                        "Procure atendimento médico imediatamente",
-                    );
-                    recommendations.push("Evite atividades físicas intensas");
-                    recommendations.push(
-                        "Mantenha-se em local seguro e acompanhado",
-                    );
-                } else if (riskLevel === "medium") {
-                    recommendations.push(
-                        "Agende uma consulta nas próximas 24-48 horas",
-                    );
-                    recommendations.push("Monitore a evolução dos sintomas");
-                    recommendations.push("Evite automedicação");
-                } else {
-                    recommendations.push(
-                        "Consulta pode ser agendada em até 7 dias",
-                    );
-                    recommendations.push("Adote medidas de cuidado geral");
-                    recommendations.push("Hidrate-se adequadamente");
-                }
-
-                return recommendations;
-            }
-
-            function showResults(analysis) {
-                document
-                    .getElementById("resultsPanel")
-                    .classList.remove("hidden");
-
-                // Risk Assessment
-                const riskColors = {
-                    low: "risk-low",
-                    medium: "risk-medium",
-                    high: "risk-high",
-                };
-
-                const riskTexts = {
-                    low: "Baixo Risco",
-                    medium: "Risco Moderado",
-                    high: "Alto Risco",
-                };
-
-                document.getElementById("riskAssessment").innerHTML = `
-                <div class="text-center">
-                    <div class="${riskColors[analysis.riskLevel]} text-white rounded-xl p-6 mb-4">
-                        <h4 class="text-2xl font-bold mb-2">${riskTexts[analysis.riskLevel]}</h4>
-                        <p class="text-lg">Nível de Confiança: ${analysis.confidence}%</p>
-                    </div>
-                </div>
-            `;
-
-                // Specialty Recommendation
-                document.getElementById("specialtyRecommendation").innerHTML = `
-                <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6">
-                    <h4 class="text-xl font-semibold text-gray-800 mb-3">
-                        <i class="fas fa-user-md text-purple-600 mr-2"></i>
-                        Especialidade Recomendada
-                    </h4>
-                    <p class="text-lg text-purple-800 font-medium">${specialties[analysis.specialty]}</p>
-                    <p class="text-sm text-gray-600 mt-2">Baseado na análise dos seus sintomas</p>
-                </div>
-            `;
-
-                // Personalized Recommendations
-                const recommendationsList = analysis.recommendations
-                    .map(
-                        (rec) =>
-                            `<li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>${rec}</li>`,
-                    )
-                    .join("");
-
-                document.getElementById(
-                    "personalizedRecommendations",
-                ).innerHTML = `
-                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6">
-                    <h4 class="text-xl font-semibold text-gray-800 mb-4">
-                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
-                        Recomendações Personalizadas
-                    </h4>
-                    <ul class="space-y-3">
-                        ${recommendationsList}
-                    </ul>
-                </div>
-            `;
-
-                // Scroll to results
-                document
-                    .getElementById("resultsPanel")
-                    .scrollIntoView({ behavior: "smooth" });
-            }
-
-            function scheduleAppointment() {
-                // Redirect to booking with AI analysis data
-                const analysisData = encodeURIComponent(
-                    JSON.stringify(chatState),
-                );
-                window.location.href = `/?ai_analysis=${analysisData}`;
-            }
-
-            function newAnalysis() {
-                // Reset chat state
-                chatState = {
-                    step: 1,
-                    maxSteps: 5,
-                    symptoms: [],
-                    intensity: "",
-                    duration: "",
-                    triggers: [],
-                    medicalHistory: [],
-                    currentSymptom: "",
-                };
-
-                // Clear chat
-                document.getElementById("chatMessages").innerHTML = `
-                <div class="chat-message">
-                    <div class="flex items-start">
-                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                            <i class="fas fa-robot text-white text-sm"></i>
-                        </div>
-                        <div class="bg-blue-50 rounded-lg p-3 max-w-xs">
-                            <p class="text-sm text-gray-800">Olá! Sou o Dr. AI, seu assistente de triagem inteligente. Vou ajudá-lo a analisar seus sintomas e recomendar o melhor tipo de atendimento. Como você está se sentindo hoje?</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-                // Hide results
-                document.getElementById("resultsPanel").classList.add("hidden");
-
-                // Scroll to top
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-        </script>
-    </body>
+       // Tratamento de erros globais
+       window.addEventListener('error', function(e) {
+           console.error('Erro na aplicação:', e.error);
+           showNotification('Ocorreu um erro inesperado. Tente recarregar a página.', 'error');
+       });
+   </script>
+</body>
 </html>
