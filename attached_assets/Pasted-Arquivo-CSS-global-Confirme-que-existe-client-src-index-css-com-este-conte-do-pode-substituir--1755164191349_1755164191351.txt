@@ -1,0 +1,134 @@
+Arquivo CSS global
+
+Confirme que existe client/src/index.css com este conteúdo (pode substituir):
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 223 47% 11%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+    --ring: 224 71% 4%;
+  }
+
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+
+E importe esse CSS no entry do React:
+
+client/src/main.tsx
+
+import "./index.css"; // <- ESSENCIAL
+
+2) Config do Tailwind/PostCSS no client/
+
+Se ainda não tiver:
+
+cd client
+npm i -D tailwindcss postcss autoprefixer tailwindcss-animate class-variance-authority tailwind-merge
+npx tailwindcss init -p
+
+
+client/tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+  theme: { extend: {} },
+  plugins: [require("tailwindcss-animate")],
+};
+
+
+client/postcss.config.js
+
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+
+Dica: se o Vite não estiver pegando os arquivos de config, adicione isto no client/package.json:
+
+"postcss": { "plugins": { "tailwindcss": {}, "autoprefixer": {} } }
+
+3) Rebuild / Restart
+
+Se o server serve o build do client:
+
+cd client
+npm run build
+
+
+Depois reinicie o servidor do Replit.
+
+Se você roda o vite dev do client:
+
+cd client
+npm run dev
+
+
+Atualize /ai-console?v=3 com hard refresh.
+
+4) Confirmar que o CSS está chegando
+
+Abra o DevTools → Network → filtre por index.css:
+
+Deve existir um CSS baixado pelo client.
+
+Abra o arquivo e confira se há regras Tailwind (ex.: *,::before,::after{--tw-border-spacing-x:0;...}).
+
+Ou teste no Console:
+
+document.body.insertAdjacentHTML('beforeend','<div class="p-3 bg-blue-600 text-white rounded mt-4">Tailwind OK</div>');
+
+
+Se aparecer azul, Tailwind está ativo.
+
+Se nada disso aplicar estilo:
+
+Posso te passar uma versão do /ai-console estilizada em Tailwind puro, sem depender dos componentes shadcn/ui — funciona mesmo que o alias de componentes não esteja ok. É só colar e usar. Quer que eu te envie essa alternativa agora?
