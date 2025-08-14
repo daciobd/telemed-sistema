@@ -1,3 +1,22 @@
+im — dá pra deixar bonito e confortável de usar com os componentes shadcn/ui que você já tem (Cards, Tabs, Buttons, Textarea, Badges). Abaixo vai um drop-in replacement para client/src/pages/ai-console.tsx com:
+
+layout limpo (Cards + Tabs),
+
+status com badge colorida,
+
+contador de caracteres,
+
+atalho Ctrl/⌘+Enter,
+
+histórico de perguntas,
+
+botões copiar e limpar,
+
+abas Perguntar e Gerar Código.
+
+Cole tudo no arquivo e salve.
+
+// client/src/pages/ai-console.tsx
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -300,3 +319,15 @@ export default function AIConsolePage() {
     </div>
   );
 }
+
+Por que melhora?
+
+Tabs e Cards dão organização visual.
+
+Badges e ícones deixam o status claro.
+
+Atalhos e contador agilizam uso.
+
+Histórico evita redigitar.
+
+Copiar/Limpar simplificam o fluxo.

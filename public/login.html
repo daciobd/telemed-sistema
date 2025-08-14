@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - TeleMed | Sua Saúde na Palma da Mão</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            .gradient-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+
+            .glass-effect {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .login-card {
+                animation: slideInUp 0.6s ease-out;
+            }
+
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .floating-element {
+                animation: float 6s ease-in-out infinite;
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+
+            .input-group {
+                position: relative;
+            }
+
+            .input-group input:focus + label,
+            .input-group input:not(:placeholder-shown) + label {
+                transform: translateY(-25px) scale(0.9);
+                color: #3b82f6;
+            }
+
+            .input-group label {
+                position: absolute;
+                left: 12px;
+                top: 12px;
+                transition: all 0.2s ease;
+                pointer-events: none;
+                color: #6b7280;
+            }
+
+            .social-btn {
+                transition: all 0.3s ease;
+            }
+
+            .social-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            }
+
+            .loading-spinner {
+                border: 3px solid #f3f3f3;
+                border-top: 3px solid #3b82f6;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .security-badge {
+                background: linear-gradient(135deg, #10b981, #059669);
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.8;
+                }
+            }
+        </style>
+    </head>
+    <body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div
+                class="floating-element absolute top-20 left-10 w-20 h-20 bg-white bg-opacity-10 rounded-full"
+            ></div>
+            <div
+                class="floating-element absolute top-40 right-20 w-16 h-16 bg-white bg-opacity-10 rounded-full"
+                style="animation-delay: -2s"
+            ></div>
+            <div
+                class="floating-element absolute bottom-20 left-20 w-12 h-12 bg-white bg-opacity-10 rounded-full"
+                style="animation-delay: -4s"
+            ></div>
+            <div
+                class="floating-element absolute bottom-40 right-10 w-24 h-24 bg-white bg-opacity-10 rounded-full"
+                style="animation-delay: -1s"
+            ></div>
+        </div>
+
+        <!-- Main Login Container -->
+        <div
+            class="w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center"
+        >
+            <!-- Left Side - Branding -->
+            <div class="text-center lg:text-left text-white">
+                <div class="mb-8">
+                    <div
+                        class="flex items-center justify-center lg:justify-start mb-6"
+                    >
+                        <div
+                            class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4"
+                        >
+                            <i class="fas fa-heartbeat text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-4xl font-bold">TeleMed</h1>
+                            <p class="text-blue-200">
+                                Sua Saúde na Palma da Mão
+                            </p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-3xl lg:text-4xl font-bold mb-4">
+                        Bem-vindo de volta!
+                    </h2>
+                    <p class="text-xl text-blue-100 mb-8">
+                        Acesse sua conta e continue cuidando da sua saúde com a
+                        tecnologia mais avançada.
+                    </p>
+
+                    <!-- Features -->
+                    <div class="space-y-4 text-left">
+                        <div class="flex items-center">
+                            <i class="fas fa-video text-green-400 mr-3"></i>
+                            <span>Consultas por vídeo 24/7</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot text-blue-400 mr-3"></i>
+                            <span>Triagem inteligente com IA</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i
+                                class="fas fa-prescription text-purple-400 mr-3"
+                            ></i>
+                            <span>Receitas digitais válidas</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i
+                                class="fas fa-shield-alt text-yellow-400 mr-3"
+                            ></i>
+                            <span>Dados protegidos e seguros</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Login Form -->
+            <div class="w-full max-w-md mx-auto">
+                <div class="glass-effect rounded-2xl p-8 login-card">
+                    <!-- Header -->
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-white mb-2">
+                            Fazer Login
+                        </h3>
+                        <p class="text-blue-200">Entre na sua conta TeleMed</p>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="space-y-6">
+                        <!-- User Type Selection -->
+                        <div
+                            class="grid grid-cols-2 gap-2 p-1 bg-white bg-opacity-10 rounded-lg"
+                        >
+                            <button
+                                type="button"
+                                id="patientBtn"
+                                class="py-2 px-4 rounded-lg text-sm font-medium transition-colors bg-white text-gray-800"
+                                onclick="selectUserType('patient')"
+                            >
+                                <i class="fas fa-user mr-1"></i>Paciente
+                            </button>
+                            <button
+                                type="button"
+                                id="doctorBtn"
+                                class="py-2 px-4 rounded-lg text-sm font-medium text-white transition-colors"
+                                onclick="selectUserType('doctor')"
+                            >
+                                <i class="fas fa-user-md mr-1"></i>Médico
+                            </button>
+                        </div>
+
+                        <!-- Email/CPF Input -->
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                id="email"
+                                required
+                                class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                                placeholder="Email ou CPF"
+                            />
+                            <label for="email" class="text-white"
+                                >Email ou CPF</label
+                            >
+                        </div>
+
+                        <!-- Password Input -->
+                        <div class="input-group">
+                            <input
+                                type="password"
+                                id="password"
+                                required
+                                class="w-full px-4 py-3 pr-12 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
+                                placeholder="Senha"
+                            />
+                            <label for="password" class="text-white"
+                                >Senha</label
+                            >
+                            <button
+                                type="button"
+                                onclick="togglePassword()"
+                                class="absolute right-3 top-3 text-white hover:text-blue-300 transition-colors"
+                            >
+                                <i id="passwordIcon" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <!-- Remember & Forgot -->
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center text-white">
+                                <input
+                                    type="checkbox"
+                                    id="remember"
+                                    class="mr-2 rounded"
+                                />
+                                <span class="text-sm">Lembrar-me</span>
+                            </label>
+                            <a
+                                href="#"
+                                onclick="showForgotPassword()"
+                                class="text-sm text-blue-300 hover:text-white transition-colors"
+                            >
+                                Esqueci minha senha
+                            </a>
+                        </div>
+
+                        <!-- Login Button -->
+                        <button
+                            type="submit"
+                            id="loginBtn"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+                        >
+                            <span id="loginBtnText">Entrar</span>
+                            <div
+                                id="loginSpinner"
+                                class="loading-spinner ml-2 hidden"
+                            ></div>
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="relative my-6">
+                            <div class="absolute inset-0 flex items-center">
+                                <div
+                                    class="w-full border-t border-white border-opacity-30"
+                                ></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-4 bg-transparent text-white"
+                                    >ou continue com</span
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Social Login -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <button
+                                type="button"
+                                onclick="socialLogin('google')"
+                                class="social-btn flex items-center justify-center py-3 px-4 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white hover:bg-opacity-20 transition-all"
+                            >
+                                <i class="fab fa-google mr-2"></i>
+                                Google
+                            </button>
+                            <button
+                                type="button"
+                                onclick="socialLogin('facebook')"
+                                class="social-btn flex items-center justify-center py-3 px-4 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white hover:bg-opacity-20 transition-all"
+                            >
+                                <i class="fab fa-facebook mr-2"></i>
+                                Facebook
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Register Link -->
+                    <div class="mt-6 text-center">
+                        <p class="text-white">
+                            Não tem uma conta?
+                            <a
+                                href="cadastro.html"
+                                class="text-blue-300 hover:text-white font-medium transition-colors"
+                            >
+                                Cadastre-se gratuitamente
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Security Badge -->
+                    <div class="mt-6 text-center">
+                        <div
+                            class="security-badge inline-flex items-center px-4 py-2 rounded-full text-white text-sm"
+                        >
+                            <i class="fas fa-shield-alt mr-2"></i>
+                            Login seguro e protegido
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Links -->
+                <div class="mt-6 text-center space-x-4">
+                    <a
+                        href="../index.html"
+                        class="text-blue-200 hover:text-white transition-colors"
+                    >
+                        <i class="fas fa-home mr-1"></i>Página Inicial
+                    </a>
+                    <a
+                        href="#"
+                        onclick="showHelp()"
+                        class="text-blue-200 hover:text-white transition-colors"
+                    >
+                        <i class="fas fa-question-circle mr-1"></i>Ajuda
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forgot Password Modal -->
+        <div
+            id="forgotModal"
+            class="fixed inset-0 bg-black bg-opacity-50 hidden z-50"
+        >
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-xl max-w-md w-full p-6">
+                    <div class="text-center mb-6">
+                        <i class="fas fa-key text-4xl text-blue-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-800">
+                            Recuperar Senha
+                        </h3>
+                        <p class="text-gray-600 mt-2">
+                            Digite seu email para receber as instruções
+                        </p>
+                    </div>
+
+                    <form id="forgotForm" class="space-y-4">
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                                >Email</label
+                            >
+                            <input
+                                type="email"
+                                id="forgotEmail"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="seu@email.com"
+                            />
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button
+                                type="button"
+                                onclick="closeForgotPassword()"
+                                class="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                class="flex-1 py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Enviar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success/Error Toast -->
+        <div id="toast" class="fixed top-4 right-4 z-50 hidden">
+            <!-- Toast notifications will be inserted here -->
+        </div>
+
+        <script>
+            let currentUserType = "patient";
+
+            // Initialize page
+            document.addEventListener("DOMContentLoaded", function () {
+                // Check if already logged in
+                checkExistingLogin();
+
+                // Setup form validation
+                setupFormValidation();
+
+                // Auto-fill for demo
+                if (window.location.search.includes("demo=1")) {
+                    setTimeout(() => {
+                        document.getElementById("email").value =
+                            "paciente@telemed.com";
+                        document.getElementById("password").value = "demo123";
+                    }, 1000);
+                }
+            });
+
+            function selectUserType(type) {
+                currentUserType = type;
+
+                const patientBtn = document.getElementById("patientBtn");
+                const doctorBtn = document.getElementById("doctorBtn");
+
+                if (type === "patient") {
+                    patientBtn.className =
+                        "py-2 px-4 rounded-lg text-sm font-medium transition-colors bg-white text-gray-800";
+                    doctorBtn.className =
+                        "py-2 px-4 rounded-lg text-sm font-medium text-white transition-colors";
+                } else {
+                    patientBtn.className =
+                        "py-2 px-4 rounded-lg text-sm font-medium text-white transition-colors";
+                    doctorBtn.className =
+                        "py-2 px-4 rounded-lg text-sm font-medium transition-colors bg-white text-gray-800";
+                }
+
+                // Update placeholder text
+                const emailInput = document.getElementById("email");
+                if (type === "doctor") {
+                    emailInput.placeholder = "CRM ou Email";
+                    emailInput.nextElementSibling.textContent = "CRM ou Email";
+                } else {
+                    emailInput.placeholder = "Email ou CPF";
+                    emailInput.nextElementSibling.textContent = "Email ou CPF";
+                }
+            }
+
+            function togglePassword() {
+                const passwordInput = document.getElementById("password");
+                const passwordIcon = document.getElementById("passwordIcon");
+
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    passwordIcon.className = "fas fa-eye-slash";
+                } else {
+                    passwordInput.type = "password";
+                    passwordIcon.className = "fas fa-eye";
+                }
+            }
+
+            function setupFormValidation() {
+                const form = document.getElementById("loginForm");
+                const inputs = form.querySelectorAll("input[required]");
+
+                inputs.forEach((input) => {
+                    input.addEventListener("blur", validateField);
+                    input.addEventListener("input", clearErrors);
+                });
+
+                form.addEventListener("submit", handleLogin);
+            }
+
+            function validateField(event) {
+                const input = event.target;
+                const value = input.value.trim();
+
+                // Remove existing error styling
+                input.classList.remove("border-red-500");
+
+                if (!value) {
+                    input.classList.add("border-red-500");
+                    return false;
+                }
+
+                // Email/CPF validation
+                if (input.id === "email") {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    const cpfRegex = /^\d{11}$/;
+                    const crmRegex = /^CRM-?[A-Z]{2}-?\d{4,6}$/i;
+
+                    if (currentUserType === "doctor") {
+                        if (!emailRegex.test(value) && !crmRegex.test(value)) {
+                            input.classList.add("border-red-500");
+                            return false;
+                        }
+                    } else {
+                        if (
+                            !emailRegex.test(value) &&
+                            !cpfRegex.test(value.replace(/\D/g, ""))
+                        ) {
+                            input.classList.add("border-red-500");
+                            return false;
+                        }
+                    }
+                }
+
+                // Password validation
+                if (input.id === "password" && value.length < 6) {
+                    input.classList.add("border-red-500");
+                    return false;
+                }
+
+                return true;
+            }
+
+            function clearErrors(event) {
+                event.target.classList.remove("border-red-500");
+            }
+
+            async function handleLogin(event) {
+                event.preventDefault();
+
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value;
+                const remember = document.getElementById("remember").checked;
+
+                // Validate form
+                if (
+                    !validateField({
+                        target: document.getElementById("email"),
+                    }) ||
+                    !validateField({
+                        target: document.getElementById("password"),
+                    })
+                ) {
+                    showToast(
+                        "Por favor, corrija os erros no formulário.",
+                        "error",
+                    );
+                    return;
+                }
+
+                // Show loading
+                setLoading(true);
+
+                try {
+                    // Simulate login API call
+                    const result = await simulateLogin(
+                        email,
+                        password,
+                        currentUserType,
+                    );
+
+                    if (result.success) {
+                        // Save login state
+                        saveLoginState(result.user, remember);
+
+                        showToast("Login realizado com sucesso!", "success");
+
+                        // Redirect based on user type
+                        setTimeout(() => {
+                            if (currentUserType === "doctor") {
+                                window.location.href = "area-medica.html";
+                            } else {
+                                window.location.href =
+                                    "../dashboard-premium-fixed.html";
+                            }
+                        }, 1500);
+                    } else {
+                        showToast(
+                            result.message || "Credenciais inválidas.",
+                            "error",
+                        );
+                    }
+                } catch (error) {
+                    showToast("Erro no servidor. Tente novamente.", "error");
+                } finally {
+                    setLoading(false);
+                }
+            }
+
+            async function simulateLogin(email, password, userType) {
+                // Simulate API delay
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+
+                // Demo credentials
+                const validCredentials = {
+                    patient: {
+                        "paciente@telemed.com": "demo123",
+                        12345678901: "demo123",
+                        "joao@email.com": "senha123",
+                    },
+                    doctor: {
+                        "medico@telemed.com": "demo123",
+                        "CRM-SP-123456": "demo123",
+                        "dra.maria@telemed.com": "senha123",
+                    },
+                };
+
+                const credentials = validCredentials[userType];
+
+                if (credentials[email] === password) {
+                    return {
+                        success: true,
+                        user: {
+                            id: Math.random().toString(36).substr(2, 9),
+                            email: email,
+                            type: userType,
+                            name:
+                                userType === "doctor"
+                                    ? "Dr. João Silva"
+                                    : "Maria Santos",
+                            avatar: `https://ui-avatars.com/api/?name=${userType === "doctor" ? "Dr+Joao" : "Maria"}&background=3b82f6&color=fff`,
+                        },
+                    };
+                } else {
+                    return {
+                        success: false,
+                        message: "Email/CPF ou senha incorretos.",
+                    };
+                }
+            }
+
+            function saveLoginState(user, remember) {
+                const storage = remember ? localStorage : sessionStorage;
+                storage.setItem("telemed_user", JSON.stringify(user));
+                storage.setItem("telemed_login_time", Date.now().toString());
+            }
+
+            function checkExistingLogin() {
+                const user =
+                    localStorage.getItem("telemed_user") ||
+                    sessionStorage.getItem("telemed_user");
+                const loginTime =
+                    localStorage.getItem("telemed_login_time") ||
+                    sessionStorage.getItem("telemed_login_time");
+
+                if (user && loginTime) {
+                    const timeDiff = Date.now() - parseInt(loginTime);
+                    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+                    if (timeDiff < maxAge) {
+                        const userData = JSON.parse(user);
+                        showToast(
+                            "Você já está logado. Redirecionando...",
+                            "info",
+                        );
+
+                        setTimeout(() => {
+                            if (userData.type === "doctor") {
+                                window.location.href = "area-medica.html";
+                            } else {
+                                window.location.href =
+                                    "../dashboard-premium-fixed.html";
+                            }
+                        }, 2000);
+                    }
+                }
+            }
+
+            function setLoading(loading) {
+                const btn = document.getElementById("loginBtn");
+                const btnText = document.getElementById("loginBtnText");
+                const spinner = document.getElementById("loginSpinner");
+
+                if (loading) {
+                    btn.disabled = true;
+                    btn.classList.add("opacity-75");
+                    btnText.textContent = "Entrando...";
+                    spinner.classList.remove("hidden");
+                } else {
+                    btn.disabled = false;
+                    btn.classList.remove("opacity-75");
+                    btnText.textContent = "Entrar";
+                    spinner.classList.add("hidden");
+                }
+            }
+
+            function socialLogin(provider) {
+                showToast(`Login com ${provider} em desenvolvimento.`, "info");
+
+                // Simulate social login success for demo
+                if (window.location.search.includes("demo=1")) {
+                    setTimeout(() => {
+                        const mockUser = {
+                            id:
+                                "social_" +
+                                Math.random().toString(36).substr(2, 9),
+                            email: `usuario@${provider}.com`,
+                            type: currentUserType,
+                            name:
+                                currentUserType === "doctor"
+                                    ? "Dr. Social User"
+                                    : "Usuário Social",
+                            avatar: `https://ui-avatars.com/api/?name=Social+User&background=3b82f6&color=fff`,
+                            provider: provider,
+                        };
+
+                        saveLoginState(mockUser, false);
+                        showToast(
+                            `Login com ${provider} realizado!`,
+                            "success",
+                        );
+
+                        setTimeout(() => {
+                            if (currentUserType === "doctor") {
+                                window.location.href = "area-medica.html";
+                            } else {
+                                window.location.href =
+                                    "../dashboard-premium-fixed.html";
+                            }
+                        }, 1500);
+                    }, 1000);
+                }
+            }
+
+            function showForgotPassword() {
+                document
+                    .getElementById("forgotModal")
+                    .classList.remove("hidden");
+            }
+
+            function closeForgotPassword() {
+                document.getElementById("forgotModal").classList.add("hidden");
+                document.getElementById("forgotForm").reset();
+            }
+
+            document
+                .getElementById("forgotForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const email = document.getElementById("forgotEmail").value;
+
+                    if (email) {
+                        showToast(
+                            "Instruções enviadas para seu email!",
+                            "success",
+                        );
+                        closeForgotPassword();
+                    } else {
+                        showToast(
+                            "Por favor, digite um email válido.",
+                            "error",
+                        );
+                    }
+                });
+
+            function showHelp() {
+                showToast(
+                    "Entre em contato: (11) 99999-9999 ou suporte@telemed.com",
+                    "info",
+                );
+            }
+
+            function showToast(message, type = "info") {
+                const toast = document.getElementById("toast");
+                const colors = {
+                    success: "bg-green-500",
+                    error: "bg-red-500",
+                    info: "bg-blue-500",
+                    warning: "bg-yellow-500",
+                };
+
+                const icons = {
+                    success: "fa-check-circle",
+                    error: "fa-exclamation-circle",
+                    info: "fa-info-circle",
+                    warning: "fa-exclamation-triangle",
+                };
+
+                toast.className = `fixed top-4 right-4 z-50 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform translate-x-full transition-transform duration-300`;
+                toast.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span>${message}</span>
+            `;
+
+                toast.classList.remove("hidden");
+                setTimeout(() => {
+                    toast.classList.remove("translate-x-full");
+                }, 100);
+
+                setTimeout(() => {
+                    toast.classList.add("translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("hidden");
+                    }, 300);
+                }, 4000);
+            }
+
+            // Keyboard shortcuts
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Enter" && e.ctrlKey) {
+                    document
+                        .getElementById("loginForm")
+                        .dispatchEvent(new Event("submit"));
+                }
+
+                if (e.key === "Escape") {
+                    if (
+                        !document
+                            .getElementById("forgotModal")
+                            .classList.contains("hidden")
+                    ) {
+                        closeForgotPassword();
+                    }
+                }
+            });
+
+            // Auto-focus email field
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("email").focus();
+            });
+        </script>
+    </body>
+</html>
