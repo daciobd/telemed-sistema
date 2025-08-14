@@ -3,75 +3,104 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ajustes finais de design */
-h1 {
-  font-size: 3.5rem !important;
-  font-weight: 800 !important;
-  margin-bottom: 1rem !important;
-}
-
-/* Melhorar cards de funcionalidades */
-.features-section {
-  margin-top: 2rem !important;
-}
-
-/* Ícones das seções com cores específicas */
-.card-teleconsultas {
-  background: rgba(16, 185, 129, 0.1) !important;
-  border-color: rgba(16, 185, 129, 0.3) !important;
-}
-
-.card-prontuario {
-  background: rgba(59, 130, 246, 0.1) !important;
-  border-color: rgba(59, 130, 246, 0.3) !important;
-}
-
-.card-receitas {
-  background: rgba(251, 146, 60, 0.1) !important;
-  border-color: rgba(251, 146, 60, 0.3) !important;
-}
-
-.card-conformidade {
-  background: rgba(139, 92, 246, 0.1) !important;
-  border-color: rgba(139, 92, 246, 0.3) !important;
-}
-
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
-  --radius: 0.5rem;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+    
+    /* Enhanced Medical Theme */
+    --medical-blue: hsl(217, 91%, 60%);
+    --medical-blue-light: hsl(217, 91%, 70%);
+    --medical-blue-dark: hsl(217, 91%, 50%);
+    --success-green: hsl(142, 76%, 36%);
+    --success-green-light: hsl(142, 76%, 46%);
+    --alert-red: hsl(0, 84%, 60%);
+    --alert-orange: hsl(38, 92%, 50%);
+    --neutral-50: hsl(210, 40%, 98%);
+    --neutral-100: hsl(210, 40%, 96%);
+    --neutral-200: hsl(214, 32%, 91%);
+    --neutral-300: hsl(213, 27%, 84%);
+    --neutral-500: hsl(215, 25%, 27%);
+    --neutral-800: hsl(220, 39%, 11%);
+  }
   
-  /* Enhanced Medical Theme */
-  --medical-blue: hsl(217, 91%, 60%);
-  --medical-blue-light: hsl(217, 91%, 70%);
-  --medical-blue-dark: hsl(217, 91%, 50%);
-  --success-green: hsl(142, 76%, 36%);
-  --success-green-light: hsl(142, 76%, 46%);
-  --alert-red: hsl(0, 84%, 60%);
-  --alert-orange: hsl(38, 92%, 50%);
-  --neutral-50: hsl(210, 40%, 98%);
-  --neutral-100: hsl(210, 40%, 96%);
-  --neutral-200: hsl(214, 32%, 91%);
-  --neutral-300: hsl(213, 27%, 84%);
-  --neutral-500: hsl(215, 25%, 27%);
-  --neutral-800: hsl(220, 39%, 11%);
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 223 47% 11%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+    --ring: 224 71% 4%;
+  }
+
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+@layer components {
+  /* Ajustes finais de design */
+  h1 {
+    font-size: 3.5rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Melhorar cards de funcionalidades */
+  .features-section {
+    margin-top: 2rem !important;
+  }
+
+  /* Ícones das seções com cores específicas */
+  .card-teleconsultas {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+  }
+
+  .card-prontuario {
+    background: rgba(59, 130, 246, 0.1) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+  }
+
+  .card-receitas {
+    background: rgba(251, 146, 60, 0.1) !important;
+    border-color: rgba(251, 146, 60, 0.3) !important;
+  }
+
+  .card-conformidade {
+    background: rgba(139, 92, 246, 0.1) !important;
+    border-color: rgba(139, 92, 246, 0.3) !important;
+  }
 }
 
 .dark {
