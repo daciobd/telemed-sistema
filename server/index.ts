@@ -107,6 +107,14 @@ app.post('/api/ai-agent/alert-test', async (req, res) => {
   }
 });
 
+// Mock simples do agente (eco)
+app.post('/api/ai/ask', async (req, res) => {
+  const q = String(req.body?.q || '').slice(0, 2000);
+  // simula latência pequena
+  await new Promise(r => setTimeout(r, 250));
+  res.json({ answer: `🤖 (stub) Você perguntou:\n\n${q}\n\n— Quando ligar o backend real, troque este endpoint.` });
+});
+
 console.log('🤖 ChatGPT Agent ativado com OpenAI v5.12.1');
 
 // Medical Reports - Sistema de Laudos Médicos

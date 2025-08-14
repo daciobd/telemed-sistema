@@ -45,3 +45,11 @@ textarea{min-height:120px; resize:vertical}
 
 /* reduz animações para usuários que preferem menos movimento */
 @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important} }
+
+/* Dark mode automático */
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b1220; --card:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; --bd:#1f2a44; --shadow:none }
+  .btn{ background:#0b1220; color:var(--ink); border-color:#24304d }
+  textarea,input{ background:#0b1220; color:var(--ink); border-color:#24304d }
+  .resp{ background:#0b1220 }
+}
