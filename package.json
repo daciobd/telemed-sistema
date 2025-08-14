@@ -44,6 +44,8 @@
     "@types/memoizee": "^0.4.12",
     "@types/passport": "^1.0.17",
     "@types/pg": "^8.15.4",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
     "@types/ws": "^8.18.1",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/ui": "^3.2.4",
