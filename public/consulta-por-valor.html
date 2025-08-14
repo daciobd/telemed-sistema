@@ -1,1044 +1,1070 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Lances - Consulta por Valor | TeleMed Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .bid-animation {
-            animation: bidPulse 2s infinite;
-        }
-        @keyframes bidPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .lance-card {
-            transition: all 0.3s ease;
-        }
-        .lance-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Consulta por Valor - Faça seu Lance | TeleMed</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            .gradient-bg {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            }
+
+            .pulse-animation {
+                animation: pulse-money 2s infinite;
+            }
+
+            @keyframes pulse-money {
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+            }
+
+            .auction-timer {
+                animation: countdown 1s infinite;
+            }
+
+            @keyframes countdown {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.7;
+                }
+            }
+
+            .step-active {
+                background: linear-gradient(135deg, #10b981, #34d399);
+                color: white;
+            }
+
+            .step-completed {
+                background: linear-gradient(135deg, #3b82f6, #60a5fa);
+                color: white;
+            }
+
+            .step-pending {
+                background: #f3f4f6;
+                color: #6b7280;
+            }
+
+            .lance-card {
+                border: 2px solid transparent;
+                transition: all 0.3s ease;
+            }
+
+            .lance-card.selected {
+                border-color: #10b981;
+                background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            }
+
+            .lance-card:hover {
+                border-color: #60a5fa;
+                transform: scale(1.02);
+            }
+
+            .price-input {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #059669;
+            }
+
+            .floating-notification {
+                animation: slideInRight 0.5s ease-out;
+            }
+
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
-                <div class="flex items-center justify-center mb-4">
-                    <div class="w-16 h-16 bg-gradient-to-r from-green-600 to-blue-600 rounded-full flex items-center justify-center">
-                        <i class="fas fa-gavel text-white text-2xl"></i>
-                    </div>
-                </div>
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Sistema de Lances Progressivos</h1>
-                <p class="text-gray-600">Conecte-se com médicos através de lances competitivos para consultas personalizadas</p>
-                <div class="mt-4">
-                    <a href="/" class="text-blue-600 hover:text-blue-800 mr-4">← Voltar ao Início</a>
-                    <a href="/guia-medicos.html" class="text-purple-600 hover:text-purple-800 mr-4">📋 Guia Médicos</a>
-                    <a href="/index.html" class="text-purple-600 hover:text-purple-800 mr-4">👨‍⚕️ Dashboard Médico</a>
-                    <a href="/dr-ai.html" class="text-green-600 hover:text-green-800">🤖 Triagem IA</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Como Funciona o Sistema de Lances - Seção Explicativa Completa -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Como Funciona o Sistema de Lances</h2>
-                <p class="text-gray-600 max-w-3xl mx-auto">
-                    Nosso sistema conecta pacientes e médicos de forma transparente e eficiente. 
-                    Veja como é simples usar nossa plataforma inovadora:
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-4 gap-6">
-                <!-- Passo 1 -->
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">1. Cadastre sua Necessidade</h3>
-                    <p class="text-gray-600 text-sm">
-                        Informe a especialidade, tipo de consulta e valor inicial que você está disposto a pagar
-                    </p>
-                </div>
-
-                <!-- Passo 2 -->
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-search text-green-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">2. Médicos Fazem Lances</h3>
-                    <p class="text-gray-600 text-sm">
-                        Profissionais qualificados competem pelo melhor valor para sua consulta
-                    </p>
-                </div>
-
-                <!-- Passo 3 -->
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-star text-purple-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">3. Escolha o Melhor</h3>
-                    <p class="text-gray-600 text-sm">
-                        Analise perfis e escolha o médico ideal baseado em valor, especialização e avaliações
-                    </p>
-                </div>
-
-                <!-- Passo 4 -->
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-video text-red-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-2">4. Realize a Consulta</h3>
-                    <p class="text-gray-600 text-sm">
-                        Agende e realize sua consulta com segurança através de nossa plataforma
-                    </p>
-                </div>
-            </div>
-
-            <!-- Vantagens do Sistema -->
-            <div class="mt-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-xl p-6">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Por que usar nosso Sistema de Lances?</h3>
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-white text-sm"></i>
-                        </div>
-                        <span class="text-gray-700"><strong>Preços Justos:</strong> Competição garante valores acessíveis</span>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-white text-sm"></i>
-                        </div>
-                        <span class="text-gray-700"><strong>Transparência:</strong> Veja todos os lances em tempo real</span>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-white text-sm"></i>
-                        </div>
-                        <span class="text-gray-700"><strong>Qualidade:</strong> Médicos verificados e qualificados</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botão para Iniciar Lance -->
-            <div class="text-center mt-6">
-                <button onclick="showBidForm()" class="bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-green-700 transition-all font-bold text-lg shadow-lg">
-                    <i class="fas fa-plus mr-2"></i>Criar Novo Lance de Consulta
-                </button>
-            </div>
-        </div>
-
-        <!-- Formulário de Novo Lance (Oculto inicialmente) -->
-        <div id="bidForm" class="bg-white rounded-2xl shadow-lg p-8 mb-8 hidden">
-            <h3 class="text-xl font-bold text-gray-800 mb-6">Criar Nova Solicitação de Consulta</h3>
-            <form onsubmit="createNewBid(event)" class="space-y-4">
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Especialidade Médica</label>
-                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="">Selecione a especialidade</option>
-                            <option value="cardiologia">Cardiologia</option>
-                            <option value="pediatria">Pediatria</option>
-                            <option value="dermatologia">Dermatologia</option>
-                            <option value="ginecologia">Ginecologia</option>
-                            <option value="psiquiatria">Psiquiatria</option>
-                            <option value="clinica-geral">Clínica Geral</option>
-                            <option value="ortopedia">Ortopedia</option>
-                            <option value="neurologia">Neurologia</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Valor Inicial do Lance</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
-                            <input type="number" placeholder="149" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" min="60" step="1" required>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">Valor mínimo: R$ 60</p>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Descrição dos Sintomas/Necessidades</label>
-                    <textarea placeholder="Descreva brevemente seus sintomas ou necessidades médicas..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-24 resize-none" required></textarea>
-                </div>
-
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="hideBidForm()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-rocket mr-2"></i>Iniciar Lance
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Active Auctions -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Consulta Cardiologia -->
-            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-lg text-gray-800">Consulta Cardiologia</h3>
-                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Urgente</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Lance Atual:</span>
-                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 180</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Tempo Restante:</span>
-                        <span class="text-red-600 font-semibold">12:45</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Médicos Interessados:</span>
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">5</span>
-                    </div>
-                    <div class="mt-4 bid-section">
-                        <div class="bid-input-wrapper">
-                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
-                                <input type="number" placeholder="185" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all" min="185" step="5" value="185">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 185 • Sugestão: R$ 190-200</p>
-                        </div>
-                        <div class="space-y-2">
-                            <button onclick="attendPatient('Maria Silva')" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors font-bold">
-                                🚨 ATENDER AGORA - R$ 300
-                            </button>
-                            <button onclick="submitBid(this, 'Cardiologia')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
-                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Teleconsulta Pediatria -->
-            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-lg text-gray-800">Teleconsulta Pediatria</h3>
-                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Regular</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Lance Atual:</span>
-                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 150</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Tempo Restante:</span>
-                        <span class="text-orange-600 font-semibold">25:30</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Médicos Interessados:</span>
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">3</span>
-                    </div>
-                    <div class="mt-4 bid-section">
-                        <div class="bid-input-wrapper">
-                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
-                                <input type="number" placeholder="155" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" min="155" step="5" value="155">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 155 • Sugestão: R$ 160-170</p>
-                        </div>
-                        <div class="space-y-2">
-                            <button onclick="attendPatient('Ana Costa')" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-bold">
-                                ▶️ Atender Agora - R$ 150
-                            </button>
-                            <button onclick="submitBid(this, 'Pediatria')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
-                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Consulta Dermatologia -->
-            <div class="lance-card bg-white rounded-xl shadow-lg p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-lg text-gray-800">Consulta Dermatologia</h3>
-                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Agendado</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Lance Atual:</span>
-                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ 120</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Tempo Restante:</span>
-                        <span class="text-green-600 font-semibold">45:15</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Médicos Interessados:</span>
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">7</span>
-                    </div>
-                    <div class="mt-4 bid-section">
-                        <div class="bid-input-wrapper">
-                            <label class="text-sm font-semibold text-gray-700 mb-2 block">Seu Lance:</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">R$</span>
-                                <input type="number" placeholder="125" class="w-full pl-10 pr-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all" min="125" step="5" value="125">
-                            </div>
-                            <p class="text-xs text-gray-500 mb-3">Mínimo: R$ 125 • Sugestão: R$ 130-140</p>
-                        </div>
-                        <div class="space-y-2">
-                            <button onclick="scheduleConsultation('João Santos', '22:00')" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-bold">
-                                📅 Agendar 22h - R$ 120
-                            </button>
-                            <button onclick="submitBid(this, 'Dermatologia')" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
-                                <i class="fas fa-gavel mr-2"></i>Fazer Lance
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Create New Auction -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                <i class="fas fa-plus-circle text-blue-600 mr-2"></i>
-                Criar Nova Consulta por Lance
-            </h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Especialidade Médica</label>
-                        <select class="w-full p-3 border rounded-lg">
-                            <option value="">Selecione a especialidade</option>
-                            <option value="cardiologia">Cardiologia</option>
-                            <option value="pediatria">Pediatria</option>
-                            <option value="dermatologia">Dermatologia</option>
-                            <option value="neurologia">Neurologia</option>
-                            <option value="ortopedia">Ortopedia</option>
-                            <option value="ginecologia">Ginecologia</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Tipo de Consulta</label>
-                        <select class="w-full p-3 border rounded-lg">
-                            <option value="">Selecione o tipo</option>
-                            <option value="presencial">Consulta Presencial</option>
-                            <option value="teleconsulta">Teleconsulta</option>
-                            <option value="urgente">Consulta Urgente</option>
-                            <option value="retorno">Consulta de Retorno</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Lance Inicial (R$)</label>
-                        <input type="number" class="w-full p-3 border rounded-lg" placeholder="100" min="50" step="10">
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Data Preferida</label>
-                        <input type="date" class="w-full p-3 border rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Horário Preferido</label>
-                        <select class="w-full p-3 border rounded-lg">
-                            <option value="">Selecione o horário</option>
-                            <option value="manha">Manhã (8h-12h)</option>
-                            <option value="tarde">Tarde (13h-17h)</option>
-                            <option value="noite">Noite (18h-22h)</option>
-                            <option value="flexivel">Horário Flexível</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Duração do Lance (minutos)</label>
-                        <select class="w-full p-3 border rounded-lg">
-                            <option value="30">30 minutos</option>
-                            <option value="60">1 hora</option>
-                            <option value="120">2 horas</option>
-                            <option value="240">4 horas</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-6">
-                <label class="block text-gray-700 font-semibold mb-2">Descrição dos Sintomas/Necessidades</label>
-                <textarea class="w-full p-3 border rounded-lg h-24" placeholder="Descreva brevemente seus sintomas ou necessidades médicas..."></textarea>
-            </div>
-            <div class="mt-6 text-center">
-                <button onclick="submitNewBid()" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-rocket mr-2"></i>Iniciar Lance
-                </button>
-            </div>
-        </div>
-
-        <!-- How It Works -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Como Funciona o Sistema de Lances</h2>
-            <div class="grid md:grid-cols-4 gap-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-user-plus text-blue-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 mb-2">1. Cadastre sua Necessidade</h3>
-                    <p class="text-gray-600 text-sm">Informe a especialidade, tipo de consulta e valor inicial</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-search text-green-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 mb-2">2. Médicos Fazem Lances</h3>
-                    <p class="text-gray-600 text-sm">Profissionais qualificados competem pelo melhor valor</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-gavel text-purple-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 mb-2">3. Escolha o Melhor</h3>
-                    <p class="text-gray-600 text-sm">Analise perfis e escolha o médico ideal</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-handshake text-red-600 text-2xl"></i>
-                    </div>
-                    <h3 class="font-semibold text-gray-800 mb-2">4. Realize a Consulta</h3>
-                    <p class="text-gray-600 text-sm">Agende e realize sua consulta com segurança</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Tracking GA4
-        function trackCTA(action, label) {
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'click', {
-                    'event_category': 'CTA',
-                    'event_label': label,
-                    'value': action === 'conversion' ? 1 : 0
-                });
-            }
-        }
-
-        // Detectar parâmetro de especialidade na URL
-        function getSpecialtyFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const especialidade = urlParams.get('especialidade');
-            
-            if (especialidade) {
-                // Track specialty parameter received
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'specialty_parameter', {
-                        'event_category': 'URL Parameter',
-                        'event_label': especialidade,
-                        'value': 1
-                    });
-                }
-                
-                // Pre-select specialty in form if available
-                preSelectSpecialty(especialidade);
-                
-                // Show specialty-specific message
-                showSpecialtyMessage(especialidade);
-            }
-        }
-
-        // Pré-selecionar especialidade no formulário
-        function preSelectSpecialty(especialidade) {
-            const specialtySelect = document.querySelector('#bid-form select');
-            if (specialtySelect) {
-                // Map URL slugs to form values
-                const specialtyMap = {
-                    'clinica-geral': 'Clínica Geral',
-                    'psiquiatria': 'Psiquiatria',
-                    'psicoterapia': 'Psicoterapia',
-                    'pediatria': 'Pediatria',
-                    'ginecologia': 'Ginecologia',
-                    'nutricao': 'Nutrição',
-                    'dermatologia': 'Dermatologia',
-                    'ortopedia': 'Ortopedia'
-                };
-                
-                const formValue = specialtyMap[especialidade];
-                if (formValue) {
-                    specialtySelect.value = formValue;
-                    console.log('🎯 Especialidade pré-selecionada:', formValue);
-                }
-            }
-        }
-
-        // Mostrar mensagem específica da especialidade
-        function showSpecialtyMessage(especialidade) {
-            const specialtyNames = {
-                'clinica-geral': 'Clínica Geral',
-                'psiquiatria': 'Psiquiatria',
-                'psicoterapia': 'Psicoterapia',
-                'pediatria': 'Pediatria',
-                'ginecologia': 'Ginecologia',
-                'nutricao': 'Nutrição',
-                'dermatologia': 'Dermatologia',
-                'ortopedia': 'Ortopedia'
-            };
-            
-            const specialtyName = specialtyNames[especialidade] || especialidade;
-            
-            // Create specialty banner
-            const banner = document.createElement('div');
-            banner.className = 'bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-r-lg';
-            banner.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas fa-info-circle mr-3 text-blue-500"></i>
-                    <div>
-                        <p class="font-medium">Especialidade Selecionada: ${specialtyName}</p>
-                        <p class="text-sm">Você será conectado preferencialmente com médicos desta especialidade.</p>
-                    </div>
-                </div>
-            `;
-            
-            // Insert banner after header
-            const header = document.querySelector('.container .text-center');
-            if (header && header.nextElementSibling) {
-                header.nextElementSibling.insertBefore(banner, header.nextElementSibling.firstChild);
-            }
-        }
-
-        // Track page view
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'page_view', {
-                'page_title': 'Sistema de Lances',
-                'page_location': window.location.href
-            });
-        }
-
-        // Initialize specialty detection
-        document.addEventListener('DOMContentLoaded', function() {
-            getSpecialtyFromURL();
-        });
-
-        // Funções de navegação para consultas
-        function attendPatient(patientName) {
-            // Track consultation start
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'consultation_start', {
-                    'event_category': 'Medical Consultation',
-                    'event_label': patientName,
-                    'value': 1
-                });
-            }
-            
-            alert(`✅ Atendimento aceito!\n\nPaciente: ${patientName}\nRedirecionando para videoconsulta...`);
-            setTimeout(() => {
-                window.location.href = '/videoconsulta.html';
-            }, 1500);
-        }
-
-        function scheduleConsultation(patientName, time) {
-            alert(`📅 Consulta agendada!\n\nPaciente: ${patientName}\nHorário: ${time}\nRedirecionando para videoconsulta...`);
-            setTimeout(() => {
-                window.location.href = '/videoconsulta.html';
-            }, 1500);
-        }
-
-        // Navegação direta para dashboard médico
-        function goToDashboard() {
-            window.location.href = '/index.html';
-        }
-
-        // Função para submeter lance com animações e feedback visual
-        function submitBid(button, specialty) {
-            const inputElement = button.parentElement.parentElement.querySelector('input[type="number"]');
-            const bidValue = inputElement.value;
-            const bidValueNum = parseFloat(bidValue);
-            
-            // Track bid attempt
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'bid_attempt', {
-                    'event_category': 'Bid Interaction',
-                    'event_label': specialty,
-                    'value': bidValueNum || 0
-                });
-            }
-            
-            // Validação mais robusta
-            if (!bidValue || bidValue.trim() === '' || isNaN(bidValueNum) || bidValueNum <= 0) {
-                showErrorFeedback(inputElement, 'Por favor, insira um valor válido!');
-                return;
-            }
-            
-            const minValue = parseInt(inputElement.getAttribute('min')) || 149;
-            if (bidValueNum < minValue) {
-                showErrorFeedback(inputElement, `Lance mínimo: R$ ${minValue}`);
-                return;
-            }
-            
-            // Animação de envio
-            button.disabled = true;
-            button.style.transform = 'scale(0.95)';
-            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
-            
-            // Simular processo de lance
-            setTimeout(() => {
-                // Sucesso visual
-                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Enviado!';
-                button.className = button.className.replace('bg-green-600', 'bg-green-500');
-                
-                // Notificação de sucesso melhorada
-                showSuccessModal(specialty, bidValue);
-                
-                // Atualizar valor na tela com animação
-                const currentBidElement = button.parentElement.parentElement.parentElement.querySelector('.bid-animation');
-                if (currentBidElement) {
-                    currentBidElement.style.transform = 'scale(1.1)';
-                    currentBidElement.style.color = '#059669';
-                    currentBidElement.textContent = `R$ ${bidValue}`;
-                    
-                    setTimeout(() => {
-                        currentBidElement.style.transform = 'scale(1)';
-                    }, 300);
-                }
-                
-                // Simular atualização no dashboard médico
-                updateMedicalDashboard(specialty, bidValue);
-                
-                // Reset do botão após sucesso
-                setTimeout(() => {
-                    button.disabled = false;
-                    button.style.transform = 'scale(1)';
-                    button.innerHTML = '<i class="fas fa-gavel mr-2"></i>Novo Lance';
-                    button.className = button.className.replace('bg-green-500', 'bg-blue-600');
-                }, 3000);
-                
-            }, 1500);
-        }
-        
-        // Função para mostrar feedback de erro
-        function showErrorFeedback(inputElement, message) {
-            inputElement.style.borderColor = '#ef4444';
-            inputElement.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
-            
-            // Criar tooltip de erro
-            const tooltip = document.createElement('div');
-            tooltip.className = 'error-tooltip';
-            tooltip.textContent = message;
-            tooltip.style.cssText = `
-                position: absolute; 
-                background: #ef4444; 
-                color: white; 
-                padding: 8px 12px; 
-                border-radius: 6px; 
-                font-size: 12px; 
-                top: -40px; 
-                left: 50%; 
-                transform: translateX(-50%); 
-                z-index: 1000;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            `;
-            
-            inputElement.parentElement.style.position = 'relative';
-            inputElement.parentElement.appendChild(tooltip);
-            inputElement.focus();
-            inputElement.select();
-            
-            // Remover feedback após 3 segundos
-            setTimeout(() => {
-                inputElement.style.borderColor = '#d1d5db';
-                inputElement.style.boxShadow = '';
-                if (tooltip.parentElement) {
-                    tooltip.parentElement.removeChild(tooltip);
-                }
-            }, 3000);
-        }
-        
-        // Função para mostrar modal de sucesso
-        function showSuccessModal(specialty, bidValue) {
-            const modal = document.createElement('div');
-            modal.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
-                        <h3 style="color: #059669; font-size: 24px; margin-bottom: 15px; font-weight: bold;">Lance Enviado!</h3>
-                        <p style="color: #6b7280; margin-bottom: 20px;">
-                            <strong>Especialidade:</strong> ${specialty}<br>
-                            <strong>Valor:</strong> R$ ${bidValue}<br><br>
-                            <em>Você receberá notificação se for selecionado!</em>
-                        </p>
-                        <button onclick="this.parentElement.parentElement.remove(); window.location.href='/aguardando-medico.html';" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                            Entendi ✓
+        <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <button
+                            onclick="goBack()"
+                            class="mr-4 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                            <i class="fas fa-arrow-left text-gray-600"></i>
                         </button>
+                        <div class="flex items-center">
+                            <i
+                                class="fas fa-gavel text-green-600 text-xl mr-3"
+                            ></i>
+                            <h1 class="text-xl font-semibold text-gray-900">
+                                Consulta por Valor
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-600">
+                            <span class="hidden sm:inline"
+                                >💰 Economia até 70%</span
+                            >
+                        </div>
+                        <a
+                            href="index.html"
+                            class="text-gray-600 hover:text-blue-600 transition-colors"
+                        >
+                            <i class="fas fa-home mr-1"></i>Início
+                        </a>
                     </div>
                 </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Auto-remover após 5 segundos
-            setTimeout(() => {
-                if (modal.parentElement) {
-                    modal.parentElement.removeChild(modal);
-                }
-            }, 5000);
-        }
-        
-        // Função para simular atualização no dashboard médico
-        function updateMedicalDashboard(specialty, bidValue) {
-            // Lista de nomes brasileiros realistas
-            const patientNames = [
-                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
-                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
-                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
-                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha',
-                'Gabriel Monteiro', 'Bianca Castro', 'Leonardo Torres', 'Adriana Dias', 'Henrique Cardoso'
-            ];
-            
-            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
-            
-            // Simular notificação para o dashboard médico
-            console.log(`🏥 DASHBOARD MÉDICO ATUALIZADO: Nova consulta ${specialty} - R$ ${bidValue} aguardando`);
-            
-            // Simular localStorage para persistir dados entre páginas
-            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
-            bids.push({
-                id: Date.now(),
-                specialty: specialty,
-                value: bidValue,
-                status: 'aguardando',
-                timestamp: new Date().toISOString(),
-                patient: randomName
-            });
-            localStorage.setItem('telemed_bids', JSON.stringify(bids));
-        }
+            </div>
+        </nav>
 
-        // Atualizar contadores de tempo em tempo real
-        function updateTimers() {
-            const timers = document.querySelectorAll('.text-red-600, .text-orange-600, .text-green-600');
-            timers.forEach(timer => {
-                if (timer.textContent.includes(':')) {
-                    const [minutes, seconds] = timer.textContent.split(':').map(Number);
-                    let totalSeconds = minutes * 60 + seconds;
-                    totalSeconds--;
-                    if (totalSeconds >= 0) {
-                        const newMinutes = Math.floor(totalSeconds / 60);
-                        const newSeconds = totalSeconds % 60;
-                        timer.textContent = `${newMinutes}:${newSeconds.toString().padStart(2, '0')}`;
-                    }
-                }
-            });
-        }
-
-        // Atualizar a cada segundo
-        setInterval(updateTimers, 1000);
-
-        // Simular atualizações de lances
-        function updateBids() {
-            const bids = document.querySelectorAll('.bid-animation');
-            bids.forEach(bid => {
-                if (Math.random() > 0.8) { // 20% chance de atualizar
-                    const currentValue = parseInt(bid.textContent.replace('R$ ', ''));
-                    const increase = Math.floor(Math.random() * 20) + 5;
-                    bid.textContent = `R$ ${currentValue + increase}`;
-                }
-            });
-        }
-
-        // Atualizar lances a cada 10 segundos
-        setInterval(updateBids, 10000);
-
-        // Função para mostrar formulário de novo lance
-        function showBidForm() {
-            document.getElementById('bidForm').classList.remove('hidden');
-            document.getElementById('bidForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Função para esconder formulário de novo lance
-        function hideBidForm() {
-            document.getElementById('bidForm').classList.add('hidden');
-        }
-
-        // Função para criar novo lance
-        function createNewBid(event) {
-            event.preventDefault();
-            
-            const form = event.target;
-            const specialty = form.querySelector('select').value;
-            const value = form.querySelector('input[type="number"]').value;
-            const description = form.querySelector('textarea').value;
-            
-            // Track form submission attempt
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'form_submit', {
-                    'event_category': 'New Bid Form',
-                    'event_label': specialty || 'Incomplete',
-                    'value': parseInt(value) || 0
-                });
-            }
-            
-            if (!specialty || !value || !description) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-            
-            if (parseInt(value) < 60) {
-                alert('O valor mínimo para um lance é R$ 60.');
-                return;
-            }
-            
-            // Criar nova solicitação
-            console.log('🆕 Criando nova solicitação:', { specialty, value, description });
-            
-            // Simular envio para o backend
-            setTimeout(() => {
-                // Esconder formulário
-                hideBidForm();
-                
-                // Mostrar modal de sucesso
-                showSuccessModal(specialty, value);
-                
-                // Adicionar à lista de lances ativos (simulação)
-                addNewBidToList(specialty, value, description);
-                
-                // Reset do formulário
-                form.reset();
-                
-            }, 1000);
-        }
-
-        // Função para adicionar novo lance à lista
-        function addNewBidToList(specialty, value, description) {
-            const container = document.querySelector('.grid.md\\:grid-cols-2.lg\\:grid-cols-3');
-            
-            const newCard = document.createElement('div');
-            newCard.className = 'lance-card bg-white rounded-xl shadow-lg p-6';
-            newCard.innerHTML = `
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-lg text-gray-800">Consulta ${specialty}</h3>
-                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Novo</span>
+        <!-- Progress Indicator -->
+        <div class="bg-white border-b">
+            <div class="max-w-4xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div id="step1" class="flex items-center step-active">
+                        <div
+                            class="w-8 h-8 rounded-full flex items-center justify-center mr-2"
+                        >
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <span class="hidden sm:inline font-medium"
+                            >1. Entenda</span
+                        >
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-4"></div>
+                    <div id="step2" class="flex items-center step-pending">
+                        <div
+                            class="w-8 h-8 rounded-full flex items-center justify-center mr-2"
+                        >
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <span class="hidden sm:inline font-medium"
+                            >2. Cadastro</span
+                        >
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-4"></div>
+                    <div id="step3" class="flex items-center step-pending">
+                        <div
+                            class="w-8 h-8 rounded-full flex items-center justify-center mr-2"
+                        >
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <span class="hidden sm:inline font-medium"
+                            >3. Lance</span
+                        >
+                    </div>
+                    <div class="flex-1 h-1 bg-gray-200 mx-4"></div>
+                    <div id="step4" class="flex items-center step-pending">
+                        <div
+                            class="w-8 h-8 rounded-full flex items-center justify-center mr-2"
+                        >
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <span class="hidden sm:inline font-medium"
+                            >4. Pagamento</span
+                        >
+                    </div>
                 </div>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Lance Inicial:</span>
-                        <span class="text-2xl font-bold text-green-600 bid-animation">R$ ${value}</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <!-- Step 1: Explicação -->
+            <div id="explanation-section" class="mb-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                        💰 Como Funciona o Sistema de Lances
+                    </h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Você propõe o valor que deseja pagar pela consulta. Os
+                        médicos avaliam e aceitam os melhores lances!
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div
+                            class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                        >
+                            <i
+                                class="fas fa-hand-holding-dollar text-blue-600 text-2xl"
+                            ></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">
+                            1. Você Faz o Lance
+                        </h3>
+                        <p class="text-gray-600 text-center">
+                            Propõe o valor que considera justo para sua consulta
+                            médica
+                        </p>
                     </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Tempo Restante:</span>
-                        <span class="text-green-600 font-semibold">59:59</span>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div
+                            class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                        >
+                            <i
+                                class="fas fa-user-md text-green-600 text-2xl"
+                            ></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">
+                            2. Médico Avalia
+                        </h3>
+                        <p class="text-gray-600 text-center">
+                            Sistema analisa seu lance e conecta com médicos
+                            disponíveis
+                        </p>
                     </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Médicos Interessados:</span>
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">0</span>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div
+                            class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                        >
+                            <i
+                                class="fas fa-video text-purple-600 text-2xl"
+                            ></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">
+                            3. Consulta Inicia
+                        </h3>
+                        <p class="text-gray-600 text-center">
+                            Lance aceito? Pagamento e consulta liberados
+                            imediatamente
+                        </p>
                     </div>
-                    <div class="mt-4">
-                        <p class="text-sm text-gray-600 mb-3"><strong>Descrição:</strong> ${description}</p>
-                        <div class="space-y-2">
-                            <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                <i class="fas fa-clock mr-2"></i>Aguardando Médicos
-                            </button>
+                </div>
+
+                <!-- Pricing Guide -->
+                <div
+                    class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-8"
+                >
+                    <h3 class="text-2xl font-semibold text-center mb-6">
+                        📊 Guia de Valores Sugeridos
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-green-600 mb-2">
+                                R$ 50-80
+                            </div>
+                            <div class="text-sm text-gray-600 mb-2">
+                                🟢 Consulta Básica
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Clínica Geral, sintomas simples
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-blue-600 mb-2">
+                                R$ 80-150
+                            </div>
+                            <div class="text-sm text-gray-600 mb-2">
+                                🔵 Especialista
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Cardiologia, Dermatologia, etc.
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div
+                                class="text-2xl font-bold text-purple-600 mb-2"
+                            >
+                                R$ 150+
+                            </div>
+                            <div class="text-sm text-gray-600 mb-2">
+                                🟣 Urgente
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Atendimento imediato
+                            </div>
                         </div>
                     </div>
                 </div>
-            `;
-            
-            container.insertBefore(newCard, container.firstChild);
-            
-            // Animação de entrada
-            newCard.style.opacity = '0';
-            newCard.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                newCard.style.transition = 'all 0.5s ease';
-                newCard.style.opacity = '1';
-                newCard.style.transform = 'translateY(0)';
-            }, 100);
-        }
 
-        // Função para submeter novo lance do formulário
-        function submitNewBid() {
-            console.log('🚀 Iniciando submissão de novo lance...');
-            console.log('🔍 Event object:', event);
-            
-            // Coletar dados do formulário
-            const specialty = document.querySelector('select').value;
-            const consultType = document.querySelectorAll('select')[1].value;
-            const bidAmount = document.querySelector('input[type="number"]').value;
-            const preferredDate = document.querySelector('input[type="date"]').value;
-            const preferredTime = document.querySelectorAll('select')[2].value;
-            const duration = document.querySelectorAll('select')[3].value;
-            const symptoms = document.querySelector('textarea').value;
-            
-            console.log('📋 Dados coletados:', {
-                specialty, consultType, bidAmount, preferredDate, preferredTime, duration, symptoms
-            });
-            
-            // Validação crítica
-            if (!specialty || !consultType || !bidAmount || !symptoms) {
-                alert('⚠️ ERRO: Preencha todos os campos obrigatórios!\n\n' +
-                      '• Especialidade Médica\n' +
-                      '• Tipo de Consulta\n' +
-                      '• Lance Inicial\n' +
-                      '• Descrição dos Sintomas');
-                return;
-            }
-            
-            const bidAmountNum = parseFloat(bidAmount);
-            if (isNaN(bidAmountNum) || bidAmountNum < 50) {
-                alert('⚠️ ERRO: Lance mínimo é R$ 50');
-                return;
-            }
-            
-            // Animação de envio
-            const button = event.target;
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processando Lance...';
-            button.style.transform = 'scale(0.95)';
-            
-            // Lista de nomes brasileiros realistas
-            const patientNames = [
-                'João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Paulo Ferreira',
-                'Lucia Pereira', 'José Rodrigues', 'Fernanda Lima', 'Roberto Almeida', 'Camila Souza',
-                'Rafael Martins', 'Juliana Barbosa', 'Marcos Ribeiro', 'Tatiana Gomes', 'Diego Carvalho',
-                'Beatriz Nunes', 'Thiago Nascimento', 'Priscila Moura', 'Eduardo Teixeira', 'Vanessa Rocha'
-            ];
-            
-            const randomName = patientNames[Math.floor(Math.random() * patientNames.length)];
-            
-            // Mapear especialidades para formato consistente
-            const specialtyMap = {
-                'cardiologia': 'Cardiologia',
-                'pediatria': 'Pediatria', 
-                'dermatologia': 'Dermatologia',
-                'neurologia': 'Neurologia',
-                'ortopedia': 'Ortopedia',
-                'ginecologia': 'Ginecologia'
-            };
-            
-            const mappedSpecialty = specialtyMap[specialty] || specialty;
-            
-            // Simular processo de envio
-            setTimeout(() => {
-                // Criar objeto de lance completo
-                const newBid = {
-                    id: Date.now(),
-                    specialty: mappedSpecialty,
-                    consultType: consultType,
-                    value: bidAmountNum,
-                    preferredDate: preferredDate,
-                    preferredTime: preferredTime,
-                    duration: duration,
-                    symptoms: symptoms,
-                    status: 'aguardando',
-                    timestamp: new Date().toISOString(),
-                    patient: randomName
-                };
-                
-                console.log('💾 Salvando lance:', newBid);
-                
-                // Salvar no localStorage
-                const existingBids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
-                existingBids.push(newBid);
-                localStorage.setItem('telemed_bids', JSON.stringify(existingBids));
-                
-                console.log('✅ Lance salvo com sucesso! Total de lances:', existingBids.length);
-                
-                // Success feedback
-                button.innerHTML = '<i class="fas fa-check mr-2"></i>Lance Criado! Redirecionando...';
-                button.className = button.className.replace('bg-blue-600', 'bg-green-600');
-                button.style.transform = 'scale(1)';
-                
-                // Redirect DIRECTLY to waiting page
-                console.log('🔄 REDIRECIONANDO DIRETAMENTE para aguardando...');
-                console.log('🌐 URL atual:', window.location.href);
-                console.log('🎯 Tentando redirecionar para: /aguardando-medico.html');
-                
-                // Try multiple redirect approaches
-                setTimeout(() => {
-                    console.log('⏰ Executando redirecionamento...');
-                    try {
-                        window.location.href = '/aguardando-medico.html';
-                        console.log('✅ Redirect chamado via href');
-                    } catch (error) {
-                        console.error('❌ Erro no redirect:', error);
-                        // Fallback
-                        window.location.replace('/aguardando-medico.html');
-                    }
-                }, 1000);
-                
-                // Reset form
-                setTimeout(() => {
-                    document.querySelector('select').selectedIndex = 0;
-                    document.querySelectorAll('select')[1].selectedIndex = 0;
-                    document.querySelector('input[type="number"]').value = '';
-                    document.querySelector('input[type="date"]').value = '';
-                    document.querySelectorAll('select')[2].selectedIndex = 0;
-                    document.querySelectorAll('select')[3].selectedIndex = 0;
-                    document.querySelector('textarea').value = '';
-                    
-                    button.disabled = false;
-                    button.innerHTML = '<i class="fas fa-rocket mr-2"></i>Iniciar Lance';
-                    button.className = button.className.replace('bg-green-600', 'bg-blue-600');
-                }, 3000);
-                
-            }, 2000);
-        }
-        
-        // Modal de sucesso para novo lance
-        function showNewBidSuccessModal(specialty, bidAmount, patientName) {
-            const modal = document.createElement('div');
-            modal.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;">
-                    <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                        <div style="font-size: 48px; margin-bottom: 20px;">🎯</div>
-                        <h3 style="color: #059669; font-size: 24px; margin-bottom: 15px; font-weight: bold;">Lance Criado com Sucesso!</h3>
-                        <div style="background: #f0f9ff; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                            <p style="color: #374151; margin-bottom: 10px;">
-                                <strong>Paciente:</strong> ${patientName}<br>
-                                <strong>Especialidade:</strong> ${specialty}<br>
-                                <strong>Valor:</strong> R$ ${bidAmount}
+                <div class="text-center">
+                    <button
+                        onclick="startProcess()"
+                        class="bg-green-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors pulse-animation"
+                    >
+                        <i class="fas fa-rocket mr-2"></i>Começar Meu Lance
+                        Agora
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Cadastro -->
+            <div id="cadastro-section" class="hidden">
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <div class="text-center mb-6">
+                            <i
+                                class="fas fa-user-plus text-4xl text-blue-600 mb-4"
+                            ></i>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">
+                                Seus Dados
+                            </h2>
+                            <p class="text-gray-600">
+                                Precisamos de algumas informações básicas
                             </p>
                         </div>
-                        <p style="color: #6b7280; margin-bottom: 20px;">
-                            <strong>🏥 Seu lance foi adicionado à fila médica!</strong><br>
-                            <em>Médicos podem ver e atender em tempo real.</em>
-                        </p>
-                        <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button id="waiting-btn" style="background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                                Entendi ✓
+
+                        <form id="cadastroForm" class="space-y-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                        >Nome Completo</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="nome"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                        >Email</label
+                                    >
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                        >Telefone</label
+                                    >
+                                    <input
+                                        type="tel"
+                                        id="telefone"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="(11) 99999-9999"
+                                    />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                        >Data de Nascimento</label
+                                    >
+                                    <input
+                                        type="date"
+                                        id="nascimento"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                    >Motivo da Consulta (Opcional)</label
+                                >
+                                <textarea
+                                    id="motivo"
+                                    rows="3"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Descreva brevemente seus sintomas ou o motivo da consulta..."
+                                ></textarea>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id="termos"
+                                    required
+                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                />
+                                <label
+                                    for="termos"
+                                    class="ml-2 text-sm text-gray-600"
+                                >
+                                    Aceito os
+                                    <a
+                                        href="#"
+                                        class="text-blue-600 hover:underline"
+                                        >termos de uso</a
+                                    >
+                                    e
+                                    <a
+                                        href="#"
+                                        class="text-blue-600 hover:underline"
+                                        >política de privacidade</a
+                                    >
+                                </label>
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                            >
+                                <i class="fas fa-arrow-right mr-2"></i>Continuar
+                                para Lance
                             </button>
-                            <button onclick="window.location.href='/dashboard-aquarela'" style="background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                                Ver Dashboard 👨‍⚕️
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Fazer Lance -->
+            <div id="lance-section" class="hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-8">
+                        <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                            💰 Faça Seu Lance
+                        </h2>
+                        <p class="text-xl text-gray-600">
+                            Quanto você gostaria de pagar pela consulta?
+                        </p>
+                    </div>
+
+                    <!-- Lances Sugeridos -->
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div
+                            class="lance-card bg-white rounded-xl p-6 cursor-pointer"
+                            onclick="selectLance(60)"
+                        >
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                >
+                                    <i
+                                        class="fas fa-leaf text-green-600 text-2xl"
+                                    ></i>
+                                </div>
+                                <h3
+                                    class="text-2xl font-bold text-green-600 mb-2"
+                                >
+                                    R$ 60
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-3">
+                                    Lance Econômico
+                                </p>
+                                <div class="text-xs text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i>Agendamento
+                                    em 24-48h
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    <i class="fas fa-percentage mr-1"></i>60% de
+                                    aprovação
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="lance-card bg-white rounded-xl p-6 cursor-pointer border-2 border-blue-500"
+                            onclick="selectLance(100)"
+                        >
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                >
+                                    <i
+                                        class="fas fa-star text-blue-600 text-2xl"
+                                    ></i>
+                                </div>
+                                <h3
+                                    class="text-2xl font-bold text-blue-600 mb-2"
+                                >
+                                    R$ 100
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-3">
+                                    Lance Recomendado
+                                </p>
+                                <div class="text-xs text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i>Atendimento
+                                    em 2-6h
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    <i class="fas fa-percentage mr-1"></i>85% de
+                                    aprovação
+                                </div>
+                                <div
+                                    class="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full"
+                                >
+                                    Mais Popular
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="lance-card bg-white rounded-xl p-6 cursor-pointer"
+                            onclick="selectLance(150)"
+                        >
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                >
+                                    <i
+                                        class="fas fa-bolt text-purple-600 text-2xl"
+                                    ></i>
+                                </div>
+                                <h3
+                                    class="text-2xl font-bold text-purple-600 mb-2"
+                                >
+                                    R$ 150
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-3">
+                                    Lance Prioritário
+                                </p>
+                                <div class="text-xs text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i>Imediato ou
+                                    30min
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    <i class="fas fa-percentage mr-1"></i>95% de
+                                    aprovação
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lance Personalizado -->
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <h3 class="text-2xl font-semibold text-center mb-6">
+                            Ou Faça um Lance Personalizado
+                        </h3>
+                        <div class="max-w-md mx-auto">
+                            <div class="text-center mb-6">
+                                <label
+                                    class="block text-lg font-medium text-gray-700 mb-4"
+                                    >Meu Lance:</label
+                                >
+                                <div class="relative">
+                                    <span
+                                        class="absolute left-4 top-1/2 transform -translate-y-1/2 text-2xl font-bold text-green-600"
+                                        >R$</span
+                                    >
+                                    <input
+                                        type="number"
+                                        id="customLance"
+                                        min="30"
+                                        max="500"
+                                        step="10"
+                                        value="100"
+                                        class="price-input w-full pl-16 pr-4 py-4 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-center"
+                                        oninput="updateLancePreview()"
+                                    />
+                                </div>
+                                <div class="mt-4">
+                                    <input
+                                        type="range"
+                                        id="lanceRange"
+                                        min="30"
+                                        max="500"
+                                        step="10"
+                                        value="100"
+                                        class="w-full"
+                                        oninput="updateLanceFromRange()"
+                                    />
+                                    <div
+                                        class="flex justify-between text-sm text-gray-500 mt-1"
+                                    >
+                                        <span>R$ 30</span>
+                                        <span>R$ 500</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Preview do Lance -->
+                            <div
+                                id="lancePreview"
+                                class="bg-gray-50 rounded-lg p-4 mb-6"
+                            >
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-600 mb-2">
+                                        Previsão para seu lance:
+                                    </p>
+                                    <div id="previewContent">
+                                        <div
+                                            class="text-lg font-semibold text-blue-600"
+                                        >
+                                            ⚡ Boa chance de aceitação
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            Atendimento em 2-6 horas
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                onclick="submitLance()"
+                                class="w-full bg-green-600 text-white py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors pulse-animation"
+                            >
+                                <i class="fas fa-gavel mr-2"></i>Enviar Meu
+                                Lance
                             </button>
                         </div>
                     </div>
                 </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Add click event to the waiting button
-            const waitingBtn = modal.querySelector('#waiting-btn');
-            waitingBtn.addEventListener('click', function() {
-                console.log('🔄 Redirecionando para página de aguardando...');
-                document.body.removeChild(modal);
-                window.location.href = '/aguardando-medico.html';
-            });
-            
-            // Auto-remover após 10 segundos
-            setTimeout(() => {
-                if (modal.parentElement) {
-                    modal.parentElement.removeChild(modal);
+            </div>
+
+            <!-- Step 4: Resultado do Lance -->
+            <div id="resultado-section" class="hidden">
+                <div class="max-w-2xl mx-auto text-center">
+                    <div id="resultadoContent">
+                        <!-- Conteúdo será inserido dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Notifications -->
+        <div id="notification" class="fixed top-4 right-4 z-50 hidden">
+            <!-- Notificações serão inseridas aqui -->
+        </div>
+
+        <script>
+            let currentStep = 1;
+            let userData = {};
+            let selectedLance = 100;
+
+            function updateStep(step) {
+                // Update progress indicator
+                for (let i = 1; i <= 4; i++) {
+                    const stepEl = document.getElementById(`step${i}`);
+                    if (i < step) {
+                        stepEl.className = "flex items-center step-completed";
+                    } else if (i === step) {
+                        stepEl.className = "flex items-center step-active";
+                    } else {
+                        stepEl.className = "flex items-center step-pending";
+                    }
                 }
-            }, 10000);
-        }
 
-        // Função para ir para página de aguardando médico
-        function goToWaitingPage() {
-            // Close the modal first
-            const modal = document.querySelector('[style*="position: fixed"]');
-            if (modal && modal.parentElement) {
-                modal.parentElement.removeChild(modal);
+                // Show/hide sections
+                document
+                    .getElementById("explanation-section")
+                    .classList.toggle("hidden", step !== 1);
+                document
+                    .getElementById("cadastro-section")
+                    .classList.toggle("hidden", step !== 2);
+                document
+                    .getElementById("lance-section")
+                    .classList.toggle("hidden", step !== 3);
+                document
+                    .getElementById("resultado-section")
+                    .classList.toggle("hidden", step !== 4);
+
+                currentStep = step;
             }
-            
-            console.log('⏰ Redirecionando para página de aguardando médico...');
-            window.location.href = '/aguardando-medico.html';
-        }
 
-        console.log('💰 Sistema de Lances TeleMed Ativo - Fluxo Completo - v2.1 CACHE_BUST_' + Date.now());
-    </script>
-</body>
+            function startProcess() {
+                updateStep(2);
+                showNotification(
+                    "Vamos começar! Preencha seus dados básicos.",
+                    "info",
+                );
+            }
+
+            function selectLance(valor) {
+                selectedLance = valor;
+                document.getElementById("customLance").value = valor;
+                document.getElementById("lanceRange").value = valor;
+                updateLancePreview();
+
+                // Update visual selection
+                document.querySelectorAll(".lance-card").forEach((card) => {
+                    card.classList.remove("selected");
+                });
+                event.currentTarget.classList.add("selected");
+            }
+
+            function updateLancePreview() {
+                const valor =
+                    parseInt(document.getElementById("customLance").value) || 0;
+                document.getElementById("lanceRange").value = valor;
+                selectedLance = valor;
+
+                let preview = "";
+                if (valor < 50) {
+                    preview = `
+                    <div class="text-lg font-semibold text-red-600">⚠️ Lance muito baixo</div>
+                    <div class="text-sm text-gray-500">Poucas chances de aceitação</div>
+                `;
+                } else if (valor < 80) {
+                    preview = `
+                    <div class="text-lg font-semibold text-yellow-600">⏰ Agendamento futuro</div>
+                    <div class="text-sm text-gray-500">Consulta em 24-48 horas</div>
+                `;
+                } else if (valor < 120) {
+                    preview = `
+                    <div class="text-lg font-semibold text-blue-600">⚡ Boa chance de aceitação</div>
+                    <div class="text-sm text-gray-500">Atendimento em 2-6 horas</div>
+                `;
+                } else {
+                    preview = `
+                    <div class="text-lg font-semibold text-green-600">🚀 Aceitação quase garantida</div>
+                    <div class="text-sm text-gray-500">Atendimento imediato ou 30min</div>
+                `;
+                }
+
+                document.getElementById("previewContent").innerHTML = preview;
+            }
+
+            function updateLanceFromRange() {
+                const valor = document.getElementById("lanceRange").value;
+                document.getElementById("customLance").value = valor;
+                updateLancePreview();
+            }
+
+            document
+                .getElementById("cadastroForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    // Validate form
+                    const requiredFields = [
+                        "nome",
+                        "email",
+                        "telefone",
+                        "nascimento",
+                    ];
+                    let isValid = true;
+
+                    requiredFields.forEach((field) => {
+                        const input = document.getElementById(field);
+                        if (!input.value.trim()) {
+                            input.classList.add("border-red-500");
+                            isValid = false;
+                        } else {
+                            input.classList.remove("border-red-500");
+                        }
+                    });
+
+                    if (!document.getElementById("termos").checked) {
+                        showNotification(
+                            "Por favor, aceite os termos de uso.",
+                            "error",
+                        );
+                        return;
+                    }
+
+                    if (isValid) {
+                        // Store user data
+                        userData = {
+                            nome: document.getElementById("nome").value,
+                            email: document.getElementById("email").value,
+                            telefone: document.getElementById("telefone").value,
+                            nascimento:
+                                document.getElementById("nascimento").value,
+                            motivo: document.getElementById("motivo").value,
+                        };
+
+                        updateStep(3);
+                        showNotification(
+                            "Dados salvos! Agora faça seu lance.",
+                            "success",
+                        );
+                    } else {
+                        showNotification(
+                            "Por favor, preencha todos os campos obrigatórios.",
+                            "error",
+                        );
+                    }
+                });
+
+            function submitLance() {
+                if (selectedLance < 30) {
+                    showNotification(
+                        "O valor mínimo do lance é R$ 30.",
+                        "error",
+                    );
+                    return;
+                }
+
+                // Simulate lance evaluation
+                showNotification("Avaliando seu lance...", "info");
+
+                setTimeout(() => {
+                    evaluateLance(selectedLance);
+                }, 2000);
+            }
+
+            function evaluateLance(valor) {
+                updateStep(4);
+
+                let resultado = "";
+
+                if (valor >= 120) {
+                    // Lance aceito imediato
+                    resultado = `
+                    <div class="bg-green-50 border-2 border-green-200 rounded-xl p-8">
+                        <i class="fas fa-check-circle text-6xl text-green-600 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-green-800 mb-4">🎉 Lance Aceito Imediatamente!</h2>
+                        <div class="bg-white rounded-lg p-6 mb-6">
+                            <div class="text-2xl font-bold text-green-600 mb-2">R$ ${valor}</div>
+                            <div class="text-sm text-gray-600">Valor do seu lance aceito</div>
+                        </div>
+                        <p class="text-gray-700 mb-6">
+                            Parabéns! Um médico aceitou seu lance. Proceda com o pagamento para iniciar sua consulta.
+                        </p>
+                        <div class="space-y-3">
+                            <button onclick="goToPayment()" class="w-full bg-green-600 text-white py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors pulse-animation">
+                                <i class="fas fa-credit-card mr-2"></i>Pagar e Iniciar Consulta
+                            </button>
+                            <p class="text-xs text-gray-500">
+                                <i class="fas fa-lock mr-1"></i>Pagamento seguro via cartão ou PIX
+                            </p>
+                        </div>
+                    </div>
+                `;
+                } else if (valor >= 60) {
+                    // Lance aceito para agendamento
+                    resultado = `
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-8">
+                        <i class="fas fa-calendar-check text-6xl text-blue-600 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-blue-800 mb-4">📅 Lance Aceito para Agendamento!</h2>
+                        <div class="bg-white rounded-lg p-6 mb-6">
+                            <div class="text-2xl font-bold text-blue-600 mb-2">R$ ${valor}</div>
+                            <div class="text-sm text-gray-600">Valor do seu lance aceito</div>
+                        </div>
+                        <p class="text-gray-700 mb-6">
+                            Seu lance foi aceito! A consulta será agendada para as próximas 24-48 horas. Confirme o pagamento para garantir sua vaga.
+                        </p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-yellow-600 mr-2"></i>
+                                <span class="text-sm text-yellow-800">Horários disponíveis: Hoje 18h às 20h ou Amanhã 9h às 17h</span>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <button onclick="acceptSchedule()" class="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-check mr-2"></i>Aceitar Agendamento e Pagar
+                            </button>
+                            <button onclick="requestImmediate()" class="w-full border-2 border-blue-600 text-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-bolt mr-2"></i>Prefiro Atendimento Imediato (+R$ 30)
+                            </button>
+                        </div>
+                    </div>
+                `;
+                } else {
+                    // Lance rejeitado
+                    resultado = `
+                    <div class="bg-red-50 border-2 border-red-200 rounded-xl p-8">
+                        <i class="fas fa-times-circle text-6xl text-red-600 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-red-800 mb-4">😔 Lance Não Aceito</h2>
+                        <div class="bg-white rounded-lg p-6 mb-6">
+                            <div class="text-2xl font-bold text-red-600 mb-2">R$ ${valor}</div>
+                            <div class="text-sm text-gray-600">Valor do seu lance</div>
+                        </div>
+                        <p class="text-gray-700 mb-6">
+                            Infelizmente seu lance ficou abaixo do valor mínimo aceito pelos médicos disponíveis no momento.
+                        </p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-lightbulb text-yellow-600 mr-2"></i>
+                                <span class="font-semibold text-yellow-800">Sugestão:</span>
+                            </div>
+                            <p class="text-sm text-yellow-800">
+                                Tente um lance de pelo menos <strong>R$ 70</strong> para consulta agendada ou <strong>R$ 120</strong> para atendimento imediato.
+                            </p>
+                        </div>
+                        <div class="space-y-3">
+                            <button onclick="newLance(70)" class="w-full bg-yellow-600 text-white py-4 rounded-lg font-semibold hover:bg-yellow-700 transition-colors">
+                                <i class="fas fa-redo mr-2"></i>Novo Lance: R$ 70
+                            </button>
+                            <button onclick="newLance(120)" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                <i class="fas fa-bolt mr-2"></i>Lance Prioritário: R$ 120
+                            </button>
+                            <button onclick="goBack()" class="w-full border-2 border-gray-300 text-gray-600 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>Voltar ao Início
+                            </button>
+                        </div>
+                    </div>
+                `;
+                }
+
+                document.getElementById("resultadoContent").innerHTML =
+                    resultado;
+                showNotification("Resultado do lance processado!", "success");
+            }
+
+            function acceptSchedule() {
+                showNotification("Redirecionando para pagamento...", "info");
+                setTimeout(() => {
+                    goToPayment();
+                }, 1500);
+            }
+
+            function requestImmediate() {
+                selectedLance += 30;
+                showNotification(
+                    "Atualizando lance para atendimento imediato...",
+                    "info",
+                );
+                setTimeout(() => {
+                    evaluateLance(selectedLance);
+                }, 1500);
+            }
+
+            function newLance(valor) {
+                selectedLance = valor;
+                document.getElementById("customLance").value = valor;
+                document.getElementById("lanceRange").value = valor;
+                updateLancePreview();
+                updateStep(3);
+                showNotification(`Lance atualizado para R$ ${valor}`, "info");
+            }
+
+            function goToPayment() {
+                // Simulate payment redirect
+                showNotification(
+                    "Redirecionando para pagamento seguro...",
+                    "success",
+                );
+                setTimeout(() => {
+                    window.location.href =
+                        "pagamento.html?valor=" +
+                        selectedLance +
+                        "&tipo=consulta";
+                }, 2000);
+            }
+
+            function goBack() {
+                if (currentStep > 1) {
+                    updateStep(currentStep - 1);
+                } else {
+                    window.location.href = "index.html";
+                }
+            }
+
+            function showNotification(message, type = "info") {
+                const notification = document.getElementById("notification");
+                const colors = {
+                    success: "bg-green-500",
+                    error: "bg-red-500",
+                    info: "bg-blue-500",
+                    warning: "bg-yellow-500",
+                };
+
+                const icons = {
+                    success: "fa-check-circle",
+                    error: "fa-exclamation-circle",
+                    info: "fa-info-circle",
+                    warning: "fa-exclamation-triangle",
+                };
+
+                notification.className = `fixed top-4 right-4 z-50 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 floating-notification`;
+                notification.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span>${message}</span>
+            `;
+
+                notification.classList.remove("hidden");
+
+                setTimeout(() => {
+                    notification.classList.add("hidden");
+                }, 4000);
+            }
+
+            // Simulação de médicos online
+            function updateOnlineDoctors() {
+                const count = Math.floor(Math.random() * 8) + 12; // 12-20 médicos
+                const indicator = document.querySelector(".auction-timer");
+                if (indicator) {
+                    indicator.textContent = `${count} médicos online agora`;
+                }
+            }
+
+            // Auto-update de preview quando carrega
+            document.addEventListener("DOMContentLoaded", function () {
+                updateLancePreview();
+                updateOnlineDoctors();
+                setInterval(updateOnlineDoctors, 30000); // Atualiza a cada 30s
+
+                // Auto-fill para demo
+                if (window.location.search.includes("demo=1")) {
+                    setTimeout(() => {
+                        document.getElementById("nome").value = "João Silva";
+                        document.getElementById("email").value =
+                            "joao@email.com";
+                        document.getElementById("telefone").value =
+                            "(11) 99999-9999";
+                        document.getElementById("nascimento").value =
+                            "1985-05-15";
+                        document.getElementById("termos").checked = true;
+                    }, 1000);
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape" && currentStep > 1) {
+                    goBack();
+                }
+                if (e.key === "Enter" && currentStep === 3) {
+                    submitLance();
+                }
+            });
+
+            // Real-time validation
+            document
+                .getElementById("customLance")
+                ?.addEventListener("input", function () {
+                    const valor = parseInt(this.value);
+                    if (valor < 30) {
+                        this.classList.add("border-red-500");
+                        showNotification("Valor mínimo: R$ 30", "warning");
+                    } else {
+                        this.classList.remove("border-red-500");
+                    }
+                });
+
+            // Phone number formatting
+            document
+                .getElementById("telefone")
+                ?.addEventListener("input", function () {
+                    let value = this.value.replace(/\D/g, "");
+                    if (value.length >= 10) {
+                        value = value.replace(
+                            /(\d{2})(\d{5})(\d{4})/,
+                            "($1) $2-$3",
+                        );
+                    } else if (value.length >= 6) {
+                        value = value.replace(
+                            /(\d{2})(\d{4})(\d+)/,
+                            "($1) $2-$3",
+                        );
+                    } else if (value.length >= 2) {
+                        value = value.replace(/(\d{2})(\d+)/, "($1) $2");
+                    }
+                    this.value = value;
+                });
+        </script>
+    </body>
 </html>
