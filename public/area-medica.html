@@ -3,495 +3,731 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área Médica - TeleMed Sistema</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="preconnect">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Área Médica - TeleMed | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #A7C7E7;
-            --secondary-color: #F4D9B4;
-            --alert-color: #E9967A;
-            --background-color: #FAF8F5;
-            --card-color: #FFFFFF;
-            --text-dark: #2c3e50;
-            --text-gray: #666;
-            --border-color: #e1e5e9;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
+        .gradient-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--background-color);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
-            color: white;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            text-decoration: none;
+        
+        .stats-card {
             transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
         }
-
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-1px);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .security-banner {
-            background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .security-banner i {
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .access-card {
-            background: var(--card-color);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .access-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
-
-        .access-card.login {
-            border-top: 4px solid var(--success-color);
-        }
-
-        .access-card.register {
-            border-top: 4px solid var(--primary-color);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .login .card-icon {
-            color: var(--success-color);
-        }
-
-        .register .card-icon {
-            color: var(--primary-color);
-        }
-
-        .card-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
-        }
-
-        .card-description {
-            color: var(--text-gray);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .card-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .card-btn:hover {
+        
+        .stats-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(167, 199, 231, 0.4);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-
-        .card-btn.register-btn {
-            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+        
+        .quick-action-btn {
+            transition: all 0.3s ease;
         }
-
-        .card-btn.register-btn:hover {
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
-
-        .info-section {
-            background: var(--card-color);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid var(--border-color);
+        
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
         }
-
-        .info-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
-
-        .info-title i {
-            color: var(--primary-color);
-            margin-right: 0.5rem;
+        
+        .pulse-dot {
+            animation: pulse-dot 2s infinite;
         }
-
-        .info-list {
-            list-style: none;
+        
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
-
-        .info-list li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
+        
+        .chart-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         }
-
-        .info-list li:last-child {
-            border-bottom: none;
+        
+        .notification-badge {
+            animation: bounce 1s infinite;
         }
-
-        .info-list i {
-            color: var(--success-color);
-            margin-right: 0.8rem;
-            width: 20px;
-            text-align: center;
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-3px); }
+            60% { transform: translateY(-2px); }
         }
-
-        .verification-process {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, #F0C87A 100%);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
+        
+        .sidebar-item {
+            transition: all 0.2s ease;
         }
-
-        .verification-title {
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-dark);
+        
+        .sidebar-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(2px);
         }
-
-        .verification-steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .step {
-            background: rgba(255,255,255,0.8);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .step-number {
-            background: var(--primary-color);
+        
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.5rem;
-            font-weight: 600;
         }
-
-        .support-banner {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-top: 2rem;
-            text-align: center;
+        
+        .appointment-item {
+            transition: all 0.2s ease;
         }
-
-        .support-contacts {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
+        
+        .appointment-item:hover {
+            background: #f8fafc;
+            transform: translateX(2px);
         }
-
-        .support-contact {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+        
+        .urgent-pulse {
+            animation: urgent-pulse 1.5s infinite;
         }
-
-        @media (max-width: 768px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .header-content {
-                padding: 0 1rem;
-            }
-            
-            .support-contacts {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-
-        .monitoring-notice {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--error-color);
-            color: var(--error-color);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            text-align: center;
+        
+        @keyframes urgent-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
     </style>
 </head>
-<body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-user-md"></i>
-                Área Médica - TeleMed
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
+        <div class="flex items-center justify-center h-16 bg-gradient-to-r from-blue-600 to-purple-600">
+            <div class="flex items-center">
+                <i class="fas fa-stethoscope text-2xl text-white mr-3"></i>
+                <h1 class="text-xl font-bold text-white">TeleMed</h1>
             </div>
-            <a href="/" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Voltar ao Site
+        </div>
+        
+        <nav class="mt-8">
+            <a href="#" class="sidebar-item active flex items-center px-6 py-3 text-gray-700">
+                <i class="fas fa-tachometer-alt w-6"></i>
+                <span class="ml-3">Dashboard</span>
             </a>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="security-banner">
-            <i class="fas fa-shield-alt"></i>
-            <strong>Área Restrita:</strong> Acesso exclusivo para profissionais médicos com CRM ativo
-        </div>
-
-        <div class="main-grid">
-            <div class="access-card login">
-                <div class="card-icon">
-                    <i class="fas fa-user-md"></i>
-                </div>
-                <h2 class="card-title">Médicos Cadastrados</h2>
-                <p class="card-description">
-                    Acesse seu dashboard profissional, agenda de consultas, relatórios financeiros e ferramentas médicas.
-                </p>
-                <a href="/login-medico.html" class="card-btn">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login Seguro
+            <a href="agenda-do-dia.html" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                <i class="fas fa-calendar-day w-6"></i>
+                <span class="ml-3">Agenda do Dia</span>
+            </a>
+            <a href="consultas-agendadas.html" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                <i class="fas fa-calendar-check w-6"></i>
+                <span class="ml-3">Consultas</span>
+                <span class="ml-auto bg-blue-500 text-white text-xs px-2 py-1 rounded-full">8</span>
+            </a>
+            <a href="prontuarios.html" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                <i class="fas fa-file-medical w-6"></i>
+                <span class="ml-3">Prontuários</span>
+            </a>
+            <a href="prescricoes.html" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                <i class="fas fa-prescription w-6"></i>
+                <span class="ml-3">Prescrições</span>
+            </a>
+            <a href="historico-consultas.html" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                <i class="fas fa-history w-6"></i>
+                <span class="ml-3">Histórico</span>
+            </a>
+            
+            <div class="border-t border-gray-200 mt-6 pt-6">
+                <a href="perfil.html" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                    <i class="fas fa-user-cog w-6"></i>
+                    <span class="ml-3">Perfil</span>
+                </a>
+                <a href="#" onclick="logout()" class="sidebar-item flex items-center px-6 py-3 text-gray-700">
+                    <i class="fas fa-sign-out-alt w-6"></i>
+                    <span class="ml-3">Sair</span>
                 </a>
             </div>
+        </nav>
+    </div>
 
-            <div class="access-card register">
-                <div class="card-icon">
-                    <i class="fas fa-user-plus"></i>
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm border-b sticky top-0 z-40">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center">
+                    <button class="lg:hidden mr-4" onclick="toggleSidebar()">
+                        <i class="fas fa-bars text-gray-600"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Dashboard Médico</h2>
+                        <p class="text-sm text-gray-600" id="currentDate">Quinta-feira, 14 de Agosto de 2025</p>
+                    </div>
                 </div>
-                <h2 class="card-title">Novos Médicos</h2>
-                <p class="card-description">
-                    Cadastre-se na plataforma. Processo de verificação em até 48h com validação de CRM.
-                </p>
-                <a href="/medico-cadastro.html" class="card-btn register-btn">
-                    <i class="fas fa-clipboard-check"></i>
-                    Cadastrar-se
-                </a>
-            </div>
-        </div>
-
-        <div class="info-section">
-            <h3 class="info-title">
-                <i class="fas fa-info-circle"></i>
-                Como Funciona o Sistema
-            </h3>
-            <ul class="info-list">
-                <li>
-                    <i class="fas fa-check"></i>
-                    Dashboard personalizado com métricas de atendimento
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Sistema de lances: médicos fazem ofertas para consultas
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Agenda integrada com videoconsultas WebRTC
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Prescrições digitais com assinatura eletrônica
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Prontuários eletrônicos com histórico completo
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Pagamentos automáticos por consulta realizada
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Suporte Dr. AI para triagem e diagnósticos
-                </li>
-                <li>
-                    <i class="fas fa-check"></i>
-                    Relatórios financeiros e de performance
-                </li>
-            </ul>
-
-            <div class="verification-process">
-                <div class="verification-title">
-                    <i class="fas fa-clipboard-check"></i>
-                    Processo de Verificação
-                </div>
-                <div class="verification-steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <strong>Cadastro</strong><br>
-                        Preencha dados pessoais e CRM
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button class="p-2 rounded-lg hover:bg-gray-100 relative" onclick="toggleNotifications()">
+                            <i class="fas fa-bell text-gray-600"></i>
+                            <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full notification-badge"></span>
+                        </button>
+                        <div id="notificationsDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border z-50">
+                            <div class="p-4 border-b">
+                                <h3 class="font-semibold text-gray-800">Notificações</h3>
+                            </div>
+                            <div class="max-h-64 overflow-y-auto">
+                                <div class="p-3 border-b hover:bg-gray-50">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium">Consulta urgente</p>
+                                            <p class="text-xs text-gray-600">João Pedro - 10:00</p>
+                                        </div>
+                                        <span class="text-xs text-gray-500">5min</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 border-b hover:bg-gray-50">
+                                    <div class="flex items-center">
+                                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium">Nova mensagem</p>
+                                            <p class="text-xs text-gray-600">Maria Silva enviou uma mensagem</p>
+                                        </div>
+                                        <span class="text-xs text-gray-500">15min</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 text-center">
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Ver todas</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <strong>Validação</strong><br>
-                        Verificamos CRM no CFM
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <strong>Documentos</strong><br>
-                        Envio de documentos comprobatórios
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <strong>Aprovação</strong><br>
-                        Ativação em até 48h
+                    
+                    <!-- User Menu -->
+                    <div class="relative">
+                        <button class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100" onclick="toggleUserMenu()">
+                            <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=40&h=40&fit=crop&crop=face" alt="Dr." class="w-8 h-8 rounded-full">
+                            <div class="text-left hidden md:block">
+                                <p class="text-sm font-medium text-gray-700" id="doctorName">Dr. João Silva</p>
+                                <p class="text-xs text-gray-500" id="doctorSpecialty">Cardiologia</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        </button>
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
+                            <a href="perfil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i>Perfil
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2"></i>Configurações
+                            </a>
+                            <hr class="my-1">
+                            <a href="#" onclick="logout()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div class="support-banner">
-            <h3>Suporte Especializado para Médicos</h3>
-            <p>Nossa equipe está disponível para ajudar profissionais médicos</p>
-            <div class="support-contacts">
-                <div class="support-contact">
-                    <i class="fas fa-phone"></i>
-                    (11) 4000-8888
+        <!-- Main Dashboard Content -->
+        <main class="p-6">
+            <!-- Welcome Section -->
+            <div class="gradient-card rounded-xl p-6 text-white mb-6 relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-bold mb-2">Bom dia, Dr. João Silva! 👨‍⚕️</h3>
+                    <p class="text-blue-100 mb-4">Você tem <strong>8 consultas</strong> agendadas para hoje. Vamos começar?</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="goToAgenda()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
+                            <i class="fas fa-calendar-day mr-2"></i>Ver Agenda
+                        </button>
+                        <button onclick="newConsultation()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all">
+                            <i class="fas fa-plus mr-2"></i>Nova Consulta
+                        </button>
+                    </div>
                 </div>
-                <div class="support-contact">
-                    <i class="fas fa-envelope"></i>
-                    medicos@telemed.com.br
-                </div>
-                <div class="support-contact">
-                    <i class="fab fa-whatsapp"></i>
-                    (11) 99999-8888
+                <div class="absolute top-4 right-4 opacity-20">
+                    <i class="fas fa-stethoscope text-6xl floating-animation"></i>
                 </div>
             </div>
-        </div>
 
-        <div class="monitoring-notice">
-            <i class="fas fa-eye"></i>
-            <strong>Aviso:</strong> Tentativas de acesso não autorizado são monitoradas e registradas conforme legislação vigente.
-        </div>
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- Today's Appointments -->
+                <div class="stats-card bg-white rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Consultas Hoje</p>
+                            <p class="text-3xl font-bold text-blue-600">8</p>
+                            <p class="text-xs text-green-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>+2 vs ontem
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Appointments -->
+                <div class="stats-card bg-white rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Pendentes</p>
+                            <p class="text-3xl font-bold text-yellow-600">3</p>
+                            <p class="text-xs text-gray-500 mt-1">Aguardando confirmação</p>
+                        </div>
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Today -->
+                <div class="stats-card bg-white rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Concluídas</p>
+                            <p class="text-3xl font-bold text-green-600">5</p>
+                            <p class="text-xs text-green-600 mt-1">
+                                <i class="fas fa-check mr-1"></i>Hoje
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Urgent Cases -->
+                <div class="stats-card bg-white rounded-xl p-6 urgent-pulse">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Urgentes</p>
+                            <p class="text-3xl font-bold text-red-600">2</p>
+                            <p class="text-xs text-red-600 mt-1">
+                                <span class="pulse-dot">🔴</span> Requer atenção
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- Today's Schedule -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-sm">
+                        <div class="p-6 border-b">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">Agenda de Hoje</h3>
+                                <a href="agenda-do-dia.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    Ver tudo <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <!-- Urgent Appointment -->
+                                <div class="appointment-item flex items-center p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="font-medium text-gray-800">João Pedro Santos</h4>
+                                            <span class="text-sm bg-red-100 text-red-800 px-2 py-1 rounded-full">
+                                                <i class="fas fa-exclamation-triangle mr-1"></i>Urgente
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-1">Dor no peito - Cardiologia</p>
+                                        <p class="text-sm font-medium text-red-600 mt-1">
+                                            <i class="fas fa-clock mr-1"></i>10:00 - 10:30
+                                        </p>
+                                    </div>
+                                    <button onclick="startConsultation('urgent-1')" class="ml-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                        Iniciar
+                                    </button>
+                                </div>
+
+                                <!-- Next Appointment -->
+                                <div class="appointment-item flex items-center p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="font-medium text-gray-800">Maria Silva Costa</h4>
+                                            <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                                                Próxima
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-1">Consulta de rotina</p>
+                                        <p class="text-sm font-medium text-blue-600 mt-1">
+                                            <i class="fas fa-clock mr-1"></i>11:00 - 11:30
+                                        </p>
+                                    </div>
+                                    <button class="ml-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                        Ver detalhes
+                                    </button>
+                                </div>
+
+                                <!-- Regular Appointments -->
+                                <div class="appointment-item flex items-center p-4 border-l-4 border-gray-300 rounded-lg hover:bg-gray-50">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-800">Carlos Lima Oliveira</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Retorno - Hipertensão</p>
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            <i class="fas fa-clock mr-1"></i>14:00 - 14:30
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="appointment-item flex items-center p-4 border-l-4 border-gray-300 rounded-lg hover:bg-gray-50">
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-800">Ana Paula Santos</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Primeira consulta</p>
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            <i class="fas fa-clock mr-1"></i>15:30 - 16:00
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions & Stats -->
+                <div class="space-y-6">
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Ações Rápidas</h3>
+                        <div class="space-y-3">
+                            <button onclick="newConsultation()" class="quick-action-btn w-full flex items-center p-3 bg-blue-50 hover:bg-blue-100 rounded-lg text-blue-700 transition-all">
+                                <i class="fas fa-plus mr-3"></i>
+                                <span>Nova Consulta</span>
+                            </button>
+                            <button onclick="goToAgenda()" class="quick-action-btn w-full flex items-center p-3 bg-green-50 hover:bg-green-100 rounded-lg text-green-700 transition-all">
+                                <i class="fas fa-calendar-day mr-3"></i>
+                                <span>Ver Agenda</span>
+                            </button>
+                            <button onclick="viewPrescriptions()" class="quick-action-btn w-full flex items-center p-3 bg-purple-50 hover:bg-purple-100 rounded-lg text-purple-700 transition-all">
+                                <i class="fas fa-prescription mr-3"></i>
+                                <span>Prescrições</span>
+                            </button>
+                            <button onclick="viewMedicalRecords()" class="quick-action-btn w-full flex items-center p-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg text-yellow-700 transition-all">
+                                <i class="fas fa-file-medical mr-3"></i>
+                                <span>Prontuários</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Overview Chart -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Consultas da Semana</h3>
+                        <div class="chart-container rounded-lg p-4">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Segunda</span>
+                                    <div class="flex items-center">
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                            <div class="w-3/4 h-full bg-blue-500"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">6</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Terça</span>
+                                    <div class="flex items-center">
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                            <div class="w-full h-full bg-green-500"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">8</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Quarta</span>
+                                    <div class="flex items-center">
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                            <div class="w-2/3 h-full bg-yellow-500"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">5</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-blue-600">Hoje</span>
+                                    <div class="flex items-center">
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                            <div class="w-full h-full bg-blue-600"></div>
+                                        </div>
+                                        <span class="text-sm font-bold text-blue-600">8</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-400">Sexta</span>
+                                    <div class="flex items-center">
+                                        <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                                            <div class="w-1/2 h-full bg-gray-400"></div>
+                                        </div>
+                                        <span class="text-sm text-gray-400">4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Atividade Recente</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-800">Consulta finalizada</p>
+                                    <p class="text-xs text-gray-500">Ana Costa - 08:30</p>
+                                </div>
+                                <span class="text-xs text-gray-400">1h atrás</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-800">Prescrição emitida</p>
+                                    <p class="text-xs text-gray-500">Carlos Silva - Hipertensão</p>
+                                </div>
+                                <span class="text-xs text-gray-400">2h atrás</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-800">Agendamento confirmado</p>
+                                    <p class="text-xs text-gray-500">Maria Santos - 15:30</p>
+                                </div>
+                                <span class="text-xs text-gray-400">3h atrás</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
-        // Verificar se há redirecionamento pendente
+        let sidebarOpen = false;
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirectUrl = urlParams.get('redirect');
+            checkDoctorAuth();
+            loadDoctorData();
+            updateCurrentDate();
             
-            if (redirectUrl) {
-                console.log('🔄 Redirecionamento pendente para:', redirectUrl);
-                
-                // Salvar URL de redirecionamento no localStorage
-                localStorage.setItem('medical_redirect_after_login', redirectUrl);
-                
-                // Atualizar links de login para incluir parâmetro
-                const loginBtn = document.querySelector('a[href="/login-medico.html"]');
-                if (loginBtn) {
-                    loginBtn.href = `/login-medico.html?redirect=${encodeURIComponent(redirectUrl)}`;
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#notificationsDropdown') && !e.target.closest('button')) {
+                    document.getElementById('notificationsDropdown').classList.add('hidden');
                 }
+                if (!e.target.closest('#userDropdown') && !e.target.closest('button')) {
+                    document.getElementById('userDropdown').classList.add('hidden');
+                }
+            });
+        });
+
+        function checkDoctorAuth() {
+            const user = localStorage.getItem('telemed_user') || sessionStorage.getItem('telemed_user');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const userData = JSON.parse(user);
+            if (userData.type !== 'doctor') {
+                alert('Acesso negado. Esta área é exclusiva para médicos.');
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        function loadDoctorData() {
+            const user = localStorage.getItem('telemed_user') || sessionStorage.getItem('telemed_user');
+            if (user) {
+                const userData = JSON.parse(user);
+                document.getElementById('doctorName').textContent = userData.name || 'Dr. João Silva';
+                document.getElementById('doctorSpecialty').textContent = userData.specialty || 'Cardiologia';
+            }
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const dateString = now.toLocaleDateString('pt-BR', options);
+            const capitalizedDate = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+            document.getElementById('currentDate').textContent = capitalizedDate;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebarOpen = !sidebarOpen;
+            
+            if (sidebarOpen) {
+                sidebar.classList.remove('-translate-x-full');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+            }
+        }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notificationsDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Navigation Functions
+        function goToAgenda() {
+            window.location.href = 'agenda-do-dia.html';
+        }
+
+        function newConsultation() {
+            // For now, redirect to agenda where they can add new consultation
+            window.location.href = 'agenda-do-dia.html';
+            
+            // Could also show a modal here for quick scheduling
+            showToast('Redirecionando para agenda...', 'info');
+        }
+
+        function viewPrescriptions() {
+            window.location.href = 'prescricoes.html';
+        }
+
+        function viewMedicalRecords() {
+            window.location.href = 'prontuarios.html';
+        }
+
+        function startConsultation(appointmentId) {
+            // Simulate starting a consultation
+            showToast('Iniciando consulta...', 'info');
+            
+            setTimeout(() => {
+                // Could redirect to consultation interface
+                showToast('Consulta iniciada com sucesso!', 'success');
+            }, 1500);
+        }
+
+        function logout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                localStorage.removeItem('telemed_user');
+                sessionStorage.removeItem('telemed_user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Utility Functions
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform translate-x-full opacity-0 transition-all duration-300';
+            
+            // Set color based on type
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500',
+                warning: 'bg-yellow-500'
+            };
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle',
+                warning: 'fas fa-exclamation-triangle'
+            };
+            
+            toast.classList.add(colors[type]);
+            toast.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="${icons[type]}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full', 'opacity-0');
+            }, 100);
+            
+            // Hide toast
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 4000);
+        }
+
+        // Auto-refresh stats every 30 seconds (simulate real-time updates)
+        setInterval(function() {
+            // In a real app, this would fetch fresh data from the server
+            console.log('Auto-refreshing dashboard data...');
+        }, 30000);
+
+        // Handle responsive sidebar on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOpen = false;
             }
         });
 
-        // Animações de entrada
-        const cards = document.querySelectorAll('.access-card, .info-section');
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
+        // Simulate some dynamic data updates
+        setTimeout(function() {
+            // Simulate a new urgent notification
+            const notificationBadge = document.querySelector('.notification-badge');
+            if (notificationBadge) {
+                notificationBadge.style.display = 'block';
+            }
+        }, 5000);
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.stats-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
             
-            setTimeout(() => {
-                card.style.transition = 'all 0.6s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 150);
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
         });
-    </script>
-</body>
-</html>
+
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + A for Agenda
+            if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+                e.preventDefault();
+                goToAgenda();
+            }
+            
+            // Ctrl/Cmd + N for New Consultation
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                newConsultation();
+            }
+            
+            // ESC to close dropdowns
+            if (e.key === 'Escape') {
+                document.getElementById('notificationsDropdown').classList.add('hidden');
+                document.getElementById('userDropdown').classList.add('hidden');
+            }
+        });
+
+        // Initialize tooltips or help text (if needed)
+        function initializeHelp() {
+            // Could add tooltip functionality here
+            console.log('Help system initialized');
+        }
+
+        // Call initialization
+        initializeHelp();

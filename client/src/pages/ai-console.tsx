@@ -1,4 +1,5 @@
-console.log("AIConsole shadcn MODO ATIVO");
+import './ai-console.css';
+if (process.env.NODE_ENV !== 'production') console.debug('[AIConsole] dev mode');
 import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -114,190 +115,172 @@ export default function AIConsolePage() {
   const clear = () => { setQuestion(""); setSpec(""); setAnswer(""); setCode(""); };
 
   return (
-    <div className="mx-auto max-w-5xl p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">TeleMed AI Console — V2</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Faça perguntas técnicas ou gere trechos de código com segurança (sem PII).
-        </p>
-      </div>
+    <main className="ai-wrap" role="main" aria-label="TeleMed AI Console">
+      <section className="ai-card">
+        <h1>TeleMed AI Console — V2</h1>
+        <p className="subtitle">Faça perguntas técnicas ou gere trechos de código com segurança (sem PII).</p>
 
-      <Card className="mb-4">
-        <CardContent className="py-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            {statusOk ? (
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-            ) : statusOk === false ? (
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-            ) : (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            )}
-            <span className="text-sm">Status do Agent:</span>
-            <Badge variant={statusOk ? "default" : "destructive"} className="capitalize">
-              {statusMsg}
-            </Badge>
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Requisitos: login de <b>médico</b>, consentimento, <code>AI_ENABLED=true</code>.
-          </div>
-        </CardContent>
-      </Card>
+        <div className="status" aria-live="polite">
+          <span className="dot" aria-hidden="true"></span>
+          <div><strong>Status do Agent:</strong> {statusMsg}</div>
+        </div>
+        <div className="req">Requisitos: login de <strong>médico</strong>, consentimento, <code>AI_ENABLED=true</code>.</div>
 
-      <Tabs value={tab} onValueChange={(v) => setTab(v as any)} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="ask">Perguntar (Q&amp;A)</TabsTrigger>
-          <TabsTrigger value="code">Gerar Código</TabsTrigger>
-        </TabsList>
+        <div className="toolbar" role="group" aria-label="Ações do Agent">
+          <button 
+            className={`btn ${tab === 'ask' ? 'primary' : ''}`} 
+            type="button"
+            onClick={() => setTab('ask')}
+          >
+            Perguntar (Q&amp;A)
+          </button>
+          <button 
+            className={`btn ${tab === 'code' ? 'primary' : ''}`} 
+            type="button"
+            onClick={() => setTab('code')}
+          >
+            Gerar Código
+          </button>
+        </div>
 
-        {/* ==== ASK ==== */}
-        <TabsContent value="ask" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Pergunta para o Agent</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="space-y-2">
-                <Label htmlFor="q">Pergunta (sem PII)</Label>
-                <Textarea
-                  id="q"
-                  placeholder="Ex.: Explique opções de autenticação segura no TeleMed."
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  onKeyDown={(e) => {
-                    if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && isValid(question) && !pending) doAsk();
-                  }}
-                  className="min-h-[140px]"
-                />
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{question.trim().length}/{MAX_LEN}</span>
-                  <span>Atalho: Ctrl/⌘ + Enter</span>
+        <div className="grid">
+          <div>
+            {tab === 'ask' ? (
+              <>
+                <div className="field">
+                  <label className="label" htmlFor="q">Pergunta para o Agent</label>
+                  <textarea 
+                    id="q" 
+                    placeholder="Ex.: Explique opções de autenticação" 
+                    aria-describedby="q-hint"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={(e) => {
+                      if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && isValid(question) && !pending) doAsk();
+                    }}
+                  />
+                  <div id="q-hint" className="hint">
+                    {qCount}/{MAX_LEN} • Sem PII • Atalho: <span className="kbd">Ctrl/⌘ + Enter</span>
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={doAsk} disabled={pending || !isValid(question)}>
-                  {pending ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Perguntando…</>) : "Perguntar ao Agent"}
-                </Button>
-                <Button variant="outline" onClick={clear}><Trash2 className="h-4 w-4 mr-2" />Limpar</Button>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label>Resposta</Label>
-                  {answer && (
-                    <Button variant="ghost" size="sm" onClick={() => copy(answer)}>
-                      <Copy className="h-4 w-4 mr-1" /> Copiar
-                    </Button>
+                <div className="actions">
+                  <button 
+                    className="btn primary" 
+                    type="button" 
+                    onClick={doAsk}
+                    disabled={pending || !isValid(question)}
+                  >
+                    {pending ? "Perguntando..." : "Perguntar ao Agent"}
+                  </button>
+                  <button className="btn" type="button" aria-label="Limpar conversa" onClick={clear}>
+                    🗑️ Limpar
+                  </button>
+                  <span className="spacer" />
+                </div>
+                <div className="resp" role="region" aria-live="polite" aria-label="Resposta">
+                  {answer ? (
+                    <pre style={{margin: 0, whiteSpace: 'pre-wrap'}}>{answer}</pre>
+                  ) : (
+                    <div className="muted">Nenhuma resposta ainda.</div>
                   )}
                 </div>
-                {answer ? (
-                  <pre className="text-sm whitespace-pre-wrap p-3 border rounded bg-muted/30">{answer}</pre>
-                ) : (
-                  <Alert><AlertDescription>Nenhuma resposta ainda.</AlertDescription></Alert>
-                )}
-              </div>
-
-              {history.length > 0 && (
-                <>
-                  <Separator />
-                  <div className="space-y-2">
-                    <Label>Últimas perguntas</Label>
-                    <div className="grid sm:grid-cols-2 gap-2">
-                      {history.map((h, i) => (
-                        <Button key={i} variant="outline" className="justify-start"
-                                onClick={() => setQuestion(h)} title="Reutilizar">
-                          {h}
-                        </Button>
-                      ))}
-                    </div>
+              </>
+            ) : (
+              <>
+                <div className="field">
+                  <label className="label" htmlFor="spec">Especificação para Código</label>
+                  <textarea 
+                    id="spec" 
+                    placeholder='Ex.: "Criar hook useAppointments com React Query chamando GET /api/appointments"' 
+                    aria-describedby="spec-hint"
+                    value={spec}
+                    onChange={(e) => setSpec(e.target.value)}
+                    onKeyDown={(e) => {
+                      if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && isValid(spec) && !pending) doGenerate();
+                    }}
+                  />
+                  <div id="spec-hint" className="hint">
+                    {sCount}/{MAX_LEN} • Sem PII • Atalho: <span className="kbd">Ctrl/⌘ + Enter</span>
                   </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* ==== CODE ==== */}
-        <TabsContent value="code" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Gerar Código</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="space-y-2">
-                <Label htmlFor="spec">Especificação (sem PII)</Label>
-                <Textarea
-                  id="spec"
-                  placeholder='Ex.: "Criar hook useAppointments com React Query chamando GET /api/appointments"'
-                  value={spec}
-                  onChange={(e) => setSpec(e.target.value)}
-                  onKeyDown={(e) => {
-                    if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && isValid(spec) && !pending) doGenerate();
-                  }}
-                  className="min-h-[140px]"
-                />
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{sCount}/{MAX_LEN}</span>
-                  <span>Atalho: Ctrl/⌘ + Enter</span>
                 </div>
-              </div>
-
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div className="space-y-2">
-                  <Label>Linguagem</Label>
-                  <select
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    value={language}
+                <div className="field">
+                  <label className="label" htmlFor="lang">Linguagem</label>
+                  <select 
+                    id="lang" 
+                    value={language} 
                     onChange={(e) => setLanguage(e.target.value as any)}
+                    style={{padding: '10px 12px', border: '1px solid var(--bd)', borderRadius: '10px', background: '#fff', font: 'inherit'}}
                   >
                     <option value="ts">TypeScript</option>
                     <option value="tsx">TSX (React)</option>
                     <option value="js">JavaScript</option>
                   </select>
                 </div>
-                <div className="sm:col-span-2 space-y-2">
-                  <Label>Notas (opcional)</Label>
-                  <Input value={notes} onChange={(e) => setNotes(e.target.value)} />
+                <div className="field">
+                  <label className="label" htmlFor="notes">Notas (opcional)</label>
+                  <input 
+                    id="notes" 
+                    value={notes} 
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Ex.: React + segurança; use React Query quando útil"
+                  />
                 </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={doGenerate} disabled={pending || !isValid(spec)}>
-                  {pending ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Gerando…</>) : "Gerar Código"}
-                </Button>
-                <Button variant="outline" onClick={clear}><Trash2 className="h-4 w-4 mr-2" />Limpar</Button>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label>Saída</Label>
-                  {code && (
-                    <Button variant="ghost" size="sm" onClick={() => copy(code)}>
-                      <Copy className="h-4 w-4 mr-1" /> Copiar
-                    </Button>
+                <div className="actions">
+                  <button 
+                    className="btn primary" 
+                    type="button" 
+                    onClick={doGenerate}
+                    disabled={pending || !isValid(spec)}
+                  >
+                    {pending ? "Gerando..." : "Gerar Código"}
+                  </button>
+                  <button className="btn" type="button" aria-label="Limpar" onClick={clear}>
+                    🗑️ Limpar
+                  </button>
+                  <span className="spacer" />
+                </div>
+                <div className="resp" role="region" aria-live="polite" aria-label="Código Gerado">
+                  {code ? (
+                    <pre style={{margin: 0, whiteSpace: 'pre-wrap', overflow: 'auto'}}>{code}</pre>
+                  ) : (
+                    <div className="muted">Nenhum código gerado ainda.</div>
                   )}
                 </div>
-                {code ? (
-                  <pre className="text-sm whitespace-pre-wrap p-3 border rounded bg-muted/30 overflow-x-auto">
-                    {code}
-                  </pre>
-                ) : (
-                  <Alert><AlertDescription>Nenhum código gerado ainda.</AlertDescription></Alert>
-                )}
+              </>
+            )}
+          </div>
+
+          <aside aria-label="Ajuda" className="aside">
+            <div className="field">
+              <div className="label">Dicas</div>
+              <ul className="hint" style={{margin:0, paddingLeft: '18px'}}>
+                <li>Evite dados pessoais do paciente.</li>
+                <li>Peça trechos de código curtos e objetivos.</li>
+                <li>Use termos: "React Query", "A11y", "RTC".</li>
+              </ul>
+            </div>
+            
+            {history.length > 0 && (
+              <div className="field">
+                <div className="label">Últimas perguntas</div>
+                <div style={{display: 'grid', gap: '8px'}}>
+                  {history.map((h, i) => (
+                    <button 
+                      key={i} 
+                      className="btn" 
+                      onClick={() => setQuestion(h)} 
+                      title="Reutilizar"
+                      style={{textAlign: 'left', fontSize: '12px', padding: '6px 10px'}}
+                    >
+                      {h.length > 40 ? h.substring(0, 40) + '...' : h}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </CardContent>
-            <CardFooter>
-              <p className="text-xs text-muted-foreground">
-                ⚠️ Não envie dados pessoais (nome, CPF, telefone, e-mail).
-              </p>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+            )}
+          </aside>
+        </div>
+      </section>
+    </main>
   );
 }

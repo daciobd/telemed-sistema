@@ -3,41 +3,25 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>
-            Cadastro - TeleMed | Junte-se à Revolução da Saúde Digital
-        </title>
+        <title>Cadastro - TeleMed | Sistema Médico</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
             rel="stylesheet"
         />
         <style>
-            .gradient-bg {
+            body {
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
             }
 
-            .glass-effect {
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+            .register-card {
+                backdrop-filter: blur(16px);
+                background: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
             }
 
-            .signup-card {
-                animation: slideInUp 0.6s ease-out;
-            }
-
-            @keyframes slideInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .floating-element {
+            .floating-animation {
                 animation: float 6s ease-in-out infinite;
             }
 
@@ -51,25 +35,97 @@
                 }
             }
 
+            .pulse-slow {
+                animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+
+            .slide-in {
+                animation: slideIn 0.8s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             .input-group {
                 position: relative;
             }
 
-            .input-group input:focus + label,
-            .input-group input:not(:placeholder-shown) + label,
-            .input-group select:focus + label,
-            .input-group select:not([value=""]) + label {
-                transform: translateY(-25px) scale(0.9);
-                color: #3b82f6;
-            }
-
-            .input-group label {
+            .input-icon {
                 position: absolute;
                 left: 12px;
-                top: 12px;
-                transition: all 0.2s ease;
-                pointer-events: none;
+                top: 50%;
+                transform: translateY(-50%);
                 color: #6b7280;
+            }
+
+            .form-input {
+                padding-left: 40px;
+            }
+
+            .register-btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                transition: all 0.3s ease;
+            }
+
+            .register-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            }
+
+            .error-shake {
+                animation: shake 0.5s ease-in-out;
+            }
+
+            @keyframes shake {
+                0%,
+                100% {
+                    transform: translateX(0);
+                }
+                25% {
+                    transform: translateX(-5px);
+                }
+                75% {
+                    transform: translateX(5px);
+                }
+            }
+
+            .toast {
+                animation: slideInRight 0.3s ease-out;
+            }
+
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            .user-type-card {
+                transition: all 0.3s ease;
+                cursor: pointer;
+                border: 2px solid transparent;
+            }
+
+            .user-type-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            .user-type-card.selected {
+                border-color: #667eea;
+                background: linear-gradient(135deg, #f0f4ff 0%, #e8f2ff 100%);
             }
 
             .step-indicator {
@@ -77,1341 +133,1031 @@
             }
 
             .step-active {
-                background: linear-gradient(135deg, #3b82f6, #60a5fa);
+                background: #667eea;
                 color: white;
             }
 
             .step-completed {
-                background: linear-gradient(135deg, #10b981, #34d399);
+                background: #10b981;
                 color: white;
             }
 
             .step-pending {
-                background: #f3f4f6;
+                background: #e5e7eb;
                 color: #6b7280;
             }
 
-            .loading-spinner {
-                border: 3px solid #f3f3f3;
-                border-top: 3px solid #3b82f6;
-                border-radius: 50%;
-                width: 20px;
-                height: 20px;
-                animation: spin 1s linear infinite;
-            }
-
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-
-            .file-upload {
+            .password-strength {
+                height: 4px;
+                border-radius: 2px;
                 transition: all 0.3s ease;
             }
 
-            .file-upload:hover {
-                border-color: #3b82f6;
-                background-color: rgba(59, 130, 246, 0.05);
+            .strength-weak {
+                background: #ef4444;
             }
-
-            .success-checkmark {
-                animation: checkmark 0.6s ease-in-out;
+            .strength-medium {
+                background: #f59e0b;
             }
-
-            @keyframes checkmark {
-                0% {
-                    transform: scale(0);
-                }
-                50% {
-                    transform: scale(1.2);
-                }
-                100% {
-                    transform: scale(1);
-                }
+            .strength-strong {
+                background: #10b981;
             }
         </style>
     </head>
-    <body class="gradient-bg min-h-screen">
+    <body class="flex items-center justify-center min-h-screen p-4">
         <!-- Background Elements -->
-        <div class="absolute inset-0 overflow-hidden">
+        <div class="fixed inset-0 overflow-hidden pointer-events-none">
             <div
-                class="floating-element absolute top-20 left-10 w-20 h-20 bg-white bg-opacity-10 rounded-full"
+                class="absolute top-1/4 left-1/4 w-64 h-64 bg-white opacity-10 rounded-full floating-animation"
             ></div>
             <div
-                class="floating-element absolute top-40 right-20 w-16 h-16 bg-white bg-opacity-10 rounded-full"
+                class="absolute top-3/4 right-1/4 w-32 h-32 bg-white opacity-10 rounded-full floating-animation"
                 style="animation-delay: -2s"
             ></div>
             <div
-                class="floating-element absolute bottom-20 left-20 w-12 h-12 bg-white bg-opacity-10 rounded-full"
-                style="animation-delay: -4s"
+                class="absolute top-1/2 left-1/2 w-48 h-48 bg-white opacity-5 rounded-full pulse-slow"
             ></div>
+        </div>
+
+        <div class="w-full max-w-2xl relative">
+            <!-- Logo and Header -->
+            <div class="text-center mb-8 slide-in">
+                <div
+                    class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-lg mb-4"
+                >
+                    <i class="fas fa-stethoscope text-3xl text-indigo-600"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-2">TeleMed</h1>
+                <p class="text-indigo-100">Crie sua conta no sistema</p>
+            </div>
+
+            <!-- Registration Form -->
             <div
-                class="floating-element absolute bottom-40 right-10 w-24 h-24 bg-white bg-opacity-10 rounded-full"
-                style="animation-delay: -1s"
-            ></div>
-        </div>
+                class="register-card rounded-2xl p-8 slide-in"
+                style="animation-delay: 0.2s"
+            >
+                <!-- Step Indicator -->
+                <div class="flex items-center justify-center mb-8">
+                    <div class="flex items-center space-x-2">
+                        <div
+                            id="step1"
+                            class="step-indicator step-active w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                        >
+                            1
+                        </div>
+                        <div class="w-8 h-1 bg-gray-200 rounded"></div>
+                        <div
+                            id="step2"
+                            class="step-indicator step-pending w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                        >
+                            2
+                        </div>
+                        <div class="w-8 h-1 bg-gray-200 rounded"></div>
+                        <div
+                            id="step3"
+                            class="step-indicator step-pending w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                        >
+                            3
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Header -->
-        <nav
-            class="relative z-10 bg-white bg-opacity-10 backdrop-blur-md border-b border-white border-opacity-20"
-        >
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center">
+                <h2
+                    class="text-2xl font-bold text-gray-800 text-center mb-6"
+                    id="stepTitle"
+                >
+                    Escolha o tipo de conta
+                </h2>
+
+                <!-- Step 1: User Type Selection -->
+                <div id="userTypeStep" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- Doctor Card -->
+                        <div
+                            class="user-type-card bg-white rounded-xl p-6 border"
+                            onclick="selectUserType('doctor')"
+                        >
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                >
+                                    <i
+                                        class="fas fa-user-md text-2xl text-blue-600"
+                                    ></i>
+                                </div>
+                                <h3
+                                    class="text-lg font-semibold text-gray-800 mb-2"
+                                >
+                                    Médico
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    Acesso completo ao sistema médico
+                                </p>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• Gerenciar consultas</li>
+                                    <li>• Prescrições eletrônicas</li>
+                                    <li>• Prontuários digitais</li>
+                                    <li>• Telemedicina</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Patient Card -->
+                        <div
+                            class="user-type-card bg-white rounded-xl p-6 border"
+                            onclick="selectUserType('patient')"
+                        >
+                            <div class="text-center">
+                                <div
+                                    class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                                >
+                                    <i
+                                        class="fas fa-user text-2xl text-green-600"
+                                    ></i>
+                                </div>
+                                <h3
+                                    class="text-lg font-semibold text-gray-800 mb-2"
+                                >
+                                    Paciente
+                                </h3>
+                                <p class="text-sm text-gray-600 mb-4">
+                                    Portal do paciente
+                                </p>
+                                <ul class="text-xs text-gray-500 space-y-1">
+                                    <li>• Agendar consultas</li>
+                                    <li>• Histórico médico</li>
+                                    <li>• Receitas digitais</li>
+                                    <li>• Teleconsultas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
                         <button
-                            onclick="goBack()"
-                            class="mr-4 p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors text-white"
+                            id="nextToPersonalInfo"
+                            onclick="nextStep()"
+                            disabled
+                            class="register-btn px-8 py-3 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <i class="fas fa-arrow-left"></i>
+                            Continuar <i class="fas fa-arrow-right ml-2"></i>
                         </button>
-                        <div class="flex items-center text-white">
-                            <i class="fas fa-heartbeat text-xl mr-3"></i>
-                            <h1 class="text-xl font-semibold">TeleMed</h1>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <a
-                            href="login.html"
-                            class="text-white hover:text-blue-200 transition-colors"
-                        >
-                            <i class="fas fa-sign-in-alt mr-1"></i>Fazer Login
-                        </a>
                     </div>
                 </div>
-            </div>
-        </nav>
 
-        <!-- Progress Indicator -->
-        <div
-            class="relative z-10 bg-white bg-opacity-10 backdrop-blur-md border-b border-white border-opacity-20"
-        >
-            <div class="max-w-4xl mx-auto px-4 py-4">
-                <div class="flex items-center justify-between">
-                    <div
-                        id="step1"
-                        class="step-indicator step-active flex items-center px-4 py-2 rounded-lg"
-                    >
-                        <i class="fas fa-user-plus mr-2"></i>
-                        <span class="hidden sm:inline">Dados Básicos</span>
-                    </div>
-                    <div
-                        class="flex-1 h-1 bg-white bg-opacity-20 mx-4 rounded"
-                    ></div>
-                    <div
-                        id="step2"
-                        class="step-indicator step-pending flex items-center px-4 py-2 rounded-lg"
-                    >
-                        <i class="fas fa-id-card mr-2"></i>
-                        <span class="hidden sm:inline">Informações</span>
-                    </div>
-                    <div
-                        class="flex-1 h-1 bg-white bg-opacity-20 mx-4 rounded"
-                    ></div>
-                    <div
-                        id="step3"
-                        class="step-indicator step-pending flex items-center px-4 py-2 rounded-lg"
-                    >
-                        <i class="fas fa-shield-alt mr-2"></i>
-                        <span class="hidden sm:inline">Segurança</span>
-                    </div>
-                    <div
-                        class="flex-1 h-1 bg-white bg-opacity-20 mx-4 rounded"
-                    ></div>
-                    <div
-                        id="step4"
-                        class="step-indicator step-pending flex items-center px-4 py-2 rounded-lg"
-                    >
-                        <i class="fas fa-check-circle mr-2"></i>
-                        <span class="hidden sm:inline">Finalizar</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div
-            class="relative z-10 flex items-center justify-center min-h-screen p-4 pt-20"
-        >
-            <div class="w-full max-w-4xl mx-auto">
-                <!-- Step 1: Tipo de Usuário e Dados Básicos -->
-                <div id="stepContent1" class="signup-card">
-                    <div class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">
-                                Criar Conta
-                            </h2>
-                            <p class="text-blue-200">
-                                Junte-se a milhares de usuários que confiam na
-                                TeleMed
-                            </p>
-                        </div>
-
-                        <!-- User Type Selection -->
-                        <div class="mb-8">
-                            <h3 class="text-white text-lg font-semibold mb-4">
-                                Você é:
-                            </h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div
-                                    class="user-type-card bg-white bg-opacity-10 border border-white border-opacity-30 rounded-xl p-6 cursor-pointer transition-all hover:bg-opacity-20"
-                                    onclick="selectUserType('patient')"
-                                >
-                                    <div class="text-center">
-                                        <i
-                                            class="fas fa-user text-4xl text-blue-300 mb-3"
-                                        ></i>
-                                        <h4
-                                            class="text-white font-semibold mb-2"
-                                        >
-                                            Paciente
-                                        </h4>
-                                        <p class="text-blue-200 text-sm">
-                                            Busco consultas médicas online
-                                        </p>
-                                    </div>
-                                </div>
-                                <div
-                                    class="user-type-card bg-white bg-opacity-10 border border-white border-opacity-30 rounded-xl p-6 cursor-pointer transition-all hover:bg-opacity-20"
-                                    onclick="selectUserType('doctor')"
-                                >
-                                    <div class="text-center">
-                                        <i
-                                            class="fas fa-user-md text-4xl text-green-300 mb-3"
-                                        ></i>
-                                        <h4
-                                            class="text-white font-semibold mb-2"
-                                        >
-                                            Médico
-                                        </h4>
-                                        <p class="text-blue-200 text-sm">
-                                            Quero atender pacientes online
-                                        </p>
-                                    </div>
-                                </div>
+                <!-- Step 2: Personal Information -->
+                <div id="personalInfoStep" class="hidden space-y-6">
+                    <form id="personalInfoForm" class="space-y-4">
+                        <!-- Name -->
+                        <div class="input-group">
+                            <label
+                                for="fullName"
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Nome Completo *
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-user input-icon"></i>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    required
+                                    class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                    placeholder="Seu nome completo"
+                                />
                             </div>
                         </div>
 
-                        <!-- Basic Info Form -->
-                        <form id="step1Form" class="space-y-6">
-                            <div class="grid md:grid-cols-2 gap-4">
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="firstName"
-                                        required
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Nome"
-                                    />
-                                    <label for="firstName" class="text-white"
-                                        >Nome</label
-                                    >
-                                </div>
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="lastName"
-                                        required
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Sobrenome"
-                                    />
-                                    <label for="lastName" class="text-white"
-                                        >Sobrenome</label
-                                    >
-                                </div>
-                            </div>
-
-                            <div class="input-group">
+                        <!-- Email -->
+                        <div class="input-group">
+                            <label
+                                for="email"
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Email *
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-envelope input-icon"></i>
                                 <input
                                     type="email"
                                     id="email"
+                                    name="email"
                                     required
-                                    class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    placeholder="Email"
+                                    class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                    placeholder="seu@email.com"
+                                    onblur="checkEmailAvailability()"
                                 />
-                                <label for="email" class="text-white"
-                                    >Email</label
+                                <div
+                                    id="emailFeedback"
+                                    class="hidden absolute right-3 top-1/2 transform -translate-y-1/2"
                                 >
+                                    <i
+                                        class="fas fa-check-circle text-green-500"
+                                        id="emailAvailable"
+                                    ></i>
+                                    <i
+                                        class="fas fa-times-circle text-red-500 hidden"
+                                        id="emailTaken"
+                                    ></i>
+                                </div>
+                            </div>
+                            <p
+                                id="emailError"
+                                class="text-sm text-red-600 mt-1 hidden"
+                            ></p>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="input-group">
+                            <label
+                                for="phone"
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Telefone *
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-phone input-icon"></i>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    required
+                                    class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                    placeholder="(11) 99999-9999"
+                                    oninput="formatPhone(this)"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Professional Info (Doctor only) -->
+                        <div id="doctorFields" class="hidden space-y-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="input-group">
+                                    <label
+                                        for="crm"
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                    >
+                                        CRM *
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fas fa-id-card input-icon"
+                                        ></i>
+                                        <input
+                                            type="text"
+                                            id="crm"
+                                            name="crm"
+                                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                            placeholder="12345-SP"
+                                            oninput="formatCRM(this)"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label
+                                        for="specialty"
+                                        class="block text-sm font-medium text-gray-700 mb-2"
+                                    >
+                                        Especialidade *
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fas fa-stethoscope input-icon"
+                                        ></i>
+                                        <select
+                                            id="specialty"
+                                            name="specialty"
+                                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                        >
+                                            <option value="">
+                                                Selecione uma especialidade
+                                            </option>
+                                            <option value="cardiologia">
+                                                Cardiologia
+                                            </option>
+                                            <option value="dermatologia">
+                                                Dermatologia
+                                            </option>
+                                            <option value="endocrinologia">
+                                                Endocrinologia
+                                            </option>
+                                            <option value="gastroenterologia">
+                                                Gastroenterologia
+                                            </option>
+                                            <option value="ginecologia">
+                                                Ginecologia
+                                            </option>
+                                            <option value="neurologia">
+                                                Neurologia
+                                            </option>
+                                            <option value="pediatria">
+                                                Pediatria
+                                            </option>
+                                            <option value="psiquiatria">
+                                                Psiquiatria
+                                            </option>
+                                            <option value="urologia">
+                                                Urologia
+                                            </option>
+                                            <option value="clinica-geral">
+                                                Clínica Geral
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CPF (Patient only) -->
+                        <div id="patientFields" class="hidden">
+                            <div class="input-group">
+                                <label
+                                    for="cpf"
+                                    class="block text-sm font-medium text-gray-700 mb-2"
+                                >
+                                    CPF *
+                                </label>
+                                <div class="relative">
+                                    <i class="fas fa-id-card input-icon"></i>
+                                    <input
+                                        type="text"
+                                        id="cpf"
+                                        name="cpf"
+                                        class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                        placeholder="000.000.000-00"
+                                        oninput="formatCPF(this)"
+                                    />
+                                </div>
                             </div>
 
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div class="input-group">
-                                    <input
-                                        type="tel"
-                                        id="phone"
-                                        required
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Telefone"
-                                    />
-                                    <label for="phone" class="text-white"
-                                        >Telefone</label
-                                    >
-                                </div>
-                                <div class="input-group">
-                                    <input
-                                        type="date"
-                                        id="birthDate"
-                                        required
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    />
-                                    <label for="birthDate" class="text-white"
-                                        >Data de Nascimento</label
-                                    >
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
-                            >
-                                Continuar
-                                <i class="fas fa-arrow-right ml-2"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Step 2: Informações Específicas -->
-                <div id="stepContent2" class="signup-card hidden">
-                    <div class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">
-                                Informações Específicas
-                            </h2>
-                            <p class="text-blue-200" id="step2Subtitle">
-                                Complete seu perfil
-                            </p>
-                        </div>
-
-                        <form id="step2Form" class="space-y-6">
-                            <!-- Patient Specific Fields -->
-                            <div id="patientFields" class="space-y-6">
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="cpf"
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="CPF"
-                                    />
-                                    <label for="cpf" class="text-white"
-                                        >CPF</label
-                                    >
-                                </div>
-
-                                <div class="input-group">
-                                    <select
-                                        id="gender"
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    >
-                                        <option value="">Selecione</option>
-                                        <option value="masculino">
-                                            Masculino
-                                        </option>
-                                        <option value="feminino">
-                                            Feminino
-                                        </option>
-                                        <option value="outro">Outro</option>
-                                        <option value="nao_informar">
-                                            Prefiro não informar
-                                        </option>
-                                    </select>
-                                    <label for="gender" class="text-white"
-                                        >Sexo</label
-                                    >
-                                </div>
-
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="address"
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Endereço completo"
-                                    />
-                                    <label for="address" class="text-white"
-                                        >Endereço</label
-                                    >
-                                </div>
-
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="emergencyContact"
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Contato de emergência"
-                                    />
                                     <label
-                                        for="emergencyContact"
-                                        class="text-white"
-                                        >Contato de Emergência</label
+                                        for="birthDate"
+                                        class="block text-sm font-medium text-gray-700 mb-2"
                                     >
-                                </div>
-                            </div>
-
-                            <!-- Doctor Specific Fields -->
-                            <div id="doctorFields" class="space-y-6 hidden">
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="crm"
-                                        required
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="CRM"
-                                    />
-                                    <label for="crm" class="text-white"
-                                        >CRM</label
-                                    >
+                                        Data de Nascimento *
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fas fa-calendar input-icon"
+                                        ></i>
+                                        <input
+                                            type="date"
+                                            id="birthDate"
+                                            name="birthDate"
+                                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div class="input-group">
-                                    <select
-                                        id="specialty"
-                                        required
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    <label
+                                        for="gender"
+                                        class="block text-sm font-medium text-gray-700 mb-2"
                                     >
-                                        <option value="">
-                                            Selecione sua especialidade
-                                        </option>
-                                        <option value="cardiologia">
-                                            Cardiologia
-                                        </option>
-                                        <option value="dermatologia">
-                                            Dermatologia
-                                        </option>
-                                        <option value="endocrinologia">
-                                            Endocrinologia
-                                        </option>
-                                        <option value="gastroenterologia">
-                                            Gastroenterologia
-                                        </option>
-                                        <option value="ginecologia">
-                                            Ginecologia
-                                        </option>
-                                        <option value="neurologia">
-                                            Neurologia
-                                        </option>
-                                        <option value="oftalmologia">
-                                            Oftalmologia
-                                        </option>
-                                        <option value="ortopedia">
-                                            Ortopedia
-                                        </option>
-                                        <option value="pediatria">
-                                            Pediatria
-                                        </option>
-                                        <option value="psiquiatria">
-                                            Psiquiatria
-                                        </option>
-                                        <option value="urologia">
-                                            Urologia
-                                        </option>
-                                        <option value="clinica_geral">
-                                            Clínica Geral
-                                        </option>
-                                    </select>
-                                    <label for="specialty" class="text-white"
-                                        >Especialidade</label
-                                    >
-                                </div>
-
-                                <div class="input-group">
-                                    <input
-                                        type="number"
-                                        id="experience"
-                                        min="0"
-                                        max="50"
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Anos de experiência"
-                                    />
-                                    <label for="experience" class="text-white"
-                                        >Anos de Experiência</label
-                                    >
-                                </div>
-
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        id="institution"
-                                        class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                        placeholder="Instituição de formação"
-                                    />
-                                    <label for="institution" class="text-white"
-                                        >Instituição de Formação</label
-                                    >
-                                </div>
-                            </div>
-
-                            <div class="flex gap-4">
-                                <button
-                                    type="button"
-                                    onclick="previousStep()"
-                                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition-colors"
-                                >
-                                    <i class="fas fa-arrow-left mr-2"></i>Voltar
-                                </button>
-                                <button
-                                    type="submit"
-                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
-                                >
-                                    Continuar
-                                    <i class="fas fa-arrow-right ml-2"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Step 3: Segurança -->
-                <div id="stepContent3" class="signup-card hidden">
-                    <div class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">
-                                Segurança da Conta
-                            </h2>
-                            <p class="text-blue-200">
-                                Crie uma senha segura para proteger sua conta
-                            </p>
-                        </div>
-
-                        <form id="step3Form" class="space-y-6">
-                            <div class="input-group">
-                                <input
-                                    type="password"
-                                    id="password"
-                                    required
-                                    class="w-full px-4 py-3 pr-12 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    placeholder="Senha"
-                                />
-                                <label for="password" class="text-white"
-                                    >Senha</label
-                                >
-                                <button
-                                    type="button"
-                                    onclick="togglePassword('password')"
-                                    class="absolute right-3 top-3 text-white hover:text-blue-300"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-
-                            <div class="input-group">
-                                <input
-                                    type="password"
-                                    id="confirmPassword"
-                                    required
-                                    class="w-full px-4 py-3 pr-12 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    placeholder="Confirmar senha"
-                                />
-                                <label for="confirmPassword" class="text-white"
-                                    >Confirmar Senha</label
-                                >
-                                <button
-                                    type="button"
-                                    onclick="togglePassword('confirmPassword')"
-                                    class="absolute right-3 top-3 text-white hover:text-blue-300"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-
-                            <!-- Password Strength Indicator -->
-                            <div class="space-y-2">
-                                <div class="text-white text-sm">
-                                    Força da senha:
-                                </div>
-                                <div
-                                    class="w-full bg-white bg-opacity-20 rounded-full h-2"
-                                >
-                                    <div
-                                        id="passwordStrength"
-                                        class="h-2 rounded-full transition-all duration-300"
-                                        style="width: 0%"
-                                    ></div>
-                                </div>
-                                <div
-                                    id="passwordCriteria"
-                                    class="text-xs text-blue-200 space-y-1"
-                                >
-                                    <div>• Mínimo 8 caracteres</div>
-                                    <div>• Pelo menos uma letra maiúscula</div>
-                                    <div>• Pelo menos um número</div>
-                                    <div>
-                                        • Pelo menos um caractere especial
+                                        Gênero *
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fas fa-venus-mars input-icon"
+                                        ></i>
+                                        <select
+                                            id="gender"
+                                            name="gender"
+                                            class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                        >
+                                            <option value="">Selecione</option>
+                                            <option value="masculino">
+                                                Masculino
+                                            </option>
+                                            <option value="feminino">
+                                                Feminino
+                                            </option>
+                                            <option value="outro">Outro</option>
+                                            <option value="nao-informar">
+                                                Prefiro não informar
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="flex gap-4">
-                                <button
-                                    type="button"
-                                    onclick="previousStep()"
-                                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition-colors"
-                                >
-                                    <i class="fas fa-arrow-left mr-2"></i>Voltar
-                                </button>
-                                <button
-                                    type="submit"
-                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
-                                >
-                                    Continuar
-                                    <i class="fas fa-arrow-right ml-2"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Step 4: Documentos e Finalização -->
-                <div id="stepContent4" class="signup-card hidden">
-                    <div class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">
-                                Documentos e Termos
-                            </h2>
-                            <p class="text-blue-200">Finalize seu cadastro</p>
                         </div>
+                    </form>
 
-                        <form id="step4Form" class="space-y-6">
-                            <!-- Document Upload for Doctors -->
-                            <div id="doctorDocuments" class="space-y-4 hidden">
-                                <h3 class="text-white font-semibold mb-4">
-                                    Documentos Obrigatórios:
-                                </h3>
-
-                                <div
-                                    class="file-upload border-2 border-dashed border-white border-opacity-30 rounded-lg p-6 text-center"
-                                >
-                                    <i
-                                        class="fas fa-upload text-3xl text-blue-300 mb-3"
-                                    ></i>
-                                    <p class="text-white mb-2">
-                                        CRM - Conselho Regional de Medicina
-                                    </p>
-                                    <input
-                                        type="file"
-                                        id="crmFile"
-                                        accept=".pdf,.jpg,.png"
-                                        class="hidden"
-                                    />
-                                    <button
-                                        type="button"
-                                        onclick="document.getElementById('crmFile').click()"
-                                        class="text-blue-300 hover:text-white"
-                                    >
-                                        Clique para enviar
-                                    </button>
-                                </div>
-
-                                <div
-                                    class="file-upload border-2 border-dashed border-white border-opacity-30 rounded-lg p-6 text-center"
-                                >
-                                    <i
-                                        class="fas fa-upload text-3xl text-blue-300 mb-3"
-                                    ></i>
-                                    <p class="text-white mb-2">
-                                        Diploma de Medicina
-                                    </p>
-                                    <input
-                                        type="file"
-                                        id="diplomaFile"
-                                        accept=".pdf,.jpg,.png"
-                                        class="hidden"
-                                    />
-                                    <button
-                                        type="button"
-                                        onclick="document.getElementById('diplomaFile').click()"
-                                        class="text-blue-300 hover:text-white"
-                                    >
-                                        Clique para enviar
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Terms and Conditions -->
-                            <div class="space-y-4">
-                                <label class="flex items-start text-white">
-                                    <input
-                                        type="checkbox"
-                                        id="terms"
-                                        required
-                                        class="mt-1 mr-3"
-                                    />
-                                    <span class="text-sm">
-                                        Aceito os
-                                        <a
-                                            href="#"
-                                            class="text-blue-300 hover:text-white"
-                                            >Termos de Uso</a
-                                        >
-                                        e
-                                        <a
-                                            href="#"
-                                            class="text-blue-300 hover:text-white"
-                                            >Política de Privacidade</a
-                                        >
-                                        da TeleMed
-                                    </span>
-                                </label>
-
-                                <label
-                                    class="flex items-start text-white"
-                                    id="doctorTerms"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        id="medicalTerms"
-                                        class="mt-1 mr-3"
-                                    />
-                                    <span class="text-sm">
-                                        Declaro que sou médico registrado no CRM
-                                        e aceito as
-                                        <a
-                                            href="#"
-                                            class="text-blue-300 hover:text-white"
-                                            >Diretrizes Médicas</a
-                                        >
-                                        da plataforma
-                                    </span>
-                                </label>
-
-                                <label class="flex items-start text-white">
-                                    <input
-                                        type="checkbox"
-                                        id="newsletter"
-                                        class="mt-1 mr-3"
-                                    />
-                                    <span class="text-sm">
-                                        Quero receber novidades e promoções por
-                                        email
-                                    </span>
-                                </label>
-                            </div>
-
-                            <div class="flex gap-4">
-                                <button
-                                    type="button"
-                                    onclick="previousStep()"
-                                    class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition-colors"
-                                >
-                                    <i class="fas fa-arrow-left mr-2"></i>Voltar
-                                </button>
-                                <button
-                                    type="submit"
-                                    id="finalSubmit"
-                                    class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-colors"
-                                >
-                                    <span id="submitText">Criar Conta</span>
-                                    <div
-                                        id="submitSpinner"
-                                        class="loading-spinner ml-2 hidden"
-                                    ></div>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Success Step -->
-                <div id="successStep" class="signup-card hidden">
-                    <div
-                        class="glass-effect rounded-2xl p-8 max-w-2xl mx-auto text-center"
-                    >
-                        <div
-                            class="success-checkmark w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                    <div class="flex justify-between">
+                        <button
+                            onclick="previousStep()"
+                            class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                         >
-                            <i class="fas fa-check text-white text-3xl"></i>
+                            <i class="fas fa-arrow-left mr-2"></i>Voltar
+                        </button>
+                        <button
+                            onclick="nextStep()"
+                            class="register-btn px-8 py-3 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Continuar <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Password and Terms -->
+                <div id="passwordStep" class="hidden space-y-6">
+                    <form id="passwordForm" class="space-y-4">
+                        <!-- Password -->
+                        <div class="input-group">
+                            <label
+                                for="password"
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Senha *
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                    placeholder="••••••••"
+                                    oninput="checkPasswordStrength()"
+                                />
+                                <button
+                                    type="button"
+                                    onclick="togglePasswordVisibility('password')"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                >
+                                    <i class="fas fa-eye" id="passwordEye"></i>
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <div
+                                    class="password-strength w-full"
+                                    id="passwordStrength"
+                                ></div>
+                                <p
+                                    class="text-xs text-gray-500 mt-1"
+                                    id="passwordStrengthText"
+                                >
+                                    Digite uma senha
+                                </p>
+                            </div>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-4">
-                            Conta Criada com Sucesso!
-                        </h2>
-                        <p class="text-blue-200 mb-8" id="successMessage">
-                            Bem-vindo à TeleMed! Sua conta foi criada e você já
-                            pode fazer login.
-                        </p>
+
+                        <!-- Confirm Password -->
+                        <div class="input-group">
+                            <label
+                                for="confirmPassword"
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Confirmar Senha *
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    required
+                                    class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                                    placeholder="••••••••"
+                                    oninput="checkPasswordMatch()"
+                                />
+                                <button
+                                    type="button"
+                                    onclick="togglePasswordVisibility('confirmPassword')"
+                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                >
+                                    <i
+                                        class="fas fa-eye"
+                                        id="confirmPasswordEye"
+                                    ></i>
+                                </button>
+                            </div>
+                            <p
+                                id="passwordMatchError"
+                                class="text-sm text-red-600 mt-1 hidden"
+                            >
+                                As senhas não coincidem
+                            </p>
+                        </div>
+
+                        <!-- Terms and Privacy -->
                         <div class="space-y-4">
-                            <button
-                                onclick="goToLogin()"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors"
-                            >
-                                <i class="fas fa-sign-in-alt mr-2"></i>Fazer
-                                Login
-                            </button>
-                            <button
-                                onclick="goHome()"
-                                class="w-full border border-white border-opacity-30 text-white font-semibold py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors"
-                            >
-                                <i class="fas fa-home mr-2"></i>Página Inicial
-                            </button>
+                            <label class="flex items-start">
+                                <input
+                                    type="checkbox"
+                                    id="acceptTerms"
+                                    required
+                                    class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-1"
+                                />
+                                <span class="ml-3 text-sm text-gray-600">
+                                    Li e aceito os
+                                    <a
+                                        href="#"
+                                        onclick="showTerms()"
+                                        class="text-indigo-600 hover:text-indigo-800 underline"
+                                        >Termos de Uso</a
+                                    >
+                                    e a
+                                    <a
+                                        href="#"
+                                        onclick="showPrivacy()"
+                                        class="text-indigo-600 hover:text-indigo-800 underline"
+                                        >Política de Privacidade</a
+                                    >
+                                </span>
+                            </label>
+
+                            <label class="flex items-start">
+                                <input
+                                    type="checkbox"
+                                    id="acceptUpdates"
+                                    class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-1"
+                                />
+                                <span class="ml-3 text-sm text-gray-600">
+                                    Desejo receber atualizações e novidades por
+                                    email
+                                </span>
+                            </label>
                         </div>
+                    </form>
+
+                    <div class="flex justify-between">
+                        <button
+                            onclick="previousStep()"
+                            class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                            <i class="fas fa-arrow-left mr-2"></i>Voltar
+                        </button>
+                        <button
+                            onclick="submitRegistration()"
+                            id="submitBtn"
+                            class="register-btn px-8 py-3 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            <span id="submitBtnText">
+                                <i class="fas fa-user-plus mr-2"></i>Criar Conta
+                            </span>
+                            <span id="submitBtnLoading" class="hidden">
+                                <i class="fas fa-spinner fa-spin mr-2"></i
+                                >Criando...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Already have account -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Já tem uma conta?
+                            <a
+                                href="login.html"
+                                class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                            >
+                                Faça login aqui
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Toast Notifications -->
-        <div id="toast" class="fixed top-4 right-4 z-50 hidden">
-            <!-- Toast notifications will be inserted here -->
-        </div>
+        <div id="toast" class="fixed top-4 right-4 z-50 hidden"></div>
 
         <script>
             let currentStep = 1;
-            let userType = "patient";
+            let selectedUserType = null;
             let formData = {};
+
+            // Existing emails for demo (simulate database check)
+            const existingEmails = [
+                "admin@telemed.com",
+                "dr.silva@telemed.com",
+                "paciente@demo.com",
+            ];
 
             // Initialize
             document.addEventListener("DOMContentLoaded", function () {
-                setupFormValidation();
-                setupPasswordStrength();
-
-                // Auto-fill for demo
-                if (window.location.search.includes("demo=1")) {
-                    setTimeout(() => {
-                        document.getElementById("firstName").value = "João";
-                        document.getElementById("lastName").value = "Silva";
-                        document.getElementById("email").value =
-                            "joao.silva@email.com";
-                        document.getElementById("phone").value =
-                            "(11) 99999-9999";
-                    }, 1000);
-                }
+                updateStepIndicator();
             });
 
             function selectUserType(type) {
-                userType = type;
+                selectedUserType = type;
 
-                // Update visual selection
+                // Remove selection from all cards
                 document.querySelectorAll(".user-type-card").forEach((card) => {
-                    card.classList.remove(
-                        "ring-2",
-                        "ring-blue-400",
-                        "bg-opacity-20",
-                    );
+                    card.classList.remove("selected");
                 });
 
-                event.currentTarget.classList.add(
-                    "ring-2",
-                    "ring-blue-400",
-                    "bg-opacity-20",
-                );
+                // Add selection to clicked card
+                event.currentTarget.classList.add("selected");
+
+                // Enable next button
+                document.getElementById("nextToPersonalInfo").disabled = false;
 
                 showToast(
-                    `Tipo selecionado: ${type === "patient" ? "Paciente" : "Médico"}`,
-                    "info",
+                    `Tipo de conta selecionado: ${type === "doctor" ? "Médico" : "Paciente"}`,
+                    "success",
                 );
-            }
-
-            function updateStep(step) {
-                // Hide all steps
-                for (let i = 1; i <= 4; i++) {
-                    document
-                        .getElementById(`stepContent${i}`)
-                        .classList.add("hidden");
-                    const stepIndicator = document.getElementById(`step${i}`);
-
-                    if (i < step) {
-                        stepIndicator.className =
-                            "step-indicator step-completed flex items-center px-4 py-2 rounded-lg";
-                    } else if (i === step) {
-                        stepIndicator.className =
-                            "step-indicator step-active flex items-center px-4 py-2 rounded-lg";
-                    } else {
-                        stepIndicator.className =
-                            "step-indicator step-pending flex items-center px-4 py-2 rounded-lg";
-                    }
-                }
-
-                // Show current step
-                document
-                    .getElementById(`stepContent${step}`)
-                    .classList.remove("hidden");
-                currentStep = step;
-
-                // Update step-specific content
-                if (step === 2) {
-                    updateStep2Content();
-                } else if (step === 4) {
-                    updateStep4Content();
-                }
-            }
-
-            function updateStep2Content() {
-                const isDoctor = userType === "doctor";
-                document
-                    .getElementById("patientFields")
-                    .classList.toggle("hidden", isDoctor);
-                document
-                    .getElementById("doctorFields")
-                    .classList.toggle("hidden", !isDoctor);
-
-                document.getElementById("step2Subtitle").textContent = isDoctor
-                    ? "Informações profissionais médicas"
-                    : "Informações pessoais do paciente";
-            }
-
-            function updateStep4Content() {
-                const isDoctor = userType === "doctor";
-                document
-                    .getElementById("doctorDocuments")
-                    .classList.toggle("hidden", !isDoctor);
-                document
-                    .getElementById("doctorTerms")
-                    .classList.toggle("hidden", !isDoctor);
-
-                if (isDoctor) {
-                    document.getElementById("medicalTerms").required = true;
-                }
             }
 
             function nextStep() {
-                if (currentStep < 4) {
-                    updateStep(currentStep + 1);
-                }
-            }
-
-            function previousStep() {
-                if (currentStep > 1) {
-                    updateStep(currentStep - 1);
-                }
-            }
-
-            // Form validation and submission
-            document
-                .getElementById("step1Form")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
-
-                    if (!userType) {
+                if (currentStep === 1) {
+                    if (!selectedUserType) {
                         showToast(
-                            "Por favor, selecione se você é paciente ou médico.",
+                            "Por favor, selecione um tipo de conta",
                             "error",
                         );
                         return;
                     }
 
-                    if (validateStep1()) {
-                        saveStepData(1);
-                        nextStep();
-                        showToast("Dados básicos salvos!", "success");
-                    }
-                });
+                    currentStep = 2;
+                    document
+                        .getElementById("userTypeStep")
+                        .classList.add("hidden");
+                    document
+                        .getElementById("personalInfoStep")
+                        .classList.remove("hidden");
+                    document.getElementById("stepTitle").textContent =
+                        "Informações Pessoais";
 
-            document
-                .getElementById("step2Form")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
-
-                    if (validateStep2()) {
-                        saveStepData(2);
-                        nextStep();
-                        showToast("Informações específicas salvas!", "success");
-                    }
-                });
-
-            document
-                .getElementById("step3Form")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
-
-                    if (validateStep3()) {
-                        saveStepData(3);
-                        nextStep();
-                        showToast(
-                            "Dados de segurança configurados!",
-                            "success",
-                        );
-                    }
-                });
-
-            document
-                .getElementById("step4Form")
-                .addEventListener("submit", function (e) {
-                    e.preventDefault();
-
-                    if (validateStep4()) {
-                        saveStepData(4);
-                        submitRegistration();
-                    }
-                });
-
-            function validateStep1() {
-                const requiredFields = [
-                    "firstName",
-                    "lastName",
-                    "email",
-                    "phone",
-                    "birthDate",
-                ];
-                let isValid = true;
-
-                requiredFields.forEach((fieldId) => {
-                    const field = document.getElementById(fieldId);
-                    if (!field.value.trim()) {
-                        field.classList.add("border-red-500");
-                        isValid = false;
+                    // Show appropriate fields based on user type
+                    if (selectedUserType === "doctor") {
+                        document
+                            .getElementById("doctorFields")
+                            .classList.remove("hidden");
+                        document
+                            .getElementById("patientFields")
+                            .classList.add("hidden");
                     } else {
-                        field.classList.remove("border-red-500");
+                        document
+                            .getElementById("doctorFields")
+                            .classList.add("hidden");
+                        document
+                            .getElementById("patientFields")
+                            .classList.remove("hidden");
                     }
-                });
+                } else if (currentStep === 2) {
+                    if (!validatePersonalInfo()) {
+                        return;
+                    }
 
-                // Email validation
-                const email = document.getElementById("email").value;
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
+                    currentStep = 3;
                     document
-                        .getElementById("email")
-                        .classList.add("border-red-500");
-                    showToast("Email inválido.", "error");
-                    isValid = false;
+                        .getElementById("personalInfoStep")
+                        .classList.add("hidden");
+                    document
+                        .getElementById("passwordStep")
+                        .classList.remove("hidden");
+                    document.getElementById("stepTitle").textContent =
+                        "Criar Senha";
                 }
 
-                // Age validation (must be 18+)
-                const birthDate = new Date(
-                    document.getElementById("birthDate").value,
-                );
-                const today = new Date();
-                const age = today.getFullYear() - birthDate.getFullYear();
-                if (age < 18) {
-                    document
-                        .getElementById("birthDate")
-                        .classList.add("border-red-500");
-                    showToast("Você deve ter pelo menos 18 anos.", "error");
-                    isValid = false;
-                }
-
-                return isValid;
+                updateStepIndicator();
             }
 
-            function validateStep2() {
-                if (userType === "doctor") {
-                    const crm = document.getElementById("crm").value;
-                    const specialty =
-                        document.getElementById("specialty").value;
+            function previousStep() {
+                if (currentStep === 2) {
+                    currentStep = 1;
+                    document
+                        .getElementById("personalInfoStep")
+                        .classList.add("hidden");
+                    document
+                        .getElementById("userTypeStep")
+                        .classList.remove("hidden");
+                    document.getElementById("stepTitle").textContent =
+                        "Escolha o tipo de conta";
+                } else if (currentStep === 3) {
+                    currentStep = 2;
+                    document
+                        .getElementById("passwordStep")
+                        .classList.add("hidden");
+                    document
+                        .getElementById("personalInfoStep")
+                        .classList.remove("hidden");
+                    document.getElementById("stepTitle").textContent =
+                        "Informações Pessoais";
+                }
 
-                    if (!crm || !specialty) {
-                        showToast(
-                            "CRM e especialidade são obrigatórios para médicos.",
-                            "error",
-                        );
-                        return false;
-                    }
+                updateStepIndicator();
+            }
 
-                    // CRM format validation
-                    const crmRegex = /^CRM-?[A-Z]{2}-?\d{4,6}$/i;
-                    if (!crmRegex.test(crm)) {
-                        document
-                            .getElementById("crm")
-                            .classList.add("border-red-500");
-                        showToast(
-                            "Formato de CRM inválido. Use: CRM-SP-123456",
-                            "error",
-                        );
-                        return false;
+            function updateStepIndicator() {
+                const steps = ["step1", "step2", "step3"];
+
+                steps.forEach((stepId, index) => {
+                    const stepElement = document.getElementById(stepId);
+
+                    if (index + 1 < currentStep) {
+                        stepElement.className =
+                            "step-indicator step-completed w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold";
+                    } else if (index + 1 === currentStep) {
+                        stepElement.className =
+                            "step-indicator step-active w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold";
+                    } else {
+                        stepElement.className =
+                            "step-indicator step-pending w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold";
                     }
+                });
+            }
+
+            function validatePersonalInfo() {
+                const requiredFields = ["fullName", "email", "phone"];
+
+                if (selectedUserType === "doctor") {
+                    requiredFields.push("crm", "specialty");
                 } else {
-                    const cpf = document.getElementById("cpf").value;
-                    if (cpf && !validateCPF(cpf)) {
-                        document
-                            .getElementById("cpf")
-                            .classList.add("border-red-500");
-                        showToast("CPF inválido.", "error");
+                    requiredFields.push("cpf", "birthDate", "gender");
+                }
+
+                for (let field of requiredFields) {
+                    const input = document.getElementById(field);
+                    if (!input || !input.value.trim()) {
+                        showToast(
+                            "Por favor, preencha todos os campos obrigatórios",
+                            "error",
+                        );
+                        shakeForm();
                         return false;
                     }
+                }
+
+                // Validate email format
+                const email = document.getElementById("email").value;
+                if (!isValidEmail(email)) {
+                    showToast("Por favor, insira um email válido", "error");
+                    return false;
+                }
+
+                // Check if email is already taken
+                if (existingEmails.includes(email)) {
+                    showToast("Este email já está em uso", "error");
+                    return false;
                 }
 
                 return true;
             }
 
-            function validateStep3() {
+            function checkEmailAvailability() {
+                const email = document.getElementById("email").value;
+                const feedback = document.getElementById("emailFeedback");
+                const available = document.getElementById("emailAvailable");
+                const taken = document.getElementById("emailTaken");
+                const error = document.getElementById("emailError");
+
+                if (!email || !isValidEmail(email)) {
+                    feedback.classList.add("hidden");
+                    return;
+                }
+
+                feedback.classList.remove("hidden");
+
+                if (existingEmails.includes(email)) {
+                    available.classList.add("hidden");
+                    taken.classList.remove("hidden");
+                    error.textContent = "Este email já está em uso";
+                    error.classList.remove("hidden");
+                } else {
+                    available.classList.remove("hidden");
+                    taken.classList.add("hidden");
+                    error.classList.add("hidden");
+                }
+            }
+
+            function checkPasswordStrength() {
+                const password = document.getElementById("password").value;
+                const strengthBar = document.getElementById("passwordStrength");
+                const strengthText = document.getElementById(
+                    "passwordStrengthText",
+                );
+
+                let strength = 0;
+                let feedback = [];
+
+                if (password.length >= 8) strength++;
+                else feedback.push("8+ caracteres");
+
+                if (/[a-z]/.test(password)) strength++;
+                else feedback.push("letra minúscula");
+
+                if (/[A-Z]/.test(password)) strength++;
+                else feedback.push("letra maiúscula");
+
+                if (/[0-9]/.test(password)) strength++;
+                else feedback.push("número");
+
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                else feedback.push("caractere especial");
+
+                // Update strength bar
+                if (strength <= 2) {
+                    strengthBar.className =
+                        "password-strength w-full strength-weak";
+                    strengthText.textContent = `Senha fraca - Adicione: ${feedback.join(", ")}`;
+                } else if (strength <= 4) {
+                    strengthBar.className =
+                        "password-strength w-full strength-medium";
+                    strengthText.textContent = `Senha média - Adicione: ${feedback.join(", ")}`;
+                } else {
+                    strengthBar.className =
+                        "password-strength w-full strength-strong";
+                    strengthText.textContent = "Senha forte";
+                }
+            }
+
+            function checkPasswordMatch() {
                 const password = document.getElementById("password").value;
                 const confirmPassword =
                     document.getElementById("confirmPassword").value;
+                const error = document.getElementById("passwordMatchError");
 
-                if (password !== confirmPassword) {
-                    document
-                        .getElementById("confirmPassword")
-                        .classList.add("border-red-500");
-                    showToast("As senhas não coincidem.", "error");
-                    return false;
+                if (confirmPassword && password !== confirmPassword) {
+                    error.classList.remove("hidden");
+                } else {
+                    error.classList.add("hidden");
                 }
-
-                if (!isPasswordStrong(password)) {
-                    showToast(
-                        "A senha não atende aos critérios de segurança.",
-                        "error",
-                    );
-                    return false;
-                }
-
-                return true;
             }
 
-            function validateStep4() {
-                if (!document.getElementById("terms").checked) {
-                    showToast("Você deve aceitar os termos de uso.", "error");
-                    return false;
-                }
-
-                if (
-                    userType === "doctor" &&
-                    !document.getElementById("medicalTerms").checked
-                ) {
-                    showToast(
-                        "Médicos devem aceitar as diretrizes médicas.",
-                        "error",
-                    );
-                    return false;
-                }
-
-                return true;
+            function formatPhone(input) {
+                let value = input.value.replace(/\D/g, "");
+                value = value.replace(/(\d{2})(\d)/, "($1) $2");
+                value = value.replace(/(\d{5})(\d)/, "$1-$2");
+                input.value = value;
             }
 
-            function saveStepData(step) {
-                const stepData = {};
-                const currentForm = document.getElementById(`step${step}Form`);
-                const inputs = currentForm.querySelectorAll("input, select");
+            function formatCPF(input) {
+                let value = input.value.replace(/\D/g, "");
+                value = value.replace(/(\d{3})(\d)/, "$1.$2");
+                value = value.replace(/(\d{3})(\d)/, "$1.$2");
+                value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                input.value = value;
+            }
 
-                inputs.forEach((input) => {
-                    if (input.type !== "checkbox" && input.type !== "file") {
-                        stepData[input.id] = input.value;
-                    } else if (input.type === "checkbox") {
-                        stepData[input.id] = input.checked;
-                    }
-                });
+            function formatCRM(input) {
+                let value = input.value.replace(/\D/g, "");
+                value = value.replace(/(\d{4,5})(\d)/, "$1-$2");
+                input.value = value.toUpperCase();
+            }
 
-                stepData.userType = userType;
-                formData[`step${step}`] = stepData;
+            function togglePasswordVisibility(fieldId) {
+                const passwordInput = document.getElementById(fieldId);
+                const eyeIcon = document.getElementById(fieldId + "Eye");
+
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    eyeIcon.className = "fas fa-eye-slash";
+                } else {
+                    passwordInput.type = "password";
+                    eyeIcon.className = "fas fa-eye";
+                }
             }
 
             async function submitRegistration() {
-                const submitBtn = document.getElementById("finalSubmit");
-                const submitText = document.getElementById("submitText");
-                const submitSpinner = document.getElementById("submitSpinner");
+                // Validate password step
+                const password = document.getElementById("password").value;
+                const confirmPassword =
+                    document.getElementById("confirmPassword").value;
+                const acceptTerms =
+                    document.getElementById("acceptTerms").checked;
 
-                // Show loading
-                submitBtn.disabled = true;
-                submitText.textContent = "Criando conta...";
-                submitSpinner.classList.remove("hidden");
+                if (!password || password.length < 8) {
+                    showToast(
+                        "A senha deve ter pelo menos 8 caracteres",
+                        "error",
+                    );
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showToast("As senhas não coincidem", "error");
+                    return;
+                }
+
+                if (!acceptTerms) {
+                    showToast("Você deve aceitar os termos de uso", "error");
+                    return;
+                }
+
+                // Show loading state
+                showLoading(true);
 
                 try {
-                    // Simulate API call
-                    await new Promise((resolve) => setTimeout(resolve, 3000));
+                    // Collect form data
+                    formData = {
+                        userType: selectedUserType,
+                        fullName: document.getElementById("fullName").value,
+                        email: document.getElementById("email").value,
+                        phone: document.getElementById("phone").value,
+                        password: password,
+                        acceptUpdates:
+                            document.getElementById("acceptUpdates").checked,
+                        registrationDate: new Date().toISOString(),
+                    };
 
-                    // Simulate registration success
-                    const success = Math.random() > 0.1; // 90% success rate
-
-                    if (success) {
-                        showSuccessStep();
+                    // Add type-specific data
+                    if (selectedUserType === "doctor") {
+                        formData.crm = document.getElementById("crm").value;
+                        formData.specialty =
+                            document.getElementById("specialty").value;
                     } else {
-                        throw new Error("Erro no servidor");
+                        formData.cpf = document.getElementById("cpf").value;
+                        formData.birthDate =
+                            document.getElementById("birthDate").value;
+                        formData.gender =
+                            document.getElementById("gender").value;
                     }
-                } catch (error) {
-                    showToast("Erro ao criar conta. Tente novamente.", "error");
 
-                    // Reset button
-                    submitBtn.disabled = false;
-                    submitText.textContent = "Criar Conta";
-                    submitSpinner.classList.add("hidden");
-                }
-            }
+                    // Simulate API call
+                    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-            function showSuccessStep() {
-                document.getElementById("stepContent4").classList.add("hidden");
-                document
-                    .getElementById("successStep")
-                    .classList.remove("hidden");
-
-                // Update success message based on user type
-                const successMessage =
-                    document.getElementById("successMessage");
-                if (userType === "doctor") {
-                    successMessage.textContent =
-                        "Sua conta médica foi criada! Seus documentos serão analisados em até 24 horas.";
-                } else {
-                    successMessage.textContent =
-                        "Bem-vindo à TeleMed! Sua conta foi criada e você já pode fazer login.";
-                }
-
-                // Update step indicators to all completed
-                for (let i = 1; i <= 4; i++) {
-                    document.getElementById(`step${i}`).className =
-                        "step-indicator step-completed flex items-center px-4 py-2 rounded-lg";
-                }
-            }
-
-            function setupFormValidation() {
-                // Real-time validation
-                const inputs = document.querySelectorAll("input[required]");
-                inputs.forEach((input) => {
-                    input.addEventListener("blur", function () {
-                        if (this.value.trim()) {
-                            this.classList.remove("border-red-500");
-                        }
-                    });
-                });
-
-                // Phone formatting
-                document
-                    .getElementById("phone")
-                    .addEventListener("input", function () {
-                        let value = this.value.replace(/\D/g, "");
-                        if (value.length >= 10) {
-                            value = value.replace(
-                                /(\d{2})(\d{5})(\d{4})/,
-                                "($1) $2-$3",
-                            );
-                        } else if (value.length >= 6) {
-                            value = value.replace(
-                                /(\d{2})(\d{4})(\d+)/,
-                                "($1) $2-$3",
-                            );
-                        } else if (value.length >= 2) {
-                            value = value.replace(/(\d{2})(\d+)/, "($1) $2");
-                        }
-                        this.value = value;
-                    });
-
-                // CPF formatting
-                const cpfInput = document.getElementById("cpf");
-                if (cpfInput) {
-                    cpfInput.addEventListener("input", function () {
-                        let value = this.value.replace(/\D/g, "");
-                        if (value.length <= 11) {
-                            value = value.replace(
-                                /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                                "$1.$2.$3-$4",
-                            );
-                            this.value = value;
-                        }
-                    });
-                }
-            }
-
-            function setupPasswordStrength() {
-                document
-                    .getElementById("password")
-                    .addEventListener("input", function () {
-                        const password = this.value;
-                        const strength = calculatePasswordStrength(password);
-                        const strengthBar =
-                            document.getElementById("passwordStrength");
-                        const criteria =
-                            document.getElementById("passwordCriteria");
-
-                        // Update strength bar
-                        strengthBar.style.width = `${strength.score * 25}%`;
-
-                        if (strength.score <= 1) {
-                            strengthBar.className =
-                                "h-2 rounded-full transition-all duration-300 bg-red-500";
-                        } else if (strength.score <= 2) {
-                            strengthBar.className =
-                                "h-2 rounded-full transition-all duration-300 bg-yellow-500";
-                        } else if (strength.score <= 3) {
-                            strengthBar.className =
-                                "h-2 rounded-full transition-all duration-300 bg-blue-500";
-                        } else {
-                            strengthBar.className =
-                                "h-2 rounded-full transition-all duration-300 bg-green-500";
-                        }
-
-                        // Update criteria
-                        criteria.innerHTML = strength.criteria
-                            .map(
-                                (criterion) =>
-                                    `<div class="${criterion.met ? "text-green-300" : "text-blue-200"}">
-                        ${criterion.met ? "✓" : "•"} ${criterion.text}
-                    </div>`,
-                            )
-                            .join("");
-                    });
-            }
-
-            function calculatePasswordStrength(password) {
-                const criteria = [
-                    { text: "Mínimo 8 caracteres", met: password.length >= 8 },
-                    {
-                        text: "Pelo menos uma letra maiúscula",
-                        met: /[A-Z]/.test(password),
-                    },
-                    { text: "Pelo menos um número", met: /\d/.test(password) },
-                    {
-                        text: "Pelo menos um caractere especial",
-                        met: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-                    },
-                ];
-
-                const score = criteria.filter((c) => c.met).length;
-
-                return { criteria, score };
-            }
-
-            function isPasswordStrong(password) {
-                const strength = calculatePasswordStrength(password);
-                return strength.score >= 4;
-            }
-
-            function validateCPF(cpf) {
-                cpf = cpf.replace(/\D/g, "");
-
-                if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-                    return false;
-                }
-
-                let sum = 0;
-                for (let i = 0; i < 9; i++) {
-                    sum += parseInt(cpf.charAt(i)) * (10 - i);
-                }
-                let remainder = 11 - (sum % 11);
-                if (remainder === 10 || remainder === 11) remainder = 0;
-                if (remainder !== parseInt(cpf.charAt(9))) return false;
-
-                sum = 0;
-                for (let i = 0; i < 10; i++) {
-                    sum += parseInt(cpf.charAt(i)) * (11 - i);
-                }
-                remainder = 11 - (sum % 11);
-                if (remainder === 10 || remainder === 11) remainder = 0;
-                if (remainder !== parseInt(cpf.charAt(10))) return false;
-
-                return true;
-            }
-
-            function togglePassword(fieldId) {
-                const field = document.getElementById(fieldId);
-                const icon =
-                    field.nextElementSibling.nextElementSibling.querySelector(
-                        "i",
+                    // Store user data (simulate database)
+                    const userData = { ...formData };
+                    delete userData.password; // Don't store password in localStorage
+                    localStorage.setItem(
+                        "telemed_user",
+                        JSON.stringify(userData),
                     );
 
-                if (field.type === "password") {
-                    field.type = "text";
-                    icon.className = "fas fa-eye-slash";
-                } else {
-                    field.type = "password";
-                    icon.className = "fas fa-eye";
+                    showToast(
+                        "Conta criada com sucesso! Redirecionando...",
+                        "success",
+                    );
+
+                    // Redirect after success
+                    setTimeout(() => {
+                        if (selectedUserType === "doctor") {
+                            window.location.href = "area-medica.html";
+                        } else {
+                            window.location.href = "area-paciente.html";
+                        }
+                    }, 2500);
+                } catch (error) {
+                    showToast("Erro ao criar conta. Tente novamente.", "error");
+                    shakeForm();
+                } finally {
+                    showLoading(false);
                 }
             }
 
-            function goToLogin() {
-                window.location.href = "login.html";
-            }
+            function showLoading(show) {
+                const btn = document.getElementById("submitBtn");
+                const btnText = document.getElementById("submitBtnText");
+                const btnLoading = document.getElementById("submitBtnLoading");
 
-            function goHome() {
-                window.location.href = "../index.html";
-            }
-
-            function goBack() {
-                if (currentStep > 1) {
-                    previousStep();
+                if (show) {
+                    btn.disabled = true;
+                    btn.classList.add("opacity-75", "cursor-not-allowed");
+                    btnText.classList.add("hidden");
+                    btnLoading.classList.remove("hidden");
                 } else {
-                    window.location.href = "../index.html";
+                    btn.disabled = false;
+                    btn.classList.remove("opacity-75", "cursor-not-allowed");
+                    btnText.classList.remove("hidden");
+                    btnLoading.classList.add("hidden");
                 }
+            }
+
+            function shakeForm() {
+                const form = document.querySelector(".register-card");
+                form.classList.add("error-shake");
+                setTimeout(() => {
+                    form.classList.remove("error-shake");
+                }, 500);
+            }
+
+            function showTerms() {
+                showToast(
+                    "Termos de uso: Uso responsável do sistema médico, confidencialidade de dados e cumprimento de regulamentações.",
+                    "info",
+                );
+            }
+
+            function showPrivacy() {
+                showToast(
+                    "Política de Privacidade: Protegemos seus dados pessoais conforme LGPD e regulamentações médicas.",
+                    "info",
+                );
+            }
+
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
             }
 
             function showToast(message, type = "info") {
                 const toast = document.getElementById("toast");
+                const icons = {
+                    success: "fas fa-check-circle",
+                    error: "fas fa-exclamation-circle",
+                    info: "fas fa-info-circle",
+                    warning: "fas fa-exclamation-triangle",
+                };
+
                 const colors = {
                     success: "bg-green-500",
                     error: "bg-red-500",
@@ -1419,58 +1165,19 @@
                     warning: "bg-yellow-500",
                 };
 
-                const icons = {
-                    success: "fa-check-circle",
-                    error: "fa-exclamation-circle",
-                    info: "fa-info-circle",
-                    warning: "fa-exclamation-triangle",
-                };
-
-                toast.className = `fixed top-4 right-4 z-50 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform translate-x-full transition-transform duration-300`;
                 toast.innerHTML = `
-                <i class="fas ${icons[type]}"></i>
-                <span>${message}</span>
+                <div class="toast ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 max-w-sm">
+                    <i class="${icons[type]}"></i>
+                    <span class="text-sm">${message}</span>
+                </div>
             `;
 
                 toast.classList.remove("hidden");
-                setTimeout(() => {
-                    toast.classList.remove("translate-x-full");
-                }, 100);
 
                 setTimeout(() => {
-                    toast.classList.add("translate-x-full");
-                    setTimeout(() => {
-                        toast.classList.add("hidden");
-                    }, 300);
-                }, 4000);
+                    toast.classList.add("hidden");
+                }, 5000);
             }
-
-            // Keyboard navigation
-            document.addEventListener("keydown", function (e) {
-                if (e.key === "Enter" && e.ctrlKey) {
-                    const currentForm = document.getElementById(
-                        `step${currentStep}Form`,
-                    );
-                    if (currentForm) {
-                        currentForm.dispatchEvent(new Event("submit"));
-                    }
-                }
-
-                if (e.key === "Escape") {
-                    goBack();
-                }
-            });
-
-            // File upload simulation for doctors
-            document.addEventListener("change", function (e) {
-                if (e.target.type === "file" && e.target.files.length > 0) {
-                    const fileName = e.target.files[0].name;
-                    const uploadArea = e.target.parentElement;
-                    uploadArea.classList.add("border-green-400", "bg-green-50");
-                    uploadArea.querySelector("p").textContent = `✓ ${fileName}`;
-                    showToast("Arquivo carregado com sucesso!", "success");
-                }
-            });
         </script>
     </body>
 </html>

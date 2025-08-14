@@ -1,0 +1,47 @@
+:root{
+  --bg:#f8fafc; --card:#fff; --ink:#0f172a; --muted:#475569;
+  --brand:#2563eb; --brand-ink:#fff; --ok:#16a34a; --warn:#f59e0b; --err:#dc2626;
+  --bd:#e2e8f0; --shadow:0 2px 14px rgba(2,6,23,.06);
+  --radius:16px; --space:14px; --space-lg:18px;
+  --font: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font); -webkit-font-smoothing:antialiased}
+
+.ai-wrap{max-width:960px; margin:24px auto; padding:0 16px}
+.ai-card{background:var(--card); border:1px solid var(--bd); border-radius:var(--radius); box-shadow:var(--shadow); padding:var(--space-lg)}
+h1{margin:0 0 8px; font-weight:700; letter-spacing:.2px}
+.subtitle{color:var(--muted); margin:0 0 16px; font-size:14px}
+
+.status{display:flex; align-items:center; gap:8px; margin:8px 0 16px}
+.dot{width:12px; height:12px; border-radius:999px; background:var(--ok); box-shadow:0 0 0 2px rgba(22,163,74,.15)}
+.req{color:var(--muted); font-size:14px}
+
+.toolbar{display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 16px}
+.btn{appearance:none; border:1px solid var(--bd); background:#fff; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600}
+.btn.primary{background:var(--brand); color:var(--brand-ink); border-color:transparent}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+
+.grid{display:grid; grid-template-columns:1fr 320px; gap:16px}
+@media (max-width:960px){ .grid{grid-template-columns:1fr} }
+
+.field{display:grid; gap:6px; margin:8px 0 12px}
+.label{font-weight:600}
+textarea,input{width:100%; border:1px solid var(--bd); border-radius:10px; padding:10px 12px; font:inherit; background:#fff}
+textarea{min-height:120px; resize:vertical}
+.hint{font-size:12px; color:var(--muted)}
+
+.actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.spacer{flex:1}
+
+.resp{margin-top:12px; padding:12px; border:1px dashed var(--bd); border-radius:12px; background:#fafbff}
+.muted{color:var(--muted)}
+
+.kbd{font:12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; border:1px solid var(--bd); border-bottom-width:2px; border-radius:6px; padding:2px 6px; background:#fff}
+
+/* A11y */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* reduz animações para usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important} }
