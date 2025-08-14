@@ -1,0 +1,80 @@
+sso tá com cara de rota errada / página antiga em cache. O que você está vendo é um HTML “cru” (sem shadcn/tailwind), então provavelmente:
+
+ou o navegador está servindo um arquivo estático (ex.: public/ai-console.html ou dr-ai.html) em vez da página React,
+
+ou a rota do SPA não está apontando para o componente novo,
+
+ou você está na URL do projeto antigo.
+
+vamos resolver em 3 passos rápidos.
+
+1) Garantir que é o componente certo (teste “V2”)
+
+Abra client/src/pages/ai-console.tsx.
+
+Mude o título para:
+
+<h1 className="text-3xl font-bold">TeleMed AI Console — V2</h1>
+
+
+Salve e atualize com hard refresh no navegador (Ctrl/Cmd+Shift+R) em /ai-console.
+
+Se não aparecer “V2” no título, você não está vendo este componente ⇒ vá para o passo 2.
+
+2) Checar rota do SPA e colisão com arquivo estático
+
+Abra client/src/App.tsx (ou onde define as rotas do Wouter) e confira que existe:
+
+import AIConsolePage from "./pages/ai-console";
+// ...
+<Route path="/ai-console" component={AIConsolePage} />
+
+
+(se usa outra sintaxe de Route, mantenha o path “/ai-console”.)
+
+Procure arquivos estáticos que possam estar “roubando” a rota:
+
+public/ai-console.html
+
+public/dr-ai.html
+
+qualquer app.get("/ai-console", … sendFile(...)) no server/index.ts
+
+Se existir algo assim:
+
+renomeie o arquivo (ex.: dr-ai.html → dr-ai-static.html) ou
+
+altere a rota do estático para outra URL (ex.: /dr-ai-static).
+
+Quando o Express serve um HTML estático com o mesmo caminho, ele sobrepõe a página React.
+
+No server/index.ts, o ideal é:
+
+app.use(express.static("public")) e
+
+um fallback para o SPA:
+
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
+
+
+Não mantenha um app.get("/ai-console", sendFile(...)) para um HTML velho.
+
+Depois de mudar algo no server/ ou public/, reinicie o servidor no Replit.
+
+3) Conferir o domínio
+
+Confirme que está abrindo a mesma instância (o domínio que sobe quando clica em Run nesse Repl). Você tem vários projetos/domínios no histórico; se abrir a instância errada vai ver a versão antiga.
+
+(opcional) Plano B imediato
+
+Se não quiser mexer nos estáticos agora, crie uma rota nova só pra React:
+
+Em App.tsx:
+
+<Route path="/ai-lab" component={AIConsolePage} />
+
+
+Acesse /ai-lab.
+Se /ai-lab mostrar a UI nova (com Cards/Tabs), a colisão estava em /ai-consol

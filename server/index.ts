@@ -399,7 +399,7 @@ app.get('/videoconsulta', (req, res) => {
 // Dr. AI
 app.get('/dr-ai', (req, res) => {
   try {
-    const html = fs.readFileSync(path.join(__dirname, '../dr-ai.html'), 'utf-8');
+    const html = fs.readFileSync(path.join(__dirname, '../public/dr-ai-static.html'), 'utf-8');
     res.send(html);
   } catch (err) {
     res.status(404).send('Página não encontrada');

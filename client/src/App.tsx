@@ -143,6 +143,7 @@ export default function App() {
             <Route path="/video-consultation" component={VideoConsultation} />
             <Route path="/enhanced-consultation" component={EnhancedConsultation} />
             <Route path="/ai-console" component={AIConsolePage} />
+            <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">

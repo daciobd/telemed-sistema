@@ -115,7 +115,7 @@ export default function AIConsolePage() {
   return (
     <div className="mx-auto max-w-5xl p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">TeleMed AI Console</h1>
+        <h1 className="text-3xl font-bold tracking-tight">TeleMed AI Console — V2</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Faça perguntas técnicas ou gere trechos de código com segurança (sem PII).
         </p>
