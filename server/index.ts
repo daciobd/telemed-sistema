@@ -336,22 +336,8 @@ app.get('/api/download-backup-file/:backupId', (req, res) => {
 
 // Vite será configurado depois do servidor inicializar
 
-// Serve página estática TeleMed (landing page)
-app.get('/', (req, res) => {
-  try {
-    const indexPath = path.join(__dirname, '../public/index.html');
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-      console.log('🏠 TeleMed Landing Page loaded from public/');
-    } else {
-      console.error('❌ Landing page not found at:', indexPath);
-      res.status(404).send('Landing page not found.');
-    }
-  } catch (err) {
-    console.error('❌ Error serving landing page:', err);
-    res.status(500).send('Server error loading landing page');
-  }
-});
+// Root route será gerenciado pelo React SPA via Vite middleware
+// Removido para permitir que o React handle o routing
 
 app.get('/dashboard-aquarela', (req, res) => {
   try {
@@ -551,7 +537,8 @@ app.get('/test-medical-report', (req, res) => {
   }
 });
 
-// SPA routes será configurado pelo Vite middleware automaticamente
+// SPA catch-all route deve estar ANTES das rotas específicas
+// Esta rota é adicionada pelo setupVite() no listener 'listening'
 
 // Render-specific: Listen on all interfaces with proper error handling
 const REPLIT_URL = process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`;

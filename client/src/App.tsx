@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import VideoConsultation from "@/pages/video-consultation";
 import EnhancedConsultation from "@/pages/enhanced-consultation";
 import AIConsolePage from "@/pages/ai-console";
+import DashboardTeste from "@/pages/dashboard-teste";
 
 // Mock auth context for demo mode
 const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -125,6 +126,22 @@ function LandingPage() {
                 /api/ai-agent/*
               </code>
             </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Dashboard Teste</h3>
+              <p className="text-gray-600 mb-4">
+                Dashboard médico completo com gráficos, KPIs e análises em tempo real
+              </p>
+              <a 
+                href="/dashboard-teste"
+                className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-center mb-2"
+              >
+                Acessar Dashboard Teste
+              </a>
+              <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
+                Chart.js + Analytics
+              </code>
+            </div>
           </div>
         </div>
       </main>
@@ -144,6 +161,7 @@ export default function App() {
             <Route path="/enhanced-consultation" component={EnhancedConsultation} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
+            <Route path="/dashboard-teste" component={DashboardTeste} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">

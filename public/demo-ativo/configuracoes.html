@@ -1,0 +1,1992 @@
+    <div class="config-item">
+        <div class="config-info">
+            <h4>SMS Automático</h4>
+            <p>Enviar lembretes de consulta por SMS</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="smsProvider">Provedor SMS</label>
+            <select id="smsProvider">
+                <option value="">Selecione...</option>
+                <option value="twilio">Twilio</option>
+                <option value="zenvia">Zenvia</option>
+                <option value="totalvoice">Total Voice</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="smsCredits">Créditos SMS Restantes</label>
+            <input type="number" id="smsCredits" value="2847" readonly>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Seção Segurança -->
+    <div id="seguranca" class="content-section">
+    <h2 class="section-title">
+    <i class="fas fa-shield-alt"></i>
+    Configurações de Segurança
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-key"></i> Autenticação</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Autenticação em Dois Fatores (2FA)</h4>
+            <p>Exigir 2FA para todos os usuários</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Login com Biometria</h4>
+            <p>Permitir login com impressão digital/Face ID</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="sessionTimeout">Timeout de Sessão (minutos)</label>
+            <select id="sessionTimeout">
+                <option value="15">15 minutos</option>
+                <option value="30" selected>30 minutos</option>
+                <option value="60">1 hora</option>
+                <option value="120">2 horas</option>
+                <option value="480">8 horas</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maxLoginAttempts">Máximo de Tentativas de Login</label>
+            <select id="maxLoginAttempts">
+                <option value="3" selected>3 tentativas</option>
+                <option value="5">5 tentativas</option>
+                <option value="10">10 tentativas</option>
+            </select>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-lock"></i> Criptografia</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Criptografia de Dados</h4>
+            <p>Criptografar dados sensíveis (AES-256)</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-online">
+                <i class="fas fa-check-circle"></i>
+                Ativo
+            </span>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>SSL/TLS</h4>
+            <p>Conexão segura HTTPS obrigatória</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-online">
+                <i class="fas fa-check-circle"></i>
+                Ativo
+            </span>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Certificado SSL</h4>
+            <p>Válido até: 15/08/2026</p>
+        </div>
+        <div class="config-control">
+            <button class="btn btn-success">
+                <i class="fas fa-sync-alt"></i>
+                Renovar
+            </button>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-user-shield"></i> Controle de Acesso</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Log de Atividades</h4>
+            <p>Registrar todas as ações dos usuários</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>IP Whitelist</h4>
+            <p>Restringir acesso a IPs específicos</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="allowedIPs">IPs Permitidos (separados por vírgula)</label>
+        <textarea id="allowedIPs" rows="3" placeholder="192.168.1.100, 203.0.113.1, 198.51.100.1"></textarea>
+    </div>
+    </div>
+    </div>
+
+    <!-- Seção Integrações -->
+    <div id="integracao" class="content-section">
+    <h2 class="section-title">
+    <i class="fas fa-plug"></i>
+    Integrações de Sistema
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-credit-card"></i> Gateways de Pagamento</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Stripe</h4>
+            <p>Gateway de pagamento internacional</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-online">
+                <i class="fas fa-check-circle"></i>
+                Conectado
+            </span>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>PagSeguro</h4>
+            <p>Gateway de pagamento nacional</p>
+        </div>
+        <div class="config-control">
+            <button class="btn btn-primary" onclick="connectPaymentGateway('pagseguro')">
+                <i class="fas fa-plug"></i>
+                Conectar
+            </button>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>PIX</h4>
+            <p>Pagamento instantâneo brasileiro</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-online">
+                <i class="fas fa-check-circle"></i>
+                Ativo
+            </span>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-video"></i> Videoconferência</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Zoom</h4>
+            <p>Plataforma de videoconferência</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-online">
+                <i class="fas fa-check-circle"></i>
+                Conectado
+            </span>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Google Meet</h4>
+            <p>Videoconferência do Google</p>
+        </div>
+        <div class="config-control">
+            <button class="btn btn-primary" onclick="connectVideoService('meet')">
+                <i class="fas fa-plug"></i>
+                Conectar
+            </button>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Microsoft Teams</h4>
+            <p>Plataforma corporativa da Microsoft</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-offline">
+                <i class="fas fa-times-circle"></i>
+                Desconectado
+            </span>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-hospital"></i> Sistemas Médicos</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>TISS (ANS)</h4>
+            <p>Padrão para troca de informações</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                Pendente
+            </span>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>HL7 FHIR</h4>
+            <p>Padrão internacional de interoperabilidade</p>
+        </div>
+        <div class="config-control">
+            <button class="btn btn-primary" onclick="configureHL7()">
+                <i class="fas fa-cog"></i>
+                Configurar
+            </button>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Conecte SUS</h4>
+            <p>Rede Nacional de Dados em Saúde</p>
+        </div>
+        <div class="config-control">
+            <span class="status-indicator status-online">
+                <i class="fas fa-check-circle"></i>
+                Conectado
+            </span>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Seção Backup -->
+    <div id="backup" class="content-section">
+    <h2 class="section-title">
+    <i class="fas fa-database"></i>
+    Backup e Recuperação
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-sync-alt"></i> Backup Automático</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Backup Automático</h4>
+            <p>Realizar backup diário dos dados</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="backupTime">Horário do Backup</label>
+            <input type="time" id="backupTime" value="02:00">
+        </div>
+
+        <div class="form-group">
+            <label for="backupRetention">Retenção (dias)</label>
+            <select id="backupRetention">
+                <option value="7">7 dias</option>
+                <option value="30" selected>30 dias</option>
+                <option value="90">90 dias</option>
+                <option value="365">1 ano</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="backupLocation">Local de Armazenamento</label>
+        <select id="backupLocation">
+            <option value="local">Servidor Local</option>
+            <option value="aws" selected>Amazon S3</option>
+            <option value="google">Google Cloud Storage</option>
+            <option value="azure">Azure Blob Storage</option>
+        </select>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-history"></i> Histórico de Backups</h3>
+
+    <div class="backup-item">
+        <div class="backup-info">
+            <h5>Backup Completo</h5>
+            <p>14/08/2025 às 02:00 - 2.3 GB</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary">
+                <i class="fas fa-download"></i>
+                Baixar
+            </button>
+            <button class="btn btn-success">
+                <i class="fas fa-undo"></i>
+                Restaurar
+            </button>
+        </div>
+    </div>
+
+    <div class="backup-item">
+        <div class="backup-info">
+            <h5>Backup Incremental</h5>
+            <p>13/08/2025 às 02:00 - 156 MB</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary">
+                <i class="fas fa-download"></i>
+                Baixar
+            </button>
+            <button class="btn btn-success">
+                <i class="fas fa-undo"></i>
+                Restaurar
+            </button>
+        </div>
+    </div>
+
+    <div class="backup-item">
+        <div class="backup-info">
+            <h5>Backup Completo</h5>
+            <p>12/08/2025 às 02:00 - 2.1 GB</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary">
+                <i class="fas fa-download"></i>
+                Baixar
+            </button>
+            <button class="btn btn-success">
+                <i class="fas fa-undo"></i>
+                Restaurar
+            </button>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-tools"></i> Ações Manuais</h3>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <button class="btn btn-success" onclick="createBackup()">
+            <i class="fas fa-plus-circle"></i>
+            Criar Backup Agora
+        </button>
+
+        <button class="btn btn-warning" onclick="testBackup()">
+            <i class="fas fa-vial"></i>
+            Testar Backup
+        </button>
+
+        <button class="btn btn-primary" onclick="exportData()">
+            <i class="fas fa-file-export"></i>
+            Exportar Dados
+        </button>
+
+        <button class="btn btn-danger" onclick="showRestoreModal()">
+            <i class="fas fa-upload"></i>
+            Restaurar Backup
+        </button>
+    </div>
+    </div>
+    </div>
+
+    <!-- Seção Sistema -->
+    <div id="sistema" class="content-section">
+    <h2 class="section-title">
+    <i class="fas fa-server"></i>
+    Informações do Sistema
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-info-circle"></i> Informações Gerais</h3>
+
+    <div class="info-card">
+        <h4><i class="fas fa-code-branch"></i> Versão do Sistema</h4>
+        <p>TeleMed v2.1.3 (Build 20250814)</p>
+    </div>
+
+    <div class="info-card">
+        <h4><i class="fas fa-calendar-alt"></i> Última Atualização</h4>
+        <p>14 de Agosto de 2025 às 09:30</p>
+    </div>
+
+    <div class="info-card">
+        <h4><i class="fas fa-clock"></i> Tempo de Atividade</h4>
+        <p>127 dias, 14 horas e 23 minutos</p>
+    </div>
+
+    <div class="info-card">
+        <h4><i class="fas fa-users"></i> Usuários Ativos</h4>
+        <p>12 médicos, 847 pacientes conectados</p>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-chart-line"></i> Uso de Recursos</h3>
+
+    <div class="usage-chart">
+        <div class="usage-item">
+            <span>CPU</span>
+            <div class="usage-bar">
+                <div class="usage-fill" style="width: 35%"></div>
+            </div>
+            <span>35%</span>
+        </div>
+
+        <div class="usage-item">
+            <span>Memória</span>
+            <div class="usage-bar">
+                <div class="usage-fill" style="width: 68%"></div>
+            </div>
+            <span>68%</span>
+        </div>
+
+        <div class="usage-item">
+            <span>Disco</span>
+            <div class="usage-bar">
+                <div class="usage-fill" style="width: 42%"></div>
+            </div>
+            <span>42%</span>
+        </div>
+
+        <div class="usage-item">
+            <span>Banda</span>
+            <div class="usage-bar">
+                <div class="usage-fill" style="width: 23%"></div>
+            </div>
+            <span>23%</span>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-cogs"></i> Manutenção</h3>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <button class="btn btn-warning" onclick="clearCache()">
+            <i class="fas fa-broom"></i>
+            Limpar Cache
+        </button>
+
+        <button class="btn btn-primary" onclick="optimizeDatabase()">
+            <i class="fas fa-database"></i>
+            Otimizar BD
+        </button>
+
+        <button class="btn btn-success" onclick="updateSystem()">
+            <i class="fas fa-sync-alt"></i>
+            Verificar Atualizações
+        </button>
+
+        <button class="btn btn-danger" onclick="restartSystem()">
+            <i class="fas fa-power-off"></i>
+            Reiniciar Sistema
+        </button>
+    </div>
+    </div>
+    </div>
+
+    <!-- Seção Logs -->
+    <div id="logs" class="content-section">
+    <h2 class="section-title">
+    <i class="fas fa-list-alt"></i>
+    Logs do Sistema
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-filter"></i> Filtros</h3>
+
+    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+        <select id="logLevel">
+            <option value="">Todos os Níveis</option>
+            <option value="info">Info</option>
+            <option value="warning">Warning</option>
+            <option value="error">Error</option>
+            <option value="success">Success</option>
+        </select>
+
+        <input type="date" id="logDate" value="2025-08-14">
+
+        <button class="btn btn-primary" onclick="filterLogs()">
+            <i class="fas fa-search"></i>
+            Filtrar
+        </button>
+
+        <button class="btn btn-success" onclick="exportLogs()">
+            <i class="fas fa-file-export"></i>
+            Exportar
+        </button>
+
+        <button class="btn btn-danger" onclick="clearLogs()">
+            <i class="fas fa-trash"></i>
+            Limpar Logs
+        </button>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-scroll"></i> Logs Recentes</h3>
+
+    <div style="max-height: 400px; overflow-y: auto;">
+        <div class="log-item">
+            <div class="log-time">14:32:15</div>
+            <div class="log-level log-info">INFO</div>
+            <div class="log-message">Usuário João Silva fez login no sistema</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:28:42</div>
+            <div class="log-level log-success">SUCCESS</div>
+            <div class="log-message">Backup automático concluído com sucesso (2.3 GB)</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:25:11</div>
+            <div class="log-level log-info">INFO</div>
+            <div class="log-message">Nova consulta agendada para Maria Silva</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:22:33</div>
+            <div class="log-level log-warning">WARN</div>
+            <div class="log-message">Tentativa de login com credenciais inválidas (IP: 192.168.1.105)</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:18:07</div>
+            <div class="log-level log-info">INFO</div>
+            <div class="log-message">Teleconsulta iniciada entre Dr. João Silva e Ana Costa</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:15:44</div>
+            <div class="log-level log-error">ERROR</div>
+            <div class="log-message">Falha na conexão com gateway de pagamento Stripe</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:12:19</div>
+            <div class="log-level log-success">SUCCESS</div>
+            <div class="log-message">Prescrição médica enviada por e-mail para Carlos Mendes</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:08:55</div>
+            <div class="log-level log-info">INFO</div>
+            <div class="log-message">Paciente Lucia Ferreira atualizou suas informações</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:05:31</div>
+            <div class="log-level log-warning">WARN</div>
+            <div class="log-message">Uso de memória atingiu 68% da capacidade</div>
+        </div>
+
+        <div class="log-item">
+            <div class="log-time">14:02:18</div>
+            <div class="log-level log-success">SUCCESS</div>
+            <div class="log-message">Sistema de backup verificado e funcionando corretamente</div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Modal de Restauração -->
+    <div id="restoreModal" class="modal">
+    <div class="modal-content">
+    <h3><i class="fas fa-upload"></i> Restaurar Backup</h3>
+    <div style="margin: 20px 0;">
+    <div class="form-group">
+    <label for="backupFile">Selecionar Arquivo de Backup</label>
+    <input type="file" id="backupFile" accept=".zip,.tar.gz,.sql">
+    </div>
+
+    <div style="background: rgba(231, 76, 60, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+    <h4 style="color: #c0392b; margin-bottom: 10px;">⚠️ Atenção!</h4>
+    <p style="color: #2c3e50;">A restauração irá substituir todos os dados atuais. Esta ação não pode ser desfeita. Certifique-se de ter um backup recente antes de prosseguir.</p>
+    </div>
+    </div>
+    <div class="modal-buttons">
+    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+    <button type="button" class="btn btn-danger" onclick="confirmRestore()">
+    <i class="fas fa-exclamation-triangle"></i>
+    Restaurar
+    </button>
+    </div>
+    </div>
+    </div>
+
+    <script>
+    // Navegação entre seções
+    function showSection(sectionName) {
+    // Ocultar todas as seções
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => section.classList.remove('active'));
+
+    // Remover classe ativa dos links
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => link.classList.remove('active'));
+
+    // Mostrar seção selecionada
+    document.getElementById(sectionName).classList.add('active');
+
+    // Ativar link correspondente
+    event.target.classList.add('active');
+    }
+
+    // Salvar todas as configurações
+    function saveAllSettings() {
+    // Simular salvamento
+    const button = document.querySelector('.save-all-btn');
+    const originalText = button.innerHTML;
+
+    button.innerHTML = '<i class="fas fa-spinner rotate"></i> Salvando...';
+    button.disabled = true;
+
+    setTimeout(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+    showNotification('✅ Backup criado com sucesso!', 'success');
+    }, 5000);
+    }
+
+    // Testar backup
+    function testBackup() {
+    showNotification('🧪 Iniciando teste de backup...', 'info');
+    setTimeout(() => {
+    showNotification('✅ Teste de backup concluído com sucesso!', 'success');
+    }, 3000);
+    }
+
+    // Exportar dados
+    function exportData() {
+    showNotification('📦 Preparando exportação de dados...', 'info');
+    setTimeout(() => {
+    showNotification('⬇️ Dados exportados com sucesso!', 'success');
+    }, 2000);
+    }
+
+    // Mostrar modal de restauração
+    function showRestoreModal() {
+    document.getElementById('restoreModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    }
+
+    // Confirmar restauração
+    function confirmRestore() {
+    const fileInput = document.getElementById('backupFile');
+    if (!fileInput.files[0]) {
+    showNotification('❌ Selecione um arquivo de backup!', 'error');
+    return;
+    }
+
+    closeModal();
+    showNotification('⚠️ Funcionalidade de restauração desabilitada no demo', 'warning');
+    }
+
+    // Fechar modal
+    function closeModal() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+    modal.style.display = 'none';
+    });
+    document.body.style.overflow = 'auto';
+    }
+
+    // Limpar cache
+    function clearCache() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+
+    button.innerHTML = '<i class="fas fa-spinner rotate"></i> Limpando...';
+    button.disabled = true;
+
+    setTimeout(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+    showNotification('🧹 Cache limpo com sucesso!', 'success');
+    }, 2000);
+    }
+
+    // Otimizar banco de dados
+    function optimizeDatabase() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+
+    button.innerHTML = '<i class="fas fa-spinner rotate"></i> Otimizando...';
+    button.disabled = true;
+
+    setTimeout(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+    showNotification('⚡ Banco de dados otimizado!', 'success');
+    }, 4000);
+    }
+
+    // Atualizar sistema
+    function updateSystem() {
+    showNotification('🔍 Verificando atualizações disponíveis...', 'info');
+    setTimeout(() => {
+    showNotification('✅ Sistema atualizado para a versão mais recente!', 'success');
+    }, 3000);
+    }
+
+    // Reiniciar sistema
+    function restartSystem() {
+    if (confirm('⚠️ Tem certeza que deseja reiniciar o sistema? Isso interromperá todas as conexões ativas.')) {
+    showNotification('🔄 Reiniciando sistema...', 'warning');
+    setTimeout(() => {
+    showNotification('✅ Sistema reiniciado com sucesso!', 'success');
+    }, 5000);
+    }
+    }
+
+    // Filtrar logs
+    function filterLogs() {
+    const level = document.getElementById('logLevel').value;
+    const date = document.getElementById('logDate').value;
+
+    showNotification(`🔍 Aplicando filtros: ${level || 'Todos'} - ${date}`, 'info');
+    }
+
+    // Exportar logs
+    function exportLogs() {
+    showNotification('📄 Exportando logs...', 'info');
+    setTimeout(() => {
+    showNotification('⬇️ Logs exportados com sucesso!', 'success');
+    }, 2000);
+    }
+
+    // Limpar logs
+    function clearLogs() {
+    if (confirm('⚠️ Tem certeza que deseja limpar todos os logs? Esta ação não pode ser desfeita.')) {
+    showNotification('🗑️ Logs limpos com sucesso!', 'success');
+    }
+    }
+
+    // Sistema de notificações
+    function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    z-index: 3000;
+    animation: slideIn 0.3s ease;
+    max-width: 350px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    `;
+
+    switch(type) {
+    case 'success':
+    notification.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+    break;
+    case 'error':
+    notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+    break;
+    case 'warning':
+    notification.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+    break;
+    default:
+    notification.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
+    }
+
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => {
+    if (document.body.contains(notification)) {
+    document.body.removeChild(notification);
+    }
+    }, 300);
+    }, 4000);
+    }
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', function(e) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+    if (e.target === modal) {
+    closeModal();
+    }
+    });
+    });
+
+    // Atalhos de teclado
+    document.addEventListener('keydown', function(e) {
+    // Ctrl + S - Salvar todas as configurações
+    if (e.ctrlKey && e.key === 's') {
+    e.preventDefault();
+    saveAllSettings();
+    }
+
+    // ESC - Fechar modais
+    if (e.key === 'Escape') {
+    closeModal();
+    }
+
+    // Ctrl + 1-7 - Navegar entre seções
+    if (e.ctrlKey && e.key >= '1' && e.key <= '7') {
+    e.preventDefault();
+    const sections = ['geral', 'notificacoes', 'seguranca', 'integracao', 'backup', 'sistema', 'logs'];
+    const sectionIndex = parseInt(e.key) - 1;
+
+    if (sections[sectionIndex]) {
+    showSection(sections[sectionIndex]);
+    }
+    }
+    });
+
+    // Animações CSS
+    const style = document.createElement('style');
+    style.textContent = `
+    @keyframes slideIn {
+    from {
+    transform: translateX(100%);
+    opacity: 0;
+    }
+    to {
+    transform: translateX(0);
+    opacity: 1;
+    }
+    }
+
+    @keyframes slideOut {
+    from {
+    transform: translateX(0);
+    opacity: 1;
+    }
+    to {
+    transform: translateX(100%);
+    opacity: 0;
+    }
+    }
+    `;
+    document.head.appendChild(style);
+
+    // Monitoramento em tempo real
+    function updateSystemStats() {
+    // Simular atualização de estatísticas do sistema
+    const cpuBar = document.querySelector('.usage-fill');
+    if (cpuBar) {
+    const currentWidth = parseInt(cpuBar.style.width);
+    const newWidth = Math.max(10, Math.min(90, currentWidth + (Math.random() - 0.5) * 10));
+    cpuBar.style.width = newWidth + '%';
+    cpuBar.parentElement.nextElementSibling.textContent = Math.round(newWidth) + '%';
+    }
+    }
+
+    // Simulação de logs em tempo real
+    function addRealTimeLogs() {
+    const logContainer = document.querySelector('#logs .config-group:last-child > div');
+    if (logContainer && document.getElementById('logs').classList.contains('active')) {
+    const now = new Date();
+    const timeString = now.toTimeString().slice(0, 8);
+
+    const logTypes = ['info', 'success', 'warning', 'error'];
+    const logMessages = [
+    'Usuário realizou login no sistema',
+    'Backup automático concluído',
+    'Nova consulta agendada',
+    'Prescrição enviada por e-mail',
+    'Paciente atualizou informações',
+    'Sistema de segurança verificado'
+    ];
+
+    const randomType = logTypes[Math.floor(Math.random() * logTypes.length)];
+    const randomMessage = logMessages[Math.floor(Math.random() * logMessages.length)];
+
+    const newLog = document.createElement('div');
+    newLog.className = 'log-item';
+    newLog.innerHTML = `
+    <div class="log-time">${timeString}</div>
+    <div class="log-level log-${randomType}">${randomType.toUpperCase()}</div>
+    <div class="log-message">${randomMessage}</div>
+    `;
+
+    logContainer.insertBefore(newLog, logContainer.firstChild);
+
+    // Remover logs antigos (manter apenas os últimos 20)
+    const allLogs = logContainer.querySelectorAll('.log-item');
+    if (allLogs.length > 20) {
+    logContainer.removeChild(allLogs[allLogs.length - 1]);
+    }
+    }
+    }
+
+    // Auto-save das configurações
+    function setupAutoSave() {
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+    if (input.type !== 'file') {
+    input.addEventListener('change', () => {
+    showNotification('💾 Configuração salva automaticamente', 'info');
+    });
+    }
+    });
+    }
+
+    // Verificar status das integrações
+    function checkIntegrationsStatus() {
+    setTimeout(() => {
+    // Simular verificação de status
+    const integrations = [
+    { name: 'Stripe', status: 'online' },
+    { name: 'Zoom', status: 'online' },
+    { name: 'Conecte SUS', status: 'online' }
+    ];
+
+    integrations.forEach(integration => {
+    // Atualizar indicadores visuais se necessário
+    });
+    }, 2000);
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+    // Configurar auto-save
+    setupAutoSave();
+
+    // Verificar status das integrações
+    checkIntegrationsStatus();
+
+    // Iniciar monitoramento em tempo real
+    setInterval(updateSystemStats, 5000);
+    setInterval(addRealTimeLogs, 8000);
+
+    // Mensagem de boas-vindas
+    setTimeout(() => {
+    showNotification('⚙️ Painel de Configurações carregado!', 'success');
+    }, 1000);
+
+    // Dicas de uso
+    setTimeout(() => {
+    showNotification('💡 Use Ctrl+S para salvar todas as configurações rapidamente!', 'info');
+    }, 5000);
+
+    // Simular verificação de sistema
+    setTimeout(() => {
+    showNotification('🔍 Verificação de integridade do sistema concluída', 'success');
+    }, 3000);
+    });
+
+    // Função para demonstrar funcionalidades
+    function demonstrateFeatures() {
+    setTimeout(() => {
+    showNotification('🔧 Explore todas as seções para personalizar seu sistema!', 'info');
+    }, 10000);
+
+    setTimeout(() => {
+    showNotification('🔄 O sistema salva automaticamente suas alterações', 'info');
+    }, 15000);
+    }
+
+    // Executar demonstração
+    demonstrateFeatures();
+    </script>
+    </body>
+    </html> originalText;
+    button.disabled = false;
+    showNotification('✅ Todas as configurações foram salvas!', 'success');
+    }, 2000);
+    }
+
+    // Conectar gateway de pagamento
+    function connectPaymentGateway(gateway) {
+    showNotification(`🔗 Conectando ao ${gateway}...`, 'info');
+    setTimeout(() => {
+    showNotification(`✅ ${gateway} conectado com sucesso!`, 'success');
+    }, 2000);
+    }
+
+    // Conectar serviço de vídeo
+    function connectVideoService(service) {
+    showNotification(`🎥 Conectando ao ${service}...`, 'info');
+    setTimeout(() => {
+    showNotification(`✅ ${service} conectado com sucesso!`, 'success');
+    }, 2000);
+    }
+
+    // Configurar HL7
+    function configureHL7() {
+    showNotification('⚙️ Abrindo configuração HL7 FHIR...', 'info');
+    }
+
+    // Criar backup
+    function createBackup() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+
+    button.innerHTML = '<i class="fas fa-spinner rotate"></i> Criando...';
+    button.disabled = true;
+
+    setTimeout(() => {
+    button.innerHTML =<!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações do Sistema - TeleMed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    }
+
+    .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    }
+
+    .header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+
+    .header-left h1 {
+    color: #2c3e50;
+    font-size: 2.2em;
+    margin-bottom: 5px;
+    }
+
+    .header-left .subtitle {
+    color: #7f8c8d;
+    font-size: 1.1em;
+    }
+
+    .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    }
+
+    .back-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #3498db;
+    color: #3498db;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+    }
+
+    .save-all-btn {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    }
+
+    .save-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.3);
+    }
+
+    .main-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    }
+
+    .sidebar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    }
+
+    .nav-menu {
+    list-style: none;
+    }
+
+    .nav-item {
+    margin-bottom: 10px;
+    }
+
+    .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 20px;
+    color: #7f8c8d;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    transform: translateX(5px);
+    }
+
+    .nav-link i {
+    font-size: 1.2em;
+    width: 20px;
+    text-align: center;
+    }
+
+    .content-area {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .content-section {
+    display: none;
+    }
+
+    .content-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+    color: #2c3e50;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ecf0f1;
+    }
+
+    .config-group {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-left: 4px solid #3498db;
+    }
+
+    .config-group h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .config-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #ecf0f1;
+    }
+
+    .config-item:last-child {
+    border-bottom: none;
+    }
+
+    .config-info {
+    flex: 1;
+    }
+
+    .config-info h4 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    }
+
+    .config-info p {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    }
+
+    .config-control {
+    margin-left: 20px;
+    }
+
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    }
+
+    .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    }
+
+    .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+    }
+
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    }
+
+    input:checked + .slider {
+    background-color: #3498db;
+    }
+
+    input:checked + .slider:before {
+    transform: translateX(26px);
+    }
+
+    .form-group {
+    margin-bottom: 20px;
+    }
+
+    .form-group label {
+    display: block;
+    color: #34495e;
+    margin-bottom: 8px;
+    font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ecf0f1;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    }
+
+    .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    }
+
+    .btn-primary {
+    background: #3498db;
+    color: white;
+    }
+
+    .btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    }
+
+    .btn-success {
+    background: #2ecc71;
+    color: white;
+    }
+
+    .btn-success:hover {
+    background: #27ae60;
+    }
+
+    .btn-warning {
+    background: #f39c12;
+    color: white;
+    }
+
+    .btn-warning:hover {
+    background: #e67e22;
+    }
+
+    .btn-danger {
+    background: #e74c3c;
+    color: white;
+    }
+
+    .btn-danger:hover {
+    background: #c0392b;
+    }
+
+    .info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-card h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .info-card p {
+    color: #7f8c8d;
+    line-height: 1.6;
+    }
+
+    .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    }
+
+    .status-online {
+    background: rgba(46, 204, 113, 0.2);
+    color: #27ae60;
+    }
+
+    .status-offline {
+    background: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
+    }
+
+    .status-warning {
+    background: rgba(241, 196, 15, 0.2);
+    color: #f39c12;
+    }
+
+    .backup-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .backup-info h5 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    }
+
+    .backup-info p {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    }
+
+    .log-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #ecf0f1;
+    }
+
+    .log-item:last-child {
+    border-bottom: none;
+    }
+
+    .log-time {
+    width: 120px;
+    color: #7f8c8d;
+    font-size: 0.9em;
+    font-family: monospace;
+    }
+
+    .log-level {
+    width: 80px;
+    text-align: center;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-right: 15px;
+    }
+
+    .log-info { background: rgba(52, 152, 219, 0.2); color: #2980b9; }
+    .log-warning { background: rgba(241, 196, 15, 0.2); color: #f39c12; }
+    .log-error { background: rgba(231, 76, 60, 0.2); color: #c0392b; }
+    .log-success { background: rgba(46, 204, 113, 0.2); color: #27ae60; }
+
+    .log-message {
+    flex: 1;
+    color: #2c3e50;
+    }
+
+    .usage-chart {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .usage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    }
+
+    .usage-bar {
+    flex: 1;
+    height: 8px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    margin: 0 15px;
+    overflow: hidden;
+    }
+
+    .usage-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+    }
+
+    .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    min-width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.3s ease;
+    }
+
+    @keyframes modalAppear {
+    from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+    }
+    to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    }
+    }
+
+    .modal h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    }
+
+    .modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 25px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+    .main-content {
+    grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+    position: static;
+    margin-bottom: 20px;
+    }
+
+    .nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    }
+
+    .nav-item {
+    margin-bottom: 0;
+    }
+    }
+
+    @media (max-width: 768px) {
+    .container {
+    padding: 15px;
+    }
+
+    .header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    }
+
+    .form-grid {
+    grid-template-columns: 1fr;
+    }
+
+    .config-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    }
+
+    .config-control {
+    margin-left: 0;
+    }
+    }
+
+    /* Animações */
+    .pulse {
+    animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+    }
+
+    .rotate {
+    animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+    }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+    <!-- Header -->
+    <div class="header">
+    <div class="header-left">
+    <h1><i class="fas fa-cogs"></i> Configurações do Sistema</h1>
+    <p class="subtitle">Gerencie todas as configurações da plataforma TeleMed</p>
+    </div>
+    <div class="header-right">
+    <a href="area-medica.html" class="back-btn">
+    <i class="fas fa-arrow-left"></i>
+    Voltar ao Dashboard
+    </a>
+    <button class="save-all-btn" onclick="saveAllSettings()">
+    <i class="fas fa-save"></i>
+    Salvar Tudo
+    </button>
+    </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+    <!-- Sidebar de Navegação -->
+    <div class="sidebar">
+    <nav>
+    <ul class="nav-menu">
+    <li class="nav-item">
+        <a href="#" class="nav-link active" onclick="showSection('geral')">
+            <i class="fas fa-sliders-h"></i>
+            Geral
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('notificacoes')">
+            <i class="fas fa-bell"></i>
+            Notificações
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('seguranca')">
+            <i class="fas fa-shield-alt"></i>
+            Segurança
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('integracao')">
+            <i class="fas fa-plug"></i>
+            Integrações
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('backup')">
+            <i class="fas fa-database"></i>
+            Backup
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('sistema')">
+            <i class="fas fa-server"></i>
+            Sistema
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" onclick="showSection('logs')">
+            <i class="fas fa-list-alt"></i>
+            Logs
+        </a>
+    </li>
+    </ul>
+    </nav>
+    </div>
+
+    <!-- Área de Conteúdo -->
+    <div class="content-area">
+    <!-- Seção Geral -->
+    <div id="geral" class="content-section active">
+    <h2 class="section-title">
+    <i class="fas fa-sliders-h"></i>
+    Configurações Gerais
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-building"></i> Informações da Clínica</h3>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="clinicName">Nome da Clínica</label>
+            <input type="text" id="clinicName" value="TeleMed - Clínica Digital">
+        </div>
+
+        <div class="form-group">
+            <label for="clinicCNPJ">CNPJ</label>
+            <input type="text" id="clinicCNPJ" value="12.345.678/0001-90">
+        </div>
+
+        <div class="form-group">
+            <label for="clinicPhone">Telefone Principal</label>
+            <input type="tel" id="clinicPhone" value="(11) 3456-7890">
+        </div>
+
+        <div class="form-group">
+            <label for="clinicEmail">E-mail Institucional</label>
+            <input type="email" id="clinicEmail" value="contato@telemed.com.br">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="clinicAddress">Endereço Completo</label>
+        <input type="text" id="clinicAddress" value="Av. Paulista, 1000 - Bela Vista, São Paulo - SP, 01310-100">
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-clock"></i> Horários de Funcionamento</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Funcionamento 24 Horas</h4>
+            <p>Permitir agendamentos e consultas em qualquer horário</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="openTime">Horário de Abertura</label>
+            <input type="time" id="openTime" value="08:00">
+        </div>
+
+        <div class="form-group">
+            <label for="closeTime">Horário de Fechamento</label>
+            <input type="time" id="closeTime" value="18:00">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="workingDays">Dias de Funcionamento</label>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" checked> Segunda-feira
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" checked> Terça-feira
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" checked> Quarta-feira
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" checked> Quinta-feira
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" checked> Sexta-feira
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox"> Sábado
+            </label>
+            <label style="display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox"> Domingo
+            </label>
+        </div>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-money-bill-wave"></i> Configurações Financeiras</h3>
+
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="consultationPrice">Valor Consulta Presencial (R$)</label>
+            <input type="number" id="consultationPrice" value="250" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label for="teleconsultationPrice">Valor Teleconsulta (R$)</label>
+            <input type="number" id="teleconsultationPrice" value="180" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label for="currency">Moeda</label>
+            <select id="currency">
+                <option value="BRL" selected>Real Brasileiro (R$)</option>
+                <option value="USD">Dólar Americano ($)</option>
+                <option value="EUR">Euro (€)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="taxRate">Taxa de Serviço (%)</label>
+            <input type="number" id="taxRate" value="5" step="0.1" min="0" max="20">
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Pagamento Online</h4>
+            <p>Permitir pagamentos via cartão e PIX</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- Seção Notificações -->
+    <div id="notificacoes" class="content-section">
+    <h2 class="section-title">
+    <i class="fas fa-bell"></i>
+    Configurações de Notificações
+    </h2>
+
+    <div class="config-group">
+    <h3><i class="fas fa-envelope"></i> Notificações por E-mail</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>E-mails Automáticos</h4>
+            <p>Enviar confirmações de consulta e lembretes</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Relatórios Diários</h4>
+            <p>Resumo diário de consultas e atividades</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="emailTemplate">Template de E-mail</label>
+        <select id="emailTemplate">
+            <option value="modern" selected>Moderno</option>
+            <option value="classic">Clássico</option>
+            <option value="minimal">Minimalista</option>
+        </select>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-mobile-alt"></i> Notificações Push</h3>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Notificações no Navegador</h4>
+            <p>Alertas em tempo real no navegador</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="config-item">
+        <div class="config-info">
+            <h4>Sons de Notificação</h4>
+            <p>Reproduzir sons para alertas importantes</p>
+        </div>
+        <div class="config-control">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="notificationFrequency">Frequência de Notificações</label>
+        <select id="notificationFrequency">
+            <option value="immediate" selected>Imediata</option>
+            <option value="5min">A cada 5 minutos</option>
+            <option value="15min">A cada 15 minutos</option>
+            <option value="1hour">A cada hora</option>
+        </select>
+    </div>
+    </div>
+
+    <div class="config-group">
+    <h3><i class="fas fa-sms"></i> SMS</h3>
+
+    <div class="config-item">
+        <div class="config-info">
