@@ -369,6 +369,21 @@ app.get('/dashboard-teste-static', (req, res) => {
   }
 });
 
+// Fixed Dashboard Teste (Latest version with corrected icon CSS)
+app.get('/dashboard-teste-fixed', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../public/dashboard-teste-fixed.html'), 'utf-8');
+    console.log('📊 Carregando Dashboard Teste corrigido (versão atualizada)');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar dashboard teste:', err);
+    res.status(500).send('Erro ao carregar o dashboard');
+  }
+});
+
 // Rotas do Dashboard Aquarela
 app.get('/dashboard', (req, res) => res.redirect('/dashboard-aquarela'));
 app.get('/dashboard-medical.html', (req, res) => res.redirect('/dashboard-aquarela'));
