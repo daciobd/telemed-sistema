@@ -25,6 +25,9 @@
   box-sizing:border-box
 }
 
+/* CRITICAL FIX: Global icon sizing to prevent oversized search icon */
+.dashboard-teste-container .icon{width:18px !important;height:18px !important;flex:0 0 18px;display:inline-block}
+
 /* Sidebar */
 .dashboard-teste-container .sidebar{
   position:fixed; 
