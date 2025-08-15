@@ -5,6 +5,7 @@ import VideoConsultation from "@/pages/video-consultation";
 import EnhancedConsultation from "@/pages/enhanced-consultation";
 import AIConsolePage from "@/pages/ai-console";
 import DashboardTeste from "@/pages/dashboard-teste";
+import DashboardTesteRobust from "@/pages/dashboard-teste-robust";
 
 // Mock auth context for demo mode
 const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -138,8 +139,14 @@ function LandingPage() {
               >
                 Acessar Dashboard Teste
               </a>
+              <a 
+                href="/dashboard-teste-robust"
+                className="block w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors text-center mb-2"
+              >
+                Dashboard Teste Robusto (Chart.js + ResizeObserver)
+              </a>
               <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
-                Chart.js + Analytics
+                Chart.js + Analytics + ResizeObserver
               </code>
             </div>
           </div>
@@ -162,6 +169,7 @@ export default function App() {
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/dashboard-teste" component={DashboardTeste} />
+            <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">

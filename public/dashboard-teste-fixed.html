@@ -67,7 +67,11 @@
     .delta.up{background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.4); color:#15803D}
     .delta.down{background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.36); color:#B91C1C}
 
-    .spark{height:44px; margin-top:8px}
+    .spark{height:44px; margin-top:8px; width:100%}
+
+/* ensure canvases size correctly in some hosts */
+canvas{max-width:100% !important; display:block}
+.card{min-width:0}
 
     .grid-2{display:grid; grid-template-columns:2fr 1.1fr; gap:24px}
     .grid-3{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:24px}
@@ -229,7 +233,7 @@
   </main>
 
 <script>
-  // Utilidades
+  // ====== Helpers & safe sizing ======
   const pastel = (alpha=0.6) => `rgba(162,210,255,${alpha})`;
   const lavender = (alpha=0.6) => `rgba(205,180,219,${alpha})`;
 
@@ -237,64 +241,75 @@
     return new Chart(el, {
       type:'line',
       data:{ labels: data.map((_,i)=>i+1), datasets:[{ data, fill:true, tension:.35, borderColor:color(.9), backgroundColor:color(.28), pointRadius:0, borderWidth:2 }] },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false}, tooltip:{enabled:false}},
-        scales:{x:{display:false}, y:{display:false}}
-      }
-    })
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}, tooltip:{enabled:false}}, scales:{x:{display:false}, y:{display:false}} }
+    });
   }
 
-  // Sparklines para os KPIs
-  sparkline(document.getElementById('spk1'), [10,12,11,13,14,15,14,16,18,17,19,21], pastel);
-  sparkline(document.getElementById('spk2'), [9,8,10,7,8,6,7,6,7,5,6,5], lavender);
-  sparkline(document.getElementById('spk3'), [6,5,6,7,5,6,4,5,5,4,5,5], pastel);
-  sparkline(document.getElementById('spk4'), [3.6,3.7,3.8,3.7,3.9,4.0,3.9,4.1,4.0,4.2,4.1,4.0], lavender);
-
-  // Barras horizontais – Atendimentos por Hora
-  const horas = Array.from({length:24}, (_,i) => `${String(i).padStart(2,'0')}:00`);
-  const valsHoras = [4,6,8,3,2,1,1,2,4,6,10,12,14,16,18,15,13,12,11,10,8,7,6,5];
-  new Chart(document.getElementById('barHoras'),{
-    type:'bar',
-    data:{ labels:horas, datasets:[{ data:valsHoras, backgroundColor: pastel(.7), borderColor:'#8AB8E6', borderWidth:1, borderRadius:8, barThickness:6 }] },
-    options:{ indexAxis:'y', plugins:{ legend:{display:false} },
-      scales:{
-        x:{ grid:{ display:false }, ticks:{ color:'#6B7280' } },
-        y:{ grid:{ display:false }, ticks:{ color:'#6B7280', autoSkip:false, maxTicksLimit:24 } }
-      }
-    }
-  });
-
-  // Heatmap simples (CSS grid) – 7 dias x 24 horas
-  const heatEl = document.getElementById('heatmap');
-  const dias = 7, horasDia=24;
-  for(let d=0; d<dias; d++){
-    for(let h=0; h<horasDia; h++){
-      const v = Math.random(); // 0..1 intensidade
-      const cell = document.createElement('div');
-      const alpha = 0.18 + v*0.62; // 0.18..0.80
-      cell.className='hm-cell';
-      cell.style.background = `rgba(162,210,255,${alpha.toFixed(2)})`;
-      cell.title = `Dia ${d+1}, ${String(h).padStart(2,'0')}:00 – intensidade ${(v*100|0)}%`;
-      heatEl.appendChild(cell);
-    }
+  function ensureCanvasSize(el, h){
+    // Force a width before Chart.js init to avoid 0-width rendering in some environments
+    const w = Math.max(280, el.parentElement?.getBoundingClientRect?.().width || 280);
+    el.setAttribute('width', w);
+    if(h) el.setAttribute('height', h);
   }
 
-  // Linha – NPS semanal
-  new Chart(document.getElementById('lineNps'),{
-    type:'line',
-    data:{ labels:['S1','S2','S3','S4','S5','S6','S7','S8'],
-      datasets:[{ label:'NPS', data:[72,74,71,75,78,80,79,82], borderColor:pastel(.95), backgroundColor:pastel(.3), borderWidth:2, pointRadius:3, tension:.35, fill:true }] },
-    options:{ plugins:{legend:{display:false}}, scales:{ x:{ grid:{display:false}}, y:{ grid:{color:'rgba(0,0,0,0.04)'}, suggestedMin:60, suggestedMax:90 } } }
-  });
+  function init(){
+    // Sparklines (force width before init)
+    ensureCanvasSize(document.getElementById('spk1'), 44);
+    ensureCanvasSize(document.getElementById('spk2'), 44);
+    ensureCanvasSize(document.getElementById('spk3'), 44);
+    ensureCanvasSize(document.getElementById('spk4'), 44);
 
-  // Barras horizontais finas – Fila por prioridade
-  new Chart(document.getElementById('barFila'),{
-    type:'bar',
-    data:{ labels:['Crítica','Alta','Média','Baixa'],
-      datasets:[{ data:[8,14,9,5], backgroundColor:[lavender(.75), pastel(.75), pastel(.55), lavender(.45)], borderColor:'#8AB8E6', borderWidth:1, barThickness:6, borderRadius:8 }] },
-    options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{ x:{grid:{display:false}}, y:{grid:{display:false}} } }
-  });
+    sparkline(document.getElementById('spk1'), [10,12,11,13,14,15,14,16,18,17,19,21], pastel);
+    sparkline(document.getElementById('spk2'), [9,8,10,7,8,6,7,6,7,5,6,5], lavender);
+    sparkline(document.getElementById('spk3'), [6,5,6,7,5,6,4,5,5,4,5,5], pastel);
+    sparkline(document.getElementById('spk4'), [3.6,3.7,3.8,3.7,3.9,4.0,3.9,4.1,4.0,4.2,4.1,4.0], lavender);
+
+    // Barras horizontais – Atendimentos por Hora
+    ensureCanvasSize(document.getElementById('barHoras'));
+    const horas = Array.from({length:24}, (_,i) => `${String(i).padStart(2,'0')}:00`);
+    const valsHoras = [4,6,8,3,2,1,1,2,4,6,10,12,14,16,18,15,13,12,11,10,8,7,6,5];
+    new Chart(document.getElementById('barHoras'),{
+      type:'bar',
+      data:{ labels:horas, datasets:[{ data:valsHoras, backgroundColor: pastel(.7), borderColor:'#8AB8E6', borderWidth:1, borderRadius:8, barThickness:6 }] },
+      options:{ indexAxis:'y', plugins:{ legend:{display:false} }, scales:{ x:{ grid:{ display:false }, ticks:{ color:'#6B7280' } }, y:{ grid:{ display:false }, ticks:{ color:'#6B7280', autoSkip:false, maxTicksLimit:24 } } } }
+    });
+
+    // Heatmap simples (CSS grid) – 7 dias x 24 horas
+    const heatEl = document.getElementById('heatmap');
+    const dias = 7, horasDia=24;
+    for(let d=0; d<dias; d++){
+      for(let h=0; h<horasDia; h++){
+        const v = Math.random();
+        const cell = document.createElement('div');
+        const alpha = 0.18 + v*0.62;
+        cell.className='hm-cell';
+        cell.style.background = `rgba(162,210,255,${alpha.toFixed(2)})`;
+        cell.title = `Dia ${d+1}, ${String(h).padStart(2,'0')}:00 – intensidade ${(v*100|0)}%`;
+        heatEl.appendChild(cell);
+      }
+    }
+
+    // Linha – NPS semanal
+    ensureCanvasSize(document.getElementById('lineNps'));
+    new Chart(document.getElementById('lineNps'),{
+      type:'line',
+      data:{ labels:['S1','S2','S3','S4','S5','S6','S7','S8'], datasets:[{ label:'NPS', data:[72,74,71,75,78,80,79,82], borderColor:pastel(.95), backgroundColor:pastel(.3), borderWidth:2, pointRadius:3, tension:.35, fill:true }] },
+      options:{ plugins:{legend:{display:false}}, scales:{ x:{ grid:{display:false}}, y:{ grid:{color:'rgba(0,0,0,0.04)'}, suggestedMin:60, suggestedMax:90 } } }
+    });
+
+    // Barras horizontais finas – Fila por prioridade
+    ensureCanvasSize(document.getElementById('barFila'));
+    new Chart(document.getElementById('barFila'),{
+      type:'bar',
+      data:{ labels:['Crítica','Alta','Média','Baixa'], datasets:[{ data:[8,14,9,5], backgroundColor:[lavender(.75), pastel(.75), pastel(.55), lavender(.45)], borderColor:'#8AB8E6', borderWidth:1, barThickness:6, borderRadius:8 }] },
+      options:{ indexAxis:'y', plugins:{legend:{display:false}}, scales:{ x:{grid:{display:false}}, y:{grid:{display:false}} } }
+    });
+
+    // Força um resize após a renderização para Chart.js recalcular se necessário
+    setTimeout(()=> window.dispatchEvent(new Event('resize')), 50);
+  }
+
+  if(document.readyState === 'complete'){ init(); } else { window.addEventListener('load', init); }
 </script>
 </body>
 </html>
