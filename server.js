@@ -1,41 +1,38 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
+// Development environment starter for TeleMed
+// This runs the TypeScript server directly using tsx
 
-console.log('🚀 TeleMed Server Starting...');
+const { spawn } = require('child_process');
 
-app.use(express.static('public'));
-app.use((req, res, next) => {
-    console.log(`📍 ${req.method} ${req.path}`);
-    next();
+console.log('🚀 Starting TeleMed Development Server...');
+
+// Start the TypeScript server with tsx
+const serverProcess = spawn('npx', ['tsx', 'server/index.ts'], {
+  stdio: 'inherit',
+  shell: true,
+  cwd: process.cwd(),
+  env: { ...process.env }
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'sistema-integrado.html'));
+serverProcess.on('error', (err) => {
+  console.error('❌ Server error:', err);
 });
 
-app.get('/demo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'demo-ativo', 'index.html'));
+serverProcess.on('exit', (code) => {
+  if (code !== 0) {
+    console.error(`❌ Server exited with code ${code}`);
+    process.exit(code);
+  }
 });
 
-app.get('/consulta', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'react-app', 'index.html'));
+// Handle graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\n🛑 Shutting down server...');
+  serverProcess.kill();
+  process.exit(0);
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ TeleMed Server ONLINE - Port ${PORT}`);
-    console.log(`🌐 Teste: https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`);
-});
-
-// Rota para sistema completo híbrido
-app.get('/complete', (req, res) => {
-    console.log('🎯 Servindo sistema híbrido completo');
-    res.sendFile(path.join(__dirname, 'public', 'telemed-complete.html'));
-});
-
-// Rota para acesso direto ao sistema com IA
-app.get('/sistema-ia', (req, res) => {
-    console.log('🤖 Redirecionando para sistema com IA');
-    res.redirect('https://e6d689c1-512b-4fe0-95e9-97962bd221aa-00-1tscx6q290aml.spock.replit.dev/');
+process.on('SIGTERM', () => {
+  console.log('\n🛑 Shutting down server...');
+  serverProcess.kill();
+  process.exit(0);
 });

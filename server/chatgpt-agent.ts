@@ -1,9 +1,9 @@
-import { OpenAI } from 'openai';
+// import { OpenAI } from 'openai'; // Temporarily disabled due to dependency conflict
 import { aiUsageTracker, trackRateLimit, getUsageToday } from './utils/aiUsage';
 import { webhookManager, sendAlert } from './utils/webhook';
 
 // Configuração do ChatGPT Agent para TeleMed Consulta
-let openai: OpenAI | null = null;
+let openai: any | null = null;
 
 // Configuração de modelos e retry
 const PRIMARY_MODEL = process.env.OPENAI_MODEL_PRIMARY || 'gpt-4o';
@@ -17,10 +17,10 @@ const exponentialDelay = (attempt: number): number => {
 
 // Inicializar OpenAI apenas se a API key estiver disponível
 if (process.env.OPENAI_API_KEY) {
-  openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-  console.log('🤖 OpenAI Client inicializado com sucesso');
+  // openai = new OpenAI({
+  //   apiKey: process.env.OPENAI_API_KEY,
+  // });
+  console.log('⚠️ OpenAI Client temporariamente desabilitado - aguardando correção de dependências');
 } else {
   console.log('⚠️ OPENAI_API_KEY não encontrada - ChatGPT Agent em modo simulação');
 }
