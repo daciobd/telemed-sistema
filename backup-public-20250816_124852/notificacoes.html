@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Notificações - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e6f7ff 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .sidebar-header {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .notification-summary {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .summary-label {
+            color: #6b7280;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .summary-value.urgent {
+            color: #ef4444;
+        }
+        
+        .summary-value.new {
+            color: #10b981;
+        }
+        
+        .filters {
+            margin-bottom: 2rem;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-btn {
+            background: #f8fafc;
+            border: 2px solid transparent;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover {
+            background: #e6f7ff;
+        }
+        
+        .filter-btn.active {
+            background: #e6f7ff;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .filter-icon {
+            margin-right: 8px;
+        }
+        
+        .filter-count {
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        
+        .filter-count.urgent {
+            background: #ef4444;
+        }
+        
+        .actions {
+            margin-top: 2rem;
+        }
+        
+        .action-btn {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: #10b981;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #059669;
+        }
+        
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .content-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .content-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-input {
+            padding: 10px 15px 10px 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            width: 250px;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+        
+        .mark-all-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mark-all-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .notifications-list {
+            flex: 1;
+            padding: 2rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 5px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .notification-item.unread {
+            background: white;
+            border-left-color: #667eea;
+        }
+        
+        .notification-item.urgent {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .notification-item.emergency {
+            border-left-color: #dc2626;
+            background: #fee2e2;
+            animation: pulse 2s infinite;
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon.consultation {
+            background: #3b82f6;
+        }
+        
+        .notification-icon.emergency {
+            background: #ef4444;
+        }
+        
+        .notification-icon.prescription {
+            background: #10b981;
+        }
+        
+        .notification-icon.payment {
+            background: #f59e0b;
+        }
+        
+        .notification-icon.rating {
+            background: #8b5cf6;
+        }
+        
+        .notification-icon.system {
+            background: #6b7280;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification-message {
+            color: #4a5568;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+        
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .notification-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .notification-type {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .notification-type.urgent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .notification-type.new {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .notification-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .notification-item:hover .notification-actions {
+            opacity: 1;
+        }
+        
+        .action-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+        
+        .action-icon.read {
+            background: #10b981;
+            color: white;
+        }
+        
+        .action-icon.delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .action-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .unread-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+        
+        .notification-body {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        /* Live Notifications */
+        .live-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            border-left: 5px solid #10b981;
+            max-width: 350px;
+        }
+        
+        .live-notification.show {
+            transform: translateX(0);
+        }
+        
+        .live-notification.urgent {
+            border-left-color: #ef4444;
+            animation: pulse 1s infinite;
+        }
+        
+        .live-notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .live-notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.9rem;
+        }
+        
+        .live-notification-close {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .live-notification-message {
+            color: #4a5568;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            color: #6b7280;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .notification-body {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .notification-actions {
+                position: static;
+                opacity: 1;
+                justify-content: flex-end;
+                margin-top: 1rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-item {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <h1>
+            <i class="fas fa-bell"></i>
+            Central de Notificações
+        </h1>
+        <p>Gerencie alertas, lembretes e notificações do sistema</p>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Resumo de Notificações</div>
+                
+                <div class="notification-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Não lidas:</span>
+                        <span class="summary-value new" id="unreadCount">7</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Urgentes:</span>
+                        <span class="summary-value urgent" id="urgentCount">2</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Hoje:</span>
+                        <span class="summary-value" id="todayCount">12</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Esta semana:</span>
+                        <span class="summary-value" id="weekCount">34</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-title">Filtrar por Tipo</div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterNotifications('all')">
+                        <span><i class="fas fa-list filter-icon"></i>Todas</span>
+                        <span class="filter-count" id="countAll">15</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterNotifications('unread')">
+                        <span><i class="fas fa-envelope filter-icon"></i>Não Lidas</span>
+                        <span class="filter-count new" id="countUnread">7</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterNotifications('emergency')">
+                        <span><i class="fas fa-exclamation-triangle filter-icon"></i>Emergências</span>
+                        <span class="filter-count urgent" id="countEmergency">2</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterNotifications('consultation')">
+                        <span><i class="fas fa-calendar filter-icon"></i>Consultas</span>
+                        <span class="filter-count" id="countConsultation">5</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterNotifications('payment')">
+                        <span><i class="fas fa-dollar-sign filter-icon"></i>Pagamentos</span>
+                        <span class="filter-count" id="countPayment">3</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterNotifications('rating')">
+                        <span><i class="fas fa-star filter-icon"></i>Avaliações</span>
+                        <span class="filter-count" id="countRating">2</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button class="action-btn" onclick="markAllAsRead()">
+                    <i class="fas fa-check-double"></i>
+                    Marcar Todas como Lidas
+                </button>
+                <button class="action-btn secondary" onclick="openSettings()">
+                    <i class="fas fa-cog"></i>
+                    Configurações
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="content-title" id="contentTitle">Todas as Notificações</div>
+                
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Buscar notificações..." onkeyup="searchNotifications()">
+                    </div>
+                    <button class="mark-all-btn" onclick="markAllAsRead()">
+                        <i class="fas fa-check"></i>
+                        Marcar como Lidas
+                    </button>
+                </div>
+            </div>
+            
+            <div class="notifications-list" id="notificationsList">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Notification -->
+    <div class="live-notification" id="liveNotification">
+        <div class="live-notification-header">
+            <div class="live-notification-title" id="liveTitle">Nova Notificação</div>
+            <button class="live-notification-close" onclick="closeLiveNotification()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="live-notification-message" id="liveMessage">Mensagem da notificação</div>
+    </div>
+
+    <script>
+        // Sample notifications data
+        let notifications = [
+            {
+                id: 1,
+                type: 'emergency',
+                title: 'Emergência: Paciente Crítico',
+                message: 'Ana Costa, 28 anos, reporta dor torácica intensa com irradiação para braço esquerdo. Suspeita de IAM. Requer atendimento imediato.',
+                time: '2024-07-22T10:35:00',
+                read: false,
+                urgent: true,
+                patient: 'Ana Costa',
+                action: 'Atender Emergência'
+            },
+            {
+                id: 2,
+                type: 'consultation',
+                title: 'Nova Consulta Agendada',
+                message: 'Maria Silva agendou consulta de Cardiologia para hoje às 14:00. Proposta de R$ 350 aceita.',
+                time: '2024-07-22T09:15:00',
+                read: false,
+                urgent: false,
+                patient: 'Maria Silva',
+                action: 'Ver Detalhes'
+            },
+            {
+                id: 3,
+                type: 'emergency',
+                title: 'Alerta: Paciente Aguardando',
+                message: 'João Santos está aguardando há 25 minutos na sala de emergência. Caso de crise hipertensiva.',
+                time: '2024-07-22T09:00:00',
+                read: false,
+                urgent: true,
+                patient: 'João Santos',
+                action: 'Atender Agora'
+            },
+            {
+                id: 4,
+                type: 'prescription',
+                title: 'Prescrição para Renovação',
+                message: 'Carlos Lima solicitou renovação da prescrição de Captopril 25mg. Última receita expira em 2 dias.',
+                time: '2024-07-22T08:45:00',
+                read: false,
+                urgent: false,
+                patient: 'Carlos Lima',
+                action: 'Renovar Receita'
+            },
+            {
+                id: 5,
+                type: 'payment',
+                title: 'Pagamento Recebido',
+                message: 'Pagamento de R$ 280 da consulta com Pedro Alves foi processado com sucesso via PIX.',
+                time: '2024-07-22T08:30:00',
+                read: true,
+                urgent: false,
+                patient: 'Pedro Alves',
+                action: 'Ver Comprovante'
+            },
+            {
+                id: 6,
+                type: 'rating',
+                title: 'Nova Avaliação Recebida',
+                message: 'Lucia Ferreira avaliou sua consulta com 5 estrelas: "Excelente atendimento, muito atencioso e esclarecedor."',
+                time: '2024-07-21T17:30:00',
+                read: false,
+                urgent: false,
+                patient: 'Lucia Ferreira',
+                action: 'Ver Avaliação'
+            },
+            {
+                id: 7,
+                type: 'consultation',
+                title: 'Consulta em 15 Minutos',
+                message: 'Lembrete: Consulta com Roberto Silva às 11:00. Teleconsulta de Ortopedia agendada.',
+                time: '2024-07-22T10:45:00',
+                read: false,
+                urgent: false,
+                patient: 'Roberto Silva',
+                action: 'Iniciar Consulta'
+            },
+            {
+                id: 8,
+                type: 'system',
+                title: 'Sistema Atualizado',
+                message: 'TeleMed Sistema foi atualizado para versão 2.1. Novas funcionalidades de prescrição digital disponíveis.',
+                time: '2024-07-21T22:00:00',
+                read: true,
+                urgent: false,
+                patient: null,
+                action: 'Ver Novidades'
+            },
+            {
+                id: 9,
+                type: 'consultation',
+                title: 'Consulta Cancelada',
+                message: 'Felipe Santos cancelou a consulta agendada para 13:30. Motivo: conflito de horário.',
+                time: '2024-07-21T16:20:00',
+                read: true,
+                urgent: false,
+                patient: 'Felipe Santos',
+                action: 'Reagendar'
+            },
+            {
+                id: 10,
+                type: 'payment',
+                title: 'Fatura Gerada',
+                message: 'Fatura mensal de R$ 2.850 gerada. Total de 12 consultas realizadas em julho.',
+                time: '2024-07-21T12:00:00',
+                read: true,
+                urgent: false,
+                patient: null,
+                action: 'Ver Fatura'
+            }
+        ];
+
+        let filteredNotifications = [...notifications];
+        let currentFilter = 'all';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNotifications();
+            startLiveNotifications();
+        });
+
+        function initializeNotifications() {
+            renderNotifications();
+            updateCounts();
+            
+            console.log('🔔 Sistema de Notificações carregado!');
+            console.log('📊 Central de alertas funcionando');
+            console.log('⚡ Notificações em tempo real ativas');
+        }
+
+        function renderNotifications() {
+            const notificationsList = document.getElementById('notificationsList');
+            
+            if (filteredNotifications.length === 0) {
+                notificationsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-bell-slash"></i>
+                        </div>
+                        <div class="empty-title">Nenhuma notificação encontrada</div>
+                        <div class="empty-text">Tente ajustar os filtros ou aguarde novas notificações</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            
+            filteredNotifications
+                .sort((a, b) => new Date(b.time) - new Date(a.time))
+                .forEach(notification => {
+                    const timeAgo = getTimeAgo(notification.time);
+                    const isUnread = !notification.read ? 'unread' : '';
+                    const isUrgent = notification.urgent ? 'urgent' : '';
+                    const isEmergency = notification.type === 'emergency' ? 'emergency' : '';
+                    
+                    html += `
+                        <div class="notification-item ${isUnread} ${isUrgent} ${isEmergency}" onclick="openNotification(${notification.id})">
+                            ${!notification.read ? '<div class="unread-indicator"></div>' : ''}
+                            
+                            <div class="notification-body">
+                                <div class="notification-icon ${notification.type}">
+                                    <i class="fas ${getNotificationIcon(notification.type)}"></i>
+                                </div>
+                                
+                                <div class="notification-content">
+                                    <div class="notification-title">
+                                        ${notification.title}
+                                        ${notification.urgent ? '<i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>' : ''}
+                                    </div>
+                                    <div class="notification-message">${notification.message}</div>
+                                    <div class="notification-meta">
+                                        <div class="notification-time">
+                                            <i class="fas fa-clock"></i>
+                                            ${timeAgo}
+                                        </div>
+                                        <div class="notification-type ${notification.urgent ? 'urgent' : ''} ${!notification.read ? 'new' : ''}">
+                                            ${getTypeLabel(notification.type)}
+                                        </div>
+                                    </div>
+                                </div>

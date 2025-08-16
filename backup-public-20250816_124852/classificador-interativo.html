@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificador Interativo - TeleMed</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 40%, #d97706 60%, #fbbf24 80%, #fef3c7 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .title {
+            color: #2A4066;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .instructions {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .status-btn, .priority-btn {
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .status-btn.ok { background: #dcfce7; border-color: #16a34a; color: #15803d; }
+        .status-btn.partial { background: #fef3c7; border-color: #eab308; color: #a16207; }
+        .status-btn.broken { background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
+        .status-btn.redirect { background: #ddd6fe; border-color: #7c3aed; color: #6d28d9; }
+        .status-btn.design { background: #fce7f3; border-color: #ec4899; color: #be185d; }
+
+        .priority-btn.essential { background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
+        .priority-btn.important { background: #fef3c7; border-color: #eab308; color: #a16207; }
+        .priority-btn.secondary { background: #e0e7ff; border-color: #6366f1; color: #4f46e5; }
+        .priority-btn.discard { background: #f1f5f9; border-color: #64748b; color: #475569; }
+
+        .status-btn.selected, .priority-btn.selected {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            border-width: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 20px 0;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        .page-name {
+            font-weight: 500;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+
+        .page-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .notes-input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 0.85rem;
+        }
+
+        .export-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px 10px 10px 0;
+        }
+
+        .export-btn:hover {
+            background: #2563eb;
+        }
+
+        .result-area {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-text {
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .title { font-size: 1.8rem; }
+            .status-btn, .priority-btn { 
+                font-size: 0.75rem; 
+                padding: 6px 8px; 
+                margin: 1px;
+                display: block;
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            table { font-size: 0.85rem; }
+            th, td { padding: 8px 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">📋 Classificador de Páginas</h1>
+
+        <div class="instructions">
+            <h3>📖 Como usar:</h3>
+            <p><strong>1.</strong> Clique no link 🔗 para abrir a página<br>
+            <strong>2.</strong> Clique nos botões para classificar<br>
+            <strong>3.</strong> Clique "Exportar" para ver o resultado</p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <strong>Status:</strong> ✅ OK | ⚠️ PARCIAL | ❌ QUEBRADA | 🔗 REDIRECIONA | 🎨 DESIGN<br>
+            <strong>Prioridade:</strong> 🔥 ESSENCIAL | 📌 IMPORTANTE | 📂 SECUNDÁRIO | 🗑️ DESCARTÁVEL
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 30px;">#</th>
+                    <th style="width: 200px;">Página</th>
+                    <th style="width: 250px;">Status</th>
+                    <th style="width: 250px;">Prioridade</th>
+                    <th>Notas</th>
+                </tr>
+            </thead>
+            <tbody id="pagesTableBody">
+                <!-- Será preenchido -->
+            </tbody>
+        </table>
+
+        <div>
+            <button class="export-btn" onclick="exportResults()">📤 Exportar Resultado</button>
+            <button class="export-btn" onclick="resetAll()">🔄 Limpar</button>
+        </div>
+
+        <div id="resultArea" class="result-area">
+            <h3>📋 Resultado:</h3>
+            <div id="resultText" class="result-text"></div>
+            <button class="export-btn" onclick="copyToClipboard()">📋 Copiar</button>
+        </div>
+    </div>
+
+    <script>
+        const pages = [
+            'index.html', 'dashboard-premium-fixed.html', 'download.html',
+            'agenda-do-dia.html', 'agenda-medico.html', 'area-medica.html', 
+            'videoconsulta.html', 'consulta-por-valor.html', 'dr-ai.html',
+            'telemonitoramento-enfermagem.html', 'prescricoes.html', 'prontuarios.html',
+            'avaliacoes.html', 'como-funciona.html', 'faq.html', 'suporte.html'
+        ];
+
+        let classifications = {};
+
+        function initializeTable() {
+            const tbody = document.getElementById('pagesTableBody');
+            tbody.innerHTML = '';
+
+            pages.forEach((page, index) => {
+                const pageId = page.replace(/[^a-zA-Z0-9]/g, '_');
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>
+                        <div class="page-name">${page}</div>
+                        <a href="${page}" target="_blank" class="page-link">🔗 Abrir</a>
+                    </td>
+                    <td>
+                        <button class="status-btn ok" onclick="setStatus('${page}', 'ok', this)">✅ OK</button>
+                        <button class="status-btn partial" onclick="setStatus('${page}', 'partial', this)">⚠️ PARCIAL</button>
+                        <button class="status-btn broken" onclick="setStatus('${page}', 'broken', this)">❌ QUEBRADA</button>
+                        <button class="status-btn redirect" onclick="setStatus('${page}', 'redirect', this)">🔗 REDIRECIONA</button>
+                        <button class="status-btn design" onclick="setStatus('${page}', 'design', this)">🎨 DESIGN</button>
+                    </td>
+                    <td>
+                        <button class="priority-btn essential" onclick="setPriority('${page}', 'essential', this)">🔥 ESSENCIAL</button>
+                        <button class="priority-btn important" onclick="setPriority('${page}', 'important', this)">📌 IMPORTANTE</button>
+                        <button class="priority-btn secondary" onclick="setPriority('${page}', 'secondary', this)">📂 SECUNDÁRIO</button>
+                        <button class="priority-btn discard" onclick="setPriority('${page}', 'discard', this)">🗑️ DESCARTÁVEL</button>
+                    </td>
+                    <td>
+                        <input type="text" class="notes-input" placeholder="Observações..." 
+                               onchange="setNotes('${page}', this.value)">
+                    </td>
+                `;
+                tbody.appendChild(row);
+                
+                if (!classifications[page]) {
+                    classifications[page] = { status: null, priority: null, notes: '' };
+                }
+            });
+        }
+
+        function setStatus(page, status, button) {
+            // Remove seleção anterior
+            const buttons = button.parentNode.querySelectorAll('.status-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            
+            // Adiciona seleção atual
+            button.classList.add('selected');
+            
+            // Salva classificação
+            classifications[page].status = status;
+            
+            console.log('Status definido:', page, status);
+        }
+
+        function setPriority(page, priority, button) {
+            // Remove seleção anterior
+            const buttons = button.parentNode.querySelectorAll('.priority-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            
+            // Adiciona seleção atual
+            button.classList.add('selected');
+            
+            // Salva classificação
+            classifications[page].priority = priority;
+            
+            console.log('Prioridade definida:', page, priority);
+        }
+
+        function setNotes(page, notes) {
+            classifications[page].notes = notes;
+        }
+
+        function exportResults() {
+            let result = "RESULTADO DA CLASSIFICAÇÃO:\\n\\n";
+            
+            const statusMap = {
+                'ok': '✅ OK',
+                'partial': '⚠️ PARCIAL', 
+                'broken': '❌ QUEBRADA',
+                'redirect': '🔗 REDIRECIONA',
+                'design': '🎨 DESIGN'
+            };
+            
+            const priorityMap = {
+                'essential': '🔥 ESSENCIAL',
+                'important': '📌 IMPORTANTE',
+                'secondary': '📂 SECUNDÁRIO', 
+                'discard': '🗑️ DESCARTÁVEL'
+            };
+
+            Object.entries(classifications).forEach(([page, data]) => {
+                if (data.status || data.priority) {
+                    const status = data.status ? statusMap[data.status] : '⬜ NÃO CLASSIFICADO';
+                    const priority = data.priority ? priorityMap[data.priority] : '⬜ NÃO CLASSIFICADO';
+                    const notes = data.notes ? ` | ${data.notes}` : '';
+                    
+                    result += `${page} | ${status} | ${priority}${notes}\\n`;
+                }
+            });
+
+            document.getElementById('resultText').textContent = result;
+            document.getElementById('resultArea').style.display = 'block';
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('resultText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Resultado copiado!');
+            });
+        }
+
+        function resetAll() {
+            if (confirm('Limpar todas as classificações?')) {
+                classifications = {};
+                initializeTable();
+                document.getElementById('resultArea').style.display = 'none';
+            }
+        }
+
+        // Inicializar
+        window.onload = function() {
+            initializeTable();
+            console.log('Classificador carregado!');
+        };
+    </script>
+</body>
+</html>

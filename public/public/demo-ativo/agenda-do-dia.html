@@ -1,0 +1,1573 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Agenda do Dia - TeleMed</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                color: #333;
+            }
+
+            .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .header {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 20px 30px;
+                margin-bottom: 30px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .header-left h1 {
+                color: #2c3e50;
+                font-size: 2.2em;
+                margin-bottom: 5px;
+            }
+
+            .header-left .subtitle {
+                color: #7f8c8d;
+                font-size: 1.1em;
+            }
+
+            .header-right {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .date-selector {
+                background: #3498db;
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 25px;
+                font-size: 1em;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .date-selector:hover {
+                background: #2980b9;
+                transform: translateY(-2px);
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 25px;
+                margin-bottom: 30px;
+            }
+
+            .stat-card {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 25px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            }
+
+            .stat-card .icon {
+                font-size: 2.5em;
+                margin-bottom: 15px;
+            }
+
+            .stat-card h3 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+
+            .stat-card p {
+                color: #7f8c8d;
+                font-size: 1.1em;
+            }
+
+            .consultas {
+                color: #3498db;
+            }
+            .pacientes {
+                color: #e74c3c;
+            }
+            .prescricoes {
+                color: #2ecc71;
+            }
+            .emergencias {
+                color: #f39c12;
+            }
+
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 350px;
+                gap: 30px;
+            }
+
+            .agenda-container {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .agenda-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+
+            .agenda-header h2 {
+                color: #2c3e50;
+                font-size: 1.8em;
+            }
+
+            .view-toggle {
+                display: flex;
+                background: #ecf0f1;
+                border-radius: 25px;
+                padding: 5px;
+            }
+
+            .view-btn {
+                background: transparent;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .view-btn.active {
+                background: #3498db;
+                color: white;
+            }
+
+            .timeline-container {
+                max-height: 600px;
+                overflow-y: auto;
+                padding-right: 10px;
+            }
+
+            .timeline-slot {
+                display: flex;
+                align-items: center;
+                padding: 15px 0;
+                border-bottom: 1px solid #ecf0f1;
+                transition: all 0.3s ease;
+            }
+
+            .timeline-slot:hover {
+                background: rgba(52, 152, 219, 0.05);
+                border-radius: 10px;
+                padding-left: 10px;
+                margin-left: -10px;
+            }
+
+            .time-slot {
+                width: 80px;
+                text-align: center;
+                font-weight: bold;
+                color: #7f8c8d;
+                margin-right: 20px;
+            }
+
+            .appointment {
+                flex: 1;
+                background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .appointment:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px rgba(116, 185, 255, 0.3);
+            }
+
+            .appointment::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent
+                );
+                transition: left 0.5s;
+            }
+
+            .appointment:hover::before {
+                left: 100%;
+            }
+
+            .appointment h4 {
+                font-size: 1.1em;
+                margin-bottom: 5px;
+            }
+
+            .appointment p {
+                opacity: 0.9;
+                font-size: 0.9em;
+            }
+
+            .appointment-status {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #2ecc71;
+            }
+
+            .appointment-status.pendente {
+                background: #f39c12;
+            }
+            .appointment-status.cancelado {
+                background: #e74c3c;
+            }
+
+            .empty-slot {
+                flex: 1;
+                padding: 15px;
+                text-align: center;
+                color: #bdc3c7;
+                font-style: italic;
+                border: 2px dashed #ecf0f1;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .empty-slot:hover {
+                border-color: #3498db;
+                color: #3498db;
+                background: rgba(52, 152, 219, 0.05);
+            }
+
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .quick-actions,
+            .notifications-panel {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 25px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .quick-actions h3,
+            .notifications-panel h3 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-size: 1.4em;
+            }
+
+            .action-btn {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                background: linear-gradient(135deg, #00cec9 0%, #55a3ff 100%);
+                color: white;
+                border: none;
+                padding: 15px 20px;
+                border-radius: 15px;
+                margin-bottom: 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 1em;
+            }
+
+            .action-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px rgba(0, 206, 201, 0.3);
+            }
+
+            .action-btn i {
+                margin-right: 12px;
+                font-size: 1.2em;
+            }
+
+            .notification-item {
+                display: flex;
+                align-items: center;
+                padding: 12px;
+                border-left: 4px solid #3498db;
+                background: rgba(52, 152, 219, 0.05);
+                border-radius: 0 10px 10px 0;
+                margin-bottom: 15px;
+                transition: all 0.3s ease;
+            }
+
+            .notification-item:hover {
+                background: rgba(52, 152, 219, 0.1);
+                transform: translateX(5px);
+            }
+
+            .notification-item i {
+                font-size: 1.3em;
+                margin-right: 15px;
+                color: #3498db;
+            }
+
+            .notification-content {
+                flex: 1;
+            }
+
+            .notification-content h5 {
+                color: #2c3e50;
+                margin-bottom: 3px;
+            }
+
+            .notification-content p {
+                color: #7f8c8d;
+                font-size: 0.9em;
+            }
+
+            .floating-btn {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+                color: white;
+                border: none;
+                cursor: pointer;
+                box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+                transition: all 0.3s ease;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5em;
+            }
+
+            .floating-btn:hover {
+                transform: scale(1.1) rotate(15deg);
+                box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4);
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 2000;
+                backdrop-filter: blur(5px);
+            }
+
+            .modal-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                min-width: 400px;
+                max-width: 90vw;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                animation: modalAppear 0.3s ease;
+            }
+
+            @keyframes modalAppear {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -60%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+            .modal h3 {
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-size: 1.5em;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                display: block;
+                color: #34495e;
+                margin-bottom: 8px;
+                font-weight: 500;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 12px 15px;
+                border: 2px solid #ecf0f1;
+                border-radius: 10px;
+                font-size: 1em;
+                transition: all 0.3s ease;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: #3498db;
+                box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            }
+
+            .modal-buttons {
+                display: flex;
+                gap: 15px;
+                justify-content: flex-end;
+                margin-top: 25px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 1em;
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary {
+                background: #3498db;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #2980b9;
+                transform: translateY(-2px);
+            }
+
+            .btn-secondary {
+                background: #95a5a6;
+                color: white;
+            }
+
+            .btn-secondary:hover {
+                background: #7f8c8d;
+            }
+
+            .back-btn {
+                background: rgba(255, 255, 255, 0.9);
+                border: 2px solid #3498db;
+                color: #3498db;
+                padding: 10px 20px;
+                border-radius: 25px;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .back-btn:hover {
+                background: #3498db;
+                color: white;
+                transform: translateY(-2px);
+            }
+
+            /* Responsividade */
+            @media (max-width: 1024px) {
+                .main-content {
+                    grid-template-columns: 1fr;
+                }
+
+                .sidebar {
+                    order: -1;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 15px;
+                }
+
+                .header {
+                    flex-direction: column;
+                    gap: 20px;
+                    text-align: center;
+                }
+
+                .stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 15px;
+                }
+
+                .stat-card {
+                    padding: 20px 15px;
+                }
+
+                .agenda-container {
+                    padding: 20px;
+                }
+
+                .timeline-slot {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+
+                .time-slot {
+                    width: 100%;
+                    text-align: left;
+                    margin-right: 0;
+                    margin-bottom: 5px;
+                }
+            }
+
+            /* Animações adicionais */
+            .pulse {
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .notification-badge {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                background: #e74c3c;
+                color: white;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8em;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1><i class="fas fa-calendar-alt"></i> Agenda do Dia</h1>
+                    <p class="subtitle" id="currentDate">
+                        Quinta-feira, 14 de Agosto de 2025
+                    </p>
+                </div>
+                <div class="header-right">
+                    <a href="/public/demo-ativo/area-medica.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar ao Dashboard
+                    </a>
+                    <input type="date" class="date-selector" id="datePicker" />
+                </div>
+            </div>
+
+            <!-- Cards de Estatísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="icon consultas">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>12</h3>
+                    <p>Consultas Agendadas</p>
+                </div>
+                <div class="stat-card">
+                    <div class="icon pacientes">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>8</h3>
+                    <p>Pacientes Únicos</p>
+                </div>
+                <div class="stat-card">
+                    <div class="icon prescricoes">
+                        <i class="fas fa-prescription-bottle"></i>
+                    </div>
+                    <h3>5</h3>
+                    <p>Prescrições Pendentes</p>
+                </div>
+                <div class="stat-card">
+                    <div class="icon emergencias">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>2</h3>
+                    <p>Casos Urgentes</p>
+                </div>
+            </div>
+
+            <!-- Conteúdo Principal -->
+            <div class="main-content">
+                <!-- Container da Agenda -->
+                <div class="agenda-container">
+                    <div class="agenda-header">
+                        <h2><i class="fas fa-clock"></i> Timeline do Dia</h2>
+                        <div class="view-toggle">
+                            <button
+                                class="view-btn active"
+                                onclick="toggleView('timeline')"
+                            >
+                                <i class="fas fa-list"></i> Timeline
+                            </button>
+                            <button
+                                class="view-btn"
+                                onclick="toggleView('calendar')"
+                            >
+                                <i class="fas fa-calendar"></i> Grade
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="timeline-container" id="timelineView">
+                        <!-- 08:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">08:00</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('Maria Silva', '08:00', 'Consulta de Rotina')"
+                            >
+                                <div class="appointment-status"></div>
+                                <h4>Maria Silva</h4>
+                                <p>
+                                    <i class="fas fa-stethoscope"></i> Consulta
+                                    de Rotina • 45min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 08:45 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">08:45</div>
+                            <div
+                                class="empty-slot"
+                                onclick="scheduleAppointment('08:45')"
+                            >
+                                <i class="fas fa-plus-circle"></i> Agendar
+                                consulta
+                            </div>
+                        </div>
+
+                        <!-- 09:30 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">09:30</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('João Santos', '09:30', 'Teleconsulta')"
+                            >
+                                <div class="appointment-status"></div>
+                                <h4>João Santos</h4>
+                                <p>
+                                    <i class="fas fa-video"></i> Teleconsulta •
+                                    30min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 10:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">10:00</div>
+                            <div
+                                class="appointment pulse"
+                                onclick="showAppointmentDetails('Ana Costa', '10:00', 'Caso Urgente')"
+                            >
+                                <div class="appointment-status pendente"></div>
+                                <h4>
+                                    Ana Costa
+                                    <i
+                                        class="fas fa-exclamation-triangle"
+                                        style="color: #f39c12"
+                                    ></i>
+                                </h4>
+                                <p>
+                                    <i class="fas fa-ambulance"></i> Caso
+                                    Urgente • 60min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 11:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">11:00</div>
+                            <div
+                                class="empty-slot"
+                                onclick="scheduleAppointment('11:00')"
+                            >
+                                <i class="fas fa-plus-circle"></i> Horário livre
+                            </div>
+                        </div>
+
+                        <!-- 11:30 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">11:30</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('Carlos Mendes', '11:30', 'Retorno')"
+                            >
+                                <div class="appointment-status"></div>
+                                <h4>Carlos Mendes</h4>
+                                <p>
+                                    <i class="fas fa-redo"></i> Consulta de
+                                    Retorno • 30min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 12:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">12:00</div>
+                            <div
+                                class="empty-slot"
+                                style="
+                                    background: rgba(46, 204, 113, 0.1);
+                                    border-color: #2ecc71;
+                                    color: #27ae60;
+                                "
+                            >
+                                <i class="fas fa-utensils"></i> Horário de
+                                Almoço
+                            </div>
+                        </div>
+
+                        <!-- 14:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">14:00</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('Lucia Ferreira', '14:00', 'Primeira Consulta')"
+                            >
+                                <div class="appointment-status"></div>
+                                <h4>Lucia Ferreira</h4>
+                                <p>
+                                    <i class="fas fa-user-plus"></i> Primeira
+                                    Consulta • 60min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 15:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">15:00</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('Pedro Oliveira', '15:00', 'Teleconsulta')"
+                            >
+                                <div class="appointment-status"></div>
+                                <h4>Pedro Oliveira</h4>
+                                <p>
+                                    <i class="fas fa-video"></i> Teleconsulta •
+                                    45min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 15:45 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">15:45</div>
+                            <div
+                                class="empty-slot"
+                                onclick="scheduleAppointment('15:45')"
+                            >
+                                <i class="fas fa-plus-circle"></i> Agendar
+                                consulta
+                            </div>
+                        </div>
+
+                        <!-- 16:30 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">16:30</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('Isabella Rocha', '16:30', 'Consulta de Rotina')"
+                            >
+                                <div class="appointment-status"></div>
+                                <h4>Isabella Rocha</h4>
+                                <p>
+                                    <i class="fas fa-stethoscope"></i> Consulta
+                                    de Rotina • 30min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 17:00 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">17:00</div>
+                            <div
+                                class="appointment"
+                                onclick="showAppointmentDetails('Roberto Lima', '17:00', 'Teleconsulta')"
+                            >
+                                <div class="appointment-status cancelado"></div>
+                                <h4>
+                                    Roberto Lima
+                                    <i
+                                        class="fas fa-times-circle"
+                                        style="color: #e74c3c"
+                                    ></i>
+                                </h4>
+                                <p>
+                                    <i class="fas fa-video"></i> Teleconsulta
+                                    Cancelada • 30min
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 17:30 -->
+                        <div class="timeline-slot">
+                            <div class="time-slot">17:30</div>
+                            <div
+                                class="empty-slot"
+                                onclick="scheduleAppointment('17:30')"
+                            >
+                                <i class="fas fa-plus-circle"></i> Último
+                                horário
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Ações Rápidas -->
+                    <div class="quick-actions">
+                        <h3><i class="fas fa-bolt"></i> Ações Rápidas</h3>
+                        <button
+                            class="action-btn"
+                            onclick="scheduleAppointment()"
+                        >
+                            <i class="fas fa-calendar-plus"></i>
+                            Nova Consulta
+                        </button>
+                        <button
+                            class="action-btn"
+                            onclick="showEmergencyProtocol()"
+                        >
+                            <i class="fas fa-ambulance"></i>
+                            Protocolo Emergência
+                        </button>
+                        <button
+                            class="action-btn"
+                            onclick="showPrescriptionForm()"
+                        >
+                            <i class="fas fa-prescription"></i>
+                            Nova Prescrição
+                        </button>
+                        <button
+                            class="action-btn"
+                            onclick="viewPatientHistory()"
+                        >
+                            <i class="fas fa-history"></i>
+                            Histórico Pacientes
+                        </button>
+                    </div>
+
+                    <!-- Painel de Notificações -->
+                    <div class="notifications-panel">
+                        <h3>
+                            <i class="fas fa-bell"></i> Notificações
+                            <span class="notification-badge">3</span>
+                        </h3>
+
+                        <div class="notification-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="notification-content">
+                                <h5>Próxima Consulta</h5>
+                                <p>Ana Costa em 15 minutos</p>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <i class="fas fa-prescription-bottle"></i>
+                            <div class="notification-content">
+                                <h5>Prescrições Pendentes</h5>
+                                <p>5 receitas aguardando aprovação</p>
+                            </div>
+                        </div>
+
+                        <div class="notification-item">
+                            <i class="fas fa-user-times"></i>
+                            <div class="notification-content">
+                                <h5>Cancelamento</h5>
+                                <p>Roberto Lima cancelou às 17:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão Flutuante de Emergência -->
+        <button
+            class="floating-btn"
+            onclick="showEmergencyProtocol()"
+            title="Protocolo de Emergência"
+        >
+            <i class="fas fa-plus"></i>
+        </button>
+
+        <!-- Modal para Agendamento -->
+        <div id="appointmentModal" class="modal">
+            <div class="modal-content">
+                <h3>
+                    <i class="fas fa-calendar-plus"></i> Agendar Nova Consulta
+                </h3>
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label for="patientName">Nome do Paciente:</label>
+                        <input type="text" id="patientName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentTime">Horário:</label>
+                        <input type="time" id="appointmentTime" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentType">Tipo de Consulta:</label>
+                        <select id="appointmentType" required>
+                            <option value="">Selecione...</option>
+                            <option value="rotina">Consulta de Rotina</option>
+                            <option value="retorno">Consulta de Retorno</option>
+                            <option value="primeira">Primeira Consulta</option>
+                            <option value="teleconsulta">Teleconsulta</option>
+                            <option value="urgente">Caso Urgente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentDuration"
+                            >Duração (minutos):</label
+                        >
+                        <select id="appointmentDuration" required>
+                            <option value="30">30 minutos</option>
+                            <option value="45">45 minutos</option>
+                            <option value="60">60 minutos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentNotes">Observações:</label>
+                        <textarea id="appointmentNotes" rows="3"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            onclick="closeModal()"
+                        >
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Agendar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para Detalhes da Consulta -->
+        <div id="appointmentDetailsModal" class="modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-user"></i> Detalhes da Consulta</h3>
+                <div id="appointmentDetailsContent">
+                    <!-- Conteúdo será preenchido dinamicamente -->
+                </div>
+                <div class="modal-buttons">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal()"
+                    >
+                        Fechar
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="startConsultation()"
+                    >
+                        <i class="fas fa-video"></i> Iniciar Consulta
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Protocolo de Emergência -->
+        <div id="emergencyModal" class="modal">
+            <div class="modal-content">
+                <h3 style="color: #e74c3c">
+                    <i class="fas fa-exclamation-triangle"></i> Protocolo de
+                    Emergência
+                </h3>
+                <div
+                    style="
+                        background: rgba(231, 76, 60, 0.1);
+                        padding: 20px;
+                        border-radius: 10px;
+                        margin-bottom: 20px;
+                    "
+                >
+                    <h4 style="color: #c0392b; margin-bottom: 15px">
+                        Ações Imediatas:
+                    </h4>
+                    <ul style="color: #2c3e50; line-height: 1.8">
+                        <li><strong>SAMU:</strong> 192</li>
+                        <li><strong>Bombeiros:</strong> 193</li>
+                        <li>
+                            <strong>Hospital de Referência:</strong> (11)
+                            3456-7890
+                        </li>
+                        <li>
+                            <strong>Central de Regulação:</strong> (11)
+                            2345-6789
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="emergencyType">Tipo de Emergência:</label>
+                    <select id="emergencyType" required>
+                        <option value="">Selecione...</option>
+                        <option value="cardiovascular">
+                            Emergência Cardiovascular
+                        </option>
+                        <option value="respiratoria">
+                            Emergência Respiratória
+                        </option>
+                        <option value="neurologica">
+                            Emergência Neurológica
+                        </option>
+                        <option value="trauma">Trauma/Acidente</option>
+                        <option value="psiquiatrica">
+                            Emergência Psiquiátrica
+                        </option>
+                        <option value="outras">Outras</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="emergencyDescription"
+                        >Descrição da Situação:</label
+                    >
+                    <textarea
+                        id="emergencyDescription"
+                        rows="4"
+                        placeholder="Descreva a situação de emergência..."
+                    ></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal()"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="button"
+                        class="btn"
+                        style="background: #e74c3c; color: white"
+                        onclick="activateEmergencyProtocol()"
+                    >
+                        <i class="fas fa-ambulance"></i> Ativar Protocolo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Configuração da data atual
+            function setCurrentDate() {
+                const today = new Date();
+                const options = {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                };
+
+                document.getElementById("currentDate").textContent =
+                    today.toLocaleDateString("pt-BR", options);
+
+                // Define a data no input
+                const dateInput = document.getElementById("datePicker");
+                dateInput.value = today.toISOString().split("T")[0];
+            }
+
+            // Funcionalidade do seletor de data
+            document
+                .getElementById("datePicker")
+                .addEventListener("change", function (e) {
+                    const selectedDate = new Date(e.target.value);
+                    const options = {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    };
+
+                    document.getElementById("currentDate").textContent =
+                        selectedDate.toLocaleDateString("pt-BR", options);
+
+                    // Simular carregamento da agenda
+                    showLoadingAnimation();
+                    setTimeout(() => {
+                        hideLoadingAnimation();
+                        updateAgendaForDate(selectedDate);
+                    }, 1000);
+                });
+
+            // Alternar visualização
+            function toggleView(viewType) {
+                const buttons = document.querySelectorAll(".view-btn");
+                buttons.forEach((btn) => btn.classList.remove("active"));
+
+                if (viewType === "timeline") {
+                    buttons[0].classList.add("active");
+                    // Implementar visualização em timeline (já está ativa)
+                } else {
+                    buttons[1].classList.add("active");
+                    // Implementar visualização em grade
+                    showCalendarView();
+                }
+            }
+
+            // Mostrar visualização em grade
+            function showCalendarView() {
+                // Implementação da vista em grade (para futuras versões)
+                showNotification(
+                    "Visualização em grade será implementada em breve!",
+                    "info",
+                );
+            }
+
+            // Agendar consulta
+            function scheduleAppointment(time = "") {
+                const modal = document.getElementById("appointmentModal");
+                const timeInput = document.getElementById("appointmentTime");
+
+                if (time) {
+                    timeInput.value = time;
+                }
+
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden";
+            }
+
+            // Mostrar detalhes da consulta
+            function showAppointmentDetails(patientName, time, type) {
+                const modal = document.getElementById(
+                    "appointmentDetailsModal",
+                );
+                const content = document.getElementById(
+                    "appointmentDetailsContent",
+                );
+
+                content.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Paciente</h4>
+                        <p style="font-size: 1.1em; font-weight: bold;">${patientName}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Horário</h4>
+                        <p style="font-size: 1.1em;">${time}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Tipo</h4>
+                        <p>${type}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #2c3e50; margin-bottom: 10px;">Status</h4>
+                        <p style="color: #27ae60;">✅ Confirmada</p>
+                    </div>
+                </div>
+                <div style="background: rgba(52, 152, 219, 0.1); padding: 15px; border-radius: 10px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">Histórico Recente</h4>
+                    <p>Última consulta: 15/07/2025 - Consulta de rotina</p>
+                    <p>Medicamentos atuais: Losartana 50mg, Metformina 850mg</p>
+                </div>
+            `;
+
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden";
+            }
+
+            // Protocolo de emergência
+            function showEmergencyProtocol() {
+                const modal = document.getElementById("emergencyModal");
+                modal.style.display = "block";
+                document.body.style.overflow = "hidden";
+            }
+
+            // Ativar protocolo de emergência
+            function activateEmergencyProtocol() {
+                const type = document.getElementById("emergencyType").value;
+                const description = document.getElementById(
+                    "emergencyDescription",
+                ).value;
+
+                if (!type || !description) {
+                    showNotification(
+                        "Preencha todos os campos obrigatórios!",
+                        "error",
+                    );
+                    return;
+                }
+
+                // Simular ativação do protocolo
+                closeModal();
+                showNotification(
+                    "🚨 Protocolo de emergência ativado! Central de regulação notificada.",
+                    "success",
+                );
+
+                // Adicionar notificação urgente
+                addUrgentNotification(
+                    "Protocolo de emergência ativo",
+                    `${type} - ${description.substring(0, 30)}...`,
+                );
+            }
+
+            // Fechar modal
+            function closeModal() {
+                const modals = document.querySelectorAll(".modal");
+                modals.forEach((modal) => {
+                    modal.style.display = "none";
+                });
+                document.body.style.overflow = "auto";
+            }
+
+            // Iniciar consulta
+            function startConsultation() {
+                closeModal();
+                showNotification(
+                    "🎥 Iniciando sala de consulta virtual...",
+                    "success",
+                );
+
+                // Simular redirecionamento para sala de consulta
+                setTimeout(() => {
+                    window.open("#", "_blank"); // Em um sistema real, abriria a sala de vídeo
+                }, 2000);
+            }
+
+            // Formulário de agendamento
+            document
+                .getElementById("appointmentForm")
+                .addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const patientName =
+                        document.getElementById("patientName").value;
+                    const time =
+                        document.getElementById("appointmentTime").value;
+                    const type =
+                        document.getElementById("appointmentType").value;
+                    const duration = document.getElementById(
+                        "appointmentDuration",
+                    ).value;
+
+                    // Simular agendamento
+                    closeModal();
+                    showNotification(
+                        `✅ Consulta agendada para ${patientName} às ${time}!`,
+                        "success",
+                    );
+
+                    // Limpar formulário
+                    this.reset();
+
+                    // Atualizar estatísticas
+                    updateStats();
+                });
+
+            // Mostrar prescrição
+            function showPrescriptionForm() {
+                showNotification(
+                    "📋 Módulo de prescrições será carregado...",
+                    "info",
+                );
+                // Redirecionar para página de prescrições
+            }
+
+            // Ver histórico de pacientes
+            function viewPatientHistory() {
+                showNotification(
+                    "📚 Carregando histórico de pacientes...",
+                    "info",
+                );
+                // Redirecionar para página de histórico
+            }
+
+            // Sistema de notificações
+            function showNotification(message, type = "info") {
+                const notification = document.createElement("div");
+                notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 10px;
+                color: white;
+                font-weight: bold;
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            `;
+
+                switch (type) {
+                    case "success":
+                        notification.style.background =
+                            "linear-gradient(135deg, #2ecc71, #27ae60)";
+                        break;
+                    case "error":
+                        notification.style.background =
+                            "linear-gradient(135deg, #e74c3c, #c0392b)";
+                        break;
+                    case "warning":
+                        notification.style.background =
+                            "linear-gradient(135deg, #f39c12, #e67e22)";
+                        break;
+                    default:
+                        notification.style.background =
+                            "linear-gradient(135deg, #3498db, #2980b9)";
+                }
+
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = "slideOut 0.3s ease";
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 4000);
+            }
+
+            // Adicionar notificação urgente
+            function addUrgentNotification(title, description) {
+                const notificationsPanel = document.querySelector(
+                    ".notifications-panel",
+                );
+                const newNotification = document.createElement("div");
+                newNotification.className = "notification-item";
+                newNotification.style.borderLeftColor = "#e74c3c";
+                newNotification.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
+                <div class="notification-content">
+                    <h5>${title}</h5>
+                    <p>${description}</p>
+                </div>
+            `;
+
+                // Inserir no topo
+                const firstNotification =
+                    notificationsPanel.querySelector(".notification-item");
+                if (firstNotification) {
+                    notificationsPanel.insertBefore(
+                        newNotification,
+                        firstNotification,
+                    );
+                } else {
+                    notificationsPanel.appendChild(newNotification);
+                }
+
+                // Atualizar badge
+                const badge = document.querySelector(".notification-badge");
+                badge.textContent = parseInt(badge.textContent) + 1;
+            }
+
+            // Atualizar estatísticas
+            function updateStats() {
+                const consultasCard = document.querySelector(".stat-card h3");
+                const currentCount = parseInt(consultasCard.textContent);
+                consultasCard.textContent = currentCount + 1;
+
+                // Animação de atualização
+                consultasCard.parentElement.style.animation = "pulse 0.5s ease";
+                setTimeout(() => {
+                    consultasCard.parentElement.style.animation = "";
+                }, 500);
+            }
+
+            // Animação de carregamento
+            function showLoadingAnimation() {
+                const timeline = document.getElementById("timelineView");
+                timeline.style.opacity = "0.5";
+                timeline.style.pointerEvents = "none";
+            }
+
+            function hideLoadingAnimation() {
+                const timeline = document.getElementById("timelineView");
+                timeline.style.opacity = "1";
+                timeline.style.pointerEvents = "auto";
+            }
+
+            // Atualizar agenda para data específica
+            function updateAgendaForDate(date) {
+                // Simular carregamento de dados para a data específica
+                showNotification(
+                    `📅 Agenda carregada para ${date.toLocaleDateString("pt-BR")}`,
+                    "info",
+                );
+            }
+
+            // Atalhos de teclado
+            document.addEventListener("keydown", function (e) {
+                // Ctrl + Shift + E - Protocolo de emergência
+                if (e.ctrlKey && e.shiftKey && e.key === "E") {
+                    e.preventDefault();
+                    showEmergencyProtocol();
+                }
+
+                // Ctrl + Shift + N - Nova consulta
+                if (e.ctrlKey && e.shiftKey && e.key === "N") {
+                    e.preventDefault();
+                    scheduleAppointment();
+                }
+
+                // ESC - Fechar modais
+                if (e.key === "Escape") {
+                    closeModal();
+                }
+
+                // Ctrl + 1-6 - Navegação rápida
+                if (e.ctrlKey && e.key >= "1" && e.key <= "6") {
+                    e.preventDefault();
+                    const sections = [
+                        "dashboard",
+                        "agenda",
+                        "pacientes",
+                        "prescricoes",
+                        "relatorios",
+                        "configuracoes",
+                    ];
+                    const section = sections[parseInt(e.key) - 1];
+                    showNotification(`⚡ Navegando para ${section}...`, "info");
+
+                    // Simular navegação
+                    if (section === "dashboard") {
+                        window.location.href = "area-medica.html";
+                    }
+                }
+            });
+
+            // Fechar modal ao clicar fora
+            window.addEventListener("click", function (e) {
+                const modals = document.querySelectorAll(".modal");
+                modals.forEach((modal) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            });
+
+            // CSS para animações
+            const style = document.createElement("style");
+            style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+            document.head.appendChild(style);
+
+            // Inicialização
+            document.addEventListener("DOMContentLoaded", function () {
+                setCurrentDate();
+
+                // Simulação de dados em tempo real
+                setInterval(() => {
+                    // Atualizar horário nas notificações
+                    const nextAppointment = document.querySelector(
+                        ".notification-item p",
+                    );
+                    if (
+                        nextAppointment &&
+                        nextAppointment.textContent.includes("minutos")
+                    ) {
+                        const currentMinutes = parseInt(
+                            nextAppointment.textContent.match(/\d+/)[0],
+                        );
+                        if (currentMinutes > 1) {
+                            nextAppointment.textContent = `Ana Costa em ${currentMinutes - 1} minutos`;
+                        }
+                    }
+                }, 60000); // Atualizar a cada minuto
+
+                // Boas-vindas
+                setTimeout(() => {
+                    showNotification(
+                        "👋 Bem-vindo à sua agenda do dia!",
+                        "success",
+                    );
+                }, 1000);
+            });
+        </script>
+    </body>
+</html>

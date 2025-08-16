@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotações Médicas - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e6f7ff 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .new-note-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .new-note-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .filters {
+            margin-bottom: 2rem;
+        }
+        
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .tag.urgente {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .tag.importante {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .tag.rotina {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .tag.pesquisa {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+        
+        .tag.active {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .notes-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .note-item {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid #e2e8f0;
+        }
+        
+        .note-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .note-item.active {
+            background: #e6f7ff;
+            border-left-color: #667eea;
+        }
+        
+        .note-item.urgente {
+            border-left-color: #ef4444;
+        }
+        
+        .note-item.importante {
+            border-left-color: #f59e0b;
+        }
+        
+        .note-item.rotina {
+            border-left-color: #10b981;
+        }
+        
+        .note-item.pesquisa {
+            border-left-color: #8b5cf6;
+        }
+        
+        .note-preview {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .note-title {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .note-date {
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+        
+        .note-content-preview {
+            color: #6b7280;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .note-tags {
+            display: flex;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .note-tag {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+        
+        .editor-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-title-section {
+            flex: 1;
+        }
+        
+        .title-input {
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: none;
+            outline: none;
+            width: 100%;
+            background: transparent;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .title-input::placeholder {
+            color: #a0aec0;
+        }
+        
+        .editor-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .priority-select {
+            padding: 8px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .priority-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .save-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .save-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        .editor-body {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .toolbar-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .toolbar-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .templates-dropdown {
+            position: relative;
+        }
+        
+        .templates-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            min-width: 250px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .templates-menu.show {
+            display: block;
+        }
+        
+        .template-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .template-item:last-child {
+            border-bottom: none;
+        }
+        
+        .template-item:hover {
+            background: #f8fafc;
+        }
+        
+        .template-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        
+        .template-desc {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .content-editor {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #2d3748;
+            resize: none;
+            font-family: inherit;
+            min-height: 300px;
+        }
+        
+        .content-editor::placeholder {
+            color: #a0aec0;
+        }
+        
+        .editor-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+        
+        .word-count {
+            margin-right: auto;
+        }
+        
+        .auto-save-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .save-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+        
+        .save-indicator.saving {
+            background: #f59e0b;
+            animation: pulse 1s infinite;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6b7280;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        .empty-action {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .empty-action:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .sidebar {
+                position: relative;
+                top: auto;
+                margin-bottom: 1rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 8px 12px;
+            }
+            
+            .editor-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .editor-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <h1>
+            <i class="fas fa-edit"></i>
+            Anotações Médicas
+        </h1>
+        <p>Editor avançado para anotações médicas profissionais</p>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <i class="fas fa-sticky-note"></i>
+                    Minhas Anotações
+                </div>
+                <button class="new-note-btn" onclick="criarNovaNota()">
+                    <i class="fas fa-plus"></i>
+                    Nova
+                </button>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar anotações..." oninput="filtrarNotas()">
+            </div>
+
+            <div class="filters">
+                <div class="filter-section">
+                    <div class="filter-title">📌 Filtrar por Prioridade:</div>
+                    <div class="filter-tags">
+                        <span class="tag urgente" data-priority="urgente" onclick="filtrarPorPrioridade('urgente')">🚨 Urgente</span>
+                        <span class="tag importante" data-priority="importante" onclick="filtrarPorPrioridade('importante')">⚠️ Importante</span>
+                        <span class="tag rotina" data-priority="rotina" onclick="filtrarPorPrioridade('rotina')">📋 Rotina</span>
+                        <span class="tag pesquisa" data-priority="pesquisa" onclick="filtrarPorPrioridade('pesquisa')">🔬 Pesquisa</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notes-list" id="notesList">
+                <!-- Anotações serão inseridas aqui -->
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div class="empty-title">Bem-vindo ao Editor de Anotações!</div>
+                <div class="empty-text">Crie sua primeira anotação médica ou selecione uma existente para começar.</div>
+                <button class="empty-action" onclick="criarNovaNota()">
+                    <i class="fas fa-plus"></i>
+                    Criar Nova Anotação
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados das anotações médicas
+        let notasData = [
+            {
+                id: 1,
+                title: "Protocolo COVID-19 Atualizado",
+                content: `# Protocolo de Atendimento COVID-19 - Versão 2025
+
+## Triagem Inicial
+- **Temperatura:** Verificar temperatura corporal (>37.5°C)
+- **Sintomas:** Febre, tosse seca, fadiga, perda de olfato/paladar
+- **Saturação:** SpO2 < 95% indica gravidade
+- **Histórico:** Exposição nos últimos 14 dias
+
+## Classificação de Risco
+### Leve (Domiciliar)
+- Sintomas leves sem dispneia
+- SpO2 > 95%
+- Sem comorbidades graves
+
+### Moderado (Observação)
+- Dispneia leve a moderada
+- SpO2 90-95%
+- Comorbidades controladas
+
+### Grave (Internação)
+- Dispneia severa ou SpO2 < 90%
+- Comprometimento respiratório
+- Comorbidades descompensadas
+
+## Tratamento
+- **Sintomático:** Paracetamol, hidratação
+- **Anticoagulação:** Enoxaparina conforme protocolo
+- **Corticoides:** Dexametasona se indicado
+- **Suporte:** Oxigenoterapia conforme necessidade
+
+## Seguimento
+- Retorno em 48-72h se sintomas leves
+- Orientação sobre sinais de alarme
+- Isolamento por 10 dias mínimo`,
+                priority: "importante",
+                tags: ["protocolo", "covid", "infectologia"],
+                createdAt: "2025-01-20T08:30:00",
+                updatedAt: "2025-01-21T14:20:00",
+                wordCount: 156
+            },
+            {
+                id: 2,
+                title: "Caso Clínico - Maria Silva",
+                content: `# Consulta Cardiológica - Maria Silva
+
+## Dados do Paciente
+- **Nome:** Maria Silva
+- **Idade:** 56 anos
+- **Profissão:** Professora
+- **Plano:** Particular
+
+## Queixa Principal
+Dor precordial há 3 dias, tipo aperto, irradiando para braço esquerdo.
+
+## História da Doença Atual
+Paciente refere início de dor torácica em repouso há 3 dias, com intensidade 7/10, associada a sudorese fria e náuseas. Dor melhora parcialmente com repouso.
+
+## Exame Físico
+- **PA:** 150/95 mmHg
+- **FC:** 88 bpm regular
+- **Ausculta cardíaca:** B1 B2 hipofonéticas, sem sopros
+- **Pulmões:** MVF presente bilateralmente
+
+## Hipótese Diagnóstica
+1. Síndrome coronariana aguda?
+2. Hipertensão arterial sistêmica
+
+## Conduta
+- ECG urgente
+- Troponina I
+- Encaminhamento para emergência
+- AAS 100mg VO imediato
+
+## Seguimento
+Retorno após avaliação na emergência.`,
+                priority: "urgente",
+                tags: ["caso-clinico", "cardiologia", "emergencia"],
+                createdAt: "2025-01-21T09:15:00",
+                updatedAt: "2025-01-21T09:45:00",
+                wordCount: 134
+            },
+            {
+                id: 3,
+                title: "Reunião Equipe Médica - Julho",
+                content: `# Ata da Reunião - Equipe Médica
+**Data:** 21/01/2025  
+**Horário:** 08:00 - 09:30  
+**Local:** Sala de Reuniões
+
+## Participantes
+- Dr. João Silva (Coordenador)
+- Dra. Ana Costa (Cardiologia)  
+- Dr. Pedro Santos (Clínica Geral)
+- Enfª Maria Oliveira (Coordenação)
+
+## Pauta Discutida
+
+### 1. Indicadores do Mês
+- **Consultas realizadas:** 1.247 (+15% vs dezembro)
+- **Taxa de satisfação:** 4.8/5.0
+- **Tempo médio de espera:** 18 minutos (-5 min)
+- **Receita:** R$ 186.450 (+22%)
+
+### 2. Novos Protocolos
+- Implementação do protocolo de telemedicina
+- Padronização de receituários digitais
+- Sistema de triagem por IA
+
+### 3. Capacitação
+- Treinamento em emergências médicas - 15/02
+- Workshop sobre comunicação - 22/02
+- Curso de suporte básico de vida - 01/03
+
+### 4. Decisões Tomadas
+1. Ampliação do horário de atendimento
+2. Contratação de 2 novos médicos
+3. Implementação do sistema de feedback
+
+### 5. Próximos Passos
+- Definir cronograma de contratações
+- Elaborar material de treinamento  
+- Implementar indicadores de qualidade
+
+**Próxima reunião:** 28/01/2025 às 08:00`,
+                priority: "rotina",
+                tags: ["reuniao", "gestao", "equipe"],
+                createdAt: "2025-01-21T08:00:00",
+                updatedAt: "2025-01-21T10:30:00",
+                wordCount: 187
+            },
+            {
+                id: 4,
+                title: "Pesquisa - Hipertensão em Diabéticos",
+                content: `# Estudo: Controle da Hipertensão em Pacientes Diabéticos
+
+## Objetivo
+Avaliar a eficácia do controle pressórico em pacientes diabéticos tipo 2 com hipertensão arterial sistêmica.
+
+## Metodologia
+- **Desenho:** Estudo observacional prospectivo
+- **População:** 150 pacientes DM2 + HAS
+- **Período:** Janeiro 2024 - Janeiro 2025
+- **Critérios de inclusão:**
+  - DM2 há >2 anos
+  - HAS confirmada (PA ≥140/90)
+  - Idade 40-70 anos
+
+## Variáveis Analisadas
+- **Primária:** Redução da PA sistólica
+- **Secundárias:** HbA1c, eventos CV, qualidade de vida
+
+## Resultados Preliminares (n=89)
+- **Redução PA sistólica:** -18.5 mmHg (p<0.001)
+- **Melhora HbA1c:** -0.8% (p<0.05)  
+- **Eventos CV:** 2.2% (vs 8.1% histórico)
+- **Aderência:** 87.6%
+
+## Medicações Utilizadas
+1. **IECA/BRA:** 78% dos casos
+2. **Diuréticos:** 65% em associação
+3. **Bloqueadores de cálcio:** 45%
+4. **Metformina:** 92% (diabetes)
+
+## Conclusões Parciais
+O controle intensivo da pressão arterial em diabéticos mostrou-se seguro e eficaz, com redução significativa de eventos cardiovasculares.
+
+## Próximas Etapas
+- Análise estatística final
+- Submissão para publicação
+- Apresentação em congresso`,
+                priority: "pesquisa",
+                tags: ["pesquisa", "diabetes", "hipertensao"],
+                createdAt: "2025-01-18T14:00:00",
+                updatedAt: "2025-01-21T16:45:00",
+                wordCount: 142
+            }
+        ];
+
+        let currentNote = null;
+        let filteredNotes = [...notasData];
+        let saveTimeout = null;
+
+        // Templates médicos
+        const templates = {
+            consulta: {
+                title: "Consulta Médica",
+                desc: "Template estruturado para consultas",
+                content: `# Consulta Médica
+
+## Dados do Paciente
+- **Nome:** 
+- **Idade:** 
+- **Profissão:** 
+- **Plano:** 
+
+## Queixa Principal
+
+
+## História da Doença Atual
+
+
+## Exame Físico
+- **PA:** 
+- **FC:** 
+- **Temperatura:** 
+- **Peso:** 
+
+## Hipótese Diagnóstica
+1. 
+2. 
+
+## Conduta
+
+
+## Seguimento
+`
+            },
+            emergencia: {
+                title: "Protocolo de Emergência",
+                desc: "Template para situações de emergência",
+                content: `# Protocolo de Emergência
+
+## Situação
+**Data/Hora:** ${new Date().toLocaleString('pt-BR')}
+**Prioridade:** 🚨 URGENTE
+
+## Avaliação Inicial
+- **Estado geral:** 
+- **Sinais vitais:** 
+- **Glasgow:** 
+- **Saturação:** 
+
+## Condutas Imediatas
+1. 
+2. 
+3. 
+
+## Medicações
+- 
+- 
+
+## Evolução
+
+
+## Próximos Passos
+`
+            },
+            followup: {
+                title: "Follow-up",
+                desc: "Acompanhamento de pacientes",
+                content: `# Follow-up - Acompanhamento
+
+## Paciente
+
+
+## Data da Consulta Anterior
+
+
+## Evolução desde a última consulta
+
+
+## Estado Atual
+- **Sintomas:** 
+- **Medicações em uso:** 
+- **Aderência ao tratamento:** 
+
+## Exames de Controle
+
+
+## Ajustes no Tratamento
+
+
+## Próximo Retorno
+`
+            },
+            pesquisa: {
+                title: "Pesquisa Científica",
+                desc: "Template para estudos e pesquisas",
+                content: `# Estudo: [Título da Pesquisa]
+
+## Objetivo
+
+
+## Metodologia
+- **Desenho:** 
+- **População:** 
+- **Período:** 
+- **Critérios de inclusão:** 
+
+## Variáveis Analisadas
+- **Primária:** 
+- **Secundárias:** 
+
+## Resultados
+
+
+## Conclusões
+
+
+## Próximas Etapas
+`
+            },
+            reuniao: {
+                title: "Ata de Reunião",
+                desc: "Template para reuniões médicas",
+                content: `# Ata da Reunião
+**Data:** ${new Date().toLocaleDateString('pt-BR')}
+**Horário:** 
+**Local:** 
+
+## Participantes
+- 
+- 
+- 
+
+## Pauta Discutida
+
+
+## Decisões Tomadas
+1. 
+2. 
+3. 
+
+## Próximos Passos
+
+
+**Próxima reunião:** 
+`
+            },
+            protocolo: {
+                title: "Protocolo Médico",
+                desc: "Template para novos protocolos",
+                content: `# Protocolo: [Nome do Protocolo]
+
+## Objetivo
+
+
+## Indicações
+- 
+- 
+
+## Contraindicações
+- 
+- 
+
+## Procedimento
+1. 
+2. 
+3. 
+
+## Materiais Necessários
+- 
+- 
+
+## Complicações Possíveis
+
+
+## Seguimento
+
+
+## Referências
+`
+            }
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📝 Sistema de Anotações Médicas carregado!');
+            console.log('✏️ Editor avançado inicializado');
+            console.log('📋 Templates médicos disponíveis');
+            
+            carregarNotas();
+            configurarAtalhos();
+            
+            console.log('✅ Sistema de Anotações pronto');
+        });
+
+        // Carregar notas na sidebar
+        function carregarNotas() {
+            const notesList = document.getElementById('notesList');
+            
+            if (filteredNotes.length === 0) {
+                notesList.innerHTML = `
+                    <div style="text-align: center; color: #6b7280; padding: 2rem;">
+                        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>Nenhuma anotação encontrada</p>
+                    </div>
+                `;
+                return;
+            }
+
+            notesList.innerHTML = filteredNotes.map(note => `
+                <div class="note-item ${note.priority}" data-id="${note.id}" onclick="carregarNota(${note.id})">
+                    <div class="note-preview">
+                        <div>
+                            <div class="note-title">${note.title}</div>
+                            <div class="note-date">${formatarData(note.updatedAt)}</div>
+                        </div>
+                    </div>
+                    <div class="note-content-preview">${note.content.replace(/[#*]/g, '').substring(0, 80)}...</div>
+                    <div class="note-tags">
+                        ${note.tags.map(tag => `<span class="note-tag">${tag}</span>`).join('')}
+                        <span class="note-tag">${note.wordCount} palavras</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Carregar nota específica
+        function carregarNota(id) {
+            const nota = notasData.find(n => n.id === id);
+            if (!nota) return;
+
+            currentNote = nota;
+
+            // Atualizar items ativos
+            document.querySelectorAll('.note-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-id="${id}"]`).classList.add('active');
+
+            // Carregar editor
+            document.getElementById('mainContent').innerHTML = `
+                <div class="editor-header">
+                    <div class="editor-title-section">
+                        <input type="text" class="title-input" placeholder="Título da anotação..." value="${nota.title}" onchange="atualizarTitulo(this.value)">
+                        <div class="editor-meta">
+                            <span><i class="fas fa-clock"></i> ${formatarData(nota.updatedAt)}</span>
+                            <span><i class="fas fa-tag"></i> ${nota.tags.join(', ')}</span>
+                            <span><i class="fas fa-font"></i> ${nota.wordCount} palavras</span>
+                        </div>
+                    </div>
+                    <div class="editor-actions">
+                        <select class="priority-select" onchange="atualizarPrioridade(this.value)">
+                            <option value="rotina" ${nota.priority === 'rotina' ? 'selected' : ''}>📋 Rotina</option>
+                            <option value="importante" ${nota.priority === 'importante' ? 'selected' : ''}>⚠️ Importante</option>
+                            <option value="urgente" ${nota.priority === 'urgente' ? 'selected' : ''}>🚨 Urgente</option>
+                            <option value="pesquisa" ${nota.priority === 'pesquisa' ? 'selected' : ''}>🔬 Pesquisa</option>
+                        </select>
+                        <button class="save-btn" onclick="salvarNota()">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                        <button class="delete-btn" onclick="excluirNota(${id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="editor-body">
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" onclick="formatarTexto('bold')" title="Negrito (Ctrl+B)">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatarTexto('italic')" title="Itálico (Ctrl+I)">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatarTexto('header')" title="Cabeçalho">
+                            <i class="fas fa-heading"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatarTexto('list')" title="Lista">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button class="toolbar-btn" onclick="formatarTexto('link')" title="Link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                        <div class="templates-dropdown">
+                            <button class="toolbar-btn" onclick="toggleTemplates()" title="Templates">
+                                <i class="fas fa-clipboard-list"></i>
+                                Templates
+                            </button>
+                            <div class="templates-menu" id="templatesMenu">
+                                ${Object.entries(templates).map(([key, template]) => `
+                                    <div class="template-item" onclick="aplicarTemplate('${key}')">
+                                        <div class="template-title">${template.title}</div>
+                                        <div class="template-desc">${template.desc}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <button class="toolbar-btn" onclick="exportarNota()" title="Exportar">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                    
+                    <textarea class="content-editor" placeholder="Comece a escrever sua anotação médica..." oninput="atualizarConteudo(this.value)">${nota.content}</textarea>
+                </div>
+                
+                <div class="editor-footer">
+                    <div class="word-count" id="wordCount">${nota.wordCount} palavras</div>
+                    <div class="auto-save-status">
+                        <div class="save-indicator" id="saveIndicator"></div>
+                        <span id="saveStatus">Salvo</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Criar nova nota
+        function criarNovaNota() {
+            const novaNota = {
+                id: Math.max(...notasData.map(n => n.id)) + 1,
+                title: "Nova Anotação",
+                content: "",
+                priority: "rotina",
+                tags: ["nova"],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                wordCount: 0
+            };
+
+            notasData.unshift(novaNota);
+            filteredNotes = [...notasData];
+            carregarNotas();
+            carregarNota(novaNota.id);
+        }
+
+        // Filtrar notas
+        function filtrarNotas() {
+            const busca = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredNotes = notasData.filter(nota => 
+                nota.title.toLowerCase().includes(busca) ||
+                nota.content.toLowerCase().includes(busca) ||
+                nota.tags.some(tag => tag.toLowerCase().includes(busca))
+            );
+
+            carregarNotas();
+        }
+
+        // Filtrar por prioridade
+        function filtrarPorPrioridade(prioridade) {
+            // Toggle filtro
+            const tag = document.querySelector(`[data-priority="${prioridade}"]`);
+            const isActive = tag.classList.contains('active');
+            
+            // Reset todos os tags
+            document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+            
+            if (!isActive) {
+                tag.classList.add('active');
+                filteredNotes = notasData.filter(nota => nota.priority === prioridade);
+            } else {
+                filteredNotes = [...notasData];
+            }
+            
+            carregarNotas();
+        }
+
+        // Atualizar título
+        function atualizarTitulo(novoTitulo) {
+            if (!currentNote) return;
+            currentNote.title = novoTitulo;
+            currentNote.updatedAt = new Date().toISOString();
+            autoSave();
+            carregarNotas();
+        }
+
+        // Atualizar conteúdo
+        function atualizarConteudo(novoConteudo) {
+            if (!currentNote) return;
+            currentNote.content = novoConteudo;
+            currentNote.wordCount = contarPalavras(novoConteudo);
+            currentNote.updatedAt = new Date().toISOString();
+            
+            // Atualizar contador de palavras
+            document.getElementById('wordCount').textContent = `${currentNote.wordCount} palavras`;
+            
+            autoSave();
+        }
+
+        // Atualizar prioridade
+        function atualizarPrioridade(novaPrioridade) {
+            if (!currentNote) return;
+            currentNote.priority = novaPrioridade;
+            currentNote.updatedAt = new Date().toISOString();
+            autoSave();
+            carregarNotas();
+        }
+
+        // Auto save
+        function autoSave() {
+            const indicator = document.getElementById('saveIndicator');
+            const status = document.getElementById('saveStatus');
+            
+            if (indicator && status) {
+                indicator.classList.add('saving');
+                status.textContent = 'Salvando...';
+            }
+
+            if (saveTimeout) {
+                clearTimeout(saveTimeout);
+            }
+
+            saveTimeout = setTimeout(() => {
+                if (indicator && status) {
+                    indicator.classList.remove('saving');
+                    status.textContent = 'Salvo';
+                }
+                
+                // Salvar no localStorage
+                localStorage.setItem('anotacoesMedicas', JSON.stringify(notasData));
+            }, 1000);
+        }
+
+        // Salvar nota manualmente
+        function salvarNota() {
+            if (!currentNote) return;
+            localStorage.setItem('anotacoesMedicas', JSON.stringify(notasData));
+            showNotification('✅ Anotação salva com sucesso!', 'success');
+        }
+
+        // Excluir nota
+        function excluirNota(id) {
+            if (!confirm('Tem certeza que deseja excluir esta anotação?')) return;
+            
+            notasData = notasData.filter(n => n.id !== id);
+            filteredNotes = [...notasData];
+            carregarNotas();
+            
+            // Limpar editor
+            document.getElementById('mainContent').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="empty-title">Anotação excluída!</div>
+                    <div class="empty-text">Selecione uma anotação existente ou crie uma nova.</div>
+                    <button class="empty-action" onclick="criarNovaNota()">
+                        <i class="fas fa-plus"></i>
+                        Criar Nova Anotação
+                    </button>
+                </div>
+            `;
+            
+            currentNote = null;
+            showNotification('🗑️ Anotação excluída com sucesso!', 'info');
+        }
+
+        // Formatar texto
+        function formatarTexto(tipo) {
+            const editor = document.querySelector('.content-editor');
+            if (!editor) return;
+
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selectedText = editor.value.substring(start, end);
+            let replacement = selectedText;
+
+            switch(tipo) {
+                case 'bold':
+                    replacement = `**${selectedText}**`;
+                    break;
+                case 'italic':
+                    replacement = `*${selectedText}*`;
+                    break;
+                case 'header':
+                    replacement = `## ${selectedText}`;
+                    break;
+                case 'list':
+                    replacement = `- ${selectedText}`;
+                    break;
+                case 'link':
+                    replacement = `[${selectedText}](url)`;
+                    break;
+            }
+
+            editor.value = editor.value.substring(0, start) + replacement + editor.value.substring(end);
+            atualizarConteudo(editor.value);
+        }
+
+        // Toggle templates
+        function toggleTemplates() {
+            const menu = document.getElementById('templatesMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Aplicar template
+        function aplicarTemplate(templateKey) {
+            const template = templates[templateKey];
+            if (!template || !currentNote) return;
+
+            const editor = document.querySelector('.content-editor');
+            if (editor) {
+                editor.value = template.content;
+                atualizarConteudo(template.content);
+            }
+
+            document.getElementById('templatesMenu').classList.remove('show');
+            showNotification(`📋 Template "${template.title}" aplicado!`, 'success');
+        }
+
+        // Exportar nota
+        function exportarNota() {
+            if (!currentNote) return;
+            
+            const dataExport = {
+                ...currentNote,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(dataExport, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentNote.title.replace(/\s+/g, '_')}.json`;
+            a.click();
+            
+            showNotification('📄 Anotação exportada com sucesso!', 'success');
+        }
+
+        // Configurar atalhos de teclado
+        function configurarAtalhos() {
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    switch(e.key) {
+                        case 'n':
+                            e.preventDefault();
+                            criarNovaNota();
+                            break;
+                        case 's':
+                            e.preventDefault();
+                            salvarNota();
+                            break;
+                        case 'b':
+                            e.preventDefault();
+                            formatarTexto('bold');
+                            break;
+                        case 'i':
+                            e.preventDefault();
+                            formatarTexto('italic');
+                            break;
+                    }
+                }
+            });
+        }
+
+        // Contar palavras
+        function contarPalavras(texto) {
+            if (!texto) return 0;
+            return texto.trim().split(/\s+/).filter(word => word.length > 0).length;
+        }
+
+        // Formatar data
+        function formatarData(isoDate) {
+            const data = new Date(isoDate);
+            const agora = new Date();
+            const diff = agora - data;
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (dias === 0) return 'Hoje';
+            if (dias === 1) return 'Ontem';
+            if (dias < 7) return `${dias} dias atrás`;
+            
+            return data.toLocaleDateString('pt-BR');
+        }
+
+        // Mostrar notificação
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                z-index: 10001;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fechar menu de templates ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.templates-dropdown')) {
+                document.getElementById('templatesMenu')?.classList.remove('show');
+            }
+        });
+
+        // Carregar dados salvos do localStorage
+        function carregarDadosSalvos() {
+            const savedData = localStorage.getItem('anotacoesMedicas');
+            if (savedData) {
+                try {
+                    notasData = JSON.parse(savedData);
+                    filteredNotes = [...notasData];
+                } catch (e) {
+                    console.log('Erro ao carregar dados salvos, usando dados padrão');
+                }
+            }
+        }
+
+        // Carregar dados salvos na inicialização
+        carregarDadosSalvos();
+    </script>
+</body>
+</html>

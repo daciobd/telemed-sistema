@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed Pro - Plataforma Integrada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .max-w-4xl {
+                max-width: 95% !important;
+            }
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            .grid {
+                gap: 1rem !important;
+            }
+            .p-8 {
+                padding: 1.5rem !important;
+            }
+            .text-6xl {
+                font-size: 3rem !important;
+            }
+        }
+        
+        /* Touch Optimization */
+        @media (hover: none) {
+            .card-hover:active {
+                transform: scale(0.98);
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .card-hover {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-4xl w-full">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold text-white mb-4">
+                    🩺 TeleMed Pro
+                </h1>
+                <p class="text-xl text-white/90 max-w-2xl mx-auto">
+                    Plataforma Integrada de Telemedicina
+                </p>
+                <p class="text-lg text-white/70 mt-2">
+                    Conectando médicos e pacientes através da tecnologia
+                </p>
+            </div>
+
+            <!-- Main Navigation Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+                <!-- Dr. AI Card -->
+                <div class="bg-white rounded-2xl p-8 text-center card-hover cursor-pointer" onclick="window.location.href='/dr-ai.html'">
+                    <div class="text-6xl mb-6">🤖</div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Dr. AI</h2>
+                    <p class="text-gray-600 mb-6">
+                        Triagem inteligente com assistente médico virtual
+                    </p>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors w-full">
+                        Iniciar Consulta AI
+                    </button>
+                </div>
+
+                <!-- Consulta por Valor Card -->
+                <div class="bg-white rounded-2xl p-8 text-center card-hover cursor-pointer" onclick="window.location.href='/consulta-por-valor.html'">
+                    <div class="text-6xl mb-6">💰</div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Consulta por Valor</h2>
+                    <p class="text-gray-600 mb-6">
+                        Sistema de lances para consultas médicas
+                    </p>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors w-full">
+                        Fazer Lance
+                    </button>
+                </div>
+            </div>
+
+            <!-- Additional Options -->
+            <div class="grid md:grid-cols-1 gap-4">
+                <!-- Dashboard Médico -->
+                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center">
+                    <h3 class="text-xl font-semibold text-white mb-3">Dashboard Médico</h3>
+                    <p class="text-white/80 mb-4">Acesso profissional para médicos</p>
+                    <button onclick="window.location.href='/dashboard-aquarela'" 
+                            class="bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-lg transition-colors">
+                        Acessar Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-12 text-white/60">
+                <p>&copy; 2025 TeleMed Pro - Inovação em Telemedicina</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Segurança Médica -->
+    <script src="/js/medical-security.js"></script>
+    
+    <script>
+        console.log('🚀 TeleMed Pro Platform Loaded');
+        
+        // Add click animations
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Aquarela - TeleMed</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 40%, #d97706 60%, #fbbf24 80%, #fef3c7 100%);
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(179, 217, 224, 0.95) 0%, rgba(209, 232, 226, 0.9) 100%);
+            border-right: 1px solid rgba(42, 64, 102, 0.2);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(42, 64, 102, 0.1);
+        }
+
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2A4066;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.875rem;
+            color: #4A6A8A;
+        }
+        
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #2A4066;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(42, 64, 102, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(42, 64, 102, 0.15);
+            border-left: 3px solid #2A4066;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 32px;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, rgba(255, 223, 0, 0.8) 0%, rgba(255, 165, 0, 0.6) 50%, rgba(255, 140, 0, 0.8) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            min-height: 180px;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2A4066;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: #4A6A8A;
+            font-weight: 500;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.9);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            padding: 12px;
+            border-radius: 50%;
+            margin-right: 16px;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue { background: #dbeafe; }
+        .stat-icon.green { background: #dcfce7; }
+        .stat-icon.yellow { background: #fef3c7; }
+        .stat-icon.purple { background: #f3e8ff; }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2A4066;
+        }
+
+        .functions-section {
+            background: rgba(255,255,255,0.8);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .functions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .action-card {
+            color: white;
+            padding: 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: white;
+        }
+
+        .card-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .card-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .card-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .card-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .activity-section {
+            background: rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .activity-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2A4066;
+            margin-bottom: 24px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .activity-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .activity-icon.blue { background: #dbeafe; }
+        .activity-icon.green { background: #dcfce7; }
+
+        .activity-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #2A4066;
+            margin-bottom: 2px;
+        }
+
+        .activity-subtitle {
+            font-size: 0.75rem;
+            color: #4A6A8A;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: #4A6A8A;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .functions-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .functions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">TeleMed Sistema</div>
+            <div class="sidebar-subtitle">Plataforma Médica Integrada</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="dashboard-premium-fixed.html" class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                Dashboard Principal
+            </a>
+            <a href="agenda-medica.html" class="nav-item">
+                <span class="nav-icon">📅</span>
+                Agenda Médica
+            </a>
+            <a href="receitas-digitais.html" class="nav-item">
+                <span class="nav-icon">📄</span>
+                Receitas Digitais
+            </a>
+            <a href="videoconsulta.html" class="nav-item">
+                <span class="nav-icon">📹</span>
+                Videoconsultas
+            </a>
+            <a href="dr-ai.html" class="nav-item">
+                <span class="nav-icon">🧠</span>
+                Dr. AI Assistente
+            </a>
+            <a href="telemonitoramento-enfermagem.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                Telemonitoramento
+            </a>
+            <a href="centro-avaliacao.html" class="nav-item">
+                <span class="nav-icon">⭐</span>
+                Centro de Avaliação
+            </a>
+            <a href="dr-ai.html" class="nav-item">
+                <span class="nav-icon">🤖</span>
+                Dr.AI - Triagem
+            </a>
+            <a href="relatorios-medicos-pdf.html" class="nav-item">
+                <span class="nav-icon">📄</span>
+                Relatórios PDF
+            </a>
+            <a href="consulta-por-valor.html" class="nav-item">
+                <span class="nav-icon">💰</span>
+                Consulta por Valor
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1 class="welcome-title">Bem-vindo, Dr. Carlos Mendes</h1>
+            <p class="welcome-subtitle">Sistema TeleMed - Sua plataforma médica completa para atendimento e gestão de pacientes</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon blue">👥</div>
+                    <div>
+                        <p class="stat-label">Pacientes Hoje</p>
+                        <p class="stat-value">24</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon green">📅</div>
+                    <div>
+                        <p class="stat-label">Consultas</p>
+                        <p class="stat-value">12</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon yellow">⏰</div>
+                    <div>
+                        <p class="stat-label">Pendentes</p>
+                        <p class="stat-value">5</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-icon purple">💊</div>
+                    <div>
+                        <p class="stat-label">Receitas</p>
+                        <p class="stat-value">18</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Action Cards -->
+        <div class="functions-section">
+            <h2 class="section-title">Funcionalidades Principais</h2>
+            
+            <div class="functions-grid">
+                <a href="agenda-medica.html" class="action-card card-blue">
+                    <div class="card-icon">📅</div>
+                    <h3 class="card-title">Agenda Médica</h3>
+                    <p class="card-subtitle">Consultas e horários</p>
+                </a>
+                
+                <a href="receitas-digitais.html" class="action-card card-green">
+                    <div class="card-icon">💊</div>
+                    <h3 class="card-title">Receitas Digitais</h3>
+                    <p class="card-subtitle">Prescrições MEMED</p>
+                </a>
+                
+                <a href="videoconsulta.html" class="action-card card-orange">
+                    <div class="card-icon">📹</div>
+                    <h3 class="card-title">Videoconsultas</h3>
+                    <p class="card-subtitle">Consultas online</p>
+                </a>
+                
+                <a href="telemonitoramento-enfermagem.html" class="action-card card-purple">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Telemonitoramento</h3>
+                    <p class="card-subtitle">Monitoramento 24/7</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+            <h3 class="activity-title">Atividade Recente</h3>
+            <div>
+                <div class="activity-item">
+                    <div class="activity-content">
+                        <div class="activity-icon blue">👤</div>
+                        <div>
+                            <p class="activity-text">Nova consulta agendada</p>
+                            <p class="activity-subtitle">Ana Silva - 14:30</p>
+                        </div>
+                    </div>
+                    <span class="activity-time">5 min atrás</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-content">
+                        <div class="activity-icon green">📄</div>
+                        <div>
+                            <p class="activity-text">Receita digital emitida</p>
+                            <p class="activity-subtitle">João Santos - MEMED</p>
+                        </div>
+                    </div>
+                    <span class="activity-time">12 min atrás</span>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-content">
+                        <div class="activity-icon blue">📹</div>
+                        <div>
+                            <p class="activity-text">Videoconsulta finalizada</p>
+                            <p class="activity-subtitle">Maria Oliveira - 30 min</p>
+                        </div>
+                    </div>
+                    <span class="activity-time">25 min atrás</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Feature Cards -->
+        <div class="functions-section">
+            <h2 class="section-title">Recursos Avançados</h2>
+            
+            <div class="functions-grid">
+                <a href="centro-avaliacao.html" class="action-card card-blue">
+                    <div class="card-icon">⭐</div>
+                    <h3 class="card-title">Centro de Avaliação</h3>
+                    <p class="card-subtitle">Avaliações médicas completas</p>
+                </a>
+                
+                <a href="dr-ai.html" class="action-card card-green">
+                    <div class="card-icon">🤖</div>
+                    <h3 class="card-title">Dr.AI - Triagem</h3>
+                    <p class="card-subtitle">Assistente AI para triagem</p>
+                </a>
+                
+                <a href="relatorios-medicos-pdf.html" class="action-card card-orange">
+                    <div class="card-icon">📄</div>
+                    <h3 class="card-title">Relatórios PDF</h3>
+                    <p class="card-subtitle">Relatórios médicos em PDF</p>
+                </a>
+                
+                <a href="consulta-por-valor.html" class="action-card card-purple">
+                    <div class="card-icon">💰</div>
+                    <h3 class="card-title">Consulta por Valor</h3>
+                    <p class="card-subtitle">Sistema de lances</p>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

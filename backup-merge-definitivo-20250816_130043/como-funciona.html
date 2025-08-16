@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Funciona - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #FAF8F5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .back-btn {
+            background: #A7C7E7;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+        
+        .back-btn:hover {
+            background: #92B4D7;
+            transform: translateY(-2px);
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            background: #A7C7E7;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #A7C7E7;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .highlight-section {
+            background: linear-gradient(135deg, #E9F4FF 0%, #F0F8FF 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .comparison-table {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            overflow-x: auto;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .comparison-table th {
+            background: #A7C7E7;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .check {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .cross {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .cta-btn {
+            background: #A7C7E7;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .cta-btn:hover {
+            background: #92B4D7;
+            transform: translateY(-2px);
+        }
+        
+        .cta-btn.secondary {
+            background: #F4D9B4;
+            color: #333;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fas fa-info-circle"></i> Como Funciona</h1>
+        <p>Entenda como o TeleMed Sistema revoluciona o acesso à saúde</p>
+    </div>
+
+    <div class="container">
+        <a href="/" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Voltar ao Site
+        </a>
+
+        <div class="highlight-section">
+            <h2>🚀 Sistema Revolucionário de Lances para Consultas Médicas</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                Primeiro sistema no Brasil onde <strong>você define o preço</strong> que quer pagar 
+                e os médicos fazem ofertas para atendê-lo. Mais economia, transparência e qualidade!
+            </p>
+        </div>
+
+        <h2 style="text-align: center; margin: 3rem 0 2rem;">📋 Como Funciona em 4 Passos Simples</h2>
+        
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-icon">📝</div>
+                <div class="step-title">Descreva sua Necessidade</div>
+                <p>Escolha a especialidade médica, descreva seus sintomas e defina quanto quer pagar pela consulta. Nosso sistema inteligente sugere valores justos.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-icon">👨‍⚕️</div>
+                <div class="step-title">Médicos Fazem Lances</div>
+                <p>Médicos qualificados e verificados fazem ofertas para atendê-lo. Você vê perfil, experiência, avaliações e especializações de cada profissional.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-icon">✅</div>
+                <div class="step-title">Escolha o Melhor</div>
+                <p>Compare propostas considerando preço, experiência e avaliações. Escolha o médico que oferece a melhor relação custo-benefício para seu caso.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-icon">💻</div>
+                <div class="step-title">Realize a Consulta</div>
+                <p>Consulta por videochamada segura com qualidade HD. Receba prescrição digital, relatório médico e acompanhamento pós-consulta.</p>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <h2>🆚 TeleMed vs Consultas Tradicionais</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>TeleMed Sistema</th>
+                        <th>Consulta Presencial</th>
+                        <th>Outros Apps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Preço</strong></td>
+                        <td class="check">✓ Você define</td>
+                        <td class="cross">✗ Preço fixo alto</td>
+                        <td class="cross">✗ Tabela rígida</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tempo</strong></td>
+                        <td class="check">✓ Agendamento rápido</td>
+                        <td class="cross">✗ Semanas de espera</td>
+                        <td class="check">✓ Rápido</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transparência</strong></td>
+                        <td class="check">✓ Total</td>
+                        <td class="cross">✗ Preços ocultos</td>
+                        <td class="cross">✗ Limitada</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Escolha do Médico</strong></td>
+                        <td class="check">✓ Você escolhe</td>
+                        <td class="cross">✗ Limitada</td>
+                        <td class="cross">✗ Aleatória</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Qualidade</strong></td>
+                        <td class="check">✓ Médicos verificados</td>
+                        <td class="check">✓ Boa</td>
+                        <td class="cross">✗ Variável</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conveniência</strong></td>
+                        <td class="check">✓ De casa</td>
+                        <td class="cross">✗ Deslocamento</td>
+                        <td class="check">✓ De casa</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 style="text-align: center; margin: 3rem 0 2rem;">🔧 Funcionalidades Avançadas</h2>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Dr. AI</h3>
+                <p>Triagem inteligente com IA que analisa sintomas e direciona para a especialidade correta</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Triagem Psiquiátrica</h3>
+                <p>Primeiro sistema no Brasil com avaliação psiquiátrica por IA usando escalas científicas</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Receitas Digitais</h3>
+                <p>Prescrições com validade legal enviadas diretamente para seu celular</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3>Pagamento Seguro</h3>
+                <p>PIX, cartão de crédito ou débito. Pagamento só após confirmação da consulta</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Histórico Médico</h3>
+                <p>Todos os seus registros médicos organizados e acessíveis em um só lugar</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Segurança LGPD</h3>
+                <p>Seus dados médicos protegidos com criptografia e conformidade total com a LGPD</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Sistema de Avaliações</h3>
+                <p>Avalie médicos e veja avaliações reais de outros pacientes</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📞</div>
+                <h3>Suporte 24/7</h3>
+                <p>Atendimento humanizado disponível a qualquer hora do dia</p>
+            </div>
+        </div>
+
+        <div class="highlight-section">
+            <h2>💰 Economia Real para Você</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div>
+                    <h3 style="color: #A7C7E7; font-size: 2rem;">40%</h3>
+                    <p>economia média em consultas especializadas</p>
+                </div>
+                <div>
+                    <h3 style="color: #A7C7E7; font-size: 2rem;">85%</h3>
+                    <p>redução no tempo de agendamento</p>
+                </div>
+                <div>
+                    <h3 style="color: #A7C7E7; font-size: 2rem;">98%</h3>
+                    <p>satisfação dos pacientes</p>
+                </div>
+                <div>
+                    <h3 style="color: #A7C7E7; font-size: 2rem;">24h</h3>
+                    <p>tempo médio de resposta dos médicos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Pronto para experimentar?</h2>
+            <p style="margin: 1rem 0;">Teste gratuitamente o Dr. AI ou faça seu primeiro lance para consulta</p>
+            <a href="/dr-ai" class="cta-btn">
+                <i class="fas fa-robot"></i> Testar Dr. AI Grátis
+            </a>
+            <a href="/patient-bidding" class="cta-btn">
+                <i class="fas fa-gavel"></i> Fazer Meu Lance
+            </a>
+            <a href="/precos.html" class="cta-btn secondary">
+                <i class="fas fa-tags"></i> Ver Preços
+            </a>
+        </div>
+
+        <div style="text-align: center; font-size: 0.9rem; color: #666; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #ddd;">
+            <p><strong>TeleMed Sistema</strong> - Revolucionando o acesso à saúde no Brasil</p>
+            <p>Suporte: suporte@telemed-sistema.replit.dev | Dúvidas: <a href="/faq.html">FAQ</a></p>
+        </div>
+    </div>
+</body>
+</html>

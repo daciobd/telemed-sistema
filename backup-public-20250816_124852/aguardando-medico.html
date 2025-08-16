@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aguardando Médico | TeleMed Sistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+            40%, 43% { transform: translateY(-30px); }
+            70% { transform: translateY(-15px); }
+            90% { transform: translateY(-4px); }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .pulse-animation { animation: pulse 2s infinite; }
+        .bounce-animation { animation: bounce 2s infinite; }
+        .spin-animation { animation: spin 2s linear infinite; }
+        
+        .progress-bar {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .notification-slide {
+            animation: slideInRight 0.5s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-heartbeat text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">TeleMed Sistema</h1>
+                        <p class="text-sm text-gray-500">Aguardando Atendimento</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-home text-xl"></i>
+                    </a>
+                    <a href="/guia-medicos.html" class="text-gray-600 hover:text-purple-600">
+                        <i class="fas fa-book text-lg"></i>
+                    </a>
+                    <a href="/index.html" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-tachometer-alt text-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Status Card -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
+            <div class="mb-6">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 bounce-animation">
+                    <i class="fas fa-clock text-blue-600 text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Lance Enviado com Sucesso!</h2>
+                <p class="text-lg text-gray-600">Seu pedido está sendo analisado pelos médicos</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="bg-gray-200 rounded-full h-3 mb-2">
+                    <div id="progressBar" class="progress-bar h-3 rounded-full" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-gray-500">Analisando proposta...</p>
+            </div>
+
+            <!-- Timer -->
+            <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                <p class="text-gray-700 font-semibold mb-2">Tempo de Espera:</p>
+                <div id="timer" class="text-2xl font-bold text-blue-600">00:00</div>
+                <p class="text-sm text-gray-500 mt-1">Tempo médio de resposta: 2-5 minutos</p>
+            </div>
+
+            <!-- Patient Info -->
+            <div id="patientInfo" class="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 class="font-bold text-gray-800 mb-3">Detalhes do seu Lance:</h3>
+                <div id="bidDetails" class="space-y-2 text-left">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="simulateAcceptance()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                    <i class="fas fa-robot mr-2"></i>Simular Aceitação (Teste)
+                </button>
+                <button onclick="cancelBid()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-times mr-2"></i>Cancelar Lance
+                </button>
+                <button onclick="refreshStatus()" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-refresh mr-2"></i>Atualizar Status
+                </button>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">O que acontece agora?</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-search text-blue-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-2">1. Análise</h4>
+                    <p class="text-gray-600 text-sm">Médicos especializados analisam seu lance e sintomas</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-hand-paper text-green-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-2">2. Aceitação</h4>
+                    <p class="text-gray-600 text-sm">Um médico aceita atender seu caso</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-video text-purple-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-2">3. Consulta</h4>
+                    <p class="text-gray-600 text-sm">Você será redirecionado para a videoconsulta</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Area -->
+    <div id="notificationArea" class="fixed top-4 right-4 z-50">
+        <!-- Notifications will be added here -->
+    </div>
+
+    <script>
+        let waitingTime = 0;
+        let progressInterval;
+        let timerInterval;
+        let statusCheckInterval;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPatientInfo();
+            startTimer();
+            startProgressBar();
+            startStatusCheck();
+            console.log('🏥 Página Aguardando Médico carregada - Monitoramento ativo');
+        });
+
+        function loadPatientInfo() {
+            // Get the latest bid from localStorage
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const latestBid = bids[bids.length - 1];
+            
+            if (latestBid) {
+                const detailsHtml = `
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Paciente:</span>
+                        <span class="font-semibold">${latestBid.patient}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Especialidade:</span>
+                        <span class="font-semibold">${latestBid.specialty}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Valor:</span>
+                        <span class="font-semibold text-green-600">R$ ${latestBid.value}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Tipo:</span>
+                        <span class="font-semibold">${latestBid.consultType}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Status:</span>
+                        <span class="font-semibold text-yellow-600">Aguardando</span>
+                    </div>
+                `;
+                document.getElementById('bidDetails').innerHTML = detailsHtml;
+                console.log('📋 Informações do paciente carregadas:', latestBid);
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                waitingTime++;
+                const minutes = Math.floor(waitingTime / 60);
+                const seconds = waitingTime % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function startProgressBar() {
+            let progress = 0;
+            progressInterval = setInterval(() => {
+                progress += Math.random() * 3; // Random progress increment
+                if (progress > 95) progress = 95; // Don't reach 100% until doctor accepts
+                document.getElementById('progressBar').style.width = progress + '%';
+            }, 1000);
+        }
+
+        function startStatusCheck() {
+            // Check for doctor acceptance every 5 seconds
+            statusCheckInterval = setInterval(() => {
+                checkDoctorAcceptance();
+            }, 5000);
+        }
+
+        function checkDoctorAcceptance() {
+            // Check if any bid has been accepted by looking for status change
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const latestBid = bids[bids.length - 1];
+            
+            if (latestBid && latestBid.status === 'aceito') {
+                console.log('🎉 Lance aceito por médico! Redirecionando...');
+                showAcceptedNotification(latestBid);
+                setTimeout(() => {
+                    window.location.href = '/videoconsulta.html';
+                }, 3000);
+            }
+            
+            // Simulate random doctor acceptance after 15 seconds for demo (reduced for faster testing)
+            if (waitingTime > 15 && Math.random() < 0.5) {
+                console.log('🎲 Simulando aceitação automática do médico...');
+                acceptBidDemo(latestBid);
+            }
+        }
+
+        function acceptBidDemo(bid) {
+            if (bid) {
+                // Update bid status to accepted
+                const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+                const bidIndex = bids.findIndex(b => b.id === bid.id);
+                if (bidIndex !== -1) {
+                    bids[bidIndex].status = 'aceito';
+                    bids[bidIndex].acceptedAt = new Date().toISOString();
+                    localStorage.setItem('telemed_bids', JSON.stringify(bids));
+                    console.log('✅ Simulação: Lance aceito automaticamente após 30s');
+                }
+            }
+        }
+
+        function showAcceptedNotification(bid) {
+            const notification = document.createElement('div');
+            notification.className = 'notification-slide bg-green-600 text-white p-4 rounded-lg shadow-lg mb-4 max-w-sm';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-xl mr-3"></i>
+                    <div>
+                        <p class="font-bold">Lance Aceito!</p>
+                        <p class="text-sm">Dr. Silva aceitou seu caso</p>
+                        <p class="text-xs mt-1">Redirecionando para videoconsulta...</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('notificationArea').appendChild(notification);
+            
+            // Complete progress bar
+            document.getElementById('progressBar').style.width = '100%';
+            
+            // Clear intervals
+            clearInterval(timerInterval);
+            clearInterval(progressInterval);
+            clearInterval(statusCheckInterval);
+        }
+
+        function refreshStatus() {
+            const button = event.target;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Atualizando...';
+            
+            setTimeout(() => {
+                checkDoctorAcceptance();
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-refresh mr-2"></i>Atualizar Status';
+                
+                showNotification('Status atualizado!', 'info');
+            }, 1500);
+        }
+
+        function simulateAcceptance() {
+            console.log('🎭 Simulando aceitação manual do médico...');
+            const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+            const latestBid = bids[bids.length - 1];
+            
+            if (latestBid && latestBid.status === 'aguardando') {
+                showNotification('Simulando aceitação do médico...', 'info');
+                setTimeout(() => {
+                    acceptBidDemo(latestBid);
+                }, 2000);
+            } else {
+                showNotification('Nenhum lance ativo encontrado para simular aceitação.', 'error');
+            }
+        }
+
+        function cancelBid() {
+            if (confirm('Tem certeza que deseja cancelar seu lance?')) {
+                // Remove the latest bid
+                const bids = JSON.parse(localStorage.getItem('telemed_bids') || '[]');
+                if (bids.length > 0) {
+                    bids.pop(); // Remove last bid
+                    localStorage.setItem('telemed_bids', JSON.stringify(bids));
+                }
+                
+                showNotification('Lance cancelado com sucesso!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/consulta-por-valor.html';
+                }, 2000);
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: 'bg-green-600',
+                error: 'bg-red-600',
+                info: 'bg-blue-600'
+            };
+            
+            notification.className = `notification-slide ${colors[type]} text-white p-4 rounded-lg shadow-lg mb-4 max-w-sm`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('notificationArea').appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        function goHome() {
+            window.location.href = '/';
+        }
+
+        // Cleanup intervals when page unloads
+        window.addEventListener('beforeunload', () => {
+            clearInterval(timerInterval);
+            clearInterval(progressInterval);
+            clearInterval(statusCheckInterval);
+        });
+
+        console.log('⏰ Sistema de Aguardando Médico ativo - Monitoramento em tempo real');
+    </script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Médico - TeleMed Sistema</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="preconnect">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #A7C7E7;
+            --secondary-color: #F4D9B4;
+            --alert-color: #E9967A;
+            --background-color: #FAF8F5;
+            --card-color: #FFFFFF;
+            --text-dark: #2c3e50;
+            --text-gray: #666;
+            --border-color: #e1e5e9;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--background-color) 0%, #f0f2f5 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--card-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .login-left {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .login-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .feature-list i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .login-right {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-subtitle {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--card-color);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(167, 199, 231, 0.1);
+        }
+
+        .crm-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .crm-number {
+            flex: 1;
+        }
+
+        .crm-state {
+            width: 80px;
+        }
+
+        .form-input.error {
+            border-color: var(--error-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .password-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #92B4D7 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(167, 199, 231, 0.4);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-links {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .form-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-link:hover {
+            color: #92B4D7;
+            text-decoration: underline;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: var(--text-gray);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            min-width: 300px;
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .demo-accounts {
+            background: rgba(167, 199, 231, 0.1);
+            border: 1px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .demo-accounts h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                margin: 1rem;
+            }
+            
+            .login-left {
+                padding: 2rem;
+                text-align: center;
+            }
+            
+            .login-right {
+                padding: 2rem;
+            }
+            
+            .notification {
+                right: 1rem;
+                left: 1rem;
+                min-width: auto;
+            }
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <a href="/area-medica.html" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Voltar à Área Médica
+    </a>
+
+    <div class="login-container">
+        <div class="login-left">
+            <div class="login-logo">
+                <i class="fas fa-user-md"></i>
+                TeleMed Médico
+            </div>
+            <div class="login-subtitle">
+                Plataforma profissional para médicos
+            </div>
+            <ul class="feature-list">
+                <li>
+                    <i class="fas fa-calendar-check"></i>
+                    Agenda integrada de consultas
+                </li>
+                <li>
+                    <i class="fas fa-video"></i>
+                    Videoconsultas WebRTC seguras
+                </li>
+                <li>
+                    <i class="fas fa-prescription"></i>
+                    Prescrições digitais validadas
+                </li>
+                <li>
+                    <i class="fas fa-chart-line"></i>
+                    Relatórios financeiros detalhados
+                </li>
+                <li>
+                    <i class="fas fa-robot"></i>
+                    Suporte Dr. AI para diagnósticos
+                </li>
+                <li>
+                    <i class="fas fa-shield-alt"></i>
+                    Segurança LGPD garantida
+                </li>
+            </ul>
+        </div>
+
+        <div class="login-right">
+            <div class="form-header">
+                <h1 class="form-title">Login Médico</h1>
+                <p class="form-subtitle">Acesse sua área profissional</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="crm">CRM + Estado</label>
+                    <div class="crm-input-group">
+                        <input type="text" id="crm" name="crm" class="form-input crm-number" placeholder="123456" maxlength="6" required>
+                        <select id="crmState" name="crmState" class="form-input crm-state" required>
+                            <option value="">UF</option>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select>
+                    </div>
+                    <div class="error-message" id="crmError">CRM inválido ou não cadastrado</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Senha</label>
+                    <div class="password-group">
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Sua senha segura" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="passwordError">Senha incorreta</div>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <span id="btnText">Acessar Dashboard</span>
+                </button>
+
+                <div class="form-links">
+                    <a href="/recuperar-senha-medico.html" class="form-link">Esqueci minha senha</a>
+                    <a href="/medico-cadastro.html" class="form-link">Ainda não sou cadastrado</a>
+                </div>
+            </form>
+
+            <div class="demo-accounts">
+                <h4><i class="fas fa-info-circle"></i> Contas Demo para Testes</h4>
+                <div class="demo-account">
+                    <span><strong>CRM:</strong> 123456-SP</span>
+                    <span><strong>Senha:</strong> medico123</span>
+                </div>
+                <div class="demo-account">
+                    <span><strong>CRM:</strong> 654321-RJ</span>
+                    <span><strong>Senha:</strong> doutor456</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de dados simulada de médicos
+        const medicosDatabase = {
+            '123456-SP': {
+                name: 'Dr. João Silva',
+                specialty: 'Cardiologia',
+                crm: '123456',
+                state: 'SP',
+                password: 'medico123',
+                verified: true
+            },
+            '654321-RJ': {
+                name: 'Dra. Maria Santos',
+                specialty: 'Pediatria',
+                crm: '654321',
+                state: 'RJ',
+                password: 'doutor456',
+                verified: true
+            },
+            '789012-MG': {
+                name: 'Dr. Carlos Mendes',
+                specialty: 'Psiquiatria',
+                crm: '789012',
+                state: 'MG',
+                password: 'psiquiatra789',
+                verified: true
+            }
+        };
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.className = 'fas fa-eye';
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function validateCRM(crm, state) {
+            const crmKey = `${crm}-${state}`;
+            return medicosDatabase.hasOwnProperty(crmKey);
+        }
+
+        function validateCredentials(crm, state, password) {
+            const crmKey = `${crm}-${state}`;
+            const medico = medicosDatabase[crmKey];
+            
+            if (!medico) return false;
+            if (!medico.verified) return { error: 'unverified' };
+            if (medico.password !== password) return { error: 'password' };
+            
+            return { success: true, medico };
+        }
+
+        function showFieldError(fieldId, show = true) {
+            const field = document.getElementById(fieldId);
+            const errorMessage = document.getElementById(fieldId + 'Error');
+            
+            if (show) {
+                field.classList.add('error');
+                errorMessage.style.display = 'block';
+            } else {
+                field.classList.remove('error');
+                errorMessage.style.display = 'none';
+            }
+        }
+
+        function setLoading(isLoading) {
+            const loginBtn = document.getElementById('loginBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const btnText = document.getElementById('btnText');
+            
+            if (isLoading) {
+                loginBtn.disabled = true;
+                loadingSpinner.style.display = 'inline-block';
+                btnText.textContent = 'Verificando...';
+            } else {
+                loginBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
+                btnText.textContent = 'Acessar Dashboard';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Limpar erros anteriores
+            showFieldError('crm', false);
+            showFieldError('password', false);
+            
+            const crm = document.getElementById('crm').value.trim();
+            const crmState = document.getElementById('crmState').value;
+            const password = document.getElementById('password').value;
+            
+            // Validações básicas
+            if (!crm || !crmState) {
+                showFieldError('crm', true);
+                showNotification('Por favor, preencha CRM e Estado', 'error');
+                return;
+            }
+            
+            if (!password) {
+                showFieldError('password', true);
+                showNotification('Por favor, digite sua senha', 'error');
+                return;
+            }
+            
+            setLoading(true);
+            
+            // Simular delay de autenticação
+            setTimeout(() => {
+                const validation = validateCredentials(crm, crmState, password);
+                
+                if (validation.success) {
+                    const medico = validation.medico;
+                    
+                    // Salvar dados do médico logado
+                    localStorage.setItem('medico_logado', JSON.stringify({
+                        crm: `${crm}-${crmState}`,
+                        name: medico.name,
+                        specialty: medico.specialty,
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    showNotification(`Bem-vindo, ${medico.name}!`, 'success');
+                    
+                    // Verificar redirecionamento
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUrl = urlParams.get('redirect') || localStorage.getItem('medical_redirect_after_login');
+                    
+                    setTimeout(() => {
+                        if (redirectUrl) {
+                            localStorage.removeItem('medical_redirect_after_login');
+                            window.location.href = redirectUrl;
+                        } else {
+                            window.location.href = '/doctor-dashboard';
+                        }
+                    }, 1500);
+                    
+                } else if (validation.error === 'unverified') {
+                    showFieldError('crm', true);
+                    showNotification('CRM aguardando verificação. Contate o suporte.', 'error');
+                    
+                } else if (validation.error === 'password') {
+                    showFieldError('password', true);
+                    showNotification('Senha incorreta. Tente novamente.', 'error');
+                    
+                } else {
+                    showFieldError('crm', true);
+                    showNotification('CRM não encontrado na base de dados', 'error');
+                }
+                
+                setLoading(false);
+            }, 1500);
+        });
+
+        // Máscaras de input
+        document.getElementById('crm').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 6) value = value.substring(0, 6);
+            e.target.value = value;
+        });
+
+        // Auto-preencher campos demo ao clicar
+        document.querySelectorAll('.demo-account').forEach(account => {
+            account.addEventListener('click', function() {
+                const text = this.textContent;
+                const crmMatch = text.match(/CRM:\s*(\d+)-(\w+)/);
+                const passwordMatch = text.match(/Senha:\s*(\w+)/);
+                
+                if (crmMatch && passwordMatch) {
+                    document.getElementById('crm').value = crmMatch[1];
+                    document.getElementById('crmState').value = crmMatch[2];
+                    document.getElementById('password').value = passwordMatch[1];
+                    
+                    showNotification('Dados preenchidos automaticamente', 'success');
+                }
+            });
+        });
+
+        // Animação de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.login-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.6s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

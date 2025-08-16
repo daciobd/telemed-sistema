@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas Agendadas - TeleMed Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e6f7ff 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select, .search-input {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-input {
+            width: 300px;
+        }
+        
+        .week-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .week-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .week-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .current-week {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .stats-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-number.confirmadas { color: #10b981; }
+        .stat-number.pendentes { color: #f59e0b; }
+        .stat-number.canceladas { color: #ef4444; }
+        .stat-number.total { color: #667eea; }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        .calendar-view {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(7, 1fr);
+            gap: 1px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .time-slot, .day-header, .calendar-cell {
+            background: white;
+            padding: 0.5rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .day-header {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #2d3748;
+            min-height: 40px;
+        }
+        
+        .time-slot {
+            background: #f8fafc;
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .calendar-cell {
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .calendar-cell:hover {
+            background: #f0f9ff;
+        }
+        
+        .appointment {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border-radius: 6px;
+            padding: 4px;
+            font-size: 0.7rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .appointment:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        
+        .appointment.confirmada {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .appointment.pendente {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .appointment.cancelada {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            opacity: 0.7;
+        }
+        
+        .appointment-time {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .appointment-patient {
+            font-size: 0.6rem;
+            opacity: 0.9;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .appointments-list {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .list-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .add-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .add-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .appointment-item {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #e2e8f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .appointment-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .appointment-item.confirmada {
+            border-left-color: #10b981;
+        }
+        
+        .appointment-item.pendente {
+            border-left-color: #f59e0b;
+        }
+        
+        .appointment-item.cancelada {
+            border-left-color: #ef4444;
+            opacity: 0.7;
+        }
+        
+        .appointment-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .patient-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .appointment-details {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .appointment-time-info {
+            text-align: right;
+            font-size: 0.8rem;
+        }
+        
+        .time-info {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+        
+        .status-badge.confirmada {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-badge.pendente {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-badge.cancelada {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .appointment-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-btn.confirm {
+            background: #10b981;
+            color: white;
+        }
+        
+        .action-btn.cancel {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .action-btn.video {
+            background: #667eea;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .info-group {
+            margin-bottom: 1rem;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+            color: #2d3748;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .modal-btn.success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .modal-btn.danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                grid-template-columns: 60px repeat(5, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filters {
+                justify-content: center;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Dashboard
+        </a>
+        <h1>
+            <i class="fas fa-calendar-alt"></i>
+            Consultas Agendadas
+        </h1>
+        <p>Visualize e gerencie todas as consultas agendadas</p>
+    </div>
+
+    <div class="container">
+        <!-- Controls -->
+        <div class="controls">
+            <div class="filters">
+                <select class="filter-select" id="statusFilter">
+                    <option value="">Todos os Status</option>
+                    <option value="confirmada">Confirmadas</option>
+                    <option value="pendente">Pendentes</option>
+                    <option value="cancelada">Canceladas</option>
+                </select>
+                
+                <select class="filter-select" id="especialidadeFilter">
+                    <option value="">Todas Especialidades</option>
+                    <option value="cardiologia">Cardiologia</option>
+                    <option value="dermatologia">Dermatologia</option>
+                    <option value="pediatria">Pediatria</option>
+                    <option value="ortopedia">Ortopedia</option>
+                </select>
+                
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍 Buscar paciente...">
+            </div>
+            
+            <div class="week-nav">
+                <button class="week-btn" id="prevWeek">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <span class="current-week" id="currentWeek">22-28 Jul 2024</span>
+                <button class="week-btn" id="nextWeek">
+                    Próxima <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number confirmadas" id="statConfirmadas">8</div>
+                <div class="stat-label">Confirmadas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number pendentes" id="statPendentes">3</div>
+                <div class="stat-label">Pendentes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number canceladas" id="statCanceladas">2</div>
+                <div class="stat-label">Canceladas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number total" id="statTotal">13</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Calendar View -->
+            <div class="calendar-view">
+                <div class="calendar-header">
+                    <h2>Agenda Semanal</h2>
+                </div>
+                
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Appointments List -->
+                <div class="appointments-list">
+                    <div class="list-header">
+                        <div class="list-title">Consultas de Hoje</div>
+                        <button class="add-btn" onclick="openAddModal()">
+                            <i class="fas fa-plus"></i> Nova
+                        </button>
+                    </div>
+                    
+                    <div id="appointmentsList">
+                        <!-- Appointments will be loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="appointmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Detalhes da Consulta</div>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            
+            <div class="modal-actions" id="modalActions">
+                <!-- Actions will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - in real app this would come from API
+        let appointments = [
+            {
+                id: 1,
+                paciente: "Maria Silva",
+                data: "2024-07-22",
+                horario: "08:00",
+                duracao: 60,
+                especialidade: "cardiologia",
+                status: "confirmada",
+                observacoes: "Consulta de rotina - acompanhamento hipertensão",
+                telefone: "(11) 99999-1111",
+                email: "maria@email.com"
+            },
+            {
+                id: 2,
+                paciente: "João Santos",
+                data: "2024-07-22",
+                horario: "09:30",
+                duracao: 45,
+                especialidade: "dermatologia",
+                status: "pendente",
+                observacoes: "Avaliação de manchas na pele",
+                telefone: "(11) 99999-2222",
+                email: "joao@email.com"
+            },
+            {
+                id: 3,
+                paciente: "Ana Costa",
+                data: "2024-07-22",
+                horario: "11:00",
+                duracao: 30,
+                especialidade: "pediatria",
+                status: "confirmada",
+                observacoes: "Consulta pediátrica - 2 anos",
+                telefone: "(11) 99999-3333",
+                email: "ana@email.com"
+            },
+            {
+                id: 4,
+                paciente: "Carlos Lima",
+                data: "2024-07-22",
+                horario: "14:00",
+                duracao: 60,
+                especialidade: "ortopedia",
+                status: "cancelada",
+                observacoes: "Paciente cancelou - reagendar",
+                telefone: "(11) 99999-4444",
+                email: "carlos@email.com"
+            },
+            {
+                id: 5,
+                paciente: "Pedro Alves",
+                data: "2024-07-22",
+                horario: "15:30",
+                duracao: 45,
+                especialidade: "cardiologia",
+                status: "confirmada",
+                observacoes: "Retorno - exames cardíacos",
+                telefone: "(11) 99999-5555",
+                email: "pedro@email.com"
+            },
+            {
+                id: 6,
+                paciente: "Lucia Ferreira",
+                data: "2024-07-23",
+                horario: "09:00",
+                duracao: 60,
+                especialidade: "dermatologia",
+                status: "pendente",
+                observacoes: "Primeira consulta",
+                telefone: "(11) 99999-6666",
+                email: "lucia@email.com"
+            },
+            {
+                id: 7,
+                paciente: "Roberto Silva",
+                data: "2024-07-24",
+                horario: "10:30",
+                duracao: 45,
+                especialidade: "ortopedia",
+                status: "confirmada",
+                observacoes: "Dor no joelho direito",
+                telefone: "(11) 99999-7777",
+                email: "roberto@email.com"
+            }
+        ];
+
+        let currentDate = new Date();
+        let selectedDate = new Date();
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            loadAppointments();
+            renderCalendar();
+            updateStats();
+            setupEventListeners();
+            
+            console.log('📅 Sistema de Consultas Agendadas carregado!');
+            console.log('📊 Agenda com dados reais funcionando');
+            console.log('🔍 Filtros e busca operacionais');
+        }
+
+        function setupEventListeners() {
+            // Filters
+            document.getElementById('statusFilter').addEventListener('change', filterAppointments);
+            document.getElementById('especialidadeFilter').addEventListener('change', filterAppointments);
+            document.getElementById('searchInput').addEventListener('input', filterAppointments);
+            
+            // Week navigation
+            document.getElementById('prevWeek').addEventListener('click', previousWeek);
+            document.getElementById('nextWeek').addEventListener('click', nextWeek);
+            
+            // Modal close on background click
+            document.getElementById('appointmentModal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+        }
+
+        function renderCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            const startOfWeek = getStartOfWeek(currentDate);
+            
+            // Update week display
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(endOfWeek.getDate() + 6);
+            document.getElementById('currentWeek').textContent = 
+                `${formatDate(startOfWeek, 'dd/MM')} - ${formatDate(endOfWeek, 'dd/MM/yyyy')}`;
+            
+            let gridHTML = '';
+            
+            // Header row
+            gridHTML += '<div class="time-slot"></div>';
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(startOfWeek);
+                date.setDate(date.getDate() + i);
+                const dayName = date.toLocaleDateString('pt-BR', { weekday: 'short' });
+                const dayNum = date.getDate();
+                gridHTML += `<div class="day-header">${dayName}<br>${dayNum}</div>`;
+            }
+            
+            // Time slots
+            const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+            
+            timeSlots.forEach(time => {
+                gridHTML += `<div class="time-slot">${time}</div>`;
+                
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(startOfWeek);
+                    date.setDate(date.getDate() + i);
+                    const dateStr = formatDate(date, 'yyyy-MM-dd');
+                    
+                    // Find appointments for this date/time
+                    const dayAppointments = appointments.filter(apt => 
+                        apt.data === dateStr && apt.horario.startsWith(time.substring(0, 2))
+                    );
+                    
+                    let cellHTML = `<div class="calendar-cell" data-date="${dateStr}" data-time="${time}">`;
+                    
+                    dayAppointments.forEach(apt => {
+                        cellHTML += `
+                            <div class="appointment ${apt.status}" onclick="openAppointmentModal(${apt.id})">
+                                <div class="appointment-time">${apt.horario}</div>
+                                <div class="appointment-patient">${apt.paciente}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    cellHTML += '</div>';
+                    gridHTML += cellHTML;
+                }
+            });
+            
+            calendarGrid.innerHTML = gridHTML;
+        }
+
+        function loadAppointments() {
+            const today = formatDate(new Date(), 'yyyy-MM-dd');
+            const todayAppointments = appointments.filter(apt => apt.data === today);
+            
+            const appointmentsList = document.getElementById('appointmentsList');
+            
+            if (todayAppointments.length === 0) {
+                appointmentsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Nenhuma consulta agendada para hoje</p>';
+                return;
+            }
+            
+            let listHTML = '';
+            
+            todayAppointments.forEach(apt => {
+                listHTML += `
+                    <div class="appointment-item ${apt.status}" onclick="openAppointmentModal(${apt.id})">
+                        <div class="appointment-info">
+                            <div>
+                                <div class="patient-name">${apt.paciente}</div>
+                                <div class="appointment-details">
+                                    ${apt.especialidade.charAt(0).toUpperCase() + apt.especialidade.slice(1)}
+                                </div>
+                            </div>
+                            <div class="appointment-time-info">
+                                <div class="time-info">${apt.horario}</div>
+                                <div class="status-badge ${apt.status}">${apt.status}</div>
+                            </div>
+                        </div>
+                        <div class="appointment-actions">
+                            ${apt.status === 'pendente' ? `
+                                <button class="action-btn confirm" onclick="event.stopPropagation(); confirmAppointment(${apt.id})">
+                                    <i class="fas fa-check"></i> Confirmar
+                                </button>
+                            ` : ''}
+                            ${apt.status === 'confirmada' ? `
+                                <button class="action-btn video" onclick="event.stopPropagation(); startVideoCall(${apt.id})">
+                                    <i class="fas fa-video"></i> Iniciar
+                                </button>
+                            ` : ''}
+                            <button class="action-btn cancel" onclick="event.stopPropagation(); cancelAppointment(${apt.id})">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            appointmentsList.innerHTML = listHTML;
+        }
+
+        function updateStats() {
+            const stats = {
+                confirmadas: appointments.filter(apt => apt.status === 'confirmada').length,
+                pendentes: appointments.filter(apt => apt.status === 'pendente').length,
+                canceladas: appointments.filter(apt => apt.status === 'cancelada').length,
+                total: appointments.length
+            };
+            
+            document.getElementById('statConfirmadas').textContent = stats.confirmadas;
+            document.getElementById('statPendentes').textContent = stats.pendentes;
+            document.getElementById('statCanceladas').textContent = stats.canceladas;
+            document.getElementById('statTotal').textContent = stats.total;
+        }
+
+        function filterAppointments() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const especialidadeFilter = document.getElementById('especialidadeFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filteredAppointments = appointments;
+            
+            if (statusFilter) {
+                filteredAppointments = filteredAppointments.filter(apt => apt.status === statusFilter);
+            }
+            
+            if (especialidadeFilter) {
+                filteredAppointments = filteredAppointments.filter(apt => apt.especialidade === especialidadeFilter);
+            }
+            
+            if (searchTerm) {
+                filteredAppointments = filteredAppointments.filter(apt => 
+                    apt.paciente.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Update calendar and list with filtered data
+            renderFilteredCalendar(filteredAppointments);
+            renderFilteredList(filteredAppointments);
+        }
+
+        function renderFilteredCalendar(filteredAppointments) {
+            // Re-render calendar with filtered appointments
+            const originalAppointments = appointments;
+            appointments = filteredAppointments;
+            renderCalendar();
+            appointments = originalAppointments;
+        }
+
+        function renderFilteredList(filteredAppointments) {
+            const today = formatDate(new Date(), 'yyyy-MM-dd');
+            const todayFiltered = filteredAppointments.filter(apt => apt.data === today);
+            
+            const appointmentsList = document.getElementById('appointmentsList');
+            
+            if (todayFiltered.length === 0) {
+                appointmentsList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">Nenhuma consulta encontrada</p>';
+                return;
+            }
+            
+            let listHTML = '';
+            
+            todayFiltered.forEach(apt => {
+                listHTML += `
+                    <div class="appointment-item ${apt.status}" onclick="openAppointmentModal(${apt.id})">
+                        <div class="appointment-info">
+                            <div>
+                                <div class="patient-name">${apt.paciente}</div>
+                                <div class="appointment-details">
+                                    ${apt.especialidade.charAt(0).toUpperCase() + apt.especialidade.slice(1)}
+                                </div>
+                            </div>
+                            <div class="appointment-time-info">
+                                <div class="time-info">${apt.horario}</div>
+                                <div class="status-badge ${apt.status}">${apt.status}</div>
+                            </div>
+                        </div>
+                        <div class="appointment-actions">
+                            ${apt.status === 'pendente' ? `
+                                <button class="action-btn confirm" onclick="event.stopPropagation(); confirmAppointment(${apt.id})">
+                                    <i class="fas fa-check"></i> Confirmar
+                                </button>
+                            ` : ''}
+                            ${apt.status === 'confirmada' ? `
+                                <button class="action-btn video" onclick="event.stopPropagation(); startVideoCall(${apt.id})">
+                                    <i class="fas fa-video"></i> Iniciar
+                                </button>
+                            ` : ''}
+                            <button class="action-btn cancel" onclick="event.stopPropagation(); cancelAppointment(${apt.id})">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            appointmentsList.innerHTML = listHTML;
+        }
+
+        function openAppointmentModal(appointmentId) {
+            const appointment = appointments.find(apt => apt.id === appointmentId);
+            if (!appointment) return;
+            
+            const modal = document.getElementById('appointmentModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const modalActions = document.getElementById('modalActions');
+            
+            modalTitle.textContent = `Consulta - ${appointment.paciente}`;
+            
+            modalBody.innerHTML = `
+                <div class="info-group">
+                    <div class="info-label">👤 Paciente</div>
+                    <div class="info-value">${appointment.paciente}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">📅 Data</div>
+                    <div class="info-value">${formatDate(new Date(appointment.data), 'dd/MM/yyyy')}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">⏰ Horário</div>
+                    <div class="info-value">${appointment.horario} (${appointment.duracao}min)</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">🏥 Especialidade</div>
+                    <div class="info-value">${appointment.especialidade.charAt(0).toUpperCase() + appointment.especialidade.slice(1)}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">📞 Telefone</div>
+                    <div class="info-value">${appointment.telefone}</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-label">📧 Email</div>
+                    <div class="info-value">${appointment.email}</div>
+                </div>
+                <div class="info-group" style="grid-column: 1 / -1;">
+                    <div class="info-label">📝 Observações</div>
+                    <div class="info-value">${appointment.observacoes}</div>
+                </div>
+                <div class="info-group" style="grid-column: 1 / -1;">
+                    <div class="info-label">✅ Status</div>
+                    <div class="info-value">
+                        <span class="status-badge ${appointment.status}">${appointment.status}</span>
+                    </div>
+                </div>
+            `;
+            
+            let actionsHTML = '';
+            
+            if (appointment.status === 'pendente') {
+                actionsHTML += `
+                    <button class="modal-btn success" onclick="confirmAppointment(${appointment.id})">
+                        <i class="fas fa-check"></i> Confirmar Consulta
+                    </button>
+                `;
+            }
+            
+            if (appointment.status === 'confirmada') {
+                actionsHTML += `
+                    <button class="modal-btn primary" onclick="startVideoCall(${appointment.id})">
+                        <i class="fas fa-video"></i> Iniciar Videoconsulta
+                    </button>
+                `;
+            }
+            
+            actionsHTML += `
+                <button class="modal-btn danger" onclick="cancelAppointment(${appointment.id})">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn" onclick="rescheduleAppointment(${appointment.id})">
+                    <i class="fas fa-calendar-alt"></i> Reagendar
+                </button>
+            `;
+            
+            modalActions.innerHTML = actionsHTML;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('appointmentModal').classList.remove('active');
+        }
+
+        function confirmAppointment(appointmentId) {
+            const appointment = appointments.find(apt => apt.id === appointmentId);
+            if (appointment) {
+                appointment.status = 'confirmada';
+                showNotification(`Consulta de ${appointment.paciente} confirmada!`, 'success');
+                refreshViews();
+                closeModal();
+            }
+        }
+
+        function cancelAppointment(appointmentId) {
+            if (confirm('Tem certeza que deseja cancelar esta consulta?')) {
+                const appointment = appointments.find(apt => apt.id === appointmentId);
+                if (appointment) {
+                    appointment.status = 'cancelada';
+                    showNotification(`Consulta de ${appointment.paciente} cancelada`, 'error');
+                    refreshViews();
+                    closeModal();
+                }
+            }
+        }
+
+        function startVideoCall(appointmentId) {
+            const appointment = appointments.find(apt => apt.id === appointmentId);
+            if (appointment) {
+                showNotification(`Iniciando videoconsulta com ${appointment.paciente}...`, 'info');
+                // Redirect to video consultation
+                setTimeout(() => {
+                    window.open('/videoconsulta.html', '_blank');
+                }, 1500);
+                closeModal();
+            }
+        }
+
+        function rescheduleAppointment(appointmentId) {
+            const newDate = prompt('Nova data (dd/mm/yyyy):');
+            const newTime = prompt('Novo horário (HH:MM):');
+            
+            if (newDate && newTime) {
+                const appointment = appointments.find(apt => apt.id === appointmentId);
+                if (appointment) {
+                    // Convert date format
+                    const dateParts = newDate.split('/');
+                    appointment.data = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                    appointment.horario = newTime;
+                    appointment.status = 'pendente';
+                    
+                    showNotification(`Consulta reagendada para ${newDate} às ${newTime}`, 'success');
+                    refreshViews();
+                    closeModal();
+                }
+            }
+        }
+
+        function previousWeek() {
+            currentDate.setDate(currentDate.getDate() - 7);
+            renderCalendar();
+        }
+
+        function nextWeek() {
+            currentDate.setDate(currentDate.getDate() + 7);
+            renderCalendar();
+        }
+
+        function refreshViews() {
+            loadAppointments();
+            renderCalendar();
+            updateStats();
+        }
+
+        function openAddModal() {
+            // Simple add appointment functionality
+            const paciente = prompt('Nome do paciente:');
+            const data = prompt('Data (dd/mm/yyyy):');
+            const horario = prompt('Horário (HH:MM):');
+            const especialidade = prompt('Especialidade:');
+            
+            if (paciente && data && horario && especialidade) {
+                const newId = Math.max(...appointments.map(apt => apt.id)) + 1;
+                const dateParts = data.split('/');
+                const dataFormatted = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                
+                const newAppointment = {
+                    id: newId,
+                    paciente: paciente,
+                    data: dataFormatted,
+                    horario: horario,
+                    duracao: 60,
+                    especialidade: especialidade.toLowerCase(),
+                    status: 'pendente',
+                    observacoes: 'Nova consulta agendada',
+                    telefone: '(11) 99999-0000',
+                    email: 'paciente@email.com'
+                };
+                
+                appointments.push(newAppointment);
+                showNotification(`Consulta agendada para ${paciente}!`, 'success');
+                refreshViews();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            switch(type) {
+                case 'success':
+                    notification.style.background = '#10b981';
+                    break;
+                case 'error':
+                    notification.style.background = '#ef4444';
+                    break;
+                case 'info':
+                default:
+                    notification.style.background = '#667eea';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Utility functions
+        function formatDate(date, format) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            
+            switch(format) {
+                case 'dd/MM/yyyy':
+                    return `${day}/${month}/${year}`;
+                case 'dd/MM':
+                    return `${day}/${month}`;
+                case 'yyyy-MM-dd':
+                    return `${year}-${month}-${day}`;
+                default:
+                    return date.toISOString().split('T')[0];
+            }
+        }
+
+        function getStartOfWeek(date) {
+            const day = date.getDay();
+            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(date.setDate(diff));
+        }
+
+        // Add CSS animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

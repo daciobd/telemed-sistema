@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Redirecionamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">Teste Redirecionamento</h1>
+        
+        <button onclick="testRedirect()" class="bg-blue-600 text-white px-4 py-2 rounded mb-4 w-full">
+            Teste 1: window.location.href
+        </button>
+        
+        <button onclick="testReplace()" class="bg-green-600 text-white px-4 py-2 rounded mb-4 w-full">
+            Teste 2: window.location.replace
+        </button>
+        
+        <button onclick="testAssign()" class="bg-purple-600 text-white px-4 py-2 rounded mb-4 w-full">
+            Teste 3: window.location.assign
+        </button>
+        
+        <button onclick="testTimeout()" class="bg-red-600 text-white px-4 py-2 rounded mb-4 w-full">
+            Teste 4: setTimeout + href
+        </button>
+        
+        <div id="status" class="bg-gray-100 p-3 rounded text-sm"></div>
+    </div>
+
+    <script>
+        function log(message) {
+            const status = document.getElementById('status');
+            status.innerHTML += message + '<br>';
+            console.log(message);
+        }
+
+        function testRedirect() {
+            log('🔄 Testando window.location.href...');
+            window.location.href = '/aguardando-medico.html';
+        }
+
+        function testReplace() {
+            log('🔄 Testando window.location.replace...');
+            window.location.replace('/aguardando-medico.html');
+        }
+
+        function testAssign() {
+            log('🔄 Testando window.location.assign...');
+            window.location.assign('/aguardando-medico.html');
+        }
+
+        function testTimeout() {
+            log('🔄 Testando setTimeout + href...');
+            setTimeout(() => {
+                log('⏰ Executando redirect após timeout...');
+                window.location.href = '/aguardando-medico.html';
+            }, 1000);
+        }
+
+        // Test if aguardando page exists
+        fetch('/aguardando-medico.html')
+            .then(response => {
+                if (response.ok) {
+                    log('✅ Página /aguardando-medico.html existe e está acessível');
+                } else {
+                    log('❌ Página /aguardando-medico.html não encontrada (status: ' + response.status + ')');
+                }
+            })
+            .catch(error => {
+                log('❌ Erro ao verificar página: ' + error.message);
+            });
+    </script>
+</body>
+</html>

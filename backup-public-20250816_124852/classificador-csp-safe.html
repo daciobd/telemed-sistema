@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificador CSP Safe</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            background: linear-gradient(135deg, #fef3c7, #f59e0b); 
+            padding: 20px; 
+            margin: 0;
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2A4066;
+            margin-bottom: 10px;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1976d2;
+        }
+        .btn { 
+            padding: 10px 15px; 
+            margin: 4px; 
+            border: 2px solid #ddd; 
+            background: white; 
+            cursor: pointer; 
+            border-radius: 6px;
+            font-size: 13px;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: #f5f5f5;
+            border-color: #ccc;
+        }
+        .btn.selected { 
+            background: #1976d2 !important; 
+            color: white !important; 
+            border-color: #1565c0 !important;
+            transform: scale(1.05);
+        }
+        .btn.status-ok { background: #e8f5e8; border-color: #4caf50; color: #2e7d32; }
+        .btn.status-broken { background: #ffebee; border-color: #f44336; color: #c62828; }
+        .btn.status-partial { background: #fff8e1; border-color: #ff9800; color: #ef6c00; }
+        .btn.priority-essential { background: #ffebee; border-color: #f44336; color: #c62828; }
+        .btn.priority-important { background: #fff8e1; border-color: #ff9800; color: #ef6c00; }
+        .btn.priority-secondary { background: #e3f2fd; border-color: #2196f3; color: #1565c0; }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0;
+            background: white;
+        }
+        th, td { 
+            padding: 15px 10px; 
+            border: 1px solid #e0e0e0; 
+            vertical-align: top;
+        }
+        th { 
+            background: #f8f9fa; 
+            font-weight: 600;
+            color: #424242;
+        }
+        a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .export-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+        }
+        .export-btn {
+            background: #4caf50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        .export-btn:hover {
+            background: #45a049;
+        }
+        .export-btn.clear {
+            background: #f44336;
+        }
+        .export-btn.clear:hover {
+            background: #d32f2f;
+        }
+        #resultado {
+            background: white;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+        .summary {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Classificador de Páginas TeleMed</h1>
+        
+        <div class="instructions">
+            <strong>📖 Instruções:</strong><br>
+            1. Clique no link 🔗 para abrir cada página em nova aba<br>
+            2. Clique nos botões para classificar o STATUS e PRIORIDADE<br>
+            3. Clique em "📤 Exportar" para gerar o resultado final
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 220px;">📄 Página</th>
+                    <th style="width: 300px;">⚡ Status</th>
+                    <th style="width: 350px;">🎯 Prioridade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-page="index.html">
+                    <td><a href="index.html" target="_blank">index.html 🔗</a></td>
+                    <td>
+                        <button class="btn status-ok" data-type="status" data-value="ok">✅ OK</button>
+                        <button class="btn status-broken" data-type="status" data-value="broken">❌ QUEBRADA</button>
+                        <button class="btn status-partial" data-type="status" data-value="partial">⚠️ PARCIAL</button>
+                    </td>
+                    <td>
+                        <button class="btn priority-essential" data-type="priority" data-value="essential">🔥 ESSENCIAL</button>
+                        <button class="btn priority-important" data-type="priority" data-value="important">📌 IMPORTANTE</button>
+                        <button class="btn priority-secondary" data-type="priority" data-value="secondary">📂 SECUNDÁRIO</button>
+                    </td>
+                </tr>
+                <tr data-page="dashboard-premium-fixed.html">
+                    <td><a href="dashboard-premium-fixed.html" target="_blank">dashboard-premium-fixed.html 🔗</a></td>
+                    <td>
+                        <button class="btn status-ok" data-type="status" data-value="ok">✅ OK</button>
+                        <button class="btn status-broken" data-type="status" data-value="broken">❌ QUEBRADA</button>
+                        <button class="btn status-partial" data-type="status" data-value="partial">⚠️ PARCIAL</button>
+                    </td>
+                    <td>
+                        <button class="btn priority-essential" data-type="priority" data-value="essential">🔥 ESSENCIAL</button>
+                        <button class="btn priority-important" data-type="priority" data-value="important">📌 IMPORTANTE</button>
+                        <button class="btn priority-secondary" data-type="priority" data-value="secondary">📂 SECUNDÁRIO</button>
+                    </td>
+                </tr>
+                <tr data-page="agenda-do-dia.html">
+                    <td><a href="agenda-do-dia.html" target="_blank">agenda-do-dia.html 🔗</a></td>
+                    <td>
+                        <button class="btn status-ok" data-type="status" data-value="ok">✅ OK</button>
+                        <button class="btn status-broken" data-type="status" data-value="broken">❌ QUEBRADA</button>
+                        <button class="btn status-partial" data-type="status" data-value="partial">⚠️ PARCIAL</button>
+                    </td>
+                    <td>
+                        <button class="btn priority-essential" data-type="priority" data-value="essential">🔥 ESSENCIAL</button>
+                        <button class="btn priority-important" data-type="priority" data-value="important">📌 IMPORTANTE</button>
+                        <button class="btn priority-secondary" data-type="priority" data-value="secondary">📂 SECUNDÁRIO</button>
+                    </td>
+                </tr>
+                <tr data-page="videoconsulta.html">
+                    <td><a href="videoconsulta.html" target="_blank">videoconsulta.html 🔗</a></td>
+                    <td>
+                        <button class="btn status-ok" data-type="status" data-value="ok">✅ OK</button>
+                        <button class="btn status-broken" data-type="status" data-value="broken">❌ QUEBRADA</button>
+                        <button class="btn status-partial" data-type="status" data-value="partial">⚠️ PARCIAL</button>
+                    </td>
+                    <td>
+                        <button class="btn priority-essential" data-type="priority" data-value="essential">🔥 ESSENCIAL</button>
+                        <button class="btn priority-important" data-type="priority" data-value="important">📌 IMPORTANTE</button>
+                        <button class="btn priority-secondary" data-type="priority" data-value="secondary">📂 SECUNDÁRIO</button>
+                    </td>
+                </tr>
+                <tr data-page="dr-ai.html">
+                    <td><a href="dr-ai.html" target="_blank">dr-ai.html 🔗</a></td>
+                    <td>
+                        <button class="btn status-ok" data-type="status" data-value="ok">✅ OK</button>
+                        <button class="btn status-broken" data-type="status" data-value="broken">❌ QUEBRADA</button>
+                        <button class="btn status-partial" data-type="status" data-value="partial">⚠️ PARCIAL</button>
+                    </td>
+                    <td>
+                        <button class="btn priority-essential" data-type="priority" data-value="essential">🔥 ESSENCIAL</button>
+                        <button class="btn priority-important" data-type="priority" data-value="important">📌 IMPORTANTE</button>
+                        <button class="btn priority-secondary" data-type="priority" data-value="secondary">📂 SECUNDÁRIO</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="export-section">
+            <button class="export-btn" id="exportBtn">📤 Exportar Resultado</button>
+            <button class="export-btn clear" id="clearBtn">🗑️ Limpar Tudo</button>
+            
+            <div id="resultado"></div>
+            <div id="summary" class="summary"></div>
+        </div>
+    </div>
+
+    <script>
+        // Event listeners sem onclick inline
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Classificador carregado!');
+            
+            // Adicionar listeners para todos os botões
+            document.querySelectorAll('.btn[data-type]').forEach(button => {
+                button.addEventListener('click', function() {
+                    handleButtonClick(this);
+                });
+            });
+            
+            // Listener para exportar
+            document.getElementById('exportBtn').addEventListener('click', exportar);
+            
+            // Listener para limpar
+            document.getElementById('clearBtn').addEventListener('click', limparTudo);
+        });
+
+        function handleButtonClick(button) {
+            const row = button.closest('tr');
+            const type = button.getAttribute('data-type');
+            const value = button.getAttribute('data-value');
+            
+            console.log(`📌 ${type} selecionado:`, value);
+            
+            // Remove seleção anterior do mesmo tipo na mesma linha
+            row.querySelectorAll(`[data-type="${type}"]`).forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Adiciona seleção ao botão clicado
+            button.classList.add('selected');
+            
+            // Feedback visual extra
+            button.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1.05)';
+            }, 150);
+        }
+
+        function exportar() {
+            let resultado = 'RESULTADO DA CLASSIFICAÇÃO:\\n\\n';
+            let count = 0;
+            
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const pageName = row.getAttribute('data-page');
+                const selectedStatus = row.querySelector('[data-type="status"].selected');
+                const selectedPriority = row.querySelector('[data-type="priority"].selected');
+                
+                if (selectedStatus || selectedPriority) {
+                    const status = selectedStatus ? selectedStatus.textContent.trim() : '⬜ NÃO CLASSIFICADO';
+                    const priority = selectedPriority ? selectedPriority.textContent.trim() : '⬜ NÃO CLASSIFICADO';
+                    
+                    resultado += `${pageName} | ${status} | ${priority}\\n`;
+                    count++;
+                }
+            });
+
+            if (count === 0) {
+                resultado += 'ℹ️ Nenhuma página foi classificada ainda.';
+            } else {
+                resultado += `\\n📊 Total classificadas: ${count} páginas`;
+            }
+
+            // Mostrar resultado
+            const resultDiv = document.getElementById('resultado');
+            resultDiv.textContent = resultado;
+            resultDiv.style.display = 'block';
+            
+            // Tentar copiar para clipboard
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(resultado).then(() => {
+                    alert('✅ Resultado copiado para área de transferência!');
+                }).catch(() => {
+                    alert('⚠️ Resultado exibido abaixo (copie manualmente)');
+                });
+            } else {
+                alert('⚠️ Resultado exibido abaixo (copie manualmente)');
+            }
+        }
+
+        function limparTudo() {
+            if (confirm('🤔 Tem certeza que deseja limpar todas as classificações?')) {
+                document.querySelectorAll('.btn.selected').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                document.getElementById('resultado').style.display = 'none';
+                document.getElementById('summary').style.display = 'none';
+                
+                alert('🧹 Todas as classificações foram limpas!');
+            }
+        }
+    </script>
+</body>
+</html>
