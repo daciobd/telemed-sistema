@@ -470,6 +470,19 @@ app.get('/sistema-notificacoes-medicas', (req, res) => {
   }
 });
 
+// Configurar rota home page personalizada ANTES do Vite middleware
+app.get('/', (req, res, next) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../public/demo-ativo/index.html'), 'utf-8');
+    console.log('🏠 Servindo home page personalizada: /public/demo-ativo/index.html');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar home page personalizada:', err);
+    res.status(500).send('Erro ao carregar a página inicial');
+  }
+});
+
 // Especialidades
 app.get('/especialidades', (req, res) => {
   try {
@@ -628,18 +641,7 @@ server.on('listening', async () => {
   startAIUsageWatchdog();
 });
 
-// Configurar rota home page personalizada ANTES do Vite middleware
-app.get('/', (req, res, next) => {
-  try {
-    const html = fs.readFileSync(path.join(__dirname, '../public/demo-ativo/index.html'), 'utf-8');
-    console.log('🏠 Servindo home page personalizada: /public/demo-ativo/index.html');
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.send(html);
-  } catch (err) {
-    console.error('❌ Erro ao carregar home page personalizada:', err);
-    res.status(500).send('Erro ao carregar a página inicial');
-  }
-});
+
 
 // AI Usage Watchdog - monitors and alerts every 5 minutes
 const watchdogAlerts = {
