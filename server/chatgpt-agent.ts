@@ -1,9 +1,9 @@
-// import { OpenAI } from 'openai'; // Temporarily disabled due to dependency conflict
-import { aiUsageTracker, trackRateLimit, getUsageToday } from './utils/aiUsage';
-import { webhookManager, sendAlert } from './utils/webhook';
+import { SimpleOpenAIClient, createOpenAIClient } from './utils/openai-client.js';
+import { aiUsageTracker, trackRateLimit, getUsageToday } from './utils/aiUsage.js';
+import { webhookManager, sendAlert } from './utils/webhook.js';
 
 // Configuração do ChatGPT Agent para TeleMed Consulta
-let openai: any | null = null;
+let openai: SimpleOpenAIClient | null = null;
 
 // Configuração de modelos e retry
 const PRIMARY_MODEL = process.env.OPENAI_MODEL_PRIMARY || 'gpt-4o';
@@ -15,15 +15,8 @@ const exponentialDelay = (attempt: number): number => {
   return Math.min(1000 * Math.pow(2, attempt), 30000); // Max 30 segundos
 };
 
-// Inicializar OpenAI apenas se a API key estiver disponível
-if (process.env.OPENAI_API_KEY) {
-  // openai = new OpenAI({
-  //   apiKey: process.env.OPENAI_API_KEY,
-  // });
-  console.log('⚠️ OpenAI Client temporariamente desabilitado - aguardando correção de dependências');
-} else {
-  console.log('⚠️ OPENAI_API_KEY não encontrada - ChatGPT Agent em modo simulação');
-}
+// Inicializar OpenAI Client personalizado
+openai = createOpenAIClient();
 
 // Prompt inicial para configurar o agente
 const telemedPrompt = `
@@ -89,7 +82,7 @@ async function callOpenAIWithResilience(
       throw new Error('OpenAI client não inicializado');
     }
     
-    const completion = await openai.chat.completions.create({
+    const completion = await openai.createChatCompletion({
       model: currentModel,
       messages,
       max_tokens: 2000,
@@ -209,7 +202,7 @@ export class TelemedChatGPTAgent {
     }
 
     try {
-      const response = await openai.chat.completions.create({
+      const response = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo', // Modelo compatível com a maioria das API keys
         messages: [
           { 

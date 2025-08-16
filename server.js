@@ -36,3 +36,9 @@ process.on('SIGTERM', () => {
   serverProcess.kill();
   process.exit(0);
 });
+
+// Rota para sistema completo híbrido
+app.get("/complete", (req, res) => {
+    console.log("🎯 Servindo sistema híbrido completo");
+    res.sendFile(path.join(__dirname, "public", "telemed-complete.html"));
+});
