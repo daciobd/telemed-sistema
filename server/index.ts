@@ -483,6 +483,22 @@ app.get('/', (req, res, next) => {
   }
 });
 
+// Servir arquivos estáticos da pasta demo-ativo
+app.use('/public/demo-ativo', express.static(path.join(__dirname, '../public/demo-ativo')));
+
+// Rota específica para area-medica.html
+app.get('/area-medica.html', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../public/demo-ativo/area-medica.html'), 'utf-8');
+    console.log('📱 Servindo área médica: /public/demo-ativo/area-medica.html');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar área médica:', err);
+    res.status(404).send('Página não encontrada');
+  }
+});
+
 // Especialidades
 app.get('/especialidades', (req, res) => {
   try {
