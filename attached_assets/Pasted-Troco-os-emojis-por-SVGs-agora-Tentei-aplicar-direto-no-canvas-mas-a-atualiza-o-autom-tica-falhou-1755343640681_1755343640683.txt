@@ -1,0 +1,80 @@
+Troco os emojis por SVGs agora. Tentei aplicar direto no canvas, mas a atualização automática falhou (o editor não achou os trechos para substituir). Sem estresse: segue um patch pronto para você colar no arquivo React/Next do canvas (“TeleMed – Dashboard v2 (React/Next…)”) — funciona igual no CRA/Vite.
+
+1) Adicione este componente IconMulti (logo abaixo do function Icon(...) ou, se preferir, substitua o Icon por uma versão que aceite múltiplos paths):
+function IconMulti({ paths = [], size = 22, strokeWidth = 2 }) {
+  return (
+    <svg
+      className="micon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {paths.map((d, i) => (<path key={i} d={d} />))}
+      <style jsx>{`
+        .micon{flex:0 0 auto;display:inline-block}
+      `}</style>
+    </svg>
+  );
+}
+
+
+Obs.: Mantive o Icon antigo para o restante do layout. O IconMulti é só para os cards de módulo.
+
+2) Substitua somente o conteúdo do ícone dentro de cada card em <section className="modules">…</section>:
+
+Agenda do Dia
+
+<div className="module-icon">
+  <IconMulti size={22} paths={["M3 7h18","M7 3v4","M17 3v4","M5 7h14v12H5z"]}/>
+</div>
+
+
+Gestão de Pacientes
+
+<div className="module-icon">
+  <IconMulti size={22} paths={[
+    "M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6",
+    "M16 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6",
+    "M2 22v-1a5 5 0 0 1 5-5h0a5 5 0 0 1 5 5v1",
+    "M12 22v-1a5 5 0 0 1 5-5h0a5 5 0 0 1 5 5v1"
+  ]}/>
+</div>
+
+
+Perfil do Médico (cruz médica – simples e legível)
+
+<div className="module-icon">
+  <IconMulti size={22} paths={[
+    "M12 4a8 8 0 1 1 0 16 8 8 0 0 1 0-16z",
+    "M12 8v8",
+    "M8 12h8"
+  ]}/>
+</div>
+
+
+Configurações (sliders)
+
+<div className="module-icon">
+  <IconMulti size={22} paths={[
+    "M4 6h16","M4 12h16","M4 18h16",
+    "M8 4v4","M12 10v4","M16 16v4"
+  ]}/>
+</div>
+
+
+Demo Responsivo (smartphone)
+
+<div className="module-icon">
+  <IconMulti size={22} paths={[
+    "M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z",
+    "M12 18h.01"
+  ]}/>
+</div>
+
+
+Só troque o que está entre <div className="module-icon">…</div> (onde hoje estão os emojis). O restante do card fica igual.
