@@ -3766,6 +3766,174 @@ Testado em: \${new Date().toLocaleString('pt-BR')}
     res.redirect('/public/dashboard-premium.html');
   });
 
+  // ===============================================
+  // ROTAS PRINCIPAIS DO SISTEMA INTEGRADO
+  // ===============================================
+  
+  // Rota TeleMed IA - Serve a aplicação React
+  app.get('/telemed', (req, res) => {
+    // Serve a aplicação React diretamente
+    res.redirect('/?demo=telemed');
+  });
+  
+  // Rota Health Connect - Funciona mas precisa de conteúdo
+  app.get('/health-connect', (req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Health Connect - Gestão Médica</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      <body class="bg-gray-50">
+          <div class="min-h-screen">
+              <header class="bg-white shadow-sm border-b">
+                  <div class="max-w-7xl mx-auto px-4 py-4">
+                      <h1 class="text-2xl font-bold text-gray-900">🏥 Health Connect</h1>
+                      <p class="text-gray-600">Sistema de Gestão Médica Avançada</p>
+                  </div>
+              </header>
+              <main class="max-w-7xl mx-auto px-4 py-8">
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div class="bg-white p-6 rounded-lg shadow">
+                          <h3 class="text-lg font-semibold mb-2">👥 Gestão de Pacientes</h3>
+                          <p class="text-gray-600 mb-4">Sistema completo de gerenciamento</p>
+                          <button onclick="window.location.href='/enhanced-consultation?consultationId=demo'" 
+                                  class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                              Acessar Sistema
+                          </button>
+                      </div>
+                      <div class="bg-white p-6 rounded-lg shadow">
+                          <h3 class="text-lg font-semibold mb-2">🩺 Consultas Especializadas</h3>
+                          <p class="text-gray-600 mb-4">Atendimento médico avançado</p>
+                          <button onclick="window.location.href='/video-consultation?consultationId=demo'" 
+                                  class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                              Nova Consulta
+                          </button>
+                      </div>
+                      <div class="bg-white p-6 rounded-lg shadow">
+                          <h3 class="text-lg font-semibold mb-2">🔬 Sistema de Exames</h3>
+                          <p class="text-gray-600 mb-4">Solicitação e acompanhamento</p>
+                          <button onclick="window.location.href='/public/dashboard-premium-fixed.html'" 
+                                  class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                              Ver Dashboard
+                          </button>
+                      </div>
+                  </div>
+              </main>
+          </div>
+      </body>
+      </html>
+    `);
+  });
+  
+  // Rota Sistema Completo Integrado
+  app.get('/complete', (req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>TeleMed - Sistema Integrado Completo</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      <body class="bg-gradient-to-br from-blue-50 to-purple-50">
+          <div class="min-h-screen">
+              <header class="bg-white/95 backdrop-blur-sm shadow-sm border-b">
+                  <div class="max-w-7xl mx-auto px-4 py-6">
+                      <div class="flex items-center justify-between">
+                          <div>
+                              <h1 class="text-3xl font-bold text-gray-900">🏥 TeleMed Sistema Completo</h1>
+                              <p class="text-gray-600">Plataforma Integrada de Telemedicina com IA</p>
+                          </div>
+                          <button onclick="window.location.href='/'" 
+                                  class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                              🏠 Voltar ao Home
+                          </button>
+                      </div>
+                  </div>
+              </header>
+              
+              <main class="max-w-7xl mx-auto px-4 py-12">
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                      
+                      <!-- TeleMed IA -->
+                      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                          <div class="text-blue-600 text-4xl mb-4">🤖</div>
+                          <h3 class="text-xl font-bold mb-2">TeleMed IA</h3>
+                          <p class="text-gray-600 mb-4">Sistema com inteligência artificial para videoconsultas</p>
+                          <button onclick="window.location.href='/video-consultation?consultationId=demo'" 
+                                  class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                              Acessar Sistema IA
+                          </button>
+                      </div>
+                      
+                      <!-- Health Connect -->
+                      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                          <div class="text-green-600 text-4xl mb-4">🏥</div>
+                          <h3 class="text-xl font-bold mb-2">Health Connect</h3>
+                          <p class="text-gray-600 mb-4">Gestão avançada de pacientes e consultas especializadas</p>
+                          <button onclick="window.location.href='/health-connect'" 
+                                  class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                              Gestão Médica
+                          </button>
+                      </div>
+                      
+                      <!-- Dashboard Premium -->
+                      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                          <div class="text-purple-600 text-4xl mb-4">📊</div>
+                          <h3 class="text-xl font-bold mb-2">Dashboard Premium</h3>
+                          <p class="text-gray-600 mb-4">Painel de controle com analytics e relatórios</p>
+                          <button onclick="window.location.href='/public/dashboard-premium-fixed.html'" 
+                                  class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                              Ver Dashboard
+                          </button>
+                      </div>
+                      
+                      <!-- Área Médica Demo -->
+                      <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                          <div class="text-emerald-600 text-4xl mb-4">🩺</div>
+                          <h3 class="text-xl font-bold mb-2">Área Médica</h3>
+                          <p class="text-gray-600 mb-4">Demo da interface médica completa</p>
+                          <button onclick="window.location.href='/public/demo-ativo/area-medica.html'" 
+                                  class="w-full bg-emerald-600 text-white py-2 rounded-lg hover:bg-emerald-700 transition-colors">
+                              Demo Médico
+                          </button>
+                      </div>
+                      
+                  </div>
+                  
+                  <!-- Seção de Features -->
+                  <div class="mt-16 bg-white rounded-xl shadow-lg p-8">
+                      <h2 class="text-2xl font-bold text-center mb-8">🚀 Recursos do Sistema Integrado</h2>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div class="text-center">
+                              <div class="text-3xl mb-2">🤖</div>
+                              <h4 class="font-semibold mb-1">IA Médica Avançada</h4>
+                              <p class="text-gray-600 text-sm">ChatGPT integrado para triagem e diagnóstico</p>
+                          </div>
+                          <div class="text-center">
+                              <div class="text-3xl mb-2">📹</div>
+                              <h4 class="font-semibold mb-1">Videoconsultas HD</h4>
+                              <p class="text-gray-600 text-sm">WebRTC com qualidade profissional</p>
+                          </div>
+                          <div class="text-center">
+                              <div class="text-3xl mb-2">🔒</div>
+                              <h4 class="font-semibold mb-1">Segurança LGPD</h4>
+                              <p class="text-gray-600 text-sm">Dados protegidos e compliance total</p>
+                          </div>
+                      </div>
+                  </div>
+              </main>
+          </div>
+      </body>
+      </html>
+    `);
+  });
+
   // Vite setup será configurado no index.ts
 
   // ===============================================
