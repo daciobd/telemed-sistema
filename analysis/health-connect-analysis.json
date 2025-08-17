@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "name": "Health Connect",
+    "import_method": "manual_copy",
+    "timestamp": "2025-08-17T10:44:40.094Z",
+    "status": "awaiting_files"
+  },
+  "structure_analysis": {
+    "frontend": {
+      "framework": null,
+      "components_count": 0,
+      "pages_count": 0,
+      "routes": []
+    },
+    "backend": {
+      "framework": null,
+      "api_endpoints": [],
+      "middleware": [],
+      "database_models": []
+    },
+    "database": {
+      "type": null,
+      "tables": [],
+      "relationships": []
+    },
+    "dependencies": {
+      "production": {},
+      "development": {}
+    }
+  },
+  "compatibility_with_telemed": {
+    "framework_compatibility": "unknown",
+    "dependency_conflicts": [],
+    "schema_conflicts": [],
+    "route_conflicts": []
+  },
+  "integration_plan": {
+    "phase1": "Análise de compatibilidade",
+    "phase2": "Resolução de conflitos",
+    "phase3": "Fusão de databases",
+    "phase4": "Unificação de APIs",
+    "phase5": "Merge de frontend",
+    "phase6": "Testes integrados"
+  }
+}
