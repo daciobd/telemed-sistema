@@ -240,7 +240,7 @@ function LandingPage() {
                 href="/dashboard-teste-robust"
                 className="block w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition-colors text-center mb-2"
               >
-                Dashboard Teste Robusto (Chart.js + ResizeObserver)
+                Dashboard Teste Robusto
               </a>
               <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
                 Chart.js + Analytics + ResizeObserver
@@ -255,6 +255,8 @@ function LandingPage() {
 
 export default function App() {
   console.log("🚀 TeleMed Landing Page carregada com sucesso");
+  console.log("🔗 Demo disponível em: /public/demo-ativo/area-medica.html");
+  console.log("✅ Sistema demo disponível");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -266,6 +268,7 @@ export default function App() {
             <Route path="/enhanced" component={EnhancedConsultation} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
+            <Route path="/dashboard-teste" component={DashboardTeste} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
             <Route path="/telemed" component={TelemedHub} />
             <Route path="/health" component={HealthHub} />
