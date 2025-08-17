@@ -77,9 +77,25 @@ app.get('/patient-management', (req, res) => {
   res.status(404).send('Patient Management page not found');
 });
 
+// Enhanced Consultation - main consultation interface with AI
+app.get('/enhanced', (req, res) => {
+  console.log('🚀 Rota /enhanced acessada - Consulta Avançada com IA');
+  const indexDist = path.join(distDir, "index.html");
+  if (fs.existsSync(indexDist)) {
+    console.log('✅ Servindo SPA para Enhanced Consultation');
+    return res.sendFile(indexDist);
+  }
+  const indexHtml = path.join(process.cwd(), "index.html");
+  if (fs.existsSync(indexHtml)) {
+    console.log('✅ Servindo SPA root para Enhanced Consultation');
+    return res.sendFile(indexHtml);
+  }
+  res.status(404).send('Enhanced Consultation SPA not found');
+});
+
 // ====== SPA fallback p/ rotas do front ======
 // Inclui as suas rotas principais e páginas internas do app
-const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients)(\/.*)?$/i;
+const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients|enhanced)(\/.*)?$/i;
 app.get(SPA_MATCHER, (req, res, next) => {
   try {
     const indexDist = path.join(distDir, "index.html");

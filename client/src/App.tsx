@@ -170,6 +170,7 @@ export default function App() {
           <Switch>
             <Route path="/video-consultation" component={VideoConsultation} />
             <Route path="/enhanced-consultation" component={EnhancedConsultation} />
+            <Route path="/enhanced" component={EnhancedConsultation} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/dashboard-teste" component={DashboardTeste} />
