@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import path from "path";
 import { registerApiStatusRoutes } from "./routes/api-status";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
@@ -3742,6 +3743,28 @@ Testado em: \${new Date().toLocaleString('pt-BR')}
   // ONBOARDING ROUTES
   // ===============================================
   app.use('/api', onboardingRoutes);
+
+  // ===============================================
+  // DASHBOARD STATIC ROUTES
+  // Serve dashboard pages directly
+  // ===============================================
+  
+  // Redirect para facilitar acesso aos dashboards
+  app.get('/dashboard-teste-fixed.html', (req, res) => {
+    res.redirect('/public/dashboard-teste-fixed.html');
+  });
+  
+  app.get('/dashboard-premium-fixed.html', (req, res) => {
+    res.redirect('/public/dashboard-premium-fixed.html');
+  });
+  
+  app.get('/dashboard-minimo.html', (req, res) => {
+    res.redirect('/public/dashboard-minimo.html');
+  });
+  
+  app.get('/dashboard-premium.html', (req, res) => {
+    res.redirect('/public/dashboard-premium.html');
+  });
 
   // Vite setup será configurado no index.ts
 
