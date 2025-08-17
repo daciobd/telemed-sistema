@@ -80,17 +80,12 @@ app.get('/patient-management', (req, res) => {
 // Enhanced Consultation - main consultation interface with AI
 app.get('/enhanced', (req, res) => {
   console.log('🚀 Rota /enhanced acessada - Consulta Avançada com IA');
-  const indexDist = path.join(distDir, "index.html");
-  if (fs.existsSync(indexDist)) {
-    console.log('✅ Servindo SPA para Enhanced Consultation');
-    return res.sendFile(indexDist);
+  const enhancedConsultationHtml = path.join(__dirname, '../public/enhanced-consultation.html');
+  if (fs.existsSync(enhancedConsultationHtml)) {
+    console.log('✅ Servindo enhanced-consultation.html dedicado');
+    return res.sendFile(enhancedConsultationHtml);
   }
-  const indexHtml = path.join(process.cwd(), "index.html");
-  if (fs.existsSync(indexHtml)) {
-    console.log('✅ Servindo SPA root para Enhanced Consultation');
-    return res.sendFile(indexHtml);
-  }
-  res.status(404).send('Enhanced Consultation SPA not found');
+  res.status(404).send('Enhanced Consultation page not found');
 });
 
 // ====== SPA fallback p/ rotas do front ======

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Avançada com IA - TeleMed Sistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .ai-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chat-bubble-doctor {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 18px 18px 4px 18px;
+        }
+        .chat-bubble-patient {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-radius: 18px 18px 18px 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- AI Consent Banner -->
+    <div id="aiConsentBanner" class="bg-blue-50 border-b border-blue-200 p-4">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-shield-alt text-blue-600"></i>
+                </div>
+                <div>
+                    <strong>Consentimento para IA Médica:</strong> Esta consulta utiliza recursos de
+                    inteligência artificial para auxiliar no diagnóstico. Os dados são processados de forma
+                    segura e confidencial.
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="declineAI()" class="px-3 py-1 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">
+                    Recusar
+                </button>
+                <button onclick="acceptAI()" class="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded">
+                    Aceitar
+                </button>
+                <button onclick="dismissBanner()" class="p-1 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Interface -->
+    <div class="flex h-screen pt-16">
+        <!-- Video Section -->
+        <div class="w-2/3 bg-black relative">
+            <!-- Video Placeholder -->
+            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                <div class="text-center text-white">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white/10 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Aguardando paciente...</h3>
+                    <p class="text-gray-300">A chamada será iniciada quando o paciente entrar</p>
+                    <div class="mt-4">
+                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+                            <i class="fas fa-circle text-xs mr-1"></i>
+                            Conectado
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Controls -->
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+                <div class="flex items-center gap-4 bg-black/50 backdrop-blur-sm rounded-full px-6 py-3">
+                    <button class="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-microphone-slash"></i>
+                    </button>
+                    <button class="w-12 h-12 bg-gray-600 hover:bg-gray-700 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-video-slash"></i>
+                    </button>
+                    <button class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button onclick="endCall()" class="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timer -->
+            <div class="absolute top-6 right-6 bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2">
+                <div class="text-white font-mono text-lg" id="consultationTimer">
+                    00:00
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="w-1/3 bg-white border-l">
+            <!-- Tabs -->
+            <div class="border-b">
+                <div class="flex">
+                    <button onclick="switchTab('chat')" class="tab-button px-4 py-3 text-sm font-medium border-b-2 border-blue-600 text-blue-600 bg-blue-50" data-tab="chat">
+                        <i class="fas fa-comments mr-2"></i>Chat
+                    </button>
+                    <button onclick="switchTab('form')" class="tab-button px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="form">
+                        <i class="fas fa-file-medical mr-2"></i>Atendimento
+                    </button>
+                    <button onclick="switchTab('exams')" class="tab-button px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700" data-tab="exams">
+                        <i class="fas fa-flask mr-2"></i>Exames
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div id="chatTab" class="tab-content flex flex-col h-full">
+                <!-- Chat Messages -->
+                <div class="flex-1 p-4 overflow-y-auto max-h-96" id="chatMessages">
+                    <div class="space-y-4">
+                        <div class="flex justify-start">
+                            <div class="chat-bubble-patient p-3 text-sm text-gray-800 max-w-xs">
+                                Olá, doutor! Como está?
+                                <div class="text-xs text-gray-500 mt-1">14:32</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <div class="chat-bubble-doctor p-3 text-sm text-white max-w-xs">
+                                Olá! Estou bem, obrigado. Como posso ajudá-lo hoje?
+                                <div class="text-xs text-blue-100 mt-1">14:33</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-start">
+                            <div class="chat-bubble-patient p-3 text-sm text-gray-800 max-w-xs">
+                                Estou sentindo dores de cabeça frequentes nos últimos dias.
+                                <div class="text-xs text-gray-500 mt-1">14:34</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="p-4 border-t">
+                    <div class="flex items-center gap-2">
+                        <input 
+                            type="text" 
+                            placeholder="Digite sua mensagem..."
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            id="chatInput"
+                            onkeypress="handleChatKeypress(event)"
+                        >
+                        <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Tab -->
+            <div id="formTab" class="tab-content hidden p-4 overflow-y-auto max-h-96">
+                <h3 class="font-semibold text-gray-800 mb-4">Registro do Atendimento</h3>
+                
+                <!-- Patient Info -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Paciente</label>
+                    <input type="text" value="João Silva Santos" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly>
+                </div>
+
+                <!-- Chief Complaint -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Queixa Principal</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none" rows="2" placeholder="Descreva a queixa principal do paciente..."></textarea>
+                </div>
+
+                <!-- History -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">História da Doença Atual</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none" rows="3" placeholder="Descreva o histórico da doença atual..."></textarea>
+                </div>
+
+                <!-- Physical Exam -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Exame Físico</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none" rows="2" placeholder="Descreva os achados do exame físico..."></textarea>
+                </div>
+
+                <!-- ICD-10 -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CID-10</label>
+                    <div class="relative">
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Digite ou selecione um código CID-10..." id="icdInput">
+                        <div id="icdSuggestions" class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 hidden z-10 max-h-40 overflow-y-auto">
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b" onclick="selectICD('F41.1', 'Transtorno de ansiedade generalizada')">
+                                <strong>F41.1</strong> - Transtorno de ansiedade generalizada
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b" onclick="selectICD('F41.0', 'Ataque de pânico')">
+                                <strong>F41.0</strong> - Ataque de pânico
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b" onclick="selectICD('F32.1', 'Episódio depressivo moderado')">
+                                <strong>F32.1</strong> - Episódio depressivo moderado
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer" onclick="selectICD('R50', 'Febre não especificada')">
+                                <strong>R50</strong> - Febre não especificada
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Assistance -->
+                <div class="mb-4 p-3 bg-gradient-to-r from-emerald-50 to-blue-50 border border-emerald-200 rounded-lg">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-robot text-emerald-600 text-sm ai-pulse"></i>
+                        </div>
+                        <span class="font-medium text-emerald-800">Assistente IA</span>
+                    </div>
+                    <p class="text-sm text-emerald-700 mb-2">
+                        Com base nos sintomas relatados (dores de cabeça frequentes), sugiro investigar:
+                    </p>
+                    <div class="space-y-1 text-xs">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-yellow-500"></i>
+                            <span>Considerar enxaqueca (G43.9)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-yellow-500"></i>
+                            <span>Avaliar tensão arterial</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-yellow-500"></i>
+                            <span>Investigar estresse/ansiedade</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+                    <i class="fas fa-save mr-2"></i>Salvar Atendimento
+                </button>
+            </div>
+
+            <!-- Exams Tab -->
+            <div id="examsTab" class="tab-content hidden p-4 overflow-y-auto max-h-96">
+                <h3 class="font-semibold text-gray-800 mb-4">Solicitação de Exames</h3>
+                
+                <!-- Exam Templates -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Exames Sugeridos</label>
+                    <div class="space-y-2">
+                        <div class="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" onclick="addExam('Hemograma completo')">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">Hemograma completo</span>
+                                <i class="fas fa-plus text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500">Jejum de 8-12 horas</p>
+                        </div>
+                        <div class="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" onclick="addExam('Tomografia de crânio')">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">Tomografia de crânio</span>
+                                <i class="fas fa-plus text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500">Para investigar dores de cabeça</p>
+                        </div>
+                        <div class="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" onclick="addExam('Pressão arterial (MAPA)')">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium">Pressão arterial (MAPA)</span>
+                                <i class="fas fa-plus text-blue-600"></i>
+                            </div>
+                            <p class="text-xs text-gray-500">Monitoramento 24h</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Exams -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Exames Selecionados</label>
+                    <div id="selectedExams" class="space-y-2">
+                        <!-- Selected exams will appear here -->
+                    </div>
+                </div>
+
+                <!-- Send Button -->
+                <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">
+                    <i class="fas fa-paper-plane mr-2"></i>Enviar Solicitações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let consultationStartTime = Date.now();
+        let timerInterval;
+        let aiConsentGiven = false;
+
+        // Timer functionality
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - consultationStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('consultationTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Tab functionality
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-blue-600', 'bg-blue-50');
+                btn.classList.add('text-gray-500');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            // Add active class to selected button
+            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            activeBtn.classList.add('border-blue-600', 'text-blue-600', 'bg-blue-50');
+            activeBtn.classList.remove('text-gray-500');
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chatMessages').querySelector('.space-y-4');
+            const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex justify-end';
+            messageDiv.innerHTML = `
+                <div class="chat-bubble-doctor p-3 text-sm text-white max-w-xs">
+                    ${message}
+                    <div class="text-xs text-blue-100 mt-1">${time}</div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            input.value = '';
+            
+            // Scroll to bottom
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // ICD-10 functionality
+        function selectICD(code, description) {
+            document.getElementById('icdInput').value = `${code} - ${description}`;
+            document.getElementById('icdSuggestions').classList.add('hidden');
+        }
+
+        document.getElementById('icdInput').addEventListener('focus', function() {
+            document.getElementById('icdSuggestions').classList.remove('hidden');
+        });
+
+        document.getElementById('icdInput').addEventListener('blur', function() {
+            setTimeout(() => {
+                document.getElementById('icdSuggestions').classList.add('hidden');
+            }, 200);
+        });
+
+        // Exam functionality
+        function addExam(examName) {
+            const selectedExams = document.getElementById('selectedExams');
+            const examDiv = document.createElement('div');
+            examDiv.className = 'flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded-lg';
+            examDiv.innerHTML = `
+                <span class="text-sm font-medium text-blue-800">${examName}</span>
+                <button onclick="this.parentElement.remove()" class="text-red-600 hover:text-red-800">
+                    <i class="fas fa-trash text-sm"></i>
+                </button>
+            `;
+            selectedExams.appendChild(examDiv);
+        }
+
+        // AI Consent functionality
+        function acceptAI() {
+            aiConsentGiven = true;
+            localStorage.setItem('ai_consent', 'true');
+            document.getElementById('aiConsentBanner').style.display = 'none';
+            console.log('✅ Consentimento IA concedido');
+        }
+
+        function declineAI() {
+            aiConsentGiven = false;
+            localStorage.setItem('ai_consent', 'false');
+            document.getElementById('aiConsentBanner').style.display = 'none';
+            console.log('❌ Consentimento IA recusado');
+        }
+
+        function dismissBanner() {
+            document.getElementById('aiConsentBanner').style.display = 'none';
+        }
+
+        function endCall() {
+            if (confirm('Deseja encerrar a consulta?')) {
+                window.location.href = '/patient-management';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start timer
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Check AI consent
+            const savedConsent = localStorage.getItem('ai_consent');
+            if (savedConsent === 'true') {
+                aiConsentGiven = true;
+                document.getElementById('aiConsentBanner').style.display = 'none';
+            }
+            
+            console.log('🏥 Enhanced Consultation Interface carregada');
+            console.log('🤖 IA médica:', aiConsentGiven ? 'Ativada' : 'Pendente de consentimento');
+            console.log('⏱️ Timer da consulta iniciado');
+        });
+    </script>
+</body>
+</html>
