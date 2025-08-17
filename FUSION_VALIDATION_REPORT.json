@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-17T11:21:36.454Z",
+  "timestamp": "2025-08-17T11:36:00.791Z",
   "summary": {
     "total_validations": 37,
     "passed": 37,
@@ -13,31 +13,31 @@
         "description": "Schema unificado existe",
         "file": "shared/schema-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.447Z"
+        "timestamp": "2025-08-17T11:36:00.784Z"
       },
       {
         "description": "Contém entidade Consultation",
         "file": "shared/schema-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.448Z"
+        "timestamp": "2025-08-17T11:36:00.785Z"
       },
       {
         "description": "Contém entidade ExamOrder",
         "file": "shared/schema-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.448Z"
+        "timestamp": "2025-08-17T11:36:00.785Z"
       },
       {
         "description": "Contém entidade Payment",
         "file": "shared/schema-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.448Z"
+        "timestamp": "2025-08-17T11:36:00.785Z"
       },
       {
         "description": "Inclui relações entre entidades",
         "file": "shared/schema-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.448Z"
+        "timestamp": "2025-08-17T11:36:00.785Z"
       }
     ],
     "2_auth_consolidated": [
@@ -45,19 +45,19 @@
         "description": "Autenticação unificada existe",
         "file": "server/auth-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.448Z"
+        "timestamp": "2025-08-17T11:36:00.786Z"
       },
       {
         "description": "Implementa JWT",
         "file": "server/auth-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.449Z"
+        "timestamp": "2025-08-17T11:36:00.786Z"
       },
       {
         "description": "Suporte a OAuth",
         "file": "server/auth-unified.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.449Z"
+        "timestamp": "2025-08-17T11:36:00.786Z"
       }
     ],
     "3_accessibility": [
@@ -65,37 +65,37 @@
         "description": "Hooks de acessibilidade existem",
         "file": "client/src/hooks/useAccessibility.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.449Z"
+        "timestamp": "2025-08-17T11:36:00.787Z"
       },
       {
         "description": "Modal acessível existe",
         "file": "client/src/components/AccessibleModal.tsx",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.449Z"
+        "timestamp": "2025-08-17T11:36:00.787Z"
       },
       {
         "description": "ARIA announcements",
         "file": "client/src/hooks/useAccessibility.ts",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.450Z"
+        "timestamp": "2025-08-17T11:36:00.788Z"
       },
       {
         "description": "Modal usa roles ARIA",
         "file": "client/src/components/AccessibleModal.tsx",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.450Z"
+        "timestamp": "2025-08-17T11:36:00.788Z"
       },
       {
         "description": "Modal suporta ESC",
         "file": "client/src/components/AccessibleModal.tsx",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.450Z"
+        "timestamp": "2025-08-17T11:36:00.788Z"
       },
       {
         "description": "Modal tem aria-modal",
         "file": "client/src/components/AccessibleModal.tsx",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.450Z"
+        "timestamp": "2025-08-17T11:36:00.788Z"
       }
     ],
     "4_performance_budget": [
@@ -103,19 +103,19 @@
         "description": "Configuração Lighthouse existe",
         "file": "lighthouserc.js",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.451Z"
+        "timestamp": "2025-08-17T11:36:00.789Z"
       },
       {
         "description": "Budget performance ≥ 80",
         "file": "lighthouserc.js",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.451Z"
+        "timestamp": "2025-08-17T11:36:00.789Z"
       },
       {
         "description": "Verifica performance",
         "file": ".github/workflows/ci.yml",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.452Z"
+        "timestamp": "2025-08-17T11:36:00.790Z"
       }
     ],
     "5_ci_pipeline": [
@@ -123,19 +123,19 @@
         "description": "Pipeline CI existe",
         "file": ".github/workflows/ci.yml",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.452Z"
+        "timestamp": "2025-08-17T11:36:00.789Z"
       },
       {
         "description": "Executa build",
         "file": ".github/workflows/ci.yml",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.452Z"
+        "timestamp": "2025-08-17T11:36:00.790Z"
       },
       {
         "description": "Executa lint",
         "file": ".github/workflows/ci.yml",
         "status": "PASS",
-        "timestamp": "2025-08-17T11:21:36.452Z"
+        "timestamp": "2025-08-17T11:36:00.790Z"
       }
     ]
   },
@@ -144,223 +144,223 @@
       "description": "Schema unificado existe",
       "file": "shared/schema-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.447Z"
+      "timestamp": "2025-08-17T11:36:00.784Z"
     },
     {
       "description": "Contém entidade Consultation",
       "file": "shared/schema-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.448Z"
+      "timestamp": "2025-08-17T11:36:00.785Z"
     },
     {
       "description": "Contém entidade ExamOrder",
       "file": "shared/schema-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.448Z"
+      "timestamp": "2025-08-17T11:36:00.785Z"
     },
     {
       "description": "Contém entidade Payment",
       "file": "shared/schema-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.448Z"
+      "timestamp": "2025-08-17T11:36:00.785Z"
     },
     {
       "description": "Usa TeleMed como source of truth",
       "file": "shared/schema-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.448Z"
+      "timestamp": "2025-08-17T11:36:00.785Z"
     },
     {
       "description": "Inclui relações entre entidades",
       "file": "shared/schema-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.448Z"
+      "timestamp": "2025-08-17T11:36:00.785Z"
     },
     {
       "description": "Autenticação unificada existe",
       "file": "server/auth-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.448Z"
+      "timestamp": "2025-08-17T11:36:00.786Z"
     },
     {
       "description": "Implementa JWT",
       "file": "server/auth-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.449Z"
+      "timestamp": "2025-08-17T11:36:00.786Z"
     },
     {
       "description": "Suporte a OAuth",
       "file": "server/auth-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.449Z"
+      "timestamp": "2025-08-17T11:36:00.786Z"
     },
     {
       "description": "Role-based access control",
       "file": "server/auth-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.449Z"
+      "timestamp": "2025-08-17T11:36:00.786Z"
     },
     {
       "description": "Refresh token support",
       "file": "server/auth-unified.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.449Z"
+      "timestamp": "2025-08-17T11:36:00.787Z"
     },
     {
       "description": "Hooks de acessibilidade existem",
       "file": "client/src/hooks/useAccessibility.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.449Z"
+      "timestamp": "2025-08-17T11:36:00.787Z"
     },
     {
       "description": "Modal acessível existe",
       "file": "client/src/components/AccessibleModal.tsx",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.449Z"
+      "timestamp": "2025-08-17T11:36:00.787Z"
     },
     {
       "description": "Suporte a navegação por teclado",
       "file": "client/src/hooks/useAccessibility.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.450Z"
+      "timestamp": "2025-08-17T11:36:00.788Z"
     },
     {
       "description": "Gerenciamento de foco",
       "file": "client/src/hooks/useAccessibility.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.450Z"
+      "timestamp": "2025-08-17T11:36:00.788Z"
     },
     {
       "description": "ARIA announcements",
       "file": "client/src/hooks/useAccessibility.ts",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.450Z"
+      "timestamp": "2025-08-17T11:36:00.788Z"
     },
     {
       "description": "Modal usa roles ARIA",
       "file": "client/src/components/AccessibleModal.tsx",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.450Z"
+      "timestamp": "2025-08-17T11:36:00.788Z"
     },
     {
       "description": "Modal suporta ESC",
       "file": "client/src/components/AccessibleModal.tsx",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.450Z"
+      "timestamp": "2025-08-17T11:36:00.788Z"
     },
     {
       "description": "Modal tem aria-modal",
       "file": "client/src/components/AccessibleModal.tsx",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.450Z"
+      "timestamp": "2025-08-17T11:36:00.788Z"
     },
     {
       "description": "Configuração Lighthouse existe",
       "file": "lighthouserc.js",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.451Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "Script de verificação existe",
       "file": "scripts/verify-performance.js",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.451Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "Budget performance ≥ 80",
       "file": "lighthouserc.js",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.451Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "TBT ≤ 300ms",
       "file": "lighthouserc.js",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.451Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "Transfer ≤ 1.5MB",
       "file": "lighthouserc.js",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.451Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "Mobile emulation",
       "file": "lighthouserc.js",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.451Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "Pipeline CI existe",
       "file": ".github/workflows/ci.yml",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.452Z"
+      "timestamp": "2025-08-17T11:36:00.789Z"
     },
     {
       "description": "Executa build",
       "file": ".github/workflows/ci.yml",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.452Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Executa lint",
       "file": ".github/workflows/ci.yml",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.452Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Verifica performance",
       "file": ".github/workflows/ci.yml",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.452Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Setup Node.js 20",
       "file": ".github/workflows/ci.yml",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.452Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Merge completo documentado",
       "file": "MERGE_COMPLETE.json",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.453Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Integração completa documentada",
       "file": "INTEGRATION_COMPLETE.json",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.453Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Checklist de fusão documentado",
       "file": "FUSION_CHECKLIST_COMPLETE.json",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.453Z"
+      "timestamp": "2025-08-17T11:36:00.790Z"
     },
     {
       "description": "Navegação unificada existe",
       "file": "client/src/components/UnifiedNavigation.tsx",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.453Z"
+      "timestamp": "2025-08-17T11:36:00.791Z"
     },
     {
       "description": "Página home unificada existe",
       "file": "client/src/pages/UnifiedHome.tsx",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.453Z"
+      "timestamp": "2025-08-17T11:36:00.791Z"
     },
     {
       "description": "Componentes Health Connect integrados",
       "file": "client/src/components/health-connect",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.453Z"
+      "timestamp": "2025-08-17T11:36:00.791Z"
     },
     {
       "description": "2 componentes UI integrados",
       "file": "client/src/components/health-connect",
       "status": "PASS",
-      "timestamp": "2025-08-17T11:21:36.454Z"
+      "timestamp": "2025-08-17T11:36:00.791Z"
     }
   ],
   "errors": [],

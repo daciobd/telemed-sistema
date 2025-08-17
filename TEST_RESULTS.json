@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-08-17T11:36:00.806Z",
+  "summary": {
+    "total_tests": 5,
+    "passed": 2,
+    "failed": 3,
+    "success_rate": "40%",
+    "total_duration": "100662ms",
+    "status": "SOME_FAILED"
+  },
+  "test_results": [
+    {
+      "name": "Contract Tests",
+      "status": "FAIL",
+      "duration": "286ms",
+      "error": "Command failed: node scripts/contract-tests.cjs\nContract failures: [\n  'health',\n  'create_consultation',\n  'list_consultations',\n  'create_exam',\n  'payment_intent'\n]\n",
+      "output": "┌─────────┬───────────────────────┬────────┐\n│ (index) │ step                  │ status │\n├─────────┼───────────────────────┼────────┤\n│ 0       │ 'health'              │ 404    │\n│ 1       │ 'create_consultation' │ 404    │\n│ 2       │ 'list_consultations'  │ 404    │\n│ 3       │ 'create_exam'         │ 404    │\n│ 4       │ 'payment_intent'      │ 404    │\n└─────────┴───────────────────────┴────────┘\n",
+      "stderr": "Contract failures: [\n  'health',\n  'create_consultation',\n  'list_consultations',\n  'create_exam',\n  'payment_intent'\n]\n",
+      "description": "Validação dos contratos mínimos das APIs (Consultation/ExamOrder/Payment)"
+    },
+    {
+      "name": "Auth Verification",
+      "status": "PASS",
+      "duration": "82ms",
+      "output": "",
+      "description": "Validação da estrutura e campos JWT/OAuth"
+    },
+    {
+      "name": "Accessibility Tests",
+      "status": "FAIL",
+      "duration": "40551ms",
+      "error": "Command failed: node scripts/a11y.cjs\nnpm warn exec The following package was not found and will be installed: pa11y@9.0.0\n\nError: Failed to launch the browser process!\n/home/runner/.cache/puppeteer/chrome/linux-139.0.7258.68/chrome-linux64/chrome: error while loading shared libraries: libglib-2.0.so.0: cannot open shared object file: No such file or directory\n\n\nTROUBLESHOOTING: https://pptr.dev/troubleshooting\n\n    at Interface.onClose (/home/runner/.npm/_npx/05d1b9d3e401eeb8/node_modules/@puppeteer/browsers/lib/cjs/launch.js:325:24)\n    at Interface.emit (node:events:536:35)\n    at Interface.close (node:internal/readline/interface:527:10)\n    at Socket.onend (node:internal/readline/interface:253:10)\n    at Socket.emit (node:events:536:35)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n\nnode:child_process:966\n    throw err;\n    ^\n\nError: Command failed: npx pa11y \"http://localhost:5000/\" --threshold 5\n    at genericNodeError (node:internal/errors:984:15)\n    at wrappedFn (node:internal/errors:538:14)\n    at checkExecSyncError (node:child_process:891:11)\n    at execSync (node:child_process:963:15)\n    at Object.<anonymous> (/home/runner/workspace/scripts/a11y.cjs:12:3)\n    at Module._compile (node:internal/modules/cjs/loader:1529:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)\n    at Module.load (node:internal/modules/cjs/loader:1275:32)\n    at Module._load (node:internal/modules/cjs/loader:1096:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 4950,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v20.19.3\n",
+      "output": "\n== A11y @ /\n\nWelcome to Pa11y\n\n > Running Pa11y on URL http://localhost:5000/\n",
+      "stderr": "npm warn exec The following package was not found and will be installed: pa11y@9.0.0\n\nError: Failed to launch the browser process!\n/home/runner/.cache/puppeteer/chrome/linux-139.0.7258.68/chrome-linux64/chrome: error while loading shared libraries: libglib-2.0.so.0: cannot open shared object file: No such file or directory\n\n\nTROUBLESHOOTING: https://pptr.dev/troubleshooting\n\n    at Interface.onClose (/home/runner/.npm/_npx/05d1b9d3e401eeb8/node_modules/@puppeteer/browsers/lib/cjs/launch.js:325:24)\n    at Interface.emit (node:events:536:35)\n    at Interface.close (node:internal/readline/interface:527:10)\n    at Socket.onend (node:internal/readline/interface:253:10)\n    at Socket.emit (node:events:536:35)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)\n\nnode:child_process:966\n    throw err;\n    ^\n\nError: Command failed: npx pa11y \"http://localhost:5000/\" --threshold 5\n    at genericNodeError (node:internal/errors:984:15)\n    at wrappedFn (node:internal/errors:538:14)\n    at checkExecSyncError (node:child_process:891:11)\n    at execSync (node:child_process:963:15)\n    at Object.<anonymous> (/home/runner/workspace/scripts/a11y.cjs:12:3)\n    at Module._compile (node:internal/modules/cjs/loader:1529:14)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)\n    at Module.load (node:internal/modules/cjs/loader:1275:32)\n    at Module._load (node:internal/modules/cjs/loader:1096:12)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 4950,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v20.19.3\n",
+      "description": "Verificação WCAG 2.1 AA nas páginas críticas"
+    },
+    {
+      "name": "Performance Tests",
+      "status": "FAIL",
+      "duration": "100561ms",
+      "error": "spawnSync /bin/sh ETIMEDOUT",
+      "output": "🚀 Verificando performance TeleMed...\n✅  .lighthouseci/ directory writable\n✅  Configuration file found\n✅  Chrome installation found\n⚠️   GitHub token not set\nHealthcheck passed!\n\nRunning Lighthouse 3 time(s) on http://localhost:5173/\nRun #1...done.\nRun #2...",
+      "stderr": "npm warn exec The following package was not found and will be installed: @lhci/cli@0.15.1\nnpm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported\nnpm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.\nnpm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported\nnpm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported\n",
+      "description": "Validação do budget de performance (Lighthouse ≥80)"
+    },
+    {
+      "name": "Fusion Checklist",
+      "status": "PASS",
+      "duration": "99ms",
+      "output": "🔍 Validando implementação do checklist de fusão...\n\n\n1️⃣ Verificando unificação de schemas...\n✅ Schema unificado existe (shared/schema-unified.ts)\n✅ Contém entidade Consultation (shared/schema-unified.ts)\n✅ Contém entidade ExamOrder (shared/schema-unified.ts)\n✅ Contém entidade Payment (shared/schema-unified.ts)\n✅ Usa TeleMed como source of truth (shared/schema-unified.ts)\n✅ Inclui relações entre entidades (shared/schema-unified.ts)\n\n2️⃣ Verificando consolidação de autenticação...\n✅ Autenticação unificada existe (server/auth-unified.ts)\n✅ Implementa JWT (server/auth-unified.ts)\n✅ Suporte a OAuth (server/auth-unified.ts)\n✅ Role-based access control (server/auth-unified.ts)\n✅ Refresh token support (server/auth-unified.ts)\n\n3️⃣ Verificando padrões de acessibilidade...\n✅ Hooks de acessibilidade existem (client/src/hooks/useAccessibility.ts)\n✅ Modal acessível existe (client/src/components/AccessibleModal.tsx)\n✅ Suporte a navegação por teclado (client/src/hooks/useAccessibility.ts)\n✅ Gerenciamento de foco (client/src/hooks/useAccessibility.ts)\n✅ ARIA announcements (client/src/hooks/useAccessibility.ts)\n✅ Modal usa roles ARIA (client/src/components/AccessibleModal.tsx)\n✅ Modal suporta ESC (client/src/components/AccessibleModal.tsx)\n✅ Modal tem aria-modal (client/src/components/AccessibleModal.tsx)\n\n4️⃣ Verificando orçamento de performance...\n✅ Configuração Lighthouse existe (lighthouserc.js)\n✅ Script de verificação existe (scripts/verify-performance.js)\n✅ Budget performance ≥ 80 (lighthouserc.js)\n✅ TBT ≤ 300ms (lighthouserc.js)\n✅ Transfer ≤ 1.5MB (lighthouserc.js)\n✅ Mobile emulation (lighthouserc.js)\n\n5️⃣ Verificando pipeline CI...\n✅ Pipeline CI existe (.github/workflows/ci.yml)\n✅ Executa build (.github/workflows/ci.yml)\n✅ Executa lint (.github/workflows/ci.yml)\n✅ Verifica performance (.github/workflows/ci.yml)\n✅ Setup Node.js 20 (.github/workflows/ci.yml)\n\n🔗 Verificando arquivos de integração...\n✅ Merge completo documentado (MERGE_COMPLETE.json)\n✅ Integração completa documentada (INTEGRATION_COMPLETE.json)\n✅ Checklist de fusão documentado (FUSION_CHECKLIST_COMPLETE.json)\n✅ Navegação unificada existe (client/src/components/UnifiedNavigation.tsx)\n✅ Página home unificada existe (client/src/pages/UnifiedHome.tsx)\n✅ Componentes Health Connect integrados (client/src/components/health-connect)\n✅ 2 componentes UI integrados (client/src/components/health-connect)\n\n📊 Gerando relatório de validação...\n\n🎯 RELATÓRIO DE VALIDAÇÃO DO CHECKLIST\n==================================================\n📊 Total de validações: 37\n✅ Passou: 37\n❌ Falhou: 0\n📈 Taxa de sucesso: 100%\n🏆 Status: COMPLIANT\n\n💡 Recomendações:\n   1. Sistema pronto para testes de aceitação\n   2. Executar testes de performance em ambiente similar à produção\n   3. Validar acessibilidade com ferramentas automáticas\n   4. Documentar processo de migração para equipe\n   5. Treinar usuários nas novas funcionalidades\n\n📄 Relatório detalhado salvo em: FUSION_VALIDATION_REPORT.json",
+      "description": "Validação completa do checklist de fusão TeleMed + Health Connect"
+    }
+  ],
+  "recommendations": [
+    "Corrigir testes que falharam antes de deploy",
+    "Verificar se todas as rotas de API estão funcionando",
+    "Corrigir problemas de acessibilidade identificados",
+    "Otimizar performance para atingir budget definido",
+    "Documentar resultados para equipe",
+    "Estabelecer processo de testes contínuos"
+  ]
+}
