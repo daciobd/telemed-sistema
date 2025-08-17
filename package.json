@@ -4,7 +4,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node start-dev.js"
+    "dev": "node start-dev.js",
+    "test:contracts": "node scripts/contract-tests.cjs",
+    "verify:auth": "node scripts/verify-auth.cjs",
+    "test:a11y": "node scripts/a11y.cjs",
+    "test:all": "node scripts/run-all-tests.js",
+    "smoke:api": "node scripts/contract-tests.cjs && echo '✓ APIs funcionando'",
+    "smoke:full": "npm run test:contracts && npm run verify:auth && echo '✓ Smoke tests OK'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

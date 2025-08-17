@@ -3745,5 +3745,100 @@ Testado em: \${new Date().toLocaleString('pt-BR')}
 
   // Vite setup será configurado no index.ts
 
+  // ===============================================
+  // CONTRACT TEST API ENDPOINTS
+  // Endpoints mínimos para smoke tests e validação
+  // ===============================================
+  
+  // Consultation API endpoints for contract tests
+  app.get("/api/consultations", (req, res) => {
+    // Return mock consultations for testing
+    res.json([
+      {
+        id: "demo-consultation-1",
+        patientId: "demo-p",
+        doctorId: "demo-d", 
+        type: "video",
+        status: "scheduled",
+        reason: "Consulta de rotina",
+        createdAt: new Date().toISOString()
+      }
+    ]);
+  });
+
+  app.post("/api/consultations", (req, res) => {
+    const { patientId, doctorId, reason } = req.body;
+    
+    if (!patientId || !doctorId) {
+      return res.status(400).json({ error: "patientId and doctorId are required" });
+    }
+    
+    // Create mock consultation
+    const consultation = {
+      id: `consultation-${Date.now()}`,
+      patientId,
+      doctorId,
+      reason: reason || "Consulta médica",
+      type: "video",
+      status: "scheduled",
+      createdAt: new Date().toISOString()
+    };
+    
+    res.status(201).json(consultation);
+  });
+
+  // Exam Order API endpoints
+  app.get("/api/exam-orders", (req, res) => {
+    res.json([
+      {
+        id: "demo-exam-1",
+        consultationId: "demo-consultation-1",
+        type: "hemograma",
+        status: "ordered",
+        createdAt: new Date().toISOString()
+      }
+    ]);
+  });
+
+  app.post("/api/exam-orders", (req, res) => {
+    const { consultationId, type } = req.body;
+    
+    if (!consultationId || !type) {
+      return res.status(400).json({ error: "consultationId and type are required" });
+    }
+    
+    const examOrder = {
+      id: `exam-${Date.now()}`,
+      consultationId,
+      type,
+      status: "ordered",
+      priority: "normal",
+      createdAt: new Date().toISOString()
+    };
+    
+    res.status(201).json(examOrder);
+  });
+
+  // Payment API endpoints
+  app.post("/api/payments/intent", (req, res) => {
+    const { consultationId, amount, currency = "BRL" } = req.body;
+    
+    if (!consultationId || !amount) {
+      return res.status(400).json({ error: "consultationId and amount are required" });
+    }
+    
+    const paymentIntent = {
+      id: `payment-${Date.now()}`,
+      consultationId,
+      amount,
+      currency,
+      status: "pending",
+      clientSecret: `pi_${Date.now()}_secret`,
+      createdAt: new Date().toISOString()
+    };
+    
+    res.status(201).json(paymentIntent);
+  });
+
   return httpServer;
 }

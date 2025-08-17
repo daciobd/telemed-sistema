@@ -1,0 +1,119 @@
+Mensagens para o Replit (cole na ordem)
+1) Smoke + contratos mínimos das APIs (Consultation / ExamOrder / Payment)
+
+Cria um teste rápido que chama as rotas principais e falha se algo essencial mudar.
+
+mkdir -p scripts
+
+cat > scripts/contract-tests.cjs <<'EOF'
+/* Node 20+ (fetch nativo) */
+const BASE = process.env.BASE_URL || `http://localhost:${process.env.PORT||5000}`;
+
+const ENDPOINTS = {
+  health:    "/api/status",
+  consults:  "/api/consultations",     // ajuste aqui se seus nomes diferirem
+  exams:     "/api/exam-orders",       // idem
+  payments:  "/api/payments/intent"    // idem
+};
+
+async function req(method, path, body){
+  const r = await fetch(BASE+path, {
+    method, headers:{ "Content-Type":"application/json" },
+    body: body? JSON.stringify(body): undefined
+  });
+  let json = null;
+  try { json = await r.json(); } catch {}
+  return { status:r.status, json };
+}
+
+(async ()=>{
+  const out = [];
+
+  // health
+  out.push(["health", await req("GET", ENDPOINTS.health)]);
+
+  // create consultation (mock)
+  out.push(["create_consultation", await req("POST", ENDPOINTS.consults, {
+    patientId: "demo-p", doctorId: "demo-d", reason: "dor de cabeça"
+  })]);
+
+  // list consultations
+  out.push(["list_consultations", await req("GET", ENDPOINTS.consults)]);
+
+  // create exam order
+  out.push(["create_exam", await req("POST", ENDPOINTS.exams, {
+    consultationId: out[1][1].json?.id ?? "demo-c", type: "hemograma"
+  })]);
+
+  // payment intent
+  out.push(["payment_intent", await req("POST", ENDPOINTS.payments, {
+    consultationId: out[1][1].json?.id ?? "demo-c", amount: 9900, currency: "BRL"
+  })]);
+
+  // rules (bem leves; ajuste conforme seu contrato real)
+  const failures = out.filter(([name,res])=>{
+    if (!res) return true;
+    if (name==="health") return res.status!==200;
+    if (name==="list_consultations") return !(Array.isArray(res.json));
+    return !String(res.status).startsWith("2");
+  });
+
+  console.table(out.map(([k,v])=>({step:k,status:v.status})));
+  if (failures.length){
+    console.error("Contract failures:", failures.map(f=>f[0]));
+    process.exit(1);
+  } else {
+    console.log("✓ Contract tests passed");
+  }
+})();
+EOF
+
+npm pkg set scripts.test\\:contracts="node scripts/contract-tests.cjs"
+npm run test:contracts || true
+
+
+Se alguma rota tiver outro nome, só ajuste as constantes no topo do arquivo e rode de novo.
+
+2) Verificação de JWT/OAuth (decodifica e checa campos)
+cat > scripts/verify-auth.cjs <<'EOF'
+const token = process.env.TEST_JWT || ""; // cole um JWT válido em TEST_JWT
+if (!token) { console.warn("Defina TEST_JWT para validar (export TEST_JWT=...)"); process.exit(0); }
+const [hdr, payload] = token.split('.').slice(0,2)
+const dec = (s)=> Buffer.from(s.replace(/-/g,'+').replace(/_/g,'/'), 'base64').toString('utf8');
+const H = JSON.parse(dec(hdr)), P = JSON.parse(dec(payload));
+const now = Math.floor(Date.now()/1000);
+const ok = P.exp>now && !!P.sub && !!P.iss && !!P.aud;
+console.log({ header:H, payload:P, now, exp_ok:P.exp>now });
+if (!ok) process.exit(1);
+console.log("✓ JWT fields ok");
+EOF
+
+npm pkg set scripts.verify\\:auth="node scripts/verify-auth.cjs"
+# Exemplo de uso: TEST_JWT="eyJ..." npm run verify:auth
+
+3) A11y WCAG AA (pa11y nas páginas críticas)
+npm i -D pa11y
+
+cat > scripts/a11y.cjs <<'EOF'
+const { execSync } = require('node:child_process');
+const BASE = process.env.BASE_URL || `http://localhost:${process.env.PORT||5000}`;
+const pages = [
+  '/', 
+  '/video-consultation?consultationId=demo',
+  '/enhanced-consultation?consultationId=demo',
+  '/doctor-dashboard',
+  '/ai-console'
+];
+for (const p of pages) {
+  console.log("\n== A11y @", p);
+  execSync(`npx pa11y "${BASE}${p}" --threshold 5`, { stdio: 'inherit' });
+}
+console.log("\n✓ A11y checks done");
+EOF
+
+npm pkg set scripts.test\\:a11y="node scripts/a11y.cjs"
+npm run test:a11y || true
+
+4) Performance “placar” (já integrado)
+# reexecuta todos e regenera o /perf/index.html
+npm run perf:all && node scripts/perf-summary.cjs && npm run verify:perf
