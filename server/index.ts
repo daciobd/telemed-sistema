@@ -66,9 +66,20 @@ if (fs.existsSync(distDir)) {
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
+// Patient Management - serving dedicated HTML page
+app.get('/patient-management', (req, res) => {
+  console.log('🏥 Rota /patient-management acessada');
+  const patientManagementHtml = path.join(__dirname, '../public/patient-management.html');
+  if (fs.existsSync(patientManagementHtml)) {
+    console.log('✅ Servindo patient-management.html dedicado');
+    return res.sendFile(patientManagementHtml);
+  }
+  res.status(404).send('Patient Management page not found');
+});
+
 // ====== SPA fallback p/ rotas do front ======
 // Inclui as suas rotas principais e páginas internas do app
-const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patient-management|patients)(\/.*)?$/i;
+const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients)(\/.*)?$/i;
 app.get(SPA_MATCHER, (req, res, next) => {
   try {
     const indexDist = path.join(distDir, "index.html");

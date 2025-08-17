@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Pacientes - TeleMed Sistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 64px;
+            width: 2px;
+            height: 64px;
+            background: linear-gradient(to bottom, #e5e7eb, transparent);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Dashboard Statistics -->
+    <div class="px-4 pt-6 pb-4">
+        <div class="max-w-6xl mx-auto grid grid-cols-4 gap-4">
+            <div class="bg-white/90 backdrop-blur-sm shadow-lg rounded-lg p-6 text-center">
+                <div class="text-blue-600 text-4xl mb-2">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">6</div>
+                <div class="text-sm text-gray-600">Pacientes</div>
+            </div>
+            <div class="bg-white/90 backdrop-blur-sm shadow-lg rounded-lg p-6 text-center">
+                <div class="text-green-600 text-4xl mb-2">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">1</div>
+                <div class="text-sm text-gray-600">Consulta</div>
+            </div>
+            <div class="bg-white/90 backdrop-blur-sm shadow-lg rounded-lg p-6 text-center">
+                <div class="text-yellow-600 text-4xl mb-2">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">4</div>
+                <div class="text-sm text-gray-600">Exames</div>
+            </div>
+            <div class="bg-white/90 backdrop-blur-sm shadow-lg rounded-lg p-6 text-center">
+                <div class="text-red-600 text-4xl mb-2">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="text-2xl font-bold text-gray-800">54</div>
+                <div class="text-sm text-gray-600">Relatórios</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Management Modal -->
+    <div id="patientModal" class="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+            <!-- Modal Header -->
+            <div class="border-b p-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800">Gestão de Pacientes</h2>
+                            <p class="text-sm text-gray-600">Gerencie seus pacientes e inicie consultas</p>
+                        </div>
+                    </div>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search and Actions -->
+            <div class="p-6 border-b">
+                <div class="flex items-center gap-4">
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input 
+                            type="text" 
+                            placeholder="Buscar por nome ou CPF..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onkeyup="filterPatients(this.value)"
+                        >
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        Novo Paciente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Patients Timeline -->
+            <div class="p-6">
+                <div class="space-y-4" id="patientsList">
+                    <!-- Patient 1 -->
+                    <div class="patient-item relative">
+                        <div class="timeline-line"></div>
+                        <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-3 h-3 bg-blue-600 rounded-full mt-6 flex-shrink-0"></div>
+                            <div class="flex-1 bg-white rounded-lg border shadow-sm p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-user text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">Carlos Medeiros</h3>
+                                            <p class="text-sm text-gray-600">123.456.789-01</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                        Ativo
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-600">
+                                        <p>📞 (11) 99999-1234</p>
+                                        <p>📅 Última consulta: 15/08/2025</p>
+                                    </div>
+                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                                        Iniciar Consulta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient 2 -->
+                    <div class="patient-item relative">
+                        <div class="timeline-line"></div>
+                        <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-3 h-3 bg-blue-600 rounded-full mt-6 flex-shrink-0"></div>
+                            <div class="flex-1 bg-white rounded-lg border shadow-sm p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-user text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">João Silva</h3>
+                                            <p class="text-sm text-gray-600">987.654.321-09</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                                        Agendado
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-600">
+                                        <p>📞 (11) 98888-5678</p>
+                                        <p>📅 Última consulta: 10/08/2025</p>
+                                    </div>
+                                    <button class="bg-green-600 hover:green-700 text-white px-4 py-2 rounded-lg text-sm">
+                                        Iniciar Consulta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient 3 -->
+                    <div class="patient-item relative">
+                        <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div class="w-3 h-3 bg-blue-600 rounded-full mt-6 flex-shrink-0"></div>
+                            <div class="flex-1 bg-white rounded-lg border shadow-sm p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-user text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-800">Maria Santos</h3>
+                                            <p class="text-sm text-gray-600">456.789.123-45</p>
+                                        </div>
+                                    </div>
+                                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
+                                        Pendente
+                                    </span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-600">
+                                        <p>📞 (11) 97777-9876</p>
+                                        <p>📅 Última consulta: 08/08/2025</p>
+                                    </div>
+                                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                                        Iniciar Consulta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="border-t p-6 flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                    Fechar
+                </button>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    Gerenciar Todos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Timeline (when modal is closed) -->
+    <div id="backgroundTimeline" class="px-4 pb-8 hidden">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Timeline de Pacientes</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-3 bg-white rounded-lg border">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                            CM
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-800">Carlos Medeiros</h3>
+                            <p class="text-sm text-gray-600">(11) 99999-1234</p>
+                        </div>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Ativo</span>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                            Iniciar Consulta
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-white rounded-lg border">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                            JS
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-800">João Silva</h3>
+                            <p class="text-sm text-gray-600">(11) 98888-5678</p>
+                        </div>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">Agendado</span>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                            Iniciar Consulta
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-white rounded-lg border">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                            MS
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-800">Maria Santos</h3>
+                            <p class="text-sm text-gray-600">(11) 97777-9876</p>
+                        </div>
+                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">Pendente</span>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                            Iniciar Consulta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button id="floatingBtn" onclick="openModal()" class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-14 h-14 shadow-lg hidden">
+        <i class="fas fa-users text-xl"></i>
+    </button>
+
+    <script>
+        function closeModal() {
+            document.getElementById('patientModal').style.display = 'none';
+            document.getElementById('backgroundTimeline').style.display = 'block';
+            document.getElementById('floatingBtn').style.display = 'block';
+        }
+
+        function openModal() {
+            document.getElementById('patientModal').style.display = 'flex';
+            document.getElementById('backgroundTimeline').style.display = 'none';
+            document.getElementById('floatingBtn').style.display = 'none';
+        }
+
+        function filterPatients(searchTerm) {
+            const patients = document.querySelectorAll('.patient-item');
+            patients.forEach(patient => {
+                const name = patient.querySelector('h3').textContent.toLowerCase();
+                const cpf = patient.querySelector('p').textContent.toLowerCase();
+                if (name.includes(searchTerm.toLowerCase()) || cpf.includes(searchTerm.toLowerCase())) {
+                    patient.style.display = 'block';
+                } else {
+                    patient.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏥 Interface de Gestão de Pacientes carregada');
+            console.log('✅ Modal funcionando com timeline de pacientes');
+            console.log('🔍 Busca funcional implementada');
+        });
+    </script>
+</body>
+</html>
