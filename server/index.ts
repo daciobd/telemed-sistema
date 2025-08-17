@@ -68,7 +68,7 @@ app.use('/attached_assets', express.static(path.join(__dirname, '../attached_ass
 
 // ====== SPA fallback p/ rotas do front ======
 // Inclui as suas rotas principais e páginas internas do app
-const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console)(\/.*)?$/i;
+const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patient-management|patients)(\/.*)?$/i;
 app.get(SPA_MATCHER, (req, res, next) => {
   try {
     const indexDist = path.join(distDir, "index.html");

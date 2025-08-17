@@ -9,6 +9,7 @@ import DashboardTesteRobust from "@/pages/dashboard-teste-robust";
 import TelemedHub from "@/pages/TelemedHub";
 import HealthHub from "@/pages/HealthHub";
 import CompleteHub from "@/pages/CompleteHub";
+import PatientManagementDashboard from "@/pages/PatientManagementDashboard";
 
 // Mock auth context for demo mode
 const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -176,6 +177,7 @@ export default function App() {
             <Route path="/telemed" component={TelemedHub} />
             <Route path="/health" component={HealthHub} />
             <Route path="/complete" component={CompleteHub} />
+            <Route path="/patient-management" component={PatientManagementDashboard} />
             <Route path="/patients" component={() => import("@/pages/health-connect/patients")} />
             <Route path="/" component={LandingPage} />
             <Route>
