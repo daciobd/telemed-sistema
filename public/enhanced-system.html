@@ -3,18 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced System OK</title>
+    <title>Enhanced System - Funcionando!</title>
     <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-green-50 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-lg shadow-lg text-center">
-        <div class="text-green-600 text-6xl mb-4">✅</div>
-        <h1 class="text-3xl font-bold mb-4">Enhanced System Funcionando!</h1>
-        <p class="text-gray-600 mb-6">Sistema enhanced restaurado com sucesso.</p>
-        <div class="space-y-2">
-            <a href="/videoconsulta" class="block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Videoconsulta</a>
-            <a href="/telemed" class="block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">TeleMed IA</a>
-            <a href="/" class="block bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700">Home</a>
+<body class="bg-gradient-to-br from-green-400 to-blue-500 min-h-screen">
+    <div class="min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+            <!-- Ícone de Sucesso -->
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+                <i class="fas fa-rocket text-green-600 text-3xl"></i>
+            </div>
+            
+            <!-- Título -->
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">
+                🎉 Enhanced System
+            </h1>
+            
+            <!-- Status -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center justify-center">
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    <span class="text-green-800 font-medium">Sistema Online e Funcionando!</span>
+                </div>
+            </div>
+            
+            <!-- Descrição -->
+            <p class="text-gray-600 mb-8">
+                O Enhanced System foi recuperado e integrado com sucesso ao TeleMed. 
+                Todas as funcionalidades estão operacionais.
+            </p>
+            
+            <!-- Botões de Navegação -->
+            <div class="space-y-3">
+                <button onclick="window.open('/videoconsulta')" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-video mr-2"></i>
+                    Acessar Videoconsulta
+                </button>
+                
+                <button onclick="window.open('/telemed')" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-robot mr-2"></i>
+                    TeleMed IA
+                </button>
+                
+                <button onclick="window.open('/health')" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-hospital mr-2"></i>
+                    Health Connect
+                </button>
+                
+                <button onclick="window.open('/')" class="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-home mr-2"></i>
+                    Voltar ao Início
+                </button>
+            </div>
+            
+            <!-- Footer -->
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <p class="text-sm text-gray-500">
+                    <i class="fas fa-shield-alt mr-1"></i>
+                    Enhanced System v2.0
+                </p>
+            </div>
         </div>
     </div>
 </body>

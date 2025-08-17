@@ -110,6 +110,12 @@ app.get('/dashboard-teste.html', (req, res) => {
   res.status(404).send('Dashboard Teste page not found');
 });
 
+// Enhanced System - redirect to enhanced consultation
+app.get('/enhanced-system', (req, res) => {
+  console.log('🔄 Rota /enhanced-system acessada - Redirecionando para /enhanced');
+  res.redirect(301, '/enhanced');
+});
+
 // ====== SPA fallback p/ rotas do front ======
 // Inclui as suas rotas principais e páginas internas do app
 const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients|enhanced)(\/.*)?$/i;

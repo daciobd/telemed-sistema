@@ -5,14 +5,24 @@ const PORT = process.env.PORT || 3000;
 
 console.log('🚀 TeleMed Server Starting...');
 
+// Middleware
 app.use(express.static('public'));
 
+// Rotas principais
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'sistema-integrado.html'));
 });
 
+app.get('/telemed', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'telemed-ia.html'));
+});
+
+app.get('/health', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'health-connect.html'));
+});
+
 app.get('/complete', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'telemed-complete.html'));
+    res.sendFile(path.join(__dirname, 'public', 'sistema-completo.html'));
 });
 
 app.get('/demo', (req, res) => {
@@ -23,72 +33,29 @@ app.get('/consulta', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'react-app', 'index.html'));
 });
 
-// Rota para enhanced system melhorado
-app.get("/enhanced-system", (req, res) => {
-    console.log("🎯 Servindo Enhanced System melhorado");
-    res.sendFile(path.join(__dirname, "public", "enhanced-system.html"));
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ TeleMed Server ONLINE na porta ${PORT}`);
-});
-
-// Rotas para sistema fusionado
-app.get('/telemed', (req, res) => {
-    console.log('🤖 Servindo TeleMed IA');
-    res.sendFile(path.join(__dirname, 'public', 'telemed-ia.html'));
-});
-
-app.get('/health', (req, res) => {
-    console.log('🏥 Servindo Health Connect');
-    res.sendFile(path.join(__dirname, 'public', 'health-connect.html'));
-});
-
-app.get('/complete', (req, res) => {
-    console.log('🔗 Servindo Sistema Integrado');
-    res.sendFile(path.join(__dirname, 'public', 'sistema-completo.html'));
-});
-
-// Rotas para enhanced
-app.get('/enhanced', (req, res) => {
-    console.log('🔗 Servindo Enhanced via iframe');
-    res.sendFile(path.join(__dirname, 'public', 'enhanced-iframe.html'));
-});
-
-app.get('/enhanced-local', (req, res) => {
-    console.log('🔗 Servindo Enhanced local (scraped)');
-    res.sendFile(path.join(__dirname, 'public', 'enhanced-local.html'));
-});
-
-app.get('/enhanced-direct', (req, res) => {
-    console.log('🔗 Redirecionando para Enhanced original');
-    res.redirect('https://e6d689c1-512b-4fe0-95e9-97962bd221aa-00-1tscx6q290aml.spock.replit.dev/enhanced');
-});
-
-// Rota para videoconsulta direta
 app.get('/videoconsulta', (req, res) => {
-    console.log('🎥 Servindo videoconsulta direta');
-    res.sendFile(path.join(__dirname, 'public', 'enhanced-local.html'));
+    res.sendFile(path.join(__dirname, 'public', 'videoconsulta.html'));
 });
 
-// Rota para enhanced system melhorado
-app.get('/enhanced-system', (req, res) => {
-    console.log('🎯 Servindo Enhanced System melhorado');
-    res.sendFile(path.join(__dirname, 'public', 'enhanced-system.html'));
-});
-
-// Corrigir rota enhanced-local
-app.get('/enhanced-local', (req, res) => {
-    console.log('🔗 Servindo Enhanced local');
-    res.sendFile(path.join(__dirname, 'public', 'enhanced-system.html'));
-});
-
-// Enhanced System Route
+// ROTA ENHANCED-SYSTEM
 app.get('/enhanced-system', (req, res) => {
     console.log('🚀 Servindo Enhanced System');
     res.sendFile(path.join(__dirname, 'public', 'enhanced-system.html'));
 });
 
-app.get("/enhanced-system", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "enhanced-system.html"));
+// Rota de saúde
+app.get('/health-check', (req, res) => {
+    res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Iniciar servidor
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ TeleMed Server ONLINE na porta ${PORT}`);
+    console.log(`🌐 URLs disponíveis:`);
+    console.log(`   🏠 Home: /`);
+    console.log(`   🤖 TeleMed: /telemed`);
+    console.log(`   🏥 Health: /health`);
+    console.log(`   🎯 Complete: /complete`);
+    console.log(`   🎥 Videoconsulta: /videoconsulta`);
+    console.log(`   🚀 Enhanced: /enhanced-system`);
 });
