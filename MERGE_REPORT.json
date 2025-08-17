@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-08-17T10:36:22.205Z",
+  "telemed_current": {
+    "backend_port": 5000,
+    "frontend_port": 5173,
+    "database": "PostgreSQL",
+    "framework": "Express + React + Vite",
+    "features": [
+      "Video consultations",
+      "AI-powered triage",
+      "Medical records",
+      "Payment processing",
+      "WhatsApp notifications"
+    ]
+  },
+  "health_connect": {
+    "components": [],
+    "apis": [],
+    "database": [],
+    "styles": [],
+    "configs": []
+  },
+  "integration_plan": {
+    "phase1": "Análise de compatibilidade",
+    "phase2": "Fusão de schemas de banco",
+    "phase3": "Unificação de APIs",
+    "phase4": "Merge de componentes frontend",
+    "phase5": "Testes integrados"
+  },
+  "next_steps": [
+    "1. Fornecer arquivos do Health Connect",
+    "2. Executar análise de conflitos",
+    "3. Criar plano de migração específico",
+    "4. Implementar fusão controlada"
+  ]
+}

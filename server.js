@@ -1,44 +1,28 @@
-// Development environment starter for TeleMed
-// This runs the TypeScript server directly using tsx
+const express = require('express');
+const path = require('path');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const { spawn } = require('child_process');
+console.log('🚀 TeleMed Server Starting...');
 
-console.log('🚀 Starting TeleMed Development Server...');
+app.use(express.static('public'));
 
-// Start the TypeScript server with tsx
-const serverProcess = spawn('npx', ['tsx', 'server/index.ts'], {
-  stdio: 'inherit',
-  shell: true,
-  cwd: process.cwd(),
-  env: { ...process.env }
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'sistema-integrado.html'));
 });
 
-serverProcess.on('error', (err) => {
-  console.error('❌ Server error:', err);
+app.get('/complete', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'telemed-complete.html'));
 });
 
-serverProcess.on('exit', (code) => {
-  if (code !== 0) {
-    console.error(`❌ Server exited with code ${code}`);
-    process.exit(code);
-  }
+app.get('/demo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'demo-ativo', 'index.html'));
 });
 
-// Handle graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down server...');
-  serverProcess.kill();
-  process.exit(0);
+app.get('/consulta', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'react-app', 'index.html'));
 });
 
-process.on('SIGTERM', () => {
-  console.log('\n🛑 Shutting down server...');
-  serverProcess.kill();
-  process.exit(0);
-});
-
-// Rota para sistema completo híbrido
-app.get("/complete", (req, res) => {
-    console.log("🎯 Servindo sistema híbrido completo");
-    res.sendFile(path.join(__dirname, "public", "telemed-complete.html"));
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ TeleMed Server ONLINE na porta ${PORT}`);
 });
