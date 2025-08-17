@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced System - Health Connect</title>
+    <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <header class="bg-green-600 text-white p-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-lg font-bold">Enhanced System - Health Connect</h1>
+            <nav class="space-x-4 text-sm">
+                <a href="/" class="hover:text-green-200">← Home</a>
+                <a href="/health" class="hover:text-green-200">Health Connect</a>
+                <a href="/telemed" class="hover:text-green-200">TeleMed IA</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div id="loading" class="loading">
+        <div class="text-center text-white">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+            <p>Carregando Enhanced System...</p>
+        </div>
+    </div>
+    
+    <iframe 
+        id="enhancedFrame"
+        src="https://e6d689c1-512b-4fe0-95e9-97962bd221aa-00-1tscx6q290aml.spock.replit.dev/enhanced"
+        class="w-full border-0"
+        style="height: calc(100vh - 60px); display: none;"
+        title="Enhanced Health Connect System"
+        onload="document.getElementById('loading').style.display='none'; this.style.display='block';">
+    </iframe>
+    
+    <script>
+        // Fallback se iframe não carregar
+        setTimeout(() => {
+            const loading = document.getElementById('loading');
+            const iframe = document.getElementById('enhancedFrame');
+            
+            if (loading.style.display !== 'none') {
+                loading.innerHTML = `
+                    <div class="text-center text-white">
+                        <div class="text-red-500 text-4xl mb-4">⚠️</div>
+                        <h2 class="text-xl mb-4">Sistema Enhanced temporariamente indisponível</h2>
+                        <p class="mb-4">O sistema original pode estar offline. Tente:</p>
+                        <div class="space-y-2">
+                            <a href="/health" class="block bg-green-600 text-white px-4 py-2 rounded">Ir para Health Connect</a>
+                            <a href="/telemed" class="block bg-blue-600 text-white px-4 py-2 rounded">Ir para TeleMed IA</a>
+                        </div>
+                    </div>
+                `;
+            }
+        }, 10000); // 10 segundos timeout
+    </script>
+</body>
+</html>

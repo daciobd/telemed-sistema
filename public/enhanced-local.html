@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Local - Sistema Completo</title>
+    <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="bg-green-600 text-white p-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-lg font-bold">Enhanced System - Videoconsulta + IA</h1>
+            <nav class="space-x-4 text-sm">
+                <a href="/" class="hover:text-green-200">← Home</a>
+                <a href="/health" class="hover:text-green-200">Health Connect</a>
+                <a href="/telemed" class="hover:text-green-200">TeleMed IA</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="h-screen flex">
+        <!-- Área principal de vídeo -->
+        <div class="flex-1 bg-gray-800 relative">
+            <!-- Timer -->
+            <div class="absolute top-4 right-4 bg-black bg-opacity-50 px-3 py-1 rounded">
+                <span id="timer" class="font-mono text-lg">08:38</span>
+            </div>
+
+            <!-- Área de vídeo central -->
+            <div class="flex items-center justify-center h-full">
+                <div class="text-center">
+                    <div class="bg-gray-700 w-32 h-32 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-user text-6xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl mb-2">Aguardando paciente...</h3>
+                    <p class="text-gray-400">A chamada será iniciada quando o paciente entrar</p>
+                    <div class="mt-4">
+                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                            <i class="fas fa-circle text-xs mr-1"></i>Conectado
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles de vídeo -->
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4">
+                <button class="bg-red-600 hover:bg-red-700 p-3 rounded-full">
+                    <i class="fas fa-microphone-slash"></i>
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 p-3 rounded-full">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="bg-blue-600 hover:bg-blue-700 p-3 rounded-full">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="bg-red-600 hover:bg-red-700 p-3 rounded-full">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Painel lateral -->
+        <div class="w-96 bg-white text-gray-900 flex flex-col">
+            <!-- Tabs -->
+            <div class="flex border-b">
+                <button onclick="showTab('chat')" id="chatTab" class="flex-1 p-3 bg-blue-50 border-b-2 border-blue-600">
+                    <i class="fas fa-comments mr-2"></i>Chat
+                </button>
+                <button onclick="showTab('atendimento')" id="atendimentoTab" class="flex-1 p-3 hover:bg-gray-50">
+                    <i class="fas fa-stethoscope mr-2"></i>Atendimento
+                </button>
+                <button onclick="showTab('exames')" id="examesTab" class="flex-1 p-3 hover:bg-gray-50">
+                    <i class="fas fa-flask mr-2"></i>Exames
+                </button>
+            </div>
+
+            <!-- Conteúdo do Chat -->
+            <div id="chatContent" class="flex-1 flex flex-col">
+                <div class="flex-1 p-4 overflow-y-auto">
+                    <div class="space-y-3">
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="text-sm"><strong>Dr.:</strong> Olá! Como está?</p>
+                            <span class="text-xs text-gray-500">14:31</span>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <p class="text-sm"><strong>Paciente:</strong> Olá! Estou bem, obrigado. Como posso ajudá-lo hoje?</p>
+                            <span class="text-xs text-gray-500">14:32</span>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="text-sm"><strong>Dr.:</strong> Estou sentindo dores de cabeça frequentes nos últimos dias.</p>
+                            <span class="text-xs text-gray-500">14:34</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 border-t">
+                    <div class="flex space-x-2">
+                        <input type="text" placeholder="Digite sua mensagem..." class="flex-1 border rounded-lg px-3 py-2 text-sm">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo do Atendimento -->
+            <div id="atendimentoContent" class="flex-1 p-4 hidden overflow-y-auto">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Queixa Principal</label>
+                        <textarea class="w-full border rounded px-3 py-2 text-sm" rows="3" placeholder="Dores de cabeça frequentes..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">História da Doença</label>
+                        <textarea class="w-full border rounded px-3 py-2 text-sm" rows="3" placeholder="Iniciou há 3 dias..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Diagnóstico IA</label>
+                        <div class="bg-green-50 p-3 rounded border">
+                            <p class="text-sm"><strong>Sugestão IA:</strong> Cefaleia tensional</p>
+                            <p class="text-xs text-gray-600">Confiança: 85%</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-green-600 text-white py-2 rounded-lg">
+                        <i class="fas fa-robot mr-2"></i>Analisar com IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- Conteúdo dos Exames -->
+            <div id="examesContent" class="flex-1 p-4 hidden overflow-y-auto">
+                <div class="space-y-4">
+                    <div class="bg-yellow-50 p-3 rounded border">
+                        <h4 class="font-medium text-sm">Exames Pendentes</h4>
+                        <p class="text-xs text-gray-600">Hemograma completo - Aguardando</p>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded border">
+                        <h4 class="font-medium text-sm">Exames Concluídos</h4>
+                        <p class="text-xs text-gray-600">Glicemia - Normal (85 mg/dL)</p>
+                    </div>
+                    <button class="w-full bg-purple-600 text-white py-2 rounded-lg">
+                        <i class="fas fa-plus mr-2"></i>Solicitar Exame
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Timer
+        let startTime = Date.now() - (8 * 60 + 38) * 1000; // Começar em 08:38
+        setInterval(() => {
+            let elapsed = Date.now() - startTime;
+            let minutes = Math.floor(elapsed / 60000);
+            let seconds = Math.floor((elapsed % 60000) / 1000);
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Tabs
+        function showTab(tab) {
+            // Esconder todos os conteúdos
+            document.getElementById('chatContent').classList.toggle('hidden', tab !== 'chat');
+            document.getElementById('atendimentoContent').classList.toggle('hidden', tab !== 'atendimento');
+            document.getElementById('examesContent').classList.toggle('hidden', tab !== 'exames');
+            
+            // Atualizar aparência dos tabs
+            const tabs = ['chat', 'atendimento', 'exames'];
+            tabs.forEach(t => {
+                const tabEl = document.getElementById(t + 'Tab');
+                if (t === tab) {
+                    tabEl.className = 'flex-1 p-3 bg-blue-50 border-b-2 border-blue-600';
+                } else {
+                    tabEl.className = 'flex-1 p-3 hover:bg-gray-50';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

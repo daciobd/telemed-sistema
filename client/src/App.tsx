@@ -173,7 +173,6 @@ export default function App() {
             <Route path="/enhanced" component={EnhancedConsultation} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
-            <Route path="/dashboard-teste" component={DashboardTeste} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
             <Route path="/telemed" component={TelemedHub} />
             <Route path="/health" component={HealthHub} />
