@@ -1,0 +1,72 @@
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: server/index.ts
+@@
+-import path from "path";
+-import express from "express";
++import path from "path";
++import fs from "fs";
++import express from "express";
+ const app = express();
+ app.use(express.json());
+@@
+-// ===== Static + SPA fallback =====
+-const distDir = path.join(process.cwd(), 'dist');
+-app.use(express.static(distDir)); // serve /dist/assets, /index.html, etc.
+-// entregue index.html para QUALQUER rota não-API e não-/perf (React Router cuida do resto)
+-app.get(/^\/(?!api|perf|static|assets|favicon\.ico).*/i, (_req, res) => {
+-  res.sendFile(path.join(distDir, 'index.html'));
+-});
++// ====== APIs e /perf primeiro ======
++// (mantenha aqui TODAS as rotas /api/*, /perf/* e middlewares como timing/compression)
++
++// ====== Vite dev (opcional, só quando VITE_DEV=true) ======
++let vite: any = null;
++if (process.env.VITE_DEV === "true") {
++  // eslint-disable-next-line @typescript-eslint/no-var-requires
++  const viteMod = await import("vite");
++  vite = await viteMod.createServer({
++    server: { middlewareMode: true },
++    appType: "spa",
++  });
++  // APIs acima continuam funcionando; Vite atende assets e HMR
++  app.use(vite.middlewares);
++}
++
++// ====== Produção: servir dist se existir ======
++const distDir = path.join(process.cwd(), "dist");
++if (fs.existsSync(distDir)) {
++  app.use(express.static(distDir)); // /assets e index.html
++}
++
++// ====== SPA fallback p/ rotas do front ======
++// Inclui as suas rotas principais e páginas internas do app
++const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console)(\/.*)?$/i;
++app.get(SPA_MATCHER, async (req, res, next) => {
++  try {
++    if (vite) {
++      const indexHtmlPath = path.join(process.cwd(), "index.html");
++      const raw = fs.readFileSync(indexHtmlPath, "utf8");
++      const html = await vite.transformIndexHtml(req.originalUrl, raw);
++      res.setHeader("Content-Type", "text/html");
++      return res.status(200).end(html);
++    }
++    const indexDist = path.join(distDir, "index.html");
++    if (fs.existsSync(indexDist)) {
++      return res.sendFile(indexDist);
++    }
++    return next(); // deixa cair no 404 se não houver front buildado
++  } catch (e) {
++    return next(e);
++  }
++});
++
++// ====== 404 final (apenas APIs/arquivos fora do SPA) ======
++app.use((req, res) => {
++  if (req.path.startsWith("/api") || req.path.startsWith("/perf")) {
++    return res.status(404).json({ error: "not_found", path: req.originalUrl });
++  }
++  return res.status(404).send("Not found");
++});
+*** End Patch
+PATCH

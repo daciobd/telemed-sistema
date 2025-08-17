@@ -6,6 +6,9 @@ import EnhancedConsultation from "@/pages/enhanced-consultation";
 import AIConsolePage from "@/pages/ai-console";
 import DashboardTeste from "@/pages/dashboard-teste";
 import DashboardTesteRobust from "@/pages/dashboard-teste-robust";
+import TelemedHub from "@/pages/TelemedHub";
+import HealthHub from "@/pages/HealthHub";
+import CompleteHub from "@/pages/CompleteHub";
 
 // Mock auth context for demo mode
 const MockAuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -170,6 +173,9 @@ export default function App() {
             <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/dashboard-teste" component={DashboardTeste} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
+            <Route path="/telemed" component={TelemedHub} />
+            <Route path="/health" component={HealthHub} />
+            <Route path="/complete" component={CompleteHub} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">

@@ -43,21 +43,48 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Static file serving with proper headers
-app.use('/assets', express.static(path.join(__dirname, '../dist/public/assets'), {
-  maxAge: '1d',
-  etag: true,
-  lastModified: true
-}));
+// ====== APIs e /perf primeiro ======
+// (mantenha aqui TODAS as rotas /api/*, /perf/* e middlewares como timing/compression)
 
-app.use(express.static(path.join(__dirname, '../dist/public'), {
-  maxAge: '1h',
-  etag: true,
-  lastModified: true
-}));
+// ====== Vite dev removido devido a limitações de await ======
+// Usando apenas modo produção com servindo de arquivos estáticos
 
+// ====== Produção: servir dist se existir ======
+const distDir = path.join(process.cwd(), "dist");
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir)); // /assets e index.html
+  
+  // Static file serving with proper headers for production
+  app.use('/assets', express.static(path.join(distDir, 'assets'), {
+    maxAge: '1d',
+    etag: true,
+    lastModified: true
+  }));
+}
+
+// Static assets
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
+
+// ====== SPA fallback p/ rotas do front ======
+// Inclui as suas rotas principais e páginas internas do app
+const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console)(\/.*)?$/i;
+app.get(SPA_MATCHER, (req, res, next) => {
+  try {
+    const indexDist = path.join(distDir, "index.html");
+    if (fs.existsSync(indexDist)) {
+      return res.sendFile(indexDist);
+    }
+    // Fallback para servir a aplicação React mesmo sem build
+    const indexHtml = path.join(process.cwd(), "index.html");
+    if (fs.existsSync(indexHtml)) {
+      return res.sendFile(indexHtml);
+    }
+    return next(); // deixa cair no 404 se não houver front
+  } catch (e) {
+    return next(e);
+  }
+});
 
 // Performance reports serving
 app.use('/perf', express.static(path.join(process.cwd(), 'perf'), {

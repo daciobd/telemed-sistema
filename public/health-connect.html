@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Connect - Gestão Médica</title>
+    <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <header class="bg-green-600 text-white p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">🏥 Health Connect</h1>
+            <nav class="space-x-4">
+                <a href="/" class="hover:text-green-200">← Voltar</a>
+                <a href="/telemed" class="hover:text-green-200">TeleMed IA</a>
+                <a href="/complete" class="hover:text-green-200">Sistema Completo</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="max-w-7xl mx-auto p-6">
+        <!-- Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="text-blue-600 text-4xl mb-3">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="text-2xl font-bold">1,247</h3>
+                <p class="text-gray-600">Pacientes Ativos</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="text-green-600 text-4xl mb-3">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="text-2xl font-bold">89</h3>
+                <p class="text-gray-600">Consultas Hoje</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="text-purple-600 text-4xl mb-3">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3 class="text-2xl font-bold">156</h3>
+                <p class="text-gray-600">Exames Pendentes</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="text-orange-600 text-4xl mb-3">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="text-2xl font-bold">4.8</h3>
+                <p class="text-gray-600">Satisfação</p>
+            </div>
+        </div>
+
+        <!-- Funcionalidades Principais -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Gestão de Pacientes -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="text-blue-600 text-4xl mb-4">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Gestão de Pacientes</h3>
+                <p class="text-gray-600 mb-4">Sistema completo de cadastro e acompanhamento de pacientes</p>
+                <button onclick="window.open('/demo-ativo/pacientes.html')" class="bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-700">
+                    <i class="fas fa-users mr-2"></i>Gerenciar Pacientes
+                </button>
+            </div>
+
+            <!-- Consultas Especializadas -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="text-green-600 text-4xl mb-4">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Consultas Especializadas</h3>
+                <p class="text-gray-600 mb-4">Diferentes especialidades médicas disponíveis</p>
+                <button onclick="window.open('/demo-ativo/agenda-do-dia.html')" class="bg-green-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-700">
+                    <i class="fas fa-calendar mr-2"></i>Ver Agenda
+                </button>
+            </div>
+
+            <!-- Sistema de Exames -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="text-purple-600 text-4xl mb-4">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Sistema de Exames</h3>
+                <p class="text-gray-600 mb-4">Solicitação e acompanhamento de exames laboratoriais</p>
+                <button class="bg-purple-600 text-white px-4 py-2 rounded-lg w-full hover:bg-purple-700">
+                    <i class="fas fa-vial mr-2"></i>Gerenciar Exames
+                </button>
+            </div>
+        </div>
+
+        <!-- Especialidades Médicas -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-6">🩺 Especialidades Disponíveis</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="text-center p-4 bg-red-50 rounded-lg hover:shadow-md transition-shadow">
+                    <i class="fas fa-heart text-red-500 text-3xl mb-2"></i>
+                    <p class="text-sm font-medium">Cardiologia</p>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg hover:shadow-md transition-shadow">
+                    <i class="fas fa-brain text-blue-500 text-3xl mb-2"></i>
+                    <p class="text-sm font-medium">Neurologia</p>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg hover:shadow-md transition-shadow">
+                    <i class="fas fa-bone text-green-500 text-3xl mb-2"></i>
+                    <p class="text-sm font-medium">Ortopedia</p>
+                </div>
+                <div class="text-center p-4 bg-purple-50 rounded-lg hover:shadow-md transition-shadow">
+                    <i class="fas fa-eye text-purple-500 text-3xl mb-2"></i>
+                    <p class="text-sm font-medium">Oftalmologia</p>
+                </div>
+                <div class="text-center p-4 bg-pink-50 rounded-lg hover:shadow-md transition-shadow">
+                    <i class="fas fa-baby text-pink-500 text-3xl mb-2"></i>
+                    <p class="text-sm font-medium">Pediatria</p>
+                </div>
+                <div class="text-center p-4 bg-orange-50 rounded-lg hover:shadow-md transition-shadow">
+                    <i class="fas fa-venus text-orange-500 text-3xl mb-2"></i>
+                    <p class="text-sm font-medium">Ginecologia</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

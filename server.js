@@ -26,3 +26,19 @@ app.get('/consulta', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ TeleMed Server ONLINE na porta ${PORT}`);
 });
+
+// Rotas para sistema fusionado
+app.get('/telemed', (req, res) => {
+    console.log('🤖 Servindo TeleMed IA');
+    res.sendFile(path.join(__dirname, 'public', 'telemed-ia.html'));
+});
+
+app.get('/health', (req, res) => {
+    console.log('🏥 Servindo Health Connect');
+    res.sendFile(path.join(__dirname, 'public', 'health-connect.html'));
+});
+
+app.get('/complete', (req, res) => {
+    console.log('🔗 Servindo Sistema Integrado');
+    res.sendFile(path.join(__dirname, 'public', 'sistema-completo.html'));
+});
