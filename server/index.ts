@@ -28,9 +28,10 @@ app.use(timing);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
-// Use environment configuration
-const PORT = Number(env.PORT);
+// Use environment configuration with dynamic port support
+const PORT = Number(process.env.PORT) || Number(env.PORT) || 5000;
 console.log(`🔗 Environment: ${env.NODE_ENV}`);
+console.log(`🔗 PORT env raw: '${process.env.PORT}'`);
 console.log(`🔗 PORT final: ${PORT}`);
 
 // Additional security headers (complementing Helmet)

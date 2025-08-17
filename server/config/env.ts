@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const env = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  PORT: z.string().default("5000"),
+  PORT: z.string().default(process.env.PORT || "5000"),
   DATABASE_URL: z.string().url(),
   JWT_SECRET: z.string().min(32),
   SESSION_SECRET: z.string().min(32),

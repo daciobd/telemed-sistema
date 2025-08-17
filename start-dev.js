@@ -33,10 +33,11 @@ function startProcess(command, args, name, options = {}) {
   return proc;
 }
 
-// Start the backend server on port 5000
-console.log('🔧 Starting Express server on port 5000...');
+// Start the backend server with dynamic port
+const PORT = Number(process.env.PORT) || 5000;
+console.log(`🔧 Starting Express server on port ${PORT}...`);
 const serverProcess = startProcess('npx', ['tsx', 'watch', 'server/index.ts'], 'Server', {
-  env: { PORT: '5000' }
+  env: { PORT: String(PORT) }
 });
 
 // Wait a moment for server to initialize
