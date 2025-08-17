@@ -1,0 +1,878 @@
+{
+  "timestamp": "2025-08-17T11:14:47.145Z",
+  "merge_summary": {
+    "status": "completed",
+    "conflicts": 28,
+    "merged_files": 0,
+    "health_connect_components": 4
+  },
+  "next_steps": [
+    "1. Instalar novas dependências: npm install",
+    "2. Revisar schemas integrados",
+    "3. Testar componentes do Health Connect",
+    "4. Atualizar rotas principais",
+    "5. Testar sistema unificado"
+  ],
+  "log": [
+    {
+      "timestamp": "2025-08-17T11:14:46.938Z",
+      "message": "Reorganizando estrutura do Health Connect...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.940Z",
+      "message": "Movido: health-connect/config/health-connect/config/package.json → health-connect/config/package.json",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.941Z",
+      "message": "Movido: health-connect/config/health-connect/config/tsconfig.json → health-connect/config/tsconfig.json",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.943Z",
+      "message": "Movido: health-connect/config/health-connect/config/vite.config.ts → health-connect/config/vite.config.ts",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.945Z",
+      "message": "Movido: health-connect/config/health-connect/config/.env.example → health-connect/config/.env.example",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.947Z",
+      "message": "Movido: health-connect/database/database/shared/schema.ts → health-connect/database/shared/schema.ts",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.948Z",
+      "message": "Movido: health-connect/database/database/server/db.ts → health-connect/database/server/db.ts",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.950Z",
+      "message": "Movido: health-connect/api/api/server/index.ts → health-connect/api/server/index.ts",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:46.952Z",
+      "message": "Movido: health-connect/api/api/server/storage.ts → health-connect/api/server/storage.ts",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.027Z",
+      "message": "Copiado recursivamente: health-connect/components/components/client/src/ → health-connect/src/",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.027Z",
+      "message": "Estrutura reorganizada",
+      "type": "success"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.027Z",
+      "message": "Analisando compatibilidade entre projetos...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "28 conflitos de dependências encontrados",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "@hookform/resolvers: Health(^3.10.0) vs TeleMed(^5.2.1)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "@radix-ui/react-slot: Health(^1.2.0) vs TeleMed(^1.2.3)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "@tanstack/react-query: Health(^5.60.5) vs TeleMed(^5.85.3)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "date-fns: Health(^3.6.0) vs TeleMed(^4.1.0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "drizzle-orm: Health(^0.39.1) vs TeleMed(^0.44.4)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.029Z",
+      "message": "drizzle-zod: Health(^0.7.0) vs TeleMed(^0.8.3)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "express: Health(^4.21.2) vs TeleMed(^4.18.2)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "express-session: Health(^1.18.1) vs TeleMed(^1.18.2)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "lucide-react: Health(^0.453.0) vs TeleMed(^0.539.0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "react: Health(^18.3.1) vs TeleMed(^19.1.1)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "react-dom: Health(^18.3.1) vs TeleMed(^19.1.1)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "react-hook-form: Health(^7.55.0) vs TeleMed(^7.62.0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "tailwind-merge: Health(^2.6.0) vs TeleMed(^3.3.1)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "wouter: Health(^3.3.5) vs TeleMed(^3.7.1)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "ws: Health(^8.18.0) vs TeleMed(^8.18.3)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.030Z",
+      "message": "zod: Health(^3.24.2) vs TeleMed(^4.0.17)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/express: Health(4.17.21) vs TeleMed(^5.0.3)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/express-session: Health(^1.18.0) vs TeleMed(^1.18.2)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/node: Health(20.16.11) vs TeleMed(^24.3.0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/passport: Health(^1.0.16) vs TeleMed(^1.0.17)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/react: Health(^18.3.11) vs TeleMed(^19.1.10)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/react-dom: Health(^18.3.1) vs TeleMed(^19.1.7)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@types/ws: Health(^8.5.13) vs TeleMed(^8.18.1)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "@vitejs/plugin-react: Health(^4.3.2) vs TeleMed(^5.0.0)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "drizzle-kit: Health(^0.30.4) vs TeleMed(^0.31.4)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "tsx: Health(^4.19.1) vs TeleMed(^4.20.4)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.031Z",
+      "message": "typescript: Health(5.6.3) vs TeleMed(^5.9.2)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.032Z",
+      "message": "vite: Health(^5.4.19) vs TeleMed(^7.1.2)",
+      "type": "warning"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.032Z",
+      "message": "Integrando dependências...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @jridgewell/trace-mapping@^0.3.25",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @neondatabase/serverless@^0.10.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @radix-ui/react-accordion@^1.2.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @radix-ui/react-alert-dialog@^1.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @radix-ui/react-aspect-ratio@^1.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @radix-ui/react-avatar@^1.1.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @radix-ui/react-checkbox@^1.1.5",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.033Z",
+      "message": "Adicionando dependência: @radix-ui/react-collapsible@^1.1.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-context-menu@^2.2.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-dialog@^1.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-dropdown-menu@^2.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-hover-card@^1.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-label@^2.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-menubar@^1.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-navigation-menu@^1.2.6",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.034Z",
+      "message": "Adicionando dependência: @radix-ui/react-popover@^1.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-progress@^1.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-radio-group@^1.2.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-scroll-area@^1.2.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-select@^2.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-separator@^1.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-slider@^1.2.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-switch@^1.1.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.035Z",
+      "message": "Adicionando dependência: @radix-ui/react-tabs@^1.1.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: @radix-ui/react-toast@^1.2.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: @radix-ui/react-toggle@^1.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: @radix-ui/react-toggle-group@^1.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: @radix-ui/react-tooltip@^1.2.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: @types/helmet@^0.0.48",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: cmdk@^1.1.1",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: connect-pg-simple@^10.0.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: embla-carousel-react@^8.6.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: express-rate-limit@^8.0.1",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: framer-motion@^11.13.1",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: input-otp@^1.4.2",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: memorystore@^1.6.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.036Z",
+      "message": "Adicionando dependência: next-themes@^0.4.6",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: openai@^5.12.2",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: react-day-picker@^8.10.1",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: react-icons@^5.4.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: react-resizable-panels@^2.1.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: recharts@^2.15.2",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: tailwindcss-animate@^1.0.7",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: tw-animate-css@^1.2.5",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: vaul@^1.1.2",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dependência: zod-validation-error@^3.4.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dev dependency: @replit/vite-plugin-cartographer@^0.2.8",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dev dependency: @replit/vite-plugin-runtime-error-modal@^0.0.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dev dependency: @tailwindcss/typography@^0.5.15",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.037Z",
+      "message": "Adicionando dev dependency: @tailwindcss/vite@^4.1.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/connect-pg-simple@^7.0.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/express@4.17.21",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/express-session@^1.18.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/node@20.16.11",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/passport@^1.0.16",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/passport-local@^1.0.38",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/react@^18.3.11",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/react-dom@^18.3.1",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @types/ws@^8.5.13",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: @vitejs/plugin-react@^4.3.2",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: autoprefixer@^10.4.20",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.038Z",
+      "message": "Adicionando dev dependency: drizzle-kit@^0.30.4",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.039Z",
+      "message": "Adicionando dev dependency: esbuild@^0.25.0",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.039Z",
+      "message": "Adicionando dev dependency: postcss@^8.4.47",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.039Z",
+      "message": "Adicionando dev dependency: tailwindcss@^3.4.17",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.039Z",
+      "message": "Adicionando dev dependency: tsx@^4.19.1",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.039Z",
+      "message": "Adicionando dev dependency: typescript@5.6.3",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.039Z",
+      "message": "Adicionando dev dependency: vite@^5.4.19",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.045Z",
+      "message": "package.json atualizado com dependências do Health Connect",
+      "type": "success"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.045Z",
+      "message": "Integrando schemas de banco de dados...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.050Z",
+      "message": "Schemas integrados em shared/schema-integrated.ts",
+      "type": "success"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.050Z",
+      "message": "Integrando componentes do Health Connect...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.053Z",
+      "message": "Componente integrado: AIConsentBanner.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.054Z",
+      "message": "Componente integrado: Protected.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.056Z",
+      "message": "Componente integrado: ConsultationHeader.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.057Z",
+      "message": "Componente integrado: ExamPanel.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.058Z",
+      "message": "Componente integrado: MedicalForm.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.060Z",
+      "message": "Componente integrado: VideoArea.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.062Z",
+      "message": "Componente integrado: accordion.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.064Z",
+      "message": "Componente integrado: alert-dialog.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.067Z",
+      "message": "Componente integrado: alert.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.068Z",
+      "message": "Componente integrado: aspect-ratio.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.070Z",
+      "message": "Componente integrado: avatar.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.071Z",
+      "message": "Componente integrado: badge.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.072Z",
+      "message": "Componente integrado: breadcrumb.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.074Z",
+      "message": "Componente integrado: button.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.075Z",
+      "message": "Componente integrado: calendar.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.076Z",
+      "message": "Componente integrado: card.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.077Z",
+      "message": "Componente integrado: carousel.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.079Z",
+      "message": "Componente integrado: chart.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.081Z",
+      "message": "Componente integrado: checkbox.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.082Z",
+      "message": "Componente integrado: collapsible.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.083Z",
+      "message": "Componente integrado: command.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.084Z",
+      "message": "Componente integrado: context-menu.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.084Z",
+      "message": "Componente integrado: dialog.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.085Z",
+      "message": "Componente integrado: drawer.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.086Z",
+      "message": "Componente integrado: dropdown-menu.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.087Z",
+      "message": "Componente integrado: form.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.089Z",
+      "message": "Componente integrado: hover-card.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.090Z",
+      "message": "Componente integrado: input-otp.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.092Z",
+      "message": "Componente integrado: input.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.094Z",
+      "message": "Componente integrado: label.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.095Z",
+      "message": "Componente integrado: menubar.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.096Z",
+      "message": "Componente integrado: navigation-menu.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.098Z",
+      "message": "Componente integrado: pagination.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.104Z",
+      "message": "Componente integrado: popover.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.108Z",
+      "message": "Componente integrado: progress.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.111Z",
+      "message": "Componente integrado: radio-group.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.112Z",
+      "message": "Componente integrado: resizable.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.119Z",
+      "message": "Componente integrado: scroll-area.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.120Z",
+      "message": "Componente integrado: select.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.124Z",
+      "message": "Componente integrado: separator.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.125Z",
+      "message": "Componente integrado: sheet.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.127Z",
+      "message": "Componente integrado: sidebar.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.128Z",
+      "message": "Componente integrado: skeleton.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.129Z",
+      "message": "Componente integrado: slider.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.130Z",
+      "message": "Componente integrado: switch.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.131Z",
+      "message": "Componente integrado: table.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.131Z",
+      "message": "Componente integrado: tabs.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.132Z",
+      "message": "Componente integrado: textarea.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.133Z",
+      "message": "Componente integrado: toast.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.134Z",
+      "message": "Componente integrado: toaster.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.135Z",
+      "message": "Componente integrado: toggle-group.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.136Z",
+      "message": "Componente integrado: toggle.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.138Z",
+      "message": "Componente integrado: tooltip.tsx",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.138Z",
+      "message": "Componentes do Health Connect integrados",
+      "type": "success"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.138Z",
+      "message": "Integrando APIs do Health Connect...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.139Z",
+      "message": "Criando navegação unificada...",
+      "type": "info"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.141Z",
+      "message": "Navegação unificada criada",
+      "type": "success"
+    },
+    {
+      "timestamp": "2025-08-17T11:14:47.142Z",
+      "message": "Gerando relatório de fusão...",
+      "type": "info"
+    }
+  ]
+}

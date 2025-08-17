@@ -1,45 +1,605 @@
 {
-  "project_info": {
-    "name": "Health Connect",
-    "import_method": "manual_copy",
-    "timestamp": "2025-08-17T10:44:40.094Z",
-    "status": "awaiting_files"
-  },
-  "structure_analysis": {
-    "frontend": {
-      "framework": null,
-      "components_count": 0,
-      "pages_count": 0,
-      "routes": []
-    },
-    "backend": {
-      "framework": null,
-      "api_endpoints": [],
-      "middleware": [],
-      "database_models": []
-    },
-    "database": {
-      "type": null,
-      "tables": [],
-      "relationships": []
+  "timestamp": "2025-08-17T11:13:30.468Z",
+  "health_connect_analysis": {
+    "structure": {
+      "components": [
+        {
+          "path": "health-connect/components/components/attached_assets/telemed clone src app_1754945783104.jsx",
+          "name": "telemed clone src app_1754945783104.jsx",
+          "size": 6603,
+          "extension": ".jsx"
+        },
+        {
+          "path": "health-connect/components/components/attached_assets/telemed clone src app_1754945796274.jsx",
+          "name": "telemed clone src app_1754945796274.jsx",
+          "size": 6603,
+          "extension": ".jsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/App.tsx",
+          "name": "App.tsx",
+          "size": 1509,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/AIConsentBanner.tsx",
+          "name": "AIConsentBanner.tsx",
+          "size": 8439,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/Protected.tsx",
+          "name": "Protected.tsx",
+          "size": 2954,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/consultation/ConsultationHeader.tsx",
+          "name": "ConsultationHeader.tsx",
+          "size": 4272,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/consultation/ExamPanel.tsx",
+          "name": "ExamPanel.tsx",
+          "size": 2318,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/consultation/MedicalForm.tsx",
+          "name": "MedicalForm.tsx",
+          "size": 5537,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/consultation/VideoArea.tsx",
+          "name": "VideoArea.tsx",
+          "size": 1978,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/accordion.tsx",
+          "name": "accordion.tsx",
+          "size": 1977,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/alert-dialog.tsx",
+          "name": "alert-dialog.tsx",
+          "size": 4420,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/alert.tsx",
+          "name": "alert.tsx",
+          "size": 1584,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/aspect-ratio.tsx",
+          "name": "aspect-ratio.tsx",
+          "size": 140,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/avatar.tsx",
+          "name": "avatar.tsx",
+          "size": 1419,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/badge.tsx",
+          "name": "badge.tsx",
+          "size": 1128,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/breadcrumb.tsx",
+          "name": "breadcrumb.tsx",
+          "size": 2712,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/button.tsx",
+          "name": "button.tsx",
+          "size": 1901,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/calendar.tsx",
+          "name": "calendar.tsx",
+          "size": 2695,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/card.tsx",
+          "name": "card.tsx",
+          "size": 1858,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/carousel.tsx",
+          "name": "carousel.tsx",
+          "size": 6210,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/chart.tsx",
+          "name": "chart.tsx",
+          "size": 10481,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/checkbox.tsx",
+          "name": "checkbox.tsx",
+          "size": 1056,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/collapsible.tsx",
+          "name": "collapsible.tsx",
+          "size": 329,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/command.tsx",
+          "name": "command.tsx",
+          "size": 4885,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/context-menu.tsx",
+          "name": "context-menu.tsx",
+          "size": 7428,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/dialog.tsx",
+          "name": "dialog.tsx",
+          "size": 3848,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/drawer.tsx",
+          "name": "drawer.tsx",
+          "size": 3021,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/dropdown-menu.tsx",
+          "name": "dropdown-menu.tsx",
+          "size": 7609,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/form.tsx",
+          "name": "form.tsx",
+          "size": 4120,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/hover-card.tsx",
+          "name": "hover-card.tsx",
+          "size": 1251,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/input-otp.tsx",
+          "name": "input-otp.tsx",
+          "size": 2154,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/input.tsx",
+          "name": "input.tsx",
+          "size": 791,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/label.tsx",
+          "name": "label.tsx",
+          "size": 710,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/menubar.tsx",
+          "name": "menubar.tsx",
+          "size": 8605,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/navigation-menu.tsx",
+          "name": "navigation-menu.tsx",
+          "size": 5128,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/pagination.tsx",
+          "name": "pagination.tsx",
+          "size": 2751,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/popover.tsx",
+          "name": "popover.tsx",
+          "size": 1280,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/progress.tsx",
+          "name": "progress.tsx",
+          "size": 791,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/radio-group.tsx",
+          "name": "radio-group.tsx",
+          "size": 1467,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/resizable.tsx",
+          "name": "resizable.tsx",
+          "size": 1723,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/scroll-area.tsx",
+          "name": "scroll-area.tsx",
+          "size": 1642,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/select.tsx",
+          "name": "select.tsx",
+          "size": 5742,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/separator.tsx",
+          "name": "separator.tsx",
+          "size": 756,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/sheet.tsx",
+          "name": "sheet.tsx",
+          "size": 4281,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/sidebar.tsx",
+          "name": "sidebar.tsx",
+          "size": 23567,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/skeleton.tsx",
+          "name": "skeleton.tsx",
+          "size": 261,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/slider.tsx",
+          "name": "slider.tsx",
+          "size": 1077,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/switch.tsx",
+          "name": "switch.tsx",
+          "size": 1139,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/table.tsx",
+          "name": "table.tsx",
+          "size": 2765,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/tabs.tsx",
+          "name": "tabs.tsx",
+          "size": 1883,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/textarea.tsx",
+          "name": "textarea.tsx",
+          "size": 689,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/toast.tsx",
+          "name": "toast.tsx",
+          "size": 4845,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/toaster.tsx",
+          "name": "toaster.tsx",
+          "size": 772,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/toggle-group.tsx",
+          "name": "toggle-group.tsx",
+          "size": 1753,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/toggle.tsx",
+          "name": "toggle.tsx",
+          "size": 1527,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/components/ui/tooltip.tsx",
+          "name": "tooltip.tsx",
+          "size": 1209,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/hooks/use-mobile.tsx",
+          "name": "use-mobile.tsx",
+          "size": 565,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/hooks/use-toast.ts",
+          "name": "use-toast.ts",
+          "size": 3895,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/components/components/client/src/hooks/useAIFeatures.ts",
+          "name": "useAIFeatures.ts",
+          "size": 2788,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/components/components/client/src/main.tsx",
+          "name": "main.tsx",
+          "size": 157,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/pages/consultation.tsx",
+          "name": "consultation.tsx",
+          "size": 3137,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/pages/enhanced-consultation.tsx",
+          "name": "enhanced-consultation.tsx",
+          "size": 84968,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/pages/exam-request.tsx",
+          "name": "exam-request.tsx",
+          "size": 19099,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/pages/login.tsx",
+          "name": "login.tsx",
+          "size": 7164,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/pages/not-found.tsx",
+          "name": "not-found.tsx",
+          "size": 711,
+          "extension": ".tsx"
+        },
+        {
+          "path": "health-connect/components/components/client/src/pages/patients.tsx",
+          "name": "patients.tsx",
+          "size": 19681,
+          "extension": ".tsx"
+        }
+      ],
+      "api_files": [
+        {
+          "path": "health-connect/api/api/server/index.ts",
+          "name": "index.ts",
+          "size": 3128,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/api/api/server/openai.ts",
+          "name": "openai.ts",
+          "size": 13378,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/api/api/server/storage.ts",
+          "name": "storage.ts",
+          "size": 993,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/api/api/server/vite.ts",
+          "name": "vite.ts",
+          "size": 2263,
+          "extension": ".ts"
+        }
+      ],
+      "database_files": [
+        {
+          "path": "health-connect/database/database/migrations/migrations/0001_patients.sql",
+          "name": "0001_patients.sql",
+          "size": 445,
+          "extension": ".sql"
+        },
+        {
+          "path": "health-connect/database/database/server/db.ts",
+          "name": "db.ts",
+          "size": 425,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/database/database/server/routes.ts",
+          "name": "routes.ts",
+          "size": 13746,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/database/database/shared/schema.ts",
+          "name": "schema.ts",
+          "size": 3671,
+          "extension": ".ts"
+        }
+      ],
+      "style_files": [
+        {
+          "path": "health-connect/styles/styles/client/src/index.css",
+          "name": "index.css",
+          "size": 4507,
+          "extension": ".css"
+        }
+      ],
+      "config_files": [
+        {
+          "path": "health-connect/config/health-connect/config/package.json",
+          "name": "package.json",
+          "size": 3974,
+          "extension": ".json"
+        },
+        {
+          "path": "health-connect/config/health-connect/config/postcss.config.js",
+          "name": "postcss.config.js",
+          "size": 80,
+          "extension": ".js"
+        },
+        {
+          "path": "health-connect/config/health-connect/config/tailwind.config.ts",
+          "name": "tailwind.config.ts",
+          "size": 2766,
+          "extension": ".ts"
+        },
+        {
+          "path": "health-connect/config/health-connect/config/tsconfig.json",
+          "name": "tsconfig.json",
+          "size": 657,
+          "extension": ".json"
+        },
+        {
+          "path": "health-connect/config/health-connect/config/vite.config.ts",
+          "name": "vite.config.ts",
+          "size": 971,
+          "extension": ".ts"
+        }
+      ]
     },
     "dependencies": {
-      "production": {},
-      "development": {}
+      "health_connect": {},
+      "telemed": {
+        "@hookform/resolvers": "^5.2.1",
+        "@radix-ui/react-slot": "^1.2.3",
+        "@replit/vite-plugin-cartographer": "^0.2.8",
+        "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
+        "@tanstack/react-query": "^5.85.3",
+        "@types/bcryptjs": "^2.4.6",
+        "@types/compression": "^1.8.1",
+        "@types/cookie-parser": "^1.4.9",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/express-session": "^1.18.2",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/node": "^24.3.0",
+        "@types/passport": "^1.0.17",
+        "@types/passport-local": "^1.0.38",
+        "@types/pg": "^8.15.5",
+        "@types/react": "^19.1.10",
+        "@types/react-dom": "^19.1.7",
+        "@types/uuid": "^10.0.0",
+        "@types/ws": "^8.18.1",
+        "@vitejs/plugin-react": "^5.0.0",
+        "axios": "^1.11.0",
+        "bcryptjs": "^3.0.2",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "compression": "^1.8.1",
+        "concurrently": "^9.2.0",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "date-fns": "^4.1.0",
+        "dotenv": "^17.2.1",
+        "drizzle-kit": "^0.31.4",
+        "drizzle-orm": "^0.44.4",
+        "drizzle-zod": "^0.8.3",
+        "express": "^4.18.2",
+        "express-session": "^1.18.2",
+        "helmet": "^8.1.0",
+        "html2canvas": "^1.4.1",
+        "jsonwebtoken": "^9.0.2",
+        "jspdf": "^2.5.1",
+        "lucide-react": "^0.539.0",
+        "nodemon": "^3.1.10",
+        "passport": "^0.7.0",
+        "passport-local": "^1.0.0",
+        "pg": "^8.16.3",
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1",
+        "react-hook-form": "^7.62.0",
+        "tailwind-merge": "^3.3.1",
+        "tsx": "^4.20.4",
+        "typescript": "^5.9.2",
+        "uuid": "^11.1.0",
+        "vite": "^7.1.2",
+        "wouter": "^3.7.1",
+        "ws": "^8.18.3",
+        "zod": "^4.0.17"
+      },
+      "conflicts": []
+    },
+    "conflicts": [],
+    "integration_plan": {
+      "phase1_analysis": {
+        "status": "completed",
+        "findings": {
+          "components_found": 66,
+          "api_files_found": 4,
+          "conflicts_detected": 0
+        }
+      },
+      "phase2_dependency_resolution": {
+        "status": "pending",
+        "critical_conflicts": [],
+        "recommended_action": "Prosseguir para fase 3"
+      },
+      "phase3_database_merge": {
+        "status": "pending",
+        "database_files": 4,
+        "action_required": "Analisar schemas e criar plano de migração"
+      },
+      "phase4_api_integration": {
+        "status": "pending",
+        "api_files": 4,
+        "action_required": "Unificar rotas e endpoints"
+      },
+      "phase5_frontend_merge": {
+        "status": "pending",
+        "components": 66,
+        "action_required": "Integrar componentes e resolver conflitos de UI"
+      }
     }
   },
-  "compatibility_with_telemed": {
-    "framework_compatibility": "unknown",
-    "dependency_conflicts": [],
-    "schema_conflicts": [],
-    "route_conflicts": []
-  },
-  "integration_plan": {
-    "phase1": "Análise de compatibilidade",
-    "phase2": "Resolução de conflitos",
-    "phase3": "Fusão de databases",
-    "phase4": "Unificação de APIs",
-    "phase5": "Merge de frontend",
-    "phase6": "Testes integrados"
-  }
+  "recommendations": [
+    {
+      "priority": "medium",
+      "category": "components",
+      "message": "Grande número de componentes detectado",
+      "action": "Planejar integração incremental por módulos"
+    }
+  ],
+  "next_steps": [
+    "1. Revisar relatório de conflitos de dependências",
+    "2. Executar: node scripts/resolve-conflicts.js",
+    "3. Fazer backup completo do TeleMed atual",
+    "4. Iniciar integração por fases",
+    "5. Testar cada fase antes de prosseguir"
+  ]
 }
