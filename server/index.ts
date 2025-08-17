@@ -99,6 +99,17 @@ app.get('/dashboard-teste', (req, res) => {
   res.status(404).send('Dashboard Teste page not found');
 });
 
+// Dashboard Teste HTML route (alternative)
+app.get('/dashboard-teste.html', (req, res) => {
+  console.log('📊 Rota /dashboard-teste.html acessada - Dashboard com Chart.js');
+  const dashboardTesteHtml = path.join(__dirname, '../public/dashboard-teste.html');
+  if (fs.existsSync(dashboardTesteHtml)) {
+    console.log('✅ Servindo dashboard-teste.html dedicado');
+    return res.sendFile(dashboardTesteHtml);
+  }
+  res.status(404).send('Dashboard Teste page not found');
+});
+
 // ====== SPA fallback p/ rotas do front ======
 // Inclui as suas rotas principais e páginas internas do app
 const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients|enhanced)(\/.*)?$/i;
