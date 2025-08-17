@@ -1,16 +1,13 @@
-import React from "react";
+import React from 'react';
 
 export default function TelemedHub() {
-  // Redirect para VideoConsultation
-  React.useEffect(() => {
-    window.location.href = '/video-consultation?consultationId=demo';
-  }, []);
-
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Redirecionando para TeleMed IA...</h1>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto"></div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">TeleMed Hub</h1>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <p>TeleMed platform hub will be implemented here.</p>
+        </div>
       </div>
     </div>
   );

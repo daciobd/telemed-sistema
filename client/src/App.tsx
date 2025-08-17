@@ -178,7 +178,7 @@ export default function App() {
             <Route path="/health" component={HealthHub} />
             <Route path="/complete" component={CompleteHub} />
             <Route path="/patient-management" component={PatientManagementDashboard} />
-            <Route path="/patients" component={() => import("@/pages/health-connect/patients")} />
+            <Route path="/patients" component={() => <div>Patients page loading...</div>} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">

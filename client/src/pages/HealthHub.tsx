@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
 export default function HealthHub() {
   return (
-    <main style={{maxWidth:960,margin:"24px auto",padding:"0 16px"}}>
-      <h1>Health Connect</h1>
-      <p>Gestão de pacientes, consultas especializadas e exames (demo).</p>
-      <ul>
-        <li><a href="/dashboard-teste-robust">Doctor Dashboard</a></li>
-        <li><a href="/enhanced-consultation?consultationId=demo">Enhanced Consultation (demo)</a></li>
-      </ul>
-    </main>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Health Hub</h1>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <p>Health Connect hub will be implemented here.</p>
+        </div>
+      </div>
+    </div>
   );
 }

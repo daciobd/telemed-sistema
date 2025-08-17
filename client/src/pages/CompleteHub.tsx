@@ -1,17 +1,14 @@
-import React from "react";
+import React from 'react';
 
 export default function CompleteHub() {
   return (
-    <main style={{maxWidth:960,margin:"24px auto",padding:"0 16px"}}>
-      <h1>Sistema Integrado</h1>
-      <p>Integra TeleMed + HealthConnect (atalhos):</p>
-      <ul>
-        <li><a href="/">Home principal</a></li>
-        <li><a href="/telemed">TeleMed IA</a></li>
-        <li><a href="/health">Health Connect</a></li>
-        <li><a href="/video-consultation?consultationId=demo">VideoConsultation</a></li>
-        <li><a href="/dashboard-teste-robust">Doctor Dashboard</a></li>
-      </ul>
-    </main>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Complete Hub</h1>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <p>Complete telemedicine hub will be implemented here.</p>
+        </div>
+      </div>
+    </div>
   );
 }
