@@ -176,6 +176,7 @@ export default function App() {
             <Route path="/telemed" component={TelemedHub} />
             <Route path="/health" component={HealthHub} />
             <Route path="/complete" component={CompleteHub} />
+            <Route path="/patients" component={() => import("@/pages/health-connect/patients")} />
             <Route path="/" component={LandingPage} />
             <Route>
               <div className="min-h-screen flex items-center justify-center">
