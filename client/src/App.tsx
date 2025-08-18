@@ -3,6 +3,7 @@ import { Router, Route, Switch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import EnhancedConsultation from "./EnhancedConsultation";
 import EnhancedConsultationV3 from "./pages/EnhancedConsultationV3";
+import EnhancedClone from "./pages/enhanced-clone";
 
 // Simple components without complex imports
 const SimpleToaster = () => <div id="toaster" className="fixed top-4 right-4 z-50" />;
@@ -271,7 +272,8 @@ export default function App() {
           <Switch>
             <Route path="/video-consultation" component={VideoConsultation} />
             <Route path="/enhanced-consultation" component={EnhancedConsultation} />
-            <Route path="/enhanced" component={EnhancedConsultation} />
+            <Route path="/enhanced" component={EnhancedClone} />
+          <Route path="/enhanced-original" component={EnhancedConsultation} />
             <Route path="/enhanced-v3" component={EnhancedConsultationV3} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
