@@ -1,0 +1,256 @@
+com esse esquema eu já te entrego um “módulo de analytics” plug-and-play que grava no localStorage, respeita o limite de 1000 eventos, integra com GA (se houver), expõe os debug hooks e facilita salvar feedbacks. também deixo prontos os hooks na página /enhanced (convite, iniciar, abas, Dr. AI, Memed, etc.).
+
+1) Crie o módulo (frontend)
+
+Arquivo: server/public/js/telemed-analytics.js
+
+<script>
+;(() => {
+  const LS_EVENTS   = 'telemed_analytics';
+  const LS_FEEDBACK = 'telemed_feedbacks';
+  const MAX_EVENTS  = 1000;
+  const BANNER_TTL_DAYS = 7;
+
+  const nowISO = () => new Date().toISOString();
+  const ua     = () => navigator.userAgent || 'unknown';
+
+  function safeParse(str, fallback) {
+    try { return JSON.parse(str) ?? fallback } catch { return fallback }
+  }
+  function readArr(key){ return safeParse(localStorage.getItem(key), []) }
+  function writeArr(key, arr){
+    while (arr.length > MAX_EVENTS) arr.shift();
+    localStorage.setItem(key, JSON.stringify(arr));
+  }
+
+  function track(event, data = {}) {
+    const rec = {
+      event,
+      data: data || {},
+      timestamp: nowISO(),
+      userAgent: ua(),
+      page: location.pathname || '/'
+    };
+    const arr = readArr(LS_EVENTS);
+    arr.push(rec);
+    writeArr(LS_EVENTS, arr);
+
+    // Google Analytics (se existir)
+    if (typeof window.gtag === 'function') {
+      try { window.gtag('event', event, { ...data, page_location: location.href }); } catch {}
+    }
+    // console.debug('[telemed.track]', rec);
+    return rec;
+  }
+
+  const feedback = {
+    save({ rating, quickOptions = [], comments = '' }) {
+      const rec = {
+        rating: Number(rating),
+        quickOptions: Array.isArray(quickOptions) ? quickOptions : [],
+        comments: String(comments || ''),
+        timestamp: nowISO(),
+        userAgent: ua(),
+        url: location.href
+      };
+      const arr = readArr(LS_FEEDBACK);
+      arr.push(rec);
+      writeArr(LS_FEEDBACK, arr);
+      track('feedback_saved', { rating: rec.rating, quickOptions: rec.quickOptions });
+      return rec;
+    },
+    all(){ return readArr(LS_FEEDBACK) },
+    clear(){ localStorage.removeItem(LS_FEEDBACK) }
+  };
+
+  // Banner flags
+  function bannerDismiss(){
+    localStorage.setItem('telemed_banner_dismissed','true');
+    localStorage.setItem('telemed_banner_dismissed_date', nowISO());
+  }
+  function bannerShouldShow(){
+    const dismissed = localStorage.getItem('telemed_banner_dismissed') === 'true';
+    if (!dismissed) return true;
+    const dt = new Date(localStorage.getItem('telemed_banner_dismissed_date') || 0);
+    const diff = (Date.now() - dt.getTime()) / (1000 * 60 * 60 * 24);
+    return diff >= BANNER_TTL_DAYS;
+  }
+
+  // Utilidades
+  function all(){ return readArr(LS_EVENTS) }
+  function clear(){ localStorage.removeItem(LS_EVENTS) }
+
+  // Export público
+  window.telemedAnalytics = { track, feedback, all, clear, bannerDismiss, bannerShouldShow };
+
+  // Debug helpers solicitados
+  window.telemedDebug = {
+    testBanner(){ 
+      localStorage.removeItem('telemed_banner_dismissed');
+      localStorage.removeItem('telemed_banner_dismissed_date');
+      window.dispatchEvent(new CustomEvent('telemed:show-banner'));
+    },
+    testModal(){ window.dispatchEvent(new CustomEvent('telemed:show-feedback')); },
+    showModal(){ window.dispatchEvent(new CustomEvent('telemed:show-feedback')); },
+    hideModal(){ window.dispatchEvent(new CustomEvent('telemed:hide-feedback')); }
+  };
+
+  // Evento de pageview do enhanced
+  track('page_open', { page: location.pathname });
+})();
+</script>
+
+
+Se preferir arquivo separado, coloque o conteúdo acima em server/public/js/telemed-analytics.js sem as tags <script> e inclua com <script src="/js/telemed-analytics.js"></script>.
+
+2) Conecte na página /enhanced (cliques e abas principais)
+
+Arquivo: server/public/enhanced-consultation.html
+Inclua depois dos seus scripts atuais:
+
+<!-- Analytics -->
+<script src="/js/telemed-analytics.js"></script>
+
+<script>
+(() => {
+  const ta = window.telemedAnalytics;
+
+  // id da consulta / paciente (ajuste conforme sua rota/query)
+  const params = new URLSearchParams(location.search);
+  const consultId  = params.get('cid') || 'demo-consult';
+  const patientId  = params.get('pid') || 'demo-patient';
+
+  // BOTÕES (IDs que sugeri anteriormente)
+  document.getElementById('btnInvite')?.addEventListener('click', () => {
+    ta.track('invite_clicked', { consultId, patientId, source:'banner' });
+  });
+
+  document.getElementById('btnStart')?.addEventListener('click', () => {
+    ta.track('consult_start', { consultId });
+  });
+
+  // Salvar / Finalizar (ajuste aos seus botões reais)
+  document.getElementById('btnSaveNotes')?.addEventListener('click', () => {
+    ta.track('consult_save', { consultId });
+  });
+  document.getElementById('btnFinalize')?.addEventListener('click', () => {
+    ta.track('consult_finalize', { consultId });
+  });
+
+  // Abas Atendimento / Exames / Receitas
+  document.querySelectorAll('[data-tab]').forEach(el => {
+    el.addEventListener('click', () => ta.track('tab_change', { tab: el.dataset.tab, consultId }));
+  });
+
+  // Dr. AI (abrir painel e enviar pergunta)
+  const aiToggle = document.getElementById('aiToggle');      // botão (ícone cérebro)
+  const aiSend   = document.getElementById('aiSend');        // botão enviar do widget
+  const aiInput  = document.getElementById('aiQuestion');    // textarea/input do widget
+  aiToggle?.addEventListener('click', () => ta.track('dr_ai_open', { consultId }));
+  aiSend?.addEventListener('click', () => {
+    const text = (aiInput?.value || '').trim();
+    if (text) ta.track('dr_ai_question', { consultId, length: text.length });
+  });
+
+  // Exames (template comum / adicionar)
+  document.getElementById('btnAddExam')?.addEventListener('click', () => {
+    const name = (document.getElementById('examName')?.value || '').trim();
+    const urgency = (document.getElementById('examUrgency')?.value || 'rotina');
+    ta.track('exam_add', { consultId, name, urgency });
+  });
+
+  // Memed (abrir e receita emitida)
+  document.getElementById('btnMemedNew')?.addEventListener('click', () => {
+    ta.track('memed_open', { consultId, patientId });
+  });
+  // Quando você receber o callback/sucesso:
+  window.addEventListener('memed:prescription', (e) => {
+    ta.track('memed_prescription', { consultId, number: e.detail?.prescriptionId });
+  });
+
+  // Barra inferior de controles do vídeo (ex.: anexar, foto, chat, notificações, AI, mic, cam, espera, encerrar)
+  const map = {
+    attach:'#btnAttach', photo:'#btnSnapshot', chat:'#btnChat', notif:'#btnNotify',
+    ai:'#aiToggle', mic:'#btnMic', cam:'#btnCam', wait:'#btnSendToLobby', end:'#btnHangup'
+  };
+  Object.entries(map).forEach(([event, sel]) => {
+    document.querySelector(sel)?.addEventListener('click', () => ta.track(`toolbar_${event}_click`, { consultId }));
+  });
+})();
+</script>
+
+
+Se algum id/nome for diferente na sua página, só troque os seletores — o resto funciona igual.
+
+3) Salvar feedback (o “modal de feedback”)
+
+Se você já tem um modal, basta chamar:
+
+telemedAnalytics.feedback.save({
+  rating: 5,
+  quickOptions: ['design','speed'], // qualquer subset de ["design","speed","navigation","mobile"]
+  comments: 'Interface muito bonita e rápida!'
+});
+
+
+Quer disparar o modal por debug (como pediu)?
+O módulo acima emite eventos de janela:
+
+window.telemedDebug.testModal() → dispara telemed:show-feedback
+
+window.telemedDebug.hideModal() → dispara telemed:hide-feedback
+
+No seu modal, ouça os eventos:
+
+window.addEventListener('telemed:show-feedback', () => openYourModal());
+window.addEventListener('telemed:hide-feedback',  () => closeYourModal());
+
+4) Banner control (teste / validade 7 dias)
+
+Para reexibir o banner manualmente:
+
+window.telemedDebug.testBanner(); // dispara 'telemed:show-banner'
+
+
+Para esconder e marcar como visto:
+
+telemedAnalytics.bannerDismiss();
+
+
+Para decidir se deve mostrar:
+
+if (telemedAnalytics.bannerShouldShow()) { /* mostra seu banner */ }
+
+5) Usar também no Dashboard React (aquele do canvas)
+
+No topo do componente (ex.: DashboardTeleMed), adicione uma vez:
+
+useEffect(() => {
+  window.telemedAnalytics?.track('dashboard_open', { page: 'dashboard-v2' });
+}, []);
+
+
+E para os 5 cards do topo, registrem cliques:
+
+function onModuleClick(name){
+  window.telemedAnalytics?.track('module_open', { name });
+}
+
+
+Depois, em cada <a className="module-card" ... onClick={()=>onModuleClick('Agenda do Dia')}>…</a>
+
+6) Como exportar/depurar rápido
+
+Para inspecionar:
+
+console.table(telemedAnalytics.all());
+console.table(telemedAnalytics.feedback.all());
+
+
+Para limpar:
+
+telemedAnalytics.clear();
+telemedAnalytics.feedback.clear();
+
+
+se quiser, no próximo passo eu já coloco o download .json (um botão que baixa todo o telemed_analytics) e, se você me der os nomes exatos dos ids que estão na sua /enhanced, eu mando o snippet já com os seletores 100% batidos com o seu HTML.

@@ -413,21 +413,32 @@ let secs = 0;
 setInterval(()=>{ secs++; const m=String(Math.floor(secs/60)).padStart(2,'0'); const s=String(secs%60).padStart(2,'0'); $('#clock').textContent=`${m}:${s}` }, 1000);
 
 /* ===== topo: ações ===== */
-$('#btnBack').onclick = () => history.back();
-$('#btnExit').onclick = () => location.href = '/';
+const btnBack = $('#btnBack');
+const btnExit = $('#btnExit');
+const btnToggleForm = $('#btnToggleForm');
+const btnW = $('#btnW');
+
+if(btnBack) btnBack.onclick = () => history.back();
+if(btnExit) btnExit.onclick = () => location.href = '/';
+
 let formVisible = true;
-$('#btnToggleForm').onclick = () => {
-  const rp = $('#rightPane');
-  formVisible = !formVisible;
-  rp.style.display = formVisible ? 'flex' : 'none';
-};
+if(btnToggleForm) {
+  btnToggleForm.onclick = () => {
+    const rp = $('#rightPane');
+    formVisible = !formVisible;
+    if(rp) rp.style.display = formVisible ? 'flex' : 'none';
+  };
+}
+
 let widths = [360, 480, 640], wi=1;
-$('#btnW').onclick = () => {
-  wi = (wi+1)%widths.length;
-  const w = widths[wi];
-  const rp = $('#rightPane');
-  rp.style.width = w+'px';
-};
+if(btnW) {
+  btnW.onclick = () => {
+    wi = (wi+1)%widths.length;
+    const w = widths[wi];
+    const rp = $('#rightPane');
+    if(rp) rp.style.width = w+'px';
+  };
+}
 
 /* ===== tabs ===== */
 function setTab(name){
@@ -514,7 +525,7 @@ function memedUrl(){
 const rxStore = JSON.parse(localStorage.getItem('telemed_rx')||'[]');
 function saveRx(){ localStorage.setItem('telemed_rx', JSON.stringify(rxStore)); }
 function renderRx(){
-  const containers = [$('#rxList'), $('#rxList2')];
+  const containers = [$('#rxList'), $('#rxList2')].filter(Boolean);
   containers.forEach(wrap=>{
     if(!rxStore.length){ wrap.className='empty'; wrap.textContent='Nenhuma receita ainda'; return; }
     wrap.className='list'; wrap.innerHTML='';
@@ -532,66 +543,122 @@ function addDemoRx(){
   rxStore.unshift({code, drug:"Dipirona sódica 500 mg", sig:"1 comprimido se dor ou febre • 20 cp"});
   saveRx(); renderRx();
 }
-$('#openMemed').onclick = ()=>{ window.open(memedUrl(), '_blank'); setTimeout(addDemoRx, 1200); };
-$('#openMemed2').onclick = ()=>{ window.open(memedUrl(), '_blank'); setTimeout(addDemoRx, 1200); };
+const openMemed = $('#openMemed');
+const openMemed2 = $('#openMemed2');
+if(openMemed) openMemed.onclick = ()=>{ window.open(memedUrl(), '_blank'); setTimeout(addDemoRx, 1200); };
+if(openMemed2) openMemed2.onclick = ()=>{ window.open(memedUrl(), '_blank'); setTimeout(addDemoRx, 1200); };
 renderRx();
 
 /* ===== Chat simples ===== */
-$('#send').onclick = ()=>{
-  const v = $('#msg').value.trim(); if(!v) return;
-  const b = document.createElement('div'); b.className='bubble me'; b.textContent=v; $('#msgs').appendChild(b); $('#msg').value='';
-  $('#msgs').scrollTop = 1e9;
-};
+const sendBtn = $('#send');
+if(sendBtn) {
+  sendBtn.onclick = ()=>{
+    const msgInput = $('#msg');
+    const msgsContainer = $('#msgs');
+    if(!msgInput || !msgsContainer) return;
+    const v = msgInput.value.trim(); if(!v) return;
+    const b = document.createElement('div'); b.className='bubble me'; b.textContent=v; 
+    msgsContainer.appendChild(b); msgInput.value='';
+    msgsContainer.scrollTop = 1e9;
+  };
+}
 
 /* ===== Dr.AI ===== */
-function toggleAI(show){ $('#aipanel').style.display = show?'flex':'none'; }
-$('#btnAI').onclick = ()=> toggleAI(true);
-$('#aiClose').onclick = ()=> toggleAI(false);
-$('#aiSend').onclick = async ()=>{
-  const t = $('#aiText').value.trim(); if(!t) return;
-  const add = (txt, me)=>{ const d=document.createElement('div'); d.className='bubble'+(me?' me':''); d.textContent=txt; $('#aiMsgs').appendChild(d); $('#aiMsgs').scrollTop=1e9; };
-  add(t, true); $('#aiText').value='';
-  try{
-    const r = await fetch('/api/ai/doctor', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:t, page:'enhanced'})});
-    if(!r.ok) throw 0; const j = await r.json(); add(j.answer || 'OK');
-  }catch{ add('Sugestão: confirmar sinais de alarme, avaliar necessidade de exame físico e medir PA.'); }
-};
+const aiPanel = $('#aipanel');
+function toggleAI(show){ if(aiPanel) aiPanel.style.display = show?'flex':'none'; }
+const btnAI = $('#btnAI');
+const aiClose = $('#aiClose');
+const aiSend = $('#aiSend');
+const aiText = $('#aiText');
+const aiMsgs = $('#aiMsgs');
+
+if(btnAI) btnAI.onclick = ()=> toggleAI(true);
+if(aiClose) aiClose.onclick = ()=> toggleAI(false);
+if(aiSend) {
+  aiSend.onclick = async ()=>{
+    if(!aiText || !aiMsgs) return;
+    const t = aiText.value.trim(); if(!t) return;
+    const add = (txt, me)=>{ const d=document.createElement('div'); d.className='bubble'+(me?' me':''); d.textContent=txt; aiMsgs.appendChild(d); aiMsgs.scrollTop=1e9; };
+    add(t, true); aiText.value='';
+    try{
+      const r = await fetch('/api/ai/doctor', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:t, page:'enhanced'})});
+      if(!r.ok) throw 0; const j = await r.json(); add(j.answer || 'OK');
+    }catch{ add('Sugestão: confirmar sinais de alarme, avaliar necessidade de exame físico e medir PA.'); }
+  };
+}
 
 /* ===== topo: start/save/finalize/invite ===== */
-$('#btnStart').onclick = async ()=>{
-  try{ await fetch('/api/consults/ABC123/start',{method:'POST'}); }catch{}
-  $('#since').textContent='Em atendimento';
-  toast('Consulta iniciada');
-};
-$('#btnSave').onclick = async ()=>{
-  const payload = {
-    qp:$('#field-qp').value, hda:$('#field-hda').value, cid:$('#cidInput').value,
-    cond:$('#field-cond').value, alert:$('#field-alert').value,
-    flags:{grave:$('#sw-grave').classList.contains('on'), compl:$('#sw-compl').classList.contains('on'), inc:$('#sw-inc').classList.contains('on')},
-    exams:examStore, rx:rxStore
+const btnStart = $('#btnStart');
+const btnSave = $('#btnSave');
+const btnFinish = $('#btnFinish');
+const btnInvite = $('#btnInvite');
+
+if(btnStart) {
+  btnStart.onclick = async ()=>{
+    try{ await fetch('/api/consults/ABC123/start',{method:'POST'}); }catch{}
+    const sinceEl = $('#since');
+    if(sinceEl) sinceEl.textContent='Em atendimento';
+    toast('Consulta iniciada');
   };
-  try{ await fetch('/api/consults/ABC123/notes',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});}catch{}
-  toast('Atendimento salvo');
-};
-$('#btnFinish').onclick = async ()=>{
-  try{ await fetch('/api/consults/ABC123/finalize',{method:'POST'});}catch{}
-  alert('Consulta finalizada!');
-};
-$('#btnInvite').onclick = async ()=>{
-  try{ await fetch('/api/consults/ABC123/invite',{method:'POST'});}catch{}
-  const b = $('#bellN'); b.style.display='inline-block';
-  toast('Convite enviado para a sala de espera');
-};
+}
+
+if(btnSave) {
+  btnSave.onclick = async ()=>{
+    const payload = {
+      qp: $('#field-qp')?.value || '',
+      hda: $('#field-hda')?.value || '',
+      cid: $('#cidInput')?.value || '',
+      cond: $('#field-cond')?.value || '',
+      alert: $('#field-alert')?.value || '',
+      flags: {
+        grave: $('#sw-grave')?.classList.contains('on') || false,
+        compl: $('#sw-compl')?.classList.contains('on') || false,
+        inc: $('#sw-inc')?.classList.contains('on') || false
+      },
+      exams: examStore,
+      rx: rxStore
+    };
+    try{ await fetch('/api/consults/ABC123/notes',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});}catch{}
+    toast('Atendimento salvo');
+  };
+}
+
+if(btnFinish) {
+  btnFinish.onclick = async ()=>{
+    try{ await fetch('/api/consults/ABC123/finalize',{method:'POST'});}catch{}
+    alert('Consulta finalizada!');
+  };
+}
+
+if(btnInvite) {
+  btnInvite.onclick = async ()=>{
+    try{ await fetch('/api/consults/ABC123/invite',{method:'POST'});}catch{}
+    const b = $('#bellN'); 
+    if(b) b.style.display='inline-block';
+    toast('Convite enviado para a sala de espera');
+  };
+}
 
 /* ===== barra vídeo ===== */
-$('#btnOpenChat').onclick = ()=> setTab('chat');
-$('#btnShot').onclick = ()=> toast('Screenshot salvo (demo)');
+const btnOpenChat = $('#btnOpenChat');
+const btnShot = $('#btnShot');
+const btnMic = $('#btnMic');
+const btnCam = $('#btnCam');
+const btnHold = $('#btnHold');
+const btnEnd = $('#btnEnd');
+
+if(btnOpenChat) btnOpenChat.onclick = ()=> setTab('chat');
+if(btnShot) btnShot.onclick = ()=> toast('Screenshot salvo (demo)');
+
 let micOn=true, camOn=true;
-$('#btnMic').onclick = ()=>{ micOn=!micOn; $('#btnMic').style.opacity = micOn?1:.5; };
-$('#btnCam').onclick = ()=>{ camOn=!camOn; $('#btnCam').style.opacity = camOn?1:.5; };
-$('#btnHold').onclick = ()=>{ $('#since').textContent='Em espera'; toast('Paciente enviado à sala de espera (demo)'); };
-$('#btnEnd').onclick = ()=>{ if(confirm('Encerrar a chamada?')) toast('Chamada encerrada (demo)'); };
+if(btnMic) btnMic.onclick = ()=>{ micOn=!micOn; btnMic.style.opacity = micOn?1:.5; };
+if(btnCam) btnCam.onclick = ()=>{ camOn=!camOn; btnCam.style.opacity = camOn?1:.5; };
+if(btnHold) btnHold.onclick = ()=>{ const sinceEl = $('#since'); if(sinceEl) sinceEl.textContent='Em espera'; toast('Paciente enviado à sala de espera (demo)'); };
+if(btnEnd) btnEnd.onclick = ()=>{ if(confirm('Encerrar a chamada?')) toast('Chamada encerrada (demo)'); };
 </script>
+
+<!-- Analytics Module -->
+<script src="/js/telemed-analytics.js"></script>
 
 <!-- Banner profissional do paciente e sistema de redimensionamento -->
 <script>
@@ -685,6 +752,270 @@ $('#btnEnd').onclick = ()=>{ if(confirm('Encerrar a chamada?')) toast('Chamada e
     if(e.key === 'ArrowRight'){ setRight((right.getBoundingClientRect().width||460)-24); }
     if(e.key === 'Enter'){ setRight(460); }
   });
+})();
+</script>
+
+<!-- Analytics Integration -->
+<script>
+(() => {
+  const ta = window.telemedAnalytics;
+  if (!ta) return;
+
+  // Configuração da consulta
+  const params = new URLSearchParams(location.search);
+  const consultId = params.get('cid') || 'enhanced-demo';
+  const patientId = params.get('pid') || 'demo-patient';
+
+  // === Eventos do Banner Profissional ===
+  document.getElementById('btnInvite')?.addEventListener('click', () => {
+    ta.track('invite_clicked', { consultId, patientId, source: 'banner' });
+  });
+
+  document.getElementById('btnStart')?.addEventListener('click', () => {
+    ta.track('consult_start', { consultId, action: 'banner_start' });
+  });
+
+  document.getElementById('btnBack')?.addEventListener('click', () => {
+    ta.track('navigation_back', { consultId, source: 'banner' });
+  });
+
+  document.getElementById('btnForm')?.addEventListener('click', () => {
+    ta.track('form_toggle', { consultId, source: 'banner' });
+  });
+
+  document.getElementById('btnLeave')?.addEventListener('click', () => {
+    ta.track('consult_leave', { consultId, source: 'banner' });
+  });
+
+  // === Eventos das Abas ===
+  document.querySelectorAll('[data-tab]').forEach(el => {
+    el.addEventListener('click', () => {
+      ta.track('tab_change', { 
+        tab: el.dataset.tab, 
+        consultId,
+        tabText: el.textContent?.trim()
+      });
+    });
+  });
+
+  // === Eventos dos Segmentos (Conduta/Exames/MedMed) ===
+  document.querySelectorAll('[data-seg]').forEach(el => {
+    el.addEventListener('click', () => {
+      ta.track('segment_change', {
+        segment: el.dataset.seg,
+        consultId,
+        segmentText: el.textContent?.trim()
+      });
+    });
+  });
+
+  // === Dr. AI Events ===
+  const aiToggle = document.getElementById('btnAI');
+  const aiSend = document.getElementById('aiSend');
+  const aiText = document.getElementById('aiText');
+
+  aiToggle?.addEventListener('click', () => {
+    ta.track('dr_ai_open', { consultId });
+  });
+
+  aiSend?.addEventListener('click', () => {
+    const text = aiText?.value?.trim() || '';
+    if (text) {
+      ta.track('dr_ai_question', { 
+        consultId, 
+        questionLength: text.length,
+        hasKeywords: {
+          symptoms: /sintoma|dor|febre|mal/i.test(text),
+          diagnosis: /diagnós|CID|hipóte/i.test(text),
+          treatment: /trata|medica|receita|conduta/i.test(text)
+        }
+      });
+    }
+  });
+
+  // === Eventos do Formulário de Atendimento ===
+  const fields = ['field-qp', 'field-hda', 'cidInput', 'field-cond', 'field-alert'];
+  fields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.addEventListener('blur', () => {
+        const content = field.value?.trim() || '';
+        if (content.length > 5) { // só rastreia se tem conteúdo significativo
+          ta.track('form_field_filled', {
+            consultId,
+            field: fieldId,
+            contentLength: content.length,
+            fieldType: field.tagName.toLowerCase()
+          });
+        }
+      });
+    }
+  });
+
+  // === Exames ===
+  document.getElementById('addExam')?.addEventListener('click', () => {
+    const name = document.getElementById('ex-name')?.value?.trim() || '';
+    const prio = document.getElementById('ex-prio')?.value || 'rotina';
+    if (name) {
+      ta.track('exam_add', { 
+        consultId, 
+        examName: name, 
+        priority: prio,
+        examType: name.toLowerCase().includes('sangue') ? 'blood' : 
+                 name.toLowerCase().includes('urina') ? 'urine' : 'other'
+      });
+    }
+  });
+
+  // === MedMed Events ===
+  const memedButtons = ['openMemed', 'openMemed2'];
+  memedButtons.forEach(btnId => {
+    document.getElementById(btnId)?.addEventListener('click', () => {
+      ta.track('memed_open', { 
+        consultId, 
+        patientId,
+        buttonSource: btnId
+      });
+    });
+  });
+
+  // Detecta quando uma receita é criada (via callback da demo)
+  window.addEventListener('telemed:prescription-created', (e) => {
+    ta.track('prescription_created', { 
+      consultId, 
+      prescriptionId: e.detail?.id,
+      method: 'memed'
+    });
+  });
+
+  // === Barra de Controles do Vídeo ===
+  const videoControls = {
+    'btnShot': 'screenshot',
+    'btnOpenChat': 'chat_open',
+    'btnBell': 'notifications',
+    'btnMic': 'microphone_toggle',
+    'btnCam': 'camera_toggle',
+    'btnHold': 'hold_call',
+    'btnEnd': 'end_call'
+  };
+
+  Object.entries(videoControls).forEach(([btnId, eventName]) => {
+    document.getElementById(btnId)?.addEventListener('click', () => {
+      ta.track(`toolbar_${eventName}`, { 
+        consultId,
+        timestamp: new Date().toISOString()
+      });
+    });
+  });
+
+  // === Eventos de Chat ===
+  document.getElementById('send')?.addEventListener('click', () => {
+    const message = document.getElementById('msg')?.value?.trim() || '';
+    if (message) {
+      ta.track('chat_message_sent', {
+        consultId,
+        messageLength: message.length,
+        messageType: message.includes('?') ? 'question' : 'statement'
+      });
+    }
+  });
+
+  // === Eventos de Formulário (Salvar/Finalizar) ===
+  document.getElementById('btnSave')?.addEventListener('click', () => {
+    // Conta quantos campos estão preenchidos
+    const filledFields = fields.filter(fieldId => {
+      const field = document.getElementById(fieldId);
+      return field?.value?.trim().length > 0;
+    }).length;
+
+    ta.track('consult_save', { 
+      consultId,
+      filledFields,
+      totalFields: fields.length,
+      completeness: Math.round((filledFields / fields.length) * 100)
+    });
+  });
+
+  document.getElementById('btnFinish')?.addEventListener('click', () => {
+    ta.track('consult_finalize', { 
+      consultId,
+      duration: document.getElementById('pbTimer')?.textContent || '00:00'
+    });
+  });
+
+  // === Switches/Toggles ===
+  document.querySelectorAll('.sw').forEach(sw => {
+    sw.addEventListener('click', () => {
+      const isActive = sw.classList.contains('on');
+      ta.track('toggle_switch', {
+        consultId,
+        switchId: sw.id || 'unknown',
+        newState: !isActive,
+        switchType: sw.closest('[data-seg]')?.dataset.seg || 'general'
+      });
+    });
+  });
+
+  // === Redimensionamento do Painel ===
+  const divider = document.getElementById('divider');
+  if (divider) {
+    let resizeStartTime;
+    
+    divider.addEventListener('pointerdown', () => {
+      resizeStartTime = Date.now();
+    });
+    
+    divider.addEventListener('pointerup', () => {
+      if (resizeStartTime) {
+        const duration = Date.now() - resizeStartTime;
+        ta.track('panel_resize', {
+          consultId,
+          resizeDuration: duration,
+          finalWidth: document.getElementById('rightPane')?.getBoundingClientRect()?.width || 0
+        });
+      }
+    });
+
+    divider.addEventListener('dblclick', () => {
+      ta.track('panel_reset', { consultId, method: 'double_click' });
+    });
+  }
+
+  // === Analytics Debug Console ===
+  window.telemedEnhancedDebug = {
+    showAnalytics() {
+      console.group('📊 Enhanced Consultation Analytics');
+      console.table(ta.all().filter(e => e.data.consultId === consultId));
+      console.groupEnd();
+    },
+    exportSession() {
+      const sessionData = ta.all().filter(e => 
+        e.data.consultId === consultId || e.page.includes('enhanced')
+      );
+      console.log('Session Data:', sessionData);
+      ta.downloadJSON();
+    },
+    clearSession() {
+      ta.clear();
+      console.log('Analytics cleared');
+    }
+  };
+
+  // Track session duration periodically
+  let sessionStartTime = Date.now();
+  setInterval(() => {
+    const duration = Math.floor((Date.now() - sessionStartTime) / 1000);
+    if (duration % 60 === 0 && duration > 0) { // a cada minuto
+      ta.track('session_heartbeat', {
+        consultId,
+        sessionDuration: duration,
+        activeTab: document.querySelector('.tab.active')?.dataset.tab || 'unknown'
+      });
+    }
+  }, 1000);
+
+  console.log('🎯 TeleMed Enhanced Analytics loaded');
+  console.log('Debug: window.telemedEnhancedDebug');
 })();
 </script>
 </body>
