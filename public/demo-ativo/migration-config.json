@@ -1,0 +1,29 @@
+{
+  "migration": {
+    "status": "ready",
+    "strategy": "feature_flag",
+    "new_dashboard": "area-medica-new.html",
+    "backup_dashboard": "area-medica-backup.html",
+    "rollback_available": true,
+    "migration_date": "2025-08-18",
+    "links_mapping": {
+      "/demo-ativo/area-medica.html": "/demo-ativo/area-medica-new.html",
+      "/area-medica": "/demo-ativo/area-medica-new.html"
+    },
+    "preserved_links": [
+      "/demo-ativo/pacientes.html",
+      "/demo-ativo/agenda-do-dia.html", 
+      "/demo-ativo/configuracoes.html",
+      "/enhanced",
+      "/patient-management",
+      "/dr-ai-demo",
+      "/dashboard-teste"
+    ],
+    "tests_completed": {
+      "functionality": true,
+      "responsiveness": true,
+      "navigation": true,
+      "integrations": true
+    }
+  }
+}

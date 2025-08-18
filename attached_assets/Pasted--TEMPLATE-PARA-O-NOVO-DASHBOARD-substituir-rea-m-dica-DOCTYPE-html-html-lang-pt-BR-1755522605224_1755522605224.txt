@@ -1,0 +1,289 @@
+<!-- TEMPLATE PARA O NOVO DASHBOARD (substituir área-médica) -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed Dashboard</title>
+    
+    <!-- CSS do novo dashboard -->
+    <link rel="stylesheet" href="assets/css/dashboard-new.css">
+    
+    <!-- Manter compatibilidade com estilos existentes se necessário -->
+    <link rel="stylesheet" href="assets/css/legacy-compatibility.css">
+</head>
+<body>
+    <!-- Estrutura do novo dashboard com links corretos -->
+    <div class="dashboard-container">
+        
+        <!-- MENU LATERAL - Manter estrutura e links existentes -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">TM</span>
+                    <span class="logo-text">TeleMed</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <h4>MENU</h4>
+                    
+                    <!-- Links principais - MANTER URLs existentes -->
+                    <a href="/area-medica" class="menu-item active">
+                        <i class="icon-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    
+                    <a href="/pacientes" class="menu-item">
+                        <i class="icon-users"></i>
+                        <span>Pacientes</span>
+                    </a>
+                    
+                    <a href="/medicos" class="menu-item">
+                        <i class="icon-doctor"></i>
+                        <span>Médicos</span>
+                    </a>
+                    
+                    <a href="/analytics" class="menu-item">
+                        <i class="icon-chart"></i>
+                        <span>Analytics</span>
+                    </a>
+                    
+                    <a href="/prontuario" class="menu-item">
+                        <i class="icon-file"></i>
+                        <span>Prontuário</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <h4>AÇÕES RÁPIDAS</h4>
+                    
+                    <!-- Links de ações - adaptar para URLs existentes -->
+                    <a href="/consulta/nova" class="menu-action">
+                        <i class="icon-plus"></i>
+                        <span>Nova Consulta</span>
+                    </a>
+                    
+                    <a href="/paciente/novo" class="menu-action">
+                        <i class="icon-user-plus"></i>
+                        <span>Novo Paciente</span>
+                    </a>
+                    
+                    <a href="/teleconsulta" class="menu-action">
+                        <i class="icon-video"></i>
+                        <span>Teleconsulta</span>
+                    </a>
+                    
+                    <a href="/prescricao" class="menu-action">
+                        <i class="icon-prescription"></i>
+                        <span>Prescrição</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- ÁREA PRINCIPAL -->
+        <main class="main-content">
+            
+            <!-- HEADER -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <div class="search-bar">
+                        <i class="icon-search"></i>
+                        <input type="text" placeholder="Buscar por pacientes, exames, sintomas...">
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <div class="header-info">
+                        <span>Período: Este ano</span>
+                        <span>Departamento: Todos</span>
+                        <span>Convênio: Todos</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- SEÇÃO DE ATALHOS -->
+            <section class="quick-actions">
+                <div class="section-header">
+                    <div class="section-icon">📋</div>
+                    <div class="section-text">
+                        <h2>Agenda do Dia</h2>
+                        <p>Timeline interativa</p>
+                    </div>
+                </div>
+                
+                <div class="action-cards">
+                    <a href="/agenda" class="action-card">
+                        <div class="card-icon">📅</div>
+                        <div class="card-content">
+                            <h3>Agenda</h3>
+                            <p>Visualizar compromissos</p>
+                        </div>
+                    </a>
+                    
+                    <a href="/consulta/nova" class="action-card">
+                        <div class="card-icon">🩺</div>
+                        <div class="card-content">
+                            <h3>Nova Consulta</h3>
+                            <p>Agendar atendimento</p>
+                        </div>
+                    </a>
+                    
+                    <a href="/relatorios" class="action-card">
+                        <div class="card-icon">📊</div>
+                        <div class="card-content">
+                            <h3>Relatórios</h3>
+                            <p>Análises e métricas</p>
+                        </div>
+                    </a>
+                    
+                    <a href="/configuracoes" class="action-card">
+                        <div class="card-icon">⚙️</div>
+                        <div class="card-content">
+                            <h3>Configurações</h3>
+                            <p>Sistema e preferências</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- SEÇÃO DE GESTÃO -->
+            <section class="management-section">
+                <div class="section-header">
+                    <div class="section-icon">👥</div>
+                    <div class="section-text">
+                        <h2>Gestão de Pacientes</h2>
+                        <p>Cadastro completo</p>
+                    </div>
+                </div>
+                
+                <div class="management-grid">
+                    <!-- Cards de métricas com links -->
+                    <a href="/pacientes" class="metric-card">
+                        <div class="metric-header">
+                            <h3>Pacientes Cadastrados</h3>
+                            <span class="metric-change positive">+3% vs. semana passada</span>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">847</span>
+                        </div>
+                        <div class="metric-chart">
+                            <!-- Gráfico pequeno -->
+                        </div>
+                    </a>
+                    
+                    <a href="/consultas/hoje" class="metric-card">
+                        <div class="metric-header">
+                            <h3>Consultas Hoje</h3>
+                            <span class="metric-change negative">-7% vs. ontem</span>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">12</span>
+                        </div>
+                    </a>
+                    
+                    <a href="/prescricoes/pendentes" class="metric-card">
+                        <div class="metric-header">
+                            <h3>Prescrições Pendentes</h3>
+                            <span class="metric-status">meta: ≤ 4</span>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">5</span>
+                        </div>
+                    </a>
+                    
+                    <a href="/avaliacoes" class="metric-card">
+                        <div class="metric-header">
+                            <h3>Avaliação Média</h3>
+                            <span class="metric-change positive">+0.2 vs. mês anterior</span>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">4.0</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- SEÇÃO DE GRÁFICOS -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Pico de Consultas por Horário</h3>
+                        <a href="/relatorios/horarios" class="view-details">Ver detalhes</a>
+                    </div>
+                    <div class="chart-content">
+                        <!-- Gráfico de consultas por horário -->
+                        <canvas id="consultasChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>NPS - Satisfação do Paciente</h3>
+                        <a href="/relatorios/satisfacao" class="view-details">Ver detalhes</a>
+                    </div>
+                    <div class="chart-content">
+                        <!-- Gráfico de satisfação -->
+                        <canvas id="satisfacaoChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Prioridade da Fila</h3>
+                        <a href="/fila" class="view-details">Gerenciar fila</a>
+                    </div>
+                    <div class="chart-content">
+                        <!-- Gráfico de prioridades -->
+                        <canvas id="filaChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+    
+    <!-- JAVASCRIPT -->
+    <script src="assets/js/dashboard-new.js"></script>
+    
+    <!-- Manter compatibilidade com scripts existentes se necessário -->
+    <script src="assets/js/legacy-compatibility.js"></script>
+    
+    <!-- Scripts de inicialização -->
+    <script>
+        // Inicializar novo dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Novo dashboard carregado!');
+            
+            // Manter funcionalidades existentes
+            initializeExistingFeatures();
+            
+            // Inicializar novas funcionalidades
+            initializeNewDashboard();
+        });
+        
+        function initializeExistingFeatures() {
+            // Manter autenticação, sessões, etc.
+            // Integrar com sistema existente
+        }
+        
+        function initializeNewDashboard() {
+            // Inicializar gráficos
+            initializeCharts();
+            
+            // Configurar animações
+            setupAnimations();
+            
+            // Configurar responsividade
+            setupResponsive();
+        }
+        
+        function initializeCharts() {
+            // Implementar gráficos com dados reais
+            // Conectar com APIs existentes
+        }
+    </script>
+</body>
+</html>

@@ -399,17 +399,24 @@ PERGUNTA DO MÉDICO: ${lastUserMessage}`;
     
     fullPrompt += `\n\nIMPORTANTE: Sempre inclua ao final um aviso de que esta é uma sugestão educacional e a decisão clínica final é do médico responsável.`;
     
-    // Use existing SimpleOpenAI client
+    // Use existing SimpleOpenAI client - fix method call
     const { SimpleOpenAIClient } = require('./utils/openai-client');
     const openaiClient = new SimpleOpenAIClient();
     
-    const response = await openaiClient.generateResponse(fullPrompt, 'enhanced-dr-ai');
+    const response = await openaiClient.createChatCompletion({
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: fullPrompt }],
+      max_tokens: 800,
+      temperature: 0.3
+    });
     
-    console.log(`✅ Dr. AI Enhanced respondeu (${response.length} chars)`);
+    const responseText = response.choices[0]?.message?.content || 'Não consegui gerar uma resposta no momento.';
+    
+    console.log(`✅ Dr. AI Enhanced respondeu (${responseText.length} chars)`);
     
     res.json({ 
       ok: true, 
-      text: response,
+      text: responseText,
       timestamp: new Date().toISOString()
     });
     
@@ -789,6 +796,29 @@ app.get('/', (req, res, next) => {
 
 // Servir arquivos estáticos da pasta demo-ativo
 app.use('/public/demo-ativo', express.static(path.join(__dirname, '../public/demo-ativo')));
+
+// Demo-ativo routes with dashboard migration support
+app.get('/demo-ativo/:page', (req, res) => {
+  const { page } = req.params;
+  
+  // Dashboard migration: serve new version if accessing area-medica.html
+  if (page === 'area-medica.html') {
+    const newDashboardPath = path.join(__dirname, '../public/demo-ativo/area-medica-new.html');
+    if (fs.existsSync(newDashboardPath)) {
+      console.log('🆕 Servindo novo dashboard (area-medica-new.html)');
+      return res.sendFile(newDashboardPath);
+    }
+  }
+  
+  // Default behavior for other pages
+  const pagePath = path.join(__dirname, '../public/demo-ativo', page);
+  if (fs.existsSync(pagePath)) {
+    console.log(`📄 Servindo página demo: ${page}`);
+    return res.sendFile(pagePath);
+  }
+  
+  res.status(404).send('Página não encontrada');
+});
 
 // Rota específica para area-medica.html
 app.get('/area-medica.html', (req, res) => {
