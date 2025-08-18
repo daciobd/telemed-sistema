@@ -2,6 +2,7 @@ import React from "react";
 import { Router, Route, Switch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import EnhancedConsultation from "./EnhancedConsultation";
+import EnhancedConsultationV3 from "./pages/EnhancedConsultationV3";
 
 // Simple components without complex imports
 const SimpleToaster = () => <div id="toaster" className="fixed top-4 right-4 z-50" />;
@@ -205,7 +206,13 @@ function LandingPage() {
               >
                 Testar EnhancedConsultation
               </button>
-              <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700">
+              <a 
+                href="/enhanced-v3"
+                className="block w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors text-center"
+              >
+                Enhanced Consultation v3
+              </a>
+              <code className="block bg-gray-100 p-2 rounded text-xs text-gray-700 mt-2">
                 ./scripts/perf-enhanced.sh
               </code>
             </div>
@@ -265,6 +272,7 @@ export default function App() {
             <Route path="/video-consultation" component={VideoConsultation} />
             <Route path="/enhanced-consultation" component={EnhancedConsultation} />
             <Route path="/enhanced" component={EnhancedConsultation} />
+            <Route path="/enhanced-v3" component={EnhancedConsultationV3} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
