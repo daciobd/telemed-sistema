@@ -90,10 +90,18 @@
                     <button class="w-12 h-12 bg-gray-600 hover:bg-gray-700 rounded-full flex items-center justify-center text-white">
                         <i class="fas fa-video-slash"></i>
                     </button>
+                    <!-- Dr. AI Brain Button -->
+                    <button id="btn-ai" class="w-12 h-12 bg-purple-600 hover:bg-purple-700 rounded-full flex items-center justify-center text-white" title="Dr. AI – Assistente clínico">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M16 7a3 3 0 10-6 0 3 3 0 106 0z"/>
+                            <path d="M8 10a4 4 0 00-4 4v2a3 3 0 003 3h1"/>
+                            <path d="M16 10a4 4 0 014 4v1a4 4 0 01-4 4h-1"/>
+                        </svg>
+                    </button>
                     <button class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white">
                         <i class="fas fa-cog"></i>
                     </button>
-                    <button onclick="endCall()" class="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white">
+                    <button id="btn-finish" onclick="endCall()" class="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white">
                         <i class="fas fa-phone-slash"></i>
                     </button>
                 </div>
@@ -244,10 +252,18 @@
                     </div>
                 </div>
 
-                <!-- Save Button -->
-                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
-                    <i class="fas fa-save mr-2"></i>Salvar Atendimento
-                </button>
+                <!-- Action Buttons -->
+                <div class="space-y-2">
+                    <button id="btn-start" onclick="startConsultation()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-play mr-2"></i>Iniciar Consulta
+                    </button>
+                    <button id="btn-save" onclick="saveConsultation()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-save mr-2"></i>Salvar Atendimento
+                    </button>
+                    <button onclick="finalizeConsultation()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        <i class="fas fa-check mr-2"></i>Finalizar Consulta
+                    </button>
+                </div>
             </div>
 
             <!-- Exams Tab -->
@@ -416,7 +432,72 @@
 
         function endCall() {
             if (confirm('Deseja encerrar a consulta?')) {
+                finalizeConsultation();
+            }
+        }
+
+        // === API Integration Functions ===
+        const CONSULT_ID = new URLSearchParams(location.search).get('consultId') || 'demo-123';
+
+        async function postJSON(url, body) {
+            const r = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body || {})
+            });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json().catch(() => ({}));
+        }
+
+        // Start Consultation
+        async function startConsultation() {
+            try {
+                await postJSON(`/api/consults/${CONSULT_ID}/start`);
+                console.log('🏥 Consulta iniciada');
+                // Update UI status
+                document.querySelector('#btn-start').textContent = '✅ Consulta Iniciada';
+                document.querySelector('#btn-start').disabled = true;
+            } catch (e) {
+                alert('Falha ao iniciar: ' + e.message);
+            }
+        }
+
+        // Save Notes
+        async function saveConsultation() {
+            const payload = {
+                chiefComplaint: document.querySelector('[name="chief_complaint"]')?.value || '',
+                hpi: document.querySelector('[name="hpi"]')?.value || '',
+                dx: document.querySelector('[name="dx"]')?.value || '',
+                plan: document.querySelector('[name="plan"]')?.value || '',
+                redFlags: document.querySelector('[name="red_flags"]')?.value || ''
+            };
+            try {
+                await postJSON(`/api/consults/${CONSULT_ID}/notes`, payload);
+                console.log('📝 Notas salvas');
+                // Show feedback
+                const btn = document.querySelector('#btn-save');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i>Salvo!';
+                btn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('bg-green-600');
+                }, 2000);
+            } catch (e) {
+                alert('Falha ao salvar: ' + e.message);
+            }
+        }
+
+        // Finalize Consultation
+        async function finalizeConsultation() {
+            if (!confirm('Finalizar consulta? Esta ação não pode ser desfeita.')) return;
+            try {
+                await postJSON(`/api/consults/${CONSULT_ID}/finalize`);
+                console.log('✅ Consulta finalizada');
+                alert('Consulta finalizada com sucesso!');
                 window.location.href = '/patient-management';
+            } catch (e) {
+                alert('Falha ao finalizar: ' + e.message);
             }
         }
 
@@ -436,6 +517,74 @@
             console.log('🤖 IA médica:', aiConsentGiven ? 'Ativada' : 'Pendente de consentimento');
             console.log('⏱️ Timer da consulta iniciado');
         });
+        
+        // === CID-10 Autocomplete ===
+        function initCIDAutocomplete() {
+            const cidInput = document.querySelector('input[placeholder*="CID"]') || document.querySelector('[name="dx"]');
+            if (!cidInput) return;
+
+            let cidDropdown;
+
+            async function searchCID(query) {
+                if (query.length < 2) {
+                    cidDropdown?.remove();
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/api/cid10?query=${encodeURIComponent(query)}`);
+                    const items = await response.json();
+                    renderCIDDropdown(items.slice(0, 8));
+                } catch (error) {
+                    console.error('CID-10 search error:', error);
+                }
+            }
+
+            function renderCIDDropdown(items) {
+                cidDropdown?.remove();
+                if (!items.length) return;
+
+                cidDropdown = document.createElement('div');
+                cidDropdown.className = 'cid-dropdown';
+                cidDropdown.style.cssText = `
+                    position: absolute; z-index: 1000; background: #fff; 
+                    border: 1px solid rgba(0,0,0,.08); border-radius: 10px; 
+                    margin-top: 6px; box-shadow: 0 10px 24px rgba(0,0,0,.12); 
+                    max-height: 220px; overflow: auto; width: 100%;
+                `;
+
+                items.forEach(item => {
+                    const option = document.createElement('div');
+                    option.className = 'cid-option';
+                    option.style.cssText = 'padding: 8px 10px; cursor: pointer; border-bottom: 1px solid #f0f0f0;';
+                    option.innerHTML = `<strong>${item.code}</strong> – ${item.label}`;
+                    option.addEventListener('mouseover', () => option.style.background = '#F3F8FF');
+                    option.addEventListener('mouseout', () => option.style.background = '');
+                    option.addEventListener('click', () => {
+                        cidInput.value = `${item.code} – ${item.label}`;
+                        cidDropdown.remove();
+                        cidInput.focus();
+                    });
+                    cidDropdown.appendChild(option);
+                });
+
+                const parent = cidInput.parentElement;
+                parent.style.position = 'relative';
+                parent.appendChild(cidDropdown);
+            }
+
+            cidInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                searchCID(query);
+            });
+
+            cidInput.addEventListener('blur', () => {
+                setTimeout(() => cidDropdown?.remove(), 200);
+            });
+        }
+
+        // Initialize CID autocomplete when page loads
+        setTimeout(initCIDAutocomplete, 500);
     </script>
 
     <!-- === Dr.AI: Painel lateral ================================================== -->
@@ -507,11 +656,11 @@
   const clearBtn= document.getElementById('drAiClear');
   const fabWrap = document.getElementById('drAiFab');
 
-  // Tenta ligar no botão do "cérebro" existente
-  const brainBtn =
-    document.querySelector('[data-action="ai"], [data-ai], .btn-ai, .icon-ai, button.ai, .toolbar .brain') || null;
+  // Liga no botão do "cérebro" específico que criamos
+  const brainBtn = document.getElementById('btn-ai');
   if (brainBtn) {
     brainBtn.addEventListener('click', togglePanel);
+    console.log('🧠 Dr. AI conectado ao botão cérebro');
   } else {
     // Senão, mostra o FAB
     fabWrap.style.display = 'block';
@@ -560,6 +709,46 @@
     appendUser(text);
     input.value = '';
     askAI(text);
+  }
+
+  // Envia pergunta para o endpoint correto
+  async function askAI(question) {
+    const userMessage = { role: 'user', content: question };
+    messages.push(userMessage);
+    localStorage.setItem('drAiThread', JSON.stringify(messages));
+
+    appendAssistant('⏳ Consultando...');
+
+    const ctx = {
+      chiefComplaint: document.querySelector('[name="chief_complaint"]')?.value || '',
+      hpi: document.querySelector('[name="hpi"]')?.value || '',
+      dx: document.querySelector('[name="dx"]')?.value || '',
+      redFlags: document.querySelector('[name="red_flags"]')?.value || ''
+    };
+    
+    try {
+      const response = await fetch('/api/ai/clinical', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, context: ctx })
+      });
+      
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      
+      const assistantMessage = { role: 'assistant', content: data.answer };
+      messages.push(assistantMessage);
+      localStorage.setItem('drAiThread', JSON.stringify(messages));
+
+      // Remove "consultando" e adiciona resposta real
+      messagesEl.removeChild(messagesEl.lastElementChild);
+      appendAssistant(data.answer || 'Resposta não disponível');
+    } catch (error) {
+      console.error('Dr. AI Error:', error);
+      // Remove "consultando" e adiciona erro
+      messagesEl.removeChild(messagesEl.lastElementChild);
+      appendAssistant('⚠️ Não foi possível conectar com o Dr. AI. Tente novamente em alguns instantes.');
+    }
   }
 
   function appendBubble(role, content){

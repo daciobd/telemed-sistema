@@ -1,0 +1,245 @@
+colocar tudo no lugar e deixar o /enhanced igual ao seu “clone”, com o Dr. AI abrindo pelo botão do “cérebro” e com os botões Start/Salvar/Finalizar chamando seus endpoints. Abaixo vai o passo-a-passo que resolve o problema de “nada mudou” no Replit e o código pronto para colar.
+
+1) Primeiro: edite o arquivo certo do /enhanced
+
+O mais comum é a rota estar servindo um HTML “solto” do backend (e não o React/Vite). Descubra exatamente qual arquivo renderiza o /enhanced:
+
+No Shell do Replit
+
+# encontre a rota e o arquivo que está servindo /enhanced
+grep -R "enhanced" -n server client public views | head -n 20
+# alternativa: procure um texto visível na tela
+grep -R "Aguardando paciente" -n .
+
+
+Você verá algo como:
+
+server/index.ts: app.get('/enhanced', ...)
+server/public/enhanced.html
+
+
+Abra e edite o arquivo que aparecer no grep (ex.: server/public/enhanced.html ou views/enhanced.ejs). É aí que suas mudanças precisam entrar.
+
+2) Adicione o botão “cérebro” na barra inferior do vídeo
+
+No mesmo HTML, ache o bloco dos controles do vídeo (a fileira de botões). Inclua o botão abaixo onde quer que o “cérebro” apareça:
+
+<!-- Botão Dr. AI (coloque junto dos demais controles) -->
+<button id="btn-ai" class="control" title="Dr. AI – Assistente clínico">
+  <!-- ícone cérebro (SVG leve) -->
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path d="M16 7a3 3 0 10-6 0 3 3 0 106 0z"/>
+    <path d="M8 10a4 4 0 00-4 4v2a3 3 0 003 3h1"/>
+    <path d="M16 10a4 4 0 014 4v1a4 4 0 01-4 4h-1"/>
+  </svg>
+</button>
+
+
+Se você já tinha um lugar reservado para o cérebro, só troque o conteúdo do botão por este (mantendo o id="btn-ai").
+
+3) Cole o painel do Dr. AI (markup + estilos + JS)
+
+No final do arquivo, imediatamente antes de </body>, cole tudo abaixo. Ele cria o painel flutuante, os estilos e o script para abrir/fechar, enviar perguntas e renderizar respostas.
+
+<!-- ===== Dr. AI Panel ===== -->
+<div id="dr-ai" class="ai-panel" hidden>
+  <header class="ai-header">
+    <div class="ai-title">🧠 Dr. AI</div>
+    <button id="ai-close" class="ai-close" title="Fechar">✕</button>
+  </header>
+
+  <div class="ai-disclaimer">
+    As respostas são **apoio à decisão** e não substituem o julgamento clínico
+    do médico nem as diretrizes da sua instituição.
+  </div>
+
+  <div id="ai-thread" class="ai-thread">
+    <!-- mensagens aparecem aqui -->
+  </div>
+
+  <form id="ai-form" class="ai-form">
+    <textarea id="ai-input" rows="2" placeholder="Digite sua pergunta clínica…"></textarea>
+    <button id="ai-send" class="ai-send" type="submit">Enviar</button>
+  </form>
+</div>
+
+<style>
+  .ai-panel{
+    position:fixed; right:20px; bottom:20px; width:420px; max-height:72vh;
+    display:flex; flex-direction:column; background:#fff; border-radius:12px;
+    box-shadow:0 12px 32px rgba(0,0,0,.18); border:1px solid rgba(0,0,0,.06);
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    overflow:hidden; z-index:9999;
+  }
+  .ai-header{ display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px; border-bottom:1px solid rgba(0,0,0,.06); background:#F8FAFF; }
+  .ai-title{ font-weight:700 }
+  .ai-close{ border:none; background:transparent; font-size:18px; cursor:pointer }
+  .ai-disclaimer{ padding:10px 14px; font-size:12px; color:#6B7280; background:#FBFDFF }
+  .ai-thread{ flex:1; padding:14px; overflow:auto; background:#FAFBFF }
+  .ai-msg{ display:flex; gap:8px; margin-bottom:12px }
+  .ai-msg.assistant .bubble{ background:#EEF6FF; border:1px solid rgba(162,210,255,.6) }
+  .ai-msg.user .bubble{ background:#F1F5F9; border:1px solid rgba(0,0,0,.06) }
+  .bubble{ padding:10px 12px; border-radius:12px; max-width:85% }
+  .ai-form{ display:flex; gap:8px; padding:10px; border-top:1px solid rgba(0,0,0,.06); background:#fff }
+  #ai-input{ flex:1; resize:none; border:1px solid rgba(0,0,0,.1); border-radius:10px; padding:10px }
+  .ai-send{ background:#A2D2FF; border:1px solid #A2D2FF; border-radius:10px; padding:0 14px; cursor:pointer; font-weight:600 }
+  .ai-send:hover{ background:#8AB8E6 }
+  @media (max-width: 520px){ .ai-panel{ width:94vw; right:3vw; bottom:3vw } }
+</style>
+
+<script>
+  // --- util ---
+  function el(sel){ return document.querySelector(sel); }
+  function addMsg(role, text){
+    const row = document.createElement('div');
+    row.className = 'ai-msg ' + (role === 'assistant' ? 'assistant' : 'user');
+    row.innerHTML = '<div class="bubble"></div>';
+    row.querySelector('.bubble').textContent = text;
+    el('#ai-thread').appendChild(row);
+    el('#ai-thread').scrollTop = el('#ai-thread').scrollHeight;
+  }
+
+  // Abre/fecha painel
+  el('#btn-ai')?.addEventListener('click', ()=> el('#dr-ai').toggleAttribute('hidden'));
+  el('#ai-close')?.addEventListener('click', ()=> el('#dr-ai').setAttribute('hidden', 'true'));
+
+  // Envio para seu endpoint (AJUSTE A URL AQUI, se necessário)
+  const AI_ENDPOINT = '/api/ai/ask'; // mude se o seu for outro
+
+  el('#ai-form')?.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const q = el('#ai-input').value.trim();
+    if(!q) return;
+    el('#ai-input').value = '';
+    addMsg('user', q);
+
+    // Contexto opcional: captura campos da anamnese na página, se houver
+    const contexto = {
+      chiefComplaint: document.querySelector('[name="chief_complaint"]')?.value || '',
+      hpi: document.querySelector('[name="hpi"]')?.value || '',
+      dx: document.querySelector('[name="dx"]')?.value || '',
+      redFlags: document.querySelector('[name="red_flags"]')?.value || ''
+    };
+
+    try{
+      const r = await fetch(AI_ENDPOINT, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ question: q, context: contexto })
+      });
+      if(!r.ok){ throw new Error('HTTP '+r.status); }
+      const data = await r.json();
+      addMsg('assistant', data.answer || data.message || 'OK');
+    }catch(err){
+      addMsg('assistant', '⚠️ Erro ao consultar o Dr. AI: ' + err.message);
+    }
+  });
+</script>
+<!-- ===== /Dr. AI Panel ===== -->
+
+4) Ligue os botões aos endpoints (start / save / finalize)
+
+Ainda no mesmo HTML do /enhanced, dê IDs aos seus botões:
+
+<button id="btn-start">Iniciar Consulta</button>
+<button id="btn-save">Salvar</button>
+<button id="btn-finish">Finalizar</button>
+
+
+E adicione este script (pode ir junto do script do Dr. AI, embaixo):
+
+<script>
+  // pegue o ID da consulta (de querystring, dataset, etc.)
+  const CONSULT_ID =
+    new URLSearchParams(location.search).get('consultId') || 'demo-123';
+
+  async function postJSON(url, body){
+    const r = await fetch(url, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body||{})
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json().catch(()=> ({}));
+  }
+
+  // Start
+  document.getElementById('btn-start')?.addEventListener('click', async()=>{
+    try{
+      await postJSON(`/api/consults/${CONSULT_ID}/start`);
+      // atualize status UI…
+    }catch(e){ alert('Falha ao iniciar: '+e.message); }
+  });
+
+  // Save (pega campos principais da anamnese)
+  document.getElementById('btn-save')?.addEventListener('click', async()=>{
+    const payload = {
+      chiefComplaint: document.querySelector('[name="chief_complaint"]')?.value || '',
+      hpi: document.querySelector('[name="hpi"]')?.value || '',
+      dx: document.querySelector('[name="dx"]')?.value || '',
+      plan: document.querySelector('[name="plan"]')?.value || '',
+      redFlags: document.querySelector('[name="red_flags"]')?.value || ''
+    };
+    try{
+      await postJSON(`/api/consults/${CONSULT_ID}/notes`, payload);
+      // feedback visual
+    }catch(e){ alert('Falha ao salvar: '+e.message); }
+  });
+
+  // Finish
+  document.getElementById('btn-finish')?.addEventListener('click', async()=>{
+    try{
+      await postJSON(`/api/consults/${CONSULT_ID}/finalize`);
+      // redirecionar/fechar
+    }catch(e){ alert('Falha ao finalizar: '+e.message); }
+  });
+</script>
+
+
+Isso não muda seu backend. Apenas consome os endpoints que você informou. Se os nomes forem outros, troque as URLs.
+
+5) CID-10 (autocomplete)
+
+Se você tem um endpoint, ex.: GET /api/cid/search?q=, cole isto onde está o input de CID e ajuste o selector:
+
+<script>
+  const cidInput = document.querySelector('[name="dx"]'); // ajuste o seletor
+  let cidBox;
+
+  async function searchCID(q){
+    const r = await fetch('/api/cid/search?q='+encodeURIComponent(q));
+    const list = await r.json(); // [{code:'F41.1', desc:'…'}, ...]
+    renderCid(list);
+  }
+  function renderCid(items){
+    cidBox?.remove();
+    cidBox = document.createElement('div');
+    cidBox.className = 'dropdown';
+    items.slice(0,10).forEach(it=>{
+      const a = document.createElement('div');
+      a.className='option';
+      a.textContent = `${it.code} – ${it.desc}`;
+      a.onclick = ()=>{ cidInput.value = `${it.code} – ${it.desc}`; cidBox.remove(); };
+      cidBox.appendChild(a);
+    });
+    cidInput.parentElement.appendChild(cidBox);
+  }
+  cidInput?.addEventListener('input', (e)=>{
+    const q = e.target.value.trim();
+    if(q.length>=2) searchCID(q); else cidBox?.remove();
+  });
+</script>
+
+<style>
+  .dropdown{ position:relative; z-index:1000; background:#fff; border:1px solid rgba(0,0,0,.08);
+    border-radius:10px; margin-top:6px; box-shadow:0 10px 24px rgba(0,0,0,.12); max-height:220px; overflow:auto }
+  .option{ padding:8px 10px; cursor:pointer }
+  .option:hover{ background:#F3F8FF }
+</style>
+
+6) Memed / Exames
+
+Memed: o seu botão já abre a nova aba. Mantenha assim e só garanta que o href gera o JSON do paciente na query (como está na sua captura).
+
+Exames: mantenha os templates comuns e, no clique do “Adicionar Exame”, faça um POST /api/consults/:id/exams com { name, priority, notes }.
