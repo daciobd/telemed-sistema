@@ -150,8 +150,7 @@ export default function EnhancedConsultation(){
   const [notes, setNotes] = useState('S: Dor latejante, piora com luz. O: PA 120/80, FC 78, afebril. A: Enxaqueca prov. P: Dipirona 500mg se dor, hidratação, repouso.');
   const [rx, setRx] = useState('Dipirona 500mg, 1cp VO a cada 6-8h se dor. Max 4x/dia por 3 dias.');
   
-  // Analytics and Banner state
-  const [showBanner, setShowBanner] = useState(true);
+  // Analytics state (banner removed from this page)
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [currentRating, setCurrentRating] = useState(0);
   const [selectedQuickOptions, setSelectedQuickOptions] = useState<string[]>([]);
@@ -189,29 +188,7 @@ export default function EnhancedConsultation(){
       hideModal: () => setShowFeedbackModal(false)
     };
 
-    // Check if banner should be shown - Force show for testing
-    console.log('🔍 Checking banner status...');
-    
-    // Clear any previous dismissal for debugging
-    // localStorage.removeItem('telemed_banner_dismissed');
-    // localStorage.removeItem('telemed_banner_dismissed_date');
-    
-    const bannerDismissed = localStorage.getItem('telemed_banner_dismissed');
-    const dismissedDate = localStorage.getItem('telemed_banner_dismissed_date');
-    
-    console.log('Banner dismissed?', bannerDismissed, 'Date:', dismissedDate);
-    
-    if (bannerDismissed && dismissedDate) {
-      const daysSince = (new Date().getTime() - new Date(dismissedDate).getTime()) / (1000 * 60 * 60 * 24);
-      console.log('Days since dismissal:', daysSince);
-      if (daysSince < 7) {
-        console.log('❌ Banner hidden due to recent dismissal');
-        setShowBanner(false);
-        return;
-      }
-    }
-    
-    console.log('✅ Banner should be visible');
+    // Banner removed from this page - will be added to main dashboard
 
     console.log('🚀 Enhanced Consultation carregada com analytics');
   }, []);
@@ -226,26 +203,7 @@ export default function EnhancedConsultation(){
     { k: 'SpO₂', v: '98%' },
   ]), []);
 
-  // Banner handlers
-  const handleTestNewDashboard = () => {
-    console.log('🚀 Botão "Testar Agora" clicado!');
-    window.telemeDashboardAnalytics?.trackEvent('new_dashboard_clicked', {
-      source: 'banner',
-      timestamp: new Date().toISOString()
-    });
-    const newDashboardUrl = 'http://localhost:5000/dashboard-teste';
-    window.open(newDashboardUrl, '_blank');
-    localStorage.setItem('telemed_dashboard_tested', 'true');
-    localStorage.setItem('telemed_dashboard_test_date', new Date().toISOString());
-    setTimeout(() => setShowFeedbackModal(true), 30000);
-  };
-
-  const handleDismissBanner = () => {
-    setShowBanner(false);
-    localStorage.setItem('telemed_banner_dismissed', 'true');
-    localStorage.setItem('telemed_banner_dismissed_date', new Date().toISOString());
-    window.telemeDashboardAnalytics?.trackEvent('banner_dismissed', { method: 'manual' });
-  };
+  // Banner handlers removed - moved to main dashboard
 
   // Feedback handlers
   const handleStarClick = (rating: number) => {
@@ -287,29 +245,7 @@ export default function EnhancedConsultation(){
     <div className="page">
       <Sidebar/>
       
-      {/* Banner do novo dashboard */}
-      {showBanner && (
-        <div id="newDashboardBanner" className="new-dashboard-banner">
-          <div className="banner-content">
-            <div className="banner-icon">🚀</div>
-            <div className="banner-text">
-              <h4>Novo Dashboard Disponível!</h4>
-              <p>Interface moderna com melhor performance e novos recursos</p>
-            </div>
-            <div className="banner-actions">
-              <button onClick={handleTestNewDashboard} className="btn-test">
-                Testar Agora
-              </button>
-              <button onClick={handleDismissBanner} className="btn-dismiss">
-                ×
-              </button>
-            </div>
-          </div>
-          <div className="banner-progress">
-            <div className="progress-bar" style={{width: '0%'}}></div>
-          </div>
-        </div>
-      )}
+      {/* Banner removed - moved to main dashboard page */}
 
       <main>
         <div className="topbar">

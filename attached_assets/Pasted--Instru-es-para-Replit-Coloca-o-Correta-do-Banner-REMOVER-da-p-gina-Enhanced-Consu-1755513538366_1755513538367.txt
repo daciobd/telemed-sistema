@@ -1,0 +1,112 @@
+# 📋 Instruções para Replit - Colocação Correta do Banner
+
+## **❌ REMOVER da página Enhanced Consultation**
+- O banner NÃO deve aparecer em `/enhanced`
+- Remover todo o código do banner da página de consulta
+
+## **✅ COLOCAR na página principal do Dashboard**
+- Página onde aparecem as métricas:
+  - "Pacientes Cadastrados: 847"
+  - "Consultas Hoje: 12"
+  - "Prescrições Pendentes: 5"
+  - "Avaliação Média: 4.0"
+
+## **🎯 Localização Exata**
+
+### Estrutura atual do dashboard:
+```
+dashboard/
+├── Menu Lateral (esquerda)
+│   ├── Dashboard ✅ <- AQUI que deve aparecer o banner
+│   ├── Pacientes
+│   ├── Médicos  
+│   ├── Analytics
+│   └── Prontuário
+└── Área Principal
+    ├── [INSERIR BANNER AQUI] 🎯
+    ├── Cards de Métricas
+    ├── Gráficos
+    └── Tabelas
+```
+
+### Onde inserir o HTML do banner:
+```html
+<!-- Logo após abrir a área principal, ANTES dos cards de métricas -->
+<div class="main-content"> <!-- ou classe similar -->
+    
+    <!-- INSERIR AQUI O BANNER -->
+    <div id="newDashboardBanner" class="new-dashboard-banner">
+        <!-- conteúdo do banner -->
+    </div>
+    
+    <!-- Depois vêm os cards existentes -->
+    <div class="metrics-cards">
+        <!-- Cards: Pacientes Cadastrados, Consultas, etc. -->
+    </div>
+</div>
+```
+
+## **📁 Arquivos a Modificar**
+
+### Arquivo principal (provavelmente):
+- `dashboard.html`
+- `index.html` 
+- `main.html`
+- Ou arquivo que contém as métricas principais
+
+### NÃO modificar:
+- Arquivos da página Enhanced Consultation
+- Páginas de pacientes, médicos, analytics
+
+## **🔍 Como Identificar a Página Correta**
+
+### A página correta TEM:
+- ✅ Cards com números: "847", "12", "5", "4.0"
+- ✅ Gráficos: "Pico de Consultas por Horário"
+- ✅ Gráfico: "NPS - Satisfação do Paciente"
+- ✅ Gráfico: "Prioridade da Fila"
+- ✅ URL padrão (sem /enhanced, /pacientes, etc.)
+
+### A página correta NÃO TEM:
+- ❌ Formulários de consulta
+- ❌ Campos de paciente
+- ❌ Interface de teleconsulta
+- ❌ /enhanced na URL
+
+## **⚡ Teste Rápido**
+
+### Após implementar:
+1. Acessar a **página principal** do dashboard
+2. Verificar se aparece o banner azul no topo
+3. Clicar em "Testar Agora" 
+4. Confirmar se abre o novo dashboard
+
+### Se não aparecer:
+1. Abrir console (F12)
+2. Verificar se há erros
+3. Digitar: `telemedDebug.showBanner()`
+4. Recarregar a página
+
+## **🎯 Posicionamento Visual**
+
+```
+┌─────────────────────────────────────────┐
+│ TeleMed - Menu Lateral                  │
+├─────────────────────────────────────────┤
+│ 🚀 [BANNER AZUL AQUI]                   │ <- Aqui!
+├─────────────────────────────────────────┤
+│ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐        │
+│ │ 847 │ │ 12  │ │  5  │ │ 4.0 │        │
+│ └─────┘ └─────┘ └─────┘ └─────┘        │
+├─────────────────────────────────────────┤
+│ [Gráficos existentes]                   │
+└─────────────────────────────────────────┘
+```
+
+## **📝 Resumo para Implementar AGORA**
+
+1. **Remover** banner da página Enhanced Consultation
+2. **Adicionar** banner na página principal (onde estão as métricas)
+3. **Posicionar** logo após o menu lateral, antes dos cards
+4. **Testar** na URL principal (não /enhanced)
+5. **Verificar** funcionamento do botão "Testar Agora"
