@@ -126,24 +126,25 @@ body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Hel
 /* util */
 hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
 
-/* Painel lateral precisa ser position:relative para o handle colar na borda */
-.side-panel, [data-panel="side"], .consult-panel, .right-panel {
+/* container do painel precisa aceitar overlay */
+.side-panel, [data-panel="side"], .consult-panel, .right-panel, .left-panel {
   position: relative;
+  overflow: visible;
 }
 
-/* Handle de arraste (fica na borda esquerda do painel lateral) */
-#tmResizer {
-  position: absolute;
-  left: -4px;
-  top: 0;
-  width: 8px;
-  height: 100%;
+/* handle de arraste */
+#tmResizer{
+  position:absolute;
+  top:0; height:100%;
+  width:8px; z-index:40;
   cursor: col-resize;
-  z-index: 40;
-  background: linear-gradient(to right, rgba(255,255,255,0) 0, rgba(255,255,255,.08) 50%, rgba(255,255,255,0) 100%);
-  opacity: .6;
+  background: linear-gradient(to right,
+    rgba(255,255,255,0) 0,
+    rgba(255,255,255,.1) 50%,
+    rgba(255,255,255,0) 100%);
+  opacity:.6;
 }
-#tmResizer:hover { opacity: 1; }
+#tmResizer:hover{ opacity:1; }
 
 #patientBanner {
   position: absolute;

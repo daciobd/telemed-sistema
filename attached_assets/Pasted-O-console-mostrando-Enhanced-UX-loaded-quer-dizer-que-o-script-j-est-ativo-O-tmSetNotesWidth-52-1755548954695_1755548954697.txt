@@ -1,0 +1,118 @@
+O console mostrando “Enhanced UX loaded” quer dizer que o script já está ativo.
+O tmSetNotesWidth(520) retornar undefined é normal (a função não retornava valor). Se a largura não mudou aí no layout, é porque o painel está usando flex-basis (ou está do lado esquerdo) e o handle ficou do lado “de fora”. Abaixo vai um patch que resolve os dois pontos:
+
+aplica largura como width + flex-basis (pega todos os layouts),
+
+coloca o handle no lado correto (direito se o painel estiver à esquerda),
+
+faz a função retornar a largura aplicada.
+
+Cole estes trechos no seu enhanced-ux.js (substituindo o bloco do resizer anterior):
+
+// ---------- Resizer do painel lateral (flex/width) com persistência ----------
+(function initSideResizer(){
+  const side =
+    document.querySelector('[data-panel="side"]') ||
+    document.querySelector('.side-panel') ||
+    document.querySelector('.right-panel') ||
+    document.querySelector('.left-panel') ||
+    document.querySelector('.consult-panel') ||
+    document.querySelector('.consult-notes');
+
+  if (!side) return;
+
+  // garante base
+  side.style.position = side.style.position || 'relative';
+  side.style.overflow = side.style.overflow || 'visible';
+
+  // onde fica o handle? (direita se o painel está à esquerda da tela)
+  const rect = side.getBoundingClientRect();
+  const isLeft = rect.left < (window.innerWidth / 2);
+
+  // limites e chave de storage
+  const KEY = 'telemed_notes_width';
+  const MIN = 320, MAX = 720;
+
+  // helper para aplicar largura em qualquer layout
+  const applyWidth = (wPx) => {
+    const w = Math.min(MAX, Math.max(MIN, Math.round(wPx)));
+    side.style.width = w + 'px';
+    side.style.flex = '0 0 ' + w + 'px';   // funciona em flex layouts
+    side.style.maxWidth = w + 'px';
+    localStorage.setItem(KEY, String(w));
+    return w;
+  };
+
+  // restaura se existir
+  const saved = Number(localStorage.getItem(KEY));
+  if (saved) applyWidth(saved);
+
+  // injeta / posiciona handle
+  let handle = document.getElementById('tmResizer');
+  if (!handle) {
+    handle = document.createElement('div');
+    handle.id = 'tmResizer';
+    side.appendChild(handle);
+  }
+  handle.style.left  = isLeft ? 'auto' : '-4px';
+  handle.style.right = isLeft ? '-4px' : 'auto';
+
+  let dragging = false, startX = 0, startW = parseInt(getComputedStyle(side).width,10)||480;
+
+  const onMove = (e) => {
+    if (!dragging) return;
+    const x = (e.clientX || e.touches?.[0]?.clientX);
+    const dx = x - startX;
+    // se o painel está do lado esquerdo, arrastar para a direita aumenta (dx positivo)
+    // se está do lado direito, o inverso
+    const factor = isLeft ? 1 : -1;
+    applyWidth(startW + factor * dx);
+  };
+
+  const stop = () => {
+    dragging = false;
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', stop);
+    window.removeEventListener('touchmove', onMove);
+    window.removeEventListener('touchend', stop);
+  };
+
+  const start = (e) => {
+    dragging = true;
+    startX = (e.clientX || e.touches?.[0]?.clientX);
+    startW = parseInt(getComputedStyle(side).width,10) || 480;
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('touchmove', onMove, {passive:false});
+    window.addEventListener('touchend', stop);
+  };
+
+  handle.addEventListener('mousedown', start);
+  handle.addEventListener('touchstart', start, {passive:false});
+
+  // expõe helper no console e passa a RETORNAR o valor aplicado
+  window.tmSetNotesWidth = (w) => applyWidth(Number(w)||480);
+})();
+
+
+E mantenha este CSS (ajusta visual e z-index do handle):
+
+/* container do painel precisa aceitar overlay */
+.side-panel, [data-panel="side"], .consult-panel, .right-panel, .left-panel {
+  position: relative;
+  overflow: visible;
+}
+
+/* handle de arraste */
+#tmResizer{
+  position:absolute;
+  top:0; height:100%;
+  width:8px; z-index:40;
+  cursor: col-resize;
+  background: linear-gradient(to right,
+    rgba(255,255,255,0) 0,
+    rgba(255,255,255,.1) 50%,
+    rgba(255,255,255,0) 100%);
+  opacity:.6;
+}
+#tmResizer:hover{ opacity:1; }

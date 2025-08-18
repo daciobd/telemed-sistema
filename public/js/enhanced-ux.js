@@ -263,67 +263,91 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
 })(); // End IIFE
 
-// ---------- Resizer do painel lateral com persistência ----------
+// ---------- Resizer do painel lateral (flex/width) com persistência ----------
 (function initSideResizer(){
-  const findSide = () =>
+  const side =
     document.querySelector('[data-panel="side"]') ||
     document.querySelector('.side-panel') ||
     document.querySelector('.right-panel') ||
+    document.querySelector('.left-panel') ||
     document.querySelector('.consult-panel') ||
+    document.querySelector('.consult-notes') ||
     document.querySelector('.split-right') ||
     document.querySelector('#rightPane');
 
-  const side = findSide();
   if (!side) return;
 
-  // largura persistida
+  // garante base
+  side.style.position = side.style.position || 'relative';
+  side.style.overflow = side.style.overflow || 'visible';
+
+  // onde fica o handle? (direita se o painel está à esquerda da tela)
+  const rect = side.getBoundingClientRect();
+  const isLeft = rect.left < (window.innerWidth / 2);
+
+  // limites e chave de storage
   const KEY = 'telemed_notes_width';
   const MIN = 320, MAX = 720;
-  const saved = Number(localStorage.getItem(KEY));
-  if (saved && saved >= MIN && saved <= MAX) side.style.width = saved + 'px';
 
-  // injeta handle
+  // helper para aplicar largura em qualquer layout
+  const applyWidth = (wPx) => {
+    const w = Math.min(MAX, Math.max(MIN, Math.round(wPx)));
+    side.style.width = w + 'px';
+    side.style.flex = '0 0 ' + w + 'px';   // funciona em flex layouts
+    side.style.maxWidth = w + 'px';
+    localStorage.setItem(KEY, String(w));
+    return w;
+  };
+
+  // restaura se existir
+  const saved = Number(localStorage.getItem(KEY));
+  if (saved) applyWidth(saved);
+
+  // injeta / posiciona handle
   let handle = document.getElementById('tmResizer');
   if (!handle) {
     handle = document.createElement('div');
     handle.id = 'tmResizer';
     side.appendChild(handle);
   }
+  handle.style.left  = isLeft ? 'auto' : '-4px';
+  handle.style.right = isLeft ? '-4px' : 'auto';
 
-  let startX = 0, startW = 0, dragging = false;
+  let dragging = false, startX = 0, startW = parseInt(getComputedStyle(side).width,10)||480;
 
   const onMove = (e) => {
     if (!dragging) return;
-    const dx = (e.clientX || e.touches?.[0]?.clientX) - startX;
-    let w = Math.min(MAX, Math.max(MIN, startW - dx));
-    side.style.width = w + 'px';
-  };
-  const onUp = () => {
-    if (!dragging) return;
-    dragging = false;
-    const w = parseInt(getComputedStyle(side).width, 10);
-    localStorage.setItem(KEY, String(w));
-    window.removeEventListener('mousemove', onMove);
-    window.removeEventListener('mouseup', onUp);
-    window.removeEventListener('touchmove', onMove);
-    window.removeEventListener('touchend', onUp);
+    const x = (e.clientX || e.touches?.[0]?.clientX);
+    const dx = x - startX;
+    // se o painel está do lado esquerdo, arrastar para a direita aumenta (dx positivo)
+    // se está do lado direito, o inverso
+    const factor = isLeft ? 1 : -1;
+    applyWidth(startW + factor * dx);
   };
 
-  const onDown = (e) => {
+  const stop = () => {
+    dragging = false;
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', stop);
+    window.removeEventListener('touchmove', onMove);
+    window.removeEventListener('touchend', stop);
+  };
+
+  const start = (e) => {
     dragging = true;
     startX = (e.clientX || e.touches?.[0]?.clientX);
-    startW = parseInt(getComputedStyle(side).width, 10);
+    startW = parseInt(getComputedStyle(side).width,10) || 480;
     window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
+    window.addEventListener('mouseup', stop);
     window.addEventListener('touchmove', onMove, {passive:false});
-    window.addEventListener('touchend', onUp);
+    window.addEventListener('touchend', stop);
   };
 
-  handle.addEventListener('mousedown', onDown);
-  handle.addEventListener('touchstart', onDown, {passive:false});
+  handle.addEventListener('mousedown', start);
+  handle.addEventListener('touchstart', start, {passive:false});
 
-  // util para testes no console
-  window.tmSetNotesWidth = (w)=>{ w=Math.min(MAX,Math.max(MIN,Number(w)||480)); side.style.width=w+'px'; localStorage.setItem(KEY,String(w)); };
+  // expõe helper no console e passa a RETORNAR o valor aplicado
+  window.tmSetNotesWidth = (w) => applyWidth(Number(w)||480);
 })();
 
 // ---------- Card do paciente sobre o vídeo ----------
