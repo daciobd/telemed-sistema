@@ -1,0 +1,258 @@
+vamos deixar a tela “enhanced” ainda mais profissional com:
+
+a faixa do paciente sobre o vídeo (overlay)
+
+a “faixa de anotações” com redimensionamento por arraste (e colapsar/expandir)
+
+Abaixo já vão os trechos prontos para colar. Eles não removem nada do que você tem; só acrescentam.
+
+1) Banner do paciente sobre o vídeo
+HTML — cole dentro da coluna do vídeo (o contêiner do player precisa ter position:relative)
+
+Arquivo: server/public/enhanced-consultation.html
+
+Procure o wrapper do vídeo (ex.: .video-area, .left-pane, etc.). Garanta que ele tenha id="leftPane" e style="position:relative" (ou uma classe que já deixe position:relative). Logo dentro dele, cole:
+
+<!-- === Patient Banner / Faixa sobre o vídeo === -->
+<div class="patient-banner" id="patientBanner" aria-live="polite">
+  <div class="pb-left">
+    <div class="avatar" id="pbAvatar">CF</div>
+    <div class="id">
+      <div class="name" id="pbName">Ana Costa Silva</div>
+      <div class="meta">
+        <span class="badge">Particular</span>
+        <span class="sep">•</span>
+        <span class="phone" id="pbPhone">11 98765-4321</span>
+        <span class="sep">•</span>
+        <span class="age" id="pbAge">0 anos</span>
+      </div>
+    </div>
+    <button class="btn pill" id="btnInvite">Convite</button>
+  </div>
+
+  <div class="pb-right">
+    <span class="status-dot on" id="pbStatusDot" aria-hidden="true"></span>
+    <span class="status-label" id="statusLabel">Aguardando</span>
+    <span class="timer" id="pbTimer">00:00</span>
+
+    <button class="btn start" id="btnStart">▶ Iniciar Consulta</button>
+    <button class="btn lite"  id="btnBack">Voltar</button>
+    <button class="btn lite"  id="btnForm">Formulário</button>
+    <button class="btn lite"  id="btnLeave">Sair</button>
+  </div>
+</div>
+
+CSS — cole no <style> da página (ou no seu CSS global)
+/* --- Patient banner overlay --- */
+.patient-banner{
+  position:absolute; inset:12px 12px auto 12px;
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  padding:10px 12px; border-radius:12px;
+  color:#E8F0FF; z-index:50;
+  background:linear-gradient(90deg,rgba(7,13,28,.66),rgba(7,13,28,.42));
+  border:1px solid rgba(162,210,255,.25);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  pointer-events:auto;
+}
+.patient-banner .pb-left{display:flex;align-items:center;gap:12px;min-width:0}
+.patient-banner .avatar{
+  width:34px;height:34px;border-radius:10px;
+  display:grid;place-items:center;background:#A2D2FF;color:#0F172A;font-weight:700;
+}
+.patient-banner .name{font-weight:700;letter-spacing:.1px}
+.patient-banner .meta{opacity:.85;font-size:12px;white-space:nowrap}
+.patient-banner .badge{
+  background:rgba(162,210,255,.18);border:1px solid rgba(162,210,255,.4);
+  color:#DCEBFF;border-radius:999px;padding:2px 8px;margin-right:6px
+}
+.patient-banner .sep{opacity:.5;margin:0 6px}
+.patient-banner .pb-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.patient-banner .status-dot{
+  width:10px;height:10px;border-radius:999px;display:inline-block;
+  background: #22c55e; box-shadow:0 0 0 3px rgba(34,197,94,.18)
+}
+.patient-banner .status-dot.off{background:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,.18)}
+.patient-banner .timer{font-variant-numeric:tabular-nums;opacity:.9;padding:0 4px}
+.patient-banner .btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 12px;border-radius:10px;border:1px solid rgba(162,210,255,.32);
+  background:rgba(12,18,32,.35); color:#E8F0FF; cursor:pointer; font-weight:600
+}
+.patient-banner .btn:hover{background:rgba(162,210,255,.12)}
+.patient-banner .btn.pill{border-radius:999px;background:rgba(162,210,255,.15)}
+.patient-banner .btn.start{background:#14a34a;border-color:#14a34a}
+.patient-banner .btn.lite{background:transparent}
+.patient-banner .btn.lite:hover{background:rgba(255,255,255,.06)}
+@media (max-width: 980px){
+  .patient-banner{inset:8px 8px auto 8px; gap:10px; padding:8px}
+  .patient-banner .btn.lite{display:none} /* enxuga nos menores */
+}
+
+JS — cole antes de </body>
+<script>
+(() => {
+  // timer simples
+  const timerEl = document.getElementById('pbTimer');
+  let secs = 0, t;
+  function startTimer(){
+    clearInterval(t);
+    t = setInterval(() => {
+      secs++;
+      const m = String(Math.floor(secs/60)).padStart(2,'0');
+      const s = String(secs%60).padStart(2,'0');
+      timerEl.textContent = `${m}:${s}`;
+    }, 1000);
+  }
+
+  // IDs de exemplo (substitua pelo que usa no seu router)
+  const consultId = new URLSearchParams(location.search).get('id') || 'demo';
+
+  // Botões
+  document.getElementById('btnInvite')?.addEventListener('click', async () => {
+    try {
+      await fetch(`/api/consults/${consultId}/invite`, {method:'POST'});
+      alert('Convite enviado ao paciente na sala de espera.');
+    } catch { alert('Falha ao enviar convite.'); }
+  });
+
+  document.getElementById('btnStart')?.addEventListener('click', async () => {
+    try {
+      const r = await fetch(`/api/consults/${consultId}/start`, {method:'POST'});
+      if(r.ok){
+        document.getElementById('statusLabel').textContent = 'Em atendimento';
+        document.getElementById('pbStatusDot').classList.remove('off');
+        startTimer();
+      } else { throw new Error(); }
+    } catch { alert('Não foi possível iniciar a consulta.'); }
+  });
+
+  document.getElementById('btnBack')?.addEventListener('click', () => history.back());
+  document.getElementById('btnForm')?.addEventListener('click', () => {
+    // abra seu drawer/modal de anamnese aqui
+    document.querySelector('[data-pane="anamnese"]')?.classList.toggle('open');
+  });
+  document.getElementById('btnLeave')?.addEventListener('click', () => {
+    if(confirm('Encerrar e sair desta consulta?')) location.href = '/';
+  });
+})();
+</script>
+
+2) Redimensionar a faixa de anotações (drag)
+
+Vamos transformar o contêiner principal em split com divisor.
+Se sua coluna direita (anotações / abas Atendimento–Exames–Receitas) ainda não tiver um id, coloque id="rightPane". O pai das duas colunas ficará assim:
+
+HTML — ajuste do contêiner principal
+
+No mesmo arquivo, localize o wrapper que contém a coluna do vídeo e a coluna das anotações. Troque por esta estrutura (mantendo o seu conteúdo atual dentro de cada lado):
+
+<!-- SPLIT layout -->
+<div class="enh-split" data-split="enhanced" id="splitRoot">
+  <section id="leftPane" class="split-left" style="position:relative"><!-- [SEU VÍDEO AQUI] --></section>
+
+  <!-- divisor arrastável -->
+  <div id="divider" class="split-divider" role="separator"
+       aria-orientation="vertical" aria-label="Redimensionar painel de anotações"
+       tabindex="0">
+    <span class="grip" aria-hidden="true"></span>
+  </div>
+
+  <aside id="rightPane" class="split-right"><!-- [SUAS ABAS/ANOTAÇÕES AQUI] --></aside>
+</div>
+
+
+Obs.: mantenha o conteúdo que você já tem dentro de #leftPane e #rightPane. Só estamos inserindo o <div id="divider"> no meio e a classe/ids.
+
+CSS — cole junto com os estilos
+/* --- Split redimensionável --- */
+.enh-split{
+  display:grid;
+  grid-template-columns: 1fr 6px minmax(380px, 36%);
+  gap:0; height: calc(100vh - 80px); /* ajuste se seu topo for maior/menor */
+}
+.split-left, .split-right{min-width:0; min-height:0; overflow:auto}
+.split-right{background:rgba(255,255,255,.02)}
+.split-divider{
+  cursor:col-resize; position:relative; background:linear-gradient(180deg,#152133,#0f172a);
+  border-left:1px solid rgba(162,210,255,.08); border-right:1px solid rgba(162,210,255,.08);
+}
+.split-divider .grip{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:3px; height:36px; border-radius:2px; background:rgba(162,210,255,.35)
+}
+.split-divider.drag{background:#0f172a}
+@media (max-width: 980px){
+  .enh-split{grid-template-columns:1fr}
+  .split-divider, .split-right{display:none} /* mobile: vira 1 coluna */
+}
+
+JS — controle do arraste e colapso
+
+Cole antes de </body> (pode junto do script do banner):
+
+<script>
+(() => {
+  const root   = document.getElementById('splitRoot');
+  const right  = document.getElementById('rightPane');
+  const divider= document.getElementById('divider');
+  if(!root || !right || !divider) return;
+
+  const KEY = 'enhanced.rightWidth';
+  const MIN = 320, MAX = 760;   // limites da coluna direita
+  const BAR = 6;                // largura do divisor
+
+  // aplica largura persistida
+  const saved = parseInt(localStorage.getItem(KEY)||'0',10);
+  if(saved) root.style.gridTemplateColumns = `1fr ${BAR}px ${saved}px`;
+
+  let startX = 0, startW = 0, dragging = false;
+  function setRight(px){
+    const total = root.clientWidth;
+    const clamped = Math.max(MIN, Math.min(MAX, px, total - 320)); // garante mínimo da esquerda
+    root.style.gridTemplateColumns = `1fr ${BAR}px ${clamped}px`;
+    localStorage.setItem(KEY, String(clamped));
+  }
+
+  divider.addEventListener('pointerdown', (e) => {
+    dragging = true; divider.classList.add('drag');
+    startX = e.clientX; startW = right.getBoundingClientRect().width;
+    divider.setPointerCapture(e.pointerId);
+  });
+  divider.addEventListener('pointermove', (e) => {
+    if(!dragging) return;
+    const delta = e.clientX - startX;
+    setRight(startW - delta); // mover à direita diminui; à esquerda aumenta
+  });
+  function endDrag(){ dragging=false; divider.classList.remove('drag'); }
+  divider.addEventListener('pointerup', endDrag);
+  divider.addEventListener('pointercancel', endDrag);
+  divider.addEventListener('dblclick', () => setRight(460));
+
+  // acessibilidade pelo teclado
+  divider.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowLeft'){ setRight((right.getBoundingClientRect().width||460)+24); }
+    if(e.key === 'ArrowRight'){ setRight((right.getBoundingClientRect().width||460)-24); }
+    if(e.key === 'Enter'){ setRight(460); }
+  });
+})();
+</script>
+
+
+Dica: se quiser um botão de colapsar/expandir rápido, adicione um botão em qualquer lugar que chame:
+
+const isZero = getComputedStyle(splitRoot).gridTemplateColumns.endsWith(' 0px');
+if(isZero) {
+  const w = parseInt(localStorage.getItem('enhanced.rightWidth')||'460',10);
+  splitRoot.style.gridTemplateColumns = `1fr 6px ${w}px`;
+} else {
+  splitRoot.style.gridTemplateColumns = `1fr 6px 0px`;
+}
+
+O que já fica conectado
+
+Convite → POST /api/consults/:id/invite
+
+Iniciar Consulta → POST /api/consults/:id/start + inicia cronômetro
+
+Banner puxa os dados “mock” (você pode preencher com o paciente real quando tiver o JSON)
