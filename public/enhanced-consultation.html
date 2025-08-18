@@ -437,5 +437,192 @@
             console.log('⏱️ Timer da consulta iniciado');
         });
     </script>
+
+    <!-- === Dr.AI: Painel lateral ================================================== -->
+<style>
+  :root{
+    --ai-bg:#fff; --ai-border:#e5e7eb; --ai-muted:#6b7280; --ai-primary:#2563eb;
+    --ai-shadow:0 10px 30px rgba(0,0,0,.12);
+  }
+  #drAiPanel{
+    position:fixed; inset:0 0 0 auto; width:420px; max-width:92vw; background:var(--ai-bg);
+    box-shadow:var(--ai-shadow); border-left:1px solid var(--ai-border);
+    transform:translateX(100%); transition:transform .25s ease; z-index:9999;
+    display:flex; flex-direction:column; font-family:Inter,system-ui,Arial,sans-serif;
+  }
+  #drAiPanel.open{ transform:translateX(0) }
+  #drAiHeader{ display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:12px 14px; border-bottom:1px solid var(--ai-border); background:#fafafa}
+  #drAiHeader h3{ margin:0; font-size:16px }
+  #drAiDisclaimer{ font-size:12px; color:var(--ai-muted); padding:8px 14px; border-bottom:1px solid var(--ai-border)}
+  #drAiMessages{ flex:1; overflow:auto; padding:14px; display:flex; flex-direction:column; gap:12px}
+  .ai-bubble{ padding:10px 12px; border:1px solid var(--ai-border); border-radius:12px; background:#fff }
+  .ai-bubble.you{ align-self:flex-end; background:#eef2ff; border-color:#c7d2fe }
+  .ai-bubble.assistant{ align-self:flex-start }
+  #drAiQuick{ display:flex; gap:8px; flex-wrap:wrap; padding:8px 14px }
+  .ai-chip{ font-size:12px; padding:6px 10px; border:1px solid #c7d2fe; border-radius:999px; background:#eef2ff; cursor:pointer }
+  #drAiComposer{ display:flex; gap:8px; padding:12px 14px; border-top:1px solid var(--ai-border); background:#fafafa}
+  #drAiInput{ flex:1; resize:none; padding:10px 12px; border-radius:10px; border:1px solid var(--ai-border); min-height:44px }
+  #drAiSend{ background:var(--ai-primary); border:none; color:#fff; border-radius:10px; padding:0 14px; font-weight:600; cursor:pointer }
+  #drAiClose{ background:transparent; border:1px solid var(--ai-border); padding:6px 10px; border-radius:8px; cursor:pointer }
+  /* Botão flutuante de fallback (se não encontrarmos o botão do cérebro) */
+  #drAiFab{ position:fixed; right:18px; bottom:18px; z-index:9998; display:none }
+  #drAiFab button{ width:52px; height:52px; border-radius:999px; border:none; background:#1f2937; color:#fff; box-shadow:var(--ai-shadow); cursor:pointer }
+</style>
+
+<div id="drAiPanel" aria-hidden="true">
+  <div id="drAiHeader">
+    <h3>🧠 Dr. AI • suporte clínico (beta)</h3>
+    <div style="display:flex; gap:8px;">
+      <button id="drAiClear" title="Limpar conversa">Limpar</button>
+      <button id="drAiClose" title="Fechar">Fechar</button>
+    </div>
+  </div>
+  <div id="drAiDisclaimer">
+    As respostas são sugestões educacionais; a decisão clínica é exclusiva do médico responsável.
+  </div>
+  <div id="drAiQuick">
+    <span class="ai-chip" data-q="Explique em linguagem simples o diagnóstico provável e sinais de alarme.">Explicar diagnóstico</span>
+    <span class="ai-chip" data-q="Sugira condutas baseadas em diretrizes para este caso (doses adultas e pediátricas quando aplicável).">Sugerir conduta</span>
+    <span class="ai-chip" data-q="Monte um resumo conciso para o prontuário com HDA, hipótese, CID10, conduta e orientações.">Resumo p/ prontuário</span>
+    <span class="ai-chip" data-q="Quais exames iniciais são mais úteis e quando evitá-los? Justifique.">Exames úteis</span>
+  </div>
+  <div id="drAiMessages" role="log" aria-live="polite"></div>
+  <div id="drAiComposer">
+    <textarea id="drAiInput" placeholder="Pergunte algo ao Dr. AI… (ex.: conduta para cefaleia crônica, quando solicitar imagem?)"></textarea>
+    <button id="drAiSend">Enviar</button>
+  </div>
+</div>
+
+<!-- Fallback: FAB se não houver botão do cérebro na barra -->
+<div id="drAiFab"><button title="Abrir Dr. AI">🧠</button></div>
+
+<script>
+(() => {
+  const panel   = document.getElementById('drAiPanel');
+  const messagesEl = document.getElementById('drAiMessages');
+  const input   = document.getElementById('drAiInput');
+  const sendBtn = document.getElementById('drAiSend');
+  const closeBtn= document.getElementById('drAiClose');
+  const clearBtn= document.getElementById('drAiClear');
+  const fabWrap = document.getElementById('drAiFab');
+
+  // Tenta ligar no botão do "cérebro" existente
+  const brainBtn =
+    document.querySelector('[data-action="ai"], [data-ai], .btn-ai, .icon-ai, button.ai, .toolbar .brain') || null;
+  if (brainBtn) {
+    brainBtn.addEventListener('click', togglePanel);
+  } else {
+    // Senão, mostra o FAB
+    fabWrap.style.display = 'block';
+    fabWrap.querySelector('button').addEventListener('click', togglePanel);
+  }
+
+  closeBtn.addEventListener('click', togglePanel);
+  clearBtn.addEventListener('click', () => {
+    messages.length = 0;
+    messagesEl.innerHTML = '';
+    localStorage.removeItem('drAiThread');
+    appendAssistant('Conversa limpa. Em que posso ajudar?');
+  });
+
+  // Chips de atalho
+  document.querySelectorAll('#drAiQuick .ai-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      input.value = chip.getAttribute('data-q');
+      input.focus();
+    });
+  });
+
+  // Estado da conversa
+  const messages = JSON.parse(localStorage.getItem('drAiThread') || '[]');
+  if (messages.length === 0) {
+    appendAssistant('Olá! Posso auxiliar com diagnóstico diferencial, conduta, exames úteis e resumo para prontuário. Lembre-se: isso é apoio à decisão — a decisão final é sua. ✅');
+  } else {
+    // Restaura o log visual
+    for (const m of messages) appendBubble(m.role, m.content);
+  }
+
+  sendBtn.addEventListener('click', onSend);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); }
+  });
+
+  function togglePanel(){
+    const open = panel.classList.toggle('open');
+    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (open) setTimeout(() => input.focus(), 50);
+  }
+
+  function onSend(){
+    const text = (input.value || '').trim();
+    if (!text) return;
+    appendUser(text);
+    input.value = '';
+    askAI(text);
+  }
+
+  function appendBubble(role, content){
+    const div = document.createElement('div');
+    div.className = 'ai-bubble ' + (role === 'user' ? 'you' : 'assistant');
+    div.textContent = content;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function appendUser(content){
+    messages.push({ role:'user', content });
+    persist();
+    appendBubble('user', content);
+  }
+  function appendAssistant(content){
+    messages.push({ role:'assistant', content });
+    persist();
+    appendBubble('assistant', content);
+  }
+  function persist(){
+    localStorage.setItem('drAiThread', JSON.stringify(messages).slice(0, 200000)); // proteção
+  }
+
+  async function askAI(newQuestion){
+    // Contexto opcional capturado da tela (se existir)
+    const patient = (document.querySelector('[name="patient"], #patientName')?.value || 
+                     document.querySelector('.patient-name')?.textContent || '').trim();
+    const hda     = document.querySelector('[name="hda"]')?.value || '';
+    const dx      = document.querySelector('[name="diagnosis"], #diagnosisInput')?.value || '';
+    const conduta = document.querySelector('[name="plan"]')?.value || '';
+
+    const payload = {
+      messages,
+      context: { patient, hda, diagnosis: dx, plan: conduta }
+    };
+
+    // Placeholder "digitando…"
+    const typing = document.createElement('div');
+    typing.className = 'ai-bubble assistant';
+    typing.textContent = 'Dr. AI está analisando…';
+    messagesEl.appendChild(typing);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    try{
+      const r = await fetch('/api/dr-ai', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await r.json();
+      typing.remove();
+
+      const text = (data && (data.text || data.answer || data.message)) ||
+        'Não consegui gerar uma resposta agora. Tente reformular a pergunta.';
+      appendAssistant(text);
+    }catch(err){
+      typing.remove();
+      appendAssistant('Falha ao contactar a IA. Verifique a rede/servidor e tente novamente.');
+      console.error(err);
+    }
+  }
+})();
+</script>
+
 </body>
 </html>

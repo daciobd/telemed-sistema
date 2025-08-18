@@ -366,6 +366,64 @@ P: Conduta terapêutica apropriada, orientações e reavaliação se necessário
   }
 });
 
+// Dr. AI endpoint for Enhanced Consultation sidebar panel
+app.post('/api/dr-ai', async (req, res) => {
+  try {
+    const { messages = [], context = {} } = req.body || {};
+    const lastUserMessage = messages.filter(m => m.role === 'user').slice(-1)[0]?.content || '';
+    
+    if (!lastUserMessage.trim()) {
+      return res.status(400).json({ ok: false, error: 'Mensagem vazia' });
+    }
+    
+    console.log('🧠 Dr. AI consulta Enhanced:', lastUserMessage.substring(0, 50) + '...');
+    
+    // Check OpenAI availability 
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(503).json({
+        ok: false,
+        error: 'openai_unavailable',
+        text: 'Serviço de IA temporariamente indisponível. Verifique a configuração da chave API.'
+      });
+    }
+    
+    // Build context for AI
+    let fullPrompt = `Você é Dr. AI, um assistente médico especializado em apoio à decisão clínica. Responda em português de forma clara, profissional e objetiva.
+    
+PERGUNTA DO MÉDICO: ${lastUserMessage}`;
+    
+    if (context.patient) fullPrompt += `\nPACIENTE: ${context.patient}`;
+    if (context.hda) fullPrompt += `\nHDA: ${context.hda}`;
+    if (context.diagnosis) fullPrompt += `\nHIPÓTESE DIAGNÓSTICA: ${context.diagnosis}`;
+    if (context.plan) fullPrompt += `\nCONDUTA ATUAL: ${context.plan}`;
+    
+    fullPrompt += `\n\nIMPORTANTE: Sempre inclua ao final um aviso de que esta é uma sugestão educacional e a decisão clínica final é do médico responsável.`;
+    
+    // Use existing SimpleOpenAI client
+    const { SimpleOpenAIClient } = require('./utils/openai-client');
+    const openaiClient = new SimpleOpenAIClient();
+    
+    const response = await openaiClient.generateResponse(fullPrompt, 'enhanced-dr-ai');
+    
+    console.log(`✅ Dr. AI Enhanced respondeu (${response.length} chars)`);
+    
+    res.json({ 
+      ok: true, 
+      text: response,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('❌ Erro Dr. AI Enhanced:', error);
+    res.status(500).json({ 
+      ok: false, 
+      error: 'ai_processing_error',
+      text: 'Falha ao processar solicitação da IA médica. Tente novamente.',
+      details: error.message 
+    });
+  }
+});
+
 console.log('🩺 Enhanced Consultation API ativado');
 
 // Health check endpoint for Render
