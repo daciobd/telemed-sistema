@@ -263,6 +263,54 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
 })(); // End IIFE
 
+// Gruda a largura persistida também na variável CSS (usada no CSS acima)
+(function syncCssVarWithSavedWidth(){
+  const w = Number(localStorage.getItem('telemed_notes_width')) || 480;
+  document.documentElement.style.setProperty('--notes-w', w + 'px');
+})();
+
+// Força um layout seguro (vídeo à esquerda, notas à direita) sem mexer no HTML
+(function enforceTwoColumns(){
+  const layout = document.querySelector('#tmLayout,.tm-layout,.enhanced-grid,.enhanced-split,.split-container')
+              || document.querySelector('#root') || document.querySelector('main') || document.body;
+
+  const side  = document.querySelector('[data-panel="side"],.side-panel,.consult-panel,.right-panel,.left-panel,#rightPane');
+  const stage = document.querySelector('[data-panel="stage"],.video-area,.stage,.main-stage,#leftPane');
+
+  if (!layout || !side || !stage) return;
+
+  layout.style.display = 'flex';
+  layout.style.gap = '16px';
+  layout.style.alignItems = 'stretch';
+
+  // garante ordem: vídeo (esquerda) primeiro, painel (direita) depois
+  if (stage.compareDocumentPosition(side) & Node.DOCUMENT_POSITION_FOLLOWING) {
+    layout.insertBefore(stage, side);
+  }
+
+  stage.style.flex = '1 1 auto';
+  stage.style.minWidth = '0';
+  stage.style.position = 'relative';
+
+  const w = Number(localStorage.getItem('telemed_notes_width')) || 480;
+  side.style.flex = `0 0 ${w}px`;
+  side.style.width = `${w}px`;
+  side.style.minWidth = '320px';
+  side.style.maxWidth = '720px';
+
+  // sobe a barra de controles do vídeo
+  const ctrls = document.querySelector('.video-controls,[data-controls="video"],.controls,.controls-bar,.toolbar,.video-toolbar');
+  if (ctrls) {
+    ctrls.style.position = 'absolute';
+    ctrls.style.left = '50%';
+    ctrls.style.bottom = '16px';
+    ctrls.style.transform = 'translateX(-50%)';
+    ctrls.style.zIndex = '60';
+    ctrls.style.pointerEvents = 'auto';
+    ctrls.style.opacity = '1';
+  }
+})();
+
 // ---------- Resizer do painel lateral (flex/width) com persistência ----------
 (function initSideResizer(){
   const side =
@@ -296,6 +344,8 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
     side.style.flex = '0 0 ' + w + 'px';   // funciona em flex layouts
     side.style.maxWidth = w + 'px';
     localStorage.setItem(KEY, String(w));
+    // Sincroniza variável CSS
+    document.documentElement.style.setProperty('--notes-w', w + 'px');
     return w;
   };
 

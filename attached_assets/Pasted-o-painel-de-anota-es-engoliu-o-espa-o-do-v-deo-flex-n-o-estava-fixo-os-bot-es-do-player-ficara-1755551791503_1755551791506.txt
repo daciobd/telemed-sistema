@@ -1,0 +1,152 @@
+o painel de anotações “engoliu” o espaço do vídeo (flex não estava fixo)
+
+os botões do player ficaram por baixo (z-index/posição)
+
+o handle ficou ok, mas precisamos amarrar a largura via variável CSS para todos os layouts
+
+Abaixo vai um patch direto (CSS + JS). Ele:
+
+trava o layout em duas colunas (vídeo à esquerda, notas à direita);
+
+aplica a largura do painel por width + flex-basis (qualquer layout flex funciona);
+
+garante min-width/overflow corretos;
+
+recoloca a barra de controles do vídeo por cima (z-index);
+
+mantém o resizer funcionando e persistente.
+
+1) CSS — coloque no seu enhanced-ux.css (ou dentro de <style> do HTML)
+/* ======= LAYOUT 2 COLUNAS (vídeo | notas) ======= */
+#tmLayout, .tm-layout, .enhanced-grid, .enhanced-split {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+/* Área de vídeo (esquerda, expansível) */
+.tm-video, .video-area, .stage, [data-panel="stage"] {
+  flex: 1 1 auto;
+  min-width: 0;             /* IMPORTANTÍSSIMO pra flex encolher sem quebrar */
+  position: relative;       /* para ancorar controles */
+}
+
+/* Painel lateral (direita, largura fixa/persistente) */
+[data-panel="side"], .side-panel, .consult-panel, .right-panel, .left-panel {
+  position: relative;
+  overflow: visible;        /* o handle precisa sair da borda */
+  flex: 0 0 var(--notes-w, 480px);
+  width: var(--notes-w, 480px);
+  min-width: 320px;
+  max-width: 720px;
+}
+
+/* ======= HANDLE DO RESIZER ======= */
+#tmResizer{
+  position:absolute;
+  top:0; height:100%;
+  width:8px; z-index:40;
+  cursor: col-resize;
+  background: linear-gradient(to right,
+    rgba(255,255,255,0) 0,
+    rgba(255,255,255,.10) 50%,
+    rgba(255,255,255,0) 100%);
+  opacity:.6;
+}
+#tmResizer:hover{ opacity:1; }
+
+/* ======= CONTROLES DO VÍDEO (por cima) ======= */
+.video-controls, [data-controls="video"], .controls, .controls-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  z-index: 60;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* Evita o painel atravessar a área do vídeo */
+.tm-video * { max-width: 100%; }
+
+
+Se a sua div raiz do conteúdo tiver outro seletor, pode adicionar esse seletor junto de #tmLayout, .tm-layout….
+
+2) JS — substitua o bloco do resizer (ou adicione depois dele) no enhanced-ux.js
+// Gruda a largura persistida também na variável CSS (usada no CSS acima)
+(function syncCssVarWithSavedWidth(){
+  const w = Number(localStorage.getItem('telemed_notes_width')) || 480;
+  document.documentElement.style.setProperty('--notes-w', w + 'px');
+})();
+
+// Força um layout seguro (vídeo à esquerda, notas à direita) sem mexer no HTML
+(function enforceTwoColumns(){
+  const layout = document.querySelector('#tmLayout,.tm-layout,.enhanced-grid,.enhanced-split')
+              || document.querySelector('#root') || document.body;
+
+  const side  = document.querySelector('[data-panel="side"],.side-panel,.consult-panel,.right-panel,.left-panel');
+  const stage = document.querySelector('[data-panel="stage"],.video-area,.stage,.main-stage');
+
+  if (!layout || !side || !stage) return;
+
+  layout.style.display = 'flex';
+  layout.style.gap = '16px';
+
+  // garante ordem: vídeo (esquerda) primeiro, painel (direita) depois
+  if (stage.compareDocumentPosition(side) & Node.DOCUMENT_POSITION_FOLLOWING) {
+    layout.insertBefore(stage, side);
+  }
+
+  stage.style.flex = '1 1 auto';
+  stage.style.minWidth = '0';
+
+  const w = Number(localStorage.getItem('telemed_notes_width')) || 480;
+  side.style.flex = `0 0 ${w}px`;
+  side.style.width = `${w}px`;
+  side.style.minWidth = '320px';
+  side.style.maxWidth = '720px';
+
+  // sobe a barra de controles do vídeo
+  const ctrls = document.querySelector('.video-controls,[data-controls="video"],.controls,.controls-bar');
+  if (ctrls) {
+    ctrls.style.position = 'absolute';
+    ctrls.style.left = '50%';
+    ctrls.style.bottom = '16px';
+    ctrls.style.transform = 'translateX(-50%)';
+    ctrls.style.zIndex = '60';
+    ctrls.style.pointerEvents = 'auto';
+    ctrls.style.opacity = '1';
+  }
+})();
+
+
+O seu resizer que já está no arquivo continua valendo. Só acrescente o document.documentElement.style.setProperty('--notes-w', …) dentro da função do resizer sempre que aplicar a largura, para manter CSS/JS sincronizados:
+
+// dentro do applyWidth(wPx) do resizer
+document.documentElement.style.setProperty('--notes-w', w + 'px');
+
+3) “Plano de saída rápida” (sem editar arquivos)
+
+Se quiser validar agora, cole este snippet no Console do navegador:
+
+(() => {
+  const setW = (w) => {
+    localStorage.setItem('telemed_notes_width', w);
+    document.documentElement.style.setProperty('--notes-w', w+'px');
+  };
+  setW(localStorage.getItem('telemed_notes_width') || 480);
+
+  const layout = document.querySelector('#tmLayout,.tm-layout,.enhanced-grid,.enhanced-split') || document.body;
+  const side  = document.querySelector('[data-panel="side"],.side-panel,.consult-panel,.right-panel,.left-panel');
+  const stage = document.querySelector('[data-panel="stage"],.video-area,.stage,.main-stage');
+
+  if (layout && side && stage) {
+    layout.style.display='flex'; layout.style.gap='16px';
+    if (stage.compareDocumentPosition(side) & Node.DOCUMENT_POSITION_FOLLOWING) layout.insertBefore(stage, side);
+    stage.style.flex='1 1 auto'; stage.style.minWidth='0';
+    const w = Number(localStorage.getItem('telemed_notes_width')) || 480;
+    side.style.flex=`0 0 ${w}px`; side.style.width=w+'px'; side.style.minWidth='320px'; side.style.maxWidth='720px';
+  }
+  const ctrls = document.querySelector('.video-controls,[data-controls="video"],.controls,.controls-bar');
+  if (ctrls){ ctrls.style.position='absolute'; ctrls.style.left='50%'; ctrls.style.bottom='16px'; ctrls.style.transform='translateX(-50%)'; ctrls.style.zIndex='60';}
+})();
