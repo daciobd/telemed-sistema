@@ -1,0 +1,117 @@
+Correção definitiva (evita colapsar de novo)
+
+Aplique estas 3 mudanças rápidas no seu enhanced-consultation.html (ou no JS do enhanced):
+
+1) CSS – limite mínimo e visual do divisor
+:root{
+  --notes-min: 360px;
+  --notes-max: 760px;
+  --notes-default: 420px;
+}
+.notes-panel{ min-width: var(--notes-min); }
+.resizer{
+  width: 8px; cursor: col-resize; background: rgba(255,255,255,.06);
+  border-left: 1px solid rgba(255,255,255,.12);
+}
+.resizer:hover{ background: rgba(255,255,255,.12); }
+
+2) JS – “clamp”, persistência segura e reset por duplo clique
+<script>
+(function(){
+  const NOTES_KEY = 'telemed_notes_width';
+  const MIN = 360, MAX = 760, DEF = 420;
+
+  const notes = document.querySelector('.notes-panel');
+  const resizer = document.querySelector('.resizer');
+
+  const clamp = (v,min,max) => Math.max(min, Math.min(max, v));
+  const px = n => `${n}px`;
+
+  // largura inicial segura
+  let w = parseInt(localStorage.getItem(NOTES_KEY) || DEF, 10);
+  w = isNaN(w) ? DEF : clamp(w, MIN, MAX);
+  if (notes) notes.style.width = px(w);
+
+  // drag
+  let startX = 0, startW = 0, dragging = false;
+  function onMove(e){
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    const nw = clamp(startW + dx, MIN, MAX);
+    notes.style.width = px(nw);
+  }
+  function onUp(){
+    if(!dragging) return;
+    dragging = false;
+    const final = parseInt(getComputedStyle(notes).width,10);
+    localStorage.setItem(NOTES_KEY, clamp(final, MIN, MAX));
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+  }
+  resizer?.addEventListener('mousedown', (e)=>{
+    dragging = true;
+    startX = e.clientX;
+    startW = parseInt(getComputedStyle(notes).width,10);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  });
+
+  // duplo clique no divisor = reset de layout
+  resizer?.addEventListener('dblclick', ()=>{
+    notes.style.width = px(DEF);
+    localStorage.setItem(NOTES_KEY, DEF);
+  });
+
+  // util de depuração
+  window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug||{}, {
+    resetLayout(){ localStorage.removeItem(NOTES_KEY); location.reload(); }
+  });
+})();
+</script>
+
+3) (Opcional) Botão de reset visível
+
+Coloque perto do divisor ou no topo das anotações:
+
+<button onclick="telemedEnhancedDebug.resetLayout()" title="Redefinir layout">
+  Reset UI
+</button>
+
+Extra: info do paciente sobre o vídeo
+
+Para manter a identidade sempre visível, adicione um “badge” fixo no topo da área de vídeo:
+
+<div class="video-header">
+  <div class="patient-badge">
+    <span class="avatar">CF</span>
+    <div>
+      <div class="name">Ana Costa Silva</div>
+      <div class="meta">Particular • (11) 98765-4321 • 0 anos</div>
+    </div>
+    <button class="btn small">Convite</button>
+    <span class="dot green">Aguardando</span>
+    <span class="timer">03:12</span>
+    <button class="btn success">▶ Iniciar Consulta</button>
+  </div>
+</div>
+
+<style>
+.video-header{position:absolute;top:12px;left:16px;right:16px;z-index:10;pointer-events:none}
+.patient-badge{
+  pointer-events:auto;display:flex;align-items:center;gap:10px;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.14);color:#fff;padding:8px 12px;border-radius:10px;
+}
+.patient-badge .avatar{width:28px;height:28px;display:grid;place-items:center;background:#1f2937;border-radius:999px}
+.patient-badge .name{font-weight:600}
+.patient-badge .meta{font-size:12px;opacity:.85}
+.patient-badge .btn.small{padding:6px 10px;font-size:12px;border-radius:8px}
+.patient-badge .btn.success{background:#16a34a;border:none;color:#fff;padding:6px 10px;border-radius:8px}
+.patient-badge .dot.green{width:8px;height:8px;border-radius:999px;background:#22c55e;display:inline-block;margin-left:6px}
+.patient-badge .timer{margin-left:auto;opacity:.9}
+</style>
+
+
+Isso mantém tudo “em cima” do vídeo sem roubar espaço do painel de anotações.
+
+Se fizer esses ajustes, você resolve a tela colapsada agora e fica protegido contra repetição do problema. Se preferir, eu também te mando um patch completo só com os blocos que faltarem (me diga o nome exato do arquivo HTML/JS onde quer que eu injete).

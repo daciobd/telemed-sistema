@@ -171,17 +171,26 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
 }
 
 /* --- Split redimensionável --- */
+:root{
+  --notes-min: 360px;
+  --notes-max: 760px;
+  --notes-default: 420px;
+}
 .enh-split{
   display:grid;
-  grid-template-columns: 1fr 6px minmax(380px, 36%);
+  grid-template-columns: 1fr 8px minmax(var(--notes-min), 36%);
   gap:0; height: calc(100vh - 80px); /* ajuste se seu topo for maior/menor */
 }
 .split-left, .split-right{min-width:0; min-height:0; overflow:auto}
-.split-right{background:rgba(255,255,255,.02)}
+.split-right{background:rgba(255,255,255,.02); min-width:var(--notes-min);}
+.notes-panel{min-width: var(--notes-min);}
 .split-divider{
-  cursor:col-resize; position:relative; background:linear-gradient(180deg,#152133,#0f172a);
-  border-left:1px solid rgba(162,210,255,.08); border-right:1px solid rgba(162,210,255,.08);
+  cursor:col-resize; position:relative; 
+  background:rgba(255,255,255,.06); 
+  border-left:1px solid rgba(255,255,255,.12);
+  width: 8px;
 }
+.split-divider:hover{background:rgba(255,255,255,.12);}
 .split-divider .grip{
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   width:3px; height:36px; border-radius:2px; background:rgba(162,210,255,.35)
@@ -269,6 +278,11 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
         <div class="tab active" data-tab="care">🩺 Atendimento</div>
         <div class="tab" data-tab="exams">🧪 Exames</div>
         <div class="tab" data-tab="rx">💊 Receitas</div>
+        <button onclick="window.telemedEnhancedDebug?.resetLayout()" 
+                title="Redefinir layout dos painéis" 
+                style="margin-left:auto;padding:4px 8px;font-size:11px;border-radius:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;cursor:pointer;">
+          Reset UI
+        </button>
       </div>
 
       <!-- panes -->
@@ -709,48 +723,82 @@ if(btnEnd) btnEnd.onclick = ()=>{ if(confirm('Encerrar a chamada?')) toast('Cham
 })();
 
 (() => {
-  // Sistema de redimensionamento
-  const root   = document.getElementById('splitRoot');
-  const right  = document.getElementById('rightPane');
-  const divider= document.getElementById('divider');
-  if(!root || !right || !divider) return;
+  // Sistema de redimensionamento com CLAMP seguro - CORREÇÃO DEFINITIVA
+  const NOTES_KEY = 'telemed_notes_width';
+  const MIN = 360, MAX = 760, DEF = 420;
 
-  const KEY = 'enhanced.rightWidth';
-  const MIN = 320, MAX = 760;   // limites da coluna direita
-  const BAR = 6;                // largura do divisor
+  const notes = document.querySelector('.split-right');
+  const resizer = document.querySelector('.split-divider');
+  const root = document.getElementById('splitRoot');
+  
+  if (!notes || !resizer || !root) return;
 
-  // aplica largura persistida
-  const saved = parseInt(localStorage.getItem(KEY)||'0',10);
-  if(saved) root.style.gridTemplateColumns = `1fr ${BAR}px ${saved}px`;
+  const clamp = (v,min,max) => Math.max(min, Math.min(max, v));
+  const px = n => `${n}px`;
 
+  // largura inicial segura
+  let w = parseInt(localStorage.getItem(NOTES_KEY) || DEF, 10);
+  w = isNaN(w) ? DEF : clamp(w, MIN, MAX);
+  root.style.gridTemplateColumns = `1fr 8px ${px(w)}`;
+
+  // drag
   let startX = 0, startW = 0, dragging = false;
-  function setRight(px){
-    const total = root.clientWidth;
-    const clamped = Math.max(MIN, Math.min(MAX, px, total - 320)); // garante mínimo da esquerda
-    root.style.gridTemplateColumns = `1fr ${BAR}px ${clamped}px`;
-    localStorage.setItem(KEY, String(clamped));
-  }
-
-  divider.addEventListener('pointerdown', (e) => {
-    dragging = true; divider.classList.add('drag');
-    startX = e.clientX; startW = right.getBoundingClientRect().width;
-    divider.setPointerCapture(e.pointerId);
-  });
-  divider.addEventListener('pointermove', (e) => {
+  function onMove(e){
     if(!dragging) return;
-    const delta = e.clientX - startX;
-    setRight(startW - delta); // mover à direita diminui; à esquerda aumenta
+    const dx = e.clientX - startX;
+    const nw = clamp(startW - dx, MIN, MAX); // invertido para natural feel
+    root.style.gridTemplateColumns = `1fr 8px ${px(nw)}`;
+  }
+  function onUp(){
+    if(!dragging) return;
+    dragging = false;
+    const currentWidth = parseInt(root.style.gridTemplateColumns.split(' ')[2]) || DEF;
+    const final = clamp(currentWidth, MIN, MAX);
+    localStorage.setItem(NOTES_KEY, final);
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    resizer.classList.remove('drag');
+  }
+  
+  resizer.addEventListener('mousedown', (e)=>{
+    dragging = true;
+    startX = e.clientX;
+    startW = parseInt(root.style.gridTemplateColumns.split(' ')[2]) || DEF;
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    resizer.classList.add('drag');
   });
-  function endDrag(){ dragging=false; divider.classList.remove('drag'); }
-  divider.addEventListener('pointerup', endDrag);
-  divider.addEventListener('pointercancel', endDrag);
-  divider.addEventListener('dblclick', () => setRight(460));
 
-  // acessibilidade pelo teclado
-  divider.addEventListener('keydown', (e) => {
-    if(e.key === 'ArrowLeft'){ setRight((right.getBoundingClientRect().width||460)+24); }
-    if(e.key === 'ArrowRight'){ setRight((right.getBoundingClientRect().width||460)-24); }
-    if(e.key === 'Enter'){ setRight(460); }
+  // duplo clique no divisor = reset de layout
+  resizer.addEventListener('dblclick', ()=>{
+    root.style.gridTemplateColumns = `1fr 8px ${px(DEF)}`;
+    localStorage.setItem(NOTES_KEY, DEF);
+  });
+
+  // teclado
+  resizer.tabIndex = 0;
+  resizer.setAttribute('aria-label', 'Redimensionar painel de anotações');
+  resizer.addEventListener('keydown', (e) => {
+    const current = parseInt(root.style.gridTemplateColumns.split(' ')[2]) || DEF;
+    if(e.key === 'ArrowLeft'){ 
+      const newW = clamp(current + 24, MIN, MAX);
+      root.style.gridTemplateColumns = `1fr 8px ${px(newW)}`;
+      localStorage.setItem(NOTES_KEY, newW);
+    }
+    if(e.key === 'ArrowRight'){ 
+      const newW = clamp(current - 24, MIN, MAX);
+      root.style.gridTemplateColumns = `1fr 8px ${px(newW)}`;
+      localStorage.setItem(NOTES_KEY, newW);
+    }
+    if(e.key === 'Enter'){ 
+      root.style.gridTemplateColumns = `1fr 8px ${px(DEF)}`;
+      localStorage.setItem(NOTES_KEY, DEF);
+    }
+  });
+
+  // util de depuração
+  window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug||{}, {
+    resetLayout(){ localStorage.removeItem(NOTES_KEY); location.reload(); }
   });
 })();
 </script>
