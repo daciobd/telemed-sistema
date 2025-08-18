@@ -1698,8 +1698,8 @@
                 });
             }
             
-            // URL do novo dashboard
-            const newDashboardUrl = 'http://localhost:5000/dashboard-teste';
+            // URL do novo dashboard - usando URL relativa para funcionar em qualquer ambiente
+            const newDashboardUrl = '/dashboard-teste';
             window.open(newDashboardUrl, '_blank');
             
             // Marcar como testado
