@@ -1,0 +1,65 @@
+ Passo a Passo da IntegraçãoGuia de Integração - Passo a PassoCódigo <!-- PASSO 1: ADICIONAR NO <HEAD> do seu dashboard atual -->
+<!-- Procure a tag <head> e adicione isto ANTES do </head> -->
+
+<script>
+// Analytics para o novo dashboard - ADICIONAR NO HEAD
+window.telemeDashboardAnalytics = {
+    trackEvent: function(HTML do Banner - Para Colar no BodyCódigo <!-- PASSO 3: ADICIONAR NO BODY -->
+<!-- Procure onde termina seu menu lateral e cole ESTE código logo após -->
+
+<!-- BANNER DO NOVO DASHBOARD -->
+<div id="newDashboardBanner" class="new-dashboard-banner">
+    <div class="banner-content">
+        <diJavaScript - Para Colar Antes do </body>Código // PASSO 4: JAVASCRIPT - Adicionar antes do </body>
+// Pode ser dentro de <script> tags ou num arquivo separado
+
+<script>
+// ========== VARIÁVEIS GLOBAIS ==========
+let currentRating = 0;
+let selectedQuickOptions = [];
+
+// ========== INICIALIZAÇÃO ==📋 Instruções de Implementação
+Passo 1: Backup (IMPORTANTE!)
+Antes de qualquer coisa, faça backup do seu arquivo atual do dashboard!
+Passo 2: Localizar os Arquivos
+Você precisa editar provavelmente um arquivo como:
+
+dashboard.html
+index.php
+main.html
+Ou similar
+
+Passo 3: Implementação
+No <head> do seu arquivo:
+html<head>
+    <!-- Seus scripts existentes... -->
+    
+    <!-- COLAR AQUI todo o conteúdo do primeiro artefato (analytics + CSS) -->
+    
+</head>
+No <body>, após o menu lateral:
+html<body>
+    <!-- Seu menu lateral existente -->
+    </div> <!-- fim do menu -->
+    
+    <!-- COLAR AQUI o HTML do banner (segundo artefato) -->
+    
+    <!-- Resto do seu conteúdo -->
+    
+    <!-- ANTES DO </body>, colar o JavaScript (terceiro artefato) -->
+</body>
+Passo 4: Ajustar a URL
+No JavaScript, procure esta linha e altere para sua URL:
+javascriptconst newDashboardUrl = 'SUA_URL_DO_NOVO_DASHBOARD_AQUI';
+Passo 5: Testar
+Teste básico:
+
+Recarregue a página
+Veja se aparece o banner azul
+Clique em "Testar Agora"
+Veja se abre o novo dashboard
+
+Teste avançado (no console do navegador):
+javascript// Digite isso no console para testar
+telemedDebug.testBanner()
+telemedDebug.testModal()

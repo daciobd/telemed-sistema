@@ -1,0 +1,69 @@
+<!-- PASSO 3: ADICIONAR NO BODY -->
+<!-- Procure onde termina seu menu lateral e cole ESTE código logo após -->
+
+<!-- BANNER DO NOVO DASHBOARD -->
+<div id="newDashboardBanner" class="new-dashboard-banner">
+    <div class="banner-content">
+        <div class="banner-icon">🚀</div>
+        <div class="banner-text">
+            <h4>Novo Dashboard Disponível!</h4>
+            <p>Interface moderna com melhor performance e novos recursos</p>
+        </div>
+        <div class="banner-actions">
+            <button id="testNewDashboard" class="btn-test">
+                Testar Agora
+            </button>
+            <button id="dismissBanner" class="btn-dismiss">
+                ×
+            </button>
+        </div>
+    </div>
+    <div class="banner-progress">
+        <div class="progress-bar"></div>
+    </div>
+</div>
+
+<!-- MODAL DE FEEDBACK (adicionar antes do </body>) -->
+<div id="feedbackModal" class="feedback-modal">
+    <div class="feedback-overlay"></div>
+    <div class="feedback-content">
+        <div class="feedback-header">
+            <h3>💬 Como foi sua experiência?</h3>
+            <button id="closeFeedback" class="close-btn">×</button>
+        </div>
+        
+        <form id="feedbackForm">
+            <div class="rating-section">
+                <label>Avalie o novo dashboard:</label>
+                <div class="star-rating" id="starRating">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                </div>
+                <input type="hidden" id="userRating" value="0">
+            </div>
+            
+            <div class="feedback-quick">
+                <label>O que mais gostou?</label>
+                <div class="quick-options">
+                    <button type="button" class="quick-btn" data-value="design">🎨 Design</button>
+                    <button type="button" class="quick-btn" data-value="speed">⚡ Velocidade</button>
+                    <button type="button" class="quick-btn" data-value="navigation">🧭 Navegação</button>
+                    <button type="button" class="quick-btn" data-value="mobile">📱 Mobile</button>
+                </div>
+            </div>
+            
+            <div class="feedback-text">
+                <label>Comentários (opcional):</label>
+                <textarea id="userComments" placeholder="Conte o que achou e sugestões de melhoria..."></textarea>
+            </div>
+            
+            <div class="feedback-actions">
+                <button type="button" id="skipFeedback" class="btn-skip">Pular</button>
+                <button type="submit" class="btn-submit">Enviar</button>
+            </div>
+        </form>
+    </div>
+</div>

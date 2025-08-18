@@ -1,0 +1,285 @@
+// PASSO 4: JAVASCRIPT - Adicionar antes do </body>
+// Pode ser dentro de <script> tags ou num arquivo separado
+
+<script>
+// ========== VARIÁVEIS GLOBAIS ==========
+let currentRating = 0;
+let selectedQuickOptions = [];
+
+// ========== INICIALIZAÇÃO ==========
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Iniciando sistema de novo dashboard...');
+    initializeDashboard();
+});
+
+function initializeDashboard() {
+    // Verificar se deve mostrar o banner
+    const bannerDismissed = localStorage.getItem('telemed_banner_dismissed');
+    const dismissedDate = localStorage.getItem('telemed_banner_dismissed_date');
+    
+    if (bannerDismissed && dismissedDate) {
+        const daysSince = (new Date() - new Date(dismissedDate)) / (1000 * 60 * 60 * 24);
+        if (daysSince < 7) {
+            console.log('📌 Banner foi dispensado há menos de 7 dias');
+            hideBanner();
+            return;
+        }
+    }
+
+    console.log('✅ Configurando eventos do banner...');
+    setupBannerEvents();
+    
+    console.log('✅ Configurando modal de feedback...');
+    setupFeedbackModal();
+    
+    console.log('✅ Iniciando animação...');
+    animateProgressBar();
+}
+
+// ========== EVENTOS DO BANNER ==========
+function setupBannerEvents() {
+    const testButton = document.getElementById('testNewDashboard');
+    const dismissButton = document.getElementById('dismissBanner');
+    
+    if (!testButton || !dismissButton) {
+        console.error('❌ Botões do banner não encontrados!');
+        return;
+    }
+    
+    testButton.addEventListener('click', function() {
+        console.log('🚀 Botão "Testar Agora" clicado!');
+        
+        // Analytics
+        window.telemeDashboardAnalytics.trackEvent('new_dashboard_clicked', {
+            source: 'banner',
+            timestamp: new Date().toISOString()
+        });
+
+        // Abrir novo dashboard - ALTERE A URL AQUI SE NECESSÁRIO
+        const newDashboardUrl = 'https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dashboard-teste';
+        window.open(newDashboardUrl, '_blank');
+        
+        // Marcar como testado
+        localStorage.setItem('telemed_dashboard_tested', 'true');
+        localStorage.setItem('telemed_dashboard_test_date', new Date().toISOString());
+        
+        // Mostrar modal de feedback após 30 segundos
+        setTimeout(function() {
+            console.log('⏰ Mostrando modal de feedback automático...');
+            showFeedbackModal();
+        }, 30000);
+    });
+
+    dismissButton.addEventListener('click', function() {
+        console.log('❌ Banner dispensado pelo usuário');
+        dismissBanner();
+    });
+}
+
+// ========== MODAL DE FEEDBACK ==========
+function setupFeedbackModal() {
+    // Eventos das estrelas
+    const stars = document.querySelectorAll('.star');
+    if (stars.length === 0) {
+        console.error('❌ Estrelas de rating não encontradas!');
+        return;
+    }
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            currentRating = parseInt(this.dataset.rating);
+            document.getElementById('userRating').value = currentRating;
+            updateStars();
+            console.log('⭐ Rating selecionado:', currentRating);
+        });
+    });
+
+    // Eventos dos botões rápidos
+    document.querySelectorAll('.quick-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const value = this.dataset.value;
+            if (selectedQuickOptions.includes(value)) {
+                selectedQuickOptions = selectedQuickOptions.filter(opt => opt !== value);
+                this.classList.remove('selected');
+            } else {
+                selectedQuickOptions.push(value);
+                this.classList.add('selected');
+            }
+            console.log('🎯 Opções selecionadas:', selectedQuickOptions);
+        });
+    });
+
+    // Fechar modal
+    const closeBtn = document.getElementById('closeFeedback');
+    const skipBtn = document.getElementById('skipFeedback');
+    const overlay = document.querySelector('.feedback-overlay');
+    
+    if (closeBtn) closeBtn.addEventListener('click', closeFeedbackModal);
+    if (skipBtn) skipBtn.addEventListener('click', closeFeedbackModal);
+    if (overlay) overlay.addEventListener('click', closeFeedbackModal);
+
+    // Enviar feedback
+    const form = document.getElementById('feedbackForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitFeedback();
+        });
+    }
+}
+
+// ========== FUNÇÕES DE ANIMAÇÃO ==========
+function animateProgressBar() {
+    const progressBar = document.querySelector('.progress-bar');
+    if (!progressBar) return;
+    
+    let width = 0;
+    const interval = setInterval(() => {
+        width += 2;
+        progressBar.style.width = width + '%';
+        if (width >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+                progressBar.style.width = '0%';
+                animateProgressBar();
+            }, 1000);
+        }
+    }, 100);
+}
+
+function updateStars() {
+    document.querySelectorAll('.star').forEach((star, index) => {
+        star.classList.toggle('active', index < currentRating);
+    });
+}
+
+// ========== FUNÇÕES DO MODAL ==========
+function showFeedbackModal() {
+    const modal = document.getElementById('feedbackModal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        window.telemeDashboardAnalytics.trackEvent('feedback_modal_shown', {
+            trigger: 'auto_after_test'
+        });
+        
+        console.log('💬 Modal de feedback aberto');
+    }
+}
+
+function closeFeedbackModal() {
+    const modal = document.getElementById('feedbackModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        console.log('💬 Modal de feedback fechado');
+    }
+}
+
+// ========== FUNÇÕES DO BANNER ==========
+function dismissBanner() {
+    const banner = document.getElementById('newDashboardBanner');
+    if (banner) {
+        banner.style.animation = 'slideOut 0.3s ease-in forwards';
+        
+        setTimeout(() => {
+            banner.style.display = 'none';
+        }, 300);
+        
+        localStorage.setItem('telemed_banner_dismissed', 'true');
+        localStorage.setItem('telemed_banner_dismissed_date', new Date().toISOString());
+        
+        window.telemeDashboardAnalytics.trackEvent('banner_dismissed', {
+            method: 'manual'
+        });
+    }
+}
+
+function hideBanner() {
+    const banner = document.getElementById('newDashboardBanner');
+    if (banner) {
+        banner.style.display = 'none';
+    }
+}
+
+// ========== FEEDBACK ==========
+function submitFeedback() {
+    const feedback = {
+        rating: currentRating,
+        quickOptions: selectedQuickOptions,
+        comments: document.getElementById('userComments').value,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        url: window.location.href
+    };
+
+    console.log('📝 Feedback enviado:', feedback);
+
+    // Salvar feedback localmente
+    const feedbacks = JSON.parse(localStorage.getItem('telemed_feedbacks') || '[]');
+    feedbacks.push(feedback);
+    localStorage.setItem('telemed_feedbacks', JSON.stringify(feedbacks));
+
+    // Analytics
+    window.telemeDashboardAnalytics.trackEvent('feedback_submitted', {
+        rating: currentRating,
+        hasComments: !!feedback.comments,
+        optionsCount: selectedQuickOptions.length
+    });
+
+    // Mostrar confirmação
+    showFeedbackThanks();
+    
+    // Marcar como feedback dado
+    localStorage.setItem('telemed_feedback_given', 'true');
+}
+
+function showFeedbackThanks() {
+    const form = document.getElementById('feedbackForm');
+    if (form) {
+        form.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 48px; margin-bottom: 20px;">🙏</div>
+                <h3 style="color: #667eea; margin: 0 0 10px 0;">Obrigado!</h3>
+                <p style="color: #666; margin: 0;">Seu feedback é muito valioso para nós.</p>
+            </div>
+        `;
+        
+        setTimeout(closeFeedbackModal, 2000);
+    }
+}
+
+// ========== FUNÇÕES DE DEBUG ==========
+// Para testar se está funcionando
+function testBanner() {
+    console.log('🧪 Testando banner...');
+    const banner = document.getElementById('newDashboardBanner');
+    if (banner) {
+        banner.style.display = 'block';
+        banner.style.background = 'red'; // Vermelho para teste
+        setTimeout(() => {
+            banner.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }, 2000);
+        console.log('✅ Banner encontrado e testado!');
+    } else {
+        console.error('❌ Banner não encontrado!');
+    }
+}
+
+function testModal() {
+    console.log('🧪 Testando modal...');
+    showFeedbackModal();
+}
+
+// Disponibilizar funções para debug no console
+window.telemедDebug = {
+    testBanner: testBanner,
+    testModal: testModal,
+    showModal: showFeedbackModal,
+    hideModal: closeFeedbackModal
+};
+
+console.log('🎉 Sistema de novo dashboard carregado!');
+console.log('🔧 Para testar, digite no console: telemed Debug.testBanner() ou telemedDebug.testModal()');
+</script>
