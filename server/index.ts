@@ -124,6 +124,17 @@ app.get('/enhanced', (req, res) => {
   res.status(404).send('Enhanced Consultation page not found');
 });
 
+// Agenda Médica - advanced calendar system
+app.get('/agenda', (req, res) => {
+  console.log('📅 Rota /agenda acessada - Agenda Médica Avançada');
+  const agendaMedicaHtml = path.join(__dirname, '../public/agenda-medica.html');
+  if (fs.existsSync(agendaMedicaHtml)) {
+    console.log('✅ Servindo agenda-medica.html dedicado');
+    return res.sendFile(agendaMedicaHtml);
+  }
+  res.status(404).send('Agenda Médica page not found');
+});
+
 // Dashboard Teste - Chart.js dashboard
 app.get('/dashboard-teste', (req, res) => {
   console.log('📊 Rota /dashboard-teste acessada - Dashboard com Chart.js');
