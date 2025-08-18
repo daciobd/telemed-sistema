@@ -269,37 +269,70 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   document.documentElement.style.setProperty('--notes-w', w + 'px');
 })();
 
-// Força um layout seguro (vídeo à esquerda, notas à direita) sem mexer no HTML
-(function enforceTwoColumns(){
-  const layout = document.querySelector('#tmLayout,.tm-layout,.enhanced-grid,.enhanced-split,.split-container')
-              || document.querySelector('#root') || document.querySelector('main') || document.body;
+// === util: menor ancestral comum (LCA) ===
+function tmLCA(a, b) {
+  const seen = new Set();
+  for (let n = a; n; n = n.parentElement) seen.add(n);
+  for (let n = b; n; n = n.parentElement) if (seen.has(n)) return n;
+  return document.body;
+}
 
-  const side  = document.querySelector('[data-panel="side"],.side-panel,.consult-panel,.right-panel,.left-panel,#rightPane');
-  const stage = document.querySelector('[data-panel="stage"],.video-area,.stage,.main-stage,#leftPane');
-
-  if (!layout || !side || !stage) return;
-
-  layout.style.display = 'flex';
-  layout.style.gap = '16px';
-  layout.style.alignItems = 'stretch';
-
-  // garante ordem: vídeo (esquerda) primeiro, painel (direita) depois
-  if (stage.compareDocumentPosition(side) & Node.DOCUMENT_POSITION_FOLLOWING) {
-    layout.insertBefore(stage, side);
+// === util: devolve o "bloco" (filho direto) do ancestral que contém o node ===
+function tmDirectChildOf(ancestor, node) {
+  let cur = node;
+  let prev = node;
+  while (cur && cur.parentElement && cur.parentElement !== ancestor) {
+    prev = cur;
+    cur = cur.parentElement;
   }
+  return (cur && cur.parentElement === ancestor) ? cur : prev;
+}
 
-  stage.style.flex = '1 1 auto';
-  stage.style.minWidth = '0';
-  stage.style.position = 'relative';
+// === aplica largura persistida em CSS var e no style inline ===
+function tmApplySideWidth(el, w) {
+  const width = Math.max(320, Math.min(720, Number(w) || 480));
+  document.documentElement.style.setProperty('--notes-w', width + 'px');
+  if (el) {
+    el.style.flex = `0 0 ${width}px`;
+    el.style.width = width + 'px';
+    el.style.minWidth = '320px';
+    el.style.maxWidth = '720px';
+  }
+  localStorage.setItem('telemed_notes_width', String(width));
+}
 
-  const w = Number(localStorage.getItem('telemed_notes_width')) || 480;
-  side.style.flex = `0 0 ${w}px`;
-  side.style.width = `${w}px`;
-  side.style.minWidth = '320px';
-  side.style.maxWidth = '720px';
+// === NOVA versão robusta (não usa insertBefore) ===
+function enforceTwoColumns() {
+  // detecta elementos
+  const stage = document.querySelector('[data-panel="stage"], .video-area, .stage, .main-stage');
+  const side  = document.querySelector('[data-panel="side"], .side-panel, .consult-panel, .right-panel, .left-panel');
 
-  // sobe a barra de controles do vídeo
-  const ctrls = document.querySelector('.video-controls,[data-controls="video"],.controls,.controls-bar,.toolbar,.video-toolbar');
+  if (!stage || !side) return;
+
+  // encontra ancestral comum e os "blocos" diretos sob esse ancestral
+  const anc       = tmLCA(stage, side);
+  const stageBlk  = tmDirectChildOf(anc, stage);
+  const sideBlk   = tmDirectChildOf(anc, side);
+
+  // ativa layout flex no ancestral comum
+  anc.style.display = 'flex';
+  anc.style.gap = '16px';
+  anc.style.alignItems = 'stretch';
+
+  // ordena sem mover DOM
+  stageBlk.style.order = '0';
+  sideBlk.style.order  = '1';
+
+  // dimensões
+  stageBlk.style.flex = '1 1 auto';
+  stageBlk.style.minWidth = '0';   // evita estouro
+  stageBlk.style.position = 'relative';
+
+  const saved = Number(localStorage.getItem('telemed_notes_width')) || 480;
+  tmApplySideWidth(sideBlk, saved);
+
+  // garante controles do vídeo acima
+  const ctrls = document.querySelector('.video-controls, [data-controls="video"], .controls, .controls-bar, .toolbar, .video-toolbar');
   if (ctrls) {
     ctrls.style.position = 'absolute';
     ctrls.style.left = '50%';
@@ -307,9 +340,26 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
     ctrls.style.transform = 'translateX(-50%)';
     ctrls.style.zIndex = '60';
     ctrls.style.pointerEvents = 'auto';
-    ctrls.style.opacity = '1';
   }
-})();
+
+  // se existir o handle, deixe-o colado na borda esquerda do painel
+  const handle = document.getElementById('tmResizer');
+  if (handle && handle.parentElement !== sideBlk) {
+    sideBlk.appendChild(handle);
+  }
+  if (handle) {
+    handle.style.left = '-4px';    // encosta na borda
+    handle.style.right = '';
+  }
+
+  // pluga o resizer para também atualizar a CSS var
+  if (window.tmResizer && typeof window.tmResizer.onWidthChange === 'function') {
+    window.tmResizer.onWidthChange = (w) => tmApplySideWidth(sideBlk, w);
+  }
+}
+
+// chama no load com try/catch para evitar quebrar
+try { enforceTwoColumns(); } catch(e) { console.warn('Layout enforcement failed:', e); }
 
 // ---------- Resizer do painel lateral (flex/width) com persistência ----------
 (function initSideResizer(){
@@ -346,6 +396,12 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
     localStorage.setItem(KEY, String(w));
     // Sincroniza variável CSS
     document.documentElement.style.setProperty('--notes-w', w + 'px');
+    
+    // Chama callback do resizer se existir
+    if (window.tmResizer && typeof window.tmResizer.onWidthChange === 'function') {
+      window.tmResizer.onWidthChange(w);
+    }
+    
     return w;
   };
 

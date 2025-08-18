@@ -1,0 +1,126 @@
+o erro que apareceu agora:
+
+Uncaught NotFoundError: Failed to execute 'insertBefore'...
+
+
+acontece quando tentamos reordenar o “vídeo” e o “painel” mas eles não são irmãos do mesmo pai. Em alguns layouts do Replit, o vídeo fica dentro de um container diferente do painel, então insertBefore quebra.
+
+A correção: não mover DOM. Em vez disso, achamos o menor ancestral comum (LCA) e aplicamos display:flex, usando order para posicionar: vídeo à esquerda (order:0) e painel à direita (order:1). Assim o layout fica estável em qualquer marcação.
+
+Abaixo vai o patch (JS seguro + um ajuste de resizer). Cole no seu enhanced-ux.js substituindo a função de “enforceTwoColumns” que eu tinha enviado; se preferir testar já, pode colar o “HOTFIX (console)” direto no DevTools.
+
+✔️ JS (substituir a função de layout)
+// === util: menor ancestral comum (LCA) ===
+function tmLCA(a, b) {
+  const seen = new Set();
+  for (let n = a; n; n = n.parentElement) seen.add(n);
+  for (let n = b; n; n = n.parentElement) if (seen.has(n)) return n;
+  return document.body;
+}
+
+// === util: devolve o "bloco" (filho direto) do ancestral que contém o node ===
+function tmDirectChildOf(ancestor, node) {
+  let cur = node;
+  let prev = node;
+  while (cur && cur.parentElement && cur.parentElement !== ancestor) {
+    prev = cur;
+    cur = cur.parentElement;
+  }
+  return (cur && cur.parentElement === ancestor) ? cur : prev;
+}
+
+// === aplica largura persistida em CSS var e no style inline ===
+function tmApplySideWidth(el, w) {
+  const width = Math.max(320, Math.min(720, Number(w) || 480));
+  document.documentElement.style.setProperty('--notes-w', width + 'px');
+  if (el) {
+    el.style.flex = `0 0 ${width}px`;
+    el.style.width = width + 'px';
+    el.style.minWidth = '320px';
+    el.style.maxWidth = '720px';
+  }
+  localStorage.setItem('telemed_notes_width', String(width));
+}
+
+// === NOVA versão robusta (não usa insertBefore) ===
+function enforceTwoColumns() {
+  // detecta elementos
+  const stage = document.querySelector('[data-panel="stage"], .video-area, .stage, .main-stage');
+  const side  = document.querySelector('[data-panel="side"], .side-panel, .consult-panel, .right-panel, .left-panel');
+
+  if (!stage || !side) return;
+
+  // encontra ancestral comum e os "blocos" diretos sob esse ancestral
+  const anc       = tmLCA(stage, side);
+  const stageBlk  = tmDirectChildOf(anc, stage);
+  const sideBlk   = tmDirectChildOf(anc, side);
+
+  // ativa layout flex no ancestral comum
+  anc.style.display = 'flex';
+  anc.style.gap = '16px';
+
+  // ordena sem mover DOM
+  stageBlk.style.order = '0';
+  sideBlk.style.order  = '1';
+
+  // dimensões
+  stageBlk.style.flex = '1 1 auto';
+  stageBlk.style.minWidth = '0';   // evita estouro
+
+  const saved = Number(localStorage.getItem('telemed_notes_width')) || 480;
+  tmApplySideWidth(sideBlk, saved);
+
+  // garante controles do vídeo acima
+  const ctrls = document.querySelector('.video-controls, [data-controls="video"], .controls, .controls-bar');
+  if (ctrls) {
+    ctrls.style.position = 'absolute';
+    ctrls.style.left = '50%';
+    ctrls.style.bottom = '16px';
+    ctrls.style.transform = 'translateX(-50%)';
+    ctrls.style.zIndex = '60';
+    ctrls.style.pointerEvents = 'auto';
+  }
+
+  // se existir o handle, deixe-o colado na borda esquerda do painel
+  const handle = document.getElementById('tmResizer');
+  if (handle && handle.parentElement !== sideBlk) {
+    sideBlk.appendChild(handle);
+  }
+  if (handle) {
+    handle.style.left = '-4px';    // encosta na borda
+    handle.style.right = '';
+  }
+
+  // pluga o resizer para também atualizar a CSS var
+  if (window.tmResizer && typeof window.tmResizer.onWidthChange === 'function') {
+    window.tmResizer.onWidthChange = (w) => tmApplySideWidth(sideBlk, w);
+  }
+}
+
+// chama no load
+try { enforceTwoColumns(); } catch(e) { console.warn(e); }
+
+
+Dica: no seu código do resizer, quando aplicar a largura, chame window.tmResizer.onWidthChange?.(novoValor); ou então copie o miolo do tmApplySideWidth para dentro dele. Assim a largura fica sempre sincronizada com --notes-w.
+
+🔧 HOTFIX (console)
+
+Se quiser validar agora sem editar arquivos, cole isto no Console do navegador e dê Enter:
+
+(() => {
+  function tmLCA(a,b){const s=new Set();for(let n=a;n;n=n.parentElement)s.add(n);for(let n=b;n;n=n.parentElement)if(s.has(n))return n;return document.body;}
+  function tmDirectChildOf(anc,node){let c=node,p=node;while(c&&c.parentElement&&c.parentElement!==anc){p=c;c=c.parentElement}return (c&&c.parentElement===anc)?c:p;}
+  function tmApplySideWidth(el,w){const W=Math.max(320,Math.min(720,Number(w)||480));document.documentElement.style.setProperty('--notes-w',W+'px');if(el){el.style.flex=`0 0 ${W}px`;el.style.width=W+'px';el.style.minWidth='320px';el.style.maxWidth='720px';}localStorage.setItem('telemed_notes_width',String(W));}
+  const stage=document.querySelector('[data-panel="stage"],.video-area,.stage,.main-stage');
+  const side =document.querySelector('[data-panel="side"],.side-panel,.consult-panel,.right-panel,.left-panel');
+  if(!stage||!side){console.warn('stage/side não encontrados');return;}
+  const anc=tmLCA(stage,side), sBlk=tmDirectChildOf(anc,stage), pBlk=tmDirectChildOf(anc,side);
+  anc.style.display='flex'; anc.style.gap='16px';
+  sBlk.style.order='0'; pBlk.style.order='1';
+  sBlk.style.flex='1 1 auto'; sBlk.style.minWidth='0';
+  tmApplySideWidth(pBlk, localStorage.getItem('telemed_notes_width')||480);
+  const ctrls=document.querySelector('.video-controls,[data-controls="video"],.controls,.controls-bar');
+  if(ctrls){ctrls.style.position='absolute';ctrls.style.left='50%';ctrls.style.bottom='16px';ctrls.style.transform='translateX(-50%)';ctrls.style.zIndex='60';}
+  const handle=document.getElementById('tmResizer'); if(handle && handle.parentElement!==pBlk) pBlk.appendChild(handle);
+  if(handle){handle.style.left='-4px'; handle.style.right='';}
+})();
