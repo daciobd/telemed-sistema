@@ -4,6 +4,8 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Consulta Avançada • TeleMed</title>
+<link rel="icon" type="image/svg+xml"
+  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +125,52 @@ body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Hel
 
 /* util */
 hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
+
+/* Painel lateral precisa ser position:relative para o handle colar na borda */
+.side-panel, [data-panel="side"], .consult-panel, .right-panel {
+  position: relative;
+}
+
+/* Handle de arraste (fica na borda esquerda do painel lateral) */
+#tmResizer {
+  position: absolute;
+  left: -4px;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 40;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0, rgba(255,255,255,.08) 50%, rgba(255,255,255,0) 100%);
+  opacity: .6;
+}
+#tmResizer:hover { opacity: 1; }
+
+#patientBanner {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(17,24,39,.6);        /* slate-900/60 */
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.08);
+  z-index: 30;
+}
+#patientBanner .name { font-weight: 700; }
+#patientBanner .meta { opacity: .9; font-size: 12px; }
+#patientBanner button {
+  background: #16a34a; /* verde */
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#patientBanner button:hover { filter: brightness(1.1); }
 
 /* --- Patient banner overlay --- */
 .patient-banner{

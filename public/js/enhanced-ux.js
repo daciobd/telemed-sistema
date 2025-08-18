@@ -262,3 +262,111 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   
   console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
 })(); // End IIFE
+
+// ---------- Resizer do painel lateral com persistência ----------
+(function initSideResizer(){
+  const findSide = () =>
+    document.querySelector('[data-panel="side"]') ||
+    document.querySelector('.side-panel') ||
+    document.querySelector('.right-panel') ||
+    document.querySelector('.consult-panel') ||
+    document.querySelector('.split-right') ||
+    document.querySelector('#rightPane');
+
+  const side = findSide();
+  if (!side) return;
+
+  // largura persistida
+  const KEY = 'telemed_notes_width';
+  const MIN = 320, MAX = 720;
+  const saved = Number(localStorage.getItem(KEY));
+  if (saved && saved >= MIN && saved <= MAX) side.style.width = saved + 'px';
+
+  // injeta handle
+  let handle = document.getElementById('tmResizer');
+  if (!handle) {
+    handle = document.createElement('div');
+    handle.id = 'tmResizer';
+    side.appendChild(handle);
+  }
+
+  let startX = 0, startW = 0, dragging = false;
+
+  const onMove = (e) => {
+    if (!dragging) return;
+    const dx = (e.clientX || e.touches?.[0]?.clientX) - startX;
+    let w = Math.min(MAX, Math.max(MIN, startW - dx));
+    side.style.width = w + 'px';
+  };
+  const onUp = () => {
+    if (!dragging) return;
+    dragging = false;
+    const w = parseInt(getComputedStyle(side).width, 10);
+    localStorage.setItem(KEY, String(w));
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    window.removeEventListener('touchmove', onMove);
+    window.removeEventListener('touchend', onUp);
+  };
+
+  const onDown = (e) => {
+    dragging = true;
+    startX = (e.clientX || e.touches?.[0]?.clientX);
+    startW = parseInt(getComputedStyle(side).width, 10);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchmove', onMove, {passive:false});
+    window.addEventListener('touchend', onUp);
+  };
+
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, {passive:false});
+
+  // util para testes no console
+  window.tmSetNotesWidth = (w)=>{ w=Math.min(MAX,Math.max(MIN,Number(w)||480)); side.style.width=w+'px'; localStorage.setItem(KEY,String(w)); };
+})();
+
+// ---------- Card do paciente sobre o vídeo ----------
+(function mountPatientBanner(){
+  // Verificar se já existe um banner (evitar duplicação)
+  if (document.getElementById('patientBanner')) return;
+  
+  // tenta localizar a área de vídeo
+  const stage =
+    document.querySelector('.video-area') ||
+    document.querySelector('#videoStage') ||
+    document.querySelector('.call-stage') ||
+    document.querySelector('[data-video-stage]') ||
+    document.querySelector('.split-left') ||
+    document.querySelector('#leftPane');
+  if (!stage) return;
+
+  // colete dados já visíveis no cabeçalho/sua UI  
+  const name  = (document.querySelector('[data-patient-name]') || document.querySelector('.patient-name') || document.querySelector('#pbName'))?.textContent?.trim() || 'Ana Costa Silva';
+  const phone = (document.querySelector('[data-patient-phone]')|| document.querySelector('.patient-phone') || document.querySelector('#pbPhone'))?.textContent?.trim() || '11 98765-4321';
+  const age   = (document.querySelector('[data-patient-age]')  || document.querySelector('.patient-age') || document.querySelector('#pbAge'))?.textContent?.trim() || '35 anos';
+
+  const banner = document.createElement('div');
+  banner.id = 'patientBanner';
+  banner.innerHTML = `
+    <div>
+      <div class="name">${name}</div>
+      <div class="meta">${phone ? '📞 ' + phone : ''}${age ? (phone ? ' • ' : '') + age : ''}</div>
+    </div>
+    <button id="pbInvite">Convite</button>
+  `;
+  stage.style.position = stage.style.position || 'relative';
+  stage.appendChild(banner);
+
+  // ação do convite
+  const inviteBtn = banner.querySelector('#pbInvite');
+  inviteBtn?.addEventListener('click', async () => {
+    try {
+      await fetch('/api/consults/ABC123/invite', { method: 'POST' });
+      inviteBtn.textContent = 'Convite enviado';
+      setTimeout(()=> inviteBtn.textContent = 'Convite', 2500);
+    } catch (e) {
+      console.warn('Falha ao enviar convite', e);
+    }
+  });
+})();

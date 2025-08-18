@@ -1,0 +1,199 @@
+Agora a gente está quase lá. Pela sua captura, o erro de “$ already declared” sumiu e o console mostra “Enhanced UX loaded…”. O único erro restante é um 404 do favicon.ico (inofensivo, mas vamos tirar isso do caminho) — e já deixo abaixo um patch para:
+
+Resolver o favicon 404 (1 linha)
+
+Garantir o redimensionamento do painel (arraste na borda, com persistência)
+
+Colocar o card do paciente sobre o topo do vídeo (com “Convite”)
+
+Pode copiar/colar exatamente como está. Não precisa criar arquivos novos.
+
+1) Favicon (encerra o 404)
+
+No <head> do server/public/enhanced-consultation.html, adicione uma destas opções:
+
+Opção simples (inline, sem arquivo físico):
+
+<link rel="icon" type="image/svg+xml"
+  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
+
+
+(Se preferir arquivo físico: crie server/public/favicon.ico e use <link rel="icon" href="/favicon.ico">.)
+
+2) Redimensionamento do painel (arraste)
+
+Cole este CSS (no <style> da página ou no seu CSS global):
+
+/* Painel lateral precisa ser position:relative para o handle colar na borda */
+.side-panel, [data-panel="side"], .consult-panel, .right-panel {
+  position: relative;
+}
+
+/* Handle de arraste (fica na borda esquerda do painel lateral) */
+#tmResizer {
+  position: absolute;
+  left: -4px;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 40;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0, rgba(255,255,255,.08) 50%, rgba(255,255,255,0) 100%);
+  opacity: .6;
+}
+#tmResizer:hover { opacity: 1; }
+
+
+E cole este JS no final do server/public/js/enhanced-ux.js (ou junto da inicialização, mas depois que o DOM está pronto):
+
+// ---------- Resizer do painel lateral com persistência ----------
+(function initSideResizer(){
+  const findSide = () =>
+    document.querySelector('[data-panel="side"]') ||
+    document.querySelector('.side-panel') ||
+    document.querySelector('.right-panel') ||
+    document.querySelector('.consult-panel');
+
+  const side = findSide();
+  if (!side) return;
+
+  // largura persistida
+  const KEY = 'telemed_notes_width';
+  const MIN = 320, MAX = 720;
+  const saved = Number(localStorage.getItem(KEY));
+  if (saved && saved >= MIN && saved <= MAX) side.style.width = saved + 'px';
+
+  // injeta handle
+  let handle = document.getElementById('tmResizer');
+  if (!handle) {
+    handle = document.createElement('div');
+    handle.id = 'tmResizer';
+    side.appendChild(handle);
+  }
+
+  let startX = 0, startW = 0, dragging = false;
+
+  const onMove = (e) => {
+    if (!dragging) return;
+    const dx = (e.clientX || e.touches?.[0]?.clientX) - startX;
+    let w = Math.min(MAX, Math.max(MIN, startW - dx)); // arrasta para esquerda/direita
+    side.style.width = w + 'px';
+  };
+  const onUp = () => {
+    if (!dragging) return;
+    dragging = false;
+    const w = parseInt(getComputedStyle(side).width, 10);
+    localStorage.setItem(KEY, String(w));
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    window.removeEventListener('touchmove', onMove);
+    window.removeEventListener('touchend', onUp);
+  };
+
+  const onDown = (e) => {
+    dragging = true;
+    startX = (e.clientX || e.touches?.[0]?.clientX);
+    startW = parseInt(getComputedStyle(side).width, 10);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchmove', onMove, {passive:false});
+    window.addEventListener('touchend', onUp);
+  };
+
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, {passive:false});
+
+  // util para testes no console
+  window.tmSetNotesWidth = (w)=>{ w=Math.min(MAX,Math.max(MIN,Number(w)||480)); side.style.width=w+'px'; localStorage.setItem(KEY,String(w)); };
+})();
+
+
+Dica: se o seu painel lateral tiver outra classe/atributo, ajuste o seletor em findSide(); a lógica funciona em qualquer layout.
+
+3) Card do paciente sobre o topo do vídeo (com “Convite”)
+
+Adicione este CSS (no mesmo bloco do #2):
+
+#patientBanner {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #fff;
+  background: rgba(17,24,39,.6);        /* slate-900/60 */
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.08);
+  z-index: 30;
+}
+#patientBanner .name { font-weight: 700; }
+#patientBanner .meta { opacity: .9; font-size: 12px; }
+#patientBanner button {
+  background: #16a34a; /* verde */
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#patientBanner button:hover { filter: brightness(1.1); }
+
+
+E este JS no enhanced-ux.js (pode ficar logo depois do resizer):
+
+// ---------- Card do paciente sobre o vídeo ----------
+(function mountPatientBanner(){
+  // tenta localizar a área de vídeo
+  const stage =
+    document.querySelector('.video-area') ||
+    document.querySelector('#videoStage') ||
+    document.querySelector('.call-stage') ||
+    document.querySelector('[data-video-stage]');
+  if (!stage) return;
+
+  // colete dados já visíveis no cabeçalho/sua UI
+  const name  = (document.querySelector('[data-patient-name]') || document.querySelector('.patient-name'))?.textContent?.trim() || 'Paciente';
+  const phone = (document.querySelector('[data-patient-phone]')|| document.querySelector('.patient-phone'))?.textContent?.trim() || '';
+  const age   = (document.querySelector('[data-patient-age]')  || document.querySelector('.patient-age'))?.textContent?.trim() || '';
+
+  let banner = document.getElementById('patientBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'patientBanner';
+    banner.innerHTML = `
+      <div>
+        <div class="name">${name}</div>
+        <div class="meta">${phone ? '📞 ' + phone : ''}${age ? (phone ? ' • ' : '') + age + ' anos' : ''}</div>
+      </div>
+      <button id="pbInvite">Convite</button>
+    `;
+    stage.style.position = stage.style.position || 'relative';
+    stage.appendChild(banner);
+  }
+
+  // ação do convite (ajuste o endpoint real)
+  const inviteBtn = banner.querySelector('#pbInvite');
+  inviteBtn?.addEventListener('click', async () => {
+    try {
+      await fetch('/api/consults/123/invite', { method: 'POST' }); // <<< troque 123 pelo id da consulta
+      inviteBtn.textContent = 'Convite enviado';
+      setTimeout(()=> inviteBtn.textContent = 'Convite', 2500);
+    } catch (e) {
+      console.warn('Falha ao enviar convite', e);
+    }
+  });
+})();
+
+
+Se você já tem os dados do paciente em JS, pode trocar o document.querySelector(...) por name/phone/age vindos do seu estado.
+
+O que esperar após colar
+
+O 404 do favicon some.
+
+A borda esquerda do painel lateral ganha um “handle” — arraste para redimensionar; a largura fica salva no localStorage e volta igual ao recarregar.
+
+O card do paciente aparece sobre o vídeo, no canto superior esquerdo, com botão Convite funcional (faz POST no endpoint que você indicar).
