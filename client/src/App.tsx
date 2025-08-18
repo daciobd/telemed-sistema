@@ -1,6 +1,7 @@
 import React from "react";
 import { Router, Route, Switch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import EnhancedConsultation from "./EnhancedConsultation";
 
 // Simple components without complex imports
 const SimpleToaster = () => <div id="toaster" className="fixed top-4 right-4 z-50" />;
@@ -16,7 +17,7 @@ const VideoConsultation = () => (
   </div>
 );
 
-const EnhancedConsultation = () => (
+const EnhancedConsultationSimple = () => (
   <div className="min-h-screen bg-gray-50 p-8">
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Enhanced Consultation</h1>

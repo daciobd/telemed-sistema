@@ -1,0 +1,159 @@
+Show! Agora vamos deixar o projeto rodando liso. Pelos logs há 3 coisas para ajustar:
+
+remover o “Vite programático” dentro do servidor (é ele que causou o erro do top-level await),
+
+consertar o alias @ do Vite,
+
+simplificar o App.tsx para renderizar só o seu dashboard (e não importar páginas que não existem).
+
+Siga estes passos (bem direto):
+
+1) server/index.ts — use este conteúdo mínimo
+
+Abra server/index.ts e substitua TUDO por isto (pode colar por cima):
+
+// server/index.ts
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import compression from 'compression';
+
+const app = express();
+
+// Middlewares
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json({ limit: '2mb' }));
+app.use(compression());
+
+// Healthcheck e exemplo
+app.get('/health', (_req, res) => {
+  res.json({ ok: true, env: process.env.NODE_ENV || 'development', time: new Date().toISOString() });
+});
+app.get('/api/ping', (_req, res) => res.json({ pong: true }));
+
+// ⚠️ IMPORTANTE: não inicie Vite por aqui (nada de createServer/import('vite'))
+// O Vite é iniciado pelo start-dev.js
+
+const PORT = Number(process.env.PORT) || 5000;
+const HOST = '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log('🔧 Starting Express server on port', PORT, '...');
+  console.log('✅ Server is listening and ready for connections');
+});
+
+
+Isso remove aquele bloco que imprimia “⚡ Configurando Vite dev server...” (e que quebrava com top-level await).
+
+2) start-dev.js — mantenha só o --watch (já está OK)
+
+Confirme que a linha do servidor está assim (sem watch como subcomando):
+
+const serverProcess = startProcess(
+  'npx',
+  ['tsx', '--watch', 'server/index.ts'],
+  'Server',
+  { env: { PORT: String(PORT) } }
+);
+
+
+Perfeito.
+
+3) Alias @ e TypeScript no client
+3.1 client/vite.config.ts
+
+Crie/edite client/vite.config.ts com este conteúdo:
+
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+});
+
+3.2 client/tsconfig.json
+
+Abra client/tsconfig.json e garanta estes campos:
+
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+    // ... mantenha o resto como já está
+  }
+}
+
+4) Simplificar o App.tsx (evitar imports faltando)
+
+Abra client/src/App.tsx e troque TUDO por:
+
+import React from 'react';
+import DashboardTeleMed from './DashboardTeleMed'; // arquivo que você vai criar no próximo passo
+
+export default function App() {
+  return <DashboardTeleMed />;
+}
+
+
+Isso remove as importações quebradas como @/pages/enhanced-consultation, @/pages/TelemedHub, etc.
+
+5) Criar o DashboardTeleMed.tsx (versão Vite-friendly)
+
+Crie o arquivo client/src/DashboardTeleMed.tsx.
+
+Copie o código da sua canvas (“Tele Med – Dashboard V2…”) para esse arquivo.
+
+Faça um ajuste rápido: troque style jsx por style (Vite não usa styled-jsx).
+
+Onde estiver style jsx global → deixe <style>{globalStyles}</style>
+
+Onde estiver style jsx → deixe <style>{styles}</style> ou <style> direto
+(Se preferir, mais fácil ainda: apague a palavra jsx e mantenha <style> normal — funciona.)
+
+Garanta que a primeira linha importa o Chart.js:
+
+import Chart from 'chart.js/auto';
+
+
+Se quiser pular a edição manual, dá pra fazer em 10s: abra o arquivo e faça “localizar e substituir”:
+
+procurar: style jsx global → substituir por: style
+
+procurar: style jsx → substituir por: style
+
+O restante do código pode ficar idêntico ao da canvas.
+
+6) Tailwind/PostCSS do client (o erro sumiu?)
+
+Se ainda aparecer erro do PostCSS, garanta que existe client/postcss.config.cjs com:
+
+module.exports = {
+  plugins: {
+    '@tailwindcss/postcss': {}, // (Tailwind v4) — se você estiver em v3, troque para: tailwindcss: {}
+    autoprefixer: {},
+  },
+};
+
+
+E que você instalou as deps:
+
+npm i -D @tailwindcss/postcss postcss autoprefixer
+
+7) Rodar
+
+No Shell (na raiz do projeto):
+
+pkill -f node 2>/dev/null || true
+npm run dev
+
+
+Backend: teste /health → deve retornar { ok: true, ... }.
+
+Frontend: abre a URL do Replit e você já deve ver o Dashboard.
