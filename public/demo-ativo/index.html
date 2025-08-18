@@ -1714,19 +1714,25 @@
             showNotification('🚀 Redirecionando para o novo dashboard...', 'info');
             
             // Tentar múltiplas URLs para máxima compatibilidade
+            // Usar URL relativa que funciona no Replit
             const dashboardUrls = [
+                `${window.location.origin}/dashboard-teste`,
+                `${window.location.origin}/dashboard-teste.html`,
+                `${window.location.origin}/dashboard-teste-fixed`,
                 '/dashboard-teste',
                 '/dashboard-teste.html',
-                '/dashboard-teste-fixed',
-                '/public/dashboard-teste.html'
+                '/dashboard-teste-fixed'
             ];
             
             // Função para testar se URL existe
             async function testUrl(url) {
                 try {
+                    console.log(`🔍 Testando URL: ${url}`);
                     const response = await fetch(url, { method: 'HEAD' });
+                    console.log(`${response.ok ? '✅' : '❌'} ${url} - Status: ${response.status}`);
                     return response.ok;
-                } catch {
+                } catch (error) {
+                    console.log(`❌ ${url} - Erro: ${error.message}`);
                     return false;
                 }
             }
