@@ -1,3 +1,20 @@
+vamos transformar o /enhanced num clone funcional, com:
+
+cabeçalho com dados do paciente + “Convite”, status, cronômetro, Iniciar Consulta, Voltar, Formulário (mostrar/ocultar), Largura do painel e Sair
+
+abas Chat | Atendimento | Exames | Receitas (Memed)
+
+formulário com CID-10 (auto-sugestão), Conduta, Complexidade, Sinais de Alerta, Salvar e Finalizar
+
+barra inferior do vídeo (anexar, screenshot, chat, notificações, Dr. AI, microfone, vídeo, Sala de espera, Encerrar)
+
+painel “Dr. AI” acoplado ao botão do cérebro
+
+Memed abrindo em nova aba (demo) + lista de receitas do atendimento
+
+Abaixo estão os arquivos completos. É só colar.
+
+1) Substitua server/public/enhanced-consultation.html
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -288,7 +305,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
       <div class="pane" id="pane-exams" style="display:none">
         <div class="card">
           <div class="label">Atalho</div>
-          <div class="kicker">Use a aba "Atendimento → MedMed" para prescrever.</div>
+          <div class="kicker">Use a aba “Atendimento → MedMed” para prescrever.</div>
         </div>
       </div>
 
@@ -513,3 +530,65 @@ $('#btnEnd').onclick = ()=>{ if(confirm('Encerrar a chamada?')) toast('Chamada e
 </script>
 </body>
 </html>
+
+2) Acrescente (ou confirme) os endpoints no server/index.ts
+
+Coloque estes stubs (funcionam para o front e você pode ligar à sua base depois). Procure o bloco onde você registra as rotas e acrescente:
+
+// --- Enhanced: APIs simples para o front ---
+app.post('/api/consults/:id/start', (req,res)=> {
+  console.log('START', req.params.id); return res.json({ok:true, startedAt:Date.now()});
+});
+app.post('/api/consults/:id/notes', express.json(), (req,res)=> {
+  console.log('SAVE', req.params.id, req.body?.qp?.slice?.(0,60));
+  return res.json({ok:true});
+});
+app.post('/api/consults/:id/finalize', (req,res)=> {
+  console.log('FINALIZE', req.params.id); return res.json({ok:true});
+});
+app.post('/api/consults/:id/invite', (req,res)=> {
+  console.log('INVITE', req.params.id); return res.json({ok:true, delivered:true});
+});
+
+// CID-10 autosugestão (usa lista carregada na memória se você já tem; aqui um fallback curto)
+const CID_LOCAL = [
+  'F41.1 – Transtorno de ansiedade generalizada',
+  'G43.0 – Enxaqueca sem aura',
+  'J00 – Nasofaringite aguda (resfriado)',
+  'I10 – Hipertensão essencial (primária)',
+  'E11 – Diabetes mellitus tipo 2',
+];
+app.get('/api/cid10', (req,res)=>{
+  const q = String(req.query.q||'').toLowerCase();
+  const list = CID_LOCAL.filter(x=>x.toLowerCase().includes(q));
+  res.json(list);
+});
+
+// Dr.AI (demonstração); troque para seu endpoint real quando quiser
+app.post('/api/ai/doctor', express.json(), async (req,res)=>{
+  const q = String(req.body?.message||'');
+  // aqui você poderia chamar seu cliente OpenAI / modelo interno
+  const mock = `Para "${q}", considere sinais de alarme, fatores de risco e exames direcionados.`;
+  res.json({answer: mock});
+});
+
+
+Observação: o seu servidor já está servindo o HTML dedicado (os logs “✅ Servindo enhanced-consultation.html dedicado” confirmam). Só substituir o arquivo e reiniciar.
+
+O que ficou pronto agora
+
+Cabeçalho completo com Convite, status/cronômetro, Iniciar, Voltar, Formulário, Largura, Sair
+
+Abas Chat / Atendimento / Exames / Receitas
+
+CID-10 com auto-sugestão (endpoint + fallback local)
+
+Exames com templates, prioridades e lista
+
+Memed: botão “Nova Receita MedMed” abre memed.com.br (modo demo) com os dados do paciente; ao voltar, a lista “Receitas do Atendimento” aparece preenchida (mock)
+
+Barra de vídeo com todos os botões solicitados (inclui Dr. AI que abre o painel lateral)
+
+Salvar e Finalizar batendo em endpoints stubs
+
+Painel Dr. AI com ressalva de que é apoio à decisão

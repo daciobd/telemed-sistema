@@ -1021,5 +1021,126 @@ function startAIUsageWatchdog(): void {
   }, 5 * 60 * 1000); // 5 minutes
 }
 
+// === Enhanced Consultation API Endpoints ===
+
+// Start consultation
+app.post('/api/consults/:id/start', (req, res) => {
+  const { id } = req.params;
+  console.log('🩺 START consultation:', id);
+  res.json({ ok: true, startedAt: Date.now(), consultId: id });
+});
+
+// Save consultation notes
+app.post('/api/consults/:id/notes', express.json(), (req, res) => {
+  const { id } = req.params;
+  const { qp, hda, cid, cond, alert, flags, exams, rx } = req.body;
+  console.log('💾 SAVE consultation notes:', id, qp?.slice(0, 60) + '...');
+  res.json({ ok: true, consultId: id, saved: true });
+});
+
+// Finalize consultation
+app.post('/api/consults/:id/finalize', (req, res) => {
+  const { id } = req.params;
+  console.log('✅ FINALIZE consultation:', id);
+  res.json({ ok: true, consultId: id, finalized: true });
+});
+
+// Send invitation to waiting room
+app.post('/api/consults/:id/invite', (req, res) => {
+  const { id } = req.params;
+  console.log('📧 INVITE patient to consultation:', id);
+  res.json({ ok: true, consultId: id, delivered: true });
+});
+
+// CID-10 autosuggestion endpoint
+const CID_LOCAL = [
+  'F41.1 – Transtorno de ansiedade generalizada',
+  'G43.0 – Enxaqueca sem aura',
+  'J00 – Nasofaringite aguda (resfriado)',
+  'I10 – Hipertensão essencial (primária)',
+  'E11 – Diabetes mellitus tipo 2',
+  'F32.0 – Episódio depressivo leve',
+  'F33.0 – Transtorno depressivo recorrente',
+  'R51 – Cefaleia',
+  'K21.9 – Doença do refluxo gastroesofágico',
+  'Z00.00 – Exame médico geral'
+];
+
+app.get('/api/cid10', (req, res) => {
+  const query = String(req.query.q || '').toLowerCase();
+  if (query.length < 2) {
+    return res.json([]);
+  }
+  
+  const filteredCids = CID_LOCAL.filter(cid => 
+    cid.toLowerCase().includes(query)
+  );
+  
+  console.log(`🔍 CID-10 search for "${query}": ${filteredCids.length} results`);
+  res.json(filteredCids);
+});
+
+// Dr.AI endpoint for Enhanced Consultation
+app.post('/api/ai/doctor', express.json(), async (req, res) => {
+  try {
+    const { message, page = 'enhanced' } = req.body;
+    
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ 
+        ok: false, 
+        error: 'Mensagem é obrigatória' 
+      });
+    }
+
+    console.log(`🧠 Dr. AI consulta (${page}):`, message.substring(0, 50) + '...');
+    
+    // Check if OpenAI is available
+    const openaiClient = createOpenAIClient();
+    if (!openaiClient) {
+      // Return fallback response
+      const fallbackResponses = [
+        'Para essa queixa, considere verificar sinais vitais, realizar exame físico direcionado e avaliar fatores de risco.',
+        'Importante confirmar sinais de alarme e considerar diagnósticos diferenciais. Reavalie necessidade de exames complementares.',
+        'Sugiro investigação clínica detalhada, atenção a medicamentos em uso e considerar encaminhamento se necessário.'
+      ];
+      
+      const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      return res.json({ 
+        answer: `${randomResponse}\n\n⚠️ Resposta gerada localmente. Para análise completa da IA, configure a chave OpenAI.`,
+        fallback: true
+      });
+    }
+
+    // Use OpenAI for real response
+    const systemPrompt = `Você é Dr. AI, um assistente médico especializado em apoio à decisão clínica. 
+    Responda em português de forma clara, objetiva e profissional. 
+    Sempre inclua ao final que suas respostas são orientativas e a decisão final é do médico responsável.`;
+
+    const response = await openaiClient.createChatCompletion({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: message }
+      ],
+      max_tokens: 600,
+      temperature: 0.3
+    });
+
+    const answer = response.choices[0]?.message?.content || 'Não foi possível gerar uma resposta no momento.';
+    
+    res.json({ 
+      answer: answer + '\n\n💡 Esta é uma orientação educacional. A decisão clínica final é do médico responsável.',
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('❌ Erro no Dr. AI:', error);
+    res.status(500).json({ 
+      error: 'Erro no processamento da IA',
+      answer: 'Sugestão: confirmar sinais de alarme, avaliar necessidade de exame físico e considerar fatores de risco.'
+    });
+  }
+});
+
 // React SPA routes - servir pelo Vite (será configurado após servidor iniciar)
 // Esta seção será substituída pelo Vite middleware * quando configurado
