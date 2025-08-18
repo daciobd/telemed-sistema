@@ -1,0 +1,209 @@
+Aqui vai o conserto, direto-ao-ponto:
+
+1) Garanta o estático correto no Express
+
+No server/index.ts, deixe as rotas estáticas explícitas (abaixo das app.use(cors())…):
+
+import path from "path";
+import express from "express";
+
+// servir /public (subpastas js, css, img, etc.)
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/js", express.static(path.join(__dirname, "public", "js")));
+app.use("/css", express.static(path.join(__dirname, "public", "css")));
+app.use("/img", express.static(path.join(__dirname, "public", "img")));
+app.use("/favicon.ico", express.static(path.join(__dirname, "public", "favicon.ico")));
+
+
+Se isso já existe, ótimo — siga para o passo 2.
+
+2) Corrija os <script> no HTML
+
+Abra server/public/enhanced-consultation.html.
+No final do arquivo, remova qualquer <script> com src vazio ou estranho (ex.: src="", src=".", src="/enhanced", etc.).
+
+Troque por exatamente estes (mantém cache-buster):
+
+<!-- analytics -->
+<script defer src="/js/telemed-analytics.js?v=1"></script>
+
+<!-- UX da página (abas, redimensionamento, botões do rodapé, etc.) -->
+<script defer src="/js/enhanced-ux.js?v=5"></script>
+
+
+Opcional (para sumir o 404 do favicon):
+
+<link rel="icon" href="/favicon.ico">
+
+
+Obs.: se preferir inline, pode comentar os <script src> e colar o JS do passo 3 direto no final do HTML. O importante é não deixar nenhum <script> apontando para /enhanced.
+
+3) Crie o JS que a página espera
+
+Crie server/public/js/enhanced-ux.js com este conteúdo compacto (inclui: tabs, redimensionamento persistente e “convite” simulado):
+
+// ---- Helpers
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+// ---- Abas (Chat / Atendimento / Exames / Receitas)
+(() => {
+  const tabBtns = $$(".tab-btn");
+  const tabPanes = $$(".tab-pane");
+  if (!tabBtns.length || !tabPanes.length) return;
+
+  function activate(id) {
+    tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === id));
+    tabPanes.forEach(p => p.classList.toggle("active", p.id === id));
+    try {
+      window.telemedAnalytics?.track?.("enhanced_tab_changed", { tab: id });
+    } catch {}
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener("click", () => activate(btn.dataset.tab));
+  });
+
+  // abre a última aba usada
+  const last = localStorage.getItem("enhanced_last_tab") || "tab-atendimento";
+  activate(last);
+  tabBtns.forEach(b => b.addEventListener("click", () => {
+    localStorage.setItem("enhanced_last_tab", b.dataset.tab);
+  }));
+})();
+
+// ---- Redimensionamento da faixa direita (anotações)
+(() => {
+  const sidebar = $("#right-notes");      // <aside id="right-notes">…</aside>
+  const handle  = $("#notes-resizer");    // <div id="notes-resizer"></div>
+  if (!sidebar || !handle) return;
+
+  const KEY = "enhanced_notes_width";
+  const minW = 320;
+  const maxW = 900;
+
+  // restaura
+  const saved = Number(localStorage.getItem(KEY));
+  if (saved && saved >= minW && saved <= maxW) {
+    sidebar.style.width = saved + "px";
+  }
+
+  let startX = 0;
+  let startW = 0;
+  let dragging = false;
+
+  const onMove = (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    let w = Math.min(maxW, Math.max(minW, startW - dx));
+    sidebar.style.width = w + "px";
+  };
+  const onUp = () => {
+    if (!dragging) return;
+    dragging = false;
+    document.body.style.userSelect = "";
+    localStorage.setItem(KEY, parseInt(sidebar.style.width, 10));
+    window.telemedAnalytics?.track?.("notes_resized", { width: parseInt(sidebar.style.width, 10) });
+    window.removeEventListener("mousemove", onMove);
+    window.removeEventListener("mouseup", onUp);
+  };
+
+  handle.addEventListener("mousedown", (e) => {
+    dragging = true;
+    startX = e.clientX;
+    startW = parseInt(getComputedStyle(sidebar).width, 10);
+    document.body.style.userSelect = "none";
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  });
+})();
+
+// ---- Botões do rodapé do vídeo (anexar, foto, chat, notificações, IA, mic, cam, espera, encerrar)
+(() => {
+  const actions = [
+    ["attach",  "click_attach"],
+    ["shot",    "click_screenshot"],
+    ["chat",    "click_chat"],
+    ["bell",    "click_notify"],
+    ["brain",   "click_ai_panel"],
+    ["mic",     "toggle_mic"],
+    ["cam",     "toggle_cam"],
+    ["hold",    "send_to_waiting"],
+    ["hang",    "end_call"]
+  ];
+  actions.forEach(([id, event]) => {
+    const btn = document.getElementById(`btn-${id}`);
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      window.telemedAnalytics?.track?.(event, { page: location.pathname });
+      // abra o painel do Dr. AI quando for o “cérebro”
+      if (id === "brain") {
+        document.body.classList.add("show-ai");
+        $("#dr-ai-panel")?.classList.add("open");
+      }
+    });
+  });
+})();
+
+// ---- Botão "Convite" (mock)
+(() => {
+  const btn = $("#btn-convite");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    window.telemedAnalytics?.track?.("invite_sent", { room: $("#room-id")?.textContent?.trim() });
+    // feedback visual rápido
+    btn.classList.add("sent");
+    btn.textContent = "Convite Enviado";
+    setTimeout(() => { btn.classList.remove("sent"); btn.textContent = "Convite"; }, 2000);
+  });
+})();
+
+// ---- Salvamento raso (mock endpoints)
+(() => {
+  const startBtn   = $("#btn-start");
+  const saveBtn    = $("#btn-save");
+  const finishBtn  = $("#btn-finish");
+  const toast = (m, cls="ok") => {
+    const t = document.createElement("div");
+    t.className = `toast ${cls}`;
+    t.textContent = m;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(), 2200);
+  };
+
+  startBtn?.addEventListener("click", async () => {
+    window.telemedAnalytics?.track?.("consult_start_clicked", {});
+    try {
+      await fetch("/api/consults/demo/start", { method:"POST" });
+      toast("Consulta iniciada");
+    } catch { toast("Falha ao iniciar", "err"); }
+  });
+
+  saveBtn?.addEventListener("click", async () => {
+    window.telemedAnalytics?.track?.("consult_save_clicked", {});
+    try {
+      await fetch("/api/consults/demo/notes", { method:"POST" });
+      toast("Rascunho salvo");
+    } catch { toast("Falha ao salvar", "err"); }
+  });
+
+  finishBtn?.addEventListener("click", async () => {
+    window.telemedAnalytics?.track?.("consult_finish_clicked", {});
+    try {
+      await fetch("/api/consults/demo/finalize", { method:"POST" });
+      toast("Consulta finalizada");
+    } catch { toast("Falha ao finalizar", "err"); }
+  });
+})();
+
+
+Se seu HTML usa outros IDs, ajuste os seletores (#right-notes, #notes-resizer, #btn-start, etc.).
+O redimensionamento depende de existirem o aside da direita e a barrinha de arraste.
+
+4) Recarregue “de verdade”
+
+Ctrl+Shift+R (ou ⌘⇧R) na página /enhanced.
+
+Abra o Network do DevTools e confirme que enhanced-ux.js e telemed-analytics.js retornam 200 / type: script.
+
+Se ainda aparecer MIME error, algum <script> antigo ficou no HTML — remova-o.

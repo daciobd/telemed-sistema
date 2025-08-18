@@ -75,9 +75,19 @@ if (fs.existsSync(distDir)) {
   }));
 }
 
-// Static assets
+// Static assets - explicit routes for better MIME handling
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
+app.use('/js', express.static(path.join(__dirname, '../public/js'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.set('Content-Type', 'application/javascript');
+    }
+  }
+}));
+app.use('/css', express.static(path.join(__dirname, '../public/css')));
+app.use('/img', express.static(path.join(__dirname, '../public/img')));
+app.use('/favicon.ico', express.static(path.join(__dirname, '../public/favicon.ico')));
 
 // Dr. AI Demo page direct route
 app.get('/dr-ai-demo', (req, res) => {
