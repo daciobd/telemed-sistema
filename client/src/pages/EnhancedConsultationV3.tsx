@@ -1,5 +1,6 @@
 // client/src/pages/EnhancedConsultationV3.tsx
 import React, { useState, useRef, useEffect } from 'react';
+import DrAIPanel from '../components/DrAIPanel';
 
 // Enhanced Consultation – v3 with complete functionality
 export default function EnhancedConsultationV3() {
@@ -17,6 +18,7 @@ export default function EnhancedConsultationV3() {
   const [receitasList, setReceitasList] = useState<any[]>([]);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [aiOpen, setAiOpen] = useState(false);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -80,6 +82,22 @@ export default function EnhancedConsultationV3() {
         link.click();
       }
     }
+  };
+
+  // Context gathering for Dr. AI
+  const gatherContext = () => {
+    return [
+      `Paciente: Ana Costa Silva (consulta demo)`,
+      `HDA: ${hda || "(vazio)"}`,
+      `Hipótese diagnóstica: ${hipotese || "(vazio)"}`,
+      `Sinais de alerta: ${sinaisAlerta || "(nenhum)"}`,
+      `Plano/Conduta atual: ${conduta || "(rascunho)"}`
+    ].join("\n");
+  };
+
+  // Insert AI response into plan
+  const insertToPlan = (text: string) => {
+    setConduta((prev) => (prev ? `${prev}\n\n${text}` : text));
   };
 
   // Save consultation
@@ -213,8 +231,8 @@ export default function EnhancedConsultationV3() {
             <button className="action-btn" onClick={() => alert('Notificações')}>
               <span>🔔</span>
             </button>
-            <button className="action-btn" onClick={() => alert('IA')}>
-              <span>🤖</span>
+            <button className="action-btn brain-btn" onClick={() => setAiOpen(true)} title="Abrir Dr. AI">
+              <span>🧠</span>
             </button>
             <button className="action-btn" onClick={() => alert('Microfone')}>
               <span>🎤</span>
@@ -435,8 +453,17 @@ export default function EnhancedConsultationV3() {
         </div>
       </div>
 
+      {/* Dr. AI Panel */}
+      <DrAIPanel
+        open={aiOpen}
+        onClose={() => setAiOpen(false)}
+        consultId="CONSULT-123"
+        gatherContext={gatherContext}
+        onInsertToPlan={insertToPlan}
+      />
+
       {/* CSS Styles */}
-      <style jsx>{`
+      <style>{`
         .consultation-container {
           min-height: 100vh;
           background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
@@ -644,6 +671,16 @@ export default function EnhancedConsultationV3() {
           justify-content: center;
           transition: all 0.2s ease;
           box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .action-btn:hover {
+          background: #f8f9fa;
+          transform: translateY(-1px);
+        }
+
+        .action-btn.brain-btn:hover {
+          background: #F3F8FF;
+          box-shadow: 0 4px 12px rgba(162,210,255,0.3);
         }
 
         .action-btn:hover {

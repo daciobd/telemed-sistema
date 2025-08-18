@@ -65,6 +65,16 @@ if (fs.existsSync(distDir)) {
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 
+// Dr. AI Demo page direct route
+app.get('/dr-ai-demo', (req, res) => {
+  const demoPath = path.join(__dirname, '../public/dr-ai-demo.html');
+  if (fs.existsSync(demoPath)) {
+    console.log('🧠 Servindo Dr. AI Demo page');
+    return res.sendFile(demoPath);
+  }
+  res.status(404).send('Demo page not found');
+});
+
 // Patient Management - serving dedicated HTML page
 app.get('/patient-management', (req, res) => {
   console.log('🏥 Rota /patient-management acessada');
@@ -183,12 +193,73 @@ app.post('/api/ai-agent/alert-test', async (req, res) => {
   }
 });
 
-// Mock simples do agente (eco)
+// Real OpenAI endpoint for Dr. AI panel
+import { createOpenAIClient } from './utils/openai-client.js';
+
 app.post('/api/ai/ask', async (req, res) => {
-  const q = String(req.body?.q || '').slice(0, 2000);
-  // simula latência pequena
-  await new Promise(r => setTimeout(r, 250));
-  res.json({ answer: `🤖 (stub) Você perguntou:\n\n${q}\n\n— Quando ligar o backend real, troque este endpoint.` });
+  try {
+    const { prompt, context = "", consultId } = req.body || {};
+    
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ 
+        ok: false, 
+        error: 'missing_prompt',
+        message: 'Prompt is required' 
+      });
+    }
+
+    const openaiClient = createOpenAIClient();
+    if (!openaiClient) {
+      return res.status(503).json({ 
+        ok: false, 
+        error: 'ai_unavailable',
+        message: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your secrets.' 
+      });
+    }
+
+    const systemMsg = "Você é o Dr. AI, um assistente clínico especializado. Responda em português, de forma objetiva, cite cuidados e alternativas, e nunca substitua o julgamento médico. Evite prescrever posologias sem checar contraindicações. Quando pertinente, aponte diretrizes e necessidade de confirmação diagnóstica. Sempre inclua que suas respostas são orientativas.";
+
+    const messages = [
+      { role: 'system' as const, content: systemMsg }
+    ];
+
+    if (context.trim()) {
+      messages.push({ 
+        role: 'user' as const, 
+        content: `Contexto clínico:\n${context}\n\nPergunta: ${prompt}` 
+      });
+    } else {
+      messages.push({ role: 'user' as const, content: prompt });
+    }
+
+    console.log(`🧠 Dr. AI consulta para ${consultId}:`, prompt.substring(0, 100) + '...');
+
+    const response = await openaiClient.createChatCompletion({
+      model: 'gpt-4o', // Using latest model as per blueprint
+      messages,
+      max_tokens: 800,
+      temperature: 0.3 // Lower temperature for more consistent medical responses
+    });
+
+    const answer = response.choices[0]?.message?.content || 'Não consegui gerar uma resposta no momento.';
+
+    res.json({ 
+      ok: true, 
+      answer,
+      consultId,
+      timestamp: new Date().toISOString()
+    });
+    
+    console.log(`✅ Dr. AI respondeu para ${consultId} (${answer.length} chars)`);
+
+  } catch (error) {
+    console.error('❌ Erro no Dr. AI:', error);
+    res.status(500).json({ 
+      ok: false, 
+      error: 'ai_processing_error',
+      message: 'Erro ao processar consulta da IA. Tente novamente.' 
+    });
+  }
 });
 
 console.log('🤖 ChatGPT Agent ativado com OpenAI v5.12.1');
