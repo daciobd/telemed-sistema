@@ -1,0 +1,461 @@
+agora o console está “limpo” (só a mensagem Enhanced UX loaded), então vamos repor a área de vídeo + a barra de botões (clips, screenshot, chat, notificações, Dr.AI, mic, cam, “aguardar” e encerrar) sem depender da estrutura do DOM do Replit.
+
+Abaixo vai um patch auto-contido para o enhanced-ux.js que:
+
+encontra a área de vídeo de forma robusta (ou cria um “scaffold” se estiver vazia),
+
+aplica o layout duas colunas (sem insertBefore, sem erros),
+
+injeta a barra de controles sobre o vídeo,
+
+mantém o redimensionador do painel e a largura persistente.
+
+1) Cole este bloco no final de server/public/js/enhanced-ux.js
+
+(deixe a função enforceTwoColumns() que já está aí; apenas acrescente o código abaixo depois dela)
+
+// ================== ESTILOS (uma vez) ==================
+(function injectEnhStyles(){
+  if (document.getElementById('tmEnhStyles')) return;
+  const css = `
+  :root { --notes-w: ${Number(localStorage.getItem('telemed_notes_width'))||480}px; }
+  .tm-stage { position:relative; background:#0d1520; min-height:420px; border-radius:10px; }
+  .tm-stage .tm-waiting {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#8aa1b1; font:500 16px/1.4 system-ui, -apple-system, Segoe UI; pointer-events:none;
+  }
+  .tm-controls {
+    position:absolute; left:50%; bottom:16px; transform:translateX(-50%);
+    display:flex; gap:10px; padding:10px 12px; border-radius:22px;
+    backdrop-filter: blur(8px); background:rgba(0,0,0,.35); box-shadow:0 6px 24px rgba(0,0,0,.25);
+    z-index:60; pointer-events:auto;
+  }
+  .tm-btn {
+    width:36px; height:36px; display:grid; place-items:center;
+    border-radius:50%; background:#182230; color:#c9d5e1; cursor:pointer; border:1px solid rgba(255,255,255,.06);
+    transition:transform .12s ease, background .12s ease;
+  }
+  .tm-btn:hover { transform:translateY(-1px); background:#1f2e40; }
+  .tm-btn.alert { background:#a46c00; color:#fff; }
+  .tm-btn.end   { background:#b4232c; color:#fff; }
+  .tm-btn.muted, .tm-btn.disabled { opacity:.55; }
+  .tm-tooltip { position:absolute; bottom:52px; background:#000; color:#fff; padding:4px 8px; border-radius:6px; font-size:12px; white-space:nowrap; opacity:0; transform:translateY(6px); pointer-events:none; transition:.12s; }
+  .tm-btn:hover .tm-tooltip { opacity:1; transform:translateY(0); }
+  `;
+  const style = document.createElement('style');
+  style.id = 'tmEnhStyles';
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+// =========== helpers de detecção de palco/painel ===========
+function tmPickStage() {
+  // preferimos seletores conhecidos; se não houver, pega o maior bloco visível
+  const known = document.querySelector(
+    '[data-panel="stage"], .video-area, .stage, .main-stage, #tmStage'
+  );
+  if (known) return known;
+  // heurística: maior DIV visível
+  let best=null, bestArea=0;
+  for (const el of document.querySelectorAll('div')) {
+    const r = el.getBoundingClientRect();
+    const area = (r.width||0)*(r.height||0);
+    const visible = r.width>300 && r.height>250 && getComputedStyle(el).display!=='none';
+    if (visible && area>bestArea) { best=el; bestArea=area; }
+  }
+  return best || document.body;
+}
+
+function tmPickSide() {
+  return document.querySelector(
+    '[data-panel="side"], .side-panel, .consult-panel, .right-panel, .left-panel'
+  );
+}
+
+// === menor ancestral comum + filho direto (iguais aos do patch anterior) ===
+function tmLCA(a,b){const s=new Set();for(let n=a;n;n=n.parentElement)s.add(n);for(let n=b;n;n=n.parentElement)if(s.has(n))return n;return document.body;}
+function tmDirectChildOf(anc,node){let c=node,p=node;while(c&&c.parentElement&&c.parentElement!==anc){p=c;c=c.parentElement}return (c&&c.parentElement===anc)?c:p;}
+
+function tmApplySideWidth(el,w){
+  const W = Math.max(320, Math.min(720, Number(w)||480));
+  document.documentElement.style.setProperty('--notes-w', W+'px');
+  if (el) { el.style.flex = `0 0 ${W}px`; el.style.width=W+'px'; el.style.minWidth='320px'; el.style.maxWidth='720px'; }
+  localStorage.setItem('telemed_notes_width', String(W));
+}
+
+// =============== layout 2 colunas robusto =================
+function tmEnsureTwoColumns() {
+  const stage = tmPickStage();
+  const side  = tmPickSide();
+  if (!stage || !side) return;
+
+  const anc      = tmLCA(stage, side);
+  const stageBlk = tmDirectChildOf(anc, stage);
+  const sideBlk  = tmDirectChildOf(anc, side);
+
+  anc.style.display = 'flex';
+  anc.style.gap = '16px';
+
+  stageBlk.style.order = '0';
+  sideBlk.style.order  = '1';
+
+  stageBlk.style.flex = '1 1 auto';
+  stageBlk.style.minWidth = '0';
+
+  // marca palco e garante fundo
+  stageBlk.classList.add('tm-stage');
+  if (!stageBlk.querySelector('.tm-waiting')) {
+    const w = document.createElement('div');
+    w.className = 'tm-waiting';
+    w.textContent = 'Aguardando paciente…';
+    stageBlk.appendChild(w);
+  }
+
+  tmApplySideWidth(sideBlk, localStorage.getItem('telemed_notes_width')||480);
+
+  // resizer — se você já tem um handle (#tmResizer), realocamos pro painel
+  const handle = document.getElementById('tmResizer');
+  if (handle && handle.parentElement !== sideBlk) sideBlk.appendChild(handle);
+  if (handle) { handle.style.left='-4px'; handle.style.right=''; }
+  if (window.tmResizer && typeof window.tmResizer.onWidthChange==='function') {
+    window.tmResizer.onWidthChange = (w)=>tmApplySideWidth(sideBlk,w);
+  }
+
+  return stageBlk;
+}
+
+// ================= barra de controles =====================
+function tmEnsureControls(stageBlk) {
+  if (!stageBlk) return;
+  if (stageBlk.querySelector('.tm-controls')) return;
+
+  const bar = document.createElement('div');
+  bar.className = 'tm-controls';
+  bar.innerHTML = `
+    ${btn('📎','Anexar documento','attach')}
+    ${btn('📸','Screenshot','snap')}
+    ${btn('💬','Abrir Chat','chat')}
+    ${btn('🔔','Notificações','bell')}
+    ${btn('🧠','Dr. AI','ai')}
+    ${btn('🎙️','Microfone','mic')}
+    ${btn('📷','Câmera','cam')}
+    ${btn('⏸️','Aguardar/retomar','hold','alert')}
+    ${btn('⛔','Encerrar','end','end')}
+  `;
+  stageBlk.appendChild(bar);
+
+  // ações (stubs seguros)
+  bar.addEventListener('click', (e)=>{
+    const b = e.target.closest('.tm-btn');
+    if (!b) return;
+    const k = b.dataset.key;
+
+    // toggles
+    if (k==='mic' || k==='cam') { b.classList.toggle('muted'); return; }
+
+    if (k==='attach') console.log('[UX] anexar…');
+    if (k==='snap')   console.log('[UX] screenshot…');
+    if (k==='chat')   document.querySelector('[data-tab="chat"], .tab-chat, [role="tab"][aria-controls*="chat"]')?.click();
+    if (k==='bell')   console.log('[UX] notificações…');
+    if (k==='ai')     document.getElementById('tmDrAiPanel')?.classList.add('open');
+    if (k==='hold')   console.log('[UX] paciente para sala de espera…');
+    if (k==='end')    console.log('[UX] encerrar consulta…');
+  });
+
+  function btn(emoji, tip, key, extra=''){
+    return `<div class="tm-btn ${extra}" data-key="${key}" aria-label="${tip}" title="${tip}">
+      <span>${emoji}</span><div class="tm-tooltip">${tip}</div>
+    </div>`;
+  }
+}
+
+// =============== bootstrap =================
+(function bootstrapEnhanced(){
+  const stageBlk = tmEnsureTwoColumns();
+  tmEnsureControls(stageBlk);
+})();
+
+
+Os ícones estão com emojis para ficar zero dependência de assets. Depois podemos trocar por seus SVGs.
+
+2) O que isso resolve
+
+Sem erros de insertBefore: o layout usa display:flex no ancestral comum e só muda order/flex.
+
+A área de vídeo (mesmo que vazia) vira um “palco” (.tm-stage) com fundo e mensagem Aguardando paciente…; quando você integrar o SDK de vídeo, é só renderizar dentro desse bloco.
+
+A barra de controles aparece centralizada embaixo do vídeo, com:
+
+📎 anexar, 📸 screenshot, 💬 chat, 🔔 notificações, 🧠 Dr.AI, 🎙️ mic (toggle), 📷 câmera (toggle), ⏸️ aguardar (amarelo), ⛔ encerrar (vermelho).
+
+As ações estão “stubadas” (logam no console e clicam na aba do chat). É só ligar cada uma ao seu endpoint/SDK.
+
+A largura do painel continua persistida no localStorage (chave telemed_notes_width) e sincronizada com a CSS --notes-w.
+
+3) Teste rápido
+
+pkill -f node 2>/dev/null || true && npm run dev
+
+Abra /enhanced, recarregue com Ctrl+F5.
+
+Deve ver:
+
+mensagem “Enhanced UX loaded…” no console,
+
+vídeo à esquerda, painel à direita,
+
+barra de botões sobre o vídeo.
+
+Se a “aba Chat” tiver outro seletor, me diga qual é o markup e eu ajusto o querySelector do botão 💬 (hoje procura [data-tab="chat"], .tab-chat, [role="tab"][aria-controls*="chat"]]).
+
+Quer que eu já troque os emojis pelos seus SVGs e conecte os cliques aos seus endpoints reais?
+
+Você disse:
+SIM
+O ChatGPT disse:
+Pensou por 45s
+
+perfeito! vou trocar os emojis por SVGs e já amarrar os cliques aos endpoints padrão. Seguem patches diretos, prontos pra colar.
+
+1) server/public/enhanced-consultation.html
+
+Logo antes de fechar o <body>, adicione o sprite de ícones (1x no app):
+
+<!-- SVG ICON SPRITE (global) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="i-clip" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5 6.5L8.88 14.12a3 3 0 1 0 4.24 4.24l7.07-7.07a5 5 0 1 0-7.07-7.07L4.7 8.57a7 7 0 1 0 9.9 9.9l5.66-5.66"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3l1.5 2H18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2.5L10 3h-1zM12 9a5 5 0 1 0 0 10a5 5 0 0 0 0-10"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2m6-6V11a6 6 0 0 0-5-5.91V4a1 1 0 1 0-2 0v1.09A6 6 0 0 0 6 11v5L4 18v1h16v-1z"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path fill="currentColor" d="M10 2a3 3 0 0 0-3 3v.17A3 3 0 0 0 3 8v2a3 3 0 0 0 2 2.82V14a4 4 0 0 0 4 4h1V4a2 2 0 0 0-2-2m4 0a2 2 0 0 0-2 2v14h1a4 4 0 0 0 4-4v-1.18A3 3 0 0 0 21 10V8a3 3 0 0 0-4-2.83V5a3 3 0 0 0-3-3"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3m5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21H9v2h6v-2h-2v-3.08A7 7 0 0 0 19 11z"/></symbol>
+  <symbol id="i-mic-off" viewBox="0 0 24 24"><path fill="currentColor" d="M19 11h-2a5 5 0 0 1-7.58 4.26l1.46-1.46A3 3 0 0 0 15 11V9h2v2a7 7 0 0 1-2 5l1.41 1.41A8.96 8.96 0 0 0 20 11M3.28 2.22L2 3.5l6.5 6.5V11a3 3 0 0 0 3 3c.15 0 .3-.01.44-.04l1.61 1.61A5 5 0 0 1 8 11V9.5L3.28 2.22M12 2a3 3 0 0 0-3 3v1.18L11.82 9H15V5a3 3 0 0 0-3-3m-1 18v3h2v-3h-2Z"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path fill="currentColor" d="M17 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3.5l5 5V5.5l-5 5Z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M6 4h4v16H6V4m8 0h4v16h-4V4"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><path fill="currentColor" d="M6 6h12v12H6z"/></symbol>
+</svg>
+
+
+Opcional (ajuda o backend): no <body> adicione o id da consulta se você tiver um:
+
+<body data-consult-id="demo-123">
+
+2) server/public/js/enhanced-ux.js
+
+Substitua a função de barra que te passei antes por esta versão com SVG + endpoints. (Se você mantiver meu bloco anterior, apenas troque a tmEnsureControls por esta aqui e acrescente os helpers tmApi, tmUpload, tmSnapshot.)
+
+// ---- helpers de API ------------------------------------
+function tmConsultId() {
+  const b = document.body?.dataset?.consultId;
+  if (b) return b;
+  const url = new URL(location.href);
+  return url.searchParams.get('cid') || 'demo-123';
+}
+async function tmApi(path, {method='GET', json, form}={}) {
+  const opts = { method, headers:{} };
+  if (json) { opts.headers['Content-Type']='application/json'; opts.body = JSON.stringify(json); }
+  if (form) { opts.body = form; } // multipart
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error(`${method} ${path} -> ${r.status}`);
+  const ct = r.headers.get('content-type')||'';
+  return ct.includes('application/json') ? r.json() : r.text();
+}
+function tmIcon(id){ return `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#${id}"/></svg>`; }
+
+// ---- upload de arquivo (📎) -----------------------------
+function tmUpload(consultId) {
+  let input = document.getElementById('tmHiddenUpload');
+  if (!input) {
+    input = document.createElement('input');
+    input.type='file'; input.id='tmHiddenUpload'; input.multiple=true; input.style.display='none';
+    document.body.appendChild(input);
+  }
+  input.onchange = async () => {
+    const files = Array.from(input.files||[]);
+    if (!files.length) return;
+    const fd = new FormData();
+    fd.append('consultId', consultId);
+    files.forEach(f => fd.append('files', f, f.name));
+    try {
+      await tmApi(`/api/consults/${consultId}/attachments`, {method:'POST', form:fd});
+      console.log('[UX] anexos enviados');
+    } catch(e){ console.error(e); }
+    input.value='';
+  };
+  input.click();
+}
+
+// ---- snapshot (📸) -------------------------------------
+async function tmSnapshot(stageEl, consultId) {
+  // tenta capturar <video> dentro do palco
+  const video = stageEl?.querySelector('video');
+  if (!video || !video.videoWidth) {
+    console.warn('Sem <video> para snapshot; nada feito.');
+    return;
+  }
+  const w = video.videoWidth, h = video.videoHeight;
+  const canvas = Object.assign(document.createElement('canvas'), { width:w, height:h });
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, w, h);
+  const blob = await new Promise(res => canvas.toBlob(res, 'image/png', 0.92));
+  const fd = new FormData();
+  fd.append('consultId', consultId);
+  fd.append('snapshot', blob, `snapshot-${Date.now()}.png`);
+  try {
+    await tmApi(`/api/consults/${consultId}/snapshots`, {method:'POST', form:fd});
+    console.log('[UX] snapshot enviado');
+  } catch(e){ console.error(e); }
+}
+
+// ---- Dr. AI (🧠) – envia pergunta para seu endpoint ----
+async function tmAskDoctorAI(question, context={}) {
+  const consultId = tmConsultId();
+  try {
+    const resp = await tmApi('/api/ai/doctor', {method:'POST', json:{ consultId, question, context }});
+    return resp; // {answer: "...", citations: [...]}
+  } catch(e){ console.error(e); return {answer:'(Falha ao contatar Dr. AI)'}; }
+}
+
+// ---- barra com SVG + actions ---------------------------
+function tmEnsureControls(stageBlk) {
+  if (!stageBlk) return;
+  if (stageBlk.querySelector('.tm-controls')) return;
+
+  const consultId = tmConsultId();
+  const bar = document.createElement('div');
+  bar.className = 'tm-controls';
+  bar.innerHTML = `
+    ${btn('attach',  'Anexar documento', 'i-clip')}
+    ${btn('snap',    'Screenshot',        'i-camera')}
+    ${btn('chat',    'Abrir Chat',        'i-chat')}
+    ${btn('bell',    'Notificações',      'i-bell')}
+    ${btn('ai',      'Dr. AI',            'i-brain')}
+    ${btn('mic',     'Microfone',         'i-mic')}
+    ${btn('cam',     'Câmera',            'i-cam')}
+    ${btn('hold',    'Aguardar/retomar',  'i-pause', 'alert')}
+    ${btn('end',     'Encerrar',          'i-stop',  'end')}
+  `;
+  stageBlk.appendChild(bar);
+
+  // eventos
+  bar.addEventListener('click', async (e)=>{
+    const b = e.target.closest('.tm-btn'); if (!b) return;
+    const key = b.dataset.key;
+    try {
+      if (key==='attach')  return tmUpload(consultId);
+      if (key==='snap')    return tmSnapshot(stageBlk, consultId);
+      if (key==='chat')    return document.querySelector('[data-tab="chat"], .tab-chat, [role="tab"][aria-controls*="chat"]')?.click();
+      if (key==='bell')    return console.log('[UX] abrir notificações…');
+      if (key==='ai')      { document.getElementById('tmDrAiPanel')?.classList.add('open'); return; }
+
+      if (key==='mic')     { b.classList.toggle('muted'); window.telemedVideo?.toggleMic?.(); return; }
+      if (key==='cam')     { b.classList.toggle('muted'); window.telemedVideo?.toggleCam?.(); return; }
+
+      if (key==='hold') {
+        b.classList.toggle('alert');
+        await tmApi(`/api/consults/${consultId}/hold`, {method:'POST', json:{ hold: b.classList.contains('alert') }});
+        return;
+      }
+      if (key==='end') {
+        await tmApi(`/api/consults/${consultId}/end`, {method:'POST'});
+        console.log('[UX] consulta encerrada');
+        return;
+      }
+    } catch(err){ console.error(err); }
+  });
+
+  function btn(key, tip, iconId, extra=''){
+    return `
+      <button class="tm-btn ${extra}" data-key="${key}" aria-label="${tip}" title="${tip}" type="button">
+        ${tmIcon(iconId)} <span class="tm-tooltip">${tip}</span>
+      </button>
+    `;
+  }
+}
+
+// ---- integra botão "Iniciar Consulta", Salvar, Finalizar ---
+(function wireActions(){
+  const cid = tmConsultId();
+  document.querySelector('[data-action="start"], .btn-start-consult')?.addEventListener('click', async ()=>{
+    try { await tmApi(`/api/consults/${cid}/start`, {method:'POST'}); } catch(e){ console.error(e); }
+  });
+  document.querySelector('[data-action="save"], .btn-save-consult')?.addEventListener('click', async ()=>{
+    const payload = collectNotesPayload();
+    try { await tmApi(`/api/consults/${cid}/notes`, {method:'POST', json:payload}); } catch(e){ console.error(e); }
+  });
+  document.querySelector('[data-action="finalize"], .btn-finalize-consult')?.addEventListener('click', async ()=>{
+    const payload = collectNotesPayload();
+    try { await tmApi(`/api/consults/${cid}/finalize`, {method:'POST', json:payload}); } catch(e){ console.error(e); }
+  });
+
+  function val(sel){ return document.querySelector(sel)?.value?.trim() || ''; }
+  function checked(sel){ return !!document.querySelector(sel)?.checked; }
+  function collectNotesPayload(){
+    return {
+      complaint:    val('#tmComplaint, textarea[name="complaint"]'),
+      history:      val('#tmHistory, textarea[name="history"]'),
+      cid10:        val('#tmCid10, input[name="cid10"]'),
+      plan:         val('#tmPlan, textarea[name="plan"]'),
+      flags: {
+        crisis:     checked('#tmFlagCrisis, input[name="flag_crisis"]'),
+        complexity: checked('#tmFlagComplex, input[name="flag_complex"]'),
+        inconsistency: checked('#tmFlagInconsistency, input[name="flag_inconsistency"]'),
+      },
+      alerts:       val('#tmAlerts, input[name="alerts"]')
+    };
+  }
+})();
+
+// ---- Dr AI painel (seu campo de pergunta) ----------------
+(function wireDoctorAI(){
+  const form  = document.getElementById('tmDrAiForm');
+  const input = document.getElementById('tmDrAiInput');
+  const out   = document.getElementById('tmDrAiOut');
+  if (!form || !input || !out) return;
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const q = input.value.trim(); if (!q) return;
+    input.value=''; out.classList.add('loading');
+    const resp = await tmAskDoctorAI(q, { page: location.pathname });
+    out.classList.remove('loading');
+    out.innerText = resp?.answer || '(sem resposta)';
+  });
+})();
+
+
+Observações:
+
+endpoints usados (ajuste se os seus forem outros):
+
+POST /api/consults/:id/start
+
+POST /api/consults/:id/attachments (FormData files[])
+
+POST /api/consults/:id/snapshots (FormData snapshot)
+
+POST /api/consults/:id/hold ({hold:true|false})
+
+POST /api/consults/:id/end
+
+POST /api/consults/:id/notes
+
+POST /api/consults/:id/finalize
+
+POST /api/ai/doctor ({consultId, question, context})
+
+Se seu backend estiver com prefixo diferente (ex.: /v1), basta trocar no tmApi(...).
+
+3) Memed (aba Receitas)
+
+Você já tem a aba Receitas e o botão “Nova Receita Memed”. Para abrir com dados do paciente (demo), use algo assim no click do botão:
+
+document.querySelector('[data-action="new-memed"]')?.addEventListener('click', ()=>{
+  const patient = {
+    name:  document.querySelector('[data-patient-name]')?.dataset.patientName || 'Paciente Demo',
+    age:   Number(document.querySelector('[data-patient-age]')?.dataset.patientAge || 40),
+    phone: document.querySelector('[data-patient-phone]')?.dataset.patientPhone || '11987654321'
+  };
+  const url = 'https://memed.com.br/?demo=1&patient=' + encodeURIComponent(JSON.stringify(patient));
+  window.open(url, '_blank', 'noopener,noreferrer');
+});

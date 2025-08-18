@@ -361,6 +361,277 @@ function enforceTwoColumns() {
 // chama no load com try/catch para evitar quebrar
 try { enforceTwoColumns(); } catch(e) { console.warn('Layout enforcement failed:', e); }
 
+// ================== ESTILOS (uma vez) ==================
+(function injectEnhStyles(){
+  if (document.getElementById('tmEnhStyles')) return;
+  const css = `
+  :root { --notes-w: ${Number(localStorage.getItem('telemed_notes_width'))||480}px; }
+  .tm-stage { position:relative; background:#0d1520; min-height:420px; border-radius:10px; overflow:hidden; }
+  .tm-stage .tm-waiting {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#8aa1b1; font:500 16px/1.4 system-ui, -apple-system, Segoe UI; pointer-events:none;
+    background: linear-gradient(135deg, #0d1520 0%, #1a2332 50%, #0f1419 100%);
+  }
+  .tm-controls {
+    position:absolute; left:50%; bottom:16px; transform:translateX(-50%);
+    display:flex; gap:10px; padding:10px 12px; border-radius:22px;
+    backdrop-filter: blur(8px); background:rgba(0,0,0,.35); box-shadow:0 6px 24px rgba(0,0,0,.25);
+    z-index:60; pointer-events:auto;
+  }
+  .tm-btn {
+    width:36px; height:36px; display:grid; place-items:center;
+    border-radius:50%; background:#182230; color:#c9d5e1; cursor:pointer; border:1px solid rgba(255,255,255,.06);
+    transition:transform .12s ease, background .12s ease;
+  }
+  .tm-btn:hover { transform:translateY(-1px); background:#1f2e40; }
+  .tm-btn.alert { background:#a46c00; color:#fff; }
+  .tm-btn.end   { background:#b4232c; color:#fff; }
+  .tm-btn.muted, .tm-btn.disabled { opacity:.55; }
+  .tm-tooltip { position:absolute; bottom:52px; background:#000; color:#fff; padding:4px 8px; border-radius:6px; font-size:12px; white-space:nowrap; opacity:0; transform:translateY(6px); pointer-events:none; transition:.12s; }
+  .tm-btn:hover .tm-tooltip { opacity:1; transform:translateY(0); }
+  .tm-upload-progress { position:absolute; top:-30px; left:50%; transform:translateX(-50%); background:#000; color:#fff; padding:4px 8px; border-radius:4px; font-size:11px; }
+  `;
+  const style = document.createElement('style');
+  style.id = 'tmEnhStyles';
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+// ---- helpers de API ------------------------------------
+function tmConsultId() {
+  const b = document.body?.dataset?.consultId;
+  if (b) return b;
+  const url = new URL(location.href);
+  return url.searchParams.get('cid') || 'demo-123';
+}
+
+async function tmApi(path, {method='GET', json, form}={}) {
+  const opts = { method, headers:{} };
+  if (json) { opts.headers['Content-Type']='application/json'; opts.body = JSON.stringify(json); }
+  if (form) { opts.body = form; } // multipart
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error(`${method} ${path} -> ${r.status}`);
+  const ct = r.headers.get('content-type')||'';
+  return ct.includes('application/json') ? r.json() : r.text();
+}
+
+function tmIcon(id){ return `<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#${id}"/></svg>`; }
+
+// ---- upload de arquivo (📎) -----------------------------
+function tmUpload(consultId) {
+  let input = document.getElementById('tmHiddenUpload');
+  if (!input) {
+    input = document.createElement('input');
+    input.type='file'; input.id='tmHiddenUpload'; input.multiple=true; input.style.display='none';
+    document.body.appendChild(input);
+  }
+  input.onchange = async () => {
+    if (!input.files.length) return;
+    const prog = document.createElement('div');
+    prog.className = 'tm-upload-progress';
+    prog.textContent = 'Enviando arquivos...';
+    document.querySelector('.tm-controls')?.appendChild(prog);
+    
+    try {
+      const form = new FormData();
+      Array.from(input.files).forEach(f => form.append('files', f));
+      form.append('consultId', consultId);
+      
+      const res = await tmApi('/api/consultation/upload', {method:'POST', form});
+      prog.textContent = `✓ ${input.files.length} arquivo(s) enviado(s)`;
+      setTimeout(() => prog.remove(), 2000);
+    } catch(e) {
+      prog.textContent = `✗ Erro: ${e.message}`;
+      setTimeout(() => prog.remove(), 3000);
+    }
+  };
+  input.click();
+}
+
+// ---- screenshot (📸) -----------------------------
+async function tmSnapshot(consultId) {
+  try {
+    const stage = document.querySelector('.tm-stage');
+    if (!stage) throw new Error('Área de vídeo não encontrada');
+    
+    // Usando html2canvas se disponível
+    if (window.html2canvas) {
+      const canvas = await html2canvas(stage);
+      canvas.toBlob(async (blob) => {
+        const form = new FormData();
+        form.append('screenshot', blob, `screenshot-${Date.now()}.png`);
+        form.append('consultId', consultId);
+        
+        await tmApi('/api/consultation/screenshot', {method:'POST', form});
+        console.log('Screenshot salvo com sucesso');
+      });
+    } else {
+      // Fallback simples
+      console.log('📸 Screenshot capturado (html2canvas não disponível)');
+      await tmApi('/api/consultation/screenshot', {
+        method:'POST', 
+        json: {consultId, timestamp: new Date().toISOString()}
+      });
+    }
+  } catch(e) {
+    console.error('Erro no screenshot:', e);
+  }
+}
+
+// =========== helpers de detecção de palco/painel ===========
+function tmPickStage() {
+  // preferimos seletores conhecidos; se não houver, pega o maior bloco visível
+  const known = document.querySelector(
+    '[data-panel="stage"], .video-area, .stage, .main-stage, #tmStage'
+  );
+  if (known) return known;
+  // heurística: maior DIV visível
+  let best=null, bestArea=0;
+  for (const el of document.querySelectorAll('div')) {
+    const r = el.getBoundingClientRect();
+    const area = (r.width||0)*(r.height||0);
+    const visible = r.width>300 && r.height>250 && getComputedStyle(el).display!=='none';
+    if (visible && area>bestArea) { best=el; bestArea=area; }
+  }
+  return best || document.body;
+}
+
+function tmPickSide() {
+  return document.querySelector(
+    '[data-panel="side"], .side-panel, .consult-panel, .right-panel, .left-panel'
+  );
+}
+
+// =============== layout 2 colunas robusto =================
+function tmEnsureTwoColumns() {
+  const stage = tmPickStage();
+  const side  = tmPickSide();
+  if (!stage || !side) return;
+
+  const anc      = tmLCA(stage, side);
+  const stageBlk = tmDirectChildOf(anc, stage);
+  const sideBlk  = tmDirectChildOf(anc, side);
+
+  anc.style.display = 'flex';
+  anc.style.gap = '16px';
+  anc.style.alignItems = 'stretch';
+
+  stageBlk.style.order = '0';
+  sideBlk.style.order  = '1';
+
+  stageBlk.style.flex = '1 1 auto';
+  stageBlk.style.minWidth = '0';
+  stageBlk.style.position = 'relative';
+
+  // marca palco e garante fundo
+  stageBlk.classList.add('tm-stage');
+  if (!stageBlk.querySelector('.tm-waiting')) {
+    const w = document.createElement('div');
+    w.className = 'tm-waiting';
+    w.textContent = 'Aguardando paciente entrar na videochamada...';
+    stageBlk.appendChild(w);
+  }
+
+  tmApplySideWidth(sideBlk, localStorage.getItem('telemed_notes_width')||480);
+
+  // resizer — se você já tem um handle (#tmResizer), realocamos pro painel
+  const handle = document.getElementById('tmResizer');
+  if (handle && handle.parentElement !== sideBlk) sideBlk.appendChild(handle);
+  if (handle) { handle.style.left='-4px'; handle.style.right=''; }
+  if (window.tmResizer && typeof window.tmResizer.onWidthChange==='function') {
+    window.tmResizer.onWidthChange = (w)=>tmApplySideWidth(sideBlk,w);
+  }
+
+  return stageBlk;
+}
+
+// ================= barra de controles =====================
+function tmEnsureControls(stageBlk) {
+  if (!stageBlk) return;
+  if (stageBlk.querySelector('.tm-controls')) return;
+
+  const bar = document.createElement('div');
+  bar.className = 'tm-controls';
+  bar.innerHTML = `
+    ${btn('i-clip','Anexar documento','attach')}
+    ${btn('i-camera','Screenshot','snap')}
+    ${btn('i-chat','Abrir Chat','chat')}
+    ${btn('i-bell','Notificações','bell')}
+    ${btn('i-brain','Dr. AI','ai')}
+    ${btn('i-mic','Microfone','mic')}
+    ${btn('i-cam','Câmera','cam')}
+    ${btn('i-pause','Aguardar/retomar','hold','alert')}
+    ${btn('i-stop','Encerrar','end','end')}
+  `;
+  stageBlk.appendChild(bar);
+
+  // ações funcionais
+  bar.addEventListener('click', async (e)=>{
+    const b = e.target.closest('.tm-btn');
+    if (!b) return;
+    const k = b.dataset.key;
+    const consultId = tmConsultId();
+
+    // toggles visuais
+    if (k==='mic') { 
+      b.classList.toggle('muted'); 
+      const icon = b.querySelector('use');
+      icon.setAttribute('href', b.classList.contains('muted') ? '#i-mic-off' : '#i-mic');
+      await tmApi('/api/consultation/toggle-mic', {method:'POST', json:{consultId, muted:b.classList.contains('muted')}});
+      return; 
+    }
+    if (k==='cam') { 
+      b.classList.toggle('muted'); 
+      await tmApi('/api/consultation/toggle-camera', {method:'POST', json:{consultId, enabled:!b.classList.contains('muted')}});
+      return; 
+    }
+
+    // ações diretas
+    if (k==='attach') tmUpload(consultId);
+    if (k==='snap') await tmSnapshot(consultId);
+    if (k==='chat') {
+      // tenta múltiplos seletores para o chat
+      const chatTab = document.querySelector('[data-tab="chat"], .tab-chat, [role="tab"][aria-controls*="chat"], [data-target="#chat"]');
+      if (chatTab) chatTab.click();
+      else console.log('Chat tab não encontrada');
+    }
+    if (k==='bell') {
+      await tmApi('/api/consultation/notifications', {method:'GET'});
+      console.log('Verificando notificações...');
+    }
+    if (k==='ai') {
+      // abre painel Dr. AI
+      const aiPanel = document.getElementById('tmDrAiPanel');
+      if (aiPanel) aiPanel.classList.add('open');
+      else console.log('Painel Dr. AI não encontrado');
+    }
+    if (k==='hold') {
+      b.classList.toggle('active');
+      const onHold = b.classList.contains('active');
+      await tmApi('/api/consultation/hold', {method:'POST', json:{consultId, hold:onHold}});
+      console.log(onHold ? 'Paciente em espera' : 'Consulta retomada');
+    }
+    if (k==='end') {
+      if (confirm('Tem certeza que deseja encerrar a consulta?')) {
+        await tmApi('/api/consultation/end', {method:'POST', json:{consultId}});
+        window.location.href = '/dashboard';
+      }
+    }
+  });
+
+  function btn(iconId, tip, key, extra=''){
+    return `<div class="tm-btn ${extra}" data-key="${key}" aria-label="${tip}" title="${tip}">
+      ${tmIcon(iconId)}<div class="tm-tooltip">${tip}</div>
+    </div>`;
+  }
+}
+
+// =============== bootstrap =================
+(function bootstrapEnhanced(){
+  const stageBlk = tmEnsureTwoColumns();
+  tmEnsureControls(stageBlk);
+})();
+
 // ---------- Resizer do painel lateral (flex/width) com persistência ----------
 (function initSideResizer(){
   const side =

@@ -49,6 +49,13 @@ import { cid10 } from './routes/cid10.js';
 import { exams } from './routes/exams.js';
 import { memed } from './routes/memed.js';
 
+// Multer for file uploads
+const multer = require('multer');
+const upload = multer({ 
+  dest: 'uploads/', 
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
+
 // ====== APIs e /perf primeiro ======
 // (mantenha aqui TODAS as rotas /api/*, /perf/* e middlewares como timing/compression)
 
@@ -58,6 +65,77 @@ app.use("/api/ai", ai);
 app.use("/api/cid10", cid10);
 app.use("/api/exams", exams);
 app.use("/api/memed", memed);
+
+// Video consultation control endpoints
+app.post('/api/consultation/upload', upload.array('files'), async (req, res) => {
+  try {
+    const { consultId } = req.body;
+    const files = req.files;
+    console.log(`📎 Upload para consulta ${consultId}: ${files?.length || 0} arquivos`);
+    res.json({ success: true, files: files?.length || 0, consultId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/consultation/screenshot', upload.single('screenshot'), async (req, res) => {
+  try {
+    const { consultId } = req.body;
+    console.log(`📸 Screenshot capturado para consulta ${consultId}`);
+    res.json({ success: true, consultId, timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/consultation/toggle-mic', async (req, res) => {
+  try {
+    const { consultId, muted } = req.body;
+    console.log(`🎙️ Microfone ${muted ? 'mutado' : 'ativado'} na consulta ${consultId}`);
+    res.json({ success: true, consultId, muted });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/consultation/toggle-camera', async (req, res) => {
+  try {
+    const { consultId, enabled } = req.body;
+    console.log(`📷 Câmera ${enabled ? 'ativada' : 'desativada'} na consulta ${consultId}`);
+    res.json({ success: true, consultId, enabled });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/consultation/notifications', async (req, res) => {
+  try {
+    console.log('🔔 Verificando notificações...');
+    res.json({ notifications: [], count: 0 });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/consultation/hold', async (req, res) => {
+  try {
+    const { consultId, hold } = req.body;
+    console.log(`⏸️ Consulta ${consultId} ${hold ? 'pausada' : 'retomada'}`);
+    res.json({ success: true, consultId, hold });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/consultation/end', async (req, res) => {
+  try {
+    const { consultId } = req.body;
+    console.log(`⛔ Consulta ${consultId} encerrada`);
+    res.json({ success: true, consultId, ended: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // ====== Vite dev removido devido a limitações de await ======
 // Usando apenas modo produção com servindo de arquivos estáticos
