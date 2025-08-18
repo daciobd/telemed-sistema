@@ -1,0 +1,387 @@
+vamos “ligar” a sua tela /enhanced ao backend, ao Dr. AI, CID-10, Exames e Memed. Abaixo vai um kit completo (rotas Express + chamadas no React). É plug-and-play: copie os arquivos/trechos pros caminhos indicados.
+
+1) Backend (Express/TypeScript)
+1.1 Rotas de consulta (start / notes / finalize)
+
+server/routes/consults.ts
+
+import { Router } from "express";
+
+type Consult = {
+  id: string;
+  status: "waiting" | "in_progress" | "finished";
+  startedAt?: string;
+  endedAt?: string;
+  notes?: {
+    hda: string; // História da Doença Atual
+    hypothesis?: { code?: string; label?: string };
+    conduct?: string;
+    alertSigns?: string;
+    complexity?: {
+      aggravation?: boolean;
+      clinical?: boolean;
+      inconsistencies?: boolean;
+    };
+    panelSize?: "sm" | "md" | "lg";
+  };
+  exams?: any[];
+  recipes?: any[];
+};
+
+const db = new Map<string, Consult>(); // demo in-memory
+
+export const consults = Router();
+
+/** POST /api/consults/:id/start  */
+consults.post("/:id/start", (req, res) => {
+  const { id } = req.params;
+  const c: Consult = db.get(id) ?? { id, status: "waiting" };
+  c.status = "in_progress";
+  c.startedAt = new Date().toISOString();
+  db.set(id, c);
+  res.json({ ok: true, consult: c });
+});
+
+/** POST /api/consults/:id/notes */
+consults.post("/:id/notes", (req, res) => {
+  const { id } = req.params;
+  const { hda, hypothesis, conduct, alertSigns, complexity, panelSize } = req.body ?? {};
+  if (!hda || !conduct) return res.status(400).json({ ok:false, error:"Campos obrigatórios: hda, conduct" });
+
+  const c: Consult = db.get(id) ?? { id, status: "in_progress" };
+  c.notes = { hda, hypothesis, conduct, alertSigns, complexity, panelSize };
+  db.set(id, c);
+  res.json({ ok: true, consult: c });
+});
+
+/** POST /api/consults/:id/finalize */
+consults.post("/:id/finalize", (req, res) => {
+  const { id } = req.params;
+  const { summary } = req.body ?? {};
+  const c = db.get(id) ?? { id, status: "in_progress" as const };
+  c.status = "finished";
+  c.endedAt = new Date().toISOString();
+  if (summary) {
+    c.notes = { ...(c.notes ?? {}), conduct: (c.notes?.conduct ?? "") + `\n\nResumo final: ${summary}` };
+  }
+  db.set(id, c);
+  res.json({ ok: true, consult: c });
+});
+
+export default consults;
+
+1.2 Dr. AI (usa seu cliente OpenAI já inicializado)
+
+server/routes/ai.ts
+
+import { Router } from "express";
+import OpenAI from "openai";
+
+export const ai = Router();
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+const SYSTEM_PROMPT = `Você é o Dr. AI, assistente clínico para médicos.
+Responda de forma objetiva, cite red flags quando houver, proponha diferenciais,
+e SEMPRE inclua a ressalva: "Conteúdo educativo; a decisão é do médico assistente."`;
+
+ai.post("/clinical", async (req, res) => {
+  const { question, patient, context } = req.body ?? {};
+  if (!question) return res.status(400).json({ ok:false, error:"question obrigatório" });
+
+  try {
+    const userPrompt = [
+      patient ? `Paciente: ${JSON.stringify(patient)}` : "",
+      context ? `Contexto: ${JSON.stringify(context)}` : "",
+      `Pergunta do médico: ${question}`
+    ].filter(Boolean).join("\n");
+
+    const r = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.2,
+    });
+
+    const text = r.choices?.[0]?.message?.content?.trim() || "Sem resposta.";
+    res.json({ ok:true, answer: text + "\n\n*Conteúdo educativo; a decisão é do médico assistente.*" });
+  } catch (e:any) {
+    res.status(200).json({
+      ok:true,
+      answer:
+        "Não consegui acessar o serviço de IA agora. Sugestão geral: confirme sinais de gravidade, descarte diagnósticos diferenciais prioritários, e documente conduta e retorno. *Conteúdo educativo; a decisão é do médico assistente.*"
+    });
+  }
+});
+
+1.3 CID-10 (autocomplete local)
+
+server/cid10.json (amostra; adicione sua lista completa depois)
+
+[
+  { "code": "F41.1", "label": "Transtorno de ansiedade generalizada" },
+  { "code": "J00",   "label": "Nasofaringite aguda (resfriado comum)" },
+  { "code": "I10",   "label": "Hipertensão essencial (primária)" },
+  { "code": "E11",   "label": "Diabetes mellitus tipo 2" }
+]
+
+
+server/routes/cid10.ts
+
+import { Router } from "express";
+import fs from "fs";
+import path from "path";
+
+const data = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "..", "cid10.json"), "utf-8")
+) as {code:string; label:string}[];
+
+export const cid10 = Router();
+
+/** GET /api/cid10?query=ansiedade */
+cid10.get("/", (req, res) => {
+  const q = String(req.query.query || "").toLowerCase();
+  if (!q) return res.json([]);
+  const result = data
+    .filter(x => x.code.toLowerCase().includes(q) || x.label.toLowerCase().includes(q))
+    .slice(0, 20);
+  res.json(result);
+});
+
+1.4 Exames (templates + pedido)
+
+server/routes/exams.ts
+
+import { Router } from "express";
+export const exams = Router();
+
+const templates = [
+  { id:"hemograma",  name:"Hemograma completo", routine:"Jejum de 8–12 horas" },
+  { id:"glicemia",   name:"Glicemia de jejum",  routine:"Jejum rigoroso de 8–12 horas" },
+];
+
+/** GET /api/exams/templates */
+exams.get("/templates", (_req, res) => res.json(templates));
+
+/** POST /api/exams/order */
+exams.post("/order", (req, res) => {
+  const { consultId, name, priority, instructions } = req.body ?? {};
+  if (!consultId || !name) return res.status(400).json({ ok:false, error:"consultId e name obrigatórios" });
+  // aqui você chamaria Fleury/Seu LIS. Por enquanto, simulamos:
+  res.json({
+    ok:true,
+    order: { id: "EX-" + Math.random().toString(36).slice(2,8).toUpperCase(), consultId, name, priority, instructions }
+  });
+});
+
+1.5 Memed (abrir, demo URL + webhook)
+
+server/routes/memed.ts
+
+import { Router } from "express";
+export const memed = Router();
+
+/** GET /api/memed/launch?name=Ana&age=30&phone=1198765... */
+memed.get("/launch", (req, res) => {
+  // Em produção, gere token/URL segundo a doc da Memed.
+  const params = new URLSearchParams({ demo:"1", patient: JSON.stringify({
+    name: req.query.name, age: req.query.age, phone: req.query.phone
+  })});
+  const url = `https://memed.com.br/?${params.toString()}`;
+  res.json({ ok:true, url });
+});
+
+/** POST /api/memed/webhook  (recebe retorno/receita pronta) */
+memed.post("/webhook", (req, res) => {
+  // armazene a receita em sua base
+  console.log("Webhook Memed:", req.body);
+  res.json({ ok:true });
+});
+
+1.6 Montar tudo no servidor
+
+No server/index.ts (ou onde você cria o app):
+
+import express from "express";
+import cors from "cors";
+import consults from "./routes/consults";
+import { ai } from "./routes/ai";
+import { cid10 } from "./routes/cid10";
+import { exams } from "./routes/exams";
+import { memed } from "./routes/memed";
+
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: "2mb" }));
+
+app.use("/api/consults", consults);
+app.use("/api/ai", ai);
+app.use("/api/cid10", cid10);
+app.use("/api/exams", exams);
+app.use("/api/memed", memed);
+
+const PORT = Number(process.env.PORT) || 5000;
+app.listen(PORT, "0.0.0.0", () => console.log("Server on", PORT));
+
+
+.env
+
+OPENAI_API_KEY=seu_token
+PORT=5000
+
+2) Frontend (React – página /enhanced)
+2.1 Helper de API
+
+client/src/lib/api.ts
+
+const BASE = import.meta.env.VITE_API_URL || "";
+
+async function j<T>(res: Response): Promise<T> {
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+export const api = {
+  startConsult: (id:string) =>
+    fetch(`${BASE}/api/consults/${id}/start`, { method:"POST" }).then(j),
+  saveNotes: (id:string, body:any) =>
+    fetch(`${BASE}/api/consults/${id}/notes`, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) }).then(j),
+  finalizeConsult: (id:string, summary?:string) =>
+    fetch(`${BASE}/api/consults/${id}/finalize`, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ summary }) }).then(j),
+
+  askAI: (body:{question:string; patient?:any; context?:any}) =>
+    fetch(`${BASE}/api/ai/clinical`, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) }).then(j),
+
+  cid10: (q:string) =>
+    fetch(`${BASE}/api/cid10?query=${encodeURIComponent(q)}`).then(j),
+
+  examTemplates: () =>
+    fetch(`${BASE}/api/exams/templates`).then(j),
+  orderExam: (body:any) =>
+    fetch(`${BASE}/api/exams/order`, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) }).then(j),
+
+  memedLaunch: (patient:{name:string;age:number;phone:string}) =>
+    fetch(`${BASE}/api/memed/launch?` + new URLSearchParams(patient as any)).then(j),
+};
+
+
+Se o backend roda no mesmo host, não precisa definir VITE_API_URL.
+Se estiver separado, crie .env na pasta client:
+
+VITE_API_URL=http://localhost:5000
+
+2.2 Ligações na página enhanced-clone.tsx
+
+No seu componente da tela (o clone que já entreguei), conecte os handlers:
+
+// topo do arquivo
+import { api } from "@/lib/api";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+const CONSULT_ID = "ABC123"; // troque pelo id real
+const PATIENT = { name:"Ana Costa Silva", age:30, phone:"11987654321" };
+
+function useDebounced<T>(value:T, ms=250) {
+  const [v,setV] = useState(value);
+  useEffect(()=>{ const t=setTimeout(()=>setV(value), ms); return ()=>clearTimeout(t)}, [value,ms]);
+  return v;
+}
+
+// ... dentro do componente:
+const [hda, setHda] = useState("");
+const [conduct, setConduct] = useState("");
+const [alertSigns, setAlertSigns] = useState("");
+const [hypothesis, setHypothesis] = useState<{code?:string; label?:string}>({});
+const [cidQuery, setCidQuery] = useState("");
+const debCid = useDebounced(cidQuery, 250);
+const [cidList, setCidList] = useState<{code:string; label:string}[]>([]);
+const [panelSize, setPanelSize] = useState<"sm"|"md"|"lg">("md");
+
+// carregar CID conforme digita
+useEffect(() => {
+  if (!debCid) return setCidList([]);
+  api.cid10(debCid).then(setCidList).catch(()=>setCidList([]));
+}, [debCid]);
+
+// botão "Iniciar Consulta"
+async function onStart() {
+  await api.startConsult(CONSULT_ID);
+  // atualize UI/local state se quiser
+}
+
+// botão "Salvar"
+async function onSave() {
+  await api.saveNotes(CONSULT_ID, {
+    hda, hypothesis, conduct, alertSigns, panelSize,
+    complexity: { /* preencha conforme seus toggles */ }
+  });
+  // toast/feedback
+}
+
+// botão "Finalizar"
+async function onFinalize() {
+  await api.finalizeConsult(CONSULT_ID, "Consulta finalizada sem intercorrências.");
+  // redirecione/feche etc.
+}
+
+// botão "Dr AI" (painel cérebro)
+async function askDoctorAI(q:string) {
+  const r = await api.askAI({ question:q, patient:PATIENT, context:{ hda, hypothesis, alertSigns }});
+  return r.answer as string;
+}
+
+// aba Exames – carregar templates
+const [templates, setTemplates] = useState<any[]>([]);
+useEffect(() => { api.examTemplates().then(setTemplates).catch(()=>{}) }, []);
+
+// adicionar exame
+async function addExam({ name, priority, instructions }:{
+  name:string; priority:"Rotina"|"Prioritário"|"Urgente"; instructions?:string;
+}) {
+  const r = await api.orderExam({ consultId: CONSULT_ID, name, priority, instructions });
+  // atualize lista local de pedidos
+}
+
+// botão Memed (abrir em nova aba)
+async function openMemed() {
+  const { url } = await api.memedLaunch(PATIENT);
+  window.open(url, "_blank", "noopener");
+}
+
+
+No input da Hipótese diagnóstica, conecte o autocomplete:
+
+<input
+  value={cidQuery || hypothesis?.label || ""}
+  onChange={(e)=>setCidQuery(e.target.value)}
+  placeholder="Digite diagnóstico / CID-10..."
+/>
+
+{cidList.length > 0 && (
+  <ul className="cid-list">
+    {cidList.map(item => (
+      <li key={item.code}
+          onClick={() => { setHypothesis(item); setCidQuery(item.label); setCidList([]) }}>
+        {item.code} — {item.label}
+      </li>
+    ))}
+  </ul>
+)}
+
+
+Nos botões do footer de vídeo:
+
+Cérebro → abre o drawer Dr. AI e usa askDoctorAI.
+
+Enviar p/ sala de espera → só UI (ou crie POST /api/consults/:id/waiting se quiser persistir).
+
+Finalizar → chama onFinalize().
+
+Nos botões de topo:
+
+Iniciar Consulta → onStart().
+
+Formulário → abre/fecha a aba correta.
+
+Largura → setPanelSize() (você já tem; salvei no notes pra persistir).
