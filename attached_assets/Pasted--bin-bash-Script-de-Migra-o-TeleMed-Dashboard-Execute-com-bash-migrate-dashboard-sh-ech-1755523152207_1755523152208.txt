@@ -1,0 +1,259 @@
+#!/bin/bash
+# Script de Migração TeleMed Dashboard
+# Execute com: bash migrate-dashboard.sh
+
+echo "🚀 Iniciando migração do TeleMed Dashboard..."
+
+# Configurações
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+BACKUP_DIR="backups/dashboard_$TIMESTAMP"
+CURRENT_DIR=$(pwd)
+NEW_DASHBOARD_URL="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dashboard-teste"
+
+echo "📅 Timestamp: $TIMESTAMP"
+echo "📁 Backup será salvo em: $BACKUP_DIR"
+
+# Função para logging
+log() {
+    echo "$(date '+%H:%M:%S') - $1"
+}
+
+# Função para verificar se comando foi bem sucedido
+check_success() {
+    if [ $? -eq 0 ]; then
+        log "✅ $1 - SUCESSO"
+    else
+        log "❌ $1 - FALHOU"
+        echo "🚨 Migração abortada devido a erro"
+        exit 1
+    fi
+}
+
+# FASE 1: BACKUP
+log "📦 Iniciando backup completo..."
+
+# Criar diretório de backup
+mkdir -p "$BACKUP_DIR"
+check_success "Criação do diretório de backup"
+
+# Backup dos arquivos principais
+if [ -f "area-medica.html" ]; then
+    cp "area-medica.html" "$BACKUP_DIR/area-medica_original.html"
+    check_success "Backup do arquivo principal"
+fi
+
+if [ -f "dashboard.html" ]; then
+    cp "dashboard.html" "$BACKUP_DIR/dashboard_original.html"
+    check_success "Backup do dashboard"
+fi
+
+if [ -f "index.html" ]; then
+    cp "index.html" "$BACKUP_DIR/index_original.html"
+    check_success "Backup do index"
+fi
+
+# Backup de diretórios
+if [ -d "assets" ]; then
+    cp -r "assets" "$BACKUP_DIR/"
+    check_success "Backup dos assets"
+fi
+
+if [ -d "css" ]; then
+    cp -r "css" "$BACKUP_DIR/"
+    check_success "Backup do CSS"
+fi
+
+if [ -d "js" ]; then
+    cp -r "js" "$BACKUP_DIR/"
+    check_success "Backup do JavaScript"
+fi
+
+log "✅ Backup completo realizado!"
+
+# FASE 2: DOWNLOAD DO NOVO DASHBOARD
+log "⬇️ Baixando novo dashboard..."
+
+# Baixar novo dashboard (adapte conforme sua estrutura)
+curl -o "novo-dashboard.html" "$NEW_DASHBOARD_URL" 2>/dev/null
+if [ $? -eq 0 ] && [ -s "novo-dashboard.html" ]; then
+    check_success "Download do novo dashboard"
+else
+    log "⚠️ Download direto falhou, usando template local"
+    # Usar template preparado localmente
+    if [ -f "dashboard-template.html" ]; then
+        cp "dashboard-template.html" "novo-dashboard.html"
+        check_success "Cópia do template local"
+    else
+        log "❌ Template não encontrado!"
+        exit 1
+    fi
+fi
+
+# FASE 3: VALIDAÇÃO
+log "🔍 Validando novo dashboard..."
+
+# Verificar se arquivo não está vazio
+if [ ! -s "novo-dashboard.html" ]; then
+    log "❌ Arquivo do novo dashboard está vazio!"
+    exit 1
+fi
+
+# Verificar se contém estrutura básica
+if grep -q "dashboard" "novo-dashboard.html" && grep -q "TeleMed" "novo-dashboard.html"; then
+    check_success "Validação da estrutura básica"
+else
+    log "❌ Estrutura do dashboard inválida!"
+    exit 1
+fi
+
+# FASE 4: MIGRAÇÃO
+log "🔄 Executando migração..."
+
+# Identificar arquivo principal atual
+MAIN_FILE=""
+if [ -f "area-medica.html" ]; then
+    MAIN_FILE="area-medica.html"
+elif [ -f "dashboard.html" ]; then
+    MAIN_FILE="dashboard.html"
+elif [ -f "index.html" ]; then
+    MAIN_FILE="index.html"
+else
+    log "❌ Arquivo principal não encontrado!"
+    exit 1
+fi
+
+log "📝 Arquivo principal identificado: $MAIN_FILE"
+
+# Fazer backup do arquivo atual com timestamp
+cp "$MAIN_FILE" "${MAIN_FILE%.html}_backup_$TIMESTAMP.html"
+check_success "Backup timestampado do arquivo principal"
+
+# Substituir pelo novo dashboard
+cp "novo-dashboard.html" "$MAIN_FILE"
+check_success "Substituição do arquivo principal"
+
+# Limpar arquivo temporário
+rm "novo-dashboard.html"
+
+# FASE 5: CONFIGURAÇÃO DE LINKS
+log "🔗 Configurando links e redirecionamentos..."
+
+# Criar arquivo de configuração para links (se não existir)
+if [ ! -f "config/links-config.json" ]; then
+    mkdir -p config
+    cat > config/links-config.json << EOF
+{
+    "links": {
+        "pacientes": "/pacientes",
+        "medicos": "/medicos",
+        "analytics": "/analytics",
+        "prontuario": "/prontuario",
+        "nova-consulta": "/consulta/nova",
+        "novo-paciente": "/paciente/novo",
+        "teleconsulta": "/teleconsulta",
+        "prescricao": "/prescricao",
+        "agenda": "/agenda",
+        "relatorios": "/relatorios",
+        "configuracoes": "/configuracoes"
+    }
+}
+EOF
+    check_success "Criação da configuração de links"
+fi
+
+# FASE 6: TESTES BÁSICOS
+log "🧪 Executando testes básicos..."
+
+# Verificar se arquivo foi criado corretamente
+if [ -f "$MAIN_FILE" ] && [ -s "$MAIN_FILE" ]; then
+    check_success "Verificação do arquivo migrado"
+else
+    log "❌ Arquivo migrado não está correto!"
+    
+    # ROLLBACK AUTOMÁTICO
+    log "🔄 Executando rollback..."
+    cp "$BACKUP_DIR/$(basename $MAIN_FILE)" "$MAIN_FILE"
+    check_success "Rollback executado"
+    exit 1
+fi
+
+# Verificar estrutura HTML básica
+if command -v html5validator &> /dev/null; then
+    html5validator --root . --match "*.html" --ignore-re "Attribute.*not allowed"
+    if [ $? -eq 0 ]; then
+        log "✅ Validação HTML - PASSOU"
+    else
+        log "⚠️ Validação HTML - AVISOS (não crítico)"
+    fi
+else
+    log "ℹ️ html5validator não instalado, pulando validação HTML"
+fi
+
+# FASE 7: FINALIZAÇÕES
+log "🎯 Finalizando migração..."
+
+# Criar script de rollback rápido
+cat > "rollback-dashboard.sh" << EOF
+#!/bin/bash
+echo "🔄 Executando rollback do dashboard..."
+cp "$BACKUP_DIR/$(basename $MAIN_FILE)" "$MAIN_FILE"
+echo "✅ Rollback concluído!"
+echo "📁 Backup restaurado de: $BACKUP_DIR"
+EOF
+
+chmod +x "rollback-dashboard.sh"
+check_success "Criação do script de rollback"
+
+# Limpar cache se houver
+if [ -d "cache" ]; then
+    rm -rf cache/*
+    log "🧹 Cache limpo"
+fi
+
+# Registrar migração
+echo "$(date): Migração executada - Backup em $BACKUP_DIR" >> migration-log.txt
+
+# SUCESSO!
+log "🎉 MIGRAÇÃO CONCLUÍDA COM SUCESSO!"
+echo ""
+echo "📋 RESUMO DA MIGRAÇÃO:"
+echo "   ✅ Backup salvo em: $BACKUP_DIR"
+echo "   ✅ Arquivo migrado: $MAIN_FILE"
+echo "   ✅ Script de rollback: rollback-dashboard.sh"
+echo ""
+echo "🚀 PRÓXIMOS PASSOS:"
+echo "   1. Testar o novo dashboard no navegador"
+echo "   2. Verificar todos os links"
+echo "   3. Testar em diferentes dispositivos"
+echo "   4. Comunicar usuários sobre mudanças"
+echo ""
+echo "🚨 SE ALGO DER ERRADO:"
+echo "   Execute: bash rollback-dashboard.sh"
+echo ""
+echo "📞 SUPORTE:"
+echo "   Log de migração: migration-log.txt"
+echo "   Backup completo: $BACKUP_DIR"
+
+# Verificar se o arquivo principal está acessível
+echo "🌐 Testando acesso ao dashboard..."
+if command -v curl &> /dev/null; then
+    # Testar se o servidor está respondendo (adapte a URL)
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost/$MAIN_FILE" || echo "000")
+    if [ "$HTTP_CODE" = "200" ]; then
+        log "✅ Dashboard acessível via HTTP"
+    else
+        log "⚠️ Dashboard pode não estar acessível (código: $HTTP_CODE)"
+        log "   Verifique se o servidor web está rodando"
+    fi
+else
+    log "ℹ️ curl não disponível, teste manual necessário"
+fi
+
+echo ""
+echo "🎯 TESTE MANUAL:"
+echo "   Acesse: http://seu-dominio/$MAIN_FILE"
+echo "   Verifique se aparece o novo layout"
+echo "   Teste todos os links do menu"
+echo ""
+
+exit 0
