@@ -42,8 +42,22 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+// ====== Import new API routes ======
+import consults from './routes/consults.js';
+import { ai } from './routes/ai.js';
+import { cid10 } from './routes/cid10.js';
+import { exams } from './routes/exams.js';
+import { memed } from './routes/memed.js';
+
 // ====== APIs e /perf primeiro ======
 // (mantenha aqui TODAS as rotas /api/*, /perf/* e middlewares como timing/compression)
+
+// Enhanced Consultation API routes
+app.use("/api/consults", consults);
+app.use("/api/ai", ai);
+app.use("/api/cid10", cid10);
+app.use("/api/exams", exams);
+app.use("/api/memed", memed);
 
 // ====== Vite dev removido devido a limitações de await ======
 // Usando apenas modo produção com servindo de arquivos estáticos

@@ -4,6 +4,7 @@
 // Basta criar a rota no App/Router para "/enhanced" apontar para este componente.
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { api, type Patient, type CID10Item, type ExamTemplate, type PanelSize } from '@/lib/api';
 
 // ====== Ícones (SVG inline, sem libs) ======
 const Icon = ({ path, size = 20, stroke = 2 }: { path: string; size?: number; stroke?: number }) => (
@@ -43,14 +44,30 @@ const fmtTime = (s: number) => {
   return `${m}:${r}`;
 };
 
-// Lista mínima de CID-10 para auto-complete
-const CID10_SAMPLE = [
-  { code: "F41.1", name: "Transtorno de ansiedade generalizada" },
-  { code: "F32.0", name: "Episódio depressivo leve" },
-  { code: "J00", name: "Rinite aguda (resfriado comum)" },
-  { code: "I10", name: "Hipertensão essencial (primária)" },
-  { code: "E11.9", name: "Diabetes mellitus tipo 2, sem complicações" },
-];
+// Constants for the consultation
+const CONSULT_ID = "ABC123"; // In real app, get from URL params
+const PATIENT: Patient = { 
+  name: "Ana Costa Silva", 
+  age: 30, 
+  phone: "11987654321" 
+};
+
+// Custom hook for debounced values
+function useDebounced<T>(value: T, delay: number = 300): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 // ====== Componentes ======
 function TogglePill({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
@@ -97,10 +114,12 @@ function DrawerAI({ open, onClose }: { open: boolean; onClose: () => void }) {
     setMessages((m) => [...m, { role: "user", text: ask }]);
     setText("");
     try {
-      const r = await fetch("/api/ai/clinical", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ q: ask }) });
-      if (!r.ok) throw new Error("fallback");
-      const data = await r.json();
-      setMessages((m) => [...m, { role: "ai", text: data.answer || "Sem resposta" }]);
+      const response = await api.askAI({ 
+        question: ask, 
+        patient: PATIENT, 
+        context: { hda: "", hypothesis: {}, alertSigns: "" }
+      });
+      setMessages((m) => [...m, { role: "ai", text: response.answer || "Sem resposta" }]);
     } catch (e) {
       // Fallback local
       setMessages((m) => [
@@ -160,43 +179,135 @@ export default function EnhancedClone() {
   const [notify, setNotify] = useState(1);
   const [aiOpen, setAiOpen] = useState(false);
 
-  // Form fields
+  // Form fields with API integration
   const [chiefComplaint, setChiefComplaint] = useState("");
   const [hpi, setHpi] = useState("");
   const [icd, setIcd] = useState("");
+  const [icdQuery, setIcdQuery] = useState("");
+  const [icdList, setIcdList] = useState<CID10Item[]>([]);
   const [icdOpen, setIcdOpen] = useState(false);
   const [conduct, setConduct] = useState("");
   const [flags, setFlags] = useState({ a: false, b: false, c: false });
   const [alerts, setAlerts] = useState("");
+  const [hypothesis, setHypothesis] = useState<{code?: string; label?: string}>({});
+  
+  // Debounced CID-10 search
+  const debouncedIcdQuery = useDebounced(icdQuery, 250);
 
-  // Exams
+  // Exams with API integration
   const [examName, setExamName] = useState("");
   const [examPriority, setExamPriority] = useState("Rotina");
+  const [examTemplates, setExamTemplates] = useState<ExamTemplate[]>([]);
+  const [examOrders, setExamOrders] = useState<any[]>([]);
+  
+  // Prescriptions
+  const [prescriptions, setPrescriptions] = useState<any[]>([]);
   const [examInstr, setExamInstr] = useState("");
   const [examList, setExamList] = useState<string[]>([]);
 
+  // Timer
   useEffect(() => {
     const t = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(t);
   }, []);
 
+  // Load CID-10 search results
+  useEffect(() => {
+    if (!debouncedIcdQuery) return setIcdList([]);
+    api.cid10(debouncedIcdQuery).then(setIcdList).catch(() => setIcdList([]));
+  }, [debouncedIcdQuery]);
+
+  // Load exam templates on mount
+  useEffect(() => {
+    api.examTemplates().then(data => setExamTemplates(data.templates || [])).catch(() => {});
+  }, []);
+
+  // Load existing exam orders and prescriptions
+  useEffect(() => {
+    api.getExamOrders(CONSULT_ID).then(data => setExamOrders(data.orders || [])).catch(() => {});
+    api.getPrescriptions(CONSULT_ID).then(data => setPrescriptions(data.prescriptions || [])).catch(() => {});
+  }, []);
+
+  // API Integration Functions
+  async function onStartConsult() {
+    try {
+      await api.startConsult(CONSULT_ID);
+      console.log('🏥 Consulta iniciada');
+    } catch (error) {
+      console.error('Erro ao iniciar consulta:', error);
+    }
+  }
+
+  async function onSaveNotes() {
+    try {
+      await api.saveNotes(CONSULT_ID, {
+        hda: hpi,
+        hypothesis,
+        conduct,
+        alertSigns: alerts,
+        panelSize,
+        complexity: {
+          aggravation: flags.a,
+          clinical: flags.b,
+          inconsistencies: flags.c
+        }
+      });
+      console.log('📝 Notas salvas com sucesso');
+    } catch (error) {
+      console.error('Erro ao salvar notas:', error);
+    }
+  }
+
+  async function onFinalizeConsult() {
+    try {
+      await api.finalizeConsult(CONSULT_ID, "Consulta finalizada sem intercorrências.");
+      console.log('✅ Consulta finalizada');
+    } catch (error) {
+      console.error('Erro ao finalizar consulta:', error);
+    }
+  }
+
+  async function askDoctorAI(question: string) {
+    try {
+      const response = await api.askAI({ 
+        question, 
+        patient: PATIENT, 
+        context: { hda: hpi, hypothesis, alertSigns: alerts }
+      });
+      return response.answer as string;
+    } catch (error) {
+      console.error('Erro no Dr. AI:', error);
+      return "Não foi possível conectar com o Dr. AI no momento. Tente novamente.";
+    }
+  }
+
+  async function addExam(examData: { name: string; priority: string; instructions?: string }) {
+    try {
+      const response = await api.orderExam({ 
+        consultId: CONSULT_ID, 
+        ...examData 
+      });
+      setExamOrders(prev => [response.order, ...prev]);
+      console.log('🧪 Exame solicitado:', examData.name);
+    } catch (error) {
+      console.error('Erro ao solicitar exame:', error);
+    }
+  }
+
+  async function openMemed() {
+    try {
+      const response = await api.memedLaunch(PATIENT);
+      window.open(response.url, "_blank", "noopener");
+      console.log('💊 Memed aberto');
+    } catch (error) {
+      console.error('Erro ao abrir Memed:', error);
+    }
+  }
+
   const missing = useMemo(() => {
     const req = [chiefComplaint, hpi, conduct];
     return req.some((v) => !v.trim());
   }, [chiefComplaint, hpi, conduct]);
-
-  function addExam(template?: string) {
-    const name = template || examName || "Exame sem nome";
-    setExamList((l) => [name, ...l]);
-    setExamName("");
-    setExamInstr("");
-    setExamPriority("Rotina");
-  }
-
-  function openMemed() {
-    const patient = encodeURIComponent(JSON.stringify({ name: "Ana Costa Silva", age: 0, phone: "11987654321" }));
-    window.open(`https://memed.com.br/?demo=1&patient=${patient}`, "_blank");
-  }
 
   return (
     <div className="page">
@@ -213,7 +324,7 @@ export default function EnhancedClone() {
         <div className="right">
           <div className="status"><span className="dot" /> Aguardando</div>
           <div className="timer">{fmtTime(seconds)}</div>
-          <button className="primary" onClick={() => alert("Consulta iniciada")}>Iniciar Consulta</button>
+          <button className="primary" onClick={onStartConsult}>Iniciar Consulta</button>
           <button className="ghost" title="Voltar"><Icon path={Icons.back} /></button>
           <button className="ghost" title="Formulário"><Icon path={Icons.form} /></button>
           <button className="ghost" title="Largura do painel" onClick={cyclePanel}><Icon path={Icons.layout} /></button>
@@ -242,7 +353,7 @@ export default function EnhancedClone() {
             <IconButton title={mic ? "Mutar" : "Ativar microfone"} icon={<Icon path={mic ? Icons.mic : Icons.micOff} />} onClick={() => setMic(!mic)} />
             <IconButton title={cam ? "Desligar câmera" : "Ligar câmera"} icon={<Icon path={cam ? Icons.video : Icons.videoOff} />} onClick={() => setCam(!cam)} />
             <IconButton title="Enviar para sala de espera" icon={<Icon path={Icons.clock} />} variant="warning" />
-            <IconButton title="Finalizar" icon={<Icon path={Icons.phoneOff} />} danger />
+            <IconButton title="Finalizar" icon={<Icon path={Icons.phoneOff} />} danger onClick={onFinalizeConsult} />
           </div>
         </section>
 
@@ -277,12 +388,22 @@ export default function EnhancedClone() {
               <div className="group">
                 <label>Hipótese Diagnóstica <span className="req">*</span></label>
                 <div className="icdWrap">
-                  <input value={icd} onChange={(e) => { setIcd(e.target.value); setIcdOpen(true); }} onFocus={() => setIcdOpen(true)} placeholder="Ex.: F41.1 - Transtorno de ansiedade..." />
-                  {icdOpen && (
+                  <input 
+                    value={icdQuery || hypothesis?.label || ""} 
+                    onChange={(e) => { setIcdQuery(e.target.value); setIcdOpen(true); }} 
+                    onFocus={() => setIcdOpen(true)} 
+                    placeholder="Digite diagnóstico / CID-10..." 
+                  />
+                  {icdOpen && icdList.length > 0 && (
                     <div className="dropdown" onMouseLeave={() => setIcdOpen(false)}>
-                      {CID10_SAMPLE.filter((c) => (icd ? (c.code + " " + c.name).toLowerCase().includes(icd.toLowerCase()) : true)).map((c) => (
-                        <div key={c.code} className="item" onClick={() => { setIcd(`${c.code} - ${c.name}`); setIcdOpen(false); }}>
-                          <strong>{c.code}</strong> {c.name}
+                      {icdList.map((item) => (
+                        <div key={item.code} className="item" onClick={() => { 
+                          setHypothesis(item); 
+                          setIcdQuery(item.label); 
+                          setIcdList([]); 
+                          setIcdOpen(false); 
+                        }}>
+                          <strong>{item.code}</strong> {item.label}
                         </div>
                       ))}
                     </div>
@@ -320,8 +441,10 @@ export default function EnhancedClone() {
               )}
 
               <div className="actions">
-                <button className="ghost"><Icon path={Icons.check} /> Salvar</button>
-                <button className="primary">Finalizar</button>
+                <button className="ghost" onClick={onSaveNotes} disabled={missing}>
+                  <Icon path={Icons.check} /> Salvar {missing && "(campos obrigatórios)"}
+                </button>
+                <button className="primary" onClick={onFinalizeConsult}>Finalizar</button>
               </div>
             </div>
           )}
@@ -339,7 +462,11 @@ export default function EnhancedClone() {
                 </select>
               </div>
               <div className="group"><label>Instruções específicas</label><textarea value={examInstr} onChange={(e) => setExamInstr(e.target.value)} /></div>
-              <button className="primary block" onClick={() => addExam()}>+ Adicionar Exame</button>
+              <button className="primary block" onClick={() => addExam({ 
+                name: examName || "Exame personalizado", 
+                priority: examPriority, 
+                instructions: examInstr 
+              })}>+ Adicionar Exame</button>
               <div className="empty card">
                 {examList.length === 0 ? (
                   <div className="none">Nenhum exame solicitado</div>
