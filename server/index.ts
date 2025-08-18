@@ -233,17 +233,17 @@ app.post('/api/ai/ask', async (req, res) => {
 
     const systemMsg = "Você é o Dr. AI, um assistente clínico especializado. Responda em português, de forma objetiva, cite cuidados e alternativas, e nunca substitua o julgamento médico. Evite prescrever posologias sem checar contraindicações. Quando pertinente, aponte diretrizes e necessidade de confirmação diagnóstica. Sempre inclua que suas respostas são orientativas.";
 
-    const messages = [
-      { role: 'system' as const, content: systemMsg }
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      { role: 'system', content: systemMsg }
     ];
 
     if (context.trim()) {
       messages.push({ 
-        role: 'user' as const, 
+        role: 'user', 
         content: `Contexto clínico:\n${context}\n\nPergunta: ${prompt}` 
       });
     } else {
-      messages.push({ role: 'user' as const, content: prompt });
+      messages.push({ role: 'user', content: prompt });
     }
 
     console.log(`🧠 Dr. AI consulta para ${consultId}:`, prompt.substring(0, 100) + '...');
