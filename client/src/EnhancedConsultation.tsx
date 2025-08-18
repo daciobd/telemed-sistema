@@ -81,7 +81,7 @@ const styles = `
   .list .item{display:flex;justify-content:space-between;gap:8px}
 
   /* Banner do novo dashboard */
-  .new-dashboard-banner{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);margin:15px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(102,126,234,0.2);position:relative;animation:slideIn 0.5s ease-out;z-index:100}
+  .new-dashboard-banner{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);margin:15px 15px 25px 15px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(102,126,234,0.2);position:relative;animation:slideIn 0.5s ease-out;z-index:100;width:calc(100% - 30px)}
   @keyframes slideIn{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
   .banner-content{display:flex;align-items:center;padding:20px;color:white;position:relative;z-index:2}
   .banner-icon{font-size:32px;margin-right:15px;animation:bounce 2s infinite}
@@ -189,17 +189,29 @@ export default function EnhancedConsultation(){
       hideModal: () => setShowFeedbackModal(false)
     };
 
-    // Check if banner should be shown
+    // Check if banner should be shown - Force show for testing
+    console.log('🔍 Checking banner status...');
+    
+    // Clear any previous dismissal for debugging
+    // localStorage.removeItem('telemed_banner_dismissed');
+    // localStorage.removeItem('telemed_banner_dismissed_date');
+    
     const bannerDismissed = localStorage.getItem('telemed_banner_dismissed');
     const dismissedDate = localStorage.getItem('telemed_banner_dismissed_date');
     
+    console.log('Banner dismissed?', bannerDismissed, 'Date:', dismissedDate);
+    
     if (bannerDismissed && dismissedDate) {
       const daysSince = (new Date().getTime() - new Date(dismissedDate).getTime()) / (1000 * 60 * 60 * 24);
+      console.log('Days since dismissal:', daysSince);
       if (daysSince < 7) {
+        console.log('❌ Banner hidden due to recent dismissal');
         setShowBanner(false);
         return;
       }
     }
+    
+    console.log('✅ Banner should be visible');
 
     console.log('🚀 Enhanced Consultation carregada com analytics');
   }, []);
