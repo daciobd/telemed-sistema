@@ -198,6 +198,105 @@ import medicalReportsRoutes from './routes/medical-reports.js';
 app.use('/api/medical-reports', medicalReportsRoutes);
 console.log('🏥 Sistema de Laudos Médicos ativado');
 
+// ===== Enhanced Consultation API Routes =====
+
+// Patient data endpoint
+app.get('/api/patients/:id', (req, res) => {
+  const { id } = req.params;
+  console.log(`👤 Carregando dados do paciente ${id}`);
+  
+  // Return demo patient data
+  res.json({
+    id,
+    name: 'João Santos',
+    age: 35,
+    sex: 'M',
+    weight: '68 kg',
+    height: '1,75 m',
+    conditions: ['HAS', 'Rinite alérgica'],
+    allergies: ['Dipirona (leve)', 'Ibuprofeno'],
+    vitals: { PA: '120/80', FC: '78 bpm', Temp: '36.7°C', 'SpO₂': '98%' },
+  });
+});
+
+// Patient exams endpoint
+app.get('/api/patients/:id/exams', (req, res) => {
+  const { id } = req.params;
+  console.log(`🔬 Carregando exames do paciente ${id}`);
+  
+  // Return demo exam data
+  res.json([
+    { id: `${id}-e1`, name: 'Hemograma completo', kind: 'pdf', url: '#hemograma' },
+    { id: `${id}-e2`, name: 'Glicemia jejum', kind: 'value', value: '89 mg/dL' },
+    { id: `${id}-e3`, name: 'Perfil lipídico', kind: 'status', value: 'OK' },
+    { id: `${id}-e4`, name: 'TSH', kind: 'value', value: '2.1 μUI/mL' },
+    { id: `${id}-e5`, name: 'Creatinina', kind: 'value', value: '0.9 mg/dL' }
+  ]);
+});
+
+// Save consultation notes
+app.post('/api/consults/:id/notes', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  console.log(`📝 Salvando evolução da consulta ${id}:`, body);
+  
+  // Here you would save to database
+  // For demo, just acknowledge receipt
+  res.json({ 
+    ok: true, 
+    consultId: id,
+    timestamp: new Date().toISOString(),
+    message: 'Evolução clínica salva com sucesso'
+  });
+});
+
+// Save prescription
+app.post('/api/consults/:id/prescriptions', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  console.log(`💊 Salvando prescrição da consulta ${id}:`, body);
+  
+  // Here you would save to database
+  // For demo, just acknowledge receipt
+  res.json({ 
+    ok: true, 
+    consultId: id,
+    timestamp: new Date().toISOString(),
+    message: 'Prescrição salva com sucesso'
+  });
+});
+
+// AI consultation notes generation
+app.post('/api/ai/consult-notes', async (req, res) => {
+  const { chiefComplaint, notes } = req.body || {};
+  console.log('🤖 Gerando notas de consulta via IA:', { chiefComplaint, notes });
+  
+  try {
+    // Generate AI-enhanced consultation notes
+    const suggestion = `Sugerido (IA):
+S: ${chiefComplaint || 'Queixa principal não especificada'}
+O: Exame físico sem alterações relevantes. Sinais vitais estáveis.
+A: Diagnóstico provável baseado em anamnese e exame físico.
+P: Conduta terapêutica apropriada, orientações e reavaliação se necessário.
+
+--- Nota: Esta é uma sugestão gerada por IA. Sempre revisar e validar clinicamente. ---`;
+    
+    res.json({ 
+      suggestion,
+      timestamp: new Date().toISOString(),
+      source: 'AI Assistant'
+    });
+  } catch (error) {
+    console.error('❌ Erro na geração de IA:', error);
+    res.status(500).json({ 
+      error: 'Erro ao gerar sugestão via IA',
+      message: error.message 
+    });
+  }
+});
+
+console.log('🩺 Enhanced Consultation API ativado');
+
 // Health check endpoint for Render
 app.get('/healthz', (req, res) => {
   res.status(200).json({ 

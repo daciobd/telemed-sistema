@@ -1,0 +1,73 @@
+um “pacotão” client + server com tudo isso pronto:
+
+telemed-ux.tsx: analytics/feedback/banner via localStorage (estrutura idêntica à que você passou), limite de 1000 eventos, validade do banner de 7 dias, window.telemedDebug (testBanner, testModal, etc.) e integração opcional com gtag.
+
+EnhancedConsultation.tsx: página /enhanced com:
+
+vídeo real via getUserMedia (Start/Stop);
+
+Salvar Evolução → POST /api/consults/:id/notes
+
+Salvar Prescrição → POST /api/consults/:id/prescriptions
+
+Exames recentes → GET /api/patients/:id/exams (stub pronto)
+
+Dados reais de paciente → GET /api/patients/:id (stub pronto)
+
+Gerar via IA → POST /api/ai/consult-notes (stub que você pode plugar no seu cliente OpenAI)
+
+Banner + modal de feedback integrados ao analytics
+
+Rotas Express/TS: stubs prontos para colar em server/index.ts.
+
+Como finalizar aí
+
+Copie os arquivos do canvas para:
+
+client/src/lib/telemed-ux.tsx
+
+client/src/EnhancedConsultation.tsx
+
+Cole as rotas do canvas em server/index.ts (logo após criar o app).
+
+Garanta a rota no App:
+
+// client/src/App.tsx
+import React from 'react';
+import { Route, Switch } from 'wouter';
+import DashboardTeleMed from './DashboardTeleMed';
+import EnhancedConsultation from './EnhancedConsultation';
+
+export default function App(){
+  return (
+    <Switch>
+      <Route path="/" component={DashboardTeleMed} />
+      <Route path="/enhanced" component={EnhancedConsultation} />
+    </Switch>
+  );
+}
+
+
+Rodar:
+
+pkill -f node 2>/dev/null || true
+npm run dev
+# abra /enhanced
+
+Testes rápidos
+
+No console do navegador:
+telemedDebug.testBanner() → reaparece o banner
+telemedDebug.testModal() → abre a modal de feedback
+
+Clique em Salvar Evolução / Salvar Prescrição → deve alertar “salvo” e logar no servidor.
+
+Veja localStorage:
+
+telemed_analytics (eventos)
+
+telemed_feedbacks (feedbacks)
+
+telemed_banner_* (controle do banner)
+
+Quando você me mandar o shape real de GET /api/patients/:id e os endpoints de IA/Exames (ex.: Fleury), eu ajusto o código para consumir os dados verdadeiros e, se quiser, troco o VideoPanel pelo provedor (Daily/Twilio/Vonage) que preferir.
