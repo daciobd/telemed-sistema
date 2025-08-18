@@ -417,64 +417,22 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
 </div>
 
 <script>
-/* ===== util ===== */
-const $ = (q) => document.querySelector(q);
-const $$ = (q) => Array.from(document.querySelectorAll(q));
-const toast = (t) => { console.log('TOAST:', t); };
-
-/* ===== timer ===== */
+/* ===== Minimal inline script - most functionality moved to enhanced-ux.js ===== */
+// Simple clock timer only - everything else delegated to external scripts
 let secs = 0;
-setInterval(()=>{ secs++; const m=String(Math.floor(secs/60)).padStart(2,'0'); const s=String(secs%60).padStart(2,'0'); $('#clock').textContent=`${m}:${s}` }, 1000);
+setInterval(()=>{ 
+  secs++; 
+  const m=String(Math.floor(secs/60)).padStart(2,'0'); 
+  const s=String(secs%60).padStart(2,'0'); 
+  const clockEl = document.querySelector('#clock');
+  if(clockEl) clockEl.textContent = `${m}:${s}`;
+}, 1000);
 
-/* ===== topo: ações ===== */
-const btnBack = $('#btnBack');
-const btnExit = $('#btnExit');
-const btnToggleForm = $('#btnToggleForm');
-const btnW = $('#btnW');
+// Tab functionality moved to enhanced-ux.js
 
-if(btnBack) btnBack.onclick = () => history.back();
-if(btnExit) btnExit.onclick = () => location.href = '/';
+// Segment functionality moved to enhanced-ux.js
 
-let formVisible = true;
-if(btnToggleForm) {
-  btnToggleForm.onclick = () => {
-    const rp = $('#rightPane');
-    formVisible = !formVisible;
-    if(rp) rp.style.display = formVisible ? 'flex' : 'none';
-  };
-}
-
-let widths = [360, 480, 640], wi=1;
-if(btnW) {
-  btnW.onclick = () => {
-    wi = (wi+1)%widths.length;
-    const w = widths[wi];
-    const rp = $('#rightPane');
-    if(rp) rp.style.width = w+'px';
-  };
-}
-
-/* ===== tabs ===== */
-function setTab(name){
-  $$('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab===name));
-  $('#pane-chat').style.display   = name==='chat'?'block':'none';
-  $('#pane-care').style.display   = name==='care'?'block':'none';
-  $('#pane-exams').style.display  = name==='exams'?'block':'none';
-  $('#pane-rx').style.display     = name==='rx'?'block':'none';
-}
-$$('.tab').forEach(el => el.onclick = () => setTab(el.dataset.tab));
-
-/* ===== segment (conduta/exames/memed dentro do atendimento) ===== */
-function setSeg(id){
-  $$('.segtab').forEach(s=>s.classList.toggle('active', s.dataset.seg===id));
-  $('#seg-cond').classList.toggle('hidden', id!=='cond');
-  $('#seg-exams').classList.toggle('hidden', id!=='exams');
-  $('#seg-memed').classList.toggle('hidden', id!=='memed');
-}
-$$('.segtab').forEach(s => s.onclick = () => setSeg(s.dataset.seg));
-
-/* ===== switches ===== */
-$$('.sw').forEach(sw => sw.onclick = () => sw.classList.toggle('on'));
+// Switches functionality moved to enhanced-ux.js
 
 /* ===== CID10 autosuggest ===== */
 const localCid = [
@@ -492,183 +450,19 @@ async function loadCid(q){
     return list.length? list : localCid.filter(x => x.toLowerCase().includes(q.toLowerCase()));
   }catch{ return localCid.filter(x => x.toLowerCase().includes(q.toLowerCase())); }
 }
-$('#cidInput').addEventListener('input', async e => {
-  const q = e.target.value.trim(); if(q.length<2) return;
-  const opts = await loadCid(q);
-  const dl = $('#cidlist'); dl.innerHTML='';
-  opts.slice(0,50).forEach(x => {
-    const o = document.createElement('option'); o.value=x; dl.appendChild(o);
-  });
-});
+// CID input functionality moved to enhanced-ux.js
 
-/* ===== exames ===== */
-const examStore = [];
-function renderExams(){
-  const wrap = $('#examList');
-  if(!examStore.length){ wrap.className='empty'; wrap.textContent='Nenhum exame solicitado'; return; }
-  wrap.className='list';
-  wrap.innerHTML='';
-  examStore.forEach((e,i)=>{
-    const d = document.createElement('div');
-    d.className='rxItem';
-    d.innerHTML = `<b>${e.name}</b> <div class="kicker">${e.prio}${e.notes?` • ${e.notes}`:''}</div>`;
-    wrap.appendChild(d);
-  });
-}
-$('#tplList').addEventListener('click', e=>{
-  const el = e.target.closest('.rxItem'); if(!el) return;
-  $('#ex-name').value = el.dataset.name;
-  $('#ex-notes').value = el.dataset.rotina;
-});
-$('#addExam').onclick = ()=>{
-  const name = $('#ex-name').value.trim(); if(!name) return;
-  const prio = $('#ex-prio').value;
-  const notes = $('#ex-notes').value.trim();
-  examStore.push({name, prio, notes});
-  renderExams(); $('#ex-name').value=''; $('#ex-notes').value='';
-};
+// Exams functionality moved to enhanced-ux.js
 
-/* ===== Memed ===== */
-function patientDemo(){
-  return { name:"Ana Costa Silva", age:"0", phone:"11987654321" }
-}
-function memedUrl(){
-  const p = patientDemo();
-  return `https://memed.com.br/?demo=1&patient=${encodeURIComponent(JSON.stringify(p))}`;
-}
-const rxStore = JSON.parse(localStorage.getItem('telemed_rx')||'[]');
-function saveRx(){ localStorage.setItem('telemed_rx', JSON.stringify(rxStore)); }
-function renderRx(){
-  const containers = [$('#rxList'), $('#rxList2')].filter(Boolean);
-  containers.forEach(wrap=>{
-    if(!rxStore.length){ wrap.className='empty'; wrap.textContent='Nenhuma receita ainda'; return; }
-    wrap.className='list'; wrap.innerHTML='';
-    rxStore.forEach(r=>{
-      const d = document.createElement('div');
-      d.className='rxItem';
-      d.innerHTML = `<div><b>Receita #${r.code}</b> <span class="badge">Assinada</span></div>
-                     <div class="kicker">${r.drug} • ${r.sig}</div>`;
-      wrap.appendChild(d);
-    });
-  });
-}
-function addDemoRx(){
-  const code = Math.random().toString(36).slice(2,9).toUpperCase();
-  rxStore.unshift({code, drug:"Dipirona sódica 500 mg", sig:"1 comprimido se dor ou febre • 20 cp"});
-  saveRx(); renderRx();
-}
-const openMemed = $('#openMemed');
-const openMemed2 = $('#openMemed2');
-if(openMemed) openMemed.onclick = ()=>{ window.open(memedUrl(), '_blank'); setTimeout(addDemoRx, 1200); };
-if(openMemed2) openMemed2.onclick = ()=>{ window.open(memedUrl(), '_blank'); setTimeout(addDemoRx, 1200); };
-renderRx();
+// MedMed functionality moved to enhanced-ux.js
 
-/* ===== Chat simples ===== */
-const sendBtn = $('#send');
-if(sendBtn) {
-  sendBtn.onclick = ()=>{
-    const msgInput = $('#msg');
-    const msgsContainer = $('#msgs');
-    if(!msgInput || !msgsContainer) return;
-    const v = msgInput.value.trim(); if(!v) return;
-    const b = document.createElement('div'); b.className='bubble me'; b.textContent=v; 
-    msgsContainer.appendChild(b); msgInput.value='';
-    msgsContainer.scrollTop = 1e9;
-  };
-}
+// Chat functionality moved to enhanced-ux.js
 
-/* ===== Dr.AI ===== */
-const aiPanel = $('#aipanel');
-function toggleAI(show){ if(aiPanel) aiPanel.style.display = show?'flex':'none'; }
-const btnAI = $('#btnAI');
-const aiClose = $('#aiClose');
-const aiSend = $('#aiSend');
-const aiText = $('#aiText');
-const aiMsgs = $('#aiMsgs');
+// Dr.AI functionality moved to enhanced-ux.js
 
-if(btnAI) btnAI.onclick = ()=> toggleAI(true);
-if(aiClose) aiClose.onclick = ()=> toggleAI(false);
-if(aiSend) {
-  aiSend.onclick = async ()=>{
-    if(!aiText || !aiMsgs) return;
-    const t = aiText.value.trim(); if(!t) return;
-    const add = (txt, me)=>{ const d=document.createElement('div'); d.className='bubble'+(me?' me':''); d.textContent=txt; aiMsgs.appendChild(d); aiMsgs.scrollTop=1e9; };
-    add(t, true); aiText.value='';
-    try{
-      const r = await fetch('/api/ai/doctor', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:t, page:'enhanced'})});
-      if(!r.ok) throw 0; const j = await r.json(); add(j.answer || 'OK');
-    }catch{ add('Sugestão: confirmar sinais de alarme, avaliar necessidade de exame físico e medir PA.'); }
-  };
-}
+// Button functionality moved to enhanced-ux.js
 
-/* ===== topo: start/save/finalize/invite ===== */
-const btnStart = $('#btnStart');
-const btnSave = $('#btnSave');
-const btnFinish = $('#btnFinish');
-const btnInvite = $('#btnInvite');
-
-if(btnStart) {
-  btnStart.onclick = async ()=>{
-    try{ await fetch('/api/consults/ABC123/start',{method:'POST'}); }catch{}
-    const sinceEl = $('#since');
-    if(sinceEl) sinceEl.textContent='Em atendimento';
-    toast('Consulta iniciada');
-  };
-}
-
-if(btnSave) {
-  btnSave.onclick = async ()=>{
-    const payload = {
-      qp: $('#field-qp')?.value || '',
-      hda: $('#field-hda')?.value || '',
-      cid: $('#cidInput')?.value || '',
-      cond: $('#field-cond')?.value || '',
-      alert: $('#field-alert')?.value || '',
-      flags: {
-        grave: $('#sw-grave')?.classList.contains('on') || false,
-        compl: $('#sw-compl')?.classList.contains('on') || false,
-        inc: $('#sw-inc')?.classList.contains('on') || false
-      },
-      exams: examStore,
-      rx: rxStore
-    };
-    try{ await fetch('/api/consults/ABC123/notes',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});}catch{}
-    toast('Atendimento salvo');
-  };
-}
-
-if(btnFinish) {
-  btnFinish.onclick = async ()=>{
-    try{ await fetch('/api/consults/ABC123/finalize',{method:'POST'});}catch{}
-    alert('Consulta finalizada!');
-  };
-}
-
-if(btnInvite) {
-  btnInvite.onclick = async ()=>{
-    try{ await fetch('/api/consults/ABC123/invite',{method:'POST'});}catch{}
-    const b = $('#bellN'); 
-    if(b) b.style.display='inline-block';
-    toast('Convite enviado para a sala de espera');
-  };
-}
-
-/* ===== barra vídeo ===== */
-const btnOpenChat = $('#btnOpenChat');
-const btnShot = $('#btnShot');
-const btnMic = $('#btnMic');
-const btnCam = $('#btnCam');
-const btnHold = $('#btnHold');
-const btnEnd = $('#btnEnd');
-
-if(btnOpenChat) btnOpenChat.onclick = ()=> setTab('chat');
-if(btnShot) btnShot.onclick = ()=> toast('Screenshot salvo (demo)');
-
-let micOn=true, camOn=true;
-if(btnMic) btnMic.onclick = ()=>{ micOn=!micOn; btnMic.style.opacity = micOn?1:.5; };
-if(btnCam) btnCam.onclick = ()=>{ camOn=!camOn; btnCam.style.opacity = camOn?1:.5; };
-if(btnHold) btnHold.onclick = ()=>{ const sinceEl = $('#since'); if(sinceEl) sinceEl.textContent='Em espera'; toast('Paciente enviado à sala de espera (demo)'); };
-if(btnEnd) btnEnd.onclick = ()=>{ if(confirm('Encerrar a chamada?')) toast('Chamada encerrada (demo)'); };
+// Video toolbar functionality moved to enhanced-ux.js
 </script>
 
 <!-- Analytics e UX modules com cache-buster -->

@@ -1,7 +1,8 @@
 // ---- Enhanced Consultation UX - TeleMed Professional Interface
-// ---- Helpers
-const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+;(() => {
+  // ---- Isolated helpers (no global collision)
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
 // ---- Abas (Chat / Atendimento / Exames / Receitas)
 (() => {
@@ -256,4 +257,8 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   }
 });
 
-console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
+  // ---- Export only what's needed globally
+  window.telemedEnhancedDebug = telemedEnhancedDebug;
+  
+  console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
+})(); // End IIFE

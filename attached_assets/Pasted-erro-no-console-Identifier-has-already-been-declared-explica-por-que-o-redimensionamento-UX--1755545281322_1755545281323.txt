@@ -1,0 +1,63 @@
+erro no console (“Identifier ‘$’ has already been declared”) explica por que o redimensionamento/UX não dispara. Ele acontece quando o arquivo enhanced-ux.js é carregado duas vezes ou quando algum outro script já definiu a variável global $. Vamos resolver em 3 passos rápidos:
+
+1) Garanta que o script é incluído só uma vez
+
+Abra server/public/enhanced-consultation.html e verifique o <head>/fim do <body>:
+
+Mantenha apenas um destes:
+
+<script src="/js/enhanced-ux.js?v=6" defer></script>
+<script src="/js/telemed-analytics.js?v=2" defer></script>
+
+
+Se houver outra tag repetida (no topo e de novo no fim, ou inline), remova a duplicada.
+Dica para conferir: pesquise por “enhanced-ux.js” e “telemed-analytics.js”.
+
+2) Blindagem no próprio arquivo para não “redeclaração” do $
+
+No topo de server/public/js/enhanced-ux.js, substitua a criação do $/$$ por esta versão “no-conflict”:
+
+// --- Safe selectors, não sobrescreve se já existir ---
+window.$  = window.$  || ((sel, root = document) => root.querySelector(sel));
+window.$$ = window.$$ || ((sel, root = document) => Array.from(root.querySelectorAll(sel)));
+
+
+Se preferir ainda mais isolamento, você pode envolver TODO o conteúdo do arquivo em um IIFE:
+
+;(() => {
+  const $  = (s, r=document)=>r.querySelector(s);
+  const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+  // ... resto do arquivo ...
+  // exponha só o que for necessário no final, ex.:
+  window.telemedEnhancedDebug = telemedEnhancedDebug;
+})();
+
+
+Qualquer uma das opções elimina o “Identifier ‘$’ has already been declared”.
+
+3) Evite cache agressivo em dev e conserte o favicon 404
+
+Desative cache dos estáticos em dev (no server/index.ts onde serve /public):
+
+app.use(
+  express.static(path.join(__dirname, 'public'), {
+    etag: false,
+    lastModified: false,
+    setHeaders: (res) => {
+      res.set('Cache-Control', 'no-store, max-age=0');
+    },
+  })
+);
+
+
+FavIcon: crie um server/public/favicon.ico (pode ser qualquer ícone temporário) e garanta no HTML:
+
+<link rel="icon" href="/favicon.ico">
+
+Checklist rápido pra você executar agora
+
+Abra enhanced-consultation.html → deixe um único <script src="/js/enhanced-ux.js? v=6" defer>.
+
+Edite o topo de js/enhanced-ux.js com o bloco “no-conflict” acima (ou envolva em IIFE).
+
+(Opcional mas recomendado) ajuste o express.static para no-store.

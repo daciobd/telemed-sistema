@@ -79,10 +79,13 @@ if (fs.existsSync(distDir)) {
 app.use('/public', express.static(path.join(__dirname, '../public')));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 app.use('/js', express.static(path.join(__dirname, '../public/js'), {
+  etag: false,
+  lastModified: false,
   setHeaders: (res, path) => {
     if (path.endsWith('.js')) {
       res.set('Content-Type', 'application/javascript');
     }
+    res.set('Cache-Control', 'no-store, max-age=0');
   }
 }));
 app.use('/css', express.static(path.join(__dirname, '../public/css')));
