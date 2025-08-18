@@ -1349,6 +1349,9 @@
                 case 'info':
                     notification.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
                     break;
+                case 'error':
+                    notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+                    break;
             }
             
             notification.textContent = message;
@@ -1691,6 +1694,12 @@
         function handleTestNewDashboard() {
             console.log('🚀 Botão "Testar Agora" clicado!');
             
+            // Mostrar loading no botão
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Carregando...';
+            button.disabled = true;
+            
             if (window.telemeDashboardAnalytics) {
                 window.telemeDashboardAnalytics.trackEvent('new_dashboard_clicked', {
                     source: 'banner',
@@ -1698,20 +1707,47 @@
                 });
             }
             
-            // URL do novo dashboard - usando URL relativa para funcionar em qualquer ambiente
-            const newDashboardUrl = '/dashboard-teste';
-            window.open(newDashboardUrl, '_blank');
-            
             // Marcar como testado
             localStorage.setItem('telemed_dashboard_tested', 'true');
             localStorage.setItem('telemed_dashboard_test_date', new Date().toISOString());
             
-            // Mostrar feedback modal após 30 segundos
-            setTimeout(() => {
-                document.getElementById('feedbackModal').classList.add('show');
-            }, 30000);
+            showNotification('🚀 Redirecionando para o novo dashboard...', 'info');
             
-            showNotification('🚀 Abrindo novo dashboard...', 'info');
+            // Tentar múltiplas URLs para máxima compatibilidade
+            const dashboardUrls = [
+                '/dashboard-teste',
+                '/dashboard-teste.html',
+                '/dashboard-teste-fixed',
+                '/public/dashboard-teste.html'
+            ];
+            
+            // Função para testar se URL existe
+            async function testUrl(url) {
+                try {
+                    const response = await fetch(url, { method: 'HEAD' });
+                    return response.ok;
+                } catch {
+                    return false;
+                }
+            }
+            
+            // Encontrar primeira URL que funciona e redirecionar
+            (async () => {
+                for (const url of dashboardUrls) {
+                    const works = await testUrl(url);
+                    if (works) {
+                        console.log(`✅ Dashboard encontrado em: ${url}`);
+                        window.location.href = url;
+                        return;
+                    }
+                }
+                
+                // Se nenhuma URL funcionar, restaurar botão e mostrar erro
+                button.textContent = originalText;
+                button.disabled = false;
+                showNotification('❌ Dashboard indisponível no momento', 'error');
+                console.error('❌ Nenhuma URL do dashboard está disponível');
+            })();
         }
         
         // Handler do botão "Dispensar"
