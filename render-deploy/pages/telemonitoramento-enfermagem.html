@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemonitoramento de Enfermagem - TeleMed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .aquarela-bg {
+            background: linear-gradient(135deg, #F5E8C7 0%, #E0D7B9 50%, #B3D9E0 100%);
+            min-height: 100vh;
+        }
+        .watercolor-card {
+            background: white;
+            border: 1px solid rgba(179, 217, 224, 0.4);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(42, 64, 102, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #2A4066 0%, #4A6A8A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        .breadcrumb {
+            background: linear-gradient(135deg, rgba(245, 232, 199, 0.8) 0%, rgba(232, 212, 201, 0.7) 100%);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #2A4066;
+            border: 1px solid rgba(179, 217, 224, 0.3);
+            font-weight: 500;
+        }
+        .monitor-status {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="aquarela-bg">
+    <div class="min-h-screen p-6">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+            <div class="breadcrumb inline-block">
+                <a href="/dashboard-aquarela" class="hover:underline">Dashboard</a>
+                <span class="mx-2">→</span>
+                <span>Telemonitoramento de Enfermagem</span>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <div class="watercolor-card p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+                    <i data-lucide="monitor-heart" class="w-8 h-8 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold gradient-text">Telemonitoramento de Enfermagem</h1>
+                    <p class="text-lg text-gray-600 mt-2">Sistema de monitoramento remoto de pacientes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="watercolor-card p-6 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 monitor-status">
+                    <i data-lucide="heart-pulse" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">24</h3>
+                <p class="text-gray-600">Pacientes Ativos</p>
+            </div>
+
+            <div class="watercolor-card p-6 text-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="activity" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">98.5%</h3>
+                <p class="text-gray-600">Uptime Sistema</p>
+            </div>
+
+            <div class="watercolor-card p-6 text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="bell" class="w-6 h-6 text-yellow-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">3</h3>
+                <p class="text-gray-600">Alertas Pendentes</p>
+            </div>
+
+            <div class="watercolor-card p-6 text-center">
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="clock" class="w-6 h-6 text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">24/7</h3>
+                <p class="text-gray-600">Monitoramento</p>
+            </div>
+        </div>
+
+        <!-- Patient Monitoring Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Active Patients -->
+            <div class="watercolor-card p-6">
+                <h3 class="text-xl font-bold gradient-text mb-4">Pacientes Monitorados</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5 text-green-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-medium">Maria Silva</p>
+                                <p class="text-sm text-gray-600">Pressão: 120/80 | FC: 72 bpm</p>
+                            </div>
+                        </div>
+                        <span class="text-sm text-green-600 font-medium">Normal</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5 text-yellow-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-medium">João Santos</p>
+                                <p class="text-sm text-gray-600">Pressão: 140/90 | FC: 88 bpm</p>
+                            </div>
+                        </div>
+                        <span class="text-sm text-yellow-600 font-medium">Atenção</span>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="font-medium">Ana Costa</p>
+                                <p class="text-sm text-gray-600">Glicemia: 110 mg/dL | Temp: 36.5°C</p>
+                            </div>
+                        </div>
+                        <span class="text-sm text-blue-600 font-medium">Estável</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Alerts -->
+            <div class="watercolor-card p-6">
+                <h3 class="text-xl font-bold gradient-text mb-4">Alertas Recentes</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 mt-0.5 mr-3"></i>
+                        <div>
+                            <p class="font-medium text-red-800">Pressão alta detectada</p>
+                            <p class="text-sm text-red-600">João Santos - 14:30</p>
+                            <p class="text-xs text-red-500 mt-1">Pressão: 150/95 mmHg</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
+                        <i data-lucide="clock" class="w-5 h-5 text-yellow-600 mt-0.5 mr-3"></i>
+                        <div>
+                            <p class="font-medium text-yellow-800">Medicação atrasada</p>
+                            <p class="text-sm text-yellow-600">Carlos Lima - 13:45</p>
+                            <p class="text-xs text-yellow-500 mt-1">Medicamento não tomado</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start p-4 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                        <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5 mr-3"></i>
+                        <div>
+                            <p class="font-medium text-blue-800">Check-up agendado</p>
+                            <p class="text-sm text-blue-600">Ana Costa - Amanhã 09:00</p>
+                            <p class="text-xs text-blue-500 mt-1">Consulta de rotina</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 flex flex-wrap gap-4">
+            <button onclick="window.location.href='/dashboard-aquarela'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg flex items-center">
+                <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                Voltar ao Dashboard
+            </button>
+            
+            <button class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg flex items-center">
+                <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+                Adicionar Paciente
+            </button>
+            
+            <button class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-300 shadow-lg flex items-center">
+                <i data-lucide="settings" class="w-5 h-5 mr-2"></i>
+                Configurações
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        console.log('🏥 Sistema de Telemonitoramento carregado');
+        console.log('📊 24 pacientes sendo monitorados');
+        console.log('⚡ Sistema operacional 24/7');
+    </script>
+</body>
+</html>

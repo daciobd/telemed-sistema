@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Teste de Depressão - PHQ-9</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .question-card.answered {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        
+        .radio-option {
+            transition: all 0.2s ease;
+        }
+        
+        .radio-option:hover {
+            background-color: #e0e7ff;
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        .result-card {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* BREADCRUMBS PROFISSIONAIS */
+        .breadcrumb-container {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item a {
+            color: #4facfe;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item a:hover {
+            background: rgba(79, 172, 254, 0.1);
+            color: #2c5282;
+            transform: translateY(-1px);
+        }
+
+        .breadcrumb-item.active {
+            color: #2d3748;
+            font-weight: 600;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .breadcrumb-separator {
+            margin: 0 8px;
+            color: #cbd5e0;
+            font-size: 16px;
+        }
+
+        .breadcrumb-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb {
+                font-size: 12px;
+                flex-wrap: wrap;
+            }
+            
+            .breadcrumb-item {
+                margin: 2px 0;
+            }
+        }
+
+        /* MEDICAL LOADER - SISTEMA DE CARREGAMENTO MÉDICO */
+        .medical-loader{display:inline-block;width:40px;height:40px;border:3px solid #f3f4f6;border-top:3px solid #4facfe;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.95);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;backdrop-filter:blur(5px)}.loading-content{text-align:center;color:#4facfe;font-weight:600;font-size:16px}.loading-subtitle{color:#888;font-size:14px;margin-top:10px;font-weight:400}.progress-medical{width:300px;height:8px;background:#f3f4f6;border-radius:4px;margin:20px 0;overflow:hidden}.progress-bar-medical{height:100%;background:linear-gradient(90deg,#4facfe,#00f2fe);border-radius:4px;transition:width .3s ease}.medical-success{color:#10b981;font-weight:600}.medical-error{color:#ef4444;font-weight:600}.pulse-medical{animation:pulse-medical 2s infinite}@keyframes pulse-medical{0%,100%{opacity:1}50%{opacity:.5}}
+    </style>
+</head>
+<body>
+    <!-- BREADCRUMB PARA PHQ-9 DEPRESSÃO -->
+    <div class="breadcrumb-container">
+        <nav class="breadcrumb">
+            <div class="breadcrumb-item">
+                <a href="/" onclick="window.history.back(); return false;">
+                    <span class="breadcrumb-icon">🏠</span>
+                    Dashboard
+                </a>
+            </div>
+            <span class="breadcrumb-separator">›</span>
+            <div class="breadcrumb-item">
+                <a href="/centro-avaliacao.html">
+                    <span class="breadcrumb-icon">🧠</span>
+                    Centro de Avaliação
+                </a>
+            </div>
+            <span class="breadcrumb-separator">›</span>
+            <div class="breadcrumb-item active">
+                <span class="breadcrumb-icon">😔</span>
+                PHQ-9 - Depressão
+            </div>
+        </nav>
+    </div>
+    
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-block bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-full mb-4">
+                    😔 AVALIAÇÃO DE DEPRESSÃO
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    PHQ-9 - Questionário de Saúde do Paciente
+                </h1>
+                <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                    Escala para rastreamento de episódio depressivo maior
+                </p>
+                <p class="text-white/70 mt-2">
+                    Avalie com que frequência você foi incomodado pelos problemas listados nas últimas 2 semanas
+                </p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="bg-white/20 rounded-full h-3 mb-8">
+                <div id="progressBar" class="progress-bar bg-white h-3 rounded-full" style="width: 0%"></div>
+            </div>
+            <div class="text-center text-white mb-8">
+                <span id="progressText">Pergunta 1 de 9</span>
+            </div>
+
+            <!-- Test Form -->
+            <div id="testForm" class="space-y-6">
+                <!-- Questions will be generated by JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div id="navigationButtons" class="flex justify-between mt-8">
+                <button id="prevBtn" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50" disabled>
+                    ← Anterior
+                </button>
+                <button id="nextBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50" disabled>
+                    Próxima →
+                </button>
+            </div>
+
+            <!-- Results Section (Hidden initially) -->
+            <div id="resultsSection" class="hidden">
+                <div class="result-card bg-white rounded-2xl p-8 mt-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                        📊 Resultados - PHQ-9
+                    </h2>
+                    
+                    <div id="resultContent" class="space-y-6">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+                        <h3 class="text-lg font-semibold text-red-800 mb-2">⚠️ Importante</h3>
+                        <p class="text-red-700">
+                            Este teste é uma ferramenta de triagem e não substitui a avaliação de um profissional de saúde mental. 
+                            Se você apresenta sintomas depressivos ou pensamentos de autolesão, procure ajuda profissional imediatamente.
+                        </p>
+                        <div class="mt-3 p-3 bg-red-100 rounded-lg">
+                            <p class="text-red-800 font-medium">🆘 Em caso de crise: CVV 188 (24h) | SAMU 192 | Bombeiros 193</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-8 space-x-4">
+                        <button onclick="resetTest()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg transition-colors">
+                            🔄 Fazer Teste Novamente
+                        </button>
+                        <a href="/centro-avaliacao" class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg transition-colors">
+                            🧠 Outros Testes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPONENTES MEDICAL LOADING E NOTIFICAÇÕES -->
+    <div id="loadingOverlay" class="loading-overlay" style="display:none">
+        <div class="loading-content">
+            <div class="medical-loader"></div>
+            <div class="loading-text">Carregando...</div>
+        </div>
+    </div>
+
+    <div class="notifications-container" id="notificationsContainer"></div>
+
+    <script>
+        // PHQ-9 Questions
+        const questions = [
+            { id: 1, text: "Pouco interesse ou prazer em fazer as coisas" },
+            { id: 2, text: "Sentir-se desanimado, deprimido ou sem esperança" },
+            { id: 3, text: "Dificuldade para adormecer, continuar dormindo ou dormir demais" },
+            { id: 4, text: "Sentir-se cansado ou com pouca energia" },
+            { id: 5, text: "Falta de apetite ou comer demais" },
+            { id: 6, text: "Sentir-se mal consigo mesmo, sentir-se um fracasso ou que você desapontou sua família ou você mesmo" },
+            { id: 7, text: "Dificuldade para se concentrar nas coisas, como ler um jornal ou assistir televisão" },
+            { id: 8, text: "Falar ou se mover muito devagar, ou ao contrário, ficar agitado e inquieto" },
+            { id: 9, text: "Pensamentos de que seria melhor estar morto ou se ferir de alguma forma" }
+        ];
+
+        const options = [
+            { value: 0, text: "Nenhuma vez" },
+            { value: 1, text: "Vários dias" },
+            { value: 2, text: "Mais da metade dos dias" },
+            { value: 3, text: "Quase todos os dias" }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        // Initialize test
+        function initTest() {
+            renderQuestion();
+            updateProgress();
+            updateNavigation();
+        }
+
+        // Render current question
+        function renderQuestion() {
+            const testForm = document.getElementById('testForm');
+            const question = questions[currentQuestion];
+            const isLastQuestion = currentQuestion === questions.length - 1;
+            
+            testForm.innerHTML = `
+                <div class="question-card bg-white rounded-2xl p-8 ${answers[question.id] !== undefined ? 'answered' : ''}">
+                    <div class="mb-6">
+                        ${isLastQuestion ? `
+                            <span class="inline-block bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full mb-4">
+                                ⚠️ Pergunta Sensível
+                            </span>
+                        ` : `
+                            <span class="inline-block bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full mb-4">
+                                😔 Sintoma Depressivo
+                            </span>
+                        `}
+                        <h3 class="text-xl font-semibold text-gray-800 leading-relaxed">
+                            ${currentQuestion + 1}. ${question.text}
+                        </h3>
+                        <p class="text-gray-600 mt-2 text-sm">
+                            Nas últimas 2 semanas, com que frequência você foi incomodado por este problema?
+                        </p>
+                        ${isLastQuestion ? `
+                            <div class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <p class="text-red-700 text-sm font-medium">
+                                    ⚠️ Se você marcou qualquer opção diferente de "Nenhuma vez" nesta pergunta, 
+                                    é importante buscar ajuda profissional imediatamente.
+                                </p>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="space-y-3">
+                        ${options.map(option => `
+                            <label class="radio-option flex items-center p-4 rounded-lg cursor-pointer border border-gray-200 hover:bg-indigo-50">
+                                <input type="radio" name="question_${question.id}" value="${option.value}" 
+                                       class="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                                       ${answers[question.id] === option.value ? 'checked' : ''}
+                                       onchange="handleAnswer(${question.id}, ${option.value})">
+                                <span class="ml-3 text-gray-700 font-medium">${option.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handle answer selection
+        function handleAnswer(questionId, value) {
+            answers[questionId] = value;
+            updateProgress();
+            updateNavigation();
+            
+            // Add visual feedback
+            const questionCard = document.querySelector('.question-card');
+            questionCard.classList.add('answered');
+            
+            // Special handling for question 9 (suicidal ideation)
+            if (questionId === 9 && value > 0) {
+                setTimeout(() => {
+                    alert('⚠️ ATENÇÃO: Você indicou pensamentos sobre morte ou autolesão. É muito importante que procure ajuda profissional imediatamente. Não hesite em ligar para o CVV (188) ou procurar um serviço de emergência.');
+                }, 500);
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = (Object.keys(answers).length / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+        }
+
+        // Update navigation buttons
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = Object.keys(answers).length === questions.length ? '📊 Ver Resultados' : 'Finalizar';
+                nextBtn.disabled = answers[questions[currentQuestion].id] === undefined;
+            } else {
+                nextBtn.textContent = 'Próxima →';
+                nextBtn.disabled = answers[questions[currentQuestion].id] === undefined;
+            }
+        }
+
+        // Navigation functions
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateProgress();
+                updateNavigation();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                updateProgress();
+                updateNavigation();
+            } else {
+                showResults();
+            }
+        }
+
+        // Calculate and show results
+        function showResults() {
+            const totalScore = Object.values(answers).reduce((sum, value) => sum + value, 0);
+            const suicidalIdeation = answers[9] > 0;
+            
+            let severity = '';
+            let color = '';
+            let recommendation = '';
+            let description = '';
+
+            if (totalScore >= 0 && totalScore <= 4) {
+                severity = 'Depressão Mínima';
+                color = 'bg-green-100 border-green-500 text-green-800';
+                description = 'Sintomas depressivos mínimos ou ausentes';
+                recommendation = 'Continue mantendo hábitos saudáveis e autocuidado.';
+            } else if (totalScore >= 5 && totalScore <= 9) {
+                severity = 'Depressão Leve';
+                color = 'bg-yellow-100 border-yellow-500 text-yellow-800';
+                description = 'Sintomas depressivos leves';
+                recommendation = 'Considere atividades prazerosas, exercícios e acompanhamento preventivo.';
+            } else if (totalScore >= 10 && totalScore <= 14) {
+                severity = 'Depressão Moderada';
+                color = 'bg-orange-100 border-orange-500 text-orange-800';
+                description = 'Sintomas depressivos moderados';
+                recommendation = 'Recomenda-se avaliação profissional e considera​ção de tratamento psicológico/psiquiátrico.';
+            } else if (totalScore >= 15 && totalScore <= 19) {
+                severity = 'Depressão Moderadamente Severa';
+                color = 'bg-red-100 border-red-500 text-red-800';
+                description = 'Sintomas depressivos moderadamente severos';
+                recommendation = 'Importante buscar avaliação profissional e tratamento especializado.';
+            } else if (totalScore >= 20 && totalScore <= 27) {
+                severity = 'Depressão Severa';
+                color = 'bg-red-200 border-red-600 text-red-900';
+                description = 'Sintomas depressivos severos';
+                recommendation = 'É crucial buscar ajuda profissional imediatamente. Tratamento intensivo é necessário.';
+            }
+
+            document.getElementById('testForm').classList.add('hidden');
+            document.getElementById('navigationButtons').classList.add('hidden');
+            
+            const resultsSection = document.getElementById('resultsSection');
+            const resultContent = document.getElementById('resultContent');
+            
+            let suicidalWarning = '';
+            if (suicidalIdeation) {
+                suicidalWarning = `
+                    <div class="p-4 bg-red-100 border border-red-300 rounded-lg mb-6">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🚨</span>
+                            <div>
+                                <h4 class="font-bold text-red-800">ALERTA DE RISCO</h4>
+                                <p class="text-red-700">Você indicou pensamentos sobre morte ou autolesão. Procure ajuda imediatamente!</p>
+                                <p class="text-red-800 font-medium mt-2">CVV: 188 (24h) | SAMU: 192 | Emergência: 193</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultContent.innerHTML = `
+                ${suicidalWarning}
+                
+                <div class="text-center mb-8">
+                    <div class="inline-block p-6 bg-indigo-100 rounded-full mb-4">
+                        <span class="text-4xl">😔</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">${severity}</h3>
+                    <p class="text-gray-600 mb-4">${description}</p>
+                    <div class="text-3xl font-bold text-indigo-600 mb-2">${totalScore}/27 pontos</div>
+                </div>
+                
+                <div class="p-6 border-l-4 rounded-r-lg ${color}">
+                    <h4 class="text-lg font-bold mb-2">📋 Recomendação</h4>
+                    <p class="font-medium">${recommendation}</p>
+                    ${suicidalIdeation ? '<p class="mt-2 font-bold text-red-800">⚠️ Risco de autolesão identificado - busque ajuda imediatamente!</p>' : ''}
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">📊 Escala PHQ-9</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-2 text-sm">
+                        <div class="text-center p-2 bg-green-100 rounded-lg">
+                            <div class="font-bold text-green-800">0-4</div>
+                            <div class="text-green-700">Mínima</div>
+                        </div>
+                        <div class="text-center p-2 bg-yellow-100 rounded-lg">
+                            <div class="font-bold text-yellow-800">5-9</div>
+                            <div class="text-yellow-700">Leve</div>
+                        </div>
+                        <div class="text-center p-2 bg-orange-100 rounded-lg">
+                            <div class="font-bold text-orange-800">10-14</div>
+                            <div class="text-orange-700">Moderada</div>
+                        </div>
+                        <div class="text-center p-2 bg-red-100 rounded-lg">
+                            <div class="font-bold text-red-800">15-19</div>
+                            <div class="text-red-700">Mod. Severa</div>
+                        </div>
+                        <div class="text-center p-2 bg-red-200 rounded-lg">
+                            <div class="font-bold text-red-900">20-27</div>
+                            <div class="text-red-800">Severa</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-gray-700">
+                        <p><strong>Data da avaliação:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+                        <p><strong>Instrumento:</strong> PHQ-9 (Patient Health Questionnaire-9)</p>
+                        ${suicidalIdeation ? '<p class="text-red-700 font-bold">⚠️ Ideação suicida detectada na questão 9</p>' : ''}
+                    </div>
+                </div>
+                
+                <!-- PDF Generation and Navigation -->
+                <div class="text-center mt-8 space-x-4">
+                    <button onclick="generatePDFReport()" 
+                            class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg transition-colors">
+                        📄 Gerar Relatório PDF
+                    </button>
+                    <button onclick="window.location.href='/centro-avaliacao'" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors">
+                        🧠 Outros Testes
+                    </button>
+                    <button onclick="resetTest()" 
+                            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg transition-colors">
+                        🔄 Repetir Teste
+                    </button>
+                </div>
+            `;
+            
+            resultsSection.classList.remove('hidden');
+            
+            // Generate PDF report function
+            window.generatePDFReport = function() {
+                const pdfData = {
+                    totalScore: totalScore,
+                    maxScore: 27,
+                    severity: severity,
+                    interpretation: description,
+                    recommendations: recommendation,
+                    emergency: suicidalIdeation
+                };
+                
+                generatePDF('PHQ-9 - Teste de Depressão', pdfData);
+                TeleMedAnalytics.trackPDFDownload('PHQ-9');
+            };
+            
+            // Analytics tracking
+            TeleMedAnalytics.trackTestComplete('PHQ-9 Depressão', severity);
+            
+            // Log result for analytics
+            console.log('😔 Teste PHQ-9 concluído:', {
+                pontuacao: totalScore,
+                severidade: severity,
+                ideacaoSuicida: suicidalIdeation
+            });
+        }
+
+        // Reset test
+        function resetTest() {
+            currentQuestion = 0;
+            answers = {};
+            
+            document.getElementById('testForm').classList.remove('hidden');
+            document.getElementById('navigationButtons').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            initTest();
+        }
+
+        // Event listeners
+        document.getElementById('prevBtn').addEventListener('click', prevQuestion);
+        document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+
+        // PDF Generation Function
+        function generatePDF(testName, results) {
+            const { jsPDF } = window.jspdf;
+            if (!jsPDF) {
+                alert('Biblioteca PDF não carregada. Tente novamente.');
+                return;
+            }
+            
+            const doc = new jsPDF();
+            const pageWidth = 210;
+            const margin = 20;
+            const lineHeight = 10;
+            let yPosition = 30;
+            
+            // Add text with line wrapping
+            function addText(text, x, y, maxWidth) {
+                const lines = doc.splitTextToSize(text, maxWidth);
+                doc.text(lines, x, y);
+                return y + (lines.length * lineHeight);
+            }
+            
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('TeleMed Pro - Centro de Avaliação Psiquiátrica', margin, yPosition);
+            yPosition += 15;
+            
+            // Test title
+            doc.setFontSize(16);
+            doc.text(`Relatório: ${testName}`, margin, yPosition);
+            yPosition += 10;
+            
+            // Date
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, margin, yPosition);
+            yPosition += 15;
+            
+            // Results
+            doc.setFont(undefined, 'bold');
+            doc.text('RESULTADOS:', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFont(undefined, 'normal');
+            yPosition = addText(`Pontuação Total: ${results.totalScore}/${results.maxScore}`, margin, yPosition, pageWidth - 2*margin);
+            yPosition = addText(`Nível: ${results.severity}`, margin, yPosition, pageWidth - 2*margin);
+            yPosition += 5;
+            
+            // Interpretation
+            doc.setFont(undefined, 'bold');
+            doc.text('INTERPRETAÇÃO:', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFont(undefined, 'normal');
+            yPosition = addText(results.interpretation, margin, yPosition, pageWidth - 2*margin);
+            yPosition += 10;
+            
+            // Recommendations
+            doc.setFont(undefined, 'bold');
+            doc.text('RECOMENDAÇÕES:', margin, yPosition);
+            yPosition += 10;
+            
+            doc.setFont(undefined, 'normal');
+            yPosition = addText(results.recommendations, margin, yPosition, pageWidth - 2*margin);
+            yPosition += 15;
+            
+            // Emergency alert if needed
+            if (results.emergency) {
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text('🚨 ALERTA DE EMERGÊNCIA:', margin, yPosition);
+                yPosition += 10;
+                doc.setFont(undefined, 'normal');
+                yPosition = addText('Risco de autolesão identificado. CVV: 188 (24h) | SAMU: 192', margin, yPosition, pageWidth - 2*margin);
+                yPosition += 15;
+            }
+            
+            // Disclaimer
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'italic');
+            yPosition = addText('IMPORTANTE: Este relatório é uma ferramenta de triagem e não substitui a avaliação de um profissional de saúde mental qualificado.', margin, yPosition, pageWidth - 2*margin);
+            
+            // Footer
+            doc.setFontSize(8);
+            doc.text('TeleMed Pro - Sistema de Avaliação Psiquiátrica', margin, 280);
+            doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, margin, 285);
+            
+            // Save
+            const fileName = `TeleMed_${testName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(fileName);
+            
+            console.log('📄 PDF gerado:', fileName);
+        }
+
+        // Analytics tracking
+        class TeleMedAnalytics {
+            static trackTestStart(testName) {
+                console.log(`📊 Teste iniciado: ${testName}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'test_started', {
+                        'test_name': testName,
+                        'timestamp': new Date().toISOString()
+                    });
+                }
+            }
+            
+            static trackTestComplete(testName, result) {
+                console.log(`✅ Teste concluído: ${testName} - Resultado: ${result}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'test_completed', {
+                        'test_name': testName,
+                        'result': result,
+                        'timestamp': new Date().toISOString()
+                    });
+                }
+            }
+            
+            static trackPDFDownload(testName) {
+                console.log(`📄 PDF gerado: ${testName}`);
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'pdf_downloaded', {
+                        'test_name': testName,
+                        'timestamp': new Date().toISOString()
+                    });
+                }
+            }
+        }
+
+        // Initialize test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('😔 Teste PHQ-9 Depressão carregado');
+            TeleMedAnalytics.trackTestStart('PHQ-9 Depressão');
+            initTest();
+        });
+    </script>
+
+    <!-- JAVASCRIPT RESPONSIVO AVANÇADO -->
+    <script>
+        function isMobile(){return window.innerWidth<=768;}
+        function isTablet(){return window.innerWidth>768 && window.innerWidth<=1024;}
+        function isDesktop(){return window.innerWidth>1024;}
+        function adjustLayout(){
+            const cards=document.querySelectorAll('.card,.ai-card,.pdf-card,.result-card');
+            if(isMobile()){
+                cards.forEach(card=>{
+                    card.style.width='100%';
+                    card.style.margin='8px 0';
+                    card.style.padding='16px';
+                });
+                const buttons=document.querySelectorAll('button,.btn');
+                buttons.forEach(btn=>{
+                    btn.style.minHeight='44px';
+                    btn.style.fontSize='16px';
+                    btn.style.width='100%';
+                });
+            }else if(isTablet()){
+                cards.forEach(card=>{
+                    card.style.width='calc(100% - 20px)';
+                    card.style.padding='24px';
+                });
+            }else{
+                cards.forEach(card=>{
+                    card.style.width='100%';
+                    card.style.padding='32px';
+                });
+            }
+        }
+        function optimizeForMobile(){
+            if(isMobile()){
+                const style=document.createElement('style');
+                style.textContent=`*{transition-duration:0.2s !important;animation-duration:0.2s !important;}`;
+                document.head.appendChild(style);
+                const images=document.querySelectorAll('img');
+                images.forEach(img=>{
+                    img.loading='lazy';
+                });
+            }
+        }
+        function handleOrientationChange(){
+            setTimeout(()=>{
+                adjustLayout();
+                const notifications=document.querySelectorAll('.notification');
+                notifications.forEach(notif=>{
+                    notif.style.maxWidth=isMobile()? '90vw':'320px';
+                });
+            },100);
+        }
+        window.addEventListener('resize',adjustLayout);
+        window.addEventListener('orientationchange',handleOrientationChange);
+        document.addEventListener('DOMContentLoaded',function(){
+            adjustLayout();
+            optimizeForMobile();
+            if('ontouchstart' in window){
+                document.body.classList.add('touch-device');
+            }
+        });
+        function preventIOSZoom(){
+            const inputs=document.querySelectorAll('input,select,textarea');
+            inputs.forEach(input=>{
+                if(input.style.fontSize !=='16px'){
+                    input.style.fontSize='16px';
+                }
+            });
+        }
+        if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
+            document.addEventListener('DOMContentLoaded',preventIOSZoom);
+        }
+    </script>
+</body>
+</html>

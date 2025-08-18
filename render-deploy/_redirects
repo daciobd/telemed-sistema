@@ -1,0 +1,7 @@
+# TeleMed Dashboard Redirects
+/dashboard /index.html 200
+/area-medica /index.html 200
+/pacientes /pages/pacientes.html 200
+/medicos /pages/medicos.html 200
+/relatorios /pages/relatorios.html 200
+/* /index.html 200

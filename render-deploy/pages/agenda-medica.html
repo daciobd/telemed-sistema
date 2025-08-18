@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Médica - TeleMed Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .datetime-info {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .current-date {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .current-time {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #007BFF;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card.success {
+            border-left-color: #28A745;
+        }
+
+        .stat-card.warning {
+            border-left-color: #FFC107;
+        }
+
+        .stat-card.danger {
+            border-left-color: #DC3545;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* CALENDAR SECTION */
+        .calendar-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            background: linear-gradient(135deg, #6f42c1, #5a2d91);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .calendar-content {
+            padding: 30px;
+        }
+
+        .date-selector {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .date-input-group label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 14px;
+        }
+
+        #dataSelecionada {
+            padding: 12px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        #dataSelecionada:focus {
+            outline: none;
+            border-color: #6f42c1;
+            box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+        }
+
+        .quick-dates {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-date-btn {
+            padding: 8px 16px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quick-date-btn:hover {
+            background: #6f42c1;
+            color: white;
+            border-color: #6f42c1;
+            transform: translateY(-1px);
+        }
+
+        .quick-date-btn.active {
+            background: #6f42c1;
+            color: white;
+            border-color: #6f42c1;
+        }
+
+        /* PATIENTS SECTION */
+        .patients-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .refresh-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* PATIENTS TABLE */
+        .patients-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .patients-table th {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .patients-table td {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+
+        .patients-table tbody tr {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .patients-table tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            transform: translateX(5px);
+        }
+
+        .patient-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .patient-name {
+            font-weight: 600;
+            color: #495057;
+            font-size: 16px;
+        }
+
+        .patient-details {
+            font-size: 13px;
+            color: #6c757d;
+            display: flex;
+            gap: 15px;
+        }
+
+        .time-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-agendado {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .status-confirmado {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .status-pendente {
+            background: #fff3e0;
+            color: #f57c00;
+            border: 1px solid #ffcc02;
+        }
+
+        .status-reagendado {
+            background: #fce4ec;
+            color: #c2185b;
+            border: 1px solid #f8bbd9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-atender {
+            background: linear-gradient(135deg, #28A745, #20c997);
+            color: white;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-atender:hover {
+            background: linear-gradient(135deg, #218838, #1aa085);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-remarcar {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-remarcar:hover {
+            background: linear-gradient(135deg, #0056B3, #004085);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+        }
+
+        .btn-cancelar {
+            background: linear-gradient(135deg, #DC3545, #c82333);
+            color: white;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-cancelar:hover {
+            background: linear-gradient(135deg, #c82333, #a71e2a);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-convidar {
+            background: linear-gradient(135deg, #6f42c1, #5a2d91);
+            color: white;
+            box-shadow: 0 2px 8px rgba(111, 66, 193, 0.3);
+        }
+
+        .btn-convidar:hover {
+            background: linear-gradient(135deg, #5a2d91, #4c2a6a);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+        }
+
+        /* LOADING STATE */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* NOTIFICATION */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #28A745, #20c997);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #FFC107, #ffca2c);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #DC3545, #e55a6c);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, #007BFF, #339af0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .calendar-content {
+                padding: 20px;
+            }
+
+            .date-selector {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .date-input-group {
+                width: 100%;
+            }
+
+            #dataSelecionada {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .quick-dates {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quick-date-btn {
+                flex: 1;
+                min-width: 60px;
+            }
+
+            .patients-table {
+                font-size: 14px;
+            }
+
+            .patients-table th,
+            .patients-table td {
+                padding: 12px 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .patient-details {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .calendar-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+
+        /* MODALS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #007BFF;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #dc3545;
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+        }
+
+        .patient-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007BFF;
+        }
+
+        .patient-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .patient-details {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        /* CALENDAR GRID */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            background: white;
+        }
+
+        .calendar-day:hover {
+            border-color: #007BFF;
+            background: #f8f9fa;
+        }
+
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            border-color: #007BFF;
+        }
+
+        .calendar-day.disabled {
+            background: #f8f9fa;
+            color: #adb5bd;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.has-appointments {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        /* TIME SLOTS */
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+        }
+
+        .time-slot:hover {
+            border-color: #007BFF;
+            background: #f8f9fa;
+        }
+
+        .time-slot.selected {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            border-color: #007BFF;
+        }
+
+        .time-slot.occupied {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+            cursor: not-allowed;
+        }
+
+        .time-slot.available {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        /* MODAL ACTIONS */
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .modal-btn.success {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* CURRENT APPOINTMENT INFO */
+        .current-appointment {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .current-time {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 5px;
+        }
+
+        .reschedule-reason {
+            margin-top: 20px;
+        }
+        /* BREADCRUMBS */
+        .breadcrumbs-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 30px;
+            border-bottom: 1px solid rgba(0, 123, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .breadcrumbs {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            color: #007BFF;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(0, 123, 255, 0.1);
+            color: #0056B3;
+        }
+
+        .breadcrumb-separator {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .breadcrumb-current {
+            color: #495057;
+            font-weight: 600;
+        }
+
+        /* CSS DOS MODALS DE REMARCAÇÃO */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #6c757d;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .patient-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .patient-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .patient-details {
+            font-size: 14px;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .current-appointment {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .current-time {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .time-slot {
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .time-slot.available {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .time-slot.available:hover {
+            background: #c3e6cb;
+            transform: translateY(-1px);
+        }
+
+        .time-slot.occupied {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+            cursor: not-allowed;
+        }
+
+        .time-slot.selected {
+            background: #cce5ff;
+            color: #004085;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .modal-btn.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .modal-btn.success:hover {
+            background: linear-gradient(135deg, #218838, #1ca085);
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.success:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumbs-container {
+                padding: 8px 15px;
+            }
+
+            .breadcrumbs {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .breadcrumb-item {
+                padding: 4px 8px;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .time-slot {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-calendar-alt"></i>
+                Agenda Médica - TeleMed Pro
+            </div>
+            <div class="header-actions">
+                <a href="/leilao-consultas.html" class="logout-btn" style="background: linear-gradient(135deg, #28a745, #20c997); margin-right: 15px;">
+                    <i class="fas fa-gavel"></i>
+                    Leilão
+                </a>
+                <a href="/receitas-digitais.html" class="logout-btn" style="background: linear-gradient(135deg, #6f42c1, #5a32a3); margin-right: 15px;">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    Receitas
+                </a>
+                <div class="datetime-info">
+                    <div class="current-date" id="current-date"></div>
+                    <div class="current-time" id="current-time"></div>
+                </div>
+                <a href="/login.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumbs-container">
+        <nav class="breadcrumbs">
+            <a href="/index.html" class="breadcrumb-item">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <a href="javascript:history.back()" class="breadcrumb-item">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-current">Agenda Médica</span>
+            <span class="breadcrumb-separator">></span>
+            <a href="#" onclick="window.scrollTo(0,0); return false;" class="breadcrumb-item">
+                <i class="fas fa-arrow-up"></i> Topo
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="total-patients">-</div>
+                <div class="stat-label">Total de Pacientes</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-value" id="confirmed-patients">-</div>
+                <div class="stat-label">Confirmados</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-value" id="pending-patients">-</div>
+                <div class="stat-label">Pendentes</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="stat-value" id="rescheduled-patients">-</div>
+                <div class="stat-label">Reagendados</div>
+            </div>
+        </div>
+
+        <!-- CALENDAR SECTION -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2 class="calendar-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Selecionar Data da Agenda
+                </h2>
+                <div class="current-selected-date" id="selected-date-display">
+                    Hoje
+                </div>
+            </div>
+            <div class="calendar-content">
+                <div class="date-selector">
+                    <div class="date-input-group">
+                        <label for="dataSelecionada">Data da Consulta:</label>
+                        <input type="date" id="dataSelecionada" onchange="atualizarAgenda()">
+                    </div>
+                    <div class="quick-dates">
+                        <button class="quick-date-btn active" onclick="selectQuickDate('today')">Hoje</button>
+                        <button class="quick-date-btn" onclick="selectQuickDate('tomorrow')">Amanhã</button>
+                        <button class="quick-date-btn" onclick="selectQuickDate('week')">Próxima Semana</button>
+                        <button class="quick-date-btn" onclick="selectQuickDate('month')">Próximo Mês</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PATIENTS SECTION -->
+        <div class="patients-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i>
+                    Pacientes do Dia
+                </h2>
+                <button class="refresh-btn" onclick="loadPatients()">
+                    <i class="fas fa-sync-alt"></i>
+                    Atualizar
+                </button>
+            </div>
+
+            <table class="patients-table">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="patients-tbody">
+                    <!-- Pacientes serão carregados aqui via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- INVITATION MODAL -->
+    <div id="invitation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-video"></i>
+                    Convidar para Teleconsulta
+                </div>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message" id="modal-message"></p>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="sendInvitation()">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Convite
+                </button>
+                <button class="modal-btn secondary" onclick="closeModal()">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE REMARCAÇÃO AVANÇADA -->
+    <div id="rescheduleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Remarcar Consulta
+                </div>
+                <button class="modal-close" onclick="closeRescheduleModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="patient-info" id="reschedulePatientInfo">
+                    <!-- Patient info will be populated here -->
+                </div>
+
+                <div class="current-appointment" id="currentAppointmentInfo">
+                    <!-- Current appointment info will be populated here -->
+                </div>
+
+                <div class="form-group">
+                    <label for="newDate">Nova Data:</label>
+                    <input type="date" id="newDate" onchange="loadAvailableSlots()">
+                </div>
+
+                <div class="form-group">
+                    <label>Horários Disponíveis:</label>
+                    <div class="time-slots" id="availableTimeSlots">
+                        <p style="text-align: center; color: #666;">Selecione uma data para ver os horários disponíveis</p>
+                    </div>
+                </div>
+
+                <div class="form-group reschedule-reason">
+                    <label for="rescheduleReason">Motivo da Remarcação:</label>
+                    <select id="rescheduleReason">
+                        <option value="">Selecione um motivo</option>
+                        <option value="medico">Indisponibilidade do médico</option>
+                        <option value="paciente">Solicitação do paciente</option>
+                        <option value="emergencia">Emergência médica</option>
+                        <option value="tecnico">Problemas técnicos</option>
+                        <option value="outro">Outro motivo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rescheduleNotes">Observações Adicionais:</label>
+                    <textarea id="rescheduleNotes" rows="3" placeholder="Informações adicionais sobre a remarcação..."></textarea>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeRescheduleModal()">Cancelar</button>
+                <button class="modal-btn success" onclick="confirmReschedule()" id="confirmRescheduleBtn" disabled>
+                    <i class="fas fa-check"></i>
+                    Confirmar Remarcação
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let patients = [];
+        let currentPatient = null;
+        let patientResponse = null;
+        let selectedDate = new Date();
+
+        // Carregar pacientes do banco
+        async function loadPatients() {
+            try {
+                showNotification('Carregando pacientes...', 'info');
+                
+                // Se uma data específica foi selecionada, use o endpoint de data
+                const dateStr = formatDateInput(selectedDate);
+                const endpoint = dateStr !== formatDateInput(new Date()) 
+                    ? `/api/pacientes/data/${dateStr}` 
+                    : '/api/pacientes';
+                    
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar pacientes');
+                }
+                
+                patients = await response.json();
+                renderPatients();
+                await loadStats();
+                
+                showNotification('Pacientes carregados com sucesso!', 'success');
+                console.log('📋 Pacientes carregados do banco PostgreSQL:', patients.length);
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar pacientes:', error);
+                showNotification('Erro ao carregar pacientes', 'error');
+                
+                // Fallback para dados de demonstração
+                loadDemoPatients();
+            }
+        }
+
+        // Carregar estatísticas do banco
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/estatisticas');
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById('total-patients').textContent = stats.total || 0;
+                    document.getElementById('confirmed-patients').textContent = stats.confirmados || 0;
+                    document.getElementById('pending-patients').textContent = stats.pendentes || 0;
+                    document.getElementById('rescheduled-patients').textContent = stats.reagendados || 0;
+                    return;
+                }
+            } catch (error) {
+                console.error('❌ Erro ao carregar estatísticas:', error);
+            }
+            
+            // Fallback para cálculo local
+            updateStats();
+        }
+
+        // Dados de demonstração como fallback
+        function loadDemoPatients() {
+            patients = [
+                {
+                    id: 1,
+                    nome: "João Silva Santos",
+                    hora_consulta: "08:20",
+                    status: "Confirmado",
+                    especialidade: "Cardiologia",
+                    convenio: "Prudential",
+                    telefone: "(11) 99999-1234",
+                    email: "joao.silva@email.com",
+                    idade: 35
+                },
+                {
+                    id: 2,
+                    nome: "Maria Oliveira Costa",
+                    hora_consulta: "09:15",
+                    status: "Agendado",
+                    especialidade: "Dermatologia",
+                    convenio: "Blue Cross",
+                    telefone: "(11) 99999-2345",
+                    email: "maria.oliveira@email.com",
+                    idade: 42
+                },
+                {
+                    id: 3,
+                    nome: "Pedro Souza Lima",
+                    hora_consulta: "10:30",
+                    status: "Pendente",
+                    especialidade: "Psiquiatria",
+                    convenio: "Mell-br",
+                    telefone: "(11) 99999-3456",
+                    email: "pedro.souza@email.com",
+                    idade: 28
+                }
+            ];
+            
+            renderPatients();
+            updateStats();
+            showNotification('Dados de demonstração carregados', 'warning');
+        }
+
+        // Renderizar tabela de pacientes
+        function renderPatients() {
+            const tbody = document.getElementById('patients-tbody');
+            
+            if (patients.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="loading">
+                            <i class="fas fa-calendar-times"></i>
+                            <div>Nenhum paciente agendado para hoje</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = patients.map(patient => `
+                <tr onclick="selectPatient(${patient.id})" data-patient-id="${patient.id}">
+                    <td>
+                        <div class="patient-info">
+                            <div class="patient-name">${patient.nome}</div>
+                            <div class="patient-details">
+                                <span><i class="fas fa-stethoscope"></i> ${patient.especialidade}</span>
+                                <span><i class="fas fa-shield-alt"></i> ${patient.convenio}</span>
+                                <span><i class="fas fa-birthday-cake"></i> ${patient.idade} anos</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="time-info">
+                            <i class="fas fa-clock"></i>
+                            ${patient.hora_consulta}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${patient.status.toLowerCase().replace(' ', '')}">${patient.status}</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-convidar" onclick="invitePatient(${patient.id}, '${patient.nome}', event)">
+                                <i class="fas fa-video"></i>
+                                Convidar
+                            </button>
+                            <button class="action-btn btn-atender" onclick="startConsulta(${patient.id}, event)">
+                                <i class="fas fa-user-md"></i>
+                                Atender
+                            </button>
+                            <button class="action-btn btn-remarcar" onclick="remarcarConsulta(${patient.id}, event)">
+                                <i class="fas fa-calendar-alt"></i>
+                                Remarcar
+                            </button>
+                            <button class="action-btn btn-cancelar" onclick="cancelarConsulta(${patient.id}, event)">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            const total = patients.length;
+            const confirmed = patients.filter(p => p.status === 'Confirmado').length;
+            const pending = patients.filter(p => p.status === 'Pendente').length;
+            const rescheduled = patients.filter(p => p.status === 'Reagendado').length;
+
+            document.getElementById('total-patients').textContent = total;
+            document.getElementById('confirmed-patients').textContent = confirmed;
+            document.getElementById('pending-patients').textContent = pending;
+            document.getElementById('rescheduled-patients').textContent = rescheduled;
+        }
+
+        // Selecionar paciente
+        function selectPatient(patientId) {
+            currentPatient = patients.find(p => p.id === patientId);
+            if (currentPatient) {
+                console.log('👤 Paciente selecionado:', currentPatient.nome);
+            }
+        }
+
+        // Convidar paciente para teleconsulta
+        function invitePatient(patientId, patientName, event) {
+            if (event) event.stopPropagation();
+            
+            currentPatient = patients.find(p => p.id === patientId);
+            if (!currentPatient) return;
+            
+            document.getElementById('modal-message').textContent = 
+                `Enviar convite de teleconsulta para ${patientName}? O paciente receberá uma notificação e poderá aceitar ou recusar a consulta.`;
+            
+            document.getElementById('invitation-modal').style.display = 'block';
+        }
+
+        // Enviar convite
+        function sendInvitation() {
+            if (!currentPatient) return;
+            
+            closeModal();
+            patientResponse = null;
+            
+            showNotification(`Convite enviado para ${currentPatient.nome}`, 'info');
+            console.log(`📞 Convite enviado para ${currentPatient.nome} às ${new Date().toLocaleTimeString()}`);
+            
+            // Simular resposta do paciente (5 segundos)
+            setTimeout(() => {
+                if (!patientResponse) {
+                    handleNoResponse();
+                }
+            }, 5000);
+        }
+
+        // Tratar falta de resposta
+        function handleNoResponse() {
+            if (!currentPatient) return;
+            
+            const action = confirm(`${currentPatient.nome} não respondeu ao convite. Deseja remarcar, cancelar ou insistir?`);
+            
+            if (action) {
+                const shouldReschedule = confirm("Remarcar consulta?");
+                if (shouldReschedule) {
+                    remarcarConsulta(currentPatient.id);
+                } else {
+                    cancelarConsulta(currentPatient.id);
+                }
+            } else {
+                showNotification("Insistindo no convite...", 'warning');
+                setTimeout(() => {
+                    invitePatient(currentPatient.id, currentPatient.nome);
+                }, 2000);
+            }
+        }
+
+        // Iniciar consulta
+        function startConsulta(patientId, event) {
+            if (event) event.stopPropagation();
+            
+            const patient = patients.find(p => p.id === patientId);
+            if (!patient) return;
+            
+            showNotification(`Iniciando consulta com ${patient.nome}`, 'success');
+            console.log(`🏥 Iniciando consulta com paciente ID: ${patientId}`);
+            
+            // Redirecionar para página de atendimento
+            setTimeout(() => {
+                window.location.href = `/atendimento-medico.html?paciente_id=${patientId}`;
+            }, 1000);
+        }
+
+        // SISTEMA AVANÇADO DE REMARCAÇÃO
+        let currentReschedulePatient = null;
+        let selectedRescheduleDate = null;
+        let selectedRescheduleTime = null;
+        let availableSlots = [];
+
+        // Abrir modal de remarcação
+        async function remarcarConsulta(patientId, event) {
+            if (event) event.stopPropagation();
+            
+            const patient = patients.find(p => p.id === patientId);
+            if (!patient) return;
+            
+            currentReschedulePatient = patient;
+            
+            // Preencher informações do paciente
+            document.getElementById('reschedulePatientInfo').innerHTML = `
+                <div class="patient-name">${patient.nome}</div>
+                <div class="patient-details">
+                    <i class="fas fa-stethoscope"></i> ${patient.especialidade} | 
+                    <i class="fas fa-shield-alt"></i> ${patient.convenio} | 
+                    <i class="fas fa-phone"></i> ${patient.telefone}
+                </div>
+            `;
+            
+            // Mostrar informações da consulta atual
+            document.getElementById('currentAppointmentInfo').innerHTML = `
+                <div class="current-time">
+                    <i class="fas fa-clock"></i> 
+                    Consulta atual: ${formatDateBR(selectedDate)} às ${patient.hora_consulta}
+                </div>
+                <div style="font-size: 14px; color: #666; margin-top: 5px;">
+                    Status: ${patient.status}
+                </div>
+            `;
+            
+            // Configurar data mínima (hoje)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('newDate').min = today;
+            document.getElementById('newDate').value = '';
+            
+            // Limpar seleções
+            selectedRescheduleDate = null;
+            selectedRescheduleTime = null;
+            document.getElementById('availableTimeSlots').innerHTML = '<p style="text-align: center; color: #666;">Selecione uma data para ver os horários disponíveis</p>';
+            document.getElementById('confirmRescheduleBtn').disabled = true;
+            
+            // Abrir modal
+            document.getElementById('rescheduleModal').style.display = 'block';
+        }
+
+        // Carregar horários disponíveis
+        async function loadAvailableSlots() {
+            const dateInput = document.getElementById('newDate');
+            const selectedDate = dateInput.value;
+            
+            if (!selectedDate) return;
+            
+            selectedRescheduleDate = selectedDate;
+            selectedRescheduleTime = null;
+            
+            try {
+                showNotification('Carregando horários disponíveis...', 'info');
+                
+                // Buscar horários disponíveis do banco
+                const response = await fetch(`/api/horarios-disponiveis/${selectedDate}`);
+                
+                if (response.ok) {
+                    availableSlots = await response.json();
+                } else {
+                    // Fallback para horários simulados
+                    availableSlots = generateDefaultTimeSlots();
+                }
+                
+                renderAvailableSlots();
+                
+            } catch (error) {
+                console.error('Erro ao carregar horários:', error);
+                availableSlots = generateDefaultTimeSlots();
+                renderAvailableSlots();
+                showNotification('Usando horários padrão', 'warning');
+            }
+        }
+
+        // Gerar horários padrão
+        function generateDefaultTimeSlots() {
+            const slots = [];
+            const times = [
+                '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+                '11:00', '11:30', '14:00', '14:30', '15:00', '15:30',
+                '16:00', '16:30', '17:00', '17:30', '18:00'
+            ];
+            
+            return times.map(time => ({
+                time: time,
+                available: Math.random() > 0.3, // 70% chance de estar disponível
+                patientName: Math.random() > 0.7 ? 'Ocupado' : null
+            }));
+        }
+
+        // Renderizar horários disponíveis
+        function renderAvailableSlots() {
+            const container = document.getElementById('availableTimeSlots');
+            
+            if (availableSlots.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">Nenhum horário disponível para esta data</p>';
+                return;
+            }
+            
+            container.innerHTML = availableSlots.map(slot => {
+                let className = 'time-slot';
+                let onclick = '';
+                let content = slot.time;
+                
+                if (slot.available) {
+                    className += ' available';
+                    onclick = `onclick="selectTimeSlot('${slot.time}')"`;
+                } else {
+                    className += ' occupied';
+                    content += '<br><small>Ocupado</small>';
+                }
+                
+                if (selectedRescheduleTime === slot.time) {
+                    className += ' selected';
+                }
+                
+                return `<div class="${className}" ${onclick}>${content}</div>`;
+            }).join('');
+        }
+
+        // Selecionar horário
+        function selectTimeSlot(time) {
+            selectedRescheduleTime = time;
+            renderAvailableSlots();
+            
+            // Habilitar botão de confirmação se tudo estiver selecionado
+            const reason = document.getElementById('rescheduleReason').value;
+            document.getElementById('confirmRescheduleBtn').disabled = !reason;
+        }
+
+        // Validar motivo de remarcação
+        document.getElementById('rescheduleReason').addEventListener('change', function() {
+            const reason = this.value;
+            const confirmBtn = document.getElementById('confirmRescheduleBtn');
+            confirmBtn.disabled = !(reason && selectedRescheduleTime);
+        });
+
+        // Confirmar remarcação
+        async function confirmReschedule() {
+            if (!currentReschedulePatient || !selectedRescheduleDate || !selectedRescheduleTime) {
+                showNotification('Selecione data e horário', 'error');
+                return;
+            }
+            
+            const reason = document.getElementById('rescheduleReason').value;
+            const notes = document.getElementById('rescheduleNotes').value;
+            
+            if (!reason) {
+                showNotification('Selecione o motivo da remarcação', 'error');
+                return;
+            }
+            
+            try {
+                showNotification('Processando remarcação...', 'info');
+                
+                const response = await fetch(`/api/pacientes/${currentReschedulePatient.id}/remarcar`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nova_data: selectedRescheduleDate,
+                        nova_hora: selectedRescheduleTime,
+                        motivo: reason,
+                        observacoes: notes,
+                        data_anterior: formatDateInput(selectedDate),
+                        hora_anterior: currentReschedulePatient.hora_consulta
+                    })
+                });
+                
+                if (response.ok) {
+                    const updatedPatient = await response.json();
+                    
+                    // Atualizar lista local
+                    const index = patients.findIndex(p => p.id === currentReschedulePatient.id);
+                    if (index !== -1) {
+                        patients[index] = updatedPatient;
+                    }
+                    
+                    renderPatients();
+                    await loadStats();
+                    
+                    closeRescheduleModal();
+                    showNotification(
+                        `Consulta de ${currentReschedulePatient.nome} remarcada para ${new Date(selectedRescheduleDate).toLocaleDateString('pt-BR')} às ${selectedRescheduleTime}`, 
+                        'success'
+                    );
+                    
+                    console.log(`📅 Consulta remarcada: ${currentReschedulePatient.nome} -> ${selectedRescheduleDate} ${selectedRescheduleTime}`);
+                    
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Erro ao remarcar consulta');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao remarcar consulta:', error);
+                showNotification('Erro ao remarcar consulta: ' + error.message, 'error');
+            }
+        }
+
+        // Fechar modal de remarcação
+        function closeRescheduleModal() {
+            document.getElementById('rescheduleModal').style.display = 'none';
+            currentReschedulePatient = null;
+            selectedRescheduleDate = null;
+            selectedRescheduleTime = null;
+            
+            // Limpar formulário
+            document.getElementById('newDate').value = '';
+            document.getElementById('rescheduleReason').value = '';
+            document.getElementById('rescheduleNotes').value = '';
+            document.getElementById('availableTimeSlots').innerHTML = '';
+            document.getElementById('confirmRescheduleBtn').disabled = true;
+        }
+
+        // Cancelar consulta
+        async function cancelarConsulta(patientId, event) {
+            if (event) event.stopPropagation();
+            
+            const patient = patients.find(p => p.id === patientId);
+            if (!patient) return;
+            
+            if (confirm(`Deseja cancelar a consulta de ${patient.nome}?`)) {
+                try {
+                    showNotification('Cancelando consulta...', 'info');
+                    
+                    const response = await fetch(`/api/pacientes/${patientId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        // Remover localmente
+                        patients = patients.filter(p => p.id !== patientId);
+                        renderPatients();
+                        await loadStats();
+                        showNotification(`Consulta de ${patient.nome} cancelada`, 'error');
+                        console.log(`❌ Consulta cancelada no banco: ${patient.nome}`);
+                    } else {
+                        throw new Error('Erro ao cancelar consulta');
+                    }
+                } catch (error) {
+                    console.error('❌ Erro ao cancelar consulta:', error);
+                    showNotification('Erro ao cancelar consulta', 'error');
+                }
+            }
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('invitation-modal').style.display = 'none';
+        }
+
+        // Sistema de notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Atualizar data e hora
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            
+            document.getElementById('current-date').textContent = 
+                now.toLocaleDateString('pt-BR', dateOptions);
+            document.getElementById('current-time').textContent = 
+                now.toLocaleTimeString('pt-BR', timeOptions);
+        }
+
+        // Simular resposta do paciente (para testes)
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.modal')) return;
+            if (!patientResponse && currentPatient) {
+                patientResponse = true;
+                showNotification(`${currentPatient.nome} aceitou o convite!`, 'success');
+            }
+        });
+
+        // Atualizar agenda baseada na data selecionada
+        function atualizarAgenda() {
+            const dateInput = document.getElementById('dataSelecionada');
+            const selectedDateStr = dateInput.value;
+            
+            if (selectedDateStr) {
+                selectedDate = new Date(selectedDateStr);
+                updateSelectedDateDisplay();
+                loadPatients();
+                showNotification(`Agenda atualizada para ${formatDateBR(selectedDate)}`, 'info');
+                console.log('📅 Data selecionada:', formatDateBR(selectedDate));
+            }
+        }
+
+        // Selecionar datas rápidas
+        function selectQuickDate(type) {
+            const today = new Date();
+            let targetDate = new Date();
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.quick-date-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            switch(type) {
+                case 'today':
+                    targetDate = today;
+                    break;
+                case 'tomorrow':
+                    targetDate.setDate(today.getDate() + 1);
+                    break;
+                case 'week':
+                    targetDate.setDate(today.getDate() + 7);
+                    break;
+                case 'month':
+                    targetDate.setMonth(today.getMonth() + 1);
+                    break;
+            }
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            selectedDate = targetDate;
+            document.getElementById('dataSelecionada').value = formatDateInput(targetDate);
+            updateSelectedDateDisplay();
+            loadPatients();
+            
+            showNotification(`Agenda carregada para ${formatDateBR(targetDate)}`, 'success');
+        }
+
+        // Formatar data para exibição BR
+        function formatDateBR(date) {
+            return date.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Formatar data para input
+        function formatDateInput(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        // Atualizar display da data selecionada
+        function updateSelectedDateDisplay() {
+            const display = document.getElementById('selected-date-display');
+            const today = new Date();
+            
+            if (selectedDate.toDateString() === today.toDateString()) {
+                display.textContent = 'Hoje';
+            } else {
+                display.textContent = formatDateBR(selectedDate);
+            }
+        }
+
+        // Inicializar calendário
+        function initializeCalendar() {
+            const today = new Date();
+            document.getElementById('dataSelecionada').value = formatDateInput(today);
+            selectedDate = today;
+            updateSelectedDateDisplay();
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            initializeCalendar();
+            loadPatients();
+            
+            console.log('🚀 Agenda Médica TeleMed Pro carregada!');
+            console.log('📅 Sistema de calendário ativo');
+            console.log('📊 Sistema de estatísticas ativo');
+            console.log('🔄 Auto-atualização habilitada');
+        });
+
+        // Atualização automática a cada 30 segundos
+        setInterval(loadPatients, 30000);
+    </script>
+</body>
+</html>

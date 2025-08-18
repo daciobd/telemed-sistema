@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Notificações Médicas - TeleMed Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-header {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-header:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* BREADCRUMBS */
+        .breadcrumbs-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .breadcrumbs {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            color: #4f46e5;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: #3730a3;
+        }
+
+        .breadcrumb-separator {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .breadcrumb-current {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .main-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #4f46e5;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-description {
+            color: #64748b;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* RESULTS */
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert.success {
+            background: #f0fdf4;
+            border-color: #22c55e;
+            color: #166534;
+        }
+
+        .alert.error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .alert.info {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+
+        .medicos-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .medico-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4f46e5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .medico-info {
+            flex: 1;
+        }
+
+        .medico-name {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .medico-details {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-enviado {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .breadcrumbs-container {
+                padding: 10px 15px;
+            }
+
+            .breadcrumbs {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .breadcrumb-item {
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-bell"></i>
+                Sistema de Notificações Médicas
+            </div>
+            <div class="header-actions">
+                <a href="/index.html" class="btn-header">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="/agenda-medica.html" class="btn-header">
+                    <i class="fas fa-calendar"></i>
+                    Agenda
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- BREADCRUMBS -->
+    <div class="breadcrumbs-container">
+        <nav class="breadcrumbs">
+            <a href="/index.html" class="breadcrumb-item">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <a href="javascript:history.back()" class="breadcrumb-item">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-current">Sistema de Notificações</span>
+            <span class="breadcrumb-separator">></span>
+            <a href="#" onclick="window.scrollTo(0,0); return false;" class="breadcrumb-item">
+                <i class="fas fa-arrow-up"></i> Topo
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <h1 class="main-title">
+            <i class="fas fa-bell"></i>
+            Sistema de Notificações Médicas
+        </h1>
+
+        <div class="cards-grid">
+            <!-- CARD 1: ENVIAR OFERTA -->
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Oferta para Médicos
+                </h2>
+                <p class="card-description">
+                    Envie uma nova oferta de consulta para médicos cadastrados via SMS e WhatsApp. 
+                    Eles receberão uma notificação instantânea com os detalhes da consulta.
+                </p>
+
+                <form id="ofertaForm">
+                    <div class="form-group">
+                        <label for="especialidade">Especialidade Médica:</label>
+                        <select id="especialidade" required>
+                            <option value="">Selecione uma especialidade</option>
+                            <option value="clinica">Clínica Geral</option>
+                            <option value="psiquiatria">Psiquiatria</option>
+                            <option value="cardiologia">Cardiologia</option>
+                            <option value="dermatologia">Dermatologia</option>
+                            <option value="neurologia">Neurologia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valor">Valor da Consulta (mínimo R$ 150,00):</label>
+                        <input type="number" id="valor" min="150" step="10" placeholder="200" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="horario">Horário Sugerido:</label>
+                        <input type="datetime-local" id="horario" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pacienteNome">Nome do Paciente:</label>
+                        <input type="text" id="pacienteNome" placeholder="Maria Silva" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="urgencia" style="margin-right: 8px;">
+                            Consulta Urgente (+35% no valor)
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-bell"></i>
+                        Enviar Notificações
+                    </button>
+                </form>
+            </div>
+
+            <!-- CARD 2: RESPOSTA DE MÉDICO -->
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-reply"></i>
+                    Simular Resposta de Médico
+                </h2>
+                <p class="card-description">
+                    Simule a resposta de um médico para testar o sistema. 
+                    Na prática, isso será feito automaticamente via SMS/WhatsApp.
+                </p>
+
+                <form id="respostaForm">
+                    <div class="form-group">
+                        <label for="ofertaId">ID da Oferta:</label>
+                        <input type="number" id="ofertaId" placeholder="Digite o ID da oferta" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resposta">Resposta do Médico:</label>
+                        <select id="resposta" required>
+                            <option value="">Selecione a resposta</option>
+                            <option value="ACEITAR">ACEITAR</option>
+                            <option value="RECUSAR">RECUSAR</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="medicoTelefone">Telefone do Médico:</label>
+                        <input type="text" id="medicoTelefone" placeholder="+5511999887766" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observacoes">Observações:</label>
+                        <textarea id="observacoes" rows="3" placeholder="Observações opcionais..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-check"></i>
+                        Enviar Resposta
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SEÇÃO DE RESULTADOS -->
+        <div class="results-section">
+            <h2 class="results-title">
+                <i class="fas fa-chart-line"></i>
+                Resultados e Status
+            </h2>
+
+            <div id="alertContainer"></div>
+            <div id="loadingContainer" class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Processando...
+            </div>
+            <div id="resultContainer"></div>
+        </div>
+
+        <!-- SEÇÃO DE OFERTAS RECENTES -->
+        <div class="results-section">
+            <h2 class="results-title">
+                <i class="fas fa-history"></i>
+                Ofertas Recentes
+            </h2>
+            <div id="ofertasContainer">
+                <p style="color: #64748b; text-align: center; padding: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    Carregando ofertas...
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurar horário padrão para amanhã às 14h
+        document.addEventListener('DOMContentLoaded', function() {
+            const amanha = new Date();
+            amanha.setDate(amanha.getDate() + 1);
+            amanha.setHours(14, 0, 0, 0);
+            
+            const horarioInput = document.getElementById('horario');
+            horarioInput.value = amanha.toISOString().slice(0, 16);
+
+            // Carregar ofertas recentes
+            carregarOfertas();
+        });
+
+        // Função para mostrar alertas
+        function mostrarAlerta(tipo, mensagem) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = tipo === 'success' ? 'success' : tipo === 'error' ? 'error' : 'info';
+            const icon = tipo === 'success' ? 'check-circle' : tipo === 'error' ? 'exclamation-triangle' : 'info-circle';
+            
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <i class="fas fa-${icon}"></i>
+                    ${mensagem}
+                </div>
+            `;
+            
+            // Auto-remover após 5 segundos
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Função para mostrar loading
+        function mostrarLoading(ativo) {
+            const loading = document.getElementById('loadingContainer');
+            if (ativo) {
+                loading.classList.add('active');
+            } else {
+                loading.classList.remove('active');
+            }
+        }
+
+        // Envio de oferta
+        document.getElementById('ofertaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            mostrarLoading(true);
+            
+            const formData = {
+                especialidade: document.getElementById('especialidade').value,
+                valor: parseInt(document.getElementById('valor').value),
+                horario: document.getElementById('horario').value,
+                pacienteId: 1, // ID fixo para demo
+                pacienteNome: document.getElementById('pacienteNome').value,
+                urgencia: document.getElementById('urgencia').checked
+            };
+
+            // Aplicar taxa de urgência
+            if (formData.urgencia) {
+                formData.valor = Math.round(formData.valor * 1.35);
+                mostrarAlerta('info', `Valor ajustado para urgência: R$ ${formData.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);
+            }
+
+            try {
+                const response = await fetch('/api/notifications/enviar-oferta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (result.sucesso) {
+                    mostrarAlerta('success', result.mensagem);
+                    
+                    // Mostrar detalhes dos médicos notificados
+                    const detalhes = result.dados.detalhes.map(medico => `
+                        <div class="medico-item">
+                            <div class="medico-info">
+                                <div class="medico-name">${medico.medico}</div>
+                                <div class="medico-details">
+                                    CRM: ${medico.crm} | Tel: ${medico.telefone}
+                                </div>
+                            </div>
+                            <div class="status-badge status-enviado">Enviado</div>
+                        </div>
+                    `).join('');
+
+                    document.getElementById('resultContainer').innerHTML = `
+                        <h3 style="margin-bottom: 15px; color: #1e293b;">
+                            <i class="fas fa-users"></i>
+                            Médicos Notificados (${result.dados.medicosEnviados})
+                        </h3>
+                        <div class="medicos-list">
+                            ${detalhes}
+                        </div>
+                        <div style="margin-top: 20px; padding: 15px; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #22c55e;">
+                            <strong>Oferta ID: ${result.dados.ofertaId}</strong><br>
+                            Use este ID para simular respostas dos médicos.
+                        </div>
+                    `;
+
+                    // Limpar formulário
+                    this.reset();
+                    
+                    // Recarregar ofertas
+                    carregarOfertas();
+                } else {
+                    mostrarAlerta('error', result.erro);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                mostrarAlerta('error', 'Erro de conexão. Tente novamente.');
+            } finally {
+                mostrarLoading(false);
+            }
+        });
+
+        // Resposta de médico
+        document.getElementById('respostaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            mostrarLoading(true);
+            
+            const formData = {
+                ofertaId: parseInt(document.getElementById('ofertaId').value),
+                resposta: document.getElementById('resposta').value,
+                medicoTelefone: document.getElementById('medicoTelefone').value,
+                observacoes: document.getElementById('observacoes').value
+            };
+
+            try {
+                const response = await fetch('/api/notifications/responder-oferta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (result.sucesso) {
+                    mostrarAlerta('success', result.mensagem);
+                    
+                    if (result.dados) {
+                        document.getElementById('resultContainer').innerHTML = `
+                            <div style="padding: 20px; background: #f0fdf4; border-radius: 12px; border-left: 4px solid #22c55e;">
+                                <h4 style="color: #166534; margin-bottom: 10px;">
+                                    <i class="fas fa-check-circle"></i>
+                                    Resposta Processada
+                                </h4>
+                                <p><strong>Médico:</strong> ${result.dados.medico}</p>
+                                <p><strong>CRM:</strong> ${result.dados.crm}</p>
+                                <p><strong>Respondido em:</strong> ${new Date(result.dados.respondidoEm).toLocaleString('pt-BR')}</p>
+                            </div>
+                        `;
+                    }
+                    
+                    // Limpar formulário
+                    this.reset();
+                    
+                    // Recarregar ofertas
+                    carregarOfertas();
+                } else {
+                    mostrarAlerta('error', result.erro);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                mostrarAlerta('error', 'Erro de conexão. Tente novamente.');
+            } finally {
+                mostrarLoading(false);
+            }
+        });
+
+        // Carregar ofertas recentes
+        async function carregarOfertas() {
+            try {
+                const response = await fetch('/api/notifications/ofertas');
+                const ofertas = await response.json();
+                
+                const container = document.getElementById('ofertasContainer');
+                
+                if (ofertas.length === 0) {
+                    container.innerHTML = `
+                        <p style="color: #64748b; text-align: center; padding: 20px;">
+                            <i class="fas fa-inbox"></i>
+                            Nenhuma oferta encontrada.
+                        </p>
+                    `;
+                    return;
+                }
+
+                const ofertasHtml = ofertas.map(oferta => {
+                    const statusClass = oferta.status === 'aceito' ? 'success' : 
+                                       oferta.status === 'recusado' ? 'error' : 'info';
+                    const statusIcon = oferta.status === 'aceito' ? 'check-circle' : 
+                                      oferta.status === 'recusado' ? 'times-circle' : 'clock';
+                    
+                    return `
+                        <div class="medico-item">
+                            <div class="medico-info">
+                                <div class="medico-name">
+                                    Oferta #${oferta.id} - ${oferta.paciente_nome}
+                                </div>
+                                <div class="medico-details">
+                                    ${oferta.especialidade} | ${new Date(oferta.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} | 
+                                    ${new Date(oferta.horario).toLocaleString('pt-BR')}
+                                    ${oferta.medico_nome ? ` | Médico: ${oferta.medico_nome} (${oferta.crm})` : ''}
+                                </div>
+                            </div>
+                            <div class="status-badge ${statusClass}">
+                                <i class="fas fa-${statusIcon}"></i>
+                                ${oferta.status.toUpperCase()}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = ofertasHtml;
+                
+            } catch (error) {
+                console.error('Erro ao carregar ofertas:', error);
+                document.getElementById('ofertasContainer').innerHTML = `
+                    <p style="color: #ef4444; text-align: center; padding: 20px;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Erro ao carregar ofertas.
+                    </p>
+                `;
+            }
+        }
+
+        // Log para debugging
+        console.log('📱 Sistema de Notificações Médicas carregado!');
+        console.log('🚀 Pronto para testar envio de ofertas via SMS/WhatsApp');
+    </script>
+</body>
+</html>

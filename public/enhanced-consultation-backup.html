@@ -133,83 +133,95 @@
             </div>
 
             <!-- Chat Tab -->
-            <div id="chatTab" class="tab-content p-4 h-96 overflow-y-auto">
-                <div class="space-y-4">
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm">
-                            D
+            <div id="chatTab" class="tab-content flex flex-col h-full">
+                <!-- Chat Messages -->
+                <div class="flex-1 p-4 overflow-y-auto max-h-96" id="chatMessages">
+                    <div class="space-y-4">
+                        <div class="flex justify-start">
+                            <div class="chat-bubble-patient p-3 text-sm text-gray-800 max-w-xs">
+                                Olá, doutor! Como está?
+                                <div class="text-xs text-gray-500 mt-1">14:32</div>
+                            </div>
                         </div>
-                        <div class="chat-bubble-doctor text-white p-3 rounded-2xl max-w-xs">
-                            <p class="text-sm">Olá! Como está se sentindo hoje?</p>
-                            <span class="text-xs opacity-80">14:32</span>
+                        <div class="flex justify-end">
+                            <div class="chat-bubble-doctor p-3 text-sm text-white max-w-xs">
+                                Olá! Estou bem, obrigado. Como posso ajudá-lo hoje?
+                                <div class="text-xs text-blue-100 mt-1">14:33</div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="flex items-start gap-3 justify-end">
-                        <div class="chat-bubble-patient text-gray-800 p-3 rounded-2xl max-w-xs">
-                            <p class="text-sm">Tenho sentido dores de cabeça frequentes nos últimos dias</p>
-                            <span class="text-xs opacity-60">14:35</span>
-                        </div>
-                        <div class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm">
-                            P
+                        <div class="flex justify-start">
+                            <div class="chat-bubble-patient p-3 text-sm text-gray-800 max-w-xs">
+                                Estou sentindo dores de cabeça frequentes nos últimos dias.
+                                <div class="text-xs text-gray-500 mt-1">14:34</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Chat Input -->
-                <div class="mt-4 flex gap-2">
-                    <input type="text" placeholder="Digite sua mensagem..." class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                <div class="p-4 border-t">
+                    <div class="flex items-center gap-2">
+                        <input 
+                            type="text" 
+                            placeholder="Digite sua mensagem..."
+                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            id="chatInput"
+                            onkeypress="handleChatKeypress(event)"
+                        >
+                        <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- Form Tab -->
             <div id="formTab" class="tab-content hidden p-4 overflow-y-auto max-h-96">
+                <h3 class="font-semibold text-gray-800 mb-4">Registro do Atendimento</h3>
+                
                 <!-- Patient Info -->
-                <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h3 class="font-semibold text-blue-800 mb-2">Paciente</h3>
-                    <p class="text-sm text-blue-700">Ana Silva • 34 anos</p>
-                    <p class="text-xs text-blue-600">ID: #P789456</p>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Paciente</label>
+                    <input type="text" value="João Silva Santos" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50" readonly>
                 </div>
 
-                <!-- Anamnesis Form -->
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Queixa Principal</label>
-                        <textarea name="chief_complaint" rows="2" class="w-full border border-gray-300 rounded-lg p-2 text-sm" placeholder="Descreva a queixa principal...">Dores de cabeça frequentes há 1 semana</textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">História da Doença Atual</label>
-                        <textarea name="hpi" rows="3" class="w-full border border-gray-300 rounded-lg p-2 text-sm" placeholder="História detalhada...">Paciente refere cefaleia bilateral, pulsátil, de intensidade moderada a forte, com início há 7 dias. Piora com atividade física e melhora parcialmente com repouso.</textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Hipótese Diagnóstica (CID-10)</label>
-                        <input name="dx" type="text" class="w-full border border-gray-300 rounded-lg p-2 text-sm" placeholder="Digite para buscar CID-10..." value="G43.9 - Enxaqueca não especificada">
-                        <div id="icdSuggestions" class="hidden mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                            <div class="p-2 hover:bg-gray-50 cursor-pointer border-b">
-                                <strong>G43.9</strong> - Enxaqueca não especificada
+                <!-- Chief Complaint -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Queixa Principal</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none" rows="2" placeholder="Descreva a queixa principal do paciente..."></textarea>
+                </div>
+
+                <!-- History -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">História da Doença Atual</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none" rows="3" placeholder="Descreva o histórico da doença atual..."></textarea>
+                </div>
+
+                <!-- Physical Exam -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Exame Físico</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none" rows="2" placeholder="Descreva os achados do exame físico..."></textarea>
+                </div>
+
+                <!-- ICD-10 -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CID-10</label>
+                    <div class="relative">
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg" placeholder="Digite ou selecione um código CID-10..." id="icdInput">
+                        <div id="icdSuggestions" class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 hidden z-10 max-h-40 overflow-y-auto">
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b" onclick="selectICD('F41.1', 'Transtorno de ansiedade generalizada')">
+                                <strong>F41.1</strong> - Transtorno de ansiedade generalizada
                             </div>
-                            <div class="p-2 hover:bg-gray-50 cursor-pointer border-b">
-                                <strong>G44.2</strong> - Cefaleia tipo tensão
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b" onclick="selectICD('F41.0', 'Ataque de pânico')">
+                                <strong>F41.0</strong> - Ataque de pânico
                             </div>
-                            <div class="p-2 hover:bg-gray-50 cursor-pointer">
-                                <strong>G44.8</strong> - Outras síndromes específicas de cefaleia
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer border-b" onclick="selectICD('F32.1', 'Episódio depressivo moderado')">
+                                <strong>F32.1</strong> - Episódio depressivo moderado
+                            </div>
+                            <div class="p-2 hover:bg-gray-100 cursor-pointer" onclick="selectICD('R50', 'Febre não especificada')">
+                                <strong>R50</strong> - Febre não especificada
                             </div>
                         </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Plano Terapêutico</label>
-                        <textarea name="plan" rows="2" class="w-full border border-gray-300 rounded-lg p-2 text-sm" placeholder="Conduta e tratamento...">Paracetamol 750mg 8/8h por 5 dias. Evitar fatores desencadeantes. Retorno em 7 dias ou se piora.</textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Sinais de Alarme</label>
-                        <textarea name="red_flags" rows="2" class="w-full border border-gray-300 rounded-lg p-2 text-sm" placeholder="Orientações sobre sinais de alarme...">Procurar atendimento imediato se: cefaleia súbita e intensa, febre, rigidez de nuca, alterações visuais ou déficits neurológicos.</textarea>
                     </div>
                 </div>
 
@@ -338,12 +350,48 @@
             activeBtn.classList.remove('text-gray-500');
         }
 
-        // CID-10 functionality
-        document.getElementById('icdInput')?.addEventListener('focus', function() {
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chatMessages').querySelector('.space-y-4');
+            const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex justify-end';
+            messageDiv.innerHTML = `
+                <div class="chat-bubble-doctor p-3 text-sm text-white max-w-xs">
+                    ${message}
+                    <div class="text-xs text-blue-100 mt-1">${time}</div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            input.value = '';
+            
+            // Scroll to bottom
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // ICD-10 functionality
+        function selectICD(code, description) {
+            document.getElementById('icdInput').value = `${code} - ${description}`;
+            document.getElementById('icdSuggestions').classList.add('hidden');
+        }
+
+        document.getElementById('icdInput').addEventListener('focus', function() {
             document.getElementById('icdSuggestions').classList.remove('hidden');
         });
 
-        document.getElementById('icdInput')?.addEventListener('blur', function() {
+        document.getElementById('icdInput').addEventListener('blur', function() {
             setTimeout(() => {
                 document.getElementById('icdSuggestions').classList.add('hidden');
             }, 200);
@@ -452,6 +500,23 @@
                 alert('Falha ao finalizar: ' + e.message);
             }
         }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start timer
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Check AI consent
+            const savedConsent = localStorage.getItem('ai_consent');
+            if (savedConsent === 'true') {
+                aiConsentGiven = true;
+                document.getElementById('aiConsentBanner').style.display = 'none';
+            }
+            
+            console.log('🏥 Enhanced Consultation Interface carregada');
+            console.log('🤖 IA médica:', aiConsentGiven ? 'Ativada' : 'Pendente de consentimento');
+            console.log('⏱️ Timer da consulta iniciado');
+        });
         
         // === CID-10 Autocomplete ===
         function initCIDAutocomplete() {
@@ -520,105 +585,233 @@
 
         // Initialize CID autocomplete when page loads
         setTimeout(initCIDAutocomplete, 500);
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Start timer
-            timerInterval = setInterval(updateTimer, 1000);
-            
-            // Check AI consent
-            const savedConsent = localStorage.getItem('ai_consent');
-            if (savedConsent === 'true') {
-                aiConsentGiven = true;
-                document.getElementById('aiConsentBanner').style.display = 'none';
-            }
-            
-            console.log('🏥 Enhanced Consultation Interface carregada');
-            console.log('🤖 IA médica:', aiConsentGiven ? 'Ativada' : 'Pendente de consentimento');
-            console.log('⏱️ Timer da consulta iniciado');
-        });
     </script>
 
     <!-- ===== Dr. AI Panel ===== -->
-<div id="dr-ai" class="ai-panel" hidden>
-  <header class="ai-header">
-    <div class="ai-title">🧠 Dr. AI</div>
-    <button id="ai-close" class="ai-close" title="Fechar">✕</button>
-  </header>
-
-  <div class="ai-disclaimer">
-    As respostas são apoio à decisão e **não substituem** o julgamento clínico.
-  </div>
-
-  <div id="ai-thread" class="ai-thread"></div>
-
-  <form id="ai-form" class="ai-form">
-    <textarea id="ai-input" rows="2" placeholder="Digite sua pergunta clínica…"></textarea>
-    <button id="ai-send" class="ai-send" type="submit">Enviar</button>
-  </form>
-</div>
-
 <style>
-  .ai-panel{position:fixed;right:20px;bottom:20px;width:420px;max-height:72vh;display:flex;flex-direction:column;background:#fff;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.06);overflow:hidden;z-index:9999;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-  .ai-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.06);background:#F8FAFF}
-  .ai-title{font-weight:700}.ai-close{border:none;background:transparent;font-size:18px;cursor:pointer}
-  .ai-disclaimer{padding:10px 14px;font-size:12px;color:#6B7280;background:#FBFDFF}
-  .ai-thread{flex:1;padding:14px;overflow:auto;background:#FAFBFF}
-  .ai-msg{display:flex;gap:8px;margin-bottom:12px}
-  .ai-msg.assistant .bubble{background:#EEF6FF;border:1px solid rgba(162,210,255,.6)}
-  .ai-msg.user .bubble{background:#F1F5F9;border:1px solid rgba(0,0,0,.06)}
-  .bubble{padding:10px 12px;border-radius:12px;max-width:85%}
-  .ai-form{display:flex;gap:8px;padding:10px;border-top:1px solid rgba(0,0,0,.06);background:#fff}
-  #ai-input{flex:1;resize:none;border:1px solid rgba(0,0,0,.1);border-radius:10px;padding:10px}
-  .ai-send{background:#A2D2FF;border:1px solid #A2D2FF;border-radius:10px;padding:0 14px;cursor:pointer;font-weight:600}
-  .ai-send:hover{background:#8AB8E6}
-  @media (max-width:520px){.ai-panel{width:94vw;right:3vw;bottom:3vw}}
+  :root{
+    --ai-bg:#fff; --ai-border:#e5e7eb; --ai-muted:#6b7280; --ai-primary:#2563eb;
+    --ai-shadow:0 10px 30px rgba(0,0,0,.12);
+  }
+  #drAiPanel{
+    position:fixed; inset:0 0 0 auto; width:420px; max-width:92vw; background:var(--ai-bg);
+    box-shadow:var(--ai-shadow); border-left:1px solid var(--ai-border);
+    transform:translateX(100%); transition:transform .25s ease; z-index:9999;
+    display:flex; flex-direction:column; font-family:Inter,system-ui,Arial,sans-serif;
+  }
+  #drAiPanel.open{ transform:translateX(0) }
+  #drAiHeader{ display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:12px 14px; border-bottom:1px solid var(--ai-border); background:#fafafa}
+  #drAiHeader h3{ margin:0; font-size:16px }
+  #drAiDisclaimer{ font-size:12px; color:var(--ai-muted); padding:8px 14px; border-bottom:1px solid var(--ai-border)}
+  #drAiMessages{ flex:1; overflow:auto; padding:14px; display:flex; flex-direction:column; gap:12px}
+  .ai-bubble{ padding:10px 12px; border:1px solid var(--ai-border); border-radius:12px; background:#fff }
+  .ai-bubble.you{ align-self:flex-end; background:#eef2ff; border-color:#c7d2fe }
+  .ai-bubble.assistant{ align-self:flex-start }
+  #drAiQuick{ display:flex; gap:8px; flex-wrap:wrap; padding:8px 14px }
+  .ai-chip{ font-size:12px; padding:6px 10px; border:1px solid #c7d2fe; border-radius:999px; background:#eef2ff; cursor:pointer }
+  #drAiComposer{ display:flex; gap:8px; padding:12px 14px; border-top:1px solid var(--ai-border); background:#fafafa}
+  #drAiInput{ flex:1; resize:none; padding:10px 12px; border-radius:10px; border:1px solid var(--ai-border); min-height:44px }
+  #drAiSend{ background:var(--ai-primary); border:none; color:#fff; border-radius:10px; padding:0 14px; font-weight:600; cursor:pointer }
+  #drAiClose{ background:transparent; border:1px solid var(--ai-border); padding:6px 10px; border-radius:8px; cursor:pointer }
+  /* Botão flutuante de fallback (se não encontrarmos o botão do cérebro) */
+  #drAiFab{ position:fixed; right:18px; bottom:18px; z-index:9998; display:none }
+  #drAiFab button{ width:52px; height:52px; border-radius:999px; border:none; background:#1f2937; color:#fff; box-shadow:var(--ai-shadow); cursor:pointer }
 </style>
 
+<div id="drAiPanel" aria-hidden="true">
+  <div id="drAiHeader">
+    <h3>🧠 Dr. AI • suporte clínico (beta)</h3>
+    <div style="display:flex; gap:8px;">
+      <button id="drAiClear" title="Limpar conversa">Limpar</button>
+      <button id="drAiClose" title="Fechar">Fechar</button>
+    </div>
+  </div>
+  <div id="drAiDisclaimer">
+    As respostas são sugestões educacionais; a decisão clínica é exclusiva do médico responsável.
+  </div>
+  <div id="drAiQuick">
+    <span class="ai-chip" data-q="Explique em linguagem simples o diagnóstico provável e sinais de alarme.">Explicar diagnóstico</span>
+    <span class="ai-chip" data-q="Sugira condutas baseadas em diretrizes para este caso (doses adultas e pediátricas quando aplicável).">Sugerir conduta</span>
+    <span class="ai-chip" data-q="Monte um resumo conciso para o prontuário com HDA, hipótese, CID10, conduta e orientações.">Resumo p/ prontuário</span>
+    <span class="ai-chip" data-q="Quais exames iniciais são mais úteis e quando evitá-los? Justifique.">Exames úteis</span>
+  </div>
+  <div id="drAiMessages" role="log" aria-live="polite"></div>
+  <div id="drAiComposer">
+    <textarea id="drAiInput" placeholder="Pergunte algo ao Dr. AI… (ex.: conduta para cefaleia crônica, quando solicitar imagem?)"></textarea>
+    <button id="drAiSend">Enviar</button>
+  </div>
+</div>
+
+<!-- Fallback: FAB se não houver botão do cérebro na barra -->
+<div id="drAiFab"><button title="Abrir Dr. AI">🧠</button></div>
+
 <script>
-  function el(s){return document.querySelector(s)}
-  function addMsg(role, text){
-    const row=document.createElement('div');
-    row.className='ai-msg '+(role==='assistant'?'assistant':'user');
-    row.innerHTML='<div class="bubble"></div>';
-    row.querySelector('.bubble').textContent=text;
-    el('#ai-thread').appendChild(row);
-    el('#ai-thread').scrollTop=el('#ai-thread').scrollHeight;
+(() => {
+  const panel   = document.getElementById('drAiPanel');
+  const messagesEl = document.getElementById('drAiMessages');
+  const input   = document.getElementById('drAiInput');
+  const sendBtn = document.getElementById('drAiSend');
+  const closeBtn= document.getElementById('drAiClose');
+  const clearBtn= document.getElementById('drAiClear');
+  const fabWrap = document.getElementById('drAiFab');
+
+  // Liga no botão do "cérebro" específico que criamos
+  const brainBtn = document.getElementById('btn-ai');
+  if (brainBtn) {
+    brainBtn.addEventListener('click', togglePanel);
+    console.log('🧠 Dr. AI conectado ao botão cérebro');
+  } else {
+    // Senão, mostra o FAB
+    fabWrap.style.display = 'block';
+    fabWrap.querySelector('button').addEventListener('click', togglePanel);
   }
 
-  // abrir/fechar
-  el('#btn-ai')?.addEventListener('click',()=>el('#dr-ai').toggleAttribute('hidden'));
-  el('#ai-close')?.addEventListener('click',()=>el('#dr-ai').setAttribute('hidden','true'));
+  closeBtn.addEventListener('click', togglePanel);
+  clearBtn.addEventListener('click', () => {
+    messages.length = 0;
+    messagesEl.innerHTML = '';
+    localStorage.removeItem('drAiThread');
+    appendAssistant('Conversa limpa. Em que posso ajudar?');
+  });
 
-  // endpoint de IA (ajuste se for outro)
-  const AI_ENDPOINT = '/api/ai/clinical';
+  // Chips de atalho
+  document.querySelectorAll('#drAiQuick .ai-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      input.value = chip.getAttribute('data-q');
+      input.focus();
+    });
+  });
 
-  el('#ai-form')?.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const q = el('#ai-input').value.trim();
-    if(!q) return;
-    el('#ai-input').value='';
-    addMsg('user', q);
+  // Estado da conversa
+  const messages = JSON.parse(localStorage.getItem('drAiThread') || '[]');
+  if (messages.length === 0) {
+    appendAssistant('Olá! Posso auxiliar com diagnóstico diferencial, conduta, exames úteis e resumo para prontuário. Lembre-se: isso é apoio à decisão — a decisão final é sua. ✅');
+  } else {
+    // Restaura o log visual
+    for (const m of messages) appendBubble(m.role, m.content);
+  }
 
-    // contexto opcional da anamnese
+  sendBtn.addEventListener('click', onSend);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); }
+  });
+
+  function togglePanel(){
+    const open = panel.classList.toggle('open');
+    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (open) setTimeout(() => input.focus(), 50);
+  }
+
+  function onSend(){
+    const text = (input.value || '').trim();
+    if (!text) return;
+    appendUser(text);
+    input.value = '';
+    askAI(text);
+  }
+
+  // Envia pergunta para o endpoint correto
+  async function askAI(question) {
+    const userMessage = { role: 'user', content: question };
+    messages.push(userMessage);
+    localStorage.setItem('drAiThread', JSON.stringify(messages));
+
+    appendAssistant('⏳ Consultando...');
+
     const ctx = {
       chiefComplaint: document.querySelector('[name="chief_complaint"]')?.value || '',
       hpi: document.querySelector('[name="hpi"]')?.value || '',
       dx: document.querySelector('[name="dx"]')?.value || '',
       redFlags: document.querySelector('[name="red_flags"]')?.value || ''
     };
+    
+    try {
+      const response = await fetch('/api/ai/clinical', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, context: ctx })
+      });
+      
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      
+      const assistantMessage = { role: 'assistant', content: data.answer };
+      messages.push(assistantMessage);
+      localStorage.setItem('drAiThread', JSON.stringify(messages));
+
+      // Remove "consultando" e adiciona resposta real
+      messagesEl.removeChild(messagesEl.lastElementChild);
+      appendAssistant(data.answer || 'Resposta não disponível');
+    } catch (error) {
+      console.error('Dr. AI Error:', error);
+      // Remove "consultando" e adiciona erro
+      messagesEl.removeChild(messagesEl.lastElementChild);
+      appendAssistant('⚠️ Não foi possível conectar com o Dr. AI. Tente novamente em alguns instantes.');
+    }
+  }
+
+  function appendBubble(role, content){
+    const div = document.createElement('div');
+    div.className = 'ai-bubble ' + (role === 'user' ? 'you' : 'assistant');
+    div.textContent = content;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  function appendUser(content){
+    messages.push({ role:'user', content });
+    persist();
+    appendBubble('user', content);
+  }
+  function appendAssistant(content){
+    messages.push({ role:'assistant', content });
+    persist();
+    appendBubble('assistant', content);
+  }
+  function persist(){
+    localStorage.setItem('drAiThread', JSON.stringify(messages).slice(0, 200000)); // proteção
+  }
+
+  async function askAI(newQuestion){
+    // Contexto opcional capturado da tela (se existir)
+    const patient = (document.querySelector('[name="patient"], #patientName')?.value || 
+                     document.querySelector('.patient-name')?.textContent || '').trim();
+    const hda     = document.querySelector('[name="hda"]')?.value || '';
+    const dx      = document.querySelector('[name="diagnosis"], #diagnosisInput')?.value || '';
+    const conduta = document.querySelector('[name="plan"]')?.value || '';
+
+    const payload = {
+      messages,
+      context: { patient, hda, diagnosis: dx, plan: conduta }
+    };
+
+    // Placeholder "digitando…"
+    const typing = document.createElement('div');
+    typing.className = 'ai-bubble assistant';
+    typing.textContent = 'Dr. AI está analisando…';
+    messagesEl.appendChild(typing);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
 
     try{
-      const r = await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q, context:ctx})});
-      if(!r.ok) throw new Error('HTTP '+r.status);
+      const r = await fetch('/api/dr-ai', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
       const data = await r.json();
-      addMsg('assistant', data.answer || data.message || 'OK');
+      typing.remove();
+
+      const text = (data && (data.text || data.answer || data.message)) ||
+        'Não consegui gerar uma resposta agora. Tente reformular a pergunta.';
+      appendAssistant(text);
     }catch(err){
-      addMsg('assistant','⚠️ Erro ao consultar Dr. AI: '+err.message);
+      typing.remove();
+      appendAssistant('Falha ao contactar a IA. Verifique a rede/servidor e tente novamente.');
+      console.error(err);
     }
-  });
+  }
+})();
 </script>
-<!-- ===== /Dr. AI Panel ===== -->
 
 </body>
 </html>

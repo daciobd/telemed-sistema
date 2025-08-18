@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Download</title>
+</head>
+<body>
+    <h1>Teste Download TeleMed</h1>
+    
+    <button onclick="testDownload()">🔥 TESTE DOWNLOAD DIRETO</button>
+    <div id="result"></div>
+    
+    <script>
+        function testDownload() {
+            console.log('Testando download...');
+            document.getElementById('result').innerHTML = 'Iniciando download...';
+            
+            // Teste direto
+            window.location.href = '/api/download-zip';
+            
+            setTimeout(() => {
+                document.getElementById('result').innerHTML = '✅ Download deve ter iniciado!';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

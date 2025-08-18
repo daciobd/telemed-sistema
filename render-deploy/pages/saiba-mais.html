@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saiba Mais - TeleMed Sistema</title>
+    <meta name="description" content="Conheça todos os recursos e funcionalidades da plataforma TeleMed Sistema. Revolucionamos a telemedicina no Brasil com tecnologia avançada e atendimento humanizado.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(78, 205, 196, 0.2);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+
+        .breadcrumb {
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #4ECDC4;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ECDC4;
+            display: block;
+        }
+
+        .stat-label {
+            color: white;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: white;
+            border-radius: 20px;
+            padding: 4rem 0;
+            margin: 3rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2C5F56;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #4ECDC4;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(78, 205, 196, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #2C5F56;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Process Steps */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+            margin: 3rem 0;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(78, 205, 196, 0.3);
+        }
+
+        .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .step-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .step-card p {
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        /* Requirements Section */
+        .requirements-section {
+            background: #f8f9fa;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+        }
+
+        .requirements-section h3 {
+            text-align: center;
+            color: #2C5F56;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .requirement-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.15);
+        }
+
+        .check-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+        }
+
+        .benefits-section h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin: 3rem 0;
+            border-radius: 20px;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #4ECDC4;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 18px 35px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #2C5F56;
+            color: white;
+            padding: 3rem 0 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #98D8C8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .main-content {
+                padding: 6rem 1rem 2rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .process-steps {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .requirements-section,
+            .benefits-section {
+                padding: 2rem 1rem;
+                margin: 2rem 0;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">TeleMed<span style="color: #B8E6E1;">Sistema</span></a>
+            <div class="breadcrumb">
+                <a href="/">Início</a> > <span>Saiba Mais</span>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Saiba Mais sobre a TeleMed Sistema</h1>
+            <p>Descubra como nossa plataforma revoluciona a telemedicina no Brasil. Conheça todos os recursos, funcionalidades e benefícios do sistema mais avançado de consultas médicas online.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">2 min</span>
+                    <div class="stat-label">Tempo médio de conexão</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <div class="stat-label">Atendimento disponível</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98%</span>
+                    <div class="stat-label">Taxa de satisfação</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">25+</span>
+                    <div class="stat-label">Especialidades médicas</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="features-section">
+            <h2 class="section-title">Como funciona o TeleMed?</h2>
+            <p class="section-subtitle">Consulta médica online do seu jeito, com rapidez, segurança e apoio humano.</p>
+            
+            <div class="process-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Cadastro rápido</h3>
+                    <p>Preencha seus dados básicos e selecione a área da saúde desejada. Sem burocracia, sem fila, sem complicação.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Você define quanto pode pagar</h3>
+                    <p>A consulta começa a partir de R$60. Você escolhe o valor que deseja investir e aguarda um profissional aceitar sua oferta.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Atendimento imediato ou em minutos</h3>
+                    <p>Assim que um profissional aceitar sua oferta, você entra direto na consulta por vídeo, onde estiver.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Receba documentos médicos</h3>
+                    <p>Receitas, atestados e solicitações de exames são enviados por e-mail com validade legal.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3>Apoio humanizado com enfermagem</h3>
+                    <p>Nosso time de enfermagem acompanha casos que exigem suporte contínuo (hipertensão, diabetes, obesidade...).</p>
+                </div>
+            </div>
+
+            <!-- Requirements Section -->
+            <div class="requirements-section">
+                <h3>🔧 O que é necessário?</h3>
+                <div class="requirements-grid">
+                    <div class="requirement-item">
+                        <span class="check-icon">✅</span>
+                        <span>Celular ou computador com câmera</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="check-icon">✅</span>
+                        <span>Conexão com a internet</span>
+                    </div>
+                    <div class="requirement-item">
+                        <span class="check-icon">✅</span>
+                        <span>Nenhum aplicativo extra: tudo acontece direto no navegador</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="benefits-section">
+                <h3>💡 Por que escolher o TeleMed?</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🕐</span>
+                        <span>Atendimento sem agendamento</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">📞</span>
+                        <span>Consulta por vídeo ou telefone</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">📃</span>
+                        <span>Documentos médicos válidos</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🤝</span>
+                        <span>Suporte com enfermeiros reais</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🔐</span>
+                        <span>Segurança e sigilo absoluto</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Recursos Revolucionários</h2>
+            <p class="section-subtitle">Tecnologia de ponta para transformar sua experiência em saúde</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Dr. AI - Triagem Inteligente</h3>
+                    <p>Sistema revolucionário de inteligência artificial que analisa seus sintomas e direciona para a especialidade médica mais adequada, incluindo triagem psiquiátrica com escalas científicas validadas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Sistema de Lances</h3>
+                    <p>Você define o valor que quer pagar pela consulta. Quanto maior o lance, mais rápido é atendido. Transparência total e pagamento apenas se a consulta acontecer.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎥</div>
+                    <h3>Videoconsultas WebRTC</h3>
+                    <p>Tecnologia WebRTC de última geração para videochamadas em alta qualidade, com chat integrado, compartilhamento de tela e gravação segura para histórico médico.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🏥</div>
+                    <h3>Dashboard Médico Profissional</h3>
+                    <p>Interface exclusiva para médicos com gerenciamento de consultas, fila de pacientes, prescrições digitais, anotações médicas e relatórios financeiros integrados.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🩺</div>
+                    <h3>Telemonitoramento de Enfermagem</h3>
+                    <p>Monitoramento 24/7 para condições crônicas com enfermeiro dedicado, alertas inteligentes, gráficos em tempo real e integração médica completa por R$ 89/mês.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Triagem Psiquiátrica Especializada</h3>
+                    <p>Primeiro sistema do Brasil com IA especializada em saúde mental, usando escalas científicas PHQ-9 e GAD-7 para detecção precisa de depressão, ansiedade e risco suicida.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3>Sistema de Notificações Enterprise</h3>
+                    <p>Central completa de notificações com priorização inteligente, alertas de emergência, lembretes de consulta, notificações de pagamento e sistema de busca avançado.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Multiplataforma e Responsivo</h3>
+                    <p>Funciona perfeitamente em smartphones, tablets e computadores. Interface otimizada para todas as telas com design responsivo e experiência fluida.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Segurança e LGPD</h3>
+                    <p>Máxima segurança com criptografia end-to-end, conformidade total com LGPD, auditoria completa de dados e controles granulares de privacidade.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>📲 Comece agora</h2>
+            <p>Experimente a revolução da telemedicina com atendimento imediato e valores a partir de R$60</p>
+            <div class="cta-buttons">
+                <a href="/consulta-por-valor.html" class="btn-primary">CONSULTE UM PROFISSIONAL AGORA</a>
+                <a href="/dr-ai.html" class="btn-secondary">Fazer Triagem Grátis com IA</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3>TeleMed Sistema</h3>
+        <p>Revolucionando a telemedicina no Brasil com tecnologia de ponta</p>
+        <div class="footer-links">
+            <a href="/">Início</a>
+            <a href="/dr-ai.html">Dr. AI</a>
+            <a href="/consulta-por-valor.html">Consultas</a>
+            <a href="/index.html">Dashboard Médico</a>
+            <a href="/triagem-psiquiatrica.html">Triagem Psiquiátrica</a>
+            <a href="/telemonitoramento-enfermagem.html">Telemonitoramento</a>
+            <a href="/notificacoes.html">Notificações</a>
+        </div>
+        <p>&copy; 2025 TeleMed Sistema. Todos os direitos reservados. | Desenvolvido com tecnologia avançada para revolucionar a telemedicina.</p>
+    </footer>
+
+    <script>
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.feature-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

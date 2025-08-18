@@ -1,0 +1,9 @@
+{
+  "name": "telemed-dashboard",
+  "version": "1.0.0",
+  "description": "TeleMed Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Static site ready for Render'"
+  }
+}

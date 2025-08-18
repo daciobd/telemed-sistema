@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Teste de Laudos Médicos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #A7C7E7 0%, #F4D9B4 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2980b9;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(167, 199, 231, 0.1);
+            border-radius: 15px;
+            border-left: 4px solid #A7C7E7;
+        }
+        
+        .section h2 {
+            color: #2980b9;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #A7C7E7 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #A7C7E7;
+        }
+        
+        .exam-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .exam-type {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+            color: #555;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .status.success {
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid #27ae60;
+            color: #27ae60;
+        }
+        
+        .status.error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 TeleMed Sistema</h1>
+            <p>Teste de Geração de Laudos Médicos</p>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Laudos Fictícios</h2>
+            <p>Gere laudos médicos fictícios para demonstração e testes.</p>
+            <br>
+            <a href="/api/medical-reports/generate-fictional" class="btn" download>
+                📄 Gerar Laudo Fictício (PDF)
+            </a>
+            <button onclick="loadExamTypes()" class="btn">
+                📋 Ver Tipos de Exames
+            </button>
+        </div>
+        
+        <div class="section">
+            <h2>🎯 Laudo Personalizado</h2>
+            <form id="customReportForm">
+                <div class="form-group">
+                    <label for="patientName">Nome do Paciente:</label>
+                    <input type="text" id="patientName" name="patientName" placeholder="Ex: Maria Silva Santos">
+                </div>
+                
+                <div class="form-group">
+                    <label for="patientAge">Idade:</label>
+                    <input type="number" id="patientAge" name="patientAge" min="1" max="120" placeholder="Ex: 45">
+                </div>
+                
+                <div class="form-group">
+                    <label for="patientCPF">CPF:</label>
+                    <input type="text" id="patientCPF" name="patientCPF" placeholder="Ex: 123.456.789-01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorName">Nome do Médico:</label>
+                    <input type="text" id="doctorName" name="doctorName" placeholder="Ex: Dr. Roberto Cardoso">
+                </div>
+                
+                <div class="form-group">
+                    <label for="doctorCRM">CRM:</label>
+                    <input type="text" id="doctorCRM" name="doctorCRM" placeholder="Ex: CRM/SP 123456">
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialty">Especialidade:</label>
+                    <select id="specialty" name="specialty">
+                        <option value="">Selecione...</option>
+                        <option value="Cardiologia">Cardiologia</option>
+                        <option value="Neurologia">Neurologia</option>
+                        <option value="Ortopedia">Ortopedia</option>
+                        <option value="Dermatologia">Dermatologia</option>
+                        <option value="Pneumologia">Pneumologia</option>
+                        <option value="Gastroenterologia">Gastroenterologia</option>
+                        <option value="Endocrinologia">Endocrinologia</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="examType">Tipo de Exame:</label>
+                    <select id="examType" name="examType">
+                        <option value="">Selecione...</option>
+                        <option value="Ecocardiograma com Doppler">Ecocardiograma com Doppler</option>
+                        <option value="Ressonância Magnética de Crânio">Ressonância Magnética de Crânio</option>
+                        <option value="Radiografia de Tórax PA e Perfil">Radiografia de Tórax PA e Perfil</option>
+                        <option value="Ultrassonografia Abdominal Total">Ultrassonografia Abdominal Total</option>
+                        <option value="Tomografia Computadorizada de Abdome">Tomografia Computadorizada de Abdome</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">
+                    📄 Gerar Laudo Personalizado
+                </button>
+            </form>
+        </div>
+        
+        <div id="examTypesSection" class="section" style="display: none;">
+            <h2>📋 Tipos de Exames Disponíveis</h2>
+            <div id="examTypesList" class="exam-types"></div>
+        </div>
+        
+        <div id="status" class="status"></div>
+    </div>
+    
+    <script>
+        // Carregar tipos de exames
+        async function loadExamTypes() {
+            try {
+                const response = await fetch('/api/medical-reports/exam-types');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const section = document.getElementById('examTypesSection');
+                    const list = document.getElementById('examTypesList');
+                    
+                    list.innerHTML = '';
+                    data.examTypes.forEach(examType => {
+                        const div = document.createElement('div');
+                        div.className = 'exam-type';
+                        div.textContent = examType;
+                        list.appendChild(div);
+                    });
+                    
+                    section.style.display = 'block';
+                    showStatus('Tipos de exames carregados com sucesso!', 'success');
+                } else {
+                    showStatus('Erro ao carregar tipos de exames', 'error');
+                }
+            } catch (error) {
+                showStatus('Erro de conexão: ' + error.message, 'error');
+            }
+        }
+        
+        // Gerar laudo personalizado
+        document.getElementById('customReportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) {
+                    data[key] = value;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/medical-reports/generate-custom', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `laudo_personalizado_${new Date().toISOString().slice(0, 10)}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    showStatus('Laudo personalizado gerado com sucesso!', 'success');
+                } else {
+                    showStatus('Erro ao gerar laudo personalizado', 'error');
+                }
+            } catch (error) {
+                showStatus('Erro de conexão: ' + error.message, 'error');
+            }
+        });
+        
+        // Mostrar status
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Carregar tipos de exames automaticamente
+        window.addEventListener('load', loadExamTypes);
+    </script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triagem Psiquiátrica Geral - TeleMed Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .question-card.answered {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        
+        .radio-option {
+            transition: all 0.2s ease;
+        }
+        
+        .radio-option:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        .result-card {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(45deg, #64748b, #475569, #334155);
+            background-size: 400% 400%;
+            animation: gradientShift 4s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .category-indicator {
+            transition: all 0.3s ease;
+        }
+        
+        .emergency-alert {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <div class="min-h-screen py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="mb-4">
+                    <a href="/centro-avaliacao" class="inline-flex items-center text-white/80 hover:text-white transition-colors">
+                        ← Voltar ao Centro de Avaliação
+                    </a>
+                </div>
+                <div class="inline-block bg-white/20 text-white text-sm font-bold px-4 py-2 rounded-full mb-4">
+                    🧠 TRIAGEM PSIQUIÁTRICA GERAL
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">
+                    Avaliação Psiquiátrica Abrangente
+                </h1>
+                <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                    Screening completo para múltiplos transtornos mentais
+                </p>
+                <p class="text-white/70 mt-2">
+                    20 perguntas cobrindo 6 categorias diagnósticas principais
+                </p>
+            </div>
+
+            <!-- Category Overview -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6 mb-8">
+                <h3 class="text-lg font-semibold text-white mb-4">📊 Categorias Avaliadas</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <div class="category-indicator bg-white/10 p-3 rounded-lg text-center">
+                        <div class="text-blue-300">😰 Ansiedade</div>
+                    </div>
+                    <div class="category-indicator bg-white/10 p-3 rounded-lg text-center">
+                        <div class="text-purple-300">😔 Depressão</div>
+                    </div>
+                    <div class="category-indicator bg-white/10 p-3 rounded-lg text-center">
+                        <div class="text-red-300">🔄 Humor</div>
+                    </div>
+                    <div class="category-indicator bg-white/10 p-3 rounded-lg text-center">
+                        <div class="text-green-300">🎯 Atenção</div>
+                    </div>
+                    <div class="category-indicator bg-white/10 p-3 rounded-lg text-center">
+                        <div class="text-orange-300">💭 Psicose</div>
+                    </div>
+                    <div class="category-indicator bg-white/10 p-3 rounded-lg text-center">
+                        <div class="text-pink-300">🍷 Substâncias</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="bg-white/20 rounded-full h-3 mb-8">
+                <div id="progressBar" class="progress-bar bg-white h-3 rounded-full" style="width: 0%"></div>
+            </div>
+            <div class="text-center text-white mb-8">
+                <span id="progressText">Pergunta 1 de 20</span>
+            </div>
+
+            <!-- Test Form -->
+            <div id="testForm" class="space-y-6">
+                <!-- Questions will be generated by JavaScript -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div id="navigationButtons" class="flex justify-between mt-8">
+                <button id="prevBtn" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50" disabled>
+                    ← Anterior
+                </button>
+                <button id="nextBtn" class="bg-slate-600 hover:bg-slate-700 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50" disabled>
+                    Próxima →
+                </button>
+            </div>
+
+            <!-- Results Section (Hidden initially) -->
+            <div id="resultsSection" class="hidden">
+                <div class="result-card bg-white rounded-2xl p-8 mt-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+                        📊 Resultados - Triagem Psiquiátrica
+                    </h2>
+                    
+                    <div id="resultContent" class="space-y-6">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-slate-50 border-l-4 border-slate-400 rounded-r-lg">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-2">⚠️ Importante</h3>
+                        <p class="text-slate-700">
+                            Esta é uma ferramenta de triagem e não substitui a avaliação de um profissional de saúde mental. 
+                            Os resultados devem ser interpretados por um psiquiatra ou psicólogo qualificado.
+                        </p>
+                    </div>
+                    
+                    <div class="text-center mt-8 space-x-4">
+                        <button onclick="resetTest()" class="bg-slate-600 hover:bg-slate-700 text-white px-8 py-3 rounded-lg transition-colors">
+                            🔄 Fazer Teste Novamente
+                        </button>
+                        <a href="/centro-avaliacao" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-colors">
+                            🧠 Outros Testes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Triagem Psiquiátrica Questions - 20 questions covering 6 categories
+        const questions = [
+            // ANSIEDADE (3 questões)
+            { 
+                id: 1, 
+                text: "Nas últimas 2 semanas, você sentiu ansiedade, nervosismo ou preocupação excessiva?",
+                category: "ansiedade",
+                critical: false
+            },
+            { 
+                id: 2, 
+                text: "Você tem dificuldade para controlar suas preocupações?",
+                category: "ansiedade",
+                critical: false
+            },
+            { 
+                id: 3, 
+                text: "Você evita situações sociais ou lugares por medo ou ansiedade?",
+                category: "ansiedade",
+                critical: false
+            },
+
+            // DEPRESSÃO (4 questões)
+            { 
+                id: 4, 
+                text: "Nas últimas 2 semanas, você se sentiu triste, deprimido ou sem esperança?",
+                category: "depressao",
+                critical: false
+            },
+            { 
+                id: 5, 
+                text: "Você perdeu o interesse ou prazer em atividades que antes gostava?",
+                category: "depressao",
+                critical: false
+            },
+            { 
+                id: 6, 
+                text: "Você tem pensamentos de morte ou de se machucar?",
+                category: "depressao",
+                critical: true
+            },
+            { 
+                id: 7, 
+                text: "Você se sente sem valor ou culpado na maior parte do tempo?",
+                category: "depressao",
+                critical: false
+            },
+
+            // TRANSTORNO BIPOLAR/HUMOR (3 questões)
+            { 
+                id: 8, 
+                text: "Você já teve períodos de humor muito elevado, eufórico ou irritável?",
+                category: "humor",
+                critical: false
+            },
+            { 
+                id: 9, 
+                text: "Durante esses períodos, você dormiu muito menos que o usual?",
+                category: "humor",
+                critical: false
+            },
+            { 
+                id: 10, 
+                text: "Você já fez coisas arriscadas ou impulsivas durante períodos de humor elevado?",
+                category: "humor",
+                critical: false
+            },
+
+            // DÉFICIT DE ATENÇÃO (3 questões)
+            { 
+                id: 11, 
+                text: "Você tem dificuldade para se concentrar ou manter a atenção?",
+                category: "atencao",
+                critical: false
+            },
+            { 
+                id: 12, 
+                text: "Você frequentemente esquece compromissos ou perde objetos importantes?",
+                category: "atencao",
+                critical: false
+            },
+            { 
+                id: 13, 
+                text: "Você tem dificuldade para ficar parado ou se sente inquieto?",
+                category: "atencao",
+                critical: false
+            },
+
+            // SINTOMAS PSICÓTICOS (4 questões)
+            { 
+                id: 14, 
+                text: "Você já ouviu vozes que outras pessoas não ouviam?",
+                category: "psicose",
+                critical: true
+            },
+            { 
+                id: 15, 
+                text: "Você já viu coisas que outras pessoas não conseguiam ver?",
+                category: "psicose",
+                critical: true
+            },
+            { 
+                id: 16, 
+                text: "Você já sentiu que outras pessoas estavam tramando contra você?",
+                category: "psicose",
+                critical: false
+            },
+            { 
+                id: 17, 
+                text: "Você já acreditou ter poderes especiais ou ser uma pessoa muito importante?",
+                category: "psicose",
+                critical: false
+            },
+
+            // USO DE SUBSTÂNCIAS (3 questões)
+            { 
+                id: 18, 
+                text: "Seu uso de álcool ou drogas tem causado problemas em sua vida?",
+                category: "substancias",
+                critical: false
+            },
+            { 
+                id: 19, 
+                text: "Você sente necessidade de beber ou usar drogas para se sentir normal?",
+                category: "substancias",
+                critical: false
+            },
+            { 
+                id: 20, 
+                text: "Outras pessoas já expressaram preocupação com seu uso de álcool ou drogas?",
+                category: "substancias",
+                critical: false
+            }
+        ];
+
+        const options = [
+            { value: 0, text: "Nunca" },
+            { value: 1, text: "Raramente" },
+            { value: 2, text: "Às vezes" },
+            { value: 3, text: "Frequentemente" },
+            { value: 4, text: "Sempre" }
+        ];
+
+        const categoryColors = {
+            ansiedade: 'border-blue-500 bg-blue-50',
+            depressao: 'border-purple-500 bg-purple-50',
+            humor: 'border-red-500 bg-red-50',
+            atencao: 'border-green-500 bg-green-50',
+            psicose: 'border-orange-500 bg-orange-50',
+            substancias: 'border-pink-500 bg-pink-50'
+        };
+
+        const categoryNames = {
+            ansiedade: '😰 Ansiedade',
+            depressao: '😔 Depressão',
+            humor: '🔄 Transtorno de Humor',
+            atencao: '🎯 Déficit de Atenção',
+            psicose: '💭 Sintomas Psicóticos',
+            substancias: '🍷 Uso de Substâncias'
+        };
+
+        let currentQuestion = 0;
+        let answers = {};
+
+        // Initialize test
+        function initTest() {
+            renderQuestion();
+            updateProgress();
+            updateNavigation();
+        }
+
+        // Render current question
+        function renderQuestion() {
+            const testForm = document.getElementById('testForm');
+            const question = questions[currentQuestion];
+            const colorClass = categoryColors[question.category];
+            
+            testForm.innerHTML = `
+                <div class="question-card bg-white rounded-2xl p-8 border-l-4 ${colorClass} ${answers[question.id] !== undefined ? 'answered' : ''}">
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="inline-block bg-slate-100 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">
+                                ${categoryNames[question.category]}
+                            </span>
+                            ${question.critical ? `
+                                <span class="emergency-alert inline-block bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded-full">
+                                    ⚠️ CRÍTICA
+                                </span>
+                            ` : ''}
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 leading-relaxed">
+                            ${currentQuestion + 1}. ${question.text}
+                        </h3>
+                        ${question.critical ? `
+                            <p class="text-red-600 mt-3 text-sm font-medium">
+                                ⚠️ Esta é uma pergunta de segurança importante
+                            </p>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="space-y-3">
+                        ${options.map(option => `
+                            <label class="radio-option flex items-center p-4 rounded-lg cursor-pointer border border-gray-200 hover:bg-slate-50">
+                                <input type="radio" name="question_${question.id}" value="${option.value}" 
+                                       class="w-4 h-4 text-slate-600 border-gray-300 focus:ring-slate-500"
+                                       ${answers[question.id] === option.value ? 'checked' : ''}
+                                       onchange="handleAnswer(${question.id}, ${option.value})">
+                                <span class="ml-3 text-gray-700 font-medium">${option.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handle answer selection
+        function handleAnswer(questionId, value) {
+            answers[questionId] = value;
+            updateProgress();
+            updateNavigation();
+            
+            // Add visual feedback
+            const questionCard = document.querySelector('.question-card');
+            questionCard.classList.add('answered');
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = (Object.keys(answers).length / questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+        }
+
+        // Update navigation buttons
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = Object.keys(answers).length === questions.length ? '📊 Ver Resultados' : 'Finalizar';
+                nextBtn.disabled = answers[questions[currentQuestion].id] === undefined;
+            } else {
+                nextBtn.textContent = 'Próxima →';
+                nextBtn.disabled = answers[questions[currentQuestion].id] === undefined;
+            }
+        }
+
+        // Navigation functions
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+                updateProgress();
+                updateNavigation();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                updateProgress();
+                updateNavigation();
+            } else {
+                showResults();
+            }
+        }
+
+        // Calculate and show results
+        function showResults() {
+            // Calculate scores by category
+            const categoryScores = {
+                ansiedade: 0,
+                depressao: 0,
+                humor: 0,
+                atencao: 0,
+                psicose: 0,
+                substancias: 0
+            };
+
+            let criticalAlerts = [];
+            let totalScore = 0;
+
+            questions.forEach(question => {
+                const answer = answers[question.id];
+                totalScore += answer;
+                categoryScores[question.category] += answer;
+                
+                // Check for critical responses
+                if (question.critical && answer >= 2) {
+                    criticalAlerts.push(question);
+                }
+            });
+
+            // Calculate category percentages
+            const categoryMaxScores = {
+                ansiedade: 12,    // 3 questions * 4 max
+                depressao: 16,    // 4 questions * 4 max
+                humor: 12,        // 3 questions * 4 max
+                atencao: 12,      // 3 questions * 4 max
+                psicose: 16,      // 4 questions * 4 max
+                substancias: 12   // 3 questions * 4 max
+            };
+
+            let overallRisk = '';
+            let color = '';
+            let recommendation = '';
+
+            if (criticalAlerts.length > 0 || totalScore >= 60) {
+                overallRisk = 'Risco Alto';
+                color = 'bg-red-100 border-red-500 text-red-800';
+                recommendation = 'Procure ajuda profissional imediatamente. Em caso de emergência, ligue para o CVV: 188';
+            } else if (totalScore >= 40) {
+                overallRisk = 'Risco Moderado';
+                color = 'bg-orange-100 border-orange-500 text-orange-800';
+                recommendation = 'Recomenda-se avaliação com profissional de saúde mental.';
+            } else if (totalScore >= 20) {
+                overallRisk = 'Risco Baixo';
+                color = 'bg-yellow-100 border-yellow-500 text-yellow-800';
+                recommendation = 'Monitore os sintomas e considere conversar com um profissional se persistirem.';
+            } else {
+                overallRisk = 'Risco Mínimo';
+                color = 'bg-green-100 border-green-500 text-green-800';
+                recommendation = 'Continue mantendo hábitos saudáveis e autocuidado.';
+            }
+
+            document.getElementById('testForm').classList.add('hidden');
+            document.getElementById('navigationButtons').classList.add('hidden');
+            
+            const resultsSection = document.getElementById('resultsSection');
+            const resultContent = document.getElementById('resultContent');
+            
+            let categoryResults = '';
+            Object.keys(categoryScores).forEach(category => {
+                const score = categoryScores[category];
+                const maxScore = categoryMaxScores[category];
+                const percentage = (score / maxScore * 100).toFixed(0);
+                const categoryColor = category === 'ansiedade' ? 'blue' : 
+                                    category === 'depressao' ? 'purple' :
+                                    category === 'humor' ? 'red' :
+                                    category === 'atencao' ? 'green' :
+                                    category === 'psicose' ? 'orange' : 'pink';
+                
+                categoryResults += `
+                    <div class="bg-${categoryColor}-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium text-${categoryColor}-800">${categoryNames[category]}</span>
+                            <span class="text-${categoryColor}-700 font-bold">${score}/${maxScore} (${percentage}%)</span>
+                        </div>
+                        <div class="w-full bg-${categoryColor}-200 rounded-full h-2 mt-2">
+                            <div class="bg-${categoryColor}-600 h-2 rounded-full" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultContent.innerHTML = `
+                <div class="text-center mb-8">
+                    <div class="inline-block p-6 bg-slate-100 rounded-full mb-4">
+                        <span class="text-4xl">🧠</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">${overallRisk}</h3>
+                    <div class="text-2xl font-bold text-slate-600 mb-2">${totalScore}/80 pontos</div>
+                </div>
+                
+                ${criticalAlerts.length > 0 ? `
+                    <div class="emergency-alert p-6 border-l-4 rounded-r-lg bg-red-100 border-red-500 text-red-800 mb-6">
+                        <h4 class="text-lg font-bold mb-2">🚨 ALERTA DE SEGURANÇA</h4>
+                        <p class="font-medium mb-3">Detectamos respostas que indicam necessidade de atenção imediata:</p>
+                        <ul class="list-disc list-inside space-y-1 text-sm">
+                            ${criticalAlerts.map(q => `<li>${q.text}</li>`).join('')}
+                        </ul>
+                        <div class="mt-4 p-3 bg-red-200 rounded-lg">
+                            <p class="font-bold">📞 CVV: 188 (24 horas, gratuito)</p>
+                            <p class="text-sm">Procure UPA, Pronto Socorro ou profissional de saúde mental imediatamente</p>
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="p-6 border-l-4 rounded-r-lg ${color} mb-6">
+                    <h4 class="text-lg font-bold mb-2">📋 Recomendação Geral</h4>
+                    <p class="font-medium">${recommendation}</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">📊 Resultados por Categoria</h4>
+                    <div class="space-y-3">
+                        ${categoryResults}
+                    </div>
+                    <div class="mt-6 text-gray-700 text-sm">
+                        <p><strong>Data da avaliação:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+                        <p><strong>Instrumento:</strong> Triagem Psiquiátrica Geral (20 itens)</p>
+                        <p><strong>Pontuação total:</strong> ${totalScore}/80 pontos</p>
+                    </div>
+                </div>
+            `;
+            
+            resultsSection.classList.remove('hidden');
+            
+            // Log results
+            console.log('🧠 Triagem Psiquiátrica concluída:', {
+                pontuacaoTotal: totalScore,
+                categorias: categoryScores,
+                alertasCriticos: criticalAlerts.length,
+                risco: overallRisk
+            });
+        }
+
+        // Reset test
+        function resetTest() {
+            currentQuestion = 0;
+            answers = {};
+            
+            document.getElementById('testForm').classList.remove('hidden');
+            document.getElementById('navigationButtons').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            initTest();
+        }
+
+        // Event listeners
+        document.getElementById('prevBtn').addEventListener('click', prevQuestion);
+        document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+
+        // Initialize test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧠 Triagem Psiquiátrica Geral carregada');
+            initTest();
+        });
+    </script>
+</body>
+</html>

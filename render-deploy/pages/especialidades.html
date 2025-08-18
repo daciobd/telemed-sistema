@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Especialidades - TeleMed Consultas</title>
+    <meta name="description" content="8 especialidades médicas com fotos profissionais. Cardiologia, Clínica Geral, Pediatria, Dermatologia, Psiquiatria, Ginecologia, Psicoterapia, Nutrição com médicos qualificados.">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Especialidades Médicas com Fotos - TeleMed">
+    <meta property="og:description" content="Conheça nossos especialistas com fotos reais. 8 especialidades disponíveis para consulta online com estatísticas e preços.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', 'Inter', Arial, sans-serif; 
+            background: linear-gradient(135deg, #FAFBFC 0%, #F0F4F8 100%);
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 40px; 
+            box-shadow: 0 10px 30px rgba(167, 199, 231, 0.1);
+        }
+        .header { 
+            background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%); 
+            color: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-bottom: 40px; 
+            text-align: center;
+        }
+        .especialidades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .especialidade-card {
+            background: #F8F9FA;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+        }
+        .especialidade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(167, 199, 231, 0.3);
+            border-color: #A7C7E7;
+        }
+        .especialidade-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #A7C7E7, #92B4D7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .especialidade-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+        .especialidade-card h3 {
+            color: #2D5A87;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .especialidade-card p {
+            color: #6B7280;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #E5E7EB;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #A7C7E7;
+            font-size: 18px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #6B7280;
+        }
+        .btn-agendar {
+            background: linear-gradient(135deg, #A7C7E7 0%, #92B4D7 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-agendar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(167, 199, 231, 0.4);
+        }
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10B981;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .badge.urgente { background: #E9967A; }
+        .badge.medio { background: #F4D9B4; color: #8B4513; }
+        @media (max-width: 768px) {
+            .container { padding: 20px; margin: 10px; }
+            .especialidades-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Nossas Especialidades</h1>
+            <p>Encontre o especialista ideal para cuidar da sua saúde</p>
+        </div>
+        
+        <div class="especialidades-grid">
+            <!-- CARDIOLOGIA -->
+            <div class="especialidade-card" onclick="agendarConsulta('cardiologia')">
+                <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
+                    <img src="/attached_assets/CARDIOLOGISTA_1753652987872.jpg" alt="Cardiologia" onerror="this.style.display='none'; this.parentNode.innerHTML='❤️'">
+                </div>
+                <h3>Cardiologia</h3>
+                <p>Especialista em coração e sistema cardiovascular. Diagnóstico e tratamento de doenças cardíacas.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Médicos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 180</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- CLÍNICA GERAL -->
+            <div class="especialidade-card" onclick="agendarConsulta('clinica-geral')">
+                <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
+                    <img src="/attached_assets/consultas online com especialistasw_1753652601464.PNG" alt="Clínica Geral" onerror="this.style.display='none'; this.parentNode.innerHTML='🩺'">
+                </div>
+                <h3>Clínica Geral</h3>
+                <p>Atendimento médico geral, diagnósticos iniciais e acompanhamento de saúde preventiva.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Médicos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 120</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.8⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- PEDIATRIA -->
+            <div class="especialidade-card" onclick="agendarConsulta('pediatria')">
+                <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
+                    <img src="/attached_assets/médica consulta mãe e filha_1753652627155.jpg" alt="Pediatria" onerror="this.style.display='none'; this.parentNode.innerHTML='👶'">
+                </div>
+                <h3>Pediatria</h3>
+                <p>Cuidados médicos especializados para bebês, crianças e adolescentes até 18 anos.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Médicos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 150</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- DERMATOLOGIA -->
+            <div class="especialidade-card" onclick="agendarConsulta('dermatologia')">
+                <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
+                    <img src="/attached_assets/DERMATOLOGIA_1753652987872.jpg" alt="Dermatologia" onerror="this.style.display='none'; this.parentNode.innerHTML='🔬'">
+                </div>
+                <h3>Dermatologia</h3>
+                <p>Diagnóstico e tratamento de doenças da pele, cabelos e unhas. Dermatologia estética.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Médicos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 200</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.8⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- PSIQUIATRIA -->
+            <div class="especialidade-card" onclick="agendarConsulta('psiquiatria')">
+                <div class="especialidade-image">
+                    <div class="badge urgente">Alta Demanda</div>
+                    <img src="/attached_assets/PSIQUIATRIA_1753652987872.jpg" alt="Psiquiatria" onerror="this.style.display='none'; this.parentNode.innerHTML='🧠'">
+                </div>
+                <h3>Psiquiatria</h3>
+                <p>Diagnóstico e tratamento de transtornos mentais, ansiedade, depressão e outros distúrbios.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Médicos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 220</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- GINECOLOGIA -->
+            <div class="especialidade-card" onclick="agendarConsulta('ginecologia')">
+                <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
+                    <img src="/attached_assets/GINECOLOGISTA_1753653216188.jpg" alt="Ginecologia" onerror="this.style.display='none'; this.parentNode.innerHTML='👩‍⚕️'">
+                </div>
+                <h3>Ginecologia</h3>
+                <p>Saúde da mulher, exames preventivos, planejamento familiar e acompanhamento ginecológico.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Médicos</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 160</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.9⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- PSICOTERAPIA -->
+            <div class="especialidade-card" onclick="agendarConsulta('psicoterapia')">
+                <div class="especialidade-image">
+                    <div class="badge medio">Procurado</div>
+                    <img src="/attached_assets/acompanhamento psicológico e nutricional_1753652601462.PNG" alt="Psicoterapia" onerror="this.style.display='none'; this.parentNode.innerHTML='💭'">
+                </div>
+                <h3>Psicoterapia</h3>
+                <p>Terapia psicológica, aconselhamento e suporte emocional para bem-estar mental.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Terapeutas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 140</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.8⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+            
+            <!-- NUTRIÇÃO -->
+            <div class="especialidade-card" onclick="agendarConsulta('nutricao')">
+                <div class="especialidade-image">
+                    <div class="badge">Disponível</div>
+                    <img src="/attached_assets/NUTRICIONISTA_1753653519172.jpg" alt="Nutrição" onerror="this.style.display='none'; this.parentNode.innerHTML='🥗'">
+                </div>
+                <h3>Nutrição</h3>
+                <p>Orientação nutricional, dietas personalizadas e acompanhamento para vida saudável.</p>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">9</div>
+                        <div class="stat-label">Nutricionistas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">R$ 100</div>
+                        <div class="stat-label">A partir de</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4.7⭐</div>
+                        <div class="stat-label">Avaliação</div>
+                    </div>
+                </div>
+                
+                <button class="btn-agendar">📅 Agendar Consulta</button>
+            </div>
+        </div>
+        
+        <!-- BOTÕES DE AÇÃO -->
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/patient-bidding" class="btn-agendar" style="max-width: 300px; margin: 0 auto;">
+                🎯 Sistema de Lances - Você Define o Preço
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        function agendarConsulta(especialidade) {
+            // Redirecionar para agendamento com especialidade pré-selecionada
+            window.location.href = `/agendamento?especialidade=${especialidade}`;
+        }
+        
+        // Fallback para imagens que não carregam
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+                // Emoji já está no onerror do HTML
+            });
+        });
+        
+        // Animação de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.especialidade-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'all 0.5s ease';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

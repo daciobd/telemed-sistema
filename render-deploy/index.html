@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Cuide da Sua Saúde com Inteligência Artificial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAFA;
+        }
+        .text-primary {
+            color: #2D3748;
+        }
+        .text-green {
+            color: #48BB78;
+        }
+        .bg-green {
+            background-color: #48BB78;
+        }
+        .bg-green:hover {
+            background-color: #38A169;
+        }
+        .text-purple {
+            color: #805AD5;
+        }
+        .border-gray-light {
+            border-color: #E2E8F0;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%);
+            min-height: calc(100vh - 80px);
+        }
+        .feature-card {
+            background: rgba(128, 90, 213, 0.05);
+            border: 1px solid rgba(128, 90, 213, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(128, 90, 213, 0.15);
+        }
+        .btn-primary {
+            background: #48BB78;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #38A169;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+        .btn-secondary {
+            background: white;
+            border: 2px solid #4299E1;
+            color: #4299E1;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: #4299E1;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #2D3748;
+        }
+        .nav-link {
+            color: #4A5568;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+            color: #2D3748;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #2D3748;
+        }
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: #718096;
+            line-height: 1.6;
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #48BB78;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dropdown-menu {
+            transition: all 0.2s ease-in-out;
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-section {
+                min-height: calc(100vh - 60px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-light sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="logo">
+                        <i data-feather="heart" class="w-6 h-6 mr-2 text-green inline-block"></i>
+                        TeleMed
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="/" class="nav-link">Início</a>
+                    <div class="relative group">
+                        <a href="#" class="nav-link flex items-center">
+                            Nossos Serviços
+                            <i data-feather="chevron-down" class="w-4 h-4 ml-1"></i>
+                        </a>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-2">
+                                <a href="/videoconsulta" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Videoconsultas</a>
+                                <a href="/agenda-medica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Agenda Médica</a>
+                                <a href="/receitas-digitais" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Receitas Digitais</a>
+                                <a href="/especialidades" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Especialidades</a>
+                                <a href="/telemonitoramento-enfermagem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Telemonitoramento</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="nav-link">Benefícios</a>
+                    <div class="relative group">
+                        <a href="#" class="nav-link flex items-center">
+                            Para Médicos
+                            <i data-feather="chevron-down" class="w-4 h-4 ml-1"></i>
+                        </a>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-2">
+                                <a href="/dashboard-aquarela" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Dashboard Médico</a>
+                                <a href="/atendimento-medico" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Atendimento</a>
+                                <a href="/sistema-notificacoes-medicas" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Notificações SMS</a>
+                                <a href="/leilao-consultas" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Leilão Consultas</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <a href="#" class="nav-link flex items-center">
+                            Testagens
+                            <i data-feather="chevron-down" class="w-4 h-4 ml-1"></i>
+                        </a>
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="p-2">
+                                <a href="/triagem-psiquiatrica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Triagem Psiquiátrica</a>
+                                <a href="/centro-avaliacao" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Centro de Avaliação</a>
+                                <a href="/ansiedade-gad7" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Teste Ansiedade GAD-7</a>
+                                <a href="/depressao-phq9" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Teste Depressão PHQ-9</a>
+                                <a href="/bipolar-mdq" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded">Teste Bipolar MDQ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="nav-link">Quem Somos</a>
+                    <a href="#" class="nav-link">Contato</a>
+                    <a href="/entrada" class="nav-link">Login</a>
+                </nav>
+
+                <!-- CTA Button -->
+                <div class="hidden md:block">
+                    <button onclick="window.location.href='/entrada'" class="bg-gray-800 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-700 transition-colors">
+                        Agendar Consulta
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="text-gray-500 hover:text-gray-600" onclick="toggleMobileMenu()">
+                        <i data-feather="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden border-t border-gray-light">
+            <div class="px-4 pt-2 pb-3 space-y-1 bg-white">
+                <a href="/" class="block px-3 py-2 text-gray-600 font-medium">Início</a>
+                
+                <!-- Serviços Mobile -->
+                <div class="border-l-2 border-gray-200 ml-2 pl-3 space-y-1">
+                    <p class="text-sm font-semibold text-gray-500 px-3 py-1">Nossos Serviços</p>
+                    <a href="/videoconsulta" class="block px-3 py-1 text-sm text-gray-600">Videoconsultas</a>
+                    <a href="/agenda-medica" class="block px-3 py-1 text-sm text-gray-600">Agenda Médica</a>
+                    <a href="/receitas-digitais" class="block px-3 py-1 text-sm text-gray-600">Receitas Digitais</a>
+                    <a href="/especialidades" class="block px-3 py-1 text-sm text-gray-600">Especialidades</a>
+                    <a href="/telemonitoramento-enfermagem" class="block px-3 py-1 text-sm text-gray-600">Telemonitoramento</a>
+                </div>
+                
+                <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Benefícios</a>
+                
+                <!-- Para Médicos Mobile -->
+                <div class="border-l-2 border-gray-200 ml-2 pl-3 space-y-1">
+                    <p class="text-sm font-semibold text-gray-500 px-3 py-1">Para Médicos</p>
+                    <a href="/dashboard-aquarela" class="block px-3 py-1 text-sm text-gray-600">Dashboard Médico</a>
+                    <a href="/atendimento-medico" class="block px-3 py-1 text-sm text-gray-600">Atendimento</a>
+                    <a href="/sistema-notificacoes-medicas" class="block px-3 py-1 text-sm text-gray-600">Notificações SMS</a>
+                    <a href="/leilao-consultas" class="block px-3 py-1 text-sm text-gray-600">Leilão Consultas</a>
+                </div>
+                
+                <!-- Testagens Mobile -->
+                <div class="border-l-2 border-gray-200 ml-2 pl-3 space-y-1">
+                    <p class="text-sm font-semibold text-gray-500 px-3 py-1">Testagens</p>
+                    <a href="/triagem-psiquiatrica" class="block px-3 py-1 text-sm text-gray-600">Triagem Psiquiátrica</a>
+                    <a href="/centro-avaliacao" class="block px-3 py-1 text-sm text-gray-600">Centro de Avaliação</a>
+                    <a href="/ansiedade-gad7" class="block px-3 py-1 text-sm text-gray-600">Teste GAD-7</a>
+                    <a href="/depressao-phq9" class="block px-3 py-1 text-sm text-gray-600">Teste PHQ-9</a>
+                    <a href="/bipolar-mdq" class="block px-3 py-1 text-sm text-gray-600">Teste MDQ</a>
+                </div>
+                
+                <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Quem Somos</a>
+                <a href="#" class="block px-3 py-2 text-gray-600 font-medium">Contato</a>
+                <a href="/entrada" class="block px-3 py-2 text-gray-600 font-medium">Login</a>
+                <button onclick="window.location.href='/entrada'" class="w-full mt-3 bg-gray-800 text-white px-4 py-2 rounded-lg font-medium">
+                    Agendar Consulta
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="text-left">
+                    <!-- Breadcrumb -->
+                    <div class="flex items-center text-sm text-gray-500 mb-8">
+                        <a href="/" class="hover:text-gray-700">Início</a>
+                        <i data-feather="chevron-right" class="w-4 h-4 mx-2"></i>
+                        <span>Saúde IA</span>
+                    </div>
+
+                    <h1 class="hero-title mb-6">
+                        Cuide da Sua<br>
+                        Saúde com<br>
+                        <span class="text-green">Inteligência<br>Artificial</span>
+                    </h1>
+                    
+                    <p class="hero-subtitle mb-8 max-w-md">
+                        Acesse consultas rápidas, triagem por IA e monitoramento 24/7 com TeleMed Sistema.
+                    </p>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                        <button onclick="window.location.href='/triagem-psiquiatrica'" class="btn-primary text-white px-8 py-4 rounded-lg font-semibold flex items-center justify-center">
+                            <i data-feather="zap" class="w-5 h-5 mr-2"></i>
+                            Triagem Grátis
+                        </button>
+                        <button onclick="window.location.href='/entrada'" class="btn-secondary px-8 py-4 rounded-lg font-semibold flex items-center justify-center">
+                            <i data-feather="calendar" class="w-5 h-5 mr-2"></i>
+                            Agendar Consulta
+                        </button>
+                    </div>
+
+                    <!-- Quick Access Links -->
+                    <div class="text-sm text-gray-500">
+                        <p class="mb-2">Acesso Rápido:</p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="/dr-ai" class="text-blue-600 hover:text-blue-700 underline">Dr. AI Assistente</a>
+                            <a href="/receitas-digitais" class="text-blue-600 hover:text-blue-700 underline">Receitas MEMED</a>
+                            <a href="/videoconsulta" class="text-blue-600 hover:text-blue-700 underline">Videoconsultas</a>
+                            <a href="/especialidades" class="text-blue-600 hover:text-blue-700 underline">Especialidades</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content - Feature Card -->
+                <div class="flex justify-center lg:justify-end">
+                    <div class="feature-card p-8 max-w-sm w-full">
+                        <div class="text-center">
+                            <div class="feature-icon mx-auto mb-6">
+                                <i data-feather="cpu" class="w-8 h-8 text-white"></i>
+                            </div>
+                            
+                            <h3 class="text-purple text-xl font-bold mb-4">
+                                Triagem Psiquiátrica IA
+                            </h3>
+                            
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Primeiro sistema do Brasil com IA especializada em saúde mental.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Feather icons
+        feather.replace();
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            const button = event.target.closest('button');
+            
+            if (!menu.contains(event.target) && !button) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        console.log('🚀 TeleMed Homepage carregada');
+        console.log('🎨 Design conforme mockup: header com navegação, hero com CTA, feature card');
+        console.log('📱 Totalmente responsivo para mobile, tablet e desktop');
+        console.log('🔗 Links adicionados: Dashboard, Videoconsultas, Testagens, Especialidades');
+        console.log('📋 Dropdown menus: Nossos Serviços, Para Médicos, Testagens');
+    </script>
+</body>
+</html>

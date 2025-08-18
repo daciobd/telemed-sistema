@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimento Médico - TeleMed Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 15px rgba(0, 123, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+        }
+
+        .patient-info .patient-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .patient-info .patient-details {
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* VIDEO SECTION */
+        .video-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E5E5;
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .video-section h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #E5E5E5;
+            padding-bottom: 15px;
+        }
+
+        .video-placeholder {
+            background: linear-gradient(135deg, #F8F9FA, #E9ECEF);
+            border: 2px dashed #007BFF;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 123, 255, 0.05) 50%, transparent 70%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .video-placeholder i {
+            font-size: 48px;
+            color: #007BFF;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .video-btn {
+            background: linear-gradient(135deg, #007BFF, #0056B3);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .video-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .video-btn.secondary {
+            background: linear-gradient(135deg, #6C757D, #495057);
+        }
+
+        .video-btn.danger {
+            background: linear-gradient(135deg, #DC3545, #C82333);
+        }
+
+        .call-timer {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #28A745;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            background: #F8F9FA;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28A745;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* PRONTUARIO SECTION */
+        .prontuario-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E5E5;
+        }
+
+        .prontuario-section h2 {
+            color: #007BFF;
+            margin-bottom: 25px;
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #E5E5E5;
+            padding-bottom: 15px;
+        }
+
+        .patient-summary {
+            background: linear-gradient(135deg, #F8F9FA, #E9ECEF);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #007BFF;
+        }
+
+        .patient-summary h3 {
+            color: #2C3E50;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .patient-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .detail-item i {
+            color: #007BFF;
+            width: 16px;
+        }
+
+        .detail-item strong {
+            color: #2C3E50;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .campo {
+            background: #F8F9FA;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #E5E5E5;
+            transition: all 0.3s ease;
+        }
+
+        .campo:hover {
+            border-color: #007BFF;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+        }
+
+        .campo label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #2C3E50;
+            font-size: 16px;
+        }
+
+        .campo label i {
+            color: #007BFF;
+        }
+
+        .campo textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #E5E5E5;
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 14px;
+            font-family: inherit;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .campo textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .campo textarea::placeholder {
+            color: #6C757D;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .action-card {
+            background: white;
+            border: 2px solid #E5E5E5;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .action-card:hover {
+            border-color: #007BFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+        }
+
+        .action-card i {
+            font-size: 24px;
+            color: #007BFF;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .action-card h4 {
+            margin-bottom: 5px;
+            color: #2C3E50;
+        }
+
+        .action-card p {
+            font-size: 12px;
+            color: #6C757D;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #28A745, #1E7E34);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .video-section {
+                position: static;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .patient-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+                margin: 20px auto;
+            }
+
+            .video-section, .prontuario-section {
+                padding: 20px;
+            }
+
+            .patient-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-controls {
+                flex-direction: column;
+            }
+        }
+
+        /* LOADING ANIMATION */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007BFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-user-md"></i>
+                TeleMed Pro - Atendimento
+            </div>
+            <div class="patient-info">
+                <div class="patient-name" id="patient-name">João Silva Santos</div>
+                <div class="patient-details">
+                    <span id="patient-time">08:20</span> • 
+                    <span id="patient-specialty">Cardiologia</span> • 
+                    <span id="patient-insurance">Prudential</span>
+                </div>
+            </div>
+            <a href="/agenda-medica.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Voltar à Agenda
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Seção de Vídeo -->
+        <div class="video-section">
+            <h2><i class="fas fa-video"></i> Videoconsulta</h2>
+            
+            <div class="connection-status">
+                <div class="status-indicator"></div>
+                Conexão estável
+            </div>
+
+            <div class="call-timer" id="call-timer">
+                <i class="fas fa-clock"></i> 00:00:00
+            </div>
+
+            <div class="video-placeholder" id="video-placeholder">
+                <i class="fas fa-video-slash"></i>
+                <h3>Chamada não iniciada</h3>
+                <p>Clique em "Iniciar Videoconsulta" para começar</p>
+            </div>
+
+            <div class="video-controls">
+                <button class="video-btn" onclick="startVideoCall()" id="start-btn">
+                    <i class="fas fa-video"></i> Iniciar
+                </button>
+                <button class="video-btn secondary" onclick="toggleMute()" id="mute-btn" disabled>
+                    <i class="fas fa-microphone"></i> Mudo
+                </button>
+                <button class="video-btn danger" onclick="endCall()" id="end-btn" disabled>
+                    <i class="fas fa-phone-slash"></i> Encerrar
+                </button>
+            </div>
+
+            <p style="text-align: center; font-size: 12px; color: #6C757D; margin-top: 15px;">
+                <i class="fas fa-shield-alt"></i> Chamada criptografada e segura
+            </p>
+        </div>
+
+        <!-- Seção do Prontuário -->
+        <div class="prontuario-section">
+            <h2><i class="fas fa-file-medical"></i> Prontuário Eletrônico</h2>
+
+            <div class="patient-summary">
+                <h3><i class="fas fa-user"></i> Dados do Paciente</h3>
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <i class="fas fa-birthday-cake"></i>
+                        <span><strong>Idade:</strong> <span id="patient-age">35 anos</span></span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-phone"></i>
+                        <span><strong>Telefone:</strong> <span id="patient-phone">(11) 99999-1234</span></span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <span><strong>Email:</strong> <span id="patient-email">joao@email.com</span></span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-heart"></i>
+                        <span><strong>Última consulta:</strong> 15/12/2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="campo">
+                    <label><i class="fas fa-comment-medical"></i> Queixa Principal</label>
+                    <textarea id="queixa" placeholder="Descreva a queixa principal do paciente, sintomas relatados e histórico atual..."></textarea>
+                </div>
+
+                <div class="campo">
+                    <label><i class="fas fa-search"></i> Exame Físico</label>
+                    <textarea id="exame-fisico" placeholder="Registre os achados do exame físico, sinais vitais e observações clínicas..."></textarea>
+                </div>
+
+                <div class="campo">
+                    <label><i class="fas fa-diagnoses"></i> Hipótese Diagnóstica</label>
+                    <textarea id="diagnostico" placeholder="Registre a hipótese diagnóstica principal e diagnósticos diferenciais..."></textarea>
+                </div>
+
+                <div class="campo">
+                    <label><i class="fas fa-clipboard-list"></i> Conduta e Plano Terapêutico</label>
+                    <textarea id="conduta" placeholder="Defina a conduta médica, medicações, orientações e próximos passos..."></textarea>
+                </div>
+            </div>
+
+            <div class="actions-grid">
+                <a href="/pdf-generator.html" class="action-card">
+                    <i class="fas fa-prescription"></i>
+                    <h4>Gerar Receita</h4>
+                    <p>Prescrição digital</p>
+                </a>
+                
+                <a href="/centro-avaliacao.html" class="action-card">
+                    <i class="fas fa-brain"></i>
+                    <h4>Avaliações</h4>
+                    <p>Testes psiquiátricos</p>
+                </a>
+                
+                <div class="action-card" onclick="solicitarExame()">
+                    <i class="fas fa-flask"></i>
+                    <h4>Solicitar Exame</h4>
+                    <p>Pedidos médicos</p>
+                </div>
+                
+                <div class="action-card" onclick="agendarRetorno()">
+                    <i class="fas fa-calendar-plus"></i>
+                    <h4>Agendar Retorno</h4>
+                    <p>Próxima consulta</p>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="salvarProntuario()">
+                <i class="fas fa-save"></i> Salvar Prontuário
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        let isCallActive = false;
+        let isMuted = false;
+        let callStartTime = null;
+        let timerInterval = null;
+
+        // Dados do paciente carregados do banco
+        let patientData = {};
+
+        // Função para carregar dados do paciente do banco
+        async function loadPatientFromDatabase() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pacienteId = urlParams.get('paciente_id');
+            
+            if (!pacienteId) {
+                showNotification('ID do paciente não fornecido', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/pacientes/${pacienteId}`);
+                if (!response.ok) {
+                    throw new Error('Paciente não encontrado');
+                }
+                
+                const patient = await response.json();
+                
+                // Converter dados do banco para formato da interface
+                patientData = {
+                    id: patient.id,
+                    name: patient.nome,
+                    time: patient.hora_consulta,
+                    specialty: patient.especialidade,
+                    insurance: patient.convenio,
+                    age: patient.idade ? `${patient.idade} anos` : 'Não informado',
+                    phone: patient.telefone,
+                    email: patient.email,
+                    // Dados do prontuário se existir
+                    queixa: patient.queixa || '',
+                    exame_fisico: patient.exame_fisico || '',
+                    hipotese_diagnostica: patient.hipotese_diagnostica || '',
+                    conduta: patient.conduta || '',
+                    observacoes: patient.observacoes || ''
+                };
+                
+                // Atualizar interface com dados do paciente
+                updatePatientInterface();
+                loadExistingProntuario();
+                
+                console.log('✅ Dados do paciente carregados do banco:', patientData.name);
+            } catch (error) {
+                console.error('❌ Erro ao carregar paciente:', error);
+                showNotification('Erro ao carregar dados do paciente', 'error');
+            }
+        }
+
+        // Inicializar dados do paciente
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadPatientFromDatabase();
+            
+            console.log('🎥 Sistema de Atendimento TeleMed carregado!');
+            console.log('👨‍⚕️ Dados do paciente carregados do banco PostgreSQL');
+            console.log('📋 Prontuário eletrônico ativo');
+            console.log('🔒 Sistema seguro e criptografado');
+        });
+
+        function updatePatientInterface() {
+            document.getElementById('patient-name').textContent = patientData.name;
+            document.getElementById('patient-time').textContent = patientData.time;
+            document.getElementById('patient-specialty').textContent = patientData.specialty;
+            document.getElementById('patient-insurance').textContent = patientData.insurance;
+            document.getElementById('patient-age').textContent = patientData.age;
+            document.getElementById('patient-phone').textContent = patientData.phone;
+            document.getElementById('patient-email').textContent = patientData.email;
+        }
+
+        function loadExistingProntuario() {
+            // Preencher campos do prontuário se existir
+            if (patientData.queixa) {
+                document.getElementById('queixa').value = patientData.queixa;
+            }
+            if (patientData.exame_fisico) {
+                document.getElementById('exame-fisico').value = patientData.exame_fisico;
+            }
+            if (patientData.hipotese_diagnostica) {
+                document.getElementById('diagnostico').value = patientData.hipotese_diagnostica;
+            }
+            if (patientData.conduta) {
+                document.getElementById('conduta').value = patientData.conduta;
+            }
+            if (patientData.observacoes) {
+                document.getElementById('observacoes').value = patientData.observacoes;
+            }
+        }
+
+        // Funções de videochamada
+        function startVideoCall() {
+            isCallActive = true;
+            callStartTime = new Date();
+            
+            // Atualizar interface
+            document.getElementById('video-placeholder').innerHTML = `
+                <i class="fas fa-video" style="color: #28A745;"></i>
+                <h3 style="color: #28A745;">Chamada Ativa</h3>
+                <p>Conectado com ${patientData.name}</p>
+            `;
+            
+            document.getElementById('call-timer').style.display = 'block';
+            document.getElementById('start-btn').disabled = true;
+            document.getElementById('mute-btn').disabled = false;
+            document.getElementById('end-btn').disabled = false;
+            
+            // Iniciar timer
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Notificação
+            showNotification('Videoconsulta iniciada com sucesso!', 'success');
+            
+            console.log(`🎥 Videoconsulta iniciada com ${patientData.name}`);
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const muteBtn = document.getElementById('mute-btn');
+            
+            if (isMuted) {
+                muteBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Ativo';
+                muteBtn.style.background = 'linear-gradient(135deg, #DC3545, #C82333)';
+                showNotification('Microfone silenciado', 'warning');
+            } else {
+                muteBtn.innerHTML = '<i class="fas fa-microphone"></i> Mudo';
+                muteBtn.style.background = 'linear-gradient(135deg, #6C757D, #495057)';
+                showNotification('Microfone ativado', 'success');
+            }
+        }
+
+        function endCall() {
+            isCallActive = false;
+            
+            // Parar timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            // Resetar interface
+            document.getElementById('video-placeholder').innerHTML = `
+                <i class="fas fa-video-slash"></i>
+                <h3>Chamada encerrada</h3>
+                <p>Consulta finalizada às ${new Date().toLocaleTimeString()}</p>
+            `;
+            
+            document.getElementById('call-timer').style.display = 'none';
+            document.getElementById('start-btn').disabled = false;
+            document.getElementById('mute-btn').disabled = true;
+            document.getElementById('end-btn').disabled = true;
+            
+            // Resetar botão mudo
+            const muteBtn = document.getElementById('mute-btn');
+            muteBtn.innerHTML = '<i class="fas fa-microphone"></i> Mudo';
+            muteBtn.style.background = 'linear-gradient(135deg, #6C757D, #495057)';
+            isMuted = false;
+            
+            showNotification('Videoconsulta encerrada', 'info');
+            
+            console.log('🔚 Videoconsulta encerrada');
+        }
+
+        function updateTimer() {
+            if (!callStartTime) return;
+            
+            const elapsed = new Date() - callStartTime;
+            const hours = Math.floor(elapsed / 3600000);
+            const minutes = Math.floor((elapsed % 3600000) / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('call-timer').innerHTML = `<i class="fas fa-clock"></i> ${timeString}`;
+        }
+
+        // Funções do prontuário
+        async function salvarProntuario() {
+            const queixa = document.getElementById('queixa').value;
+            const exame_fisico = document.getElementById('exame-fisico').value;
+            const hipotese_diagnostica = document.getElementById('diagnostico').value;
+            const conduta = document.getElementById('conduta').value;
+            const observacoes = document.getElementById('observacoes').value;
+            
+            if (!queixa && !hipotese_diagnostica && !conduta) {
+                showNotification('Preencha pelo menos um campo do prontuário', 'warning');
+                return;
+            }
+            
+            if (!patientData.id) {
+                showNotification('Dados do paciente não carregados', 'error');
+                return;
+            }
+            
+            const saveBtn = document.querySelector('.save-btn');
+            const originalText = saveBtn.innerHTML;
+            
+            saveBtn.innerHTML = '<div class="loading"></div> Salvando...';
+            saveBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/prontuarios', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        paciente_id: patientData.id,
+                        queixa,
+                        exame_fisico,
+                        hipotese_diagnostica,
+                        conduta,
+                        observacoes
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar prontuário');
+                }
+                
+                const result = await response.json();
+                
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Salvo com Sucesso!';
+                saveBtn.style.background = 'linear-gradient(135deg, #28A745, #1E7E34)';
+                
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                    saveBtn.style.background = 'linear-gradient(135deg, #007BFF, #0056B3)';
+                }, 2000);
+                
+                showNotification('Prontuário salvo no banco PostgreSQL!', 'success');
+                console.log('💾 Prontuário salvo no banco de dados:', result);
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar prontuário:', error);
+                
+                saveBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro ao Salvar';
+                saveBtn.style.background = 'linear-gradient(135deg, #DC3545, #B02A37)';
+                
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                    saveBtn.style.background = 'linear-gradient(135deg, #007BFF, #0056B3)';
+                }, 2000);
+                
+                showNotification('Erro ao salvar prontuário', 'error');
+            }
+        }
+
+        function solicitarExame() {
+            showNotification('Abrindo sistema de solicitação de exames...', 'info');
+            console.log('🧪 Redirecionando para solicitação de exames');
+        }
+
+        function agendarRetorno() {
+            showNotification('Abrindo agenda para retorno...', 'info');
+            setTimeout(() => {
+                window.location.href = '/agenda-medica.html';
+            }, 1000);
+        }
+
+        // Sistema de notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const colors = {
+                success: '#28A745',
+                warning: '#FFC107',
+                error: '#DC3545',
+                info: '#007BFF'
+            };
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background: ${colors[type] || colors.info};
+                color: white;
+                border-radius: 10px;
+                z-index: 1000;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                animation: slideInRight 0.3s ease-out;
+                font-weight: 500;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Atalhos de teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        salvarProntuario();
+                        break;
+                    case 'Enter':
+                        if (!isCallActive) {
+                            e.preventDefault();
+                            startVideoCall();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Animações CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

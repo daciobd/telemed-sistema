@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gerador de PDF - TeleMed Sistema</title>
+    
+    <!-- Bibliotecas para PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        /* CSS RESPONSIVO GLOBAL AVANÇADO */
+        *{box-sizing:border-box;}html{scroll-behavior:smooth;}body{margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}.container{max-width:1200px;margin:0 auto;padding:0 16px;}.cards-grid,.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;padding:20px 0;}@media (max-width:480px){.container{padding:0 12px;}.cards-grid,.grid{grid-template-columns:1fr;gap:16px;padding:16px 0;}.card,.ai-card,.pdf-card,.protocol-card,.symptom-card{padding:16px;margin:0;border-radius:12px;min-height:auto;}.card h3,.ai-card h3{font-size:1.1em;margin-bottom:8px;}.card p,.ai-card p{font-size:0.9em;line-height:1.4;}.header h1{font-size:1.8em !important;text-align:center;margin-bottom:10px;}.header p{font-size:1em !important;text-align:center;}.btn,button,.ai-btn,.pdf-btn,.analyze-btn,.generate-btn{padding:14px 20px !important;font-size:16px !important;min-height:44px !important;border-radius:12px !important;width:100% !important;margin:8px 0 !important;box-sizing:border-box;}.form-section,.question-group{padding:20px 16px !important;}.input-group input,.input-group select,.input-group textarea{font-size:16px !important;padding:12px 16px !important;border-radius:8px !important;width:100% !important;}.input-row,.form-row{grid-template-columns:1fr !important;gap:16px !important;}.breadcrumb{font-size:12px !important;flex-wrap:wrap;gap:4px;}.breadcrumb-item{margin:2px 0;}.breadcrumb-separator{margin:0 4px;}.stats-grid{grid-template-columns:repeat(2,1fr) !important;gap:12px !important;}.stat-card{padding:16px !important;text-align:center;}.modal{margin:20px !important;padding:20px !important;max-width:none !important;width:calc(100% - 40px) !important;max-height:80vh !important;overflow-y:auto;}.modal-actions{flex-direction:column-reverse !important;gap:8px !important;}.modal-actions button{width:100% !important;min-height:44px !important;}.notifications-container{right:10px !important;left:10px !important;top:10px !important;}.notification{max-width:none !important;transform:translateY(-100px) !important;}.notification.show{transform:translateY(0) !important;}}@media (min-width:481px) and (max-width:768px){.cards-grid,.grid{grid-template-columns:repeat(2,1fr);gap:18px;}.card,.ai-card,.pdf-card{padding:20px;border-radius:14px;}.header h1{font-size:2.2em !important;}.stats-grid{grid-template-columns:repeat(4,1fr) !important;gap:16px !important;}.input-row,.form-row{grid-template-columns:repeat(2,1fr) !important;gap:20px !important;}}@media (min-width:769px) and (max-width:1024px){.cards-grid,.grid{grid-template-columns:repeat(3,1fr);gap:20px;}.container{padding:0 24px;}.input-row,.form-row{grid-template-columns:repeat(2,1fr) !important;gap:24px !important;}}@media (min-width:1025px) and (max-width:1200px){.cards-grid,.grid{grid-template-columns:repeat(4,1fr);gap:24px;}}@media (min-width:1201px){.cards-grid,.grid{grid-template-columns:repeat(4,1fr);gap:30px;}.container{padding:0 40px;}}@media (max-height:500px) and (orientation:landscape){.header{padding:15px !important;}.header h1{font-size:1.6em !important;margin-bottom:5px !important;}.header p{font-size:0.9em !important;}.cards-grid,.grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr)) !important;gap:16px !important;padding:16px 0 !important;}.card,.ai-card{padding:12px !important;min-height:100px !important;}.form-section{padding:20px 16px !important;}}.touch-target{min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;}@media (max-width:768px){.table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;}table{min-width:600px;}.mobile-stack{display:block !important;width:100%;}.mobile-stack tr{display:block !important;border:1px solid #ddd;margin-bottom:10px;border-radius:8px;padding:10px;}.mobile-stack td{display:block !important;text-align:left !important;padding:5px 0 !important;border:none !important;}.mobile-stack td::before{content:attr(data-label) ":";font-weight:bold;color:#333;}}@media (max-width:768px){.fab{bottom:20px !important;right:20px !important;width:48px !important;height:48px !important;font-size:20px !important;}}.card,.ai-card,.pdf-card{will-change:transform;backface-visibility:hidden;perspective:1000px;}@media (prefers-color-scheme:dark){.card,.ai-card,.pdf-card{background:#2d3748 !important;color:#e2e8f0 !important;border-color:#4a5568 !important;}.notification{background:#2d3748 !important;color:#e2e8f0 !important;}.modal{background:#2d3748 !important;color:#e2e8f0 !important;}}@media (prefers-reduced-motion:reduce){*{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}}@media print{.fab,.notification,.nav-menu,.modal-overlay,.loading-overlay{display:none !important;}.card{break-inside:avoid;margin-bottom:20px;}body{font-size:12pt;line-height:1.4;}}
+
+        /* NOTIFICAÇÕES MÉDICAS AVANÇADAS */
+        .notifications-container{position:fixed;top:20px;right:20px;z-index:10000;pointer-events:none}
+        .notification{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);border-left:4px solid #4facfe;transform:translateX(400px);transition:.4s cubic-bezier(.4,0,.2,1);pointer-events:auto;max-width:320px;font-family:'Segoe UI',sans-serif;position:relative;overflow:hidden}
+        .notification.show{transform:translateX(0)}
+        .notification.success{border-left-color:#48bb78}
+        .notification.error{border-left-color:#f56565}
+        .notification.warning{border-left-color:#ed8936}
+        .notification.info{border-left-color:#4facfe}
+        .notification.medical{border-left-color:#667eea}
+        .notification-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+        .notification-title{display:flex;align-items:center;font-weight:600;font-size:14px;color:#2d3748}
+        .notification-icon{margin-right:8px;font-size:16px}
+        .notification-close{background:none;border:none;font-size:18px;color:#a0aec0;cursor:pointer;padding:0;width:20px;height:20px}
+        .notification-message{font-size:13px;color:#4a5568;line-height:1.4;margin-bottom:10px}
+        .notification-progress{position:absolute;bottom:0;left:0;height:3px;width:100%;background:rgba(79,172,254,0.1)}
+        .notification-progress-bar{height:100%;background:rgba(79,172,254,0.5);animation:progress-countdown linear;transform-origin:left}
+        @keyframes progress-countdown{from{width:100%}to{width:0%}}
+        @media(max-width:768px){.notifications-container{right:10px;left:10px;top:10px}.notification{max-width:none;transform:translateY(-100px)}.notification.show{transform:translateY(0)}}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        /* BREADCRUMBS PROFISSIONAIS */
+        .breadcrumb-container {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e5e9;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item a {
+            color: #4facfe;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item a:hover {
+            background: rgba(79, 172, 254, 0.1);
+            color: #2c5282;
+            transform: translateY(-1px);
+        }
+
+        .breadcrumb-item.active {
+            color: #2d3748;
+            font-weight: 600;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .breadcrumb-separator {
+            margin: 0 8px;
+            color: #cbd5e0;
+            font-size: 16px;
+        }
+
+        .breadcrumb-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb {
+                font-size: 12px;
+                flex-wrap: wrap;
+            }
+            
+            .breadcrumb-item {
+                margin: 2px 0;
+            }
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .pdf-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9ff;
+        }
+
+        .pdf-type-card {
+            background: white;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pdf-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .pdf-type-card.active {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .pdf-type-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .pdf-type-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .pdf-type-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .form-section {
+            padding: 40px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .form-group h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .generate-section {
+            padding: 30px;
+            background: #f0f2ff;
+            text-align: center;
+        }
+
+        .extra-functions {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            font-size: 1.2em;
+            padding: 15px 40px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .pdf-types {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .extra-functions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* MEDICAL LOADER - SISTEMA DE CARREGAMENTO MÉDICO */
+        .medical-loader{display:inline-block;width:40px;height:40px;border:3px solid #f3f4f6;border-top:3px solid #4facfe;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.95);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;backdrop-filter:blur(5px)}.loading-content{text-align:center;color:#4facfe;font-weight:600;font-size:16px}.loading-subtitle{color:#888;font-size:14px;margin-top:10px;font-weight:400}.progress-medical{width:300px;height:8px;background:#f3f4f6;border-radius:4px;margin:20px 0;overflow:hidden}.progress-bar-medical{height:100%;background:linear-gradient(90deg,#4facfe,#00f2fe);border-radius:4px;transition:width .3s ease}.medical-success{color:#10b981;font-weight:600}.medical-error{color:#ef4444;font-weight:600}.pulse-medical{animation:pulse-medical 2s infinite}@keyframes pulse-medical{0%,100%{opacity:1}50%{opacity:.5}}
+    </style>
+</head>
+<body>
+    <!-- BREADCRUMB PARA PDF GENERATOR -->
+    <div class="breadcrumb-container">
+        <nav class="breadcrumb">
+            <div class="breadcrumb-item">
+                <a href="/" onclick="window.history.back(); return false;">
+                    <span class="breadcrumb-icon">🏠</span>
+                    Dashboard
+                </a>
+            </div>
+            <span class="breadcrumb-separator">›</span>
+            <div class="breadcrumb-item active">
+                <span class="breadcrumb-icon">📄</span>
+                Gerador de PDF
+            </div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+        <div class="header">
+            <a href="javascript:history.back()" class="back-btn">← Voltar</a>
+            <h1>📄 Gerador de PDF</h1>
+            <p>Sistema completo de geração de documentos médicos</p>
+        </div>
+
+        <!-- Seleção do Tipo de PDF -->
+        <div class="pdf-types" id="pdfTypes">
+            <div class="pdf-type-card" onclick="selectPdfType('consulta')">
+                <div class="pdf-type-icon">🩺</div>
+                <div class="pdf-type-title">Relatório de Consulta</div>
+                <div class="pdf-type-desc">Prontuário completo da consulta médica</div>
+            </div>
+
+            <div class="pdf-type-card" onclick="selectPdfType('exame')">
+                <div class="pdf-type-icon">🔬</div>
+                <div class="pdf-type-title">Laudo de Exame</div>
+                <div class="pdf-type-desc">Resultado e interpretação de exames</div>
+            </div>
+
+            <div class="pdf-type-card" onclick="selectPdfType('receita')">
+                <div class="pdf-type-icon">💊</div>
+                <div class="pdf-type-title">Receita Médica</div>
+                <div class="pdf-type-desc">Prescrição de medicamentos</div>
+            </div>
+
+            <div class="pdf-type-card" onclick="selectPdfType('atestado')">
+                <div class="pdf-type-icon">📋</div>
+                <div class="pdf-type-title">Atestado Médico</div>
+                <div class="pdf-type-desc">Atestado de saúde ou incapacidade</div>
+            </div>
+        </div>
+
+        <!-- Formulário para Relatório de Consulta -->
+        <div class="form-section" id="consultaForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="pacienteNome">Nome Completo *</label>
+                        <input type="text" id="pacienteNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="pacienteCpf">CPF</label>
+                        <input type="text" id="pacienteCpf" placeholder="000.000.000-00">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="pacienteIdade">Idade</label>
+                        <input type="number" id="pacienteIdade" min="0" max="120">
+                    </div>
+                    <div class="input-group">
+                        <label for="pacienteSexo">Sexo</label>
+                        <select id="pacienteSexo">
+                            <option value="">Selecione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h3>👨‍⚕️ Dados do Médico</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="medicoNome">Nome do Médico *</label>
+                        <input type="text" id="medicoNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="medicoCrm">CRM</label>
+                        <input type="text" id="medicoCrm" placeholder="12345/UF">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="medicoEspecialidade">Especialidade</label>
+                        <input type="text" id="medicoEspecialidade">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h3>📋 Informações da Consulta</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="dataConsulta">Data da Consulta *</label>
+                        <input type="date" id="dataConsulta" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="horaConsulta">Horário</label>
+                        <input type="time" id="horaConsulta">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="sintomas">Sintomas Relatados</label>
+                    <textarea id="sintomas" placeholder="Descreva os sintomas apresentados pelo paciente..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="diagnostico">Diagnóstico *</label>
+                    <textarea id="diagnostico" required placeholder="Diagnóstico médico..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="tratamento">Tratamento Prescrito</label>
+                    <textarea id="tratamento" placeholder="Medicamentos e orientações..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="observacoes">Observações Adicionais</label>
+                    <textarea id="observacoes" placeholder="Observações e recomendações..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário para Laudo de Exame -->
+        <div class="form-section" id="exameForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="examePacienteNome">Nome Completo *</label>
+                        <input type="text" id="examePacienteNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="examePacienteCpf">CPF</label>
+                        <input type="text" id="examePacienteCpf" placeholder="000.000.000-00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h3>🔬 Dados do Exame</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="tipoExame">Tipo de Exame *</label>
+                        <select id="tipoExame" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="Hemograma">Hemograma</option>
+                            <option value="Raio-X">Raio-X</option>
+                            <option value="Ultrassom">Ultrassom</option>
+                            <option value="Tomografia">Tomografia</option>
+                            <option value="Ressonância">Ressonância</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="dataExame">Data do Exame *</label>
+                        <input type="date" id="dataExame" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="resultadoExame">Resultado do Exame *</label>
+                    <textarea id="resultadoExame" required placeholder="Descreva os resultados encontrados..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="conclusaoExame">Conclusão/Interpretação</label>
+                    <textarea id="conclusaoExame" placeholder="Interpretação médica dos resultados..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário para Receita Médica -->
+        <div class="form-section" id="receitaForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="receitaPacienteNome">Nome Completo *</label>
+                        <input type="text" id="receitaPacienteNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="receitaPacienteIdade">Idade</label>
+                        <input type="number" id="receitaPacienteIdade" min="0" max="120">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h3>💊 Prescrição</h3>
+                <div class="input-group">
+                    <label for="medicamentos">Medicamentos *</label>
+                    <textarea id="medicamentos" required placeholder="Liste os medicamentos com dosagem e posologia..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="orientacoes">Orientações de Uso</label>
+                    <textarea id="orientacoes" placeholder="Instruções especiais para o paciente..."></textarea>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="validadeReceita">Validade (dias)</label>
+                        <input type="number" id="validadeReceita" value="30" min="1" max="365">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulário para Atestado Médico -->
+        <div class="form-section" id="atestadoForm">
+            <div class="form-group">
+                <h3>👤 Dados do Paciente</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="atestadoPacienteNome">Nome Completo *</label>
+                        <input type="text" id="atestadoPacienteNome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="atestadoPacienteCpf">CPF</label>
+                        <input type="text" id="atestadoPacienteCpf" placeholder="000.000.000-00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h3>📋 Dados do Atestado</h3>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="tipoAtestado">Tipo de Atestado *</label>
+                        <select id="tipoAtestado" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="Incapacidade Temporária">Incapacidade Temporária</option>
+                            <option value="Aptidão Física">Aptidão Física</option>
+                            <option value="Comparecimento">Comparecimento</option>
+                            <option value="Saúde Ocupacional">Saúde Ocupacional</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="diasAfastamento">Dias de Afastamento</label>
+                        <input type="number" id="diasAfastamento" min="1" max="365">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="motivoAtestado">Motivo/Observações *</label>
+                    <textarea id="motivoAtestado" required placeholder="Motivo médico para o atestado..."></textarea>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="dataInicioAfastamento">Data de Início</label>
+                        <input type="date" id="dataInicioAfastamento">
+                    </div>
+                    <div class="input-group">
+                        <label for="dataFimAfastamento">Data de Fim</label>
+                        <input type="date" id="dataFimAfastamento">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Geração -->
+        <div class="generate-section" id="generateSection" style="display: none;">
+            <div class="extra-functions">
+                <button onclick="previewPDF()" class="action-btn" style="background: #17a2b8;">
+                    👁️ Preview
+                </button>
+                
+                <button onclick="showHistory()" class="action-btn" style="background: #6c757d;">
+                    📋 Histórico
+                </button>
+                
+                <button onclick="loadTemplate(selectedPdfType)" class="action-btn" style="background: #28a745;">
+                    📝 Template
+                </button>
+            </div>
+
+            <button class="generate-btn btn-animated ripple" id="generateBtn" onclick="generatePDFWithLoading()">
+                📄 Gerar PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- COMPONENTES MEDICAL LOADING -->
+    <div id="loadingOverlay" class="loading-overlay" style="display:none">
+        <div class="loading-content">
+            <div class="medical-loader"></div>
+            <div class="loading-text">Carregando...</div>
+        </div>
+    </div>
+
+    <div class="skeleton-card" style="display:none" id="skeletonLoading">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text short"></div>
+        <div class="skeleton skeleton-text"></div>
+    </div>
+
+    <!-- SISTEMA DE NOTIFICAÇÕES MÉDICAS AVANÇADO -->
+    <div class="notifications-container" id="notificationsContainer"></div>
+
+    <div class="progress-bar" style="display:none" id="progressBar">
+        <div class="progress-fill"></div>
+    </div>
+
+    <script>
+        let selectedPdfType = null;
+        const { jsPDF } = window.jspdf;
+
+        // Templates pré-definidos
+        const templates = {
+            consulta: {
+                diagnostico: "Consulta de rotina - Paciente sem queixas específicas",
+                sintomas: "Paciente refere estar se sentindo bem",
+                tratamento: "Manter cuidados habituais, retorno em 6 meses",
+                observacoes: "Paciente orientado sobre prevenção"
+            },
+            receita: {
+                medicamentos: "1. Paracetamol 500mg - 1 comprimido de 6/6h se dor ou febre",
+                orientacoes: "Tomar os medicamentos conforme prescrição médica",
+                validadeReceita: "30"
+            },
+            exame: {
+                resultadoExame: "Exame dentro dos parâmetros normais",
+                conclusaoExame: "Resultado normal, sem alterações significativas"
+            },
+            atestado: {
+                motivoAtestado: "Paciente apto para atividades normais",
+                diasAfastamento: "0"
+            }
+        };
+
+        // Selecionar tipo de PDF
+        function selectPdfType(type) {
+            selectedPdfType = type;
+            
+            // Remover active de todos os cards
+            document.querySelectorAll('.pdf-type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Adicionar active ao card selecionado
+            event.target.closest('.pdf-type-card').classList.add('active');
+            
+            // Esconder todos os formulários
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar formulário correspondente
+            document.getElementById(type + 'Form').classList.add('active');
+            document.getElementById('generateSection').style.display = 'block';
+            
+            // Rolar para o formulário
+            document.getElementById(type + 'Form').scrollIntoView({ behavior: 'smooth' });
+            
+            // Carregar dados salvos se houver
+            loadFormData();
+            setupAutoSave();
+        }
+
+        // Validação de formulário
+        function validateForm() {
+            const activeForm = document.querySelector('.form-section.active');
+            const requiredFields = activeForm.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#dc3545';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e1e5e9';
+                }
+            });
+            
+            return isValid;
+        }
+
+        // FUNÇÕES MEDICAL LOADING
+        function showLoading(text = "Carregando...") {
+            let overlay = document.getElementById("loadingOverlay");
+            overlay.querySelector(".loading-text").textContent = text;
+            overlay.style.display = "flex";
+        }
+
+        function hideLoading() {
+            document.getElementById("loadingOverlay").style.display = "none";
+        }
+
+        function showNotification(title, message, type = "success", duration = 4000) {
+            const container = document.getElementById("notificationsContainer");
+            const notificationId = "notification-" + Date.now();
+            
+            const notification = document.createElement("div");
+            notification.className = `notification ${type}`;
+            notification.id = notificationId;
+            
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <div class="notification-icon">${getNotificationIcon(type)}</div>
+                    <div class="notification-title">${title}</div>
+                    <button class="notification-close" onclick="removeNotification('${notificationId}')">&times;</button>
+                </div>
+                <div class="notification-message">${message}</div>
+                <div class="notification-progress">
+                    <div class="notification-progress-bar" style="animation-duration: ${duration}ms;"></div>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => notification.classList.add("show"), 100);
+            
+            // Auto remove
+            setTimeout(() => removeNotification(notificationId), duration);
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                success: "✅",
+                error: "❌", 
+                warning: "⚠️",
+                info: "ℹ️",
+                medical: "🩺"
+            };
+            return icons[type] || icons.info;
+        }
+
+        function removeNotification(id) {
+            const notification = document.getElementById(id);
+            if (notification) {
+                notification.classList.remove("show");
+                setTimeout(() => notification.remove(), 400);
+            }
+        }
+
+        function showProgress() {
+            let progressBar = document.getElementById("progressBar");
+            progressBar.style.display = "block";
+            setTimeout(() => {
+                progressBar.style.display = "none";
+            }, 2000);
+        }
+
+        function generatePDFWithLoading() {
+            showLoading("Gerando PDF médico...");
+            showProgress();
+            showNotification("Processando", "Iniciando geração do PDF médico...", "info", 2000);
+            
+            setTimeout(() => {
+                generatePDF();
+                hideLoading();
+                showNotification("PDF Gerado", "Documento médico criado com sucesso!", "medical", 5000);
+            }, 2000);
+        }
+
+        // Gerar PDF
+        function generatePDF() {
+            if (!validateForm()) {
+                alert('Por favor, preencha todos os campos obrigatórios marcados com *');
+                return;
+            }
+
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.width;
+            let yPos = 20;
+
+            // Cabeçalho
+            doc.setFontSize(20);
+            doc.setTextColor(102, 126, 234);
+            doc.text('TeleMed Sistema', pageWidth/2, yPos, { align: 'center' });
+            
+            yPos += 10;
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            
+            switch(selectedPdfType) {
+                case 'consulta':
+                    doc.text('RELATÓRIO DE CONSULTA MÉDICA', pageWidth/2, yPos, { align: 'center' });
+                    yPos += 20;
+                    
+                    // Dados do paciente
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('DADOS DO PACIENTE:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Nome: ${document.getElementById('pacienteNome').value}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`CPF: ${document.getElementById('pacienteCpf').value || 'Não informado'}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Idade: ${document.getElementById('pacienteIdade').value || 'Não informada'} anos`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Sexo: ${document.getElementById('pacienteSexo').value || 'Não informado'}`, 20, yPos);
+                    yPos += 15;
+                    
+                    // Dados do médico
+                    doc.setFont(undefined, 'bold');
+                    doc.text('DADOS DO MÉDICO:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Médico: ${document.getElementById('medicoNome').value}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`CRM: ${document.getElementById('medicoCrm').value || 'Não informado'}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Especialidade: ${document.getElementById('medicoEspecialidade').value || 'Não informada'}`, 20, yPos);
+                    yPos += 15;
+                    
+                    // Dados da consulta
+                    doc.setFont(undefined, 'bold');
+                    doc.text('DADOS DA CONSULTA:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Data: ${document.getElementById('dataConsulta').value}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Horário: ${document.getElementById('horaConsulta').value || 'Não informado'}`, 20, yPos);
+                    yPos += 12;
+                    
+                    // Sintomas
+                    if (document.getElementById('sintomas').value) {
+                        doc.setFont(undefined, 'bold');
+                        doc.text('SINTOMAS RELATADOS:', 20, yPos);
+                        yPos += 8;
+                        doc.setFont(undefined, 'normal');
+                        const sintomas = doc.splitTextToSize(document.getElementById('sintomas').value, 170);
+                        doc.text(sintomas, 20, yPos);
+                        yPos += (sintomas.length * 6) + 6;
+                    }
+                    
+                    // Diagnóstico
+                    doc.setFont(undefined, 'bold');
+                    doc.text('DIAGNÓSTICO:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    const diagnostico = doc.splitTextToSize(document.getElementById('diagnostico').value, 170);
+                    doc.text(diagnostico, 20, yPos);
+                    yPos += (diagnostico.length * 6) + 6;
+                    
+                    // Tratamento
+                    if (document.getElementById('tratamento').value) {
+                        doc.setFont(undefined, 'bold');
+                        doc.text('TRATAMENTO PRESCRITO:', 20, yPos);
+                        yPos += 8;
+                        doc.setFont(undefined, 'normal');
+                        const tratamento = doc.splitTextToSize(document.getElementById('tratamento').value, 170);
+                        doc.text(tratamento, 20, yPos);
+                        yPos += (tratamento.length * 6) + 6;
+                    }
+                    
+                    // Observações
+                    if (document.getElementById('observacoes').value) {
+                        doc.setFont(undefined, 'bold');
+                        doc.text('OBSERVAÇÕES:', 20, yPos);
+                        yPos += 8;
+                        doc.setFont(undefined, 'normal');
+                        const observacoes = doc.splitTextToSize(document.getElementById('observacoes').value, 170);
+                        doc.text(observacoes, 20, yPos);
+                        yPos += (observacoes.length * 6) + 6;
+                    }
+                    break;
+
+                case 'exame':
+                    doc.text('LAUDO DE EXAME MÉDICO', pageWidth/2, yPos, { align: 'center' });
+                    yPos += 20;
+                    
+                    // Dados do paciente
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('DADOS DO PACIENTE:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Nome: ${document.getElementById('examePacienteNome').value}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`CPF: ${document.getElementById('examePacienteCpf').value || 'Não informado'}`, 20, yPos);
+                    yPos += 15;
+                    
+                    // Dados do exame
+                    doc.setFont(undefined, 'bold');
+                    doc.text('DADOS DO EXAME:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Tipo: ${document.getElementById('tipoExame').value}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Data: ${document.getElementById('dataExame').value}`, 20, yPos);
+                    yPos += 15;
+                    
+                    // Resultado
+                    doc.setFont(undefined, 'bold');
+                    doc.text('RESULTADO:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    const resultado = doc.splitTextToSize(document.getElementById('resultadoExame').value, 170);
+                    doc.text(resultado, 20, yPos);
+                    yPos += (resultado.length * 6) + 6;
+                    
+                    // Conclusão
+                    if (document.getElementById('conclusaoExame').value) {
+                        doc.setFont(undefined, 'bold');
+                        doc.text('CONCLUSÃO:', 20, yPos);
+                        yPos += 8;
+                        doc.setFont(undefined, 'normal');
+                        const conclusao = doc.splitTextToSize(document.getElementById('conclusaoExame').value, 170);
+                        doc.text(conclusao, 20, yPos);
+                        yPos += (conclusao.length * 6) + 6;
+                    }
+                    break;
+
+                case 'receita':
+                    doc.text('RECEITA MÉDICA', pageWidth/2, yPos, { align: 'center' });
+                    yPos += 20;
+                    
+                    // Dados do paciente
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('PACIENTE:', 20, yPos);
+                    yPos += 8;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`Nome: ${document.getElementById('receitaPacienteNome').value}`, 20, yPos);
+                    yPos += 6;
+                    doc.text(`Idade: ${document.getElementById('receitaPacienteIdade').value || 'Não informada'} anos`, 20, yPos);
+                    yPos += 15;
+                    
+                    // Prescrição
+                    doc.setFont(undefined, 'bold');
+                    doc.text('USO INTERNO:', 20, yPos);
+                    yPos += 10;
+                    doc.setFont(undefined, 'normal');
+                    const medicamentos = doc.splitTextToSize(document.getElementById('medicamentos').value, 170);
+                    doc.text(medicamentos, 20, yPos);
+                    yPos += (medicamentos.length * 6) + 10;
+                    
+                    // Orientações
+                    if (document.getElementById('orientacoes').value) {
+                        doc.setFont(undefined, 'bold');
+                        doc.text('ORIENTAÇÕES:', 20, yPos);
+                        yPos += 8;
+                        doc.setFont(undefined, 'normal');
+                        const orientacoes = doc.splitTextToSize(document.getElementById('orientacoes').value, 170);
+                        doc.text(orientacoes, 20, yPos);
+                        yPos += (orientacoes.length * 6) + 6;
+                    }
+                    
+                    // Validade
+                    yPos += 10;
+                    doc.setFontSize(10);
+                    doc.text(`Válida por ${document.getElementById('validadeReceita').value || '30'} dias a partir da data de emissão.`, 20, yPos);
+                    break;
+
+                case 'atestado':
+                    doc.text('ATESTADO MÉDICO', pageWidth/2, yPos, { align: 'center' });
+                    yPos += 30;
+                    
+                    doc.setFontSize(12);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('Atesto para os devidos fins que o(a) Sr(a):', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text(document.getElementById('atestadoPacienteNome').value.toUpperCase(), 20, yPos);
+                    yPos += 10;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`CPF: ${document.getElementById('atestadoPacienteCpf').value || 'Não informado'}`, 20, yPos);
+                    yPos += 20;
+                    
+                    // Motivo
+                    const motivo = doc.splitTextToSize(document.getElementById('motivoAtestado').value, 170);
+                    doc.text(motivo, 20, yPos);
+                    yPos += (motivo.length * 6) + 15;
+                    
+                    // Período de afastamento
+                    const diasAfastamento = document.getElementById('diasAfastamento').value;
+                    if (diasAfastamento && diasAfastamento > 0) {
+                        doc.text(`Necessitando de afastamento de suas atividades por ${diasAfastamento} dias.`, 20, yPos);
+                        yPos += 10;
+                        
+                        const dataInicio = document.getElementById('dataInicioAfastamento').value;
+                        const dataFim = document.getElementById('dataFimAfastamento').value;
+                        if (dataInicio && dataFim) {
+                            doc.text(`Período: ${dataInicio} a ${dataFim}`, 20, yPos);
+                            yPos += 15;
+                        }
+                    }
+                    
+                    yPos += 20;
+                    doc.text(`${new Date().toLocaleDateString('pt-BR')}`, 20, yPos);
+                    break;
+            }
+
+            // Rodapé
+            yPos += 30;
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Dr(a). ${document.getElementById('medicoNome').value || document.getElementById('examePacienteNome')?.closest('.form-section').querySelector('[id*="medicoNome"]')?.value || 'Médico Responsável'}`, 20, yPos);
+            yPos += 6;
+            doc.setFont(undefined, 'normal');
+            doc.text(`CRM: ${document.getElementById('medicoCrm').value || 'Não informado'}`, 20, yPos);
+            
+            // Salvar no histórico
+            saveToHistory({
+                fileName: `${selectedPdfType}_${new Date().toISOString().split('T')[0]}.pdf`
+            });
+            
+            // Download do PDF
+            const fileName = `${selectedPdfType}_${document.querySelector('.form-section.active input[required]').value.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(fileName);
+            
+            alert('PDF gerado com sucesso!');
+        }
+
+        // Preview do PDF
+        function previewPDF() {
+            if (!validateForm()) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 1000; display: flex;
+                align-items: center; justify-content: center;
+            `;
+            
+            const preview = document.createElement('div');
+            preview.style.cssText = `
+                background: white; padding: 20px; border-radius: 10px;
+                max-width: 600px; max-height: 80vh; overflow-y: auto;
+            `;
+            
+            const pacienteNome = document.querySelector('.form-section.active input[required]').value;
+            const medicoNome = document.getElementById('medicoNome')?.value || 'Médico Responsável';
+            
+            preview.innerHTML = `
+                <h3>Preview do PDF</h3>
+                <p><strong>Tipo:</strong> ${selectedPdfType.charAt(0).toUpperCase() + selectedPdfType.slice(1)}</p>
+                <p><strong>Paciente:</strong> ${pacienteNome}</p>
+                <p><strong>Médico:</strong> ${medicoNome}</p>
+                <p><strong>Data:</strong> ${new Date().toLocaleDateString('pt-BR')}</p>
+                <hr style="margin: 15px 0;">
+                <div style="margin: 20px 0;">
+                    <button onclick="this.closest('[style*=fixed]').remove(); generatePDF();" 
+                            style="background: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-right: 10px;">
+                        ✅ Confirmar e Gerar
+                    </button>
+                    <button onclick="this.closest('[style*=fixed]').remove();" 
+                            style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px;">
+                        ❌ Cancelar
+                    </button>
+                </div>
+            `;
+            
+            modal.appendChild(preview);
+            document.body.appendChild(modal);
+        }
+
+        // Salvar dados do formulário
+        function saveFormData() {
+            const formData = {};
+            const inputs = document.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                if (input.id) {
+                    formData[input.id] = input.value;
+                }
+            });
+            
+            localStorage.setItem('pdfFormData', JSON.stringify(formData));
+        }
+
+        // Carregar dados salvos
+        function loadFormData() {
+            const savedData = localStorage.getItem('pdfFormData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                Object.keys(data).forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.value = data[fieldId];
+                    }
+                });
+            }
+        }
+
+        // Auto-save
+        function setupAutoSave() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('change', saveFormData);
+                input.addEventListener('input', saveFormData);
+            });
+        }
+
+        // Salvar no histórico
+        function saveToHistory(pdfInfo) {
+            let history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+            
+            const newEntry = {
+                id: Date.now(),
+                tipo: selectedPdfType,
+                paciente: document.querySelector('.form-section.active input[required]').value,
+                medico: document.getElementById('medicoNome')?.value || 'Médico Responsável',
+                data: new Date().toISOString(),
+                ...pdfInfo
+            };
+            
+            history.unshift(newEntry);
+            
+            if (history.length > 50) {
+                history = history.slice(0, 50);
+            }
+            
+            localStorage.setItem('pdfHistory', JSON.stringify(history));
+        }
+
+        // Mostrar histórico
+        function showHistory() {
+            const history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+            
+            if (history.length === 0) {
+                alert('Nenhum PDF gerado ainda.');
+                return;
+            }
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 1000; display: flex;
+                align-items: center; justify-content: center;
+            `;
+            
+            const historyDiv = document.createElement('div');
+            historyDiv.style.cssText = `
+                background: white; padding: 20px; border-radius: 10px;
+                max-width: 800px; max-height: 80vh; overflow-y: auto;
+            `;
+            
+            let historyHTML = '<h3>📋 Histórico de PDFs</h3>';
+            history.forEach(item => {
+                historyHTML += `
+                    <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                        <strong>${item.tipo.toUpperCase()}</strong> - ${item.paciente}<br>
+                        <small>Médico: ${item.medico} | ${new Date(item.data).toLocaleString('pt-BR')}</small>
+                    </div>
+                `;
+            });
+            
+            historyHTML += `
+                <button onclick="this.closest('[style*=fixed]').remove();" 
+                        style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-top: 20px;">
+                    Fechar
+                </button>
+            `;
+            
+            historyDiv.innerHTML = historyHTML;
+            modal.appendChild(historyDiv);
+            document.body.appendChild(modal);
+        }
+
+        // Carregar template
+        function loadTemplate(tipo) {
+            if (templates[tipo]) {
+                Object.keys(templates[tipo]).forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.value = templates[tipo][fieldId];
+                    }
+                });
+                alert('Template carregado com sucesso!');
+            }
+        }
+
+        // Carregar dados salvos na inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = localStorage.getItem('pdfData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                if (data.tipo) {
+                    selectPdfType(data.tipo);
+                }
+                
+                if (data.paciente) {
+                    const pacienteField = document.querySelector('.form-section.active input[required]');
+                    if (pacienteField) {
+                        pacienteField.value = data.paciente;
+                    }
+                }
+                
+                localStorage.removeItem('pdfData');
+            }
+            
+            // Auto-definir data atual
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(dateInput => {
+                if (!dateInput.value) {
+                    dateInput.value = today;
+                }
+            });
+        });
+
+        console.log('📄 Gerador de PDF carregado');
+    </script>
+
+    <!-- JAVASCRIPT RESPONSIVO AVANÇADO -->
+    <script>
+        function isMobile(){return window.innerWidth<=768;}
+        function isTablet(){return window.innerWidth>768 && window.innerWidth<=1024;}
+        function isDesktop(){return window.innerWidth>1024;}
+        function adjustLayout(){
+            const cards=document.querySelectorAll('.card,.ai-card,.pdf-card');
+            if(isMobile()){
+                cards.forEach(card=>{
+                    card.style.width='100%';
+                    card.style.margin='8px 0';
+                });
+                const buttons=document.querySelectorAll('button,.btn');
+                buttons.forEach(btn=>{
+                    btn.style.minHeight='44px';
+                    btn.style.fontSize='16px';
+                });
+            }else if(isTablet()){
+                cards.forEach(card=>{
+                    card.style.width='calc(50% - 10px)';
+                });
+            }else{
+                cards.forEach(card=>{
+                    card.style.width='calc(25% - 15px)';
+                });
+            }
+        }
+        function optimizeForMobile(){
+            if(isMobile()){
+                const style=document.createElement('style');
+                style.textContent=`*{transition-duration:0.2s !important;animation-duration:0.2s !important;}`;
+                document.head.appendChild(style);
+                const images=document.querySelectorAll('img');
+                images.forEach(img=>{
+                    img.loading='lazy';
+                });
+            }
+        }
+        function handleOrientationChange(){
+            setTimeout(()=>{
+                adjustLayout();
+                const notifications=document.querySelectorAll('.notification');
+                notifications.forEach(notif=>{
+                    notif.style.maxWidth=isMobile()? '90vw':'320px';
+                });
+            },100);
+        }
+        window.addEventListener('resize',adjustLayout);
+        window.addEventListener('orientationchange',handleOrientationChange);
+        document.addEventListener('DOMContentLoaded',function(){
+            adjustLayout();
+            optimizeForMobile();
+            if('ontouchstart' in window){
+                document.body.classList.add('touch-device');
+            }
+        });
+        function preventIOSZoom(){
+            const inputs=document.querySelectorAll('input,select,textarea');
+            inputs.forEach(input=>{
+                if(input.style.fontSize !=='16px'){
+                    input.style.fontSize='16px';
+                }
+            });
+        }
+        if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
+            document.addEventListener('DOMContentLoaded',preventIOSZoom);
+        }
+    </script>
+</body>
+</html>

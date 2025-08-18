@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integração Hostinger - TeleMed Sistema</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .content {
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #4f46e5;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .section h2 {
+            color: #4f46e5;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .link-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #4f46e5;
+        }
+
+        .link-card h3 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .link-card .url {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            color: #4f46e5;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .link-card .description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .copy-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .instructions h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ol {
+            color: #78350f;
+            line-height: 1.8;
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-section {
+            background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .demo-section h3 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-link"></i> Integração Hostinger + TeleMed Sistema</h1>
+            <p>Links prontos para usar na sua página do Hostinger</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2><i class="fas fa-rocket"></i> Links Principais do Sistema</h2>
+                
+                <div class="links-grid">
+                    <div class="link-card">
+                        <h3><i class="fas fa-robot"></i> Dr. AI - Triagem Inteligente</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/dr-ai.html</div>
+                        <div class="description">Sistema de triagem médica com inteligência artificial</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/dr-ai.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-brain"></i> Triagem Psiquiátrica</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/triagem-psiquiatrica.html</div>
+                        <div class="description">Avaliação psiquiátrica com escalas PHQ-9 e GAD-7</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/triagem-psiquiatrica.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-heart-pulse"></i> Telemonitoramento de Enfermagem</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/telemonitoramento-enfermagem.html</div>
+                        <div class="description">Monitoramento 24/7 com enfermeiro dedicado</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/telemonitoramento-enfermagem.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-gavel"></i> Sistema de Lances</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/consulta-por-valor.html</div>
+                        <div class="description">Consultas médicas por lances com preços justos</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/consulta-por-valor.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-video"></i> Videoconsultas</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/videoconsulta.html</div>
+                        <div class="description">Consultas por vídeo com tecnologia WebRTC</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/videoconsulta.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-info-circle"></i> Saiba Mais</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/saiba-mais.html</div>
+                        <div class="description">Página informativa completa sobre recursos e funcionalidades</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/saiba-mais.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-user-md"></i> Especialidades Médicas</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/especialidades.html</div>
+                        <div class="description">8 especialidades disponíveis: Clínico Geral, Psiquiatra, Pediatra, Ginecologista e mais</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/especialidades.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-sign-in-alt"></i> Página de Login</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/login.html</div>
+                        <div class="description">Sistema de login com autenticação social (Google, Facebook)</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/login.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-user-plus"></i> Página de Cadastro</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/register.html</div>
+                        <div class="description">Cadastro profissional multi-etapa para médicos e pacientes</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/register.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-sitemap"></i> Índice do Sistema</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/sistema-indice.html</div>
+                        <div class="description">Navegação completa entre todas as 12 páginas do sistema</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/sistema-indice.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-user-md"></i> Dashboard Médico</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/index.html</div>
+                        <div class="description">Painel completo para médicos</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/index.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-bell"></i> Sistemas Avançados</h2>
+                
+                <div class="links-grid">
+                    <div class="link-card">
+                        <h3><i class="fas fa-bell"></i> Central de Notificações</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/notificacoes.html</div>
+                        <div class="description">Sistema enterprise de notificações médicas</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/notificacoes.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-prescription"></i> Sistema de Prescrições</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/prescricoes.html</div>
+                        <div class="description">Emissão digital de receitas médicas</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/prescricoes.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-users"></i> Fila de Pacientes</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/fila-pacientes-medico.html</div>
+                        <div class="description">Gerenciamento de fila para médicos</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/fila-pacientes-medico.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+
+                    <div class="link-card">
+                        <h3><i class="fas fa-calendar"></i> Histórico de Consultas</h3>
+                        <div class="url">https://telemed-sistema.replit.dev/historico-consultas.html</div>
+                        <div class="description">Histórico completo de atendimentos</div>
+                        <button class="copy-button" onclick="copyToClipboard('https://telemed-sistema.replit.dev/historico-consultas.html')">
+                            <i class="fas fa-copy"></i> Copiar Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Como Usar no Hostinger</h3>
+                <ol>
+                    <li><strong>Acesse o Editor:</strong> Entre no Hostinger Website Builder</li>
+                    <li><strong>Selecione o Botão:</strong> Clique no botão que deseja configurar</li>
+                    <li><strong>Abra Configurações:</strong> Procure por "Link" ou "URL" nas configurações</li>
+                    <li><strong>Cole o Link:</strong> Use os botões "Copiar Link" acima para copiar a URL</li>
+                    <li><strong>Configure Abertura:</strong> Selecione "Abrir em nova aba" para melhor experiência</li>
+                    <li><strong>Salve e Publique:</strong> Salve as alterações e publique o site</li>
+                </ol>
+            </div>
+
+            <div class="demo-section">
+                <h3><i class="fas fa-play"></i> Teste os Sistemas Agora</h3>
+                <p style="margin-bottom: 1rem; color: #1e40af;">Clique nos botões abaixo para testar cada funcionalidade:</p>
+                <div class="demo-buttons">
+                    <a href="/dr-ai.html" class="demo-button" target="_blank">
+                        <i class="fas fa-robot"></i> Dr. AI
+                    </a>
+                    <a href="/triagem-psiquiatrica.html" class="demo-button" target="_blank">
+                        <i class="fas fa-brain"></i> Triagem Psiquiátrica
+                    </a>
+                    <a href="/telemonitoramento-enfermagem.html" class="demo-button" target="_blank">
+                        <i class="fas fa-heart-pulse"></i> Telemonitoramento
+                    </a>
+                    <a href="/consulta-por-valor.html" class="demo-button" target="_blank">
+                        <i class="fas fa-gavel"></i> Sistema de Lances
+                    </a>
+                    <a href="/saiba-mais.html" class="demo-button" target="_blank">
+                        <i class="fas fa-info-circle"></i> Saiba Mais
+                    </a>
+                    <a href="/especialidades.html" class="demo-button" target="_blank">
+                        <i class="fas fa-stethoscope"></i> Especialidades
+                    </a>
+                    <a href="/login.html" class="demo-button" target="_blank">
+                        <i class="fas fa-sign-in-alt"></i> Página de Login
+                    </a>
+                    <a href="/register.html" class="demo-button" target="_blank">
+                        <i class="fas fa-user-plus"></i> Página de Cadastro
+                    </a>
+                    <a href="/index.html" class="demo-button" target="_blank">
+                        <i class="fas fa-user-md"></i> Dashboard Médico
+                    </a>
+                    <a href="/sistema-indice.html" class="demo-button" target="_blank">
+                        <i class="fas fa-sitemap"></i> Índice do Sistema
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Mostrar feedback visual
+                const button = event.target.closest('.copy-button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Erro ao copiar: ', err);
+                alert('Link copiado: ' + text);
+            });
+        }
+
+        // Animação de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.link-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
