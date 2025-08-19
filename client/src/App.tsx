@@ -270,11 +270,23 @@ export default function App() {
       <MockAuthProvider>
         <Router>
           <Switch>
+            {/* ROTAS CANÔNICAS */}
+            <Route path="/agenda" component={() => <div>Redirecting to agenda...</div>} />
+            <Route path="/consulta" component={() => <div>Redirecting to consulta...</div>} />
+            <Route path="/dashboard" component={() => <div>Redirecting to dashboard...</div>} />
+            
+            {/* ALIASES ANTIGOS - Redirecionamentos */}
+            <Route path="/enhanced" component={() => <div>Redirecting to /consulta...</div>} />
+            <Route path="/enhanced-consultation" component={() => <div>Redirecting to /consulta...</div>} />
+            <Route path="/enhanced-teste" component={() => <div>Redirecting to /consulta...</div>} />
+            <Route path="/dashboard-teste" component={() => <div>Redirecting to /dashboard...</div>} />
+            <Route path="/doctor-dashboard" component={() => <div>Redirecting to /dashboard...</div>} />
+            
+            {/* ROTAS REACT ESPECÍFICAS */}
             <Route path="/video-consultation" component={VideoConsultation} />
-            <Route path="/enhanced-consultation" component={EnhancedConsultation} />
-            <Route path="/enhanced" component={EnhancedClone} />
-          <Route path="/enhanced-original" component={EnhancedConsultation} />
+            <Route path="/enhanced-original" component={EnhancedConsultation} />
             <Route path="/enhanced-v3" component={EnhancedConsultationV3} />
+            <Route path="/enhanced-clone" component={EnhancedClone} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
@@ -283,13 +295,16 @@ export default function App() {
             <Route path="/complete" component={CompleteHub} />
             <Route path="/patient-management" component={PatientManagementDashboard} />
             <Route path="/patients" component={() => <div>Patients page loading...</div>} />
-            <Route path="/" component={LandingPage} />
+            
+            {/* ROOT → Redirect to /agenda */}
+            <Route path="/" component={() => <div>Redirecting to agenda...</div>} />
+            
             <Route>
               <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
                   <h1 className="text-2xl font-bold text-gray-900 mb-4">Página não encontrada</h1>
-                  <a href="/" className="text-emerald-600 hover:text-emerald-700">
-                    Voltar ao início
+                  <a href="/agenda" className="text-emerald-600 hover:text-emerald-700">
+                    Voltar à Agenda
                   </a>
                 </div>
               </div>

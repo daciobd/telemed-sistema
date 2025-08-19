@@ -191,59 +191,97 @@ app.get('/patient-management', (req, res) => {
   res.status(404).send('Patient Management page not found');
 });
 
-// Enhanced Consultation - main consultation interface with AI
-app.get('/enhanced', (req, res) => {
-  console.log('🚀 Rota /enhanced acessada - Consulta Avançada com IA');
-  const enhancedConsultationHtml = path.join(__dirname, '../public/enhanced-consultation.html');
-  if (fs.existsSync(enhancedConsultationHtml)) {
-    console.log('✅ Servindo enhanced-consultation.html dedicado');
-    return res.sendFile(enhancedConsultationHtml);
-  }
-  res.status(404).send('Enhanced Consultation page not found');
+// ====== ROTAS CANÔNICAS OFICIAIS ======
+
+// Root - redirect to agenda (new canonical entry point)
+app.get('/', (req, res) => {
+  console.log('🏠 Rota raiz acessada - Redirecionando para /agenda');
+  res.redirect(301, '/agenda');
 });
 
-// Enhanced Teste - new HTML-based consultation interface
-app.get('/enhanced-teste', (req, res) => {
-  console.log('🚀 Rota /enhanced-teste acessada - Nova Interface de Teste');
-  const enhancedTesteHtml = path.join(__dirname, '../public/enhanced-teste.html');
-  if (fs.existsSync(enhancedTesteHtml)) {
-    console.log('✅ Servindo enhanced-teste.html dedicado');
-    return res.sendFile(enhancedTesteHtml);
-  }
-  res.status(404).send('Enhanced Teste page not found');
-});
-
-// Agenda Médica - advanced calendar system
+// CANONICAL: Agenda (Agenda Médica)
 app.get('/agenda', (req, res) => {
-  console.log('📅 Rota /agenda acessada - Agenda Médica Avançada');
+  console.log('📅 Rota CANÔNICA /agenda acessada - Agenda Médica');
   const agendaMedicaHtml = path.join(__dirname, '../public/agenda-medica.html');
   if (fs.existsSync(agendaMedicaHtml)) {
-    console.log('✅ Servindo agenda-medica.html dedicado');
+    console.log('✅ Servindo agenda-medica.html (CANÔNICA)');
     return res.sendFile(agendaMedicaHtml);
   }
-  res.status(404).send('Agenda Médica page not found');
+  res.status(404).send('Agenda page not found');
 });
 
-// Dashboard Teste - Chart.js dashboard
+// CANONICAL: Consulta (Enhanced Teste v2.2)
+app.get('/consulta', (req, res) => {
+  console.log('🎯 Rota CANÔNICA /consulta acessada - Enhanced Teste v2.2');
+  const enhancedTesteHtml = path.join(__dirname, '../public/enhanced-teste.html');
+  if (fs.existsSync(enhancedTesteHtml)) {
+    console.log('✅ Servindo enhanced-teste.html (CANÔNICA)');
+    return res.sendFile(enhancedTesteHtml);
+  }
+  res.status(404).send('Consulta page not found');
+});
+
+// CANONICAL: Dashboard (Dashboard Teste)
+app.get('/dashboard', (req, res) => {
+  console.log('📊 Rota CANÔNICA /dashboard acessada - Dashboard Médico');
+  const dashboardTesteHtml = path.join(__dirname, '../public/dashboard-teste.html');
+  if (fs.existsSync(dashboardTesteHtml)) {
+    console.log('✅ Servindo dashboard-teste.html (CANÔNICA)');
+    return res.sendFile(dashboardTesteHtml);
+  }
+  res.status(404).send('Dashboard page not found');
+});
+
+// ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
+
+// Enhanced aliases → /consulta
+app.get('/enhanced', (req, res) => {
+  console.log('🔄 Alias /enhanced → Redirecionando para /consulta');
+  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
+});
+
+app.get('/enhanced-consultation', (req, res) => {
+  console.log('🔄 Alias /enhanced-consultation → Redirecionando para /consulta');
+  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
+});
+
+app.get('/enhanced-teste', (req, res) => {
+  console.log('🔄 Alias /enhanced-teste → Redirecionando para /consulta');
+  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
+});
+
+app.get('/enhanced-system', (req, res) => {
+  console.log('🔄 Alias /enhanced-system → Redirecionando para /consulta');
+  res.redirect(301, '/consulta');
+});
+
+// Dashboard aliases → /dashboard
 app.get('/dashboard-teste', (req, res) => {
-  console.log('📊 Rota /dashboard-teste acessada - Dashboard com Chart.js');
-  const dashboardTesteHtml = path.join(__dirname, '../public/dashboard-teste.html');
-  if (fs.existsSync(dashboardTesteHtml)) {
-    console.log('✅ Servindo dashboard-teste.html dedicado');
-    return res.sendFile(dashboardTesteHtml);
-  }
-  res.status(404).send('Dashboard Teste page not found');
+  console.log('🔄 Alias /dashboard-teste → Redirecionando para /dashboard');
+  res.redirect(301, '/dashboard');
 });
 
-// Dashboard Teste HTML route (alternative)
 app.get('/dashboard-teste.html', (req, res) => {
-  console.log('📊 Rota /dashboard-teste.html acessada - Dashboard com Chart.js');
-  const dashboardTesteHtml = path.join(__dirname, '../public/dashboard-teste.html');
-  if (fs.existsSync(dashboardTesteHtml)) {
-    console.log('✅ Servindo dashboard-teste.html dedicado');
-    return res.sendFile(dashboardTesteHtml);
+  console.log('🔄 Alias /dashboard-teste.html → Redirecionando para /dashboard');
+  res.redirect(301, '/dashboard');
+});
+
+app.get('/doctor-dashboard', (req, res) => {
+  console.log('🔄 Alias /doctor-dashboard → Redirecionando para /dashboard');
+  res.redirect(301, '/dashboard');
+});
+
+// ====== PÁGINAS AUXILIARES ======
+
+// Patient Info - detailed patient information
+app.get('/patient-info', (req, res) => {
+  console.log('👤 Rota /patient-info acessada - Informações do Paciente');
+  const patientInfoHtml = path.join(__dirname, '../public/patient-info.html');
+  if (fs.existsSync(patientInfoHtml)) {
+    console.log('✅ Servindo patient-info.html dedicado');
+    return res.sendFile(patientInfoHtml);
   }
-  res.status(404).send('Dashboard Teste page not found');
+  res.status(404).send('Patient Info page not found');
 });
 
 // Demo WebRTC - testing interface
@@ -257,26 +295,9 @@ app.get('/demo-webrtc', (req, res) => {
   res.status(404).send('Demo WebRTC page not found');
 });
 
-// Patient Info - detailed patient information
-app.get('/patient-info', (req, res) => {
-  console.log('👤 Rota /patient-info acessada - Informações do Paciente');
-  const patientInfoHtml = path.join(__dirname, '../public/patient-info.html');
-  if (fs.existsSync(patientInfoHtml)) {
-    console.log('✅ Servindo patient-info.html dedicado');
-    return res.sendFile(patientInfoHtml);
-  }
-  res.status(404).send('Patient Info page not found');
-});
-
-// Enhanced System - redirect to enhanced consultation
-app.get('/enhanced-system', (req, res) => {
-  console.log('🔄 Rota /enhanced-system acessada - Redirecionando para /enhanced');
-  res.redirect(301, '/enhanced');
-});
-
 // ====== SPA fallback p/ rotas do front ======
 // Inclui as suas rotas principais e páginas internas do app
-const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients|enhanced)(\/.*)?$/i;
+const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients|enhanced-clone|enhanced-v3|enhanced-original|dashboard-teste-robust)(\/.*)?$/i;
 app.get(SPA_MATCHER, (req, res, next) => {
   try {
     const indexDist = path.join(distDir, "index.html");
