@@ -95,6 +95,14 @@
     #ai-input{flex:1;resize:none;border:var(--line);border-radius:10px;padding:10px}
     .ai-send{background:#60a5fa;border:1px solid #60a5fa;border-radius:10px;padding:0 14px;cursor:pointer;font-weight:600;color:#fff}
     .ai-send:hover{background:#3b82f6}
+    
+    /* Barra de receitas fixa */
+    .rx-bar{position:fixed;bottom:20px;left:20px;background:#fff;border:var(--line);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);z-index:1000;display:flex;align-items:center;gap:12px;min-width:280px}
+    .rx-count{background:#22c55e;color:#fff;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:600}
+    .rx-links{display:flex;gap:8px}
+    .rx-link{padding:6px 12px;border-radius:8px;border:var(--line);background:#f8fafc;color:#374151;text-decoration:none;font-size:12px;cursor:pointer}
+    .rx-link:hover{background:#e2e8f0}
+    
     @media (max-width:980px){.page{grid-template-columns:1fr}}
   </style>
 </head>
@@ -109,9 +117,9 @@
           <div><strong id="pName">Ana Costa Silva</strong> <span class="pill" id="pAge">32 anos</span></div>
           <div style="font-size:12px;color:#64748b">📞 <span id="pPhone">11987654321</span> • <span class="pill">Particular</span></div>
         </div>
-        <button class="btn ghost" id="btn-invite" title="Enviar convite ao paciente">Convite</button>
       </div>
       <div class="status">
+        <button class="btn ghost" id="btn-invite" title="Enviar convite ao paciente">Convite</button>
         <span class="state wait" id="state"><span class="dot"></span> Aguardando</span>
         <span class="pill" id="elapsed">18m 19s</span>
         <button class="btn primary" id="btn-start">Iniciar Consulta</button>
@@ -174,20 +182,20 @@
     <!-- ATENDIMENTO -->
     <div class="pad" id="tab-care">
       <div class="field">
-        <label class="label">Queixa principal <span class="req">*</span></label>
-        <input class="inp" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" required />
+        <label class="label req">Queixa principal <span class="req">*</span></label>
+        <input class="inp area" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" required />
       </div>
       <div class="field">
-        <label class="label">História da doença atual <span class="req">*</span></label>
+        <label class="label req">História da doença atual <span class="req">*</span></label>
         <textarea class="area" name="hpi" placeholder="Paciente refere..." required></textarea>
       </div>
       <div class="field">
-        <label class="label">Hipótese diagnóstica <span class="req">*</span></label>
-        <input class="inp" id="dx" name="dx" list="cid10" placeholder="Busque por CID-10 (ex: 'transtorno ansioso')" required />
+        <label class="label req">Hipótese diagnóstica <span class="req">*</span></label>
+        <input class="inp" id="dx" name="dx" list="cid10" placeholder="Digite para buscar CID-10 (ex: 'transtorno ansioso')" required />
         <datalist id="cid10"></datalist>
       </div>
       <div class="field">
-        <label class="label">Conduta terapêutica <span class="req">*</span></label>
+        <label class="label req">Conduta terapêutica <span class="req">*</span></label>
         <textarea class="area" name="plan" placeholder="Conduta: ..." required></textarea>
       </div>
       <div class="field">
@@ -296,6 +304,15 @@
   </form>
 </div>
 <!-- ===== /Dr. AI Panel ===== -->
+
+<!-- Barra de receitas fixa -->
+<div class="rx-bar" id="rxBar" style="display:none">
+  <div>🧾 Receitas: <span class="rx-count" id="rxCount">0</span></div>
+  <div class="rx-links">
+    <a href="#" class="rx-link" id="rxMemedLink">Memed</a>
+    <a href="#" class="rx-link" id="rxScroll">Ver Lista</a>
+  </div>
+</div>
 
 <script>
 /** ========= CONFIG (troque se quiser) ========= */
@@ -451,14 +468,23 @@ if ($('#tplBox')) $('#tplBox').onclick = (ev)=>{
 };
 
 /** ========= Memed ========= */
-if ($('#memedBtn')) $('#memedBtn').onclick = ()=>{
+function buildMemedURL() {
   const patient = {
     name: $('#pName') ? $('#pName').textContent : 'Paciente', 
     age: $('#pAge') ? $('#pAge').textContent.replace(' anos','') : '0', 
     phone: $('#pPhone') ? $('#pPhone').textContent : ''
   };
-  const url = 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
-  window.open(url, '_blank','noopener');
+  return 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
+}
+
+function updateRxCount() {
+  const count = $('#rxList') ? $('#rxList').children.length : 0;
+  if ($('#rxCount')) $('#rxCount').textContent = count;
+  if ($('#rxBar')) $('#rxBar').style.display = count > 0 ? 'flex' : 'none';
+}
+
+if ($('#memedBtn')) $('#memedBtn').onclick = ()=>{
+  window.open(buildMemedURL(), '_blank','noopener');
   // adiciona receita fictícia na lista
   const li = document.createElement('div');
   li.style.padding='10px'; li.style.border='1px solid rgba(0,0,0,.06)'; li.style.borderRadius='10px'; li.style.margin='6px 0';
@@ -466,7 +492,22 @@ if ($('#memedBtn')) $('#memedBtn').onclick = ()=>{
   if ($('#rxList')) {
     if ($('#rxList').textContent.includes('Nenhuma')) $('#rxList').innerHTML='';
     $('#rxList').appendChild(li);
+    updateRxCount();
   }
+};
+
+// Barra de receitas
+if ($('#rxMemedLink')) $('#rxMemedLink').onclick = (e) => {
+  e.preventDefault();
+  window.open(buildMemedURL(), '_blank', 'noopener');
+  const receitasTab = $('.tab[data-tab="receitas"]');
+  if (receitasTab) receitasTab.click();
+};
+if ($('#rxScroll')) $('#rxScroll').onclick = (e) => {
+  e.preventDefault();
+  const receitasTab = $('.tab[data-tab="receitas"]');
+  if (receitasTab) receitasTab.click();
+  if ($('#tab-receitas')) $('#tab-receitas').scrollIntoView({behavior:'smooth', block:'start'});
 };
 
 /** ========= Dr. AI ========= */
@@ -502,7 +543,8 @@ if ($('#ai-form')) $('#ai-form').addEventListener('submit', async (e)=>{
   }catch(err){ addMsg('assistant','⚠️ Erro ao consultar IA: '+err.message); }
 });
 
-console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface v2.0');
+console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface v2.1');
+updateRxCount();
 </script>
 </body>
 </html>
