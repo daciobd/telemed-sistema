@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-08-19T19:39:10.502Z",
+  "canonical_routes": {
+    "agenda": {
+      "path": "/agenda",
+      "file": "agenda-medica.html",
+      "status": "active"
+    },
+    "consulta": {
+      "path": "/consulta",
+      "file": "enhanced-teste.html",
+      "status": "active"
+    },
+    "dashboard": {
+      "path": "/dashboard",
+      "file": "dashboard-teste.html",
+      "status": "active"
+    }
+  },
+  "redirects": [
+    {
+      "from": "/enhanced",
+      "to": "/consulta",
+      "status": "301",
+      "preserves_query": true
+    },
+    {
+      "from": "/enhanced-consultation",
+      "to": "/consulta",
+      "status": "301",
+      "preserves_query": true
+    },
+    {
+      "from": "/enhanced-teste",
+      "to": "/consulta",
+      "status": "301",
+      "preserves_query": true
+    },
+    {
+      "from": "/dashboard-teste",
+      "to": "/dashboard",
+      "status": "301",
+      "preserves_query": true
+    },
+    {
+      "from": "/doctor-dashboard",
+      "to": "/dashboard",
+      "status": "301",
+      "preserves_query": true
+    }
+  ],
+  "checks": {
+    "legacy_files": 3,
+    "sitemap": true,
+    "test_scripts": 4,
+    "spa_fallback": false
+  },
+  "next_steps": [
+    "Executar npm run verify:routes regularmente",
+    "Monitorar performance com test:perf:canonical",
+    "Validar acessibilidade com test:a11y:canonical",
+    "Considerar mover arquivos legacy para pages/legacy/"
+  ]
+}

@@ -10,7 +10,13 @@
     "test:a11y": "node scripts/a11y.cjs",
     "test:all": "node scripts/run-all-tests.js",
     "smoke:api": "node scripts/contract-tests.cjs && echo '✓ APIs funcionando'",
-    "smoke:full": "npm run test:contracts && npm run verify:auth && echo '✓ Smoke tests OK'"
+    "smoke:full": "npm run test:contracts && npm run verify:auth && echo '✓ Smoke tests OK'",
+    "verify\\:routes": "node scripts/verify-routes.cjs",
+    "verify:routes": "node scripts/verify-routes.cjs",
+    "test:canonical": "node scripts/test-canonical-routes.js",
+    "test:a11y:canonical": "node scripts/a11y-canonical.cjs",
+    "test:perf:canonical": "node scripts/perf-canonical.js",
+    "canonical:hygiene": "node scripts/canonical-hygiene.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

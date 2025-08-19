@@ -1,0 +1,86 @@
+fechar a “ponta-de-prova” (verificação + limpeza). Deixo abaixo um pacote enxuto para você colar no Replit e validar que tudo está certo hoje e a cada deploy.
+
+1) Smoke de rotas canônicas + redirects (cole no Shell)
+# scripts/verify-routes.cjs
+cat > scripts/verify-routes.cjs <<'EOF'
+const BASE = process.env.BASE_URL || `http://localhost:${process.env.PORT||5000}`;
+const alias = [
+  "/enhanced","/enhanced-consultation","/video-consultation",
+  "/doctor-dashboard","/dashboard-teste","/dashboard-teste.html","/schedule"
+];
+const canon = ["/", "/agenda", "/consulta", "/dashboard"];
+
+async function head(p){ const r = await fetch(BASE+p, {redirect:"manual"}); return {p, s:r.status, loc:r.headers.get('location')}; }
+(async ()=>{
+  const rows = [];
+  for(const p of canon) rows.push(await head(p));
+  for(const p of alias) rows.push(await head(p+"?x=1&y=2")); // garante preservação de query
+  console.table(rows);
+  const bad = rows.filter(r=>{
+    if (canon.includes(r.p)) return !(r.s>=200 && r.s<400);
+    if (alias.includes(r.p.replace(/\?.*$/,''))) return !(String(r.s).startsWith("30") && r.loc && /(\?|&)x=1/.test(r.loc));
+    return true;
+  });
+  if (bad.length){ console.error("❌ Falhas:", bad); process.exit(1); }
+  console.log("✅ Rotas canônicas/redirects ok");
+})();
+EOF
+
+npm pkg set scripts.verify\\:routes="node scripts/verify-routes.cjs"
+npm run verify:routes
+
+
+O script confirma:
+
+/agenda, /consulta, /dashboard respondem OK;
+
+aliases antigos redirecionam (3xx) preservando query string.
+
+2) Header/Menu usando as rotas novas (substitua links antigos)
+// ex.: Header.tsx / Topbar.tsx
+import { Link } from "react-router-dom";
+
+<nav className="main-nav">
+  <Link to="/agenda">Agenda</Link>
+  <Link to="/consulta">Consulta</Link>
+  <Link to="/dashboard">Dashboard</Link>
+</nav>
+
+3) Fallback de SPA (garante que “Entrar via URL direta” nunca dá 404)
+
+No server/index.ts, mantenha algo assim após as rotas /api e /perf:
+
+app.use(express.static(distDir)); // se houver build
+
+// qualquer rota não-API cai no SPA
+app.get(/^\/(?!api|perf|assets|static|favicon\.ico).*/i, (req,res,next)=>{
+  if (viteDev) return viteDev.transformIndexHtml(req.originalUrl, indexHtmlRaw).then(html=>res.end(html)).catch(next);
+  return res.sendFile(path.join(distDir,"index.html"));
+});
+
+
+Assim você não precisa lembrar de atualizar o servidor quando trocar rotas.
+
+4) CI/QA: atualize testes para as canônicas
+
+A11y: inclua as novas rotas
+npm run test:a11y deve verificar /agenda, /consulta, /dashboard.
+
+Perf: ajuste seus scripts Lighthouse para medirem as três páginas e publicar em /perf/index.html.
+
+Smoke API: mantenha o test:contracts apontando para as rotas da consulta (se há chamadas associadas).
+
+5) Higiene do repositório (sem quebrar legado)
+
+Mova páginas antigas para pages/legacy/ ou renomeie *Legacy*.tsx.
+
+Mantenha os redirects por pelo menos 90 dias (SEO/links antigos).
+
+Atualize sitemap.xml (opcional, mas recomendado):
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>/agenda</loc></url>
+  <url><loc>/consulta</loc></url>
+  <url><loc>/dashboard</loc></url>
+</urlset>

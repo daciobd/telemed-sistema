@@ -252,23 +252,23 @@ app.get('/enhanced-teste', (req, res) => {
 
 app.get('/enhanced-system', (req, res) => {
   console.log('🔄 Alias /enhanced-system → Redirecionando para /consulta');
-  res.redirect(301, '/consulta');
+  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
 });
 
 // Dashboard aliases → /dashboard
 app.get('/dashboard-teste', (req, res) => {
   console.log('🔄 Alias /dashboard-teste → Redirecionando para /dashboard');
-  res.redirect(301, '/dashboard');
+  res.redirect(301, '/dashboard' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
 });
 
 app.get('/dashboard-teste.html', (req, res) => {
   console.log('🔄 Alias /dashboard-teste.html → Redirecionando para /dashboard');
-  res.redirect(301, '/dashboard');
+  res.redirect(301, '/dashboard' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
 });
 
 app.get('/doctor-dashboard', (req, res) => {
   console.log('🔄 Alias /doctor-dashboard → Redirecionando para /dashboard');
-  res.redirect(301, '/dashboard');
+  res.redirect(301, '/dashboard' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
 });
 
 // ====== PÁGINAS AUXILIARES ======
@@ -295,20 +295,27 @@ app.get('/demo-webrtc', (req, res) => {
   res.status(404).send('Demo WebRTC page not found');
 });
 
-// ====== SPA fallback p/ rotas do front ======
-// Inclui as suas rotas principais e páginas internas do app
-const SPA_MATCHER = /^\/(telemed|health|complete|video-consultation|enhanced-consultation|doctor-dashboard|ai-console|patients|enhanced-clone|enhanced-v3|enhanced-original|dashboard-teste-robust)(\/.*)?$/i;
-app.get(SPA_MATCHER, (req, res, next) => {
+// ====== SPA fallback para rotas React ======
+// Serve o React SPA para rotas não-API/static
+app.use(express.static(distDir)); // serve build se houver
+
+// Qualquer rota não-API cai no SPA (evita 404 em rotas diretas)
+app.get(/^\/(?!api|perf|assets|static|favicon\.ico).*/i, (req, res, next) => {
   try {
+    // Se em desenvolvimento com Vite
+    if (process.env.NODE_ENV !== 'production') {
+      const indexHtml = path.join(process.cwd(), "index.html");
+      if (fs.existsSync(indexHtml)) {
+        return res.sendFile(indexHtml);
+      }
+    }
+    
+    // Se em produção com build
     const indexDist = path.join(distDir, "index.html");
     if (fs.existsSync(indexDist)) {
       return res.sendFile(indexDist);
     }
-    // Fallback para servir a aplicação React mesmo sem build
-    const indexHtml = path.join(process.cwd(), "index.html");
-    if (fs.existsSync(indexHtml)) {
-      return res.sendFile(indexHtml);
-    }
+    
     return next(); // deixa cair no 404 se não houver front
   } catch (e) {
     return next(e);
