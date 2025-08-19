@@ -21,9 +21,9 @@
     }
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f4f7fb;color:var(--ink)}
-    .page{display:grid;grid-template-columns:1.25fr 1fr;gap:0;height:100vh}
+    .page{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:auto 1fr;gap:0;height:100vh}
     /* ====== COLUNA VÍDEO ====== */
-    .videoWrap{position:relative;background:var(--bg);display:flex;align-items:center;justify-content:center}
+    .videoWrap{position:relative;background:var(--bg);display:flex;align-items:center;justify-content:center;grid-row:2}
     .room{color:#cbd5e1;text-align:center}
     .room .cam{font-size:44px}
     .badge{display:inline-flex;align-items:center;gap:6px;background:#0f172a;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#d1d5db;font-size:12px}
@@ -35,11 +35,10 @@
     .control.red{background:var(--red);border-color:var(--red);color:#fff}
     .control.amber{background:var(--amber);border-color:var(--amber);color:#111}
     .control.blue{background:#1f2937;border-color:#334155}
-    .notif{position:absolute;left:22px;bottom:22px}
     .notif .dot{position:absolute;right:-2px;top:-2px;width:16px;height:16px;background:#ef4444;color:#fff;border-radius:999px;display:grid;place-items:center;font-size:11px;border:2px solid #0f172a}
     /* ====== COLUNA PAINEL ====== */
-    .panel{background:#f8fafc;overflow:auto}
-    .topbar{position:sticky;top:0;background:#fff;border-bottom:var(--line);padding:12px 14px;z-index:2}
+    .panel{background:#f8fafc;overflow:auto;grid-row:2}
+    .topbar{position:sticky;top:0;background:#fff;border-bottom:var(--line);padding:12px 14px;z-index:2;grid-column:1 / 3;grid-row:1}
     .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
     .pInfo{display:flex;gap:12px;align-items:center}
     .avatar{width:30px;height:30px;border-radius:50%;background:#e5e7eb;display:grid;place-items:center}
@@ -109,6 +108,30 @@
 </head>
 <body>
 <div class="page">
+  <!-- topo full width -->
+  <div class="topbar">
+    <div class="row">
+      <div class="pInfo">
+        <div class="avatar">👤</div>
+        <div>
+          <div><strong id="pName">Ana Costa Silva</strong> <span class="pill" id="pAge">32 anos</span></div>
+          <div style="font-size:12px;color:#64748b">📞 <span id="pPhone">11987654321</span> • <span class="pill">Particular</span></div>
+        </div>
+        <button class="btn ghost" id="btn-invite" title="Enviar convite ao paciente">Convite</button>
+      </div>
+      <div class="status">
+        <span class="state wait" id="state"><span class="dot"></span> Aguardando</span>
+        <span class="pill" id="elapsed">23m 00s</span>
+        <button class="btn primary" id="btn-start">Iniciar Consulta</button>
+        <button class="btn ghost" id="btn-back">Voltar</button>
+        <button class="btn ghost" id="btn-form">Formulário</button>
+        <button class="btn ghost" id="btn-narrow">Faixa ↓/↑</button>
+        <button class="btn ghost" id="btn-exit">Sair</button>
+        <div class="control blue notif" title="Notificações" id="btn-bell">🔔<span class="dot" id="bellDot" style="display:none">1</span></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ======== COLUNA VÍDEO ========= -->
   <section class="videoWrap">
     <div class="uptime" id="uptime">00:00</div>
@@ -127,7 +150,6 @@
       <input type="file" id="filepick" hidden />
       <button class="control blue" id="btn-shot" title="Capturar imagem">📸</button>
       <button class="control blue" id="btn-chat" title="Abrir chat">💬</button>
-      <div class="control blue notif" title="Notificações" style="position:relative" id="btn-bell">🔔<span class="dot" id="bellDot" style="display:none">1</span></div>
       <button class="control blue" id="btn-ai" title="Dr. AI – Assistente clínico">🧠</button>
       <button class="control blue" id="btn-mic" title="Microfone on/off">🎙️</button>
       <button class="control blue" id="btn-cam" title="Vídeo on/off">🎥</button>
@@ -138,28 +160,6 @@
 
   <!-- ======== COLUNA PAINEL ========= -->
   <section class="panel">
-    <!-- topo -->
-    <div class="topbar">
-      <div class="row">
-        <div class="pInfo">
-          <div class="avatar">👤</div>
-          <div>
-            <div><strong id="pName">Ana Costa Silva</strong> <span class="pill" id="pAge">32 anos</span></div>
-            <div style="font-size:12px;color:#64748b">📞 <span id="pPhone">11987654321</span> • <span class="pill">Particular</span></div>
-          </div>
-          <button class="btn ghost" id="btn-invite" title="Enviar convite ao paciente">Convite</button>
-        </div>
-        <div class="status">
-          <span class="state wait" id="state"><span class="dot"></span> Aguardando</span>
-          <span class="pill" id="elapsed">13m 00s</span>
-          <button class="btn primary" id="btn-start">Iniciar Consulta</button>
-          <button class="btn ghost" id="btn-back">Voltar</button>
-          <button class="btn ghost" id="btn-form">Formulário</button>
-          <button class="btn ghost" id="btn-narrow">Faixa ↓/↑</button>
-          <button class="btn ghost" id="btn-exit">Sair</button>
-        </div>
-      </div>
-    </div>
 
     <!-- abas -->
     <div class="tabs">
@@ -195,16 +195,16 @@
       </div>
       
       <div class="field">
-        <label class="label">Queixa principal</label>
-        <input class="inp area" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" />
+        <label class="label req">Queixa principal <span class="req">*</span></label>
+        <input class="inp area" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" required />
       </div>
       <div class="field">
-        <label class="label">História da doença atual</label>
-        <textarea class="area" name="hpi" placeholder="Paciente refere..."></textarea>
+        <label class="label req">História da doença atual <span class="req">*</span></label>
+        <textarea class="area" name="hpi" placeholder="Paciente refere..." required></textarea>
       </div>
       <div class="field">
-        <label class="label">Hipótese diagnóstica</label>
-        <input class="inp" id="dx" name="dx" list="cid10" placeholder="Busque por CID-10 (ex: 'transtorno ansioso')" />
+        <label class="label req">Hipótese diagnóstica <span class="req">*</span></label>
+        <input class="inp" id="dx" name="dx" list="cid10" placeholder="Busque por CID-10 (ex: 'transtorno ansioso')" required />
         <datalist id="cid10"></datalist>
       </div>
       <div class="field">
@@ -227,56 +227,64 @@
         <div class="seg active" data-seg="plan">Conduta</div>
         <div class="seg" data-seg="exams">Exames</div>
       </div>
-
-      <!-- Dr. AI Section -->
-      <div style="margin-top:20px;padding:16px;background:#F0F9FF;border:1px solid #7DD3FC;border-radius:12px">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-          <span style="font-size:20px">🧠</span>
-          <strong style="color:#0C4A6E">Dr. AI - Assistente Clínico</strong>
+      <div id="seg-plan">
+        <!-- Já coberto pelas caixas acima -->
+      </div>
+      <div id="seg-exams" hidden>
+        <div style="margin-bottom:10px">
+          <div style="font-weight:600;margin-bottom:8px">Templates comuns</div>
+          <div class="templates" id="tplBox">
+            <div class="tpl" data-name="Hemograma Completo" data-inst="Jejum de 8h">Hemograma Completo</div>
+            <div class="tpl" data-name="Glicemia" data-inst="Jejum">Glicemia</div>
+            <div class="tpl" data-name="Raio-X Tórax" data-inst="Sem joias">Raio-X Tórax</div>
+            <div class="tpl" data-name="Eletrocardiograma" data-inst="Repouso">Eletrocardiograma</div>
+          </div>
         </div>
-        <p style="color:#0369A1;font-size:14px;margin:0 0 12px">Análise inteligente baseada nos dados do paciente e literatura médica atualizada.</p>
-        <button class="btn primary" id="btn-ai-consult" style="background:#0284C7">Consultar Dr. AI</button>
+        <div class="field">
+          <label class="label">Nome do exame</label>
+          <input class="inp" id="exName" placeholder="Hemograma completo" />
+        </div>
+        <div class="field">
+          <label class="label">Prioridade</label>
+          <select class="select" id="exPriority">
+            <option>Rotina</option>
+            <option>Prioritário</option>
+            <option>Urgente</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label">Instruções específicas</label>
+          <textarea class="area" id="exNotes" placeholder="Jejum de 8h, trazer documento..."></textarea>
+        </div>
+        <button class="btn primary" id="exAdd" style="width:100%">Adicionar Exame</button>
+        <div style="margin-top:14px">
+          <div style="font-weight:600;margin-bottom:8px">Exames Solicitados</div>
+          <div class="examList" id="examList">Nenhum exame solicitado</div>
+        </div>
       </div>
     </div>
 
     <!-- EXAMES -->
     <div class="pad" id="tab-exams" hidden>
-      <div class="field">
-        <label class="label">Solicitar exames</label>
-        <div class="templates">
-          <div class="tpl" data-exam="hemograma">🩸 Hemograma completo</div>
-          <div class="tpl" data-exam="glicemia">🍯 Glicemia de jejum</div>
-          <div class="tpl" data-exam="colesterol">🧪 Perfil lipídico</div>
-          <div class="tpl" data-exam="urina">💧 Exame de urina</div>
-          <div class="tpl" data-exam="ecg">💗 Eletrocardiograma</div>
-          <div class="tpl" data-exam="raio-x">🦴 Raio-X de tórax</div>
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Exames solicitados</label>
-        <div class="examList" id="examList">Nenhum exame adicionado ainda</div>
-      </div>
+      <!-- Mirror do seg-exams para aba completa -->
+      <div id="examsMirror"></div>
     </div>
 
     <!-- RECEITAS -->
     <div class="pad" id="tab-receitas" hidden>
       <div class="memedCard">
-        <div class="memedHead">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:24px;height:24px;background:#22c55e;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px">✓</div>
-            <strong>Memed Prescrições</strong>
-          </div>
-          <span class="ok">Conectado</span>
-        </div>
-        <p style="color:#6b7280;font-size:13px;margin:0 0 12px">Sistema integrado para prescrições digitais certificadas</p>
-        <button class="btn primary" id="btn-memed">Abrir Memed</button>
+        <div class="memedHead"><strong>🧾 Integração Memed</strong></div>
+        <p>Prescreva medicamentos de forma segura e rápida com assinatura digital automática.</p>
+        <button class="btn primary" id="memedBtn">Nova Receita Memed</button>
+        <ul style="margin:12px 0 0 20px;font-size:14px;color:#374151">
+          <li class="ok">Base farmacológica completa</li>
+          <li class="ok">Assinatura digital ICP-Brasil</li>
+          <li class="ok">Verificação de interações</li>
+        </ul>
       </div>
-      
-      <div style="margin-top:20px">
-        <div style="font-weight:600;margin-bottom:12px">Receitas do Atendimento</div>
-        <div id="rxList" style="border:var(--line);border-radius:10px;background:#fff;min-height:60px;padding:12px;color:#6b7280">
-          Nenhuma receita prescrita ainda
-        </div>
+      <div style="margin-top:14px">
+        <div style="font-weight:600;margin-bottom:8px">Receitas do Atendimento</div>
+        <div class="examList" id="rxList">Nenhuma receita ainda</div>
       </div>
     </div>
 
@@ -288,170 +296,214 @@
   </section>
 </div>
 
-<!-- Dr. AI Panel (Flutuante) -->
-<div class="ai-panel" id="ai-panel">
-  <div class="ai-header">
-    <div style="display:flex;align-items:center;gap:8px">
-      <span>🧠</span>
-      <strong>Dr. AI</strong>
-    </div>
-    <button id="ai-close" style="border:none;background:none;cursor:pointer;font-size:18px">×</button>
-  </div>
+<!-- ===== Dr. AI Panel ===== -->
+<div id="dr-ai" class="ai-panel">
+  <header class="ai-header">
+    <div style="font-weight:700">🧠 Dr. AI</div>
+    <button id="ai-close" class="btn ghost">✕</button>
+  </header>
   <div class="ai-disclaimer">
-    ⚠️ O Dr. AI é um assistente de apoio à decisão clínica. Todas as recomendações devem ser validadas pelo médico responsável.
+    As respostas são apoio à decisão e <b>não substituem</b> o julgamento do médico.
   </div>
-  <div class="ai-thread" id="ai-thread">
-    <div class="ai-msg assistant">
-      <div class="bubble">Olá! Sou o Dr. AI, seu assistente clínico. Como posso ajudar com este atendimento?</div>
-    </div>
-  </div>
-  <div class="ai-form">
-    <textarea id="ai-input" placeholder="Pergunte sobre diagnósticos, condutas, exames..." rows="2"></textarea>
-    <button class="ai-send" id="ai-send">Enviar</button>
-  </div>
+  <div id="ai-thread" class="ai-thread"></div>
+  <form id="ai-form" class="ai-form">
+    <textarea id="ai-input" rows="2" placeholder="Digite sua pergunta clínica…"></textarea>
+    <button class="ai-send" type="submit">Enviar</button>
+  </form>
 </div>
+<!-- ===== /Dr. AI Panel ===== -->
 
 <script>
+/** ========= CONFIG (troque se quiser) ========= */
+const API = {
+  start  : (id)=> `/api/consults/${id}/start`,
+  notes  : (id)=> `/api/consults/${id}/notes`,
+  finish : (id)=> `/api/consults/${id}/finalize`,
+  cid10  : (q)=> `/api/cid10/search?q=${encodeURIComponent(q)}`,
+  aiAsk  : '/api/ai/ask'
+};
+const CONSULT_ID = new URLSearchParams(location.search).get('consultId') || 'demo-123';
+
+/** ========= util ========= */
+const $ = (s,root=document)=> root.querySelector(s);
+const $$= (s,root=document)=> [...root.querySelectorAll(s)];
+const post= async (url, body)=> {
+  const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json().catch(()=> ({}));
+};
+
 // Utilidades para receitas
 function buildMemedURL(){
   const patient = {
-    name:  document.getElementById('pName').textContent,
-    age:   document.getElementById('pAge').textContent.replace(' anos',''),
-    phone: document.getElementById('pPhone').textContent
+    name:  $('#pName').textContent,
+    age:   $('#pAge').textContent.replace(' anos',''),
+    phone: $('#pPhone').textContent
   };
   // substitua pelo endpoint oficial quando integrar de fato
   return 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
 }
 function updateRxCount(){
-  const rxList = document.getElementById('rxList');
+  const rxList = $('#rxList');
   const n = rxList ? rxList.children.length : 0;
-  document.getElementById('rxCount').textContent = n;
+  $('#rxCount').textContent = n;
 }
 
-// Cronômetro
-let startTime = Date.now() - 13 * 60 * 1000; // 13 min atrás
-setInterval(() => {
-  const elapsed = Math.floor((Date.now() - startTime) / 1000);
-  const mins = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
-  document.getElementById('uptime').textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-  document.getElementById('elapsed').textContent = `${mins}m ${secs.toString().padStart(2,'0')}s`;
-}, 1000);
+/** ========= timer / uptime ========= */
+let sec=780; // 13min já decorridos
+setInterval(()=>{sec++; const m=String(Math.floor(sec/60)).padStart(2,'0'); const s=String(sec%60).padStart(2,'0'); $('#uptime').textContent=`${m}:${s}`; $('#elapsed').textContent = `${Math.floor(sec/60)}m ${s}s`;},1000);
 
-// Navegação entre abas
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    // Remove active das abas
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    
-    // Esconde todas as seções
-    document.querySelectorAll('#tab-chat, #tab-care, #tab-exams, #tab-receitas').forEach(section => {
-      section.hidden = true;
-    });
-    
-    // Mostra a seção correspondente
-    const targetTab = tab.dataset.tab;
-    document.getElementById(`tab-${targetTab}`).hidden = false;
-  });
+/** ========= abas ========= */
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  $('#tab-chat').hidden = t.dataset.tab!=='chat';
+  $('#tab-care').hidden = t.dataset.tab!=='care';
+  $('#tab-exams').hidden = t.dataset.tab!=='exams';
+  $('#tab-receitas').hidden = t.dataset.tab!=='receitas';
+}));
+
+/** ========= segs (plan/exams) ========= */
+$$('.seg').forEach(s=>s.addEventListener('click',()=>{
+  $$('.seg').forEach(x=>x.classList.remove('active'));
+  s.classList.add('active');
+  $('#seg-plan').hidden  = s.dataset.seg!=='plan';
+  $('#seg-exams').hidden = s.dataset.seg!=='exams';
+}));
+
+/** mirror da área de exames na aba Exames */
+$('#examsMirror').appendChild($('#seg-exams').cloneNode(true));
+
+/** ========= botões topo ========= */
+$('#btn-invite').onclick = ()=>{ alert('Convite enviado para o paciente na sala de espera.'); };
+$('#btn-start').onclick  = async ()=>{
+  try{ await post(API.start(CONSULT_ID)); $('#state').classList.remove('wait'); $('#state').classList.add('live'); $('#state').innerHTML='<span class="dot"></span> Em atendimento'; }
+  catch(e){ alert('Falha ao iniciar: '+e.message); }
+};
+$('#btn-back').onclick   = ()=> history.back();
+$('#btn-form').onclick   = ()=> alert('Abrir formulário de anamnese (WIP).');
+$('#btn-narrow').onclick = ()=> document.body.classList.toggle('narrow');
+$('#btn-exit').onclick   = ()=> { if(confirm('Sair desta tela?')) location.href='/'; };
+$('#btn-bell').onclick   = ()=> $('#bellDot').style.display='none';
+
+/** ========= barra de vídeo ========= */
+$('#btn-attach').onclick = ()=> $('#filepick').click();
+$('#filepick').onchange  = (e)=> { if(e.target.files[0]) { $('#bellDot').style.display='grid'; alert('Arquivo anexado: '+e.target.files[0].name); } };
+$('#btn-shot').onclick   = ()=> alert('Captura de imagem (mock).');
+$('#btn-chat').onclick   = ()=> { $('.tab[data-tab="chat"]').click(); };
+$('#btn-mic').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
+$('#btn-cam').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
+$('#btn-wait').onclick   = ()=> alert('Paciente enviado para sala de espera.');
+$('#btn-hang').onclick   = ()=> alert('Chamada finalizada.');
+
+/** ========= chat simples ========= */
+$('#chatSend').onclick = ()=>{
+  const v = $('#chatInput').value.trim(); if(!v) return;
+  $('#chatInput').value='';
+  const b = document.createElement('div'); b.style.maxWidth='70%'; b.style.background='#3b82f6'; b.style.color='#fff'; b.style.borderRadius='12px'; b.style.padding='10px'; b.style.margin='8px 0 8px auto'; b.textContent=v;
+  $('#chatBox').appendChild(b); $('#chatBox').scrollTop=$('#chatBox').scrollHeight;
+};
+
+/** ========= CID-10 autocomplete ========= */
+let cidTimer=null;
+$('#dx').addEventListener('input',()=>{
+  clearTimeout(cidTimer);
+  const q = $('#dx').value.trim();
+  if(q.length<2) return;
+  cidTimer = setTimeout(async ()=>{
+    try{
+      const r = await fetch(API.cid10(q));
+      const list = await r.json(); // espera: [{code:"F41.1",name:"Transtorno..."}, ...]
+      const dl = $('#cid10'); dl.innerHTML='';
+      (list||[]).slice(0,30).forEach(it=>{
+        const o=document.createElement('option'); o.value=`${it.code} - ${it.name}`; dl.appendChild(o);
+      });
+    }catch(e){}
+  }, 200);
 });
 
-// Chat
-document.getElementById('chatSend').addEventListener('click', () => {
-  const input = document.getElementById('chatInput');
-  if (!input.value.trim()) return;
-  
-  const chatBox = document.getElementById('chatBox');
-  const msg = document.createElement('div');
-  msg.style.cssText = 'max-width:70%;background:#dbeafe;border-radius:12px;padding:10px;margin-bottom:8px;margin-left:auto;text-align:right';
-  msg.textContent = input.value;
-  chatBox.appendChild(msg);
-  
-  input.value = '';
-  chatBox.scrollTop = chatBox.scrollHeight;
-});
-
-// CID-10 Autocomplete
-const cid10Data = [
-  'F41.1 - Transtorno de ansiedade generalizada',
-  'M79.3 - Dor musculoesquelética não especificada',
-  'R50.9 - Febre não especificada',
-  'K59.0 - Constipação',
-  'G44.1 - Cefaleia tensional',
-  'J06.9 - Infecção das vias aéreas superiores',
-  'R06.0 - Dispneia'
-];
-
-document.getElementById('dx').addEventListener('input', (e) => {
-  const datalist = document.getElementById('cid10');
-  datalist.innerHTML = '';
-  
-  const query = e.target.value.toLowerCase();
-  cid10Data
-    .filter(item => item.toLowerCase().includes(query))
-    .forEach(item => {
-      const option = document.createElement('option');
-      option.value = item;
-      datalist.appendChild(option);
-    });
-});
-
-// Exames
-document.querySelectorAll('.tpl').forEach(template => {
-  template.addEventListener('click', () => {
-    const examName = template.textContent;
-    const examList = document.getElementById('examList');
-    
-    if (examList.textContent === 'Nenhum exame adicionado ainda') {
-      examList.innerHTML = '';
+/** ========= salvar / finalizar ========= */
+$('#btn-save').onclick = async ()=>{
+  const payload = {
+    chiefComplaint: $('[name="chief_complaint"]').value||'',
+    hpi: $('[name="hpi"]').value||'',
+    dx:  $('[name="dx"]').value||'',
+    plan:$('[name="plan"]').value||'',
+    redFlags:$('[name="red_flags"]').value||'',
+    complexity:{
+      mental: $('#cmp1').checked, clinical: $('#cmp2').checked, inconsistency: $('#cmp3').checked
     }
-    
-    const examItem = document.createElement('div');
-    examItem.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9';
-    examItem.innerHTML = `
-      <span>${examName}</span>
-      <button onclick="this.parentElement.remove()" style="border:none;background:#fee2e2;color:#dc2626;border-radius:6px;padding:4px 8px;cursor:pointer">Remover</button>
-    `;
-    examList.appendChild(examItem);
+  };
+  try{ await post(API.notes(CONSULT_ID), payload); alert('Anotações salvas.'); }
+  catch(e){ alert('Falha ao salvar: '+e.message); }
+};
+$('#btn-finish').onclick = async ()=>{
+  try{ await post(API.finish(CONSULT_ID)); alert('Consulta finalizada.'); }
+  catch(e){ alert('Falha ao finalizar: '+e.message); }
+};
+
+/** ========= Exames ========= */
+const examList = [];
+function renderExamList(){
+  const box = $('#examList'); box.innerHTML='';
+  if(!examList.length){ box.textContent='Nenhum exame solicitado'; return; }
+  examList.forEach((ex,i)=>{
+    const row=document.createElement('div');
+    row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center';
+    row.style.border='1px solid rgba(0,0,0,.06)'; row.style.padding='8px 10px'; row.style.borderRadius='8px'; row.style.margin='6px 0';
+    row.innerHTML = `<div><b>${ex.name}</b> • ${ex.priority}<br><small>${ex.notes||''}</small></div><button data-i="${i}" class="btn ghost">Excluir</button>`;
+    row.querySelector('button').onclick=(ev)=>{ examList.splice(Number(ev.target.dataset.i),1); renderExamList(); };
+    box.appendChild(row);
   });
-});
+}
+$('#exAdd').onclick = ()=>{
+  const name=$('#exName').value.trim(); if(!name) return alert('Informe o nome do exame.');
+  examList.push({name, priority:$('#exPriority').value, notes:$('#exNotes').value.trim()});
+  $('#exName').value=''; $('#exNotes').value=''; renderExamList();
+};
+$('#tplBox').onclick = (ev)=>{
+  const el = ev.target.closest('.tpl'); if(!el) return;
+  $('#exName').value = el.dataset.name; $('#exNotes').value = el.dataset.inst;
+};
 
-// Dr. AI Panel
-document.getElementById('btn-ai').addEventListener('click', () => {
-  document.getElementById('ai-panel').style.display = 'flex';
-});
+/** ========= Memed ========= */
+$('#memedBtn').onclick = ()=>{
+  const patient = {name: $('#pName').textContent, age: $('#pAge').textContent.replace(' anos',''), phone: $('#pPhone').textContent};
+  const url = 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
+  window.open(url, '_blank','noopener');
+  // adiciona receita fictícia na lista
+  const li = document.createElement('div');
+  li.style.padding='10px'; li.style.border='1px solid rgba(0,0,0,.06)'; li.style.borderRadius='10px'; li.style.margin='6px 0';
+  li.innerHTML = `<b>Receita #MEMED-${Math.random().toString(36).slice(2,8).toUpperCase()}</b> <span style="color:#16a34a">✔ Assinada</span><br><small>${new Date().toLocaleString()}</small><br><div style="margin-top:6px">Dipirona Sódica – 500mg • 1 comprimido se dor ou febre</div>`;
+  $('#rxList').appendChild(li);
+  if($('#rxList').textContent.includes('Nenhuma')) $('#rxList').innerHTML='';
+  updateRxCount();
+};
 
-document.getElementById('btn-ai-consult').addEventListener('click', () => {
-  document.getElementById('ai-panel').style.display = 'flex';
-});
-
-document.getElementById('ai-close').addEventListener('click', () => {
-  document.getElementById('ai-panel').style.display = 'none';
-});
-
-document.getElementById('ai-send').addEventListener('click', () => {
-  const input = document.getElementById('ai-input');
-  if (!input.value.trim()) return;
-  
-  const thread = document.getElementById('ai-thread');
-  
-  // Mensagem do usuário
-  const userMsg = document.createElement('div');
-  userMsg.className = 'ai-msg user';
-  userMsg.innerHTML = `<div class="bubble">${input.value}</div>`;
-  thread.appendChild(userMsg);
-  
-  // Simular resposta do AI
-  setTimeout(() => {
-    const aiMsg = document.createElement('div');
-    aiMsg.className = 'ai-msg assistant';
-    aiMsg.innerHTML = `<div class="bubble">Baseado nos sintomas apresentados, sugiro considerar as seguintes hipóteses diagnósticas... [Esta é uma simulação do Dr. AI]</div>`;
-    thread.appendChild(aiMsg);
-    thread.scrollTop = thread.scrollHeight;
-  }, 1000);
-  
-  input.value = '';
-  thread.scrollTop = thread.scrollHeight;
+/** ========= Dr. AI ========= */
+function addMsg(role, txt){
+  const row=document.createElement('div');
+  row.className='ai-msg '+(role==='assistant'?'assistant':'user');
+  row.innerHTML='<div class="bubble"></div>';
+  row.querySelector('.bubble').textContent=txt;
+  $('#ai-thread').appendChild(row);
+  $('#ai-thread').scrollTop = $('#ai-thread').scrollHeight;
+}
+$('#btn-ai').onclick = ()=> { $('#dr-ai').style.display='flex'; };
+$('#ai-close').onclick = ()=> { $('#dr-ai').style.display='none'; };
+$('#ai-form').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const q = $('#ai-input').value.trim(); if(!q) return;
+  $('#ai-input').value=''; addMsg('user', q);
+  const ctx = {
+    chiefComplaint:$('[name="chief_complaint"]').value,
+    hpi:$('[name="hpi"]').value, dx:$('[name="dx"]').value, redFlags:$('[name="red_flags"]').value
+  };
+  try{
+    const r = await fetch(API.aiAsk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q, context:ctx})});
+    const data = await r.json().catch(()=>({}));
+    addMsg('assistant', data.answer || data.message || 'OK');
+  }catch(err){ addMsg('assistant','⚠️ Erro ao consultar IA: '+err.message); }
 });
 
 // Barra de receitas
@@ -510,6 +562,18 @@ document.getElementById('btn-chat').addEventListener('click', () => {
   // Ativar aba de chat
   document.querySelector('[data-tab="chat"]').click();
 });
+
+// Barra de receitas
+$('#rxMemedLink').onclick = (e) => {
+  e.preventDefault();
+  window.open(buildMemedURL(), '_blank', 'noopener');
+  // opcional: focar a seção de receitas
+  $('.tab[data-tab="receitas"]').click();
+};
+$('#rxScroll').onclick = () => {
+  $('.tab[data-tab="receitas"]').click();
+  $('#tab-receitas').scrollIntoView({behavior:'smooth', block:'start'});
+};
 
 console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface');
 updateRxCount();
