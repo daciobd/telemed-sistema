@@ -1,7 +1,7 @@
 // client/src/pages/enhanced-clone.tsx
 // UI clone da tela "Enhanced" com vídeo à esquerda, formulário à direita,
 // barra superior, botões de ação e painel Dr. AI (drawer). Sem dependências extras.
-// Basta criar a rota no App/Router para "/enhanced" apontar para este componente.
+// Basta criar a rota no App/Router para "/consulta" apontar para este componente.
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { api, type Patient, type CID10Item, type ExamTemplate, type PanelSize } from '@/lib/api';

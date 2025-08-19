@@ -25,7 +25,7 @@ export default function DoctorAppointments() {
   });
 
   const handleStartVideoCall = (appointmentId: number) => {
-    setLocation(`/video-consultation?appointment=${appointmentId}`);
+    setLocation(`/consulta?appointment=${appointmentId}`);
   };
 
   if (isLoading) {

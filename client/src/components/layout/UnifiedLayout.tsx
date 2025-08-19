@@ -87,7 +87,7 @@ export function UnifiedLayout({
     switch (userType) {
       case 'doctor':
         return [
-          { label: 'Dashboard', icon: Stethoscope, path: '/doctor-dashboard' },
+          { label: 'Dashboard', icon: Stethoscope, path: '/dashboard' },
           { label: 'Agenda', icon: Calendar, path: '/doctor-agenda' },
           { label: 'Pacientes', icon: User, path: '/patients' },
           { label: 'Prescrições', icon: Pill, path: '/prescriptions' },
@@ -100,7 +100,7 @@ export function UnifiedLayout({
           { label: 'Consultas', icon: Calendar, path: '/appointments' },
           { label: 'Prontuário', icon: FileText, path: '/medical-records' },
           { label: 'Receitas', icon: Pill, path: '/my-prescriptions' },
-          { label: 'Videoconsultas', icon: Video, path: '/video-consultations' },
+          { label: 'Videoconsultas', icon: Video, path: '/consulta' },
           ...commonItems
         ];
       case 'admin':

@@ -16,7 +16,9 @@
     "test:canonical": "node scripts/test-canonical-routes.js",
     "test:a11y:canonical": "node scripts/a11y-canonical.cjs",
     "test:perf:canonical": "node scripts/perf-canonical.js",
-    "canonical:hygiene": "node scripts/canonical-hygiene.js"
+    "canonical:hygiene": "node scripts/canonical-hygiene.js",
+    "codemod:routes": "node scripts/codemod-canonical-routes.cjs",
+    "test:frontend:redirects": "node scripts/test-frontend-redirects.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

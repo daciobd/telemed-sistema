@@ -65,7 +65,7 @@ const menuItems = [
   { 
     id: 'video-consultation', 
     label: 'Videoconsultas', 
-    href: '/video-consultation', 
+    href: '/consulta', 
     icon: Video,
     tourTarget: 'video-consultation'
   },

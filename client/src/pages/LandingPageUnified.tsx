@@ -254,7 +254,7 @@ export default function LandingPageUnified() {
               Fazer Lance por Consulta
             </button>
             <button 
-              onClick={() => handleNavigation('/doctor-dashboard')}
+              onClick={() => handleNavigation('/dashboard')}
               className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-green-500 transition-colors"
             >
               Área Médica

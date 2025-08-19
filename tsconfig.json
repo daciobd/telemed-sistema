@@ -17,8 +17,13 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "lib": ["ES2022", "DOM"],
-    "types": ["node"]
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "server/**/*",
@@ -29,6 +34,8 @@
     "node_modules",
     "dist",
     "public",
-    "client"
+    "client",
+    "client/src/legacy/**/*",
+    "**/*.legacy.*"
   ]
 }

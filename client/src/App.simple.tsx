@@ -138,11 +138,11 @@ const queryClient = new QueryClient({
 // Simple landing page component
 function LandingPage() {
   const handleNavigateToVideo = () => {
-    window.location.href = '/video-consultation?consultationId=demo';
+    window.location.href = '/consulta?consultationId=demo';
   };
   
   const handleNavigateToEnhanced = () => {
-    window.location.href = '/enhanced-consultation?consultationId=demo';
+    window.location.href = '/consulta?consultationId=demo';
   };
 
   return (
@@ -231,7 +231,7 @@ function LandingPage() {
                 Dashboard médico completo com gráficos, KPIs e análises em tempo real
               </p>
               <a 
-                href="/dashboard-teste"
+                href="/dashboard"
                 className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-center mb-2"
               >
                 Acessar Dashboard Teste
@@ -263,12 +263,12 @@ export default function App() {
       <MockAuthProvider>
         <Router>
           <Switch>
-            <Route path="/video-consultation" component={VideoConsultation} />
-            <Route path="/enhanced-consultation" component={EnhancedConsultation} />
-            <Route path="/enhanced" component={EnhancedConsultation} />
+            <Route path="/consulta" component={VideoConsultation} />
+            <Route path="/consulta" component={EnhancedConsultation} />
+            <Route path="/consulta" component={EnhancedConsultation} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
-            <Route path="/dashboard-teste" component={DashboardTeste} />
+            <Route path="/dashboard" component={DashboardTeste} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
             <Route path="/telemed" component={TelemedHub} />
             <Route path="/health" component={HealthHub} />

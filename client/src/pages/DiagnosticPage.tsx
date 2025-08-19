@@ -190,7 +190,7 @@ export default function DiagnosticPage() {
           }}>
             🚀 Sistema Principal
           </a>
-          <a href="/doctor-dashboard" style={{
+          <a href="/dashboard" style={{
             background: '#28a745',
             color: 'white',
             textDecoration: 'none',

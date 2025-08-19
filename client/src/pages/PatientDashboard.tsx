@@ -391,7 +391,7 @@ export default function PatientDashboard() {
                 </Button>
               </Link>
 
-              <Link href="/video-consultation">
+              <Link href="/consulta">
                 <Button variant="outline" className="w-full h-20 flex-col" data-tour="video-consultation">
                   <Video className="w-6 h-6 mb-2" />
                   Videoconsulta

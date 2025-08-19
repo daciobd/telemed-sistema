@@ -112,7 +112,7 @@ export function Banner({ onFeedback }: { onFeedback?: () => void }) {
     <div style={styles.banner}>
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
         <span>🎉 Novo dashboard e consulta avançada disponíveis.</span>
-        <button style={styles.btnPri} onClick={() => { markDashboardTested(); trackEvent('new_dashboard_clicked', { source: 'banner' }); location.href = '/enhanced'; }}>Testar agora</button>
+        <button style={styles.btnPri} onClick={() => { markDashboardTested(); trackEvent('new_dashboard_clicked', { source: 'banner' }); location.href = '/consulta'; }}>Testar agora</button>
         <button style={styles.btnSec} onClick={() => { onFeedback?.(); trackEvent('banner_feedback_click', {}); }}>Dar feedback</button>
       </div>
       <button style={styles.btnX} onClick={() => { dismissBanner(); setVisible(false); trackEvent('banner_dismissed', {}); }}>✕</button>

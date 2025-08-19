@@ -27,12 +27,12 @@ export default function UnifiedHome() {
               Plataforma original com AI médica, consultas de vídeo e sistema de notificações.
             </p>
             <div className="space-y-3">
-              <Link href="/video-consultation?consultationId=demo">
+              <Link href="/consulta?consultationId=demo">
                 <div className="block p-3 bg-emerald-100 rounded hover:bg-emerald-200 transition-colors">
                   🎥 Video Consulta
                 </div>
               </Link>
-              <Link href="/enhanced-consultation?consultationId=demo">
+              <Link href="/consulta?consultationId=demo">
                 <div className="block p-3 bg-emerald-100 rounded hover:bg-emerald-200 transition-colors">
                   🤖 Consulta com IA
                 </div>

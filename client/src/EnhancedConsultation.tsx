@@ -140,7 +140,7 @@ export default function EnhancedConsultation() {
         <div className="section-title">Menu</div>
         <nav className="nav">
           <a href="/">🏠 Dashboard</a>
-          <a href="/enhanced" className="active">🩺 Consulta Avançada</a>
+          <a href="/consulta" className="active">🩺 Consulta Avançada</a>
         </nav>
         <div className="section-title">Ações Rápidas</div>
         <div className="group">

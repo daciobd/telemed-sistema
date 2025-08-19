@@ -30,7 +30,7 @@ export default function LoginPage() {
     e.preventDefault();
     // Demo login - redirect to appropriate dashboard
     if (loginData.userType === 'doctor') {
-      setLocation('/doctor-dashboard');
+      setLocation('/dashboard');
     } else {
       setLocation('/patient-dashboard');
     }
@@ -38,7 +38,7 @@ export default function LoginPage() {
 
   const handleDemoLogin = (userType: string) => {
     if (userType === 'doctor') {
-      setLocation('/doctor-dashboard');
+      setLocation('/dashboard');
     } else {
       setLocation('/patient-dashboard');
     }

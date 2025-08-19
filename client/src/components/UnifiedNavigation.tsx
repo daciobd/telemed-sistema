@@ -8,8 +8,8 @@ export const UnifiedNavigation = () => {
   const menuItems = [
     // TeleMed Original
     { path: '/', label: 'Home TeleMed', section: 'telemed' },
-    { path: '/video-consultation', label: 'Video Consulta', section: 'telemed' },
-    { path: '/enhanced-consultation', label: 'Consulta Avançada', section: 'telemed' },
+    { path: '/consulta', label: 'Video Consulta', section: 'telemed' },
+    { path: '/consulta', label: 'Consulta Avançada', section: 'telemed' },
     
     // Health Connect
     { path: '/health-connect/patients', label: 'Pacientes HC', section: 'health-connect' },

@@ -1,9 +1,8 @@
 import React from "react";
-import { Router, Route, Switch } from "wouter";
+import { Router, Route, Switch, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import EnhancedConsultation from "./EnhancedConsultation";
 import EnhancedConsultationV3 from "./pages/EnhancedConsultationV3";
-import EnhancedClone from "./pages/enhanced-clone";
 
 // Simple components without complex imports
 const SimpleToaster = () => <div id="toaster" className="fixed top-4 right-4 z-50" />;
@@ -141,11 +140,11 @@ const queryClient = new QueryClient({
 // Simple landing page component
 function LandingPage() {
   const handleNavigateToVideo = () => {
-    window.location.href = '/video-consultation?consultationId=demo';
+    window.location.href = '/consulta?consultationId=demo';
   };
   
   const handleNavigateToEnhanced = () => {
-    window.location.href = '/enhanced-consultation?consultationId=demo';
+    window.location.href = '/consulta?consultationId=demo';
   };
 
   return (
@@ -208,7 +207,7 @@ function LandingPage() {
                 Testar EnhancedConsultation
               </button>
               <a 
-                href="/enhanced-v3"
+                href="/consulta"
                 className="block w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors text-center"
               >
                 Enhanced Consultation v3
@@ -240,7 +239,7 @@ function LandingPage() {
                 Dashboard médico completo com gráficos, KPIs e análises em tempo real
               </p>
               <a 
-                href="/dashboard-teste"
+                href="/dashboard"
                 className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-center mb-2"
               >
                 Acessar Dashboard Teste
@@ -270,23 +269,26 @@ export default function App() {
       <MockAuthProvider>
         <Router>
           <Switch>
-            {/* ROTAS CANÔNICAS */}
-            <Route path="/agenda" component={() => <div>Redirecting to agenda...</div>} />
-            <Route path="/consulta" component={() => <div>Redirecting to consulta...</div>} />
-            <Route path="/dashboard" component={() => <div>Redirecting to dashboard...</div>} />
+            {/* ROTAS CANÔNICAS - Servidas pelo servidor */}
+            <Route path="/agenda" component={() => <div>Loading agenda...</div>} />
+            <Route path="/consulta" component={() => <div>Loading consulta...</div>} />
+            <Route path="/dashboard" component={() => <div>Loading dashboard...</div>} />
             
-            {/* ALIASES ANTIGOS - Redirecionamentos */}
-            <Route path="/enhanced" component={() => <div>Redirecting to /consulta...</div>} />
-            <Route path="/enhanced-consultation" component={() => <div>Redirecting to /consulta...</div>} />
-            <Route path="/enhanced-teste" component={() => <div>Redirecting to /consulta...</div>} />
-            <Route path="/dashboard-teste" component={() => <div>Redirecting to /dashboard...</div>} />
-            <Route path="/doctor-dashboard" component={() => <div>Redirecting to /dashboard...</div>} />
+            {/* ALIASES ANTIGOS - Redirects React para sincronizar com servidor */}
+            <Route path="/enhanced" component={() => <Redirect to="/consulta" />} />
+            <Route path="/enhanced-consultation" component={() => <Redirect to="/consulta" />} />
+            <Route path="/enhanced-teste" component={() => <Redirect to="/consulta" />} />
+            <Route path="/enhanced-system" component={() => <Redirect to="/consulta" />} />
+            <Route path="/video-consultation" component={() => <Redirect to="/consulta" />} />
+            <Route path="/doctor-dashboard" component={() => <Redirect to="/dashboard" />} />
+            <Route path="/dashboard-teste" component={() => <Redirect to="/dashboard" />} />
+            <Route path="/dashboard-teste.html" component={() => <Redirect to="/dashboard" />} />
             
             {/* ROTAS REACT ESPECÍFICAS */}
-            <Route path="/video-consultation" component={VideoConsultation} />
-            <Route path="/enhanced-original" component={EnhancedConsultation} />
-            <Route path="/enhanced-v3" component={EnhancedConsultationV3} />
-            <Route path="/enhanced-clone" component={EnhancedClone} />
+            <Route path="/video-consultation-react" component={VideoConsultation} />
+            <Route path="/enhanced-consultation-react" component={EnhancedConsultation} />
+            <Route path="/enhanced-consultation-v3" component={EnhancedConsultationV3} />
+            <Route path="/enhanced-clone-react" component={() => <div>Enhanced Clone Loading...</div>} />
             <Route path="/ai-console" component={AIConsolePage} />
             <Route path="/ai-lab" component={AIConsolePage} />
             <Route path="/dashboard-teste-robust" component={DashboardTesteRobust} />
@@ -297,7 +299,7 @@ export default function App() {
             <Route path="/patients" component={() => <div>Patients page loading...</div>} />
             
             {/* ROOT → Redirect to /agenda */}
-            <Route path="/" component={() => <div>Redirecting to agenda...</div>} />
+            <Route path="/" component={() => <Redirect to="/agenda" />} />
             
             <Route>
               <div className="min-h-screen flex items-center justify-center">
