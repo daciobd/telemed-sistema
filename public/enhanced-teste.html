@@ -95,6 +95,15 @@
     #ai-input{flex:1;resize:none;border:var(--line);border-radius:10px;padding:10px}
     .ai-send{background:#60a5fa;border:1px solid #60a5fa;border-radius:10px;padding:0 14px;cursor:pointer;font-weight:600;color:#fff}
     .ai-send:hover{background:#3b82f6}
+    /* ==== Barra de Receitas ==== */
+    .rxBar{
+      display:flex; align-items:center; justify-content:space-between;
+      background:#fff; border:var(--line); border-radius:10px;
+      padding:10px 12px; margin:10px 0 14px; box-shadow:var(--shadow,0 0 0 rgba(0,0,0,0));
+    }
+    .rxLeft{display:flex; align-items:center; gap:10px}
+    .rxCount{padding:4px 8px; border-radius:999px; background:#f1f5f9; border:var(--line); font-size:12px}
+    .rxActions{display:flex; gap:8px}
     @media (max-width:980px){.page{grid-template-columns:1fr}}
   </style>
 </head>
@@ -173,6 +182,18 @@
 
     <!-- ATENDIMENTO -->
     <div class="pad" id="tab-care">
+      <!-- Barra de Receitas -->
+      <div class="rxBar" role="region" aria-label="Receitas do atendimento">
+        <div class="rxLeft">
+          <strong>🧾 Receitas</strong>
+          <span class="rxCount"><span id="rxCount">0</span> item(s)</span>
+        </div>
+        <div class="rxActions">
+          <a class="btn primary" id="rxMemedLink" href="#" target="_blank" rel="noopener">Abrir Memed</a>
+          <button class="btn ghost" id="rxScroll" type="button">Ver lista</button>
+        </div>
+      </div>
+      
       <div class="field">
         <label class="label">Queixa principal</label>
         <input class="inp area" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" />
@@ -250,6 +271,13 @@
         <p style="color:#6b7280;font-size:13px;margin:0 0 12px">Sistema integrado para prescrições digitais certificadas</p>
         <button class="btn primary" id="btn-memed">Abrir Memed</button>
       </div>
+      
+      <div style="margin-top:20px">
+        <div style="font-weight:600;margin-bottom:12px">Receitas do Atendimento</div>
+        <div id="rxList" style="border:var(--line);border-radius:10px;background:#fff;min-height:60px;padding:12px;color:#6b7280">
+          Nenhuma receita prescrita ainda
+        </div>
+      </div>
     </div>
 
     <!-- Ações finais -->
@@ -284,6 +312,22 @@
 </div>
 
 <script>
+// Utilidades para receitas
+function buildMemedURL(){
+  const patient = {
+    name:  document.getElementById('pName').textContent,
+    age:   document.getElementById('pAge').textContent.replace(' anos',''),
+    phone: document.getElementById('pPhone').textContent
+  };
+  // substitua pelo endpoint oficial quando integrar de fato
+  return 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
+}
+function updateRxCount(){
+  const rxList = document.getElementById('rxList');
+  const n = rxList ? rxList.children.length : 0;
+  document.getElementById('rxCount').textContent = n;
+}
+
 // Cronômetro
 let startTime = Date.now() - 13 * 60 * 1000; // 13 min atrás
 setInterval(() => {
@@ -410,9 +454,36 @@ document.getElementById('ai-send').addEventListener('click', () => {
   thread.scrollTop = thread.scrollHeight;
 });
 
+// Barra de receitas
+document.getElementById('rxMemedLink').onclick = (e) => {
+  e.preventDefault();
+  window.open(buildMemedURL(), '_blank', 'noopener');
+  // opcional: focar a seção de receitas
+  document.querySelector('[data-tab="receitas"]').click();
+};
+document.getElementById('rxScroll').onclick = () => {
+  document.querySelector('[data-tab="receitas"]').click();
+  document.getElementById('tab-receitas').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
 // Memed
 document.getElementById('btn-memed').addEventListener('click', () => {
-  window.open('https://memed.com.br', '_blank');
+  window.open(buildMemedURL(), '_blank','noopener');
+
+  // adiciona receita fictícia na lista
+  const li = document.createElement('div');
+  li.style.padding='10px';
+  li.style.border='1px solid rgba(0,0,0,.06)';
+  li.style.borderRadius='10px';
+  li.style.margin='6px 0';
+  li.innerHTML = `<b>Receita #MEMED-${Math.random().toString(36).slice(2,8).toUpperCase()}</b>
+                  <span style="color:#16a34a">✔ Assinada</span><br>
+                  <small>${new Date().toLocaleString()}</small><br>
+                  <div style="margin-top:6px">Dipirona Sódica – 500mg • 1 comprimido se dor ou febre</div>`;
+  const rxList = document.getElementById('rxList');
+  if(rxList.textContent.includes('Nenhuma')) rxList.innerHTML='';
+  rxList.appendChild(li);
+  updateRxCount();            // <<< atualiza o contador da barra
 });
 
 // Botões de ação
@@ -441,6 +512,7 @@ document.getElementById('btn-chat').addEventListener('click', () => {
 });
 
 console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface');
+updateRxCount();
 </script>
 </body>
 </html>

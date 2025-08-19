@@ -1,0 +1,102 @@
+peguei o HTML “enhanced inicial” que você mandou e adicionei só uma “barra de Receitas” fixa no início do Atendimento, com:
+
+contador de receitas,
+
+botão Abrir Memed (abre em nova aba com os dados do paciente),
+
+atalho Ver lista (rola até a seção de receitas).
+
+Abaixo estão apenas os trechos que você precisa colar.
+
+1) CSS (uma caixinha simples e consistente)
+
+Adicione perto do final do <style>:
+
+/* ==== Barra de Receitas ==== */
+.rxBar{
+  display:flex; align-items:center; justify-content:space-between;
+  background:#fff; border:var(--line); border-radius:10px;
+  padding:10px 12px; margin:10px 0 14px; box-shadow:var(--shadow,0 0 0 rgba(0,0,0,0));
+}
+.rxLeft{display:flex; align-items:center; gap:10px}
+.rxCount{padding:4px 8px; border-radius:999px; background:#f1f5f9; border:var(--line); font-size:12px}
+.rxActions{display:flex; gap:8px}
+
+2) HTML (logo no começo da aba Atendimento)
+
+Dentro de <div class="pad" id="tab-care">, logo após abrir essa <div>, cole:
+
+<!-- Barra de Receitas -->
+<div class="rxBar" role="region" aria-label="Receitas do atendimento">
+  <div class="rxLeft">
+    <strong>🧾 Receitas</strong>
+    <span class="rxCount"><span id="rxCount">0</span> item(s)</span>
+  </div>
+  <div class="rxActions">
+    <a class="btn primary" id="rxMemedLink" href="#" target="_blank" rel="noopener">Abrir Memed</a>
+    <button class="btn ghost" id="rxScroll" type="button">Ver lista</button>
+  </div>
+</div>
+
+
+Não removi nada do que você já tinha — só inseri a barra acima dos campos de atendimento.
+
+3) JS (utilidades + integração com a barra)
+3.1 Adicione esta função perto do topo do <script> (logo após a constante CONSULT_ID, por exemplo):
+function buildMemedURL(){
+  const patient = {
+    name:  $('#pName').textContent,
+    age:   $('#pAge').textContent.replace(' anos',''),
+    phone: $('#pPhone').textContent
+  };
+  // substitua pelo endpoint oficial quando integrar de fato
+  return 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
+}
+function updateRxCount(){
+  const n = $('#rxList') ? $('#rxList').children.length : 0;
+  $('#rxCount').textContent = n;
+}
+
+3.2 Botões da barra
+
+Em qualquer lugar após o DOM existir (pode ser logo depois dos outros handlers), adicione:
+
+// Barra de receitas
+$('#rxMemedLink').onclick = (e)=>{
+  e.preventDefault();
+  window.open(buildMemedURL(), '_blank', 'noopener');
+  // opcional: focar a seção de receitas
+  $('.seg[data-seg="memed"]').click();
+};
+$('#rxScroll').onclick = ()=>{
+  $('.seg[data-seg="memed"]').click();
+  $('#seg-memed').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
+3.3 Reaproveite o botão já existente “Nova Receita MedMed”
+
+Substitua apenas o conteúdo do handler #memedBtn (mantenha o resto do arquivo igual):
+
+$('#memedBtn').onclick = ()=>{
+  window.open(buildMemedURL(), '_blank','noopener');
+
+  // adiciona receita fictícia na lista
+  const li = document.createElement('div');
+  li.style.padding='10px';
+  li.style.border='1px solid rgba(0,0,0,.06)';
+  li.style.borderRadius='10px';
+  li.style.margin='6px 0';
+  li.innerHTML = `<b>Receita #MEMED-${Math.random().toString(36).slice(2,8).toUpperCase()}</b>
+                  <span style="color:#16a34a">✔ Assinada</span><br>
+                  <small>${new Date().toLocaleString()}</small><br>
+                  <div style="margin-top:6px">Dipirona Sódica – 500mg • 1 comprimido se dor ou febre</div>`;
+  if($('#rxList').textContent.includes('Nenhuma')) $('#rxList').innerHTML='';
+  $('#rxList').appendChild(li);
+  updateRxCount();            // <<< atualiza o contador da barra
+};
+
+3.4 Atualize o contador ao carregar a página
+
+No final do <script>, adicione:
+
+updateRxCount();
