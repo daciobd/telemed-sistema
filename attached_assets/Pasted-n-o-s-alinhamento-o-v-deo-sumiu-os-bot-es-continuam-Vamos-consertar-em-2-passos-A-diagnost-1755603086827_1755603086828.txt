@@ -1,0 +1,112 @@
+não é só alinhamento: o vídeo sumiu (os botões continuam). Vamos consertar em 2 passos: (A) diagnosticar se o elemento existe e está com altura 0/z-index/hidden e (B) aplicar um fix seguro que garante contêiner com altura (aspect-ratio), mostra <video>/<canvas> e mantém os botões em overlay sem cobrir o player.
+
+Abaixo estão mensagens prontas para colar no Replit. Depois, você apenas atualiza a página.
+
+A) Diagnóstico rápido (descobrir se o vídeo monta e quanto mede)
+
+Cole no Replit:
+
+# 1) adicionar um logger temporário na Enhanced
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/EnhancedConsultation.tsx
+@@
+ import React from "react";
+ import "./enhanced-fix.css";
++// DEBUG apenas: logar se existe <video>/<canvas> e o tamanho do player
++if (process.env.NODE_ENV !== "production") {
++  setTimeout(() => {
++    const scope = document.querySelector(".enhanced-wrap") || document.body;
++    const vids = Array.from(scope.querySelectorAll("video,canvas")) as HTMLElement[];
++    console.debug("[Enhanced][probe] found", vids.length, "video/canvas");
++    vids.forEach((el, i) => {
++      const r = el.getBoundingClientRect();
++      console.debug(`[Enhanced][probe] #${i}`, el.tagName, { w: r.width, h: r.height, display: getComputedStyle(el).display, vis: getComputedStyle(el).visibility, z: getComputedStyle(el).zIndex });
++    });
++  }, 500);
++}
+*** End Patch
+PATCH
+
+
+Atualize a página /enhanced e olhe no Console:
+– “found 0” → nada está montando (condição/feature flag).
+– “found N” com h:0 → o vídeo existe, mas sem altura (CSS).
+
+B) Fix seguro de layout do vídeo (restaura visibilidade)
+
+Cole no Replit:
+
+# 2) estilos robustos para qualquer player nessa página
+cat > client/src/pages/enhanced-video.css <<'EOF'
+/* contêiner do player */
+.enhanced-video-shell{
+  position:relative; width:100%; max-width:1200px; margin:0 auto 12px;
+  aspect-ratio:16/9; min-height:240px; background:#000; border-radius:12px; overflow:hidden;
+}
+/* fallback se o browser não tiver aspect-ratio (ou quando algum CSS quebrar) */
+@supports not (aspect-ratio: 16/9) {
+  .enhanced-video-shell::before{content:""; display:block; padding-top:56.25%}
+}
+/* qualquer <video> ou <canvas> dentro do shell ocupa tudo */
+.enhanced-video-shell video,
+.enhanced-video-shell canvas{
+  position:absolute; inset:0; width:100% !important; height:100% !important;
+  object-fit:contain; display:block; visibility:visible !important; opacity:1 !important;
+}
+/* barra de botões sobreposta sem cobrir cliques no vídeo além dos botões */
+.enhanced-controls{
+  position:absolute; left:0; right:0; bottom:8px; display:flex; gap:8px; justify-content:center;
+  pointer-events:none;
+}
+.enhanced-controls > *{ pointer-events:auto; }
+/* z-index saneado: vídeo no fundo, controles acima */
+.enhanced-video-shell{ z-index:0 }
+.enhanced-controls{ z-index:10 }
+EOF
+
+# 3) importar o CSS e garantir um shell em volta do player
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/EnhancedConsultation.tsx
+@@
+-import "./enhanced-fix.css";
++import "./enhanced-fix.css";
++import "./enhanced-video.css";
+@@
+ export default function EnhancedConsultation(){
+   return (
+     <div className="enhanced-shell">
+       <main className="enhanced-wrap enhanced-container" data-full="false">
+-        {/* conteúdo atual */}
++        {/* VIDEO AREA */}
++        <section className="enhanced-video-shell" id="enhanced-video">
++          {/* Se o seu componente de vídeo já existe, ele ficará visível aqui se estiver neste ponto da árvore.
++              Caso ele seja montado em outro lugar, este shell ainda força altura e previne sumiço por CSS. */}
++          {/* Controles (exemplo; substitua pelos seus) */}
++          <div className="enhanced-controls">
++            {/* seus botões existentes podem ficar aqui */}
++          </div>
++        </section>
++        {/* resto do conteúdo atual (tabs, formulários etc.) */}
+       </main>
+     </div>
+   );
+ }
+*** End Patch
+PATCH
+
+
+Se o seu player está em outro componente (ex.: <VideoCanvas/>), mova a montagem dele para dentro do <section className="enhanced-video-shell">…</section> ou dê a classe enhanced-video-shell ao contêiner atual do vídeo.
+
+C) Causas comuns do “vídeo sumiu” e como já cobrimos
+
+Altura 0 do contêiner (flex/grid sem conteúdo visível) → aspect-ratio + min-height garantem altura.
+
+Overlay cobrindo o player → z-index e pointer-events nos controles corrigidos.
+
+display:none/visibility:hidden herdado → forçamos display:block/visibility:visible no <video>/<canvas>.
+
+Largura 100vw com DevTools docked → removido; usamos width:100% e centramos por margin:auto.
+
+Feature flag/condição não montando o player → o logger “found 0” acusa; aí é ajustar a condição de render (eu te passo um patch se aparecer isso no Console).

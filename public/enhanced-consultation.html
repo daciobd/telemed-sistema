@@ -8,6 +8,7 @@
   href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/enhanced-video.css">
 <style>
 :root{
   --bg:#0f172a; --panel:#111827; --ink:#e5e7eb; --muted:#9ca3af;
@@ -319,14 +320,16 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
       </div>
 
       <!-- VÍDEO PRINCIPAL -->
-      <div class="clock" id="clock">00:00</div>
-      <div class="wait">
-        <div>
-          <div class="cam">📷</div>
-          <div style="text-align:center;margin-top:8px;color:#9ca3af">Aguardando paciente…</div>
-          <div class="room">
-            <span class="badgeOn"><span style="width:8px;height:8px;border-radius:999px;background:#22c55e"></span>Conectado</span>
-            <div style="margin-top:6px;color:#9ca3af">Sala: #ABC123</div>
+      <div class="enhanced-video-shell" id="enhanced-video">
+        <div class="clock" id="clock">00:00</div>
+        <div class="wait">
+          <div>
+            <div class="cam">📷</div>
+            <div style="text-align:center;margin-top:8px;color:#9ca3af">Aguardando paciente…</div>
+            <div class="room">
+              <span class="badgeOn"><span style="width:8px;height:8px;border-radius:999px;background:#22c55e"></span>Conectado</span>
+              <div style="margin-top:6px;color:#9ca3af">Sala: #ABC123</div>
+            </div>
           </div>
         </div>
       </div>

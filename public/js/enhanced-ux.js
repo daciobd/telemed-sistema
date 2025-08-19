@@ -261,6 +261,29 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   window.telemedEnhancedDebug = telemedEnhancedDebug;
   
   console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
+
+// DEBUG: diagnosticar se existe video/canvas e tamanho
+setTimeout(() => {
+  const scope = document.querySelector(".app") || document.body;
+  const vids = Array.from(scope.querySelectorAll("video,canvas"));
+  console.debug("[Enhanced][probe] found", vids.length, "video/canvas");
+  vids.forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    console.debug(`[Enhanced][probe] #${i}`, el.tagName, { 
+      w: r.width, h: r.height, 
+      display: getComputedStyle(el).display, 
+      vis: getComputedStyle(el).visibility, 
+      z: getComputedStyle(el).zIndex 
+    });
+  });
+  
+  // Verificar se área de vídeo principal tem altura
+  const leftPane = document.querySelector('.split-left, .left');
+  if (leftPane) {
+    const r = leftPane.getBoundingClientRect();
+    console.debug("[Enhanced][probe] Video area:", { w: r.width, h: r.height });
+  }
+}, 500);
 })(); // End IIFE
 
 // Gruda a largura persistida também na variável CSS (usada no CSS acima)
