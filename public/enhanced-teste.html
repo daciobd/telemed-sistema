@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Consulta Avançada • TeleMed</title>
+  <style>
+    :root{
+      --bg:#0f172a;            /* fundo vídeo */
+      --panel:#ffffff;         /* painéis/brancos */
+      --ink:#111827;           /* texto escuro */
+      --muted:#6B7280;         /* texto fraco */
+      --line:1px solid rgba(0,0,0,.08);
+      --blue:#60a5fa;          /* botões azuis */
+      --blue-600:#3b82f6;
+      --green:#22c55e;         /* status conectado */
+      --amber:#f59e0b;         /* enviar p/ espera */
+      --red:#ef4444;           /* encerrar */
+      --shadow:0 10px 30px rgba(0,0,0,.16);
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f4f7fb;color:var(--ink)}
+    .page{display:grid;grid-template-columns:1.25fr 1fr;gap:0;height:100vh}
+    /* ====== COLUNA VÍDEO ====== */
+    .videoWrap{position:relative;background:var(--bg);display:flex;align-items:center;justify-content:center}
+    .room{color:#cbd5e1;text-align:center}
+    .room .cam{font-size:44px}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:#0f172a;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#d1d5db;font-size:12px}
+    .uptime{position:absolute;top:14px;right:14px;background:#111827;color:#fff;padding:6px 10px;border-radius:10px;font-variant-numeric:tabular-nums}
+    /* controles embaixo */
+    .controls{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;gap:10px;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);padding:10px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
+    .control{width:42px;height:42px;border-radius:999px;border:1px solid rgba(255,255,255,.15);display:grid;place-items:center;color:#e5e7eb;cursor:pointer;transition:.15s}
+    .control:hover{transform:translateY(-2px);background:rgba(255,255,255,.08)}
+    .control.red{background:var(--red);border-color:var(--red);color:#fff}
+    .control.amber{background:var(--amber);border-color:var(--amber);color:#111}
+    .control.blue{background:#1f2937;border-color:#334155}
+    .notif{position:absolute;left:22px;bottom:22px}
+    .notif .dot{position:absolute;right:-2px;top:-2px;width:16px;height:16px;background:#ef4444;color:#fff;border-radius:999px;display:grid;place-items:center;font-size:11px;border:2px solid #0f172a}
+    /* ====== COLUNA PAINEL ====== */
+    .panel{background:#f8fafc;overflow:auto}
+    .topbar{position:sticky;top:0;background:#fff;border-bottom:var(--line);padding:12px 14px;z-index:2}
+    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .pInfo{display:flex;gap:12px;align-items:center}
+    .avatar{width:30px;height:30px;border-radius:50%;background:#e5e7eb;display:grid;place-items:center}
+    .pill{padding:6px 10px;border-radius:999px;border:var(--line);background:#fff;font-size:12px}
+    .status{display:flex;gap:10px;align-items:center}
+    .status .state{display:inline-flex;gap:6px;align-items:center;background:#f1f5f9;padding:6px 10px;border-radius:999px;border:var(--line);font-size:12px}
+    .state .dot{width:8px;height:8px;border-radius:999px;background:#94a3b8}
+    .state.wait .dot{background:#f59e0b}
+    .state.live .dot{background:#22c55e}
+    .btn{display:inline-flex;gap:8px;align-items:center;border:1px solid transparent;border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
+    .btn.primary{background:var(--blue);color:#fff}
+    .btn.primary:hover{background:var(--blue-600)}
+    .btn.ghost{background:#fff;border:var(--line)}
+    .tabs{display:flex;gap:6px;border-bottom:var(--line);background:#fff}
+    .tab{padding:10px 12px;cursor:pointer;border-bottom:2px solid transparent}
+    .tab.active{border-color:var(--blue);color:#0f172a;font-weight:600}
+    .pad{padding:16px}
+    .field{margin-bottom:14px}
+    .label{font-size:13px;color:#374151;margin:0 0 6px;display:flex;gap:6px;align-items:center}
+    .label .req{color:#ef4444}
+    .inp, .area, .select{width:100%;border:var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+    .area{min-height:88px;resize:vertical}
+    .segRow{display:flex;gap:8px;background:#f3f4f6;border-radius:10px;border:var(--line);overflow:hidden}
+    .seg{flex:1;text-align:center;padding:8px 10px;cursor:pointer}
+    .seg.active{background:#fff;border-bottom:2px solid var(--blue);font-weight:600}
+    .chips{display:flex;gap:10px;flex-wrap:wrap}
+    .switch{display:flex;gap:10px;align-items:center}
+    .switch input{appearance:none;width:42px;height:24px;background:#e5e7eb;border-radius:999px;position:relative;outline:none;cursor:pointer;border:1px solid rgba(0,0,0,.08)}
+    .switch input:checked{background:#bbf7d0}
+    .switch input:before{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:999px;background:#fff;transition:.18s}
+    .switch input:checked:before{left:21px}
+    .actions{display:flex;gap:12px;justify-content:flex-end;position:sticky;bottom:0;background:#fff;padding:12px 14px;border-top:var(--line)}
+    .warn{background:#fff7ed;border:1px solid #fed7aa;color:#92400e;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:13px}
+    /* Exames */
+    .templates{display:flex;flex-direction:column;gap:8px;border:var(--line);padding:10px;border-radius:10px;background:#fff;max-height:160px;overflow:auto}
+    .tpl{padding:8px;border-radius:10px;border:1px dashed rgba(0,0,0,.1);cursor:pointer}
+    .tpl:hover{background:#f8fafc}
+    .examList{border:var(--line);border-radius:10px;background:#fff;min-height:90px;padding:12px;color:#475569}
+    /* Memed */
+    .memedCard{border:var(--line);border-radius:12px;background:#fff;padding:16px}
+    .memedHead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .ok{color:#16a34a}
+    /* Dr AI Panel */
+    .ai-panel{position:fixed;right:20px;bottom:20px;width:420px;max-height:72vh;display:none;flex-direction:column;background:#fff;border-radius:12px;box-shadow:var(--shadow);border:var(--line);overflow:hidden;z-index:9999}
+    .ai-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:var(--line);background:#F8FAFF}
+    .ai-disclaimer{padding:10px 14px;font-size:12px;color:#6B7280;background:#FBFDFF}
+    .ai-thread{flex:1;padding:14px;overflow:auto;background:#FAFBFF}
+    .ai-msg{display:flex;gap:8px;margin-bottom:12px}
+    .ai-msg.assistant .bubble{background:#EEF6FF;border:1px solid rgba(162,210,255,.6)}
+    .ai-msg.user .bubble{background:#F1F5F9;border:var(--line)}
+    .bubble{padding:10px 12px;border-radius:12px;max-width:85%}
+    .ai-form{display:flex;gap:8px;padding:10px;border-top:var(--line);background:#fff}
+    #ai-input{flex:1;resize:none;border:var(--line);border-radius:10px;padding:10px}
+    .ai-send{background:#60a5fa;border:1px solid #60a5fa;border-radius:10px;padding:0 14px;cursor:pointer;font-weight:600;color:#fff}
+    .ai-send:hover{background:#3b82f6}
+    @media (max-width:980px){.page{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- ======== COLUNA VÍDEO ========= -->
+  <section class="videoWrap">
+    <div class="uptime" id="uptime">00:00</div>
+
+    <div class="room">
+      <div class="cam">📹</div>
+      <div style="font-size:18px;margin-top:8px">Aguardando paciente…</div>
+      <div style="margin-top:6px">A chamada será iniciada quando o paciente entrar</div>
+      <div style="margin-top:10px" class="badge"><span style="width:8px;height:8px;border-radius:999px;background:var(--green)"></span> Conectado</div>
+      <div style="margin-top:6px;color:#9ca3af">Sala: <strong>#ABC123</strong></div>
+    </div>
+
+    <!-- botões inferiores -->
+    <div class="controls">
+      <button class="control blue" id="btn-attach" title="Anexar arquivo">📎</button>
+      <input type="file" id="filepick" hidden />
+      <button class="control blue" id="btn-shot" title="Capturar imagem">📸</button>
+      <button class="control blue" id="btn-chat" title="Abrir chat">💬</button>
+      <div class="control blue notif" title="Notificações" style="position:relative" id="btn-bell">🔔<span class="dot" id="bellDot" style="display:none">1</span></div>
+      <button class="control blue" id="btn-ai" title="Dr. AI – Assistente clínico">🧠</button>
+      <button class="control blue" id="btn-mic" title="Microfone on/off">🎙️</button>
+      <button class="control blue" id="btn-cam" title="Vídeo on/off">🎥</button>
+      <button class="control amber" id="btn-wait" title="Enviar para sala de espera">⏳</button>
+      <button class="control red" id="btn-hang" title="Finalizar chamada">⛔</button>
+    </div>
+  </section>
+
+  <!-- ======== COLUNA PAINEL ========= -->
+  <section class="panel">
+    <!-- topo -->
+    <div class="topbar">
+      <div class="row">
+        <div class="pInfo">
+          <div class="avatar">👤</div>
+          <div>
+            <div><strong id="pName">Ana Costa Silva</strong> <span class="pill" id="pAge">32 anos</span></div>
+            <div style="font-size:12px;color:#64748b">📞 <span id="pPhone">11987654321</span> • <span class="pill">Particular</span></div>
+          </div>
+          <button class="btn ghost" id="btn-invite" title="Enviar convite ao paciente">Convite</button>
+        </div>
+        <div class="status">
+          <span class="state wait" id="state"><span class="dot"></span> Aguardando</span>
+          <span class="pill" id="elapsed">13m 00s</span>
+          <button class="btn primary" id="btn-start">Iniciar Consulta</button>
+          <button class="btn ghost" id="btn-back">Voltar</button>
+          <button class="btn ghost" id="btn-form">Formulário</button>
+          <button class="btn ghost" id="btn-narrow">Faixa ↓/↑</button>
+          <button class="btn ghost" id="btn-exit">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- abas -->
+    <div class="tabs">
+      <div class="tab" data-tab="chat">💬 Chat</div>
+      <div class="tab active" data-tab="care">🩺 Atendimento</div>
+      <div class="tab" data-tab="exams">🧪 Exames</div>
+      <div class="tab" data-tab="receitas">🧾 Receitas</div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="pad" id="tab-chat" hidden>
+      <div id="chatBox" style="height:54vh;overflow:auto;border:var(--line);border-radius:10px;background:#fff;padding:10px">
+        <div style="max-width:70%;background:#f1f5f9;border-radius:12px;padding:10px;margin-bottom:8px">Olá, doutor! Como está?</div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px">
+        <input id="chatInput" class="inp" placeholder="Digite uma mensagem…" />
+        <button id="chatSend" class="btn primary">Enviar</button>
+      </div>
+    </div>
+
+    <!-- ATENDIMENTO -->
+    <div class="pad" id="tab-care">
+      <div class="field">
+        <label class="label">Queixa principal</label>
+        <input class="inp area" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" />
+      </div>
+      <div class="field">
+        <label class="label">História da doença atual</label>
+        <textarea class="area" name="hpi" placeholder="Paciente refere..."></textarea>
+      </div>
+      <div class="field">
+        <label class="label">Hipótese diagnóstica</label>
+        <input class="inp" id="dx" name="dx" list="cid10" placeholder="Busque por CID-10 (ex: 'transtorno ansioso')" />
+        <datalist id="cid10"></datalist>
+      </div>
+      <div class="field">
+        <label class="label req">Conduta terapêutica <span class="req">*</span></label>
+        <textarea class="area" name="plan" placeholder="Conduta: ..." required></textarea>
+      </div>
+      <div class="field">
+        <label class="label">Sinais de alerta</label>
+        <input class="inp" name="red_flags" placeholder="Dor torácica, ideação suicida, etc." />
+      </div>
+      <div class="field">
+        <label class="label">Complexidade/Gravidade</label>
+        <div class="chips">
+          <label class="switch"><input type="checkbox" id="cmp1" /> Mental</label>
+          <label class="switch"><input type="checkbox" id="cmp2" /> Clínica</label>
+          <label class="switch"><input type="checkbox" id="cmp3" /> Inconsistência</label>
+        </div>
+      </div>
+      <div class="segRow">
+        <div class="seg active" data-seg="plan">Conduta</div>
+        <div class="seg" data-seg="exams">Exames</div>
+      </div>
+
+      <!-- Dr. AI Section -->
+      <div style="margin-top:20px;padding:16px;background:#F0F9FF;border:1px solid #7DD3FC;border-radius:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:20px">🧠</span>
+          <strong style="color:#0C4A6E">Dr. AI - Assistente Clínico</strong>
+        </div>
+        <p style="color:#0369A1;font-size:14px;margin:0 0 12px">Análise inteligente baseada nos dados do paciente e literatura médica atualizada.</p>
+        <button class="btn primary" id="btn-ai-consult" style="background:#0284C7">Consultar Dr. AI</button>
+      </div>
+    </div>
+
+    <!-- EXAMES -->
+    <div class="pad" id="tab-exams" hidden>
+      <div class="field">
+        <label class="label">Solicitar exames</label>
+        <div class="templates">
+          <div class="tpl" data-exam="hemograma">🩸 Hemograma completo</div>
+          <div class="tpl" data-exam="glicemia">🍯 Glicemia de jejum</div>
+          <div class="tpl" data-exam="colesterol">🧪 Perfil lipídico</div>
+          <div class="tpl" data-exam="urina">💧 Exame de urina</div>
+          <div class="tpl" data-exam="ecg">💗 Eletrocardiograma</div>
+          <div class="tpl" data-exam="raio-x">🦴 Raio-X de tórax</div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Exames solicitados</label>
+        <div class="examList" id="examList">Nenhum exame adicionado ainda</div>
+      </div>
+    </div>
+
+    <!-- RECEITAS -->
+    <div class="pad" id="tab-receitas" hidden>
+      <div class="memedCard">
+        <div class="memedHead">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:24px;height:24px;background:#22c55e;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px">✓</div>
+            <strong>Memed Prescrições</strong>
+          </div>
+          <span class="ok">Conectado</span>
+        </div>
+        <p style="color:#6b7280;font-size:13px;margin:0 0 12px">Sistema integrado para prescrições digitais certificadas</p>
+        <button class="btn primary" id="btn-memed">Abrir Memed</button>
+      </div>
+    </div>
+
+    <!-- Ações finais -->
+    <div class="actions">
+      <button class="btn ghost" id="btn-save">💾 Salvar</button>
+      <button class="btn primary" id="btn-finish">✅ Finalizar Consulta</button>
+    </div>
+  </section>
+</div>
+
+<!-- Dr. AI Panel (Flutuante) -->
+<div class="ai-panel" id="ai-panel">
+  <div class="ai-header">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span>🧠</span>
+      <strong>Dr. AI</strong>
+    </div>
+    <button id="ai-close" style="border:none;background:none;cursor:pointer;font-size:18px">×</button>
+  </div>
+  <div class="ai-disclaimer">
+    ⚠️ O Dr. AI é um assistente de apoio à decisão clínica. Todas as recomendações devem ser validadas pelo médico responsável.
+  </div>
+  <div class="ai-thread" id="ai-thread">
+    <div class="ai-msg assistant">
+      <div class="bubble">Olá! Sou o Dr. AI, seu assistente clínico. Como posso ajudar com este atendimento?</div>
+    </div>
+  </div>
+  <div class="ai-form">
+    <textarea id="ai-input" placeholder="Pergunte sobre diagnósticos, condutas, exames..." rows="2"></textarea>
+    <button class="ai-send" id="ai-send">Enviar</button>
+  </div>
+</div>
+
+<script>
+// Cronômetro
+let startTime = Date.now() - 13 * 60 * 1000; // 13 min atrás
+setInterval(() => {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  document.getElementById('uptime').textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+  document.getElementById('elapsed').textContent = `${mins}m ${secs.toString().padStart(2,'0')}s`;
+}, 1000);
+
+// Navegação entre abas
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Remove active das abas
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    // Esconde todas as seções
+    document.querySelectorAll('#tab-chat, #tab-care, #tab-exams, #tab-receitas').forEach(section => {
+      section.hidden = true;
+    });
+    
+    // Mostra a seção correspondente
+    const targetTab = tab.dataset.tab;
+    document.getElementById(`tab-${targetTab}`).hidden = false;
+  });
+});
+
+// Chat
+document.getElementById('chatSend').addEventListener('click', () => {
+  const input = document.getElementById('chatInput');
+  if (!input.value.trim()) return;
+  
+  const chatBox = document.getElementById('chatBox');
+  const msg = document.createElement('div');
+  msg.style.cssText = 'max-width:70%;background:#dbeafe;border-radius:12px;padding:10px;margin-bottom:8px;margin-left:auto;text-align:right';
+  msg.textContent = input.value;
+  chatBox.appendChild(msg);
+  
+  input.value = '';
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+// CID-10 Autocomplete
+const cid10Data = [
+  'F41.1 - Transtorno de ansiedade generalizada',
+  'M79.3 - Dor musculoesquelética não especificada',
+  'R50.9 - Febre não especificada',
+  'K59.0 - Constipação',
+  'G44.1 - Cefaleia tensional',
+  'J06.9 - Infecção das vias aéreas superiores',
+  'R06.0 - Dispneia'
+];
+
+document.getElementById('dx').addEventListener('input', (e) => {
+  const datalist = document.getElementById('cid10');
+  datalist.innerHTML = '';
+  
+  const query = e.target.value.toLowerCase();
+  cid10Data
+    .filter(item => item.toLowerCase().includes(query))
+    .forEach(item => {
+      const option = document.createElement('option');
+      option.value = item;
+      datalist.appendChild(option);
+    });
+});
+
+// Exames
+document.querySelectorAll('.tpl').forEach(template => {
+  template.addEventListener('click', () => {
+    const examName = template.textContent;
+    const examList = document.getElementById('examList');
+    
+    if (examList.textContent === 'Nenhum exame adicionado ainda') {
+      examList.innerHTML = '';
+    }
+    
+    const examItem = document.createElement('div');
+    examItem.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9';
+    examItem.innerHTML = `
+      <span>${examName}</span>
+      <button onclick="this.parentElement.remove()" style="border:none;background:#fee2e2;color:#dc2626;border-radius:6px;padding:4px 8px;cursor:pointer">Remover</button>
+    `;
+    examList.appendChild(examItem);
+  });
+});
+
+// Dr. AI Panel
+document.getElementById('btn-ai').addEventListener('click', () => {
+  document.getElementById('ai-panel').style.display = 'flex';
+});
+
+document.getElementById('btn-ai-consult').addEventListener('click', () => {
+  document.getElementById('ai-panel').style.display = 'flex';
+});
+
+document.getElementById('ai-close').addEventListener('click', () => {
+  document.getElementById('ai-panel').style.display = 'none';
+});
+
+document.getElementById('ai-send').addEventListener('click', () => {
+  const input = document.getElementById('ai-input');
+  if (!input.value.trim()) return;
+  
+  const thread = document.getElementById('ai-thread');
+  
+  // Mensagem do usuário
+  const userMsg = document.createElement('div');
+  userMsg.className = 'ai-msg user';
+  userMsg.innerHTML = `<div class="bubble">${input.value}</div>`;
+  thread.appendChild(userMsg);
+  
+  // Simular resposta do AI
+  setTimeout(() => {
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'ai-msg assistant';
+    aiMsg.innerHTML = `<div class="bubble">Baseado nos sintomas apresentados, sugiro considerar as seguintes hipóteses diagnósticas... [Esta é uma simulação do Dr. AI]</div>`;
+    thread.appendChild(aiMsg);
+    thread.scrollTop = thread.scrollHeight;
+  }, 1000);
+  
+  input.value = '';
+  thread.scrollTop = thread.scrollHeight;
+});
+
+// Memed
+document.getElementById('btn-memed').addEventListener('click', () => {
+  window.open('https://memed.com.br', '_blank');
+});
+
+// Botões de ação
+document.getElementById('btn-save').addEventListener('click', () => {
+  alert('Dados salvos com sucesso!');
+});
+
+document.getElementById('btn-finish').addEventListener('click', () => {
+  if (confirm('Deseja finalizar esta consulta?')) {
+    alert('Consulta finalizada!');
+  }
+});
+
+// Controles de vídeo
+document.getElementById('btn-attach').addEventListener('click', () => {
+  document.getElementById('filepick').click();
+});
+
+document.getElementById('btn-shot').addEventListener('click', () => {
+  alert('Captura de tela realizada!');
+});
+
+document.getElementById('btn-chat').addEventListener('click', () => {
+  // Ativar aba de chat
+  document.querySelector('[data-tab="chat"]').click();
+});
+
+console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface');
+</script>
+</body>
+</html>

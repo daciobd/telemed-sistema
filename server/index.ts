@@ -202,6 +202,17 @@ app.get('/enhanced', (req, res) => {
   res.status(404).send('Enhanced Consultation page not found');
 });
 
+// Enhanced Teste - new HTML-based consultation interface
+app.get('/enhanced-teste', (req, res) => {
+  console.log('🚀 Rota /enhanced-teste acessada - Nova Interface de Teste');
+  const enhancedTesteHtml = path.join(__dirname, '../public/enhanced-teste.html');
+  if (fs.existsSync(enhancedTesteHtml)) {
+    console.log('✅ Servindo enhanced-teste.html dedicado');
+    return res.sendFile(enhancedTesteHtml);
+  }
+  res.status(404).send('Enhanced Teste page not found');
+});
+
 // Agenda Médica - advanced calendar system
 app.get('/agenda', (req, res) => {
   console.log('📅 Rota /agenda acessada - Agenda Médica Avançada');
