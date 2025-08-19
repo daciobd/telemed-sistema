@@ -45,10 +45,10 @@ export default function EnhancedConsultation() {
   }, []);
 
   return (
-    <div className="enhanced-shell">
-      <div className="enhanced-wrap">
+    <div className="enhanced-shell enhanced-bleed">
+      <main className="enhanced-wrap" data-full="true">
         {/* Container de vídeo (será movido para coluna esquerda) */}
-        <div id="enhanced-video" className="enhanced-video-shell">
+        <section className="enhanced-video-shell" id="enhanced-video">
           <div className="wait">
             <div>🎥 Aguardando conexão de vídeo...</div>
           </div>
@@ -63,7 +63,7 @@ export default function EnhancedConsultation() {
             <button title="Pausar">⏸️</button>
             <button title="Encerrar">🔚</button>
           </div>
-        </div>
+        </section>
 
         {/* Conteúdo principal (será movido para coluna direita) */}
         <div className="bg-white rounded-lg shadow-lg p-6">
@@ -137,7 +137,7 @@ export default function EnhancedConsultation() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

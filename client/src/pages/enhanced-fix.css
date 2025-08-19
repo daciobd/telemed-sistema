@@ -132,3 +132,21 @@
   background: rgba(79, 70, 229, 0.8);
   transform: scale(1.1);
 }
+
+/* --- Full-bleed: ocupa a largura da viewport mesmo se o pai tiver max-width --- */
+.enhanced-bleed{
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;           /* use dvw/svw se preferir tratar iOS barras: 100dvw */
+  overflow-x: hidden;
+}
+
+/* dentro do bleed, centralizamos e limitamos a largura máxima */
+.enhanced-wrap{
+  width: clamp(1100px, 96vw, 1680px);
+  margin-inline: auto;
+  padding: 16px;
+}
