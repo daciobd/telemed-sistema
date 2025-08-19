@@ -103,6 +103,18 @@
     .rx-link{padding:6px 12px;border-radius:8px;border:var(--line);background:#f8fafc;color:#374151;text-decoration:none;font-size:12px;cursor:pointer}
     .rx-link:hover{background:#e2e8f0}
     
+    /* Barra horizontal de exames */
+    .examBar{
+      display:flex; gap:8px; overflow:auto; padding:8px; background:#fff;
+      border:var(--line); border-radius:10px; white-space:nowrap; scroll-behavior:smooth;
+    }
+    .examChip{
+      display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:var(--line);
+      border-radius:999px; background:#f8fafc; cursor:pointer; font-size:14px;
+    }
+    .examChip:hover{ background:#eef2ff; border-color:#c7d2fe }
+    .examBar::-webkit-scrollbar{ height:8px } .examBar::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:99px }
+    
     @media (max-width:980px){.page{grid-template-columns:1fr}}
   </style>
 </head>
@@ -219,6 +231,10 @@
       </div>
       <div id="seg-exams" hidden>
         <div style="margin-bottom:10px">
+          <div style="font-weight:600;margin-bottom:8px">Exames mais comuns</div>
+          <div class="examBar" id="examBar"></div>
+        </div>
+        <div style="margin-bottom:10px">
           <div style="font-weight:600;margin-bottom:8px">Templates comuns</div>
           <div class="templates" id="tplBox">
             <div class="tpl" data-name="Hemograma completo" data-inst="Jejum de 8h"><span style="color:red">🩸</span> Hemograma completo</div>
@@ -334,31 +350,132 @@ const post= async (url, body)=> {
   return r.json().catch(()=> ({}));
 };
 
+/** ===== CID-10 autocomplete ===== */
+const CID_FALLBACK = [
+  { code:'F41.1', name:'Transtorno de ansiedade generalizada' },
+  { code:'J06.9', name:'Infecções agudas das vias aéreas superiores, não especificada' },
+  { code:'M54.5', name:'Dor lombar' },
+  { code:'R51',   name:'Cefaleia' },
+  { code:'I10',   name:'Hipertensão essencial (primária)' },
+  { code:'E11.9', name:'Diabetes mellitus tipo 2 sem complicações' },
+  { code:'J45.9', name:'Asma, não especificada' },
+];
+
+let cidAbort = null, cidTimer = null;
+const dxInput = $('#dx'), cidList = $('#cid10');
+
+function normalizeCidList(list){
+  // aceita [{code,name}] ou [{cid,descricao}] etc.
+  return (list||[]).map(x=>{
+    const code = x.code || x.cid || x.codigo || '';
+    const name = x.name || x.term || x.descricao || x.descr || '';
+    return code && name ? {code, name} : null;
+  }).filter(Boolean);
+}
+async function searchCid(q){
+  if (!q || q.length < 2) return normalizeCidList(CID_FALLBACK);
+  try{
+    if (cidAbort) cidAbort.abort();
+    cidAbort = new AbortController();
+    const r = await fetch(API.cid10(q), { signal: cidAbort.signal });
+    if (!r.ok) throw 0;
+    const data = await r.json().catch(()=>[]);
+    const out = normalizeCidList(data);
+    return out.length ? out : normalizeCidList(CID_FALLBACK);
+  }catch{
+    return normalizeCidList(CID_FALLBACK);
+  }
+}
+function renderCidOptions(items){
+  if (cidList) cidList.innerHTML = items.map(i=>`<option value="${i.code} — ${i.name}"></option>`).join('');
+}
+
+if (dxInput) dxInput.addEventListener('input', e=>{
+  const q = e.target.value.trim();
+  clearTimeout(cidTimer);
+  cidTimer = setTimeout(async ()=>{
+    const items = await searchCid(q);
+    renderCidOptions(items);
+  }, 250);
+});
+// 1ª carga
+renderCidOptions(CID_FALLBACK);
+
 /** ========= timer / uptime ========= */
 let sec=0; setInterval(()=>{sec++; const m=String(Math.floor(sec/60)).padStart(2,'0'); const s=String(sec%60).padStart(2,'0'); $('#uptime').textContent=`${m}:${s}`},1000);
 
-/** ========= abas ========= */
-$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+/** ===== Abas principais (mover DOM de Exames) ===== */
+$$('.tab').forEach(t=>t.addEventListener('click', ()=>{
   $$('.tab').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
-  $('#tab-chat').hidden = t.dataset.tab!=='chat';
-  $('#tab-care').hidden = t.dataset.tab!=='care';
-  $('#tab-exams').hidden = t.dataset.tab!=='exams';
-  $('#tab-receitas').hidden = t.dataset.tab!=='receitas';
+
+  const which = t.dataset.tab;
+  $('#tab-chat').hidden     = which!=='chat';
+  $('#tab-care').hidden     = which!=='care';
+  $('#tab-exams').hidden    = which!=='exams';
+  $('#tab-receitas').hidden = which!=='receitas';
+
+  // move o bloco de exames (um único DOM) entre segmento e aba
+  const segEx = $('#seg-exams');
+  if (which==='exams') {
+    if (segEx && segEx.parentElement !== $('#tab-exams')) {
+      $('#tab-exams').innerHTML = ''; // limpa espelhos antigos
+      $('#tab-exams').appendChild(segEx);
+      segEx.hidden = false;
+    }
+  } else {
+    if (segEx && segEx.parentElement !== $('#tab-care')) {
+      const segPlan = $('#seg-plan');
+      if (segPlan) segPlan.insertAdjacentElement('beforebegin', segEx); // volta para o atendimento
+      segEx.hidden = true; // fica oculto dentro do atendimento até clicar no segmento "Exames"
+    }
+  }
 }));
 
-/** ========= segs (plan/exams) ========= */
-$$('.seg').forEach(s=>s.addEventListener('click',()=>{
+/** ===== Segmentador Conduta/Exames dentro do Atendimento ===== */
+$$('.seg').forEach(s=>s.addEventListener('click', ()=>{
   $$('.seg').forEach(x=>x.classList.remove('active'));
   s.classList.add('active');
   $('#seg-plan').hidden  = s.dataset.seg!=='plan';
   $('#seg-exams').hidden = s.dataset.seg!=='exams';
 }));
 
-/** mirror da área de exames na aba Exames */
-const examsMirror = $('#examsMirror');
-if (examsMirror && $('#seg-exams')) {
-  examsMirror.appendChild($('#seg-exams').cloneNode(true));
+/** ===== Exames comuns (chips horizontais) ===== */
+const COMMON_EXAMS = [
+  { n:'Hemograma completo',       inst:'Jejum 8h',        icon:'🩸' },
+  { n:'Glicemia de jejum',        inst:'Jejum',           icon:'🍎' },
+  { n:'Perfil lipídico',          inst:'',                icon:'💉' },
+  { n:'TSH',                      inst:'Sem jejum',       icon:'🦋' },
+  { n:'T4 livre',                 inst:'Sem jejum',       icon:'🦋' },
+  { n:'Creatinina',               inst:'Jejum opcional',  icon:'🧪' },
+  { n:'Ureia',                    inst:'Jejum opcional',  icon:'🧪' },
+  { n:'Urina tipo 1',             inst:'1ª urina manhã',  icon:'🚽' },
+  { n:'PCR',                      inst:'Sem jejum',       icon:'🧫' },
+  { n:'Vitamina D',               inst:'Sem jejum',       icon:'☀️' },
+  { n:'Raio-X de tórax (PA)',     inst:'Insp. profunda',  icon:'🩻' },
+  { n:'Eletrocardiograma',        inst:'Repouso',         icon:'❤️' },
+  { n:'PSA',                      inst:'≥ 50 anos',       icon:'🧑‍⚕️' },
+];
+
+function renderExamBar(){
+  const bar = $('#examBar');
+  if (!bar) return;
+  bar.innerHTML = COMMON_EXAMS.map(e=>(
+    `<button class="examChip" type="button" data-name="${e.n}" data-inst="${e.inst}">
+      <span>${e.icon}</span> ${e.n}
+    </button>`
+  )).join('');
+  bar.querySelectorAll('.examChip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if ($('#exName')) $('#exName').value  = btn.dataset.name || '';
+      if ($('#exNotes')) $('#exNotes').value = btn.dataset.inst  || '';
+      if ($('#exPriority')) $('#exPriority').value = 'Rotina';
+      // Adiciona direto (se preferir só preencher, comente a linha abaixo)
+      if ($('#exAdd')) $('#exAdd').click();
+      // garante que o usuário "vê" o pedido sendo adicionado
+      if ($('#examList')) $('#examList').scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  });
 }
 
 /** ========= botões topo ========= */
@@ -391,24 +508,7 @@ if ($('#chatSend')) $('#chatSend').onclick = ()=>{
   if ($('#chatBox')) { $('#chatBox').appendChild(b); $('#chatBox').scrollTop=$('#chatBox').scrollHeight; }
 };
 
-/** ========= CID-10 autocomplete ========= */
-let cidTimer=null;
-if ($('#dx')) $('#dx').addEventListener('input',()=>{
-  clearTimeout(cidTimer);
-  const q = $('#dx').value.trim();
-  if(q.length<2) return;
-  cidTimer = setTimeout(async ()=>{
-    try{
-      const r = await fetch(API.cid10(q));
-      const list = await r.json(); // espera: [{code:"F41.1",name:"Transtorno..."}, ...]
-      const dl = $('#cid10'); if (!dl) return;
-      dl.innerHTML='';
-      (list||[]).slice(0,30).forEach(it=>{
-        const o=document.createElement('option'); o.value=`${it.code} - ${it.name}`; dl.appendChild(o);
-      });
-    }catch(e){}
-  }, 200);
-});
+
 
 /** ========= salvar / finalizar ========= */
 if ($('#btn-save')) $('#btn-save').onclick = async ()=>{
@@ -543,7 +643,8 @@ if ($('#ai-form')) $('#ai-form').addEventListener('submit', async (e)=>{
   }catch(err){ addMsg('assistant','⚠️ Erro ao consultar IA: '+err.message); }
 });
 
-console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface v2.1');
+console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface v2.2');
+renderExamBar();
 updateRxCount();
 </script>
 </body>

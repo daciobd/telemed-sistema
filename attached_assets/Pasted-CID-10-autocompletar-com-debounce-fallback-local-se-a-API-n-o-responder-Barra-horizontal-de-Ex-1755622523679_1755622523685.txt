@@ -1,0 +1,201 @@
+CID-10 autocompletar (com debounce + fallback local se a API não responder).
+
+Barra horizontal de Exames comuns (rolável) + correção da “aba Exames em branco” movendo o mesmo DOM do segmento para a aba.
+
+Cole os trechos abaixo nos lugares indicados. (Mantive tudo o que você já tem; só adiciona/ajusta.)
+
+1) CSS — chips roláveis de Exames
+
+No <style>, adicione:
+
+/* Barra horizontal de exames */
+.examBar{
+  display:flex; gap:8px; overflow:auto; padding:8px; background:#fff;
+  border:var(--line); border-radius:10px; white-space:nowrap; scroll-behavior:smooth;
+}
+.examChip{
+  display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:var(--line);
+  border-radius:999px; background:#f8fafc; cursor:pointer; font-size:14px;
+}
+.examChip:hover{ background:#eef2ff; border-color:#c7d2fe }
+.examBar::-webkit-scrollbar{ height:8px } .examBar::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:99px }
+
+2) HTML — barra de Exames dentro do segmento “Exames”
+
+No bloco segmento de exames (em #seg-exams), logo acima de “Templates comuns”, cole:
+
+<div style="margin-bottom:10px">
+  <div style="font-weight:600;margin-bottom:8px">Exames mais comuns</div>
+  <div class="examBar" id="examBar"></div>
+</div>
+
+
+(Não mexa no resto — os “Templates comuns” continuam logo abaixo.)
+
+3) JS — CID-10 + barra de Exames + sincronizar aba “Exames”
+
+No <script>, adicione/ajuste estes blocos.
+
+3.1 CID-10 com debounce + fallback
+
+Coloque perto do topo, após a constante API e utilitários:
+
+/** ===== CID-10 autocomplete ===== */
+const CID_FALLBACK = [
+  { code:'F41.1', name:'Transtorno de ansiedade generalizada' },
+  { code:'J06.9', name:'Infecções agudas das vias aéreas superiores, não especificada' },
+  { code:'M54.5', name:'Dor lombar' },
+  { code:'R51',   name:'Cefaleia' },
+  { code:'I10',   name:'Hipertensão essencial (primária)' },
+  { code:'E11.9', name:'Diabetes mellitus tipo 2 sem complicações' },
+  { code:'J45.9', name:'Asma, não especificada' },
+];
+
+let cidAbort = null, cidTimer = null;
+const dxInput = $('#dx'), cidList = $('#cid10');
+
+function normalizeCidList(list){
+  // aceita [{code,name}] ou [{cid,descricao}] etc.
+  return (list||[]).map(x=>{
+    const code = x.code || x.cid || x.codigo || '';
+    const name = x.name || x.term || x.descricao || x.descr || '';
+    return code && name ? {code, name} : null;
+  }).filter(Boolean);
+}
+async function searchCid(q){
+  if (!q || q.length < 2) return normalizeCidList(CID_FALLBACK);
+  try{
+    if (cidAbort) cidAbort.abort();
+    cidAbort = new AbortController();
+    const r = await fetch(API.cid10(q), { signal: cidAbort.signal });
+    if (!r.ok) throw 0;
+    const data = await r.json().catch(()=>[]);
+    const out = normalizeCidList(data);
+    return out.length ? out : normalizeCidList(CID_FALLBACK);
+  }catch{
+    return normalizeCidList(CID_FALLBACK);
+  }
+}
+function renderCidOptions(items){
+  cidList.innerHTML = items.map(i=>`<option value="${i.code} — ${i.name}"></option>`).join('');
+}
+
+dxInput.addEventListener('input', e=>{
+  const q = e.target.value.trim();
+  clearTimeout(cidTimer);
+  cidTimer = setTimeout(async ()=>{
+    const items = await searchCid(q);
+    renderCidOptions(items);
+  }, 250);
+});
+// 1ª carga
+renderCidOptions(CID_FALLBACK);
+
+
+Isso preenche o <datalist id="cid10"> conforme o usuário digita em Hipótese diagnóstica; se a rota /api/cid10/search estiver fora/indisponível, cai no fallback.
+
+3.2 Barra horizontal de Exames
+
+Adicione após o código das abas/segmentos:
+
+/** ===== Exames comuns (chips horizontais) ===== */
+const COMMON_EXAMS = [
+  { n:'Hemograma completo',       inst:'Jejum 8h',        icon:'🩸' },
+  { n:'Glicemia de jejum',        inst:'Jejum',           icon:'🍎' },
+  { n:'Perfil lipídico',          inst:'',                icon:'💉' },
+  { n:'TSH',                      inst:'Sem jejum',       icon:'🦋' },
+  { n:'T4 livre',                 inst:'Sem jejum',       icon:'🦋' },
+  { n:'Creatinina',               inst:'Jejum opcional',  icon:'🧪' },
+  { n:'Ureia',                    inst:'Jejum opcional',  icon:'🧪' },
+  { n:'Urina tipo 1',             inst:'1ª urina manhã',  icon:'🚽' },
+  { n:'PCR',                      inst:'Sem jejum',       icon:'🧫' },
+  { n:'Vitamina D',               inst:'Sem jejum',       icon:'☀️' },
+  { n:'Raio-X de tórax (PA)',     inst:'Insp. profunda',  icon:'🩻' },
+  { n:'Eletrocardiograma',        inst:'Repouso',         icon:'❤️' },
+  { n:'PSA',                      inst:'≥ 50 anos',       icon:'🧑‍⚕️' },
+];
+
+function renderExamBar(){
+  const bar = $('#examBar');
+  if (!bar) return;
+  bar.innerHTML = COMMON_EXAMS.map(e=>(
+    `<button class="examChip" type="button" data-name="${e.n}" data-inst="${e.inst}">
+      <span>${e.icon}</span> ${e.n}
+    </button>`
+  )).join('');
+  bar.querySelectorAll('.examChip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      $('#exName').value  = btn.dataset.name || '';
+      $('#exNotes').value = btn.dataset.inst  || '';
+      $('#exPriority').value = 'Rotina';
+      // Adiciona direto (se preferir só preencher, comente a linha abaixo)
+      $('#exAdd').click();
+      // garante que o usuário “vê” o pedido sendo adicionado
+      $('#examList').scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  });
+}
+renderExamBar();
+
+3.3 “Aba Exames” vazia → mover o mesmo DOM do segmento
+
+No seu handler das abas principais (você já tem algo como $$('.tab').forEach(...)), troque a parte que só fazia hidden=true/false por este switch (mantém a mesma API visual, mas move o bloco #seg-exams para a aba quando necessário e devolve ao Atendimento ao sair):
+
+/** ===== Abas principais (mover DOM de Exames) ===== */
+$$('.tab').forEach(t=>t.addEventListener('click', ()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+
+  const which = t.dataset.tab;
+  $('#tab-chat').hidden     = which!=='chat';
+  $('#tab-care').hidden     = which!=='care';
+  $('#tab-exams').hidden    = which!=='exams';
+  $('#tab-receitas').hidden = which!=='receitas';
+
+  // move o bloco de exames (um único DOM) entre segmento e aba
+  const segEx = $('#seg-exams');
+  if (which==='exams') {
+    if (segEx && segEx.parentElement !== $('#tab-exams')) {
+      $('#tab-exams').innerHTML = ''; // limpa espelhos antigos
+      $('#tab-exams').appendChild(segEx);
+      segEx.hidden = false;
+    }
+  } else {
+    if (segEx && segEx.parentElement !== $('#tab-care')) {
+      $('#seg-plan').insertAdjacentElement('beforebegin', segEx); // volta para o atendimento
+      segEx.hidden = true; // fica oculto dentro do atendimento até clicar no segmento "Exames"
+    }
+  }
+}));
+
+
+E, para o segmentador interno (os botões “Conduta / Exames”), garanta que seu listener já faz:
+
+/** ===== Segmentador Conduta/Exames dentro do Atendimento ===== */
+$$('.seg').forEach(s=>s.addEventListener('click', ()=>{
+  $$('.seg').forEach(x=>x.classList.remove('active'));
+  s.classList.add('active');
+  $('#seg-plan').hidden  = s.dataset.seg!=='plan';
+  $('#seg-exams').hidden = s.dataset.seg!=='exams';
+}));
+
+
+Assim, a “aba Exames” não fica mais vazia: ela usa o mesmo conteúdo do segmento (sem duplicar handlers).
+
+3.4 Funções utilitárias de Exames (se ainda não tiver)
+
+Se o seu #exAdd já adiciona na lista, mantenha. Caso não exista, use este mínimo:
+
+function addExamToList(name, prio, notes){
+  const box = $('#examList');
+  const item = document.createElement('div');
+  item.style.cssText = 'padding:8px;border:1px solid rgba(0,0,0,.08);border-radius:10px;margin:6px 0;background:#fff';
+  item.innerHTML = `<b>${name}</b> <span class="pill">${prio}</span><br><small>${notes||''}</small>`;
+  if (box.textContent.includes('Nenhum exame')) box.innerHTML='';
+  box.appendChild(item);
+}
+$('#exAdd').addEventListener('click', ()=>{
+  const n = $('#exName').value.trim(); if(!n) return;
+  addExamToList(n, $('#exPriority').value, $('#exNotes').value.trim());
+  $('#exName').value=''; $('#exNotes').value='';
+});
