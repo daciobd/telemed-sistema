@@ -1,0 +1,37 @@
+/* Centro responsivo e sem arrasto lateral */
+html,body{height:100%; margin:0; padding:0}
+*{box-sizing:border-box}
+body{overflow-x:hidden}
+
+.enhanced-shell{min-height:100vh; display:grid; grid-template-columns:minmax(0,1fr)}
+.enhanced-wrap{width:min(1200px, 100%); margin-inline:auto; padding:16px}
+
+/* Overrides defensivos se alguém alinhou à direita */
+.enhanced-wrap,.enhanced-container,.enh-split{margin-left:auto;margin-right:auto}
+.enhanced-container,.enh-split{display:block !important; max-width:1200px}
+.enhanced-right, [data-align="end"]{justify-content:unset !important}
+
+/* 100vw costuma quebrar quando DevTools está docked */
+:where(.enhanced-root, .enhanced-wrap, .enhanced-container, .enh-split){width:100%}
+:where(.enhanced-root, .enhanced-wrap, .enhanced-container, .enh-split)[data-full="true"]{width:100%}
+
+/* Fix para split layout específico */
+.enh-split{
+  display:flex !important;
+  max-width:100% !important;
+  margin:0 auto !important;
+  justify-content:center !important;
+}
+
+/* Previne overflow horizontal em qualquer elemento */
+.split-left, .split-right, .tm-stage, .consult-panel{
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+/* Centraliza o app container */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  width:100%;
+}

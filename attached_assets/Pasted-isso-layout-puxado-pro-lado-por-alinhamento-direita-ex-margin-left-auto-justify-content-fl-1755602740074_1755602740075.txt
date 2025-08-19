@@ -1,0 +1,57 @@
+isso é layout “puxado” pro lado por alinhamento à direita (ex.: margin-left:auto, justify-content:flex-end ou width:100vw). Vamos centralizar a Enhanced com um patch rápido (safe, não quebra nada) e bloquear overflow.
+
+Mensagem pronta pro Replit (cole tudo)
+# 1) CSS de correção (centro + sem 100vw/overflow)
+mkdir -p client/src/pages
+cat > client/src/pages/enhanced-fix.css <<'EOF'
+/* Centro responsivo e sem arrasto lateral */
+html,body,#root{height:100%}
+*{box-sizing:border-box}
+body{overflow-x:hidden}
+
+.enhanced-shell{min-height:100%; display:grid; grid-template-columns:minmax(0,1fr)}
+.enhanced-wrap{width:min(1200px, 100%); margin-inline:auto; padding:16px}
+
+/* Overrides defensivos se alguém alinhou à direita */
+.enhanced-wrap,.enhanced-container{margin-left:auto;margin-right:auto}
+.enhanced-container{display:block !important; max-width:1200px}
+.enhanced-right, [data-align="end"]{justify-content:unset !important}
+
+/* 100vw costuma quebrar quando DevTools está docked */
+:where(.enhanced-root, .enhanced-wrap, .enhanced-container){width:100%}
+:where(.enhanced-root, .enhanced-wrap, .enhanced-container)[data-full="true"]{width:100%} /* nunca usar 100vw aqui */
+EOF
+
+# 2) Envolver a página Enhanced com o wrapper centralizado
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/EnhancedConsultation.tsx
+@@
+-import React from "react";
++import React from "react";
++import "./enhanced-fix.css";
+@@
+-export default function EnhancedConsultation(){
+-  return (
+-    <>
+-      {/* conteúdo atual */}
+-    </>
+-  );
+-}
++export default function EnhancedConsultation(){
++  return (
++    <div className="enhanced-shell">
++      <main className="enhanced-wrap enhanced-container" data-full="false">
++        {/* conteúdo atual */}
++      </main>
++    </div>
++  );
++}
+*** End Patch
+PATCH
+
+# 3) (Opcional mas recomendado) eliminar usos de 100vw em estilos do projeto
+grep -RIn "100vw" client/src | sed -n '1,120p' || true
+
+
+Se o arquivo da página tiver outro nome/caminho, ajuste no applypatch (ex.: Enhanced.tsx ou /pages/enhanced/index.tsx). A ideia é importar enhanced-fix.css e embrulhar o conteúdo em <div class="enhanced-shell"><main class="enhanced-wrap">…</main></div>.
