@@ -1,0 +1,100 @@
+CSS — largura total + grid de 2 colunas
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/enhanced-fix.css
+@@
+-.enhanced-wrap{width:min(1200px, 100%); margin-inline:auto; padding:16px}
++/* usar praticamente a largura toda em desktop, sem barra horizontal */
++.enhanced-wrap{
++  width: clamp(1100px, 96vw, 1680px);
++  margin-inline:auto;
++  padding:16px;
++}
++
++/* layout em duas colunas (esquerda: vídeo/status | direita: formulário) */
++.enhanced-columns{
++  display:grid;
++  grid-template-columns: minmax(360px, 42%) 1fr;
++  gap:16px;
++  align-items:start;
++  min-height: calc(100vh - 96px);
++}
++
++/* coluna esquerda fixa durante a rolagem */
++.enhanced-left{
++  position: sticky;
++  top: 12px;
++}
++
++/* rolagem só na direita; evita que a página inteira role demais */
++.enhanced-right{
++  min-height: calc(100vh - 96px);
++  overflow: auto;
++}
+ 
+ /* Overrides defensivos se alguém alinhou à direita */
+ .enhanced-wrap,.enhanced-container{margin-left:auto;margin-right:auto}
+ .enhanced-container{display:block !important; max-width:1200px}
+ .enhanced-right, [data-align="end"]{justify-content:unset !important}
+ 
+ /* 100vw costuma quebrar quando DevTools está docked */
+ :where(.enhanced-root, .enhanced-wrap, .enhanced-container){width:100%}
+ :where(.enhanced-root, .enhanced-wrap, .enhanced-container)[data-full="true"]{width:100%} /* nunca usar 100vw aqui */
+*** End Patch
+PATCH
+
+2) React — embrulhar vídeo e conteúdo nas duas colunas
+
+Se você já tem o EnhancedConsultation.tsx, vamos só envolver o retorno com as novas classes. (Não mexe em lógica nenhuma.)
+
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/EnhancedConsultation.tsx
+@@
+ export default function EnhancedConsultation(){
+   return (
+     <div className="enhanced-shell">
+-      <main className="enhanced-wrap enhanced-container" data-full="false">
+-        {/* VIDEO AREA */}
+-        <section className="enhanced-video-shell" id="enhanced-video">
+-          {/* Se o seu componente de vídeo já existe, ele ficará visível aqui se estiver neste ponto da árvore.
+-              Caso ele seja montado em outro lugar, este shell ainda força altura e previne sumiço por CSS. */}
+-          {/* Controles (exemplo; substitua pelos seus) */}
+-          <div className="enhanced-controls">
+-            {/* seus botões existentes podem ficar aqui */}
+-          </div>
+-        </section>
+-        {/* resto do conteúdo atual (tabs, formulários etc.) */}
++      <main className="enhanced-wrap" data-full="true">
++        <div className="enhanced-columns">
++          {/* COLUNA ESQUERDA: card de status + VÍDEO */}
++          <aside className="enhanced-left">
++            <section className="enhanced-video-shell" id="enhanced-video">
++              {/* o componente de vídeo/canvas existente aparecerá aqui */}
++              <div className="enhanced-controls">{/* botões sobre o vídeo (seus) */}</div>
++            </section>
++          </aside>
++
++          {/* COLUNA DIREITA: tabs, formulário, receitas, exames */}
++          <section className="enhanced-right">
++            {/* >>> aqui permanece TODO o conteúdo de atendimento/tabs/formulários que você já tem <<< */}
++          </section>
++        </div>
+       </main>
+     </div>
+   );
+ }
+*** End Patch
+PATCH
+
+
+Obs.: se seu código já separa “painel esquerdo/direito”, só garanta que o esquerdo esteja dentro de .enhanced-left e o direito dentro de .enhanced-right. O resto segue igual.
+
+3) (Opcional) “Aperto” em telas menores
+
+Se quiser que com 1100px ou menos o layout vire 1 coluna, já está coberto pelo clamp; mas pode reforçar:
+
+@media (max-width: 1100px){
+  .enhanced-columns{ grid-template-columns: 1fr; }
+  .enhanced-left{ position: static; }
+}

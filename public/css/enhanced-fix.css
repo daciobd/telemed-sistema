@@ -4,7 +4,48 @@ html,body{height:100%; margin:0; padding:0}
 body{overflow-x:hidden}
 
 .enhanced-shell{min-height:100vh; display:grid; grid-template-columns:minmax(0,1fr)}
-.enhanced-wrap{width:min(1200px, 100%); margin-inline:auto; padding:16px}
+/* usar praticamente a largura toda em desktop, sem barra horizontal */
+.enhanced-wrap{
+  width: clamp(1100px, 96vw, 1680px);
+  margin-inline:auto;
+  padding:16px;
+}
+
+/* layout em duas colunas (esquerda: vídeo/status | direita: formulário) */
+.enhanced-columns{
+  display:grid;
+  grid-template-columns: minmax(360px, 42%) 1fr;
+  gap:16px;
+  align-items:start;
+  min-height: calc(100vh - 96px);
+}
+
+/* coluna esquerda fixa durante a rolagem */
+.enhanced-left{
+  position: sticky;
+  top: 12px;
+}
+
+/* rolagem só na direita; evita que a página inteira role demais */
+.enhanced-right{
+  min-height: calc(100vh - 96px);
+  overflow: auto;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 1100px){
+  .enhanced-columns{ 
+    grid-template-columns: 1fr; 
+    gap: 12px;
+  }
+  .enhanced-left{ 
+    position: static; 
+  }
+  .enhanced-wrap{
+    width: min(100%, 95vw);
+    padding: 12px;
+  }
+}
 
 /* Overrides defensivos se alguém alinhou à direita */
 .enhanced-wrap,.enhanced-container,.enh-split{margin-left:auto;margin-right:auto}

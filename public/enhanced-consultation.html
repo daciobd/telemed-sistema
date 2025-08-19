@@ -287,9 +287,11 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
 </head>
 <body data-consult-id="demo-123">
 <div class="app">
-  <!-- SPLIT layout -->
-  <div class="enh-split" data-split="enhanced" id="splitRoot">
-    <section id="leftPane" class="split-left" style="position:relative">
+  <!-- Enhanced Columns Layout -->
+  <div class="enhanced-columns">
+    <!-- COLUNA ESQUERDA: vídeo e status -->
+    <aside class="enhanced-left">
+      <section id="leftPane" class="split-left" style="position:relative">
       <!-- === Patient Banner / Faixa sobre o vídeo === -->
       <div class="patient-banner" id="patientBanner" aria-live="polite">
         <div class="pb-left">
@@ -346,16 +348,12 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
         <div class="ico yellow" id="btnHold" title="Enviar p/ sala de espera"><span>⏸️</span></div>
         <div class="ico red" id="btnEnd" title="Encerrar"><span>⛔</span></div>
       </div>
-    </section>
+      </section>
+    </aside>
 
-    <!-- divisor arrastável -->
-    <div id="divider" class="split-divider" role="separator"
-         aria-orientation="vertical" aria-label="Redimensionar painel de anotações"
-         tabindex="0">
-      <span class="grip" aria-hidden="true"></span>
-    </div>
-
-    <aside id="rightPane" class="split-right">
+    <!-- COLUNA DIREITA: formulários e tabs -->
+    <section class="enhanced-right">
+      <aside id="rightPane" class="split-right" style="position:static; background:transparent; min-width:auto;">
 
       <!-- abas -->
       <div class="tabs">
@@ -484,6 +482,9 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
         </div>
         <div class="row"><div class="label">Receitas do Atendimento</div><div id="rxList2" class="empty">Nenhuma receita ainda</div></div>
       </div>
+    </section>
+
+      </aside>
     </section>
   </div>
 </div>
