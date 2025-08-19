@@ -1,0 +1,84 @@
+o vídeo ainda está “em cima” porque o DOM está ficando com 3+ elementos irmãos diretos dentro do container, então o grid não fecha em 2 colunas e empurra o resto para baixo. Vamos forçar (no próprio componente) que a Enhanced tenha exatamente 2 colunas: “esquerda” (card+vídeo) e “direita” (todo o resto). O código abaixo reorganiza o DOM automaticamente assim que a página monta.
+
+Cole no Replit (patch direto)
+1) EnhancedConsultation.tsx — reorganizador de colunas
+
+Adicione este useEffect no arquivo client/src/pages/EnhancedConsultation.tsx (onde já importamos os CSS e temos o return):
+
+// 🔧 Garante 2 colunas de verdade: tudo até o vídeo fica à esquerda, o restante vai para a direita
+useEffect(() => {
+  const wrap = document.querySelector(".enhanced-wrap") as HTMLElement | null;
+  if (!wrap) return;
+  // Evita duplicar se já estiver montado
+  if (wrap.querySelector(".enhanced-columns")) return;
+
+  // Pegamos os filhos DIRETOS do wrap
+  const children = Array.from(wrap.children) as HTMLElement[];
+  if (children.length === 0) return;
+
+  // Localiza o contêiner do vídeo (id criado no patch anterior)
+  const video = wrap.querySelector("#enhanced-video") as HTMLElement | null;
+
+  // Cria a estrutura das 2 colunas
+  const columns = document.createElement("div");
+  columns.className = "enhanced-columns";
+  const left = document.createElement("aside");
+  left.className = "enhanced-left";
+  const right = document.createElement("section");
+  right.className = "enhanced-right";
+
+  // Regra: tudo ATÉ o vídeo (inclusive) vai para a esquerda; o restante, direita.
+  if (video) {
+    let onRight = false;
+    for (const el of children) {
+      if (el === columns) continue;        // segurança
+      if (!onRight) left.appendChild(el);
+      else right.appendChild(el);
+      if (el === video) onRight = true;    // a partir daqui, tudo à direita
+    }
+  } else {
+    // Fallback: se por algum motivo não achou o vídeo, manda o 1º bloco para esquerda, resto direita
+    if (children[0]) left.appendChild(children[0]);
+    for (let i = 1; i < children.length; i++) right.appendChild(children[i]);
+  }
+
+  columns.appendChild(left);
+  columns.appendChild(right);
+  wrap.appendChild(columns);
+}, []);
+
+
+Esse efeito pega os filhos diretos de .enhanced-wrap, move até o #enhanced-video para .enhanced-left e empacota o restante em .enhanced-right. Assim o grid terá exatamente 2 filhos e o formulário não “vai para baixo”.
+
+2) CSS já preparado
+
+Você já tem os estilos em enhanced-fix.css; só confira que estes trechos existem (ou adicione ao final do arquivo):
+
+.enhanced-wrap{
+  width: clamp(1100px, 96vw, 1680px);
+  margin-inline:auto;
+  padding:16px;
+}
+.enhanced-columns{
+  display:grid;
+  grid-template-columns: minmax(360px, 42%) 1fr;
+  gap:16px;
+  align-items:start;
+  min-height: calc(100vh - 96px);
+}
+.enhanced-left{ position: sticky; top: 12px; }
+.enhanced-right{ min-height: calc(100vh - 96px); overflow: auto; }
+.enhanced-right > *{ width:100%; }
+
+@media (max-width: 1100px){
+  .enhanced-columns{ grid-template-columns:1fr; }
+  .enhanced-left{ position: static; }
+}
+
+O que você deve ver após atualizar
+
+Vídeo + card permanecem na coluna esquerda (sticky).
+
+Tabs/Formulário/Receitas/Exames ficam todos juntos na coluna direita (rolagem nela).
+
+Nada mais “desce” para uma linha abaixo do vídeo.
