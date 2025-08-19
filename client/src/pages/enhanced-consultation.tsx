@@ -1,7 +1,11 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./enhanced-fix.css";
 
 export default function EnhancedConsultation() {
+  const [mode, setMode] = useState<"default"|"video"|"form">("default");
+  const columnsClass =
+    "enhanced-columns " +
+    (mode==="video" ? "is-video-wide" : mode==="form" ? "is-form-wide" : "");
   // 🔧 Garante 2 colunas de verdade: tudo até o vídeo fica à esquerda, o restante vai para a direita
   useEffect(() => {
     const wrap = document.querySelector(".enhanced-wrap") as HTMLElement | null;
@@ -47,25 +51,42 @@ export default function EnhancedConsultation() {
   return (
     <div className="enhanced-shell enhanced-bleed">
       <main className="enhanced-wrap" data-full="true">
-        {/* Container de vídeo (será movido para coluna esquerda) */}
-        <section className="enhanced-video-shell" id="enhanced-video">
-          <div className="wait">
-            <div>🎥 Aguardando conexão de vídeo...</div>
-          </div>
-          {/* Controles de vídeo serão inseridos aqui via JavaScript */}
-          <div className="enhanced-controls">
-            <button title="Anexar arquivo">📎</button>
-            <button title="Capturar tela">📸</button>
-            <button title="Chat">💬</button>
-            <button title="Notificações">🔔</button>
-            <button title="Microfone">🎙️</button>
-            <button title="Câmera">📹</button>
-            <button title="Pausar">⏸️</button>
-            <button title="Encerrar">🔚</button>
-          </div>
-        </section>
 
-        {/* Conteúdo principal (será movido para coluna direita) */}
+        {/* toolbar de visualização */}
+        <div className="enhanced-viewbar" role="toolbar" aria-label="Ajustar layout">
+          <button className="btn"
+                  aria-pressed={mode==="video"}
+                  onClick={()=>setMode(m => m==="video" ? "default" : "video")}>
+            📽️ Expandir vídeo
+          </button>
+          <button className="btn"
+                  aria-pressed={mode==="form"}
+                  onClick={()=>setMode(m => m==="form" ? "default" : "form")}>
+            📋 Expandir formulário
+          </button>
+        </div>
+
+        <div className={columnsClass}>
+          <aside className="enhanced-left">
+              <div className="wait">
+                <div>🎥 Aguardando conexão de vídeo...</div>
+              </div>
+              {/* Controles de vídeo serão inseridos aqui via JavaScript */}
+              <div className="enhanced-controls">
+                <button title="Anexar arquivo">📎</button>
+                <button title="Capturar tela">📸</button>
+                <button title="Chat">💬</button>
+                <button title="Notificações">🔔</button>
+                <button title="Microfone">🎙️</button>
+                <button title="Câmera">📹</button>
+                <button title="Pausar">⏸️</button>
+                <button title="Encerrar">🔚</button>
+              </div>
+            </section>
+          </aside>
+
+          <section className="enhanced-right">
+            {/* Conteúdo principal */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">Consulta Avançada com IA</h1>
           
@@ -135,7 +156,7 @@ export default function EnhancedConsultation() {
                 Consultar IA
               </button>
             </div>
-          </div>
+          </section>
         </div>
       </main>
     </div>

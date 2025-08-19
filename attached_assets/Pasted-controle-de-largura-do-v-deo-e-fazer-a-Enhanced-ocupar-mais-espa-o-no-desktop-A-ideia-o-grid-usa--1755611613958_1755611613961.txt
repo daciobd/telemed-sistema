@@ -1,0 +1,103 @@
+controle de largura do vídeo e fazer a Enhanced ocupar mais espaço no desktop.
+
+A ideia: o grid usa 2 colunas, mas a esquerda está em ~42% (≈480 px na sua tela). Vamos:
+
+aumentar o padrão no desktop;
+
+adicionar um toggle “Expandir vídeo / Expandir formulário”.
+
+Cole os dois patches abaixo.
+
+1) CSS — colunas com variável e modos (padrão mais largo + toggle)
+
+Arquivo: client/src/pages/enhanced-fix.css
+
+/* tamanhos via variável; desktop padrão mais largo para o vídeo */
+.enhanced-columns{
+  /* era: minmax(360px, 42%) 1fr */
+  --left-col: 54%;                 /* largura padrão da coluna do vídeo no desktop */
+  display:grid;
+  grid-template-columns: minmax(420px, var(--left-col)) 1fr;
+  gap:16px;
+  align-items:start;
+  min-height: calc(100vh - 96px);
+}
+
+/* modos de visualização */
+.enhanced-columns.is-video-wide{ --left-col: 62%; }   /* vídeo maior */
+.enhanced-columns.is-form-wide{  --left-col: 38%; }   /* formulário maior */
+
+/* toolbar flutuante para o toggle */
+.enhanced-viewbar{
+  position: sticky; top: 8px; z-index: 25;
+  display:flex; gap:8px; justify-content:flex-end; margin-bottom:8px;
+}
+.enhanced-viewbar .btn{
+  appearance:none; border:1px solid #2a3759; background:#0b1220; color:#e5e7eb;
+  border-radius:10px; padding:6px 10px; cursor:pointer;
+}
+.enhanced-viewbar .btn[aria-pressed="true"]{ outline:2px solid #2563eb; }
+
+
+Mantive o breakpoint: abaixo de 1100 px continua 1 coluna (se já tinha esse bloco, não precisa mexer).
+
+2) Componente — botões para alternar o modo
+
+Arquivo: client/src/pages/EnhancedConsultation.tsx
+
+Adicione os estados e handlers e a toolbar (procure o return e inclua a barra dentro de .enhanced-wrap, antes de .enhanced-columns):
+
+import React, { useEffect, useRef, useState } from "react"; // <- adicione useState
+
+export default function EnhancedConsultation(){
+  // ...
+  const [mode, setMode] = useState<"default"|"video"|"form">("default");
+  const columnsClass =
+    "enhanced-columns " +
+    (mode==="video" ? "is-video-wide" : mode==="form" ? "is-form-wide" : "");
+
+  return (
+    <div className="enhanced-shell enhanced-bleed">
+      <main className="enhanced-wrap" data-full="true">
+
+        {/* toolbar de visualização */}
+        <div className="enhanced-viewbar" role="toolbar" aria-label="Ajustar layout">
+          <button className="btn"
+                  aria-pressed={mode==="video"}
+                  onClick={()=>setMode(m => m==="video" ? "default" : "video")}>
+            📽️ Expandir vídeo
+          </button>
+          <button className="btn"
+                  aria-pressed={mode==="form"}
+                  onClick={()=>setMode(m => m==="form" ? "default" : "form")}>
+            📋 Expandir formulário
+          </button>
+        </div>
+
+        <div className={columnsClass}>
+          <aside className="enhanced-left">
+            <section className="enhanced-video-shell" id="enhanced-video">
+              <video ref={remoteRef} data-rtc-role="remote" autoPlay playsInline />
+              <video ref={localRef}  data-rtc-role="local"  autoPlay playsInline muted />
+              <div className="enhanced-controls">{/* seus botões */}</div>
+            </section>
+          </aside>
+
+          <section className="enhanced-right">
+            {/* TODO: tabs + formulário existentes */}
+          </section>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+O que esperar
+
+Sem tocar em lógica de RTC, o vídeo já abre mais largo (≈ 54% da largura útil).
+
+Clique “📽️ Expandir vídeo” → vai para ~62% (bom para exame físico/visual).
+
+Clique “📋 Expandir formulário” → reduz vídeo para ~38% e dá foco ao preenchimento.
+
+Clique novamente no botão ativo para voltar ao padrão.
