@@ -1,0 +1,81 @@
+CSS: largura real da página + coluna do vídeo mais larga
+
+Arquivo: client/src/pages/enhanced-fix.css (adicione/ajuste estes blocos no final)
+
+/* — full-bleed: ocupa a viewport mesmo se o layout pai tiver max-width — */
+.enhanced-bleed{
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50svw;
+  margin-right: -50svw;
+  width: 100svw;           /* usa svw para ignorar barra/DevTools */
+  overflow-x: hidden;
+}
+
+/* wrapper centralizado e bem largo em desktop */
+.enhanced-wrap{
+  width: clamp(1200px, 98svw, 1800px);  /* ↑ antes estava ~1100/1200 */
+  margin-inline: auto;
+  padding: 16px;
+}
+
+/* grid de 2 colunas com variável — vídeo maior e min 520px */
+.enhanced-columns{
+  --left-col: 62%;                         /* antes ~42–54% */
+  display: grid;
+  grid-template-columns: minmax(520px, var(--left-col)) 1fr;
+  gap: 16px;
+  align-items: start;
+  min-height: calc(100vh - 96px);
+}
+
+.enhanced-left{ position: sticky; top: 12px; }
+.enhanced-right{ min-height: calc(100vh - 96px); overflow: auto; }
+.enhanced-right > *{ width: 100%; }
+
+@media (max-width: 1100px){
+  .enhanced-columns{ grid-template-columns: 1fr; }
+  .enhanced-left{ position: static; }
+}
+
+2) Componente: garantir que o “bleed” está aplicado
+
+Arquivo: client/src/pages/EnhancedConsultation.tsx
+Certifique-se de que a classe enhanced-bleed esteja no contêiner raiz que envolve a página:
+
+return (
+  <div className="enhanced-shell enhanced-bleed">
+    <main className="enhanced-wrap" data-full="true">
+      <div className="enhanced-columns">
+        <aside className="enhanced-left">
+          <section className="enhanced-video-shell" id="enhanced-video">
+            <video ref={remoteRef} data-rtc-role="remote" autoPlay playsInline />
+            <video ref={localRef}  data-rtc-role="local"  autoPlay playsInline muted />
+            <div className="enhanced-controls">{/* … */}</div>
+          </section>
+        </aside>
+        <section className="enhanced-right">
+          {/* tabs + formulário… */}
+        </section>
+      </div>
+    </main>
+  </div>
+);
+
+Como conferir (no seu DevTools)
+
+Recarregue /enhanced.
+
+Rode no Console:
+
+document.querySelector('.enhanced-wrap')?.getBoundingClientRect().width
+
+
+→ Deve dar ≥ 1200 px (mesmo com DevTools aberto).
+3) O bloco “Video area” deve subir para ~700–1100 px (depende do seu viewport).
+
+Se quiser ajustar fino sem mexer em CSS, dá para testar ao vivo:
+
+document.querySelector('.enhanced-columns')
+  ?.style.setProperty('--left-col','66%')  // ou 58%, 70%…

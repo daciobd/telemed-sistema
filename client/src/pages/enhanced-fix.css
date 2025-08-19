@@ -12,14 +12,13 @@
   padding: 16px;
 }
 
-/* tamanhos via variável; desktop padrão mais largo para o vídeo */
+/* grid de 2 colunas com variável — vídeo maior e min 520px */
 .enhanced-columns{
-  /* era: minmax(360px, 42%) 1fr */
-  --left-col: 54%;                 /* largura padrão da coluna do vídeo no desktop */
-  display:grid;
-  grid-template-columns: minmax(420px, var(--left-col)) 1fr;
-  gap:16px;
-  align-items:start;
+  --left-col: 62%;                         /* antes ~42–54% */
+  display: grid;
+  grid-template-columns: minmax(520px, var(--left-col)) 1fr;
+  gap: 16px;
+  align-items: start;
   min-height: calc(100vh - 96px);
 }
 
@@ -151,20 +150,20 @@
   transform: scale(1.1);
 }
 
-/* --- Full-bleed: ocupa a largura da viewport mesmo se o pai tiver max-width --- */
+/* — full-bleed: ocupa a viewport mesmo se o layout pai tiver max-width — */
 .enhanced-bleed{
   position: relative;
   left: 50%;
   right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  width: 100vw;           /* use dvw/svw se preferir tratar iOS barras: 100dvw */
+  margin-left: -50svw;
+  margin-right: -50svw;
+  width: 100svw;           /* usa svw para ignorar barra/DevTools */
   overflow-x: hidden;
 }
 
-/* dentro do bleed, centralizamos e limitamos a largura máxima */
+/* wrapper centralizado e bem largo em desktop */
 .enhanced-wrap{
-  width: clamp(1100px, 96vw, 1680px);
+  width: clamp(1200px, 98svw, 1800px);  /* ↑ antes estava ~1100/1200 */
   margin-inline: auto;
   padding: 16px;
 }
