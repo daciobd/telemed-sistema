@@ -70,11 +70,11 @@ app.use("/api/memed", memed);
 app.post('/api/consultation/upload', upload.array('files'), async (req, res) => {
   try {
     const { consultId } = req.body;
-    const files = req.files;
+    const files = req.files as Express.Multer.File[];
     console.log(`📎 Upload para consulta ${consultId}: ${files?.length || 0} arquivos`);
     res.json({ success: true, files: files?.length || 0, consultId });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: (error as Error).message });
   }
 });
 
@@ -84,7 +84,7 @@ app.post('/api/consultation/screenshot', upload.single('screenshot'), async (req
     console.log(`📸 Screenshot capturado para consulta ${consultId}`);
     res.json({ success: true, consultId, timestamp: new Date().toISOString() });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: (error as Error).message });
   }
 });
 
