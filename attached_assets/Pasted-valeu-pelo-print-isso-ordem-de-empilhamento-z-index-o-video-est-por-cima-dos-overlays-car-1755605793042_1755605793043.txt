@@ -1,0 +1,74 @@
+valeu pelo print — isso é ordem de empilhamento (z-index): o <video> está por cima dos overlays (cards/botões). Vamos forçar uma hierarquia estável:
+
+vídeo/canvas = nível 5
+
+overlays (HUD, card, botões) = nível 20, com pointer-events: auto
+
+Cole no Replit:
+
+1) Ajuste de CSS (camadas e clique garantidos)
+
+Atualize client/src/pages/enhanced-video.css:
+
+ .enhanced-video-shell{
+   position:relative; width:100%; max-width:1200px; margin:0 auto 12px;
+   aspect-ratio:16/9; min-height:240px; background:#000; border-radius:12px; overflow:hidden;
++  contain: paint; /* isola a pilha de z-index para evitar conflitos externos */
++  z-index: 0;
+ }
+@@
+ .enhanced-video-shell video,
+ .enhanced-video-shell canvas{
+-  position:absolute; inset:0; width:100% !important; height:100% !important;
+-  object-fit:contain; display:block; visibility:visible !important; opacity:1 !important;
++  position:absolute; inset:0;
++  width:100% !important; height:100% !important;
++  object-fit:contain;
++  display:block; visibility:visible !important; opacity:1 !important;
++  z-index: 5;            /* <<< vídeo fica abaixo dos overlays */
+ }
+ /* PIP (local camera) no canto */
+ .enhanced-video-shell video[data-rtc-role="local"]{
+   width:22% !important; height:auto !important;
+   right:8px; bottom:8px; left:auto; top:auto;
+   border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.35);
++  z-index: 15;           /* PIP acima do vídeo remoto, abaixo do HUD/controles */
+ }
+ 
+-/* barra de botões sobreposta sem cobrir cliques no vídeo além dos botões */
+-.enhanced-controls{
++/* barra de botões sobreposta (e clicável) */
++.enhanced-controls{
+   position:absolute; left:0; right:0; bottom:8px; display:flex; gap:8px; justify-content:center;
+-  pointer-events:none;
++  pointer-events:auto;
++  z-index: 20;          /* <<< acima de tudo */
+ }
+-.enhanced-controls > *{ pointer-events:auto; }
+-.enhanced-video-shell{ z-index:0 }
+-.enhanced-controls{ z-index:10 }
++.enhanced-controls > *{ pointer-events:auto }
++
++/* QUALQUER overlay que o app já renderize dentro do shell */
++.enhanced-video-shell .overlay,
++.enhanced-video-shell .hud,
++.enhanced-video-shell [data-overlay],
++.enhanced-video-shell .rtc-overlay{
++  position:absolute; z-index:20; pointer-events:auto;
++}
++/* se houver um header/toolbar do vídeo, prenda no topo */
++.enhanced-video-shell .overlay.top,
++.enhanced-video-shell .hud.top{ top:8px; left:0; right:0 }
+
+2) (Opcional) dar classe ao seu overlay existente
+
+Se seu “card de paciente + barra de ícones” for um elemento já renderizado dentro do contêiner do vídeo, adicione uma dessas classes/atributos para que o CSS acima o promova:
+
+<div className="overlay top">…</div>
+<!-- ou -->
+<div className="hud top">…</div>
+<!-- ou -->
+<div data-overlay className="top">…</div>
+
+
+Não precisa mudar lógica nenhuma; é só a classe/atributo.

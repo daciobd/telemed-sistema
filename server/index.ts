@@ -50,7 +50,7 @@ import { exams } from './routes/exams.js';
 import { memed } from './routes/memed.js';
 
 // Multer for file uploads
-const multer = require('multer');
+import multer from 'multer';
 const upload = multer({ 
   dest: 'uploads/', 
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
@@ -70,7 +70,7 @@ app.use("/api/memed", memed);
 app.post('/api/consultation/upload', upload.array('files'), async (req, res) => {
   try {
     const { consultId } = req.body;
-    const files = req.files as Express.Multer.File[];
+    const files = req.files as any[];
     console.log(`📎 Upload para consulta ${consultId}: ${files?.length || 0} arquivos`);
     res.json({ success: true, files: files?.length || 0, consultId });
   } catch (error) {
@@ -94,7 +94,7 @@ app.post('/api/consultation/toggle-mic', async (req, res) => {
     console.log(`🎙️ Microfone ${muted ? 'mutado' : 'ativado'} na consulta ${consultId}`);
     res.json({ success: true, consultId, muted });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: (error as Error).message });
   }
 });
 
@@ -244,6 +244,17 @@ app.get('/demo-webrtc', (req, res) => {
     return res.sendFile(demoWebrtcHtml);
   }
   res.status(404).send('Demo WebRTC page not found');
+});
+
+// Patient Info - detailed patient information
+app.get('/patient-info', (req, res) => {
+  console.log('👤 Rota /patient-info acessada - Informações do Paciente');
+  const patientInfoHtml = path.join(__dirname, '../public/patient-info.html');
+  if (fs.existsSync(patientInfoHtml)) {
+    console.log('✅ Servindo patient-info.html dedicado');
+    return res.sendFile(patientInfoHtml);
+  }
+  res.status(404).send('Patient Info page not found');
 });
 
 // Enhanced System - redirect to enhanced consultation

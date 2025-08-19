@@ -1,0 +1,193 @@
+Patient Info" screen that appears after clicking a patient's name in the schedule (from the calendar page). It's a pre-consultation overview where the doctor can review details, history, and notes before attending.
+Key Features
+
+Layout: Photo on left; Patient details (name, age, CPF, waiting time, reason) on right.
+Buttons: "Atender paciente" (green, starts video consultation); "Voltar" (back to schedule).
+History Section: Table with rows for past consultations. Each row: File icon (clickable to view summary), Date, Reason, Diagnosis.
+Notes Section: Below history, a box for private notes (editable or viewable).
+Dynamic: Loads based on patient ID from URL (e.g., patient-info.html?patient=2).
+Integration: Update the previous script.js to open this page when clicking the patient name in the schedule (instead of directly to video).
+
+This is still frontend-focused (HTML/CSS/JS). If you have a backend, replace mock data with API fetches.
+Step-by-Step Code
+Add these files to your Replit project:
+
+patient-info.html (new page).
+Update assets/css/styles.css (add new styles).
+Update assets/js/script.js (add patient data loading and link updates).
+Create placeholder pages: video-atendimento.html (stub for now), and consultation-summary.html (for file icon click).
+
+1. HTML Structure (patient-info.html)
+html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>TeleMedConsulta - Informações do Paciente</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- For icons -->
+</head>
+<body>
+    <header>
+        <h1>Informações do Paciente</h1>
+    </header>
+    <div class="patient-container">
+        <!-- Foto à Esquerda -->
+        <div class="patient-photo">
+            <img id="patient-image" src="placeholder-photo.png" alt="Foto do Paciente"> <!-- Substitua por real -->
+        </div>
+
+        <!-- Informações à Direita -->
+        <div class="patient-details">
+            <h2 id="patient-name"></h2>
+            <p id="patient-age-cpf"></p>
+            <p id="patient-waiting"></p>
+            <p id="patient-reason"></p>
+            <button class="attend-btn" onclick="attendPatient()">Atender paciente</button>
+            <button class="back-btn" onclick="history.back()">Voltar</button>
+        </div>
+    </div>
+
+    <!-- Histórico -->
+    <div class="history-section">
+        <h3>Histórico</h3>
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th></th> <!-- Ícone -->
+                    <th>Data</th>
+                    <th>Razão para consulta</th>
+                    <th>Diagnóstico</th>
+                </tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+        </table>
+    </div>
+
+    <!-- Notas Privadas -->
+    <div class="notes-section">
+        <h3>Notas privadas</h3>
+        <textarea id="private-notes" placeholder="Sem notas registradas"></textarea>
+        <button onclick="saveNotes()">Salvar Notas</button>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
+2. CSS Updates (assets/css/styles.css)
+Add these to the existing file for the new page.
+css.patient-container { display: flex; gap: 20px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.patient-photo { width: 150px; }
+.patient-photo img { width: 100%; border-radius: 50%; background: #ddd; }
+.patient-details { flex: 1; }
+.attend-btn { background: green; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+.back-btn { background: #ccc; color: black; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+
+.history-section { margin-top: 20px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.history-section table { width: 100%; border-collapse: collapse; }
+.history-section th, .history-section td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+.history-section .file-icon { cursor: pointer; color: blue; }
+
+.notes-section { margin-top: 20px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.notes-section textarea { width: 100%; height: 100px; border: 1px solid #ddd; padding: 10px; }
+.notes-section button { margin-top: 10px; background: #007bff; color: white; padding: 5px 10px; border: none; cursor: pointer; }
+3. JavaScript Updates (assets/js/script.js)
+Add this to the existing file. Expand the mock data with patient details, history, and notes. Load based on URL param.
+javascript// Expandir Mock Data: Adicione history e notes por patient ID
+const patients = {
+    1: {
+        name: 'Da Silva, Bruno Peixoto, Alberto',
+        age: 35,
+        cpf: '12345678901',
+        photo: 'placeholder-photo.png',
+        waiting: 'em 5 minutos',
+        reason: 'Sem especificar/Outros (Clínica Geral)',
+        history: [
+            { date: '04/08/2025', reason: 'Sem especificar/Outros (Clínica Geral)', diagnosis: 'I21 INFARTO AGUDO DO MIOCÁRDIO', summaryId: 101 }
+        ],
+        notes: 'Sem notas registradas'
+    },
+    2: {
+        name: 'William Lopes Do Nascimento',
+        age: 27,
+        cpf: '02876267179',
+        photo: 'placeholder-photo.png',
+        waiting: 'em 3 minutos',
+        reason: 'Sem especificar/Outros (Psiquiatria)',
+        history: [
+            { date: '04/08/2025', reason: 'Sem especificar/Outros (Clínica Geral)', diagnosis: 'I21 INFARTO AGUDO DO MIOCÁRDIO', summaryId: 102 }
+        ],
+        notes: 'Sem notas registradas'
+    },
+    // Adicione mais pacientes conforme necessário
+};
+
+// Função para carregar dados do paciente (chamada em patient-info.html)
+function loadPatientInfo() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = parseInt(urlParams.get('patient'));
+    const patient = patients[patientId];
+
+    if (!patient) {
+        alert('Paciente não encontrado!');
+        return;
+    }
+
+    document.getElementById('patient-name').textContent = patient.name;
+    document.getElementById('patient-age-cpf').textContent = `${patient.age} anos, CPF ${patient.cpf}`;
+    document.getElementById('patient-waiting').textContent = `Espera: ${patient.waiting}`;
+    document.getElementById('patient-reason').textContent = `Razão para consulta: ${patient.reason}`;
+    document.getElementById('patient-image').src = patient.photo;
+    document.getElementById('private-notes').value = patient.notes;
+
+    const historyBody = document.getElementById('history-body');
+    historyBody.innerHTML = '';
+    patient.history.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><i class="fas fa-file-alt file-icon" onclick="viewSummary(${entry.summaryId})"></i></td>
+            <td>${entry.date}</td>
+            <td>${entry.reason}</td>
+            <td>${entry.diagnosis}</td>
+        `;
+        historyBody.appendChild(row);
+    });
+}
+
+// Função para atender (ir para vídeo)
+function attendPatient() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const patientId = urlParams.get('patient');
+    window.location.href = `video-atendimento.html?patient=${patientId}`;
+}
+
+// Função para ver resumo (clique no ícone)
+function viewSummary(summaryId) {
+    window.location.href = `consultation-summary.html?summary=${summaryId}`; // Página stub para resumo
+}
+
+// Salvar notas (mock, use localStorage ou API real)
+function saveNotes() {
+    const notes = document.getElementById('private-notes').value;
+    alert('Notas salvas: ' + notes); // Substitua por salvamento real
+}
+
+// Atualizar showScheduleForDay no script anterior para linkar ao nome do paciente
+// Em showScheduleForDay, modifique o li.innerHTML para:
+<li>
+    <span class="time">${appt.time}</span>
+    <span class="patient" onclick="goToPatientInfo(${appt.id})">${appt.patient}</span> <!-- Clique no nome abre info -->
+    <span class="status">${appt.status}</span>
+    ${appt.ready ? '<span class="camera-ready"></span>' : ''}
+    <button onclick="reschedule(${appt.id})"><i class="fas fa-calendar-alt"></i></button> <!-- Mude arrow para info, se necessário -->
+</li>
+
+// Nova função para ir à página de info
+function goToPatientInfo(id) {
+    window.location.href = `patient-info.html?patient=${id}`;
+}
+
+// Chame loadPatientInfo() se estiver na página certa
+if (window.location.pathname.includes('patient-info.html')) {
+    loadPatientInfo();
+}
+Próximos Passos

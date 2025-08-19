@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Paciente • TeleMed</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --ink: #e5e7eb;
+            --muted: #9ca3af;
+            --ok: #16a34a;
+            --warn: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --card: #0b1220;
+            --card2: #0b1322;
+            --ring: rgba(59,130,246,.35);
+            --chip: #0b213d;
+            --line: rgba(255,255,255,.08);
+            --brand: #60a5fa;
+        }
+
+        * { box-sizing: border-box; }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--panel);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid var(--line);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--brand);
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .patient-overview {
+            display: grid;
+            grid-template-columns: 180px 1fr auto;
+            gap: 24px;
+            background: var(--card);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            margin-bottom: 24px;
+        }
+
+        .patient-photo {
+            text-align: center;
+        }
+
+        .patient-photo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--panel);
+            border: 3px solid var(--line);
+            object-fit: cover;
+        }
+
+        .patient-details h2 {
+            margin: 0 0 12px 0;
+            color: var(--ink);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .patient-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .meta-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--chip);
+            color: var(--brand);
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: var(--ok);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #15803d;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--panel);
+            color: var(--ink);
+            border: 1px solid var(--line);
+        }
+
+        .btn-secondary:hover {
+            background: var(--card);
+        }
+
+        .section {
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            padding: 20px 24px 0;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 0;
+        }
+
+        .section-header h3 {
+            margin: 0 0 16px 0;
+            color: var(--ink);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .history-table th {
+            background: var(--panel);
+            color: var(--muted);
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .history-table td {
+            color: var(--ink);
+        }
+
+        .file-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--info);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-icon:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+        }
+
+        .notes-area {
+            padding: 24px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 16px;
+            color: var(--ink);
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px var(--ring);
+        }
+
+        .waiting-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background: var(--warn);
+            color: #000;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #dc2626;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 768px) {
+            .patient-overview {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .actions {
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Informações do Paciente</h1>
+        </div>
+
+        <div class="patient-overview">
+            <div class="patient-photo">
+                <img id="patient-image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'%3E%3Ccircle cx='75' cy='75' r='75' fill='%23374151'/%3E%3Ctext x='75' y='85' font-family='Inter,Arial' font-size='48' text-anchor='middle' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="Foto do Paciente">
+            </div>
+
+            <div class="patient-details">
+                <h2 id="patient-name">Carregando...</h2>
+                <div class="patient-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">🎂</span>
+                        <span id="patient-age">-- anos</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📄</span>
+                        <span id="patient-cpf">CPF: ---</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🩺</span>
+                        <span id="patient-reason">Razão: --</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">⏱️</span>
+                        <span class="waiting-indicator">
+                            <span class="pulse"></span>
+                            <span id="patient-waiting">Aguardando</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="status-badge" id="patient-status">
+                    🟢 Disponível para atendimento
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="attendPatient()">
+                    🎥 Atender Paciente
+                </button>
+                <button class="btn btn-secondary" onclick="history.back()">
+                    ← Voltar
+                </button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h3>📚 Histórico de Consultas</h3>
+            </div>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;"></th>
+                        <th>Data</th>
+                        <th>Razão para Consulta</th>
+                        <th>Diagnóstico</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--muted); padding: 40px;">
+                            Carregando histórico...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h3>📝 Notas Privadas</h3>
+            </div>
+            <div class="notes-area">
+                <textarea id="private-notes" class="notes-textarea" placeholder="Adicionar notas privadas sobre o paciente..."></textarea>
+                <button class="btn btn-primary" onclick="saveNotes()">
+                    💾 Salvar Notas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados mock dos pacientes (integrar com backend real)
+        const patients = {
+            1: {
+                name: 'Bruno Peixoto Alberto da Silva',
+                age: 35,
+                cpf: '123.456.789-01',
+                photo: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 150 150\'%3E%3Ccircle cx=\'75\' cy=\'75\' r=\'75\' fill=\'%234f46e5\'/%3E%3Ctext x=\'75\' y=\'85\' font-family=\'Inter,Arial\' font-size=\'48\' text-anchor=\'middle\' fill=\'white\'%3EBS%3C/text%3E%3C/svg%3E',
+                waiting: 'há 5 minutos',
+                reason: 'Consulta de rotina - Clínica Geral',
+                status: 'Aguardando atendimento',
+                history: [
+                    { 
+                        date: '04/08/2025', 
+                        reason: 'Dor no peito', 
+                        diagnosis: 'I21 - Infarto Agudo do Miocárdio', 
+                        status: 'Finalizada',
+                        summaryId: 101 
+                    },
+                    { 
+                        date: '15/07/2025', 
+                        reason: 'Check-up anual', 
+                        diagnosis: 'Z00.0 - Exame médico geral', 
+                        status: 'Finalizada',
+                        summaryId: 102 
+                    }
+                ],
+                notes: 'Paciente com histórico de problemas cardíacos. Monitorar pressão arterial regularmente.'
+            },
+            2: {
+                name: 'William Lopes do Nascimento',
+                age: 27,
+                cpf: '028.762.671-79',
+                photo: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 150 150\'%3E%3Ccircle cx=\'75\' cy=\'75\' r=\'75\' fill=\'%2306b6d4\'/%3E%3Ctext x=\'75\' y=\'85\' font-family=\'Inter,Arial\' font-size=\'48\' text-anchor=\'middle\' fill=\'white\'%3EWL%3C/text%3E%3C/svg%3E',
+                waiting: 'há 3 minutos',
+                reason: 'Acompanhamento psiquiátrico',
+                status: 'Aguardando atendimento',
+                history: [
+                    { 
+                        date: '28/07/2025', 
+                        reason: 'Ansiedade e depressão', 
+                        diagnosis: 'F41.2 - Transtorno misto ansioso e depressivo', 
+                        status: 'Finalizada',
+                        summaryId: 103 
+                    }
+                ],
+                notes: 'Paciente em acompanhamento psiquiátrico. Medicação: Sertralina 50mg.'
+            },
+            3: {
+                name: 'Maria Santos Oliveira',
+                age: 42,
+                cpf: '456.789.123-45',
+                photo: 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 150 150\'%3E%3Ccircle cx=\'75\' cy=\'75\' r=\'75\' fill=\'%23ec4899\'/%3E%3Ctext x=\'75\' y=\'85\' font-family=\'Inter,Arial\' font-size=\'48\' text-anchor=\'middle\' fill=\'white\'%3EMS%3C/text%3E%3C/svg%3E',
+                waiting: 'há 12 minutos',
+                reason: 'Exame de rotina - Ginecologia',
+                status: 'Aguardando atendimento',
+                history: [
+                    { 
+                        date: '10/08/2025', 
+                        reason: 'Exame preventivo', 
+                        diagnosis: 'Z12.4 - Exame ginecológico de rotina', 
+                        status: 'Finalizada',
+                        summaryId: 104 
+                    }
+                ],
+                notes: 'Histórico familiar de câncer de mama. Realizar mamografia anual.'
+            }
+        };
+
+        function loadPatientInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientId = parseInt(urlParams.get('patient')) || 1;
+            const patient = patients[patientId];
+
+            if (!patient) {
+                alert('Paciente não encontrado!');
+                history.back();
+                return;
+            }
+
+            // Atualizar informações básicas
+            document.getElementById('patient-name').textContent = patient.name;
+            document.getElementById('patient-age').textContent = `${patient.age} anos`;
+            document.getElementById('patient-cpf').textContent = `CPF: ${patient.cpf}`;
+            document.getElementById('patient-reason').textContent = patient.reason;
+            document.getElementById('patient-waiting').textContent = patient.waiting;
+            document.getElementById('patient-image').src = patient.photo;
+            document.getElementById('private-notes').value = patient.notes;
+
+            // Atualizar histórico
+            const historyBody = document.getElementById('history-body');
+            historyBody.innerHTML = '';
+            
+            if (patient.history.length === 0) {
+                historyBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 40px;">Nenhum histórico encontrado</td></tr>';
+            } else {
+                patient.history.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="file-icon" onclick="viewSummary(${entry.summaryId})" title="Ver resumo da consulta">
+                                📄
+                            </div>
+                        </td>
+                        <td>${entry.date}</td>
+                        <td>${entry.reason}</td>
+                        <td>${entry.diagnosis}</td>
+                        <td><span class="status-badge">✅ ${entry.status}</span></td>
+                    `;
+                    historyBody.appendChild(row);
+                });
+            }
+
+            // Armazenar ID do paciente para uso posterior
+            window.currentPatientId = patientId;
+        }
+
+        function attendPatient() {
+            const patientId = window.currentPatientId;
+            // Redirecionar para o sistema de consulta avançada
+            window.location.href = `/enhanced?patient=${patientId}`;
+        }
+
+        function viewSummary(summaryId) {
+            // Implementar visualização de resumo (pode abrir modal ou nova página)
+            alert(`Ver resumo da consulta #${summaryId}\n\nEsta funcionalidade pode ser integrada com o sistema de prontuário.`);
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('private-notes').value;
+            const patientId = window.currentPatientId;
+            
+            // Simular salvamento (integrar com backend)
+            if (patients[patientId]) {
+                patients[patientId].notes = notes;
+            }
+            
+            // Feedback visual
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Salvo!';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        // Carregar informações quando a página carregar
+        window.addEventListener('DOMContentLoaded', loadPatientInfo);
+    </script>
+</body>
+</html>
