@@ -285,6 +285,91 @@ window.addEventListener('telemed:rtc-stream', (e) => {
   window.telemedAttachStream?.(role, stream);
 });
 
+// Comunicação com página demo via postMessage
+window.addEventListener('message', (event) => {
+  const { type, role } = event.data || {};
+  
+  switch (type) {
+    case 'telemed-demo-stream':
+      // Ativar modo demo programaticamente
+      const canvas = document.createElement('canvas');
+      canvas.width = 1280;
+      canvas.height = 720;
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+      
+      const draw = () => {
+        const gradient = ctx.createLinearGradient(0, 0, 1280, 720);
+        gradient.addColorStop(0, `hsl(${(t % 360)}, 35%, 30%)`);
+        gradient.addColorStop(1, `hsl(${((t + 120) % 360)}, 35%, 20%)`);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1280, 720);
+        
+        ctx.fillStyle = '#fff';
+        ctx.font = '48px system-ui';
+        ctx.fillText('🎥 DEMO PATIENT', 32, 72);
+        ctx.font = '28px system-ui';
+        ctx.fillText(new Date().toLocaleTimeString(), 32, 116);
+        ctx.fillText('Controle Externo Ativo', 32, 160);
+        
+        t += 1;
+        requestAnimationFrame(draw);
+      };
+      
+      draw();
+      const stream = canvas.captureStream(24);
+      window.telemedAttachStream('remote', stream);
+      console.log('🎬 Demo stream ativado via postMessage');
+      break;
+      
+    case 'telemed-stop-all':
+      // Parar todos os streams
+      const remoteVideo = document.getElementById('remoteVideo');
+      const localVideo = document.getElementById('localVideo');
+      
+      if (remoteVideo && remoteVideo.srcObject) {
+        remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+        remoteVideo.srcObject = null;
+      }
+      
+      if (localVideo && localVideo.srcObject) {
+        localVideo.srcObject.getTracks().forEach(track => track.stop());
+        localVideo.srcObject = null;
+      }
+      
+      // Mostrar área de espera novamente
+      const waitArea = document.getElementById('waitingArea');
+      if (waitArea) waitArea.style.display = 'block';
+      
+      console.log('⛔ Todos os streams foram parados');
+      break;
+      
+    case 'telemed-status-check':
+      // Enviar status dos elementos de vídeo
+      const remote = document.getElementById('remoteVideo');
+      const local = document.getElementById('localVideo');
+      
+      const status = {
+        remote: {
+          exists: !!remote,
+          hasStream: !!(remote && remote.srcObject),
+          dimensions: remote ? { w: remote.clientWidth, h: remote.clientHeight } : null
+        },
+        local: {
+          exists: !!local,
+          hasStream: !!(local && local.srcObject),
+          dimensions: local ? { w: local.clientWidth, h: local.clientHeight } : null
+        }
+      };
+      
+      event.source.postMessage({
+        type: 'telemed-status-response',
+        message: `Remote: ${status.remote.exists ? '✅' : '❌'} ${status.remote.hasStream ? '🎥' : '📭'} | Local: ${status.local.exists ? '✅' : '❌'} ${status.local.hasStream ? '🎥' : '📭'}`
+      }, '*');
+      break;
+  }
+});
+
 // MODO DEMO: /enhanced?demo=1 cria vídeo animado de teste
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get('demo') === '1') {

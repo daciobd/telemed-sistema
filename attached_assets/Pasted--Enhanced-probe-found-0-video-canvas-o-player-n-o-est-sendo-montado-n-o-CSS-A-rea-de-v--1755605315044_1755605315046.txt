@@ -1,0 +1,116 @@
+[Enhanced][probe] found 0 video/canvas → o player não está sendo montado (não é CSS).
+
+A “área de vídeo” tem tamanho (w:480,h:282), então só falta inserir os elementos <video> e dar um jeito simples do seu RTC plugar os streams.
+
+Vamos resolver de forma robusta: pré-montar dois slots (remote e local PIP) e expor um helper global para o módulo RTC anexar streams. Também deixo um modo demo opcional para você validar layout sem câmera.
+
+Cole no Replit (patch direto)
+1) CSS do vídeo (já cobre tamanho, overlay e PIP)
+
+(Se você já criou enhanced-video.css, mantenha; abaixo só garante o PIP e o fill total)
+
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/enhanced-video.css
+@@
+ .enhanced-video-shell{
+   position:relative; width:100%; max-width:1200px; margin:0 auto 12px;
+   aspect-ratio:16/9; min-height:240px; background:#000; border-radius:12px; overflow:hidden;
+ }
+@@
+ .enhanced-video-shell video,
+ .enhanced-video-shell canvas{
+   position:absolute; inset:0; width:100% !important; height:100% !important;
+   object-fit:contain; display:block; visibility:visible !important; opacity:1 !important;
+ }
++/* PIP (local camera) no canto */
++.enhanced-video-shell video[data-rtc-role="local"]{
++  width:22% !important; height:auto !important;
++  right:8px; bottom:8px; left:auto; top:auto;
++  border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.35);
++}
+*** End Patch
+PATCH
+
+2) Enhanced: montar os slots <video> + helper global para anexar streams
+applypatch <<'PATCH'
+*** Begin Patch
+*** Update File: client/src/pages/EnhancedConsultation.tsx
+@@
+-import React from "react";
++import React, { useEffect, useMemo, useRef } from "react";
+ import "./enhanced-fix.css";
+ import "./enhanced-video.css";
+@@
+ export default function EnhancedConsultation(){
++  const remoteRef = useRef<HTMLVideoElement>(null);
++  const localRef  = useRef<HTMLVideoElement>(null);
++
++  // Helper global para o seu módulo RTC plugar streams:
++  // window.telemedAttachStream('remote'|'local', MediaStream)
++  useEffect(()=> {
++    // @ts-ignore
++    window.telemedAttachStream = (role: 'remote'|'local', stream: MediaStream)=>{
++      const el = role==='remote' ? remoteRef.current : localRef.current;
++      if (el) { (el as any).srcObject = stream; el.play?.().catch(()=>{}); }
++    };
++    // Também aceitamos eventos DOM: window.dispatchEvent(new CustomEvent('telemed:rtc-stream',{detail:{role,stream}}))
++    const onEvt = (e: any)=> {
++      const { role, stream } = e.detail||{};
++      // @ts-ignore
++      window.telemedAttachStream?.(role, stream);
++    };
++    window.addEventListener('telemed:rtc-stream', onEvt as any);
++    return ()=> window.removeEventListener('telemed:rtc-stream', onEvt as any);
++  }, []);
++
++  // DEMO opcional: /enhanced?demo=1 pinta um "vídeo" animado sem usar câmera
++  useEffect(()=> {
++    const q = new URLSearchParams(location.search);
++    if (q.get('demo') !== '1') return;
++    const canvas = document.createElement('canvas');
++    canvas.width = 1280; canvas.height = 720;
++    const ctx = canvas.getContext('2d')!;
++    let t = 0; let raf=0;
++    const draw = ()=> {
++      ctx.fillStyle = `hsl(${(t%360)},35%,30%)`; ctx.fillRect(0,0,1280,720);
++      ctx.fillStyle = '#fff'; ctx.font = '48px system-ui';
++      ctx.fillText('DEMO VIDEO', 32, 72);
++      ctx.font='28px system-ui'; ctx.fillText(new Date().toLocaleTimeString(), 32, 116);
++      t+=1; raf = requestAnimationFrame(draw);
++    };
++    draw();
++    const stream = (canvas as any).captureStream(24);
++    // @ts-ignore
++    window.telemedAttachStream?.('remote', stream);
++    return ()=> cancelAnimationFrame(raf);
++  }, []);
++
+   return (
+     <div className="enhanced-shell">
+       <main className="enhanced-wrap" data-full="true">
+         <div className="enhanced-columns">
+           {/* COLUNA ESQUERDA: card de status + VÍDEO */}
+           <aside className="enhanced-left">
+             <section className="enhanced-video-shell" id="enhanced-video">
+-              {/* o componente de vídeo/canvas existente aparecerá aqui */}
++              {/* slots de vídeo — já montados sempre */}
++              <video ref={remoteRef} data-rtc-role="remote" autoPlay playsInline />
++              <video ref={localRef}  data-rtc-role="local"  autoPlay playsInline muted />
+               <div className="enhanced-controls">{/* botões sobre o vídeo (seus) */}</div>
+             </section>
+           </aside>
+*** End Patch
+PATCH
+
+
+Isso garante que sempre existam elementos de vídeo na página. Seu módulo RTC só precisa chamar:
+
+// exemplo: quando conectar
+window.telemedAttachStream('remote', remoteStream);
+window.telemedAttachStream('local', localStream);
+
+
+ou disparar o evento:
+
+window.dispatchEvent(new CustomEvent('telemed:rtc-stream', { detail:{ role:'remote', stream: remoteStream 

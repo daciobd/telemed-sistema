@@ -235,6 +235,17 @@ app.get('/dashboard-teste.html', (req, res) => {
   res.status(404).send('Dashboard Teste page not found');
 });
 
+// Demo WebRTC - testing interface
+app.get('/demo-webrtc', (req, res) => {
+  console.log('🎥 Rota /demo-webrtc acessada - Demo WebRTC Interface');
+  const demoWebrtcHtml = path.join(__dirname, '../public/demo-webrtc.html');
+  if (fs.existsSync(demoWebrtcHtml)) {
+    console.log('✅ Servindo demo-webrtc.html dedicado');
+    return res.sendFile(demoWebrtcHtml);
+  }
+  res.status(404).send('Demo WebRTC page not found');
+});
+
 // Enhanced System - redirect to enhanced consultation
 app.get('/enhanced-system', (req, res) => {
   console.log('🔄 Rota /enhanced-system acessada - Redirecionando para /enhanced');

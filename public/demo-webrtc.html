@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo WebRTC - TeleMed</title>
+    <style>
+        body { 
+            font-family: system-ui; 
+            margin: 20px; 
+            background: #0f172a; 
+            color: white; 
+        }
+        .demo-container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        .btn { 
+            padding: 8px 16px; 
+            margin: 4px; 
+            border: none; 
+            border-radius: 6px; 
+            background: #3b82f6; 
+            color: white; 
+            cursor: pointer; 
+        }
+        .btn:hover { background: #2563eb; }
+        .btn.success { background: #16a34a; }
+        .btn.danger { background: #dc2626; }
+        pre { 
+            background: #1e293b; 
+            padding: 12px; 
+            border-radius: 6px; 
+            overflow-x: auto; 
+        }
+        iframe { 
+            width: 100%; 
+            height: 600px; 
+            border: 1px solid #334155; 
+            border-radius: 8px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎥 Demo WebRTC - Sistema de Vídeo TeleMed</h1>
+        
+        <h2>Sistema Atual:</h2>
+        <iframe src="/enhanced" title="Enhanced Consultation"></iframe>
+        
+        <h2>Controles de Teste:</h2>
+        <button class="btn" onclick="testCameraAccess()">📷 Testar Câmera Local</button>
+        <button class="btn success" onclick="attachDemoStream()">🎬 Demo Stream Animado</button>
+        <button class="btn" onclick="testScreenShare()">📺 Compartilhar Tela</button>
+        <button class="btn danger" onclick="stopAllStreams()">⛔ Parar Todos</button>
+        
+        <h2>API de Integração:</h2>
+        <pre><code>// Anexar stream remoto (paciente)
+window.telemedAttachStream('remote', remoteStream);
+
+// Anexar stream local (médico)  
+window.telemedAttachStream('local', localStream);
+
+// Via evento personalizado
+window.dispatchEvent(new CustomEvent('telemed:rtc-stream', {
+    detail: { role: 'remote', stream: remoteStream }
+}));</code></pre>
+
+        <h2>Status dos Elementos:</h2>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        // Função para testar acesso à câmera
+        async function testCameraAccess() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: true, 
+                    audio: true 
+                });
+                
+                // Anexar ao sistema TeleMed via postMessage
+                const iframe = document.querySelector('iframe');
+                iframe.contentWindow.postMessage({
+                    type: 'telemed-attach-stream',
+                    role: 'local',
+                    // Note: não podemos transferir stream via postMessage
+                    // Isso é apenas para demonstração
+                }, '*');
+                
+                updateStatus('✅ Câmera acessada com sucesso');
+                
+                // Para demonstração, vamos anexar localmente também
+                setTimeout(() => {
+                    if (window.telemedAttachStream) {
+                        window.telemedAttachStream('local', stream);
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                updateStatus('❌ Erro ao acessar câmera: ' + error.message);
+            }
+        }
+        
+        // Demo stream animado
+        function attachDemoStream() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1280;
+            canvas.height = 720;
+            const ctx = canvas.getContext('2d');
+            let t = 0;
+            
+            const draw = () => {
+                // Fundo gradiente
+                const gradient = ctx.createLinearGradient(0, 0, 1280, 720);
+                gradient.addColorStop(0, `hsl(${(t % 360)}, 35%, 30%)`);
+                gradient.addColorStop(1, `hsl(${((t + 120) % 360)}, 35%, 20%)`);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 1280, 720);
+                
+                // Texto
+                ctx.fillStyle = '#fff';
+                ctx.font = '48px system-ui';
+                ctx.fillText('🎥 DEMO PATIENT', 32, 72);
+                ctx.font = '28px system-ui';
+                ctx.fillText(new Date().toLocaleTimeString(), 32, 116);
+                ctx.fillText('Sistema TeleMed Pro', 32, 160);
+                
+                t += 1;
+                requestAnimationFrame(draw);
+            };
+            
+            draw();
+            const stream = canvas.captureStream(24);
+            
+            // Enviar para iframe
+            const iframe = document.querySelector('iframe');
+            iframe.contentWindow.postMessage({
+                type: 'telemed-demo-stream'
+            }, '*');
+            
+            updateStatus('🎬 Demo stream criado e enviado');
+        }
+        
+        // Compartilhamento de tela
+        async function testScreenShare() {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ 
+                    video: true, 
+                    audio: true 
+                });
+                
+                updateStatus('📺 Compartilhamento de tela ativo');
+                
+            } catch (error) {
+                updateStatus('❌ Erro no compartilhamento: ' + error.message);
+            }
+        }
+        
+        // Parar todos os streams
+        function stopAllStreams() {
+            const iframe = document.querySelector('iframe');
+            iframe.contentWindow.postMessage({
+                type: 'telemed-stop-all'
+            }, '*');
+            
+            updateStatus('⛔ Comando de parada enviado');
+        }
+        
+        // Atualizar status
+        function updateStatus(message) {
+            const status = document.getElementById('status');
+            const time = new Date().toLocaleTimeString();
+            status.innerHTML += `<div>${time}: ${message}</div>`;
+            status.scrollTop = status.scrollHeight;
+        }
+        
+        // Verificar status dos elementos no iframe
+        function checkVideoElements() {
+            const iframe = document.querySelector('iframe');
+            iframe.contentWindow.postMessage({
+                type: 'telemed-status-check'
+            }, '*');
+        }
+        
+        // Escutar respostas do iframe
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'telemed-status-response') {
+                updateStatus(`📊 Status: ${event.data.message}`);
+            }
+        });
+        
+        // Verificar status a cada 5 segundos
+        setInterval(checkVideoElements, 5000);
+        
+        // Status inicial
+        updateStatus('🚀 Demo WebRTC inicializado');
+    </script>
+</body>
+</html>
