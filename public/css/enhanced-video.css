@@ -14,6 +14,14 @@
   object-fit:contain; display:block; visibility:visible !important; opacity:1 !important;
 }
 
+/* PIP (local camera) no canto */
+.enhanced-video-shell video[data-rtc-role="local"]{
+  width:22% !important; height:auto !important;
+  right:8px; bottom:8px; left:auto; top:auto;
+  border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.35);
+  z-index: 5;
+}
+
 /* Fix para área de vídeo existente */
 .left, .split-left {
   position: relative;

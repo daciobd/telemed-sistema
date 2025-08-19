@@ -323,8 +323,12 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:10px 0}
 
       <!-- VÍDEO PRINCIPAL -->
       <div class="enhanced-video-shell" id="enhanced-video">
+        <!-- slots de vídeo — já montados sempre -->
+        <video id="remoteVideo" data-rtc-role="remote" autoplay playsinline style="background:#000"></video>
+        <video id="localVideo" data-rtc-role="local" autoplay playsinline muted style="background:#000"></video>
+        
         <div class="clock" id="clock">00:00</div>
-        <div class="wait">
+        <div class="wait" id="waitingArea">
           <div>
             <div class="cam">📷</div>
             <div style="text-align:center;margin-top:8px;color:#9ca3af">Aguardando paciente…</div>

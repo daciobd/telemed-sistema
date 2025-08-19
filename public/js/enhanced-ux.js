@@ -262,14 +262,76 @@ window.telemedEnhancedDebug = Object.assign(window.telemedEnhancedDebug || {}, {
   
   console.log('🎯 Enhanced UX loaded - TeleMed Professional Interface');
 
-// DEBUG: diagnosticar se existe video/canvas e tamanho
+// ===== SISTEMA DE ATTACHMENT DE STREAMS =====
+// Helper global para módulos RTC anexarem streams
+window.telemedAttachStream = (role, stream) => {
+  const el = role === 'remote' ? document.getElementById('remoteVideo') : document.getElementById('localVideo');
+  if (el && stream) {
+    el.srcObject = stream;
+    el.play().catch(() => {});
+    console.log(`🎥 Stream attached: ${role}`, stream);
+    
+    // Ocultar área de espera quando stream remoto conectar
+    if (role === 'remote') {
+      const waitArea = document.getElementById('waitingArea');
+      if (waitArea) waitArea.style.display = 'none';
+    }
+  }
+};
+
+// Suporte a eventos personalizados
+window.addEventListener('telemed:rtc-stream', (e) => {
+  const { role, stream } = e.detail || {};
+  window.telemedAttachStream?.(role, stream);
+});
+
+// MODO DEMO: /enhanced?demo=1 cria vídeo animado de teste
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('demo') === '1') {
+  setTimeout(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1280;
+    canvas.height = 720;
+    const ctx = canvas.getContext('2d');
+    let t = 0;
+    
+    const draw = () => {
+      // Fundo gradiente animado
+      const gradient = ctx.createLinearGradient(0, 0, 1280, 720);
+      gradient.addColorStop(0, `hsl(${(t % 360)}, 35%, 30%)`);
+      gradient.addColorStop(1, `hsl(${((t + 60) % 360)}, 35%, 20%)`);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1280, 720);
+      
+      // Texto demo
+      ctx.fillStyle = '#fff';
+      ctx.font = '48px system-ui';
+      ctx.fillText('🎥 DEMO VIDEO', 32, 72);
+      ctx.font = '28px system-ui';
+      ctx.fillText(new Date().toLocaleTimeString(), 32, 116);
+      ctx.fillText('Paciente Virtual Conectado', 32, 160);
+      
+      t += 1;
+      requestAnimationFrame(draw);
+    };
+    
+    draw();
+    const stream = canvas.captureStream(24);
+    window.telemedAttachStream('remote', stream);
+    console.log('🎬 Demo mode: Virtual patient stream created');
+  }, 1000);
+}
+
+// DEBUG: diagnosticar elementos de vídeo
 setTimeout(() => {
   const scope = document.querySelector(".app") || document.body;
   const vids = Array.from(scope.querySelectorAll("video,canvas"));
-  console.debug("[Enhanced][probe] found", vids.length, "video/canvas");
+  console.debug("[Enhanced][probe] found", vids.length, "video/canvas elements");
   vids.forEach((el, i) => {
     const r = el.getBoundingClientRect();
     console.debug(`[Enhanced][probe] #${i}`, el.tagName, { 
+      id: el.id,
+      role: el.dataset.rtcRole,
       w: r.width, h: r.height, 
       display: getComputedStyle(el).display, 
       vis: getComputedStyle(el).visibility, 
