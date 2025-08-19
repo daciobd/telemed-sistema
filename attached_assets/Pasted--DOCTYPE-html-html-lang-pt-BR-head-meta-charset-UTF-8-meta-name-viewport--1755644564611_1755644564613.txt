@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMedConsulta - Meus Pacientes</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Meus Pacientes</h1>
+    </header>
+    <div class="filter-bar">
+        <input type="text" id="filter-id" placeholder="ID Persona">
+        <input type="text" id="filter-nome" placeholder="Nome">
+        <input type="text" id="filter-sobrenome" placeholder="Sobrenome completo">
+        <input type="text" id="filter-mae" placeholder="Nome da Mãe">
+        <input type="text" id="filter-identificacao" placeholder="Identificação">
+        <select id="filter-especialidade">
+            <option value="">-- Especialidade --</option>
+            <option value="Clínica Geral">Clínica Geral</option>
+            <option value="Psiquiatria">Psiquiatria</option>
+            <option value="Cardiologia">Cardiologia</option>
+            <!-- Adicione mais especialidades conforme necessário -->
+        </select>
+        <button onclick="filterPatients()">Filtrar</button>
+    </div>
+    <table id="patients-table">
+        <thead>
+            <tr>
+                <th>ID Persona</th>
+                <th>Nome Completo</th>
+                <th>Identificação</th>
+                <th>Data de Nascimento</th>
+                <th>Idade</th>
+                <th>Sexo</th>
+                <th>Conta de Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dados mock; substitua por reais via backend -->
+            <tr data-especialidade="Clínica Geral">
+                <td>335602</td>
+                <td>Dhelicane Da Silva Costa</td>
+                <td>03268984370</td>
+                <td>23/09/1988</td>
+                <td>36 anos</td>
+                <td>Feminino</td>
+                <td>dhelicanecosta@icloud.com</td>
+                <td>+5521995040225</td>
+                <td>
+                    <button>Ver PHR</button>
+                    <button>Nova Atenção Offline</button>
+                </td>
+            </tr>
+            <tr data-especialidade="Psiquiatria">
+                <td>4537263</td>
+                <td>Hadassa Da Silva Santos Garcia</td>
+                <td>14108089760</td>
+                <td>01/08/1991</td>
+                <td>34 anos</td>
+                <td>Feminino</td>
+                <td>silvadassa@gmail.com</td>
+                <td>+5521960184773</td>
+                <td>
+                    <button>Ver PHR</button>
+                    <button>Nova Atenção Offline</button>
+                </td>
+            </tr>
+            <tr data-especialidade="Clínica Geral">
+                <td>4849323</td>
+                <td>William Lopes Do Nascimento</td>
+                <td>02876267179</td>
+                <td>10/09/1997</td>
+                <td>27 anos</td>
+                <td>Masculino</td>
+                <td>02876267179@mail.com</td>
+                <td>+55219601725613</td>
+                <td>
+                    <button>Ver PHR</button>
+                    <button>Nova Atenção Offline</button>
+                </td>
+            </tr>
+            <tr data-especialidade="Cardiologia">
+                <td>5150400</td>
+                <td>Erika Carvalho Mendes</td>
+                <td>11892279722</td>
+                <td>04/05/1987</td>
+                <td>38 anos</td>
+                <td>Feminino</td>
+                <td>erka.c.mendes@gmail.com</td>
+                <td>+55219601725613</td>
+                <td>
+                    <button>Ver PHR</button>
+                    <button>Nova Atenção Offline</button>
+                </td>
+            </tr>
+            <tr data-especialidade="Clínica Geral">
+                <td>5155665</td>
+                <td>Natália Da Silva Mello</td>
+                <td>09941565708</td>
+                <td>27/12/1982</td>
+                <td>42 anos</td>
+                <td>Feminino</td>
+                <td>natalla.cathiva@gmail.com</td>
+                <td>+551961725613</td>
+                <td>
+                    <button>Ver PHR</button>
+                    <button>Nova Atenção Offline</button>
+                </td>
+            </tr>
+            <!-- Adicione mais linhas conforme necessário -->
+        </tbody>
+    </table>
+    <button class="back-btn" onclick="history.back()">Voltar</button>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+        function filterPatients() {
+            const id = document.getElementById('filter-id').value.toLowerCase();
+            const nome = document.getElementById('filter-nome').value.toLowerCase();
+            const sobrenome = document.getElementById('filter-sobrenome').value.toLowerCase();
+            const mae = document.getElementById('filter-mae').value.toLowerCase();
+            const identificacao = document.getElementById('filter-identificacao').value.toLowerCase();
+            const especialidade = document.getElementById('filter-especialidade').value.toLowerCase();
+
+            const rows = document.querySelectorAll('#patients-table tbody tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowId = cells[0].textContent.toLowerCase();
+                const rowNome = cells[1].textContent.toLowerCase();
+                const rowIdent = cells[2].textContent.toLowerCase();
+                const rowEspecialidade = row.dataset.especialidade.toLowerCase();
+
+                // Simples filtro (adapte para mais campos se necessário)
+                const matchId = rowId.includes(id);
+                const matchNome = rowNome.includes(nome) || rowNome.includes(sobrenome) || rowNome.includes(mae);
+                const matchIdent = rowIdent.includes(identificacao);
+                const matchEsp = especialidade === '' || rowEspecialidade.includes(especialidade);
+
+                row.style.display = (matchId && matchNome && matchIdent && matchEsp) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

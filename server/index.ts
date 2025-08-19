@@ -232,6 +232,17 @@ app.get('/dashboard', (req, res) => {
   res.status(404).send('Dashboard page not found');
 });
 
+// CANONICAL: Pacientes (Meus Pacientes)
+app.get('/pacientes', (req, res) => {
+  console.log('👥 Rota CANÔNICA /pacientes acessada - Meus Pacientes');
+  const pacientesHtml = path.join(__dirname, '../public/meus-pacientes.html');
+  if (fs.existsSync(pacientesHtml)) {
+    console.log('✅ Servindo meus-pacientes.html (CANÔNICA)');
+    return res.sendFile(pacientesHtml);
+  }
+  res.status(404).send('Pacientes page not found');
+});
+
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
 
 // Enhanced aliases → /consulta
