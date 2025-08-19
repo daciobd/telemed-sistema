@@ -39,19 +39,20 @@
     /* ====== COLUNA PAINEL ====== */
     .panel{background:#f8fafc;overflow:auto;grid-row:2}
     .topbar{position:sticky;top:0;background:#fff;border-bottom:var(--line);padding:12px 14px;z-index:2;grid-column:1 / 3;grid-row:1}
-    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .row{display:flex;gap:16px;align-items:center;justify-content:space-between}
     .pInfo{display:flex;gap:12px;align-items:center}
     .avatar{width:30px;height:30px;border-radius:50%;background:#e5e7eb;display:grid;place-items:center}
     .pill{padding:6px 10px;border-radius:999px;border:var(--line);background:#fff;font-size:12px}
-    .status{display:flex;gap:10px;align-items:center}
+    .status{display:flex;gap:16px;align-items:center}
     .status .state{display:inline-flex;gap:6px;align-items:center;background:#f1f5f9;padding:6px 10px;border-radius:999px;border:var(--line);font-size:12px}
     .state .dot{width:8px;height:8px;border-radius:999px;background:#94a3b8}
     .state.wait .dot{background:#f59e0b}
     .state.live .dot{background:#22c55e}
-    .btn{display:inline-flex;gap:8px;align-items:center;border:1px solid transparent;border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer}
+    .btn{display:inline-flex;gap:8px;align-items:center;border:1px solid transparent;border-radius:10px;padding:8px 12px;font-weight:600;cursor:pointer;background:transparent}
     .btn.primary{background:var(--blue);color:#fff}
     .btn.primary:hover{background:var(--blue-600)}
     .btn.ghost{background:#fff;border:var(--line)}
+    .btn.fail{background:#ef4444;color:#fff}
     .tabs{display:flex;gap:6px;border-bottom:var(--line);background:#fff}
     .tab{padding:10px 12px;cursor:pointer;border-bottom:2px solid transparent}
     .tab.active{border-color:var(--blue);color:#0f172a;font-weight:600}
@@ -74,7 +75,7 @@
     .warn{background:#fff7ed;border:1px solid #fed7aa;color:#92400e;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:13px}
     /* Exames */
     .templates{display:flex;flex-direction:column;gap:8px;border:var(--line);padding:10px;border-radius:10px;background:#fff;max-height:160px;overflow:auto}
-    .tpl{padding:8px;border-radius:10px;border:1px dashed rgba(0,0,0,.1);cursor:pointer}
+    .tpl{padding:8px;border-radius:10px;border:1px dashed rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;gap:8px}
     .tpl:hover{background:#f8fafc}
     .examList{border:var(--line);border-radius:10px;background:#fff;min-height:90px;padding:12px;color:#475569}
     /* Memed */
@@ -94,15 +95,6 @@
     #ai-input{flex:1;resize:none;border:var(--line);border-radius:10px;padding:10px}
     .ai-send{background:#60a5fa;border:1px solid #60a5fa;border-radius:10px;padding:0 14px;cursor:pointer;font-weight:600;color:#fff}
     .ai-send:hover{background:#3b82f6}
-    /* ==== Barra de Receitas ==== */
-    .rxBar{
-      display:flex; align-items:center; justify-content:space-between;
-      background:#fff; border:var(--line); border-radius:10px;
-      padding:10px 12px; margin:10px 0 14px; box-shadow:var(--shadow,0 0 0 rgba(0,0,0,0));
-    }
-    .rxLeft{display:flex; align-items:center; gap:10px}
-    .rxCount{padding:4px 8px; border-radius:999px; background:#f1f5f9; border:var(--line); font-size:12px}
-    .rxActions{display:flex; gap:8px}
     @media (max-width:980px){.page{grid-template-columns:1fr}}
   </style>
 </head>
@@ -121,7 +113,7 @@
       </div>
       <div class="status">
         <span class="state wait" id="state"><span class="dot"></span> Aguardando</span>
-        <span class="pill" id="elapsed">23m 00s</span>
+        <span class="pill" id="elapsed">18m 19s</span>
         <button class="btn primary" id="btn-start">Iniciar Consulta</button>
         <button class="btn ghost" id="btn-back">Voltar</button>
         <button class="btn ghost" id="btn-form">Formulário</button>
@@ -160,7 +152,6 @@
 
   <!-- ======== COLUNA PAINEL ========= -->
   <section class="panel">
-
     <!-- abas -->
     <div class="tabs">
       <div class="tab" data-tab="chat">💬 Chat</div>
@@ -182,33 +173,21 @@
 
     <!-- ATENDIMENTO -->
     <div class="pad" id="tab-care">
-      <!-- Barra de Receitas -->
-      <div class="rxBar" role="region" aria-label="Receitas do atendimento">
-        <div class="rxLeft">
-          <strong>🧾 Receitas</strong>
-          <span class="rxCount"><span id="rxCount">0</span> item(s)</span>
-        </div>
-        <div class="rxActions">
-          <a class="btn primary" id="rxMemedLink" href="#" target="_blank" rel="noopener">Abrir Memed</a>
-          <button class="btn ghost" id="rxScroll" type="button">Ver lista</button>
-        </div>
-      </div>
-      
       <div class="field">
-        <label class="label req">Queixa principal <span class="req">*</span></label>
-        <input class="inp area" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" required />
+        <label class="label">Queixa principal <span class="req">*</span></label>
+        <input class="inp" name="chief_complaint" placeholder="Dor de cabeça intensa há 3 dias" required />
       </div>
       <div class="field">
-        <label class="label req">História da doença atual <span class="req">*</span></label>
+        <label class="label">História da doença atual <span class="req">*</span></label>
         <textarea class="area" name="hpi" placeholder="Paciente refere..." required></textarea>
       </div>
       <div class="field">
-        <label class="label req">Hipótese diagnóstica <span class="req">*</span></label>
+        <label class="label">Hipótese diagnóstica <span class="req">*</span></label>
         <input class="inp" id="dx" name="dx" list="cid10" placeholder="Busque por CID-10 (ex: 'transtorno ansioso')" required />
         <datalist id="cid10"></datalist>
       </div>
       <div class="field">
-        <label class="label req">Conduta terapêutica <span class="req">*</span></label>
+        <label class="label">Conduta terapêutica <span class="req">*</span></label>
         <textarea class="area" name="plan" placeholder="Conduta: ..." required></textarea>
       </div>
       <div class="field">
@@ -234,10 +213,16 @@
         <div style="margin-bottom:10px">
           <div style="font-weight:600;margin-bottom:8px">Templates comuns</div>
           <div class="templates" id="tplBox">
-            <div class="tpl" data-name="Hemograma Completo" data-inst="Jejum de 8h">Hemograma Completo</div>
-            <div class="tpl" data-name="Glicemia" data-inst="Jejum">Glicemia</div>
-            <div class="tpl" data-name="Raio-X Tórax" data-inst="Sem joias">Raio-X Tórax</div>
-            <div class="tpl" data-name="Eletrocardiograma" data-inst="Repouso">Eletrocardiograma</div>
+            <div class="tpl" data-name="Hemograma completo" data-inst="Jejum de 8h"><span style="color:red">🩸</span> Hemograma completo</div>
+            <div class="tpl" data-name="Glicemia de jejum" data-inst="Jejum"><span style="color:orange">🍎</span> Glicemia de jejum</div>
+            <div class="tpl" data-name="Perfil lipídico" data-inst=""><span style="color:green">💉</span> Perfil lipídico</div>
+            <div class="tpl" data-name="TSH" data-inst="Sem jejum"><span style="color:blue">🦋</span> TSH</div>
+            <div class="tpl" data-name="Creatinina" data-inst="Jejum opcional"><span style="color:purple">🩸</span> Creatinina</div>
+            <div class="tpl" data-name="Urina tipo 1" data-inst="Primeira urina da manhã"><span style="color:yellow">🚽</span> Urina tipo 1</div>
+            <div class="tpl" data-name="Raio-X de tórax" data-inst="Inspiração profunda"><span style="color:gray">🩻</span> Raio-X de tórax</div>
+            <div class="tpl" data-name="Eletrocardiograma" data-inst="Repouso"><span style="color:red">❤️</span> Eletrocardiograma</div>
+            <div class="tpl" data-name="Vitamina D" data-inst="Sem jejum"><span style="color:orange">☀️</span> Vitamina D</div>
+            <div class="tpl" data-name="PSA" data-inst="Homens acima de 50 anos"><span style="color:blue">🧑‍⚕️</span> PSA</div>
           </div>
         </div>
         <div class="field">
@@ -259,8 +244,13 @@
         <button class="btn primary" id="exAdd" style="width:100%">Adicionar Exame</button>
         <div style="margin-top:14px">
           <div style="font-weight:600;margin-bottom:8px">Exames Solicitados</div>
-          <div class="examList" id="examList">Nenhum exame solicitado</div>
+          <div class="examList" id="examList">Nenhum exame adicionado ainda</div>
         </div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="btn-save">💾 Salvar</button>
+        <button class="btn fail" id="btn-no-finish">Não Foi Possível Finalizar Consulta</button>
+        <button class="btn primary" id="btn-finish">✅ Finalizar</button>
       </div>
     </div>
 
@@ -286,12 +276,6 @@
         <div style="font-weight:600;margin-bottom:8px">Receitas do Atendimento</div>
         <div class="examList" id="rxList">Nenhuma receita ainda</div>
       </div>
-    </div>
-
-    <!-- Ações finais -->
-    <div class="actions">
-      <button class="btn ghost" id="btn-save">💾 Salvar</button>
-      <button class="btn primary" id="btn-finish">✅ Finalizar Consulta</button>
     </div>
   </section>
 </div>
@@ -333,25 +317,8 @@ const post= async (url, body)=> {
   return r.json().catch(()=> ({}));
 };
 
-// Utilidades para receitas
-function buildMemedURL(){
-  const patient = {
-    name:  $('#pName').textContent,
-    age:   $('#pAge').textContent.replace(' anos',''),
-    phone: $('#pPhone').textContent
-  };
-  // substitua pelo endpoint oficial quando integrar de fato
-  return 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
-}
-function updateRxCount(){
-  const rxList = $('#rxList');
-  const n = rxList ? rxList.children.length : 0;
-  $('#rxCount').textContent = n;
-}
-
 /** ========= timer / uptime ========= */
-let sec=780; // 13min já decorridos
-setInterval(()=>{sec++; const m=String(Math.floor(sec/60)).padStart(2,'0'); const s=String(sec%60).padStart(2,'0'); $('#uptime').textContent=`${m}:${s}`; $('#elapsed').textContent = `${Math.floor(sec/60)}m ${s}s`;},1000);
+let sec=0; setInterval(()=>{sec++; const m=String(Math.floor(sec/60)).padStart(2,'0'); const s=String(sec%60).padStart(2,'0'); $('#uptime').textContent=`${m}:${s}`},1000);
 
 /** ========= abas ========= */
 $$('.tab').forEach(t=>t.addEventListener('click',()=>{
@@ -372,41 +339,44 @@ $$('.seg').forEach(s=>s.addEventListener('click',()=>{
 }));
 
 /** mirror da área de exames na aba Exames */
-$('#examsMirror').appendChild($('#seg-exams').cloneNode(true));
+const examsMirror = $('#examsMirror');
+if (examsMirror && $('#seg-exams')) {
+  examsMirror.appendChild($('#seg-exams').cloneNode(true));
+}
 
 /** ========= botões topo ========= */
-$('#btn-invite').onclick = ()=>{ alert('Convite enviado para o paciente na sala de espera.'); };
-$('#btn-start').onclick  = async ()=>{
+if ($('#btn-invite')) $('#btn-invite').onclick = ()=>{ alert('Convite enviado para o paciente na sala de espera.'); };
+if ($('#btn-start')) $('#btn-start').onclick  = async ()=>{
   try{ await post(API.start(CONSULT_ID)); $('#state').classList.remove('wait'); $('#state').classList.add('live'); $('#state').innerHTML='<span class="dot"></span> Em atendimento'; }
   catch(e){ alert('Falha ao iniciar: '+e.message); }
 };
-$('#btn-back').onclick   = ()=> history.back();
-$('#btn-form').onclick   = ()=> alert('Abrir formulário de anamnese (WIP).');
-$('#btn-narrow').onclick = ()=> document.body.classList.toggle('narrow');
-$('#btn-exit').onclick   = ()=> { if(confirm('Sair desta tela?')) location.href='/'; };
-$('#btn-bell').onclick   = ()=> $('#bellDot').style.display='none';
+if ($('#btn-back')) $('#btn-back').onclick   = ()=> history.back();
+if ($('#btn-form')) $('#btn-form').onclick   = ()=> alert('Abrir formulário de anamnese (WIP).');
+if ($('#btn-narrow')) $('#btn-narrow').onclick = ()=> document.body.classList.toggle('narrow');
+if ($('#btn-exit')) $('#btn-exit').onclick   = ()=> { if(confirm('Sair desta tela?')) location.href='/'; };
+if ($('#btn-bell')) $('#btn-bell').onclick   = ()=> { if ($('#bellDot')) $('#bellDot').style.display='none'; };
 
 /** ========= barra de vídeo ========= */
-$('#btn-attach').onclick = ()=> $('#filepick').click();
-$('#filepick').onchange  = (e)=> { if(e.target.files[0]) { $('#bellDot').style.display='grid'; alert('Arquivo anexado: '+e.target.files[0].name); } };
-$('#btn-shot').onclick   = ()=> alert('Captura de imagem (mock).');
-$('#btn-chat').onclick   = ()=> { $('.tab[data-tab="chat"]').click(); };
-$('#btn-mic').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
-$('#btn-cam').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
-$('#btn-wait').onclick   = ()=> alert('Paciente enviado para sala de espera.');
-$('#btn-hang').onclick   = ()=> alert('Chamada finalizada.');
+if ($('#btn-attach')) $('#btn-attach').onclick = ()=> { if ($('#filepick')) $('#filepick').click(); };
+if ($('#filepick')) $('#filepick').onchange  = (e)=> { if(e.target.files[0]) { if ($('#bellDot')) $('#bellDot').style.display='grid'; alert('Arquivo anexado: '+e.target.files[0].name); } };
+if ($('#btn-shot')) $('#btn-shot').onclick   = ()=> alert('Captura de imagem (mock).');
+if ($('#btn-chat')) $('#btn-chat').onclick   = ()=> { const chatTab = $('.tab[data-tab="chat"]'); if (chatTab) chatTab.click(); };
+if ($('#btn-mic')) $('#btn-mic').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
+if ($('#btn-cam')) $('#btn-cam').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
+if ($('#btn-wait')) $('#btn-wait').onclick   = ()=> alert('Paciente enviado para sala de espera.');
+if ($('#btn-hang')) $('#btn-hang').onclick   = ()=> alert('Chamada finalizada.');
 
 /** ========= chat simples ========= */
-$('#chatSend').onclick = ()=>{
-  const v = $('#chatInput').value.trim(); if(!v) return;
-  $('#chatInput').value='';
+if ($('#chatSend')) $('#chatSend').onclick = ()=>{
+  const v = $('#chatInput') ? $('#chatInput').value.trim() : ''; if(!v) return;
+  if ($('#chatInput')) $('#chatInput').value='';
   const b = document.createElement('div'); b.style.maxWidth='70%'; b.style.background='#3b82f6'; b.style.color='#fff'; b.style.borderRadius='12px'; b.style.padding='10px'; b.style.margin='8px 0 8px auto'; b.textContent=v;
-  $('#chatBox').appendChild(b); $('#chatBox').scrollTop=$('#chatBox').scrollHeight;
+  if ($('#chatBox')) { $('#chatBox').appendChild(b); $('#chatBox').scrollTop=$('#chatBox').scrollHeight; }
 };
 
 /** ========= CID-10 autocomplete ========= */
 let cidTimer=null;
-$('#dx').addEventListener('input',()=>{
+if ($('#dx')) $('#dx').addEventListener('input',()=>{
   clearTimeout(cidTimer);
   const q = $('#dx').value.trim();
   if(q.length<2) return;
@@ -414,7 +384,8 @@ $('#dx').addEventListener('input',()=>{
     try{
       const r = await fetch(API.cid10(q));
       const list = await r.json(); // espera: [{code:"F41.1",name:"Transtorno..."}, ...]
-      const dl = $('#cid10'); dl.innerHTML='';
+      const dl = $('#cid10'); if (!dl) return;
+      dl.innerHTML='';
       (list||[]).slice(0,30).forEach(it=>{
         const o=document.createElement('option'); o.value=`${it.code} - ${it.name}`; dl.appendChild(o);
       });
@@ -423,61 +394,79 @@ $('#dx').addEventListener('input',()=>{
 });
 
 /** ========= salvar / finalizar ========= */
-$('#btn-save').onclick = async ()=>{
+if ($('#btn-save')) $('#btn-save').onclick = async ()=>{
   const payload = {
-    chiefComplaint: $('[name="chief_complaint"]').value||'',
-    hpi: $('[name="hpi"]').value||'',
-    dx:  $('[name="dx"]').value||'',
-    plan:$('[name="plan"]').value||'',
-    redFlags:$('[name="red_flags"]').value||'',
+    chiefComplaint: $('[name="chief_complaint"]') ? $('[name="chief_complaint"]').value || '' : '',
+    hpi: $('[name="hpi"]') ? $('[name="hpi"]').value || '' : '',
+    dx:  $('[name="dx"]') ? $('[name="dx"]').value || '' : '',
+    plan: $('[name="plan"]') ? $('[name="plan"]').value || '' : '',
+    redFlags: $('[name="red_flags"]') ? $('[name="red_flags"]').value || '' : '',
     complexity:{
-      mental: $('#cmp1').checked, clinical: $('#cmp2').checked, inconsistency: $('#cmp3').checked
+      mental: $('#cmp1') ? $('#cmp1').checked : false, 
+      clinical: $('#cmp2') ? $('#cmp2').checked : false, 
+      inconsistency: $('#cmp3') ? $('#cmp3').checked : false
     }
   };
   try{ await post(API.notes(CONSULT_ID), payload); alert('Anotações salvas.'); }
   catch(e){ alert('Falha ao salvar: '+e.message); }
 };
-$('#btn-finish').onclick = async ()=>{
+if ($('#btn-finish')) $('#btn-finish').onclick = async ()=>{
   try{ await post(API.finish(CONSULT_ID)); alert('Consulta finalizada.'); }
   catch(e){ alert('Falha ao finalizar: '+e.message); }
 };
+if ($('#btn-no-finish')) $('#btn-no-finish').onclick = ()=> alert('Consulta não pode ser finalizada (motivo: campos obrigatórios incompletos).');
 
 /** ========= Exames ========= */
 const examList = [];
 function renderExamList(){
-  const box = $('#examList'); box.innerHTML='';
-  if(!examList.length){ box.textContent='Nenhum exame solicitado'; return; }
+  const box = $('#examList'); if (!box) return;
+  box.innerHTML='';
+  if(!examList.length){ box.textContent='Nenhum exame adicionado ainda'; return; }
   examList.forEach((ex,i)=>{
     const row=document.createElement('div');
     row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center';
     row.style.border='1px solid rgba(0,0,0,.06)'; row.style.padding='8px 10px'; row.style.borderRadius='8px'; row.style.margin='6px 0';
     row.innerHTML = `<div><b>${ex.name}</b> • ${ex.priority}<br><small>${ex.notes||''}</small></div><button data-i="${i}" class="btn ghost">Excluir</button>`;
-    row.querySelector('button').onclick=(ev)=>{ examList.splice(Number(ev.target.dataset.i),1); renderExamList(); };
+    const btn = row.querySelector('button');
+    if (btn) btn.onclick=(ev)=>{ examList.splice(Number(ev.target.dataset.i),1); renderExamList(); };
     box.appendChild(row);
   });
 }
-$('#exAdd').onclick = ()=>{
-  const name=$('#exName').value.trim(); if(!name) return alert('Informe o nome do exame.');
-  examList.push({name, priority:$('#exPriority').value, notes:$('#exNotes').value.trim()});
-  $('#exName').value=''; $('#exNotes').value=''; renderExamList();
+if ($('#exAdd')) $('#exAdd').onclick = ()=>{
+  const name = $('#exName') ? $('#exName').value.trim() : ''; 
+  if(!name) return alert('Informe o nome do exame.');
+  examList.push({
+    name, 
+    priority: $('#exPriority') ? $('#exPriority').value : 'Rotina', 
+    notes: $('#exNotes') ? $('#exNotes').value.trim() : ''
+  });
+  if ($('#exName')) $('#exName').value=''; 
+  if ($('#exNotes')) $('#exNotes').value=''; 
+  renderExamList();
 };
-$('#tplBox').onclick = (ev)=>{
+if ($('#tplBox')) $('#tplBox').onclick = (ev)=>{
   const el = ev.target.closest('.tpl'); if(!el) return;
-  $('#exName').value = el.dataset.name; $('#exNotes').value = el.dataset.inst;
+  if ($('#exName')) $('#exName').value = el.dataset.name;
+  if ($('#exNotes')) $('#exNotes').value = el.dataset.inst;
 };
 
 /** ========= Memed ========= */
-$('#memedBtn').onclick = ()=>{
-  const patient = {name: $('#pName').textContent, age: $('#pAge').textContent.replace(' anos',''), phone: $('#pPhone').textContent};
+if ($('#memedBtn')) $('#memedBtn').onclick = ()=>{
+  const patient = {
+    name: $('#pName') ? $('#pName').textContent : 'Paciente', 
+    age: $('#pAge') ? $('#pAge').textContent.replace(' anos','') : '0', 
+    phone: $('#pPhone') ? $('#pPhone').textContent : ''
+  };
   const url = 'https://memed.com.br/?demo=1&patient='+encodeURIComponent(JSON.stringify(patient));
   window.open(url, '_blank','noopener');
   // adiciona receita fictícia na lista
   const li = document.createElement('div');
   li.style.padding='10px'; li.style.border='1px solid rgba(0,0,0,.06)'; li.style.borderRadius='10px'; li.style.margin='6px 0';
   li.innerHTML = `<b>Receita #MEMED-${Math.random().toString(36).slice(2,8).toUpperCase()}</b> <span style="color:#16a34a">✔ Assinada</span><br><small>${new Date().toLocaleString()}</small><br><div style="margin-top:6px">Dipirona Sódica – 500mg • 1 comprimido se dor ou febre</div>`;
-  $('#rxList').appendChild(li);
-  if($('#rxList').textContent.includes('Nenhuma')) $('#rxList').innerHTML='';
-  updateRxCount();
+  if ($('#rxList')) {
+    if ($('#rxList').textContent.includes('Nenhuma')) $('#rxList').innerHTML='';
+    $('#rxList').appendChild(li);
+  }
 };
 
 /** ========= Dr. AI ========= */
@@ -485,19 +474,26 @@ function addMsg(role, txt){
   const row=document.createElement('div');
   row.className='ai-msg '+(role==='assistant'?'assistant':'user');
   row.innerHTML='<div class="bubble"></div>';
-  row.querySelector('.bubble').textContent=txt;
-  $('#ai-thread').appendChild(row);
-  $('#ai-thread').scrollTop = $('#ai-thread').scrollHeight;
+  const bubble = row.querySelector('.bubble');
+  if (bubble) bubble.textContent=txt;
+  if ($('#ai-thread')) {
+    $('#ai-thread').appendChild(row);
+    $('#ai-thread').scrollTop = $('#ai-thread').scrollHeight;
+  }
 }
-$('#btn-ai').onclick = ()=> { $('#dr-ai').style.display='flex'; };
-$('#ai-close').onclick = ()=> { $('#dr-ai').style.display='none'; };
-$('#ai-form').addEventListener('submit', async (e)=>{
+if ($('#btn-ai')) $('#btn-ai').onclick = ()=> { if ($('#dr-ai')) $('#dr-ai').style.display='flex'; };
+if ($('#ai-close')) $('#ai-close').onclick = ()=> { if ($('#dr-ai')) $('#dr-ai').style.display='none'; };
+if ($('#ai-form')) $('#ai-form').addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const q = $('#ai-input').value.trim(); if(!q) return;
-  $('#ai-input').value=''; addMsg('user', q);
+  const q = $('#ai-input') ? $('#ai-input').value.trim() : ''; 
+  if(!q) return;
+  if ($('#ai-input')) $('#ai-input').value=''; 
+  addMsg('user', q);
   const ctx = {
-    chiefComplaint:$('[name="chief_complaint"]').value,
-    hpi:$('[name="hpi"]').value, dx:$('[name="dx"]').value, redFlags:$('[name="red_flags"]').value
+    chiefComplaint: $('[name="chief_complaint"]') ? $('[name="chief_complaint"]').value : '',
+    hpi: $('[name="hpi"]') ? $('[name="hpi"]').value : '', 
+    dx: $('[name="dx"]') ? $('[name="dx"]').value : '', 
+    redFlags: $('[name="red_flags"]') ? $('[name="red_flags"]').value : ''
   };
   try{
     const r = await fetch(API.aiAsk,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q, context:ctx})});
@@ -506,77 +502,7 @@ $('#ai-form').addEventListener('submit', async (e)=>{
   }catch(err){ addMsg('assistant','⚠️ Erro ao consultar IA: '+err.message); }
 });
 
-// Barra de receitas
-document.getElementById('rxMemedLink').onclick = (e) => {
-  e.preventDefault();
-  window.open(buildMemedURL(), '_blank', 'noopener');
-  // opcional: focar a seção de receitas
-  document.querySelector('[data-tab="receitas"]').click();
-};
-document.getElementById('rxScroll').onclick = () => {
-  document.querySelector('[data-tab="receitas"]').click();
-  document.getElementById('tab-receitas').scrollIntoView({behavior:'smooth', block:'start'});
-};
-
-// Memed
-document.getElementById('btn-memed').addEventListener('click', () => {
-  window.open(buildMemedURL(), '_blank','noopener');
-
-  // adiciona receita fictícia na lista
-  const li = document.createElement('div');
-  li.style.padding='10px';
-  li.style.border='1px solid rgba(0,0,0,.06)';
-  li.style.borderRadius='10px';
-  li.style.margin='6px 0';
-  li.innerHTML = `<b>Receita #MEMED-${Math.random().toString(36).slice(2,8).toUpperCase()}</b>
-                  <span style="color:#16a34a">✔ Assinada</span><br>
-                  <small>${new Date().toLocaleString()}</small><br>
-                  <div style="margin-top:6px">Dipirona Sódica – 500mg • 1 comprimido se dor ou febre</div>`;
-  const rxList = document.getElementById('rxList');
-  if(rxList.textContent.includes('Nenhuma')) rxList.innerHTML='';
-  rxList.appendChild(li);
-  updateRxCount();            // <<< atualiza o contador da barra
-});
-
-// Botões de ação
-document.getElementById('btn-save').addEventListener('click', () => {
-  alert('Dados salvos com sucesso!');
-});
-
-document.getElementById('btn-finish').addEventListener('click', () => {
-  if (confirm('Deseja finalizar esta consulta?')) {
-    alert('Consulta finalizada!');
-  }
-});
-
-// Controles de vídeo
-document.getElementById('btn-attach').addEventListener('click', () => {
-  document.getElementById('filepick').click();
-});
-
-document.getElementById('btn-shot').addEventListener('click', () => {
-  alert('Captura de tela realizada!');
-});
-
-document.getElementById('btn-chat').addEventListener('click', () => {
-  // Ativar aba de chat
-  document.querySelector('[data-tab="chat"]').click();
-});
-
-// Barra de receitas
-$('#rxMemedLink').onclick = (e) => {
-  e.preventDefault();
-  window.open(buildMemedURL(), '_blank', 'noopener');
-  // opcional: focar a seção de receitas
-  $('.tab[data-tab="receitas"]').click();
-};
-$('#rxScroll').onclick = () => {
-  $('.tab[data-tab="receitas"]').click();
-  $('#tab-receitas').scrollIntoView({behavior:'smooth', block:'start'});
-};
-
-console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface');
-updateRxCount();
+console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface v2.0');
 </script>
 </body>
 </html>
