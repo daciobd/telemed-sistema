@@ -243,6 +243,17 @@ app.get('/pacientes', (req, res) => {
   res.status(404).send('Pacientes page not found');
 });
 
+// CANONICAL: PHR - Registro de Saúde do Paciente
+app.get('/registro-saude', (req, res) => {
+  console.log('📋 Rota CANÔNICA /registro-saude acessada - PHR');
+  const phrHtml = path.join(__dirname, '../public/registro-saude.html');
+  if (fs.existsSync(phrHtml)) {
+    console.log('✅ Servindo registro-saude.html (CANÔNICA)');
+    return res.sendFile(phrHtml);
+  }
+  res.status(404).send('PHR page not found');
+});
+
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
 
 // Enhanced aliases → /consulta

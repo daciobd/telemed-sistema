@@ -540,11 +540,11 @@
         }
 
         function viewPHR(patientId) {
-            // Simular abertura do PHR do paciente
+            // Abrir PHR do paciente na nova página dedicada
             console.log(`📋 Abrindo PHR do paciente ${patientId}`);
             
-            // Implementar integração com sistema de PHR
-            window.open(`/consulta?patientId=${patientId}&view=phr`, '_blank');
+            // Abrir página de Registro de Saúde com ID do paciente
+            window.open(`/registro-saude?patientId=${patientId}`, '_blank');
         }
 
         function newOfflineAttention(patientId) {

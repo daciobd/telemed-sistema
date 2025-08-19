@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMedConsulta - Perfil do Paciente</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #333;
+        }
+        .back-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+        .patient-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .info-section {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .info-section h3 {
+            color: #555;
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .info-item {
+            margin: 10px 0;
+            color: #666;
+        }
+        .info-item strong {
+            color: #333;
+        }
+        .health-status {
+            margin-top: 20px;
+        }
+        .health-status h3 {
+            color: #555;
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .status-card {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .status-card h4 {
+            margin: 0;
+            color: #444;
+        }
+        .status-card p {
+            margin: 5px 0 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Perfil do Paciente - Dhelicane Da Silva Costa</h2>
+            <button class="back-btn" onclick="history.back()">Voltar</button>
+        </div>
+        <div class="patient-info">
+            <div class="info-section">
+                <h3>Informações Pessoais</h3>
+                <div class="info-item"><strong>ID Persona:</strong> 335602</div>
+                <div class="info-item"><strong>Nome Completo:</strong> Dhelicane Da Silva Costa</div>
+                <div class="info-item"><strong>Nome da Mãe:</strong> Maria José Da Silva</div>
+                <div class="info-item"><strong>Identificação:</strong> 03268984370</div>
+                <div class="info-item"><strong>Data de Nascimento:</strong> 23/09/1988</div>
+                <div class="info-item"><strong>Idade:</strong> 36 anos</div>
+                <div class="info-item"><strong>Sexo:</strong> Feminino</div>
+                <div class="info-item"><strong>Conta de Email:</strong> dhelicanecosta@icloud.com</div>
+                <div class="info-item"><strong>Telefone:</strong> +5521995040225</div>
+            </div>
+            <div class="info-section">
+                <h3>Histórico Médico</h3>
+                <div class="info-item"><strong>Condições Pré-existentes:</strong> Hipertensão, Asma</div>
+                <div class="info-item"><strong>Alergias:</strong> Penicilina</div>
+                <div class="info-item"><strong>Medicamentos em Uso:</strong> Losartana 50mg, Salbutamol (conforme necessidade)</div>
+                <div class="info-item"><strong>Última Consulta:</strong> 15/07/2025</div>
+                <div class="info-item"><strong>Especialista Responsável:</strong> Dr. João Pereira (Clínica Geral)</div>
+            </div>
+        </div>
+        <div class="health-status">
+            <h3>Status de Saúde Atual</h3>
+            <div class="status-grid">
+                <div class="status-card">
+                    <h4>Pressão Arterial</h4>
+                    <p>120/80 mmHg</p>
+                </div>
+                <div class="status-card">
+                    <h4>Glicemia</h4>
+                    <p>95 mg/dL</p>
+                </div>
+                <div class="status-card">
+                    <h4>Frequência Cardíaca</h4>
+                    <p>72 bpm</p>
+                </div>
+                <div class="status-card">
+                    <h4>IMC</h4>
+                    <p>24.5</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -285,6 +285,8 @@ export default function App() {
             <Route path="/dashboard-teste.html" component={() => <Redirect to="/dashboard" />} />
             <Route path="/patient-management" component={() => <Redirect to="/pacientes" />} />
             <Route path="/meus-pacientes" component={() => <Redirect to="/pacientes" />} />
+            <Route path="/phr" component={() => <Redirect to="/registro-saude" />} />
+            <Route path="/patient-health-record" component={() => <Redirect to="/registro-saude" />} />
             
             {/* ROTAS REACT ESPECÍFICAS */}
             <Route path="/video-consultation-react" component={VideoConsultation} />
