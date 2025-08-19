@@ -221,12 +221,12 @@ app.get('/consulta', (req, res) => {
   res.status(404).send('Consulta page not found');
 });
 
-// CANONICAL: Dashboard (Dashboard Teste)
+// CANONICAL: Dashboard (Dashboard Teste - Versão Definitiva)
 app.get('/dashboard', (req, res) => {
-  console.log('📊 Rota CANÔNICA /dashboard acessada - Dashboard Médico');
+  console.log('📊 Rota CANÔNICA /dashboard acessada - Dashboard Teste Definitivo');
   const dashboardTesteHtml = path.join(__dirname, '../public/dashboard-teste.html');
   if (fs.existsSync(dashboardTesteHtml)) {
-    console.log('✅ Servindo dashboard-teste.html (CANÔNICA)');
+    console.log('✅ Servindo dashboard-teste.html (CANÔNICA DEFINITIVA)');
     return res.sendFile(dashboardTesteHtml);
   }
   res.status(404).send('Dashboard page not found');
