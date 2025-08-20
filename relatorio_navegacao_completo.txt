@@ -1,0 +1,3114 @@
+============================================================
+MAPA DE NAVEGAÇÃO - TELEMED SISTEMA
+============================================================
+Total de páginas HTML: 456
+Total de links encontrados: 2159
+============================================================
+
+DIRETÓRIO: .
+----------------------------------------
+📄 agenda-medica.html
+  🔗 Links internos:
+    → /leilao-consultas.html
+    → /receitas-digitais.html
+    → /login.html
+    → /index.html
+    → javascript:history.back()
+    → #
+
+📄 ansiedade-gad7.html
+  🔗 Links internos:
+    → /
+    → /centro-avaliacao.html
+    → /centro-avaliacao.html
+    → /centro-avaliacao
+
+📄 atendimento-medico.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /pdf-generator.html
+    → /centro-avaliacao.html
+
+📄 bipolar-mdq.html
+  🔗 Links internos:
+    → /
+    → /centro-avaliacao.html
+    → /centro-avaliacao.html
+    → /centro-avaliacao
+
+📄 centro-avaliacao.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → #avaliacoes
+    → #especialistas
+    → #contato
+    → /login.html
+    → #avaliacoes
+    → #profissionais
+
+📄 dashboard-aquarela-backup.html
+  (sem links)
+
+📄 dashboard-aquarela-simple-backup.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /receitas-digitais.html
+    → /videoconsulta.html
+
+📄 dashboard-clean.html
+  (sem links)
+
+📄 dashboard-minimal.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /centro-avaliacao.html
+    → /pdf-generator.html
+    → /triagem-inteligente.html
+    → #
+    → #
+    → #
+    → #
+
+📄 dashboard-pastel.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /pdf-generator.html
+    → /centro-avaliacao.html
+    → /triagem-inteligente.html
+    → #
+    → #
+    → #
+
+📄 depressao-phq9.html
+  🔗 Links internos:
+    → /
+    → /centro-avaliacao.html
+    → /centro-avaliacao
+
+📄 dr-ai.html
+  🔗 Links internos:
+    → /
+    → /doctor-dashboard
+
+📄 especialidades.html
+  🔗 Links internos:
+    → /patient-bidding
+
+📄 gad7-ansiedade.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 guia-integracao-hostinger.html
+  (sem links)
+
+📄 integracao-hostinger.html
+  🔗 Links internos:
+    → /dr-ai.html
+    → /triagem-psiquiatrica.html
+    → /telemonitoramento-enfermagem.html
+    → /consulta-por-valor.html
+    → /saiba-mais.html
+    → /especialidades.html
+    → /login.html
+    → /register.html
+    → /index.html
+    → /sistema-indice.html
+
+📄 leilao-consultas.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /index.html
+    → /centro-avaliacao.html
+
+📄 links-verificacao-telemed.html
+  🔗 Links internos:
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/pdf-generator.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/centro-avaliacao.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/ansiedade-gad7.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/depressao-phq9.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/bipolar-mdq.html
+  🌐 Links externos: 1
+
+📄 login.html
+  🔗 Links internos:
+    → #
+    → /register.html
+
+📄 logout.html
+  (sem links)
+
+📄 mdq-bipolar.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 memed-receita-viewer.html
+  🔗 Links internos:
+    → receitas-digitais.html
+    → #
+
+📄 pdf-generator.html
+  🔗 Links internos:
+    → /
+    → javascript:history.back()
+
+📄 phq9-depressao.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 pss10-stress.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 receitas-digitais.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /index.html
+    → /leilao-consultas.html
+
+📄 register.html
+  🔗 Links internos:
+    → /
+    → /
+    → #
+    → #
+    → /login.html
+
+📄 saiba-mais.html
+  🔗 Links internos:
+    → /
+    → /
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /triagem-psiquiatrica.html
+    → /telemonitoramento-enfermagem.html
+    ... e mais 1 links
+
+📄 sistema-indice.html
+  🔗 Links internos:
+    → index.html
+    → login.html
+    → register.html
+    → especialidades.html
+    → dr-ai.html
+    → triagem-psiquiatrica.html
+    → telemonitoramento-enfermagem.html
+    → saiba-mais.html
+    → index.html
+    → consulta-por-valor.html
+    ... e mais 6 links
+
+📄 sistema-notificacoes-medicas.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-medica.html
+    → /index.html
+    → javascript:history.back()
+    → #
+
+📄 stress-pss10.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 tdah-asrs18.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+
+📄 entrada.html
+  (sem links)
+
+📄 test-medical-report.html
+  🔗 Links internos:
+    → /api/medical-reports/generate-fictional
+
+📄 landing-page-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 download-page.html
+  (sem links)
+
+📄 test-download.html
+  (sem links)
+
+📄 dashboard-aquarela.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 download-page-fixed.html
+  (sem links)
+
+📄 localhost_2025-08-13_11-27-26.report.html
+  (sem links)
+
+📄 videoconsulta.html
+  (sem links)
+
+📄 dr-ai-OLD-backup.html
+  🔗 Links internos:
+    → /
+    → /doctor-dashboard
+
+📄 consulta-por-valor.html
+  (sem links)
+
+📄 index.html
+  🔗 Links internos:
+    → /
+    → #
+    → /videoconsulta
+    → /agenda-medica
+    → /receitas-digitais
+    → /especialidades
+    → /telemonitoramento-enfermagem
+    → #
+    → #
+    → /dashboard-aquarela
+    ... e mais 36 links
+
+
+DIRETÓRIO: ./.lighthouseci
+----------------------------------------
+📄 lhr-1755430551241.html
+  (sem links)
+
+
+DIRETÓRIO: ./.local/state/replit/agent/design_reference/71ef6736-ac2e-4cc8-81be-f8b48ff1f1e8
+----------------------------------------
+📄 059a1715-597f-4411-9bcb-0e637b8420d1.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+
+
+DIRETÓRIO: ./_archived_versions/telemed-clone
+----------------------------------------
+📄 index.html
+  (sem links)
+
+
+DIRETÓRIO: ./_archived_versions/telemed-clone/dist
+----------------------------------------
+📄 index.html
+  (sem links)
+
+
+DIRETÓRIO: ./_archived_versions/telemed_clean
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /guia-medicos.html
+    → /index.html
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /guia-medicos.html
+    → /index.html
+    ... e mais 7 links
+
+
+DIRETÓRIO: ./_archived_versions/telemed_premium
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /guia-medicos.html
+    → /index.html
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /guia-medicos.html
+    → /index.html
+    ... e mais 8 links
+  🌐 Links externos: 3
+
+
+DIRETÓRIO: ./_archived_versions/telemed_ultra
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /guia-medicos.html
+    → /index.html
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /guia-medicos.html
+    → /index.html
+    ... e mais 8 links
+  🌐 Links externos: 3
+
+
+DIRETÓRIO: ./analysis
+----------------------------------------
+📄 health-connect-report.html
+  (sem links)
+
+
+DIRETÓRIO: ./archive
+----------------------------------------
+📄 dashboard-aquarela.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /pdf-generator.html
+    → /centro-avaliacao.html
+    → /phq9-depressao.html
+    → /ansiedade-gad7.html
+    → /pss10-stress.html
+    → /triagem-psiquiatrica.html
+    → /agenda-medica.html
+    → #
+    ... e mais 4 links
+
+📄 dashboard-medical.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /centro-avaliacao.html
+    → /pdf-generator.html
+    → /triagem-inteligente.html
+    → /agenda-medica.html
+    → #
+    → #
+    → #
+    → /index.html
+    ... e mais 1 links
+
+📄 medical-dashboard-pro.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /pdf-generator.html
+    → /centro-avaliacao.html
+    → /phq9-depressao.html
+    → /gad7-ansiedade.html
+    → /mdq-bipolar.html
+    → /pss10-stress.html
+    → /tdah-asrs18.html
+    → /triagem-inteligente.html
+    ... e mais 9 links
+
+
+DIRETÓRIO: ./archive/legacy
+----------------------------------------
+📄 demo-vs-real.html
+  🔗 Links internos:
+    → /dashboard-medical.html?demo=true
+    → /dashboard-medical.html
+
+📄 medical-dashboard-pro.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    ... e mais 6 links
+
+
+DIRETÓRIO: ./attached_assets
+----------------------------------------
+📄 medical_interface_1752674583607.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    ... e mais 6 links
+
+📄 updated_dashboard (1)_1752692301739.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    ... e mais 6 links
+
+📄 updated_dashboard_1752691660805.html
+  🔗 Links internos:
+    → #
+    → #
+
+
+DIRETÓRIO: ./attached_assets/TeleMed
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #
+    → #
+
+
+DIRETÓRIO: ./attached_assets/TeleMed_Final_Premium
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+
+
+DIRETÓRIO: ./attached_assets/TeleMed_Visual
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → #
+
+
+DIRETÓRIO: ./attached_assets/public
+----------------------------------------
+📄 test-safe.html
+  (sem links)
+
+
+DIRETÓRIO: ./backup-merge-definitivo-20250816_130043
+----------------------------------------
+📄 agenda-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 aguardando-medico.html
+  🔗 Links internos:
+    → /
+    → /guia-medicos.html
+    → /index.html
+
+📄 anotacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 avaliacoes.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 como-funciona.html
+  🔗 Links internos:
+    → /
+    → /dr-ai
+    → /patient-bidding
+    → /precos.html
+    → /faq.html
+
+📄 consultas-agendadas.html
+  🔗 Links internos:
+    → /index.html
+
+📄 contato.html
+  🔗 Links internos:
+    → /
+
+📄 download.html
+  🔗 Links internos:
+    → TeleMed_Ultra_v8.7.0.zip
+    → TeleMed_Ultra_v8.7.0.tar.gz
+    → TeleMed_Premium_v8.6.0.zip
+    → TeleMed_Premium_v8.6.0.tar.gz
+    → TeleMed_Clean_v8.5.0.zip
+    → TeleMed_Clean_v8.5.0.tar.gz
+
+📄 equipe-medica.html
+  🔗 Links internos:
+    → /
+    → /agendamento?especialidade=cardiologia
+    → /agendamento?especialidade=pediatria
+    → /agendamento?especialidade=psiquiatria
+    → /agendamento?especialidade=ginecologia
+    → /agendamento?especialidade=ortopedia
+    → /agendamento?especialidade=dermatologia
+    → /patient-bidding
+    → /dr-ai
+    → /faq.html
+
+📄 estatisticas-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 faq.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /especialidades.html
+    → /contato.html
+    → /dr-ai.html
+    → /
+
+📄 fila-pacientes-medico.html
+  🔗 Links internos:
+    → /index.html
+
+📄 guia-medicos.html
+  🔗 Links internos:
+    → /
+    → /index.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /test-bid-integration.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    ... e mais 22 links
+
+📄 historico-consultas.html
+  🔗 Links internos:
+    → index.html
+
+📄 login-medico.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /recuperar-senha-medico.html
+    → /medico-cadastro.html
+
+📄 medico-cadastro.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /termos-de-uso
+    → /politica-privacidade
+    → /area-medica.html
+
+📄 notificacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 politica-privacidade.html
+  🔗 Links internos:
+    → /
+    → /contato.html
+  🌐 Links externos: 1
+
+📄 precos.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+
+📄 preferencias.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 prescricoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 prontuarios.html
+  🔗 Links internos:
+    → /doctor-dashboard
+
+📄 relatorio-receita.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 sobre.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /contato.html
+
+📄 suporte.html
+  🔗 Links internos:
+    → /faq.html
+    → /contato.html
+    → /
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → #
+    → #
+    → #como-funciona
+    → #
+    → #
+    → #
+    → #
+
+📄 termos-de-uso.html
+  🔗 Links internos:
+    → /
+
+📄 test-bid-integration.html
+  (sem links)
+
+📄 test-bidding-flow.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /index.html
+    → /videoconsulta.html
+    → /index.html
+
+📄 test-bidding.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+
+📄 test-redirect.html
+  (sem links)
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /dr-ai.html
+
+📄 videoconsulta.html
+  🔗 Links internos:
+    → /guia-medicos.html
+    → /index.html
+
+📄 dashboard-premium.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 index-backup.html
+  (sem links)
+
+📄 landing-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 centro-avaliacao.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 relatorios-medicos-pdf.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+
+📄 agenda-medica.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 receitas-digitais.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 dashboard-premium-fixed.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → agenda-medica.html
+    → receitas-digitais.html
+    → videoconsulta.html
+    → dr-ai.html
+    → telemonitoramento-enfermagem.html
+    → centro-avaliacao.html
+    → dr-ai.html
+    → relatorios-medicos-pdf.html
+    → consulta-por-valor.html
+    ... e mais 8 links
+
+📄 indice-completo.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → index.html
+    → dashboard-premium-fixed.html
+    → download.html
+    → agenda-do-dia.html
+    → agenda-medico.html
+    → area-medica.html
+    → perfil-medico.html
+    → login-medico.html
+    → medico-cadastro.html
+    ... e mais 31 links
+
+📄 classificador-interativo.html
+  (sem links)
+
+📄 teste-classificador.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-csp-safe.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-sem-js.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 consulta-por-valor-corrigida.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+
+📄 dashboard-minimo.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    → telemonitoramento-enfermagem.html
+    → relatorio-receita.html
+    → download.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    ... e mais 3 links
+
+📄 videoconsulta-corrigida.html
+  🔗 Links internos:
+    → #
+    → /index.html
+
+📄 dr-ai-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 dr-ai-corrigido-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 consulta-por-valor.html
+  🔗 Links internos:
+    → index.html
+    → #
+    → #
+
+📄 login.html
+  🔗 Links internos:
+    → #
+    → cadastro.html
+    → ../index.html
+    → #
+
+📄 cadastro.html
+  🔗 Links internos:
+    → #
+    → #
+    → login.html
+
+📄 dashboard-teste-static.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+📄 dashboard-teste-fixed.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+
+DIRETÓRIO: ./backup-merge-definitivo-20250816_130043/demo-ativo
+----------------------------------------
+📄 agenda-do-dia.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 mobile.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 pacientes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 perfil-medico.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 area-medica.html
+  🔗 Links internos:
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+  🌐 Links externos: 1
+
+📄 configuracoes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #features
+    → #demo
+    → #about
+    → #contact
+    → area-medica.html
+    → area-medica.html
+    → #demo
+    → area-medica.html
+    → /public/demo-ativo/agenda-do-dia.html
+    ... e mais 12 links
+
+
+DIRETÓRIO: ./backup-pre-merge-final-20250816_125242
+----------------------------------------
+📄 agenda-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 aguardando-medico.html
+  🔗 Links internos:
+    → /
+    → /guia-medicos.html
+    → /index.html
+
+📄 anotacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 avaliacoes.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 como-funciona.html
+  🔗 Links internos:
+    → /
+    → /dr-ai
+    → /patient-bidding
+    → /precos.html
+    → /faq.html
+
+📄 consultas-agendadas.html
+  🔗 Links internos:
+    → /index.html
+
+📄 contato.html
+  🔗 Links internos:
+    → /
+
+📄 download.html
+  🔗 Links internos:
+    → TeleMed_Ultra_v8.7.0.zip
+    → TeleMed_Ultra_v8.7.0.tar.gz
+    → TeleMed_Premium_v8.6.0.zip
+    → TeleMed_Premium_v8.6.0.tar.gz
+    → TeleMed_Clean_v8.5.0.zip
+    → TeleMed_Clean_v8.5.0.tar.gz
+
+📄 equipe-medica.html
+  🔗 Links internos:
+    → /
+    → /agendamento?especialidade=cardiologia
+    → /agendamento?especialidade=pediatria
+    → /agendamento?especialidade=psiquiatria
+    → /agendamento?especialidade=ginecologia
+    → /agendamento?especialidade=ortopedia
+    → /agendamento?especialidade=dermatologia
+    → /patient-bidding
+    → /dr-ai
+    → /faq.html
+
+📄 estatisticas-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 faq.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /especialidades.html
+    → /contato.html
+    → /dr-ai.html
+    → /
+
+📄 fila-pacientes-medico.html
+  🔗 Links internos:
+    → /index.html
+
+📄 guia-medicos.html
+  🔗 Links internos:
+    → /
+    → /index.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /test-bid-integration.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    ... e mais 22 links
+
+📄 historico-consultas.html
+  🔗 Links internos:
+    → index.html
+
+📄 login-medico.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /recuperar-senha-medico.html
+    → /medico-cadastro.html
+
+📄 medico-cadastro.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /termos-de-uso
+    → /politica-privacidade
+    → /area-medica.html
+
+📄 notificacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 politica-privacidade.html
+  🔗 Links internos:
+    → /
+    → /contato.html
+  🌐 Links externos: 1
+
+📄 precos.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+
+📄 preferencias.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 prescricoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 prontuarios.html
+  🔗 Links internos:
+    → /doctor-dashboard
+
+📄 relatorio-receita.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 sobre.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /contato.html
+
+📄 suporte.html
+  🔗 Links internos:
+    → /faq.html
+    → /contato.html
+    → /
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → #
+    → #
+    → #como-funciona
+    → #
+    → #
+    → #
+    → #
+
+📄 termos-de-uso.html
+  🔗 Links internos:
+    → /
+
+📄 test-bid-integration.html
+  (sem links)
+
+📄 test-bidding-flow.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /index.html
+    → /videoconsulta.html
+    → /index.html
+
+📄 test-bidding.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+
+📄 test-redirect.html
+  (sem links)
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /dr-ai.html
+
+📄 videoconsulta.html
+  🔗 Links internos:
+    → /guia-medicos.html
+    → /index.html
+
+📄 dashboard-premium.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 index-backup.html
+  (sem links)
+
+📄 landing-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 centro-avaliacao.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 relatorios-medicos-pdf.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+
+📄 agenda-medica.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 receitas-digitais.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 dashboard-premium-fixed.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → agenda-medica.html
+    → receitas-digitais.html
+    → videoconsulta.html
+    → dr-ai.html
+    → telemonitoramento-enfermagem.html
+    → centro-avaliacao.html
+    → dr-ai.html
+    → relatorios-medicos-pdf.html
+    → consulta-por-valor.html
+    ... e mais 8 links
+
+📄 indice-completo.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → index.html
+    → dashboard-premium-fixed.html
+    → download.html
+    → agenda-do-dia.html
+    → agenda-medico.html
+    → area-medica.html
+    → perfil-medico.html
+    → login-medico.html
+    → medico-cadastro.html
+    ... e mais 31 links
+
+📄 classificador-interativo.html
+  (sem links)
+
+📄 teste-classificador.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-csp-safe.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-sem-js.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 consulta-por-valor-corrigida.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+
+📄 dashboard-minimo.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    → telemonitoramento-enfermagem.html
+    → relatorio-receita.html
+    → download.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    ... e mais 3 links
+
+📄 videoconsulta-corrigida.html
+  🔗 Links internos:
+    → #
+    → /index.html
+
+📄 dr-ai-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 dr-ai-corrigido-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 consulta-por-valor.html
+  🔗 Links internos:
+    → index.html
+    → #
+    → #
+
+📄 login.html
+  🔗 Links internos:
+    → #
+    → cadastro.html
+    → ../index.html
+    → #
+
+📄 cadastro.html
+  🔗 Links internos:
+    → #
+    → #
+    → login.html
+
+📄 dashboard-teste-static.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+📄 dashboard-teste-fixed.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+
+DIRETÓRIO: ./backup-pre-merge-final-20250816_125242/demo-ativo
+----------------------------------------
+📄 agenda-do-dia.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 mobile.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 pacientes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 perfil-medico.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 area-medica.html
+  🔗 Links internos:
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+  🌐 Links externos: 1
+
+📄 configuracoes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #features
+    → #demo
+    → #about
+    → #contact
+    → area-medica.html
+    → area-medica.html
+    → #demo
+    → area-medica.html
+    → /public/demo-ativo/agenda-do-dia.html
+    ... e mais 12 links
+
+
+DIRETÓRIO: ./backup-public-20250816_124852
+----------------------------------------
+📄 agenda-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 aguardando-medico.html
+  🔗 Links internos:
+    → /
+    → /guia-medicos.html
+    → /index.html
+
+📄 anotacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 avaliacoes.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 como-funciona.html
+  🔗 Links internos:
+    → /
+    → /dr-ai
+    → /patient-bidding
+    → /precos.html
+    → /faq.html
+
+📄 consultas-agendadas.html
+  🔗 Links internos:
+    → /index.html
+
+📄 contato.html
+  🔗 Links internos:
+    → /
+
+📄 download.html
+  🔗 Links internos:
+    → TeleMed_Ultra_v8.7.0.zip
+    → TeleMed_Ultra_v8.7.0.tar.gz
+    → TeleMed_Premium_v8.6.0.zip
+    → TeleMed_Premium_v8.6.0.tar.gz
+    → TeleMed_Clean_v8.5.0.zip
+    → TeleMed_Clean_v8.5.0.tar.gz
+
+📄 equipe-medica.html
+  🔗 Links internos:
+    → /
+    → /agendamento?especialidade=cardiologia
+    → /agendamento?especialidade=pediatria
+    → /agendamento?especialidade=psiquiatria
+    → /agendamento?especialidade=ginecologia
+    → /agendamento?especialidade=ortopedia
+    → /agendamento?especialidade=dermatologia
+    → /patient-bidding
+    → /dr-ai
+    → /faq.html
+
+📄 estatisticas-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 faq.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /especialidades.html
+    → /contato.html
+    → /dr-ai.html
+    → /
+
+📄 fila-pacientes-medico.html
+  🔗 Links internos:
+    → /index.html
+
+📄 guia-medicos.html
+  🔗 Links internos:
+    → /
+    → /index.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /test-bid-integration.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    ... e mais 22 links
+
+📄 historico-consultas.html
+  🔗 Links internos:
+    → index.html
+
+📄 login-medico.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /recuperar-senha-medico.html
+    → /medico-cadastro.html
+
+📄 medico-cadastro.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /termos-de-uso
+    → /politica-privacidade
+    → /area-medica.html
+
+📄 notificacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 politica-privacidade.html
+  🔗 Links internos:
+    → /
+    → /contato.html
+  🌐 Links externos: 1
+
+📄 precos.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+
+📄 preferencias.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 prescricoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 prontuarios.html
+  🔗 Links internos:
+    → /doctor-dashboard
+
+📄 relatorio-receita.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 sobre.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /contato.html
+
+📄 suporte.html
+  🔗 Links internos:
+    → /faq.html
+    → /contato.html
+    → /
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → #
+    → #
+    → #como-funciona
+    → #
+    → #
+    → #
+    → #
+
+📄 termos-de-uso.html
+  🔗 Links internos:
+    → /
+
+📄 test-bid-integration.html
+  (sem links)
+
+📄 test-bidding-flow.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /index.html
+    → /videoconsulta.html
+    → /index.html
+
+📄 test-bidding.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+
+📄 test-redirect.html
+  (sem links)
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /dr-ai.html
+
+📄 videoconsulta.html
+  🔗 Links internos:
+    → /guia-medicos.html
+    → /index.html
+
+📄 dashboard-premium.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 index-backup.html
+  (sem links)
+
+📄 landing-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 centro-avaliacao.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 relatorios-medicos-pdf.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+
+📄 agenda-medica.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 receitas-digitais.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 dashboard-premium-fixed.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → agenda-medica.html
+    → receitas-digitais.html
+    → videoconsulta.html
+    → dr-ai.html
+    → telemonitoramento-enfermagem.html
+    → centro-avaliacao.html
+    → dr-ai.html
+    → relatorios-medicos-pdf.html
+    → consulta-por-valor.html
+    ... e mais 8 links
+
+📄 indice-completo.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → index.html
+    → dashboard-premium-fixed.html
+    → download.html
+    → agenda-do-dia.html
+    → agenda-medico.html
+    → area-medica.html
+    → perfil-medico.html
+    → login-medico.html
+    → medico-cadastro.html
+    ... e mais 31 links
+
+📄 classificador-interativo.html
+  (sem links)
+
+📄 teste-classificador.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-csp-safe.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-sem-js.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 consulta-por-valor-corrigida.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+
+📄 dashboard-minimo.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    → telemonitoramento-enfermagem.html
+    → relatorio-receita.html
+    → download.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    ... e mais 3 links
+
+📄 videoconsulta-OLD-backup.html
+  🔗 Links internos:
+    → /guia-medicos.html
+    → /index.html
+
+📄 videoconsulta-corrigida.html
+  🔗 Links internos:
+    → #
+    → /index.html
+
+📄 dr-ai-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 dr-ai-corrigido-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 consulta-por-valor.html
+  🔗 Links internos:
+    → index.html
+    → #
+    → #
+
+📄 login.html
+  🔗 Links internos:
+    → #
+    → cadastro.html
+    → ../index.html
+    → #
+
+📄 cadastro.html
+  🔗 Links internos:
+    → #
+    → #
+    → login.html
+
+📄 dashboard-teste-static.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+📄 dashboard-teste-fixed.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+
+DIRETÓRIO: ./backup-public-20250816_124852/demo-ativo
+----------------------------------------
+📄 agenda-do-dia.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 mobile.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 pacientes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 perfil-medico.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 area-medica.html
+  🔗 Links internos:
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+  🌐 Links externos: 1
+
+📄 configuracoes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #features
+    → #demo
+    → #about
+    → #contact
+    → area-medica.html
+    → area-medica.html
+    → #demo
+    → area-medica.html
+    → /public/demo-ativo/agenda-do-dia.html
+    ... e mais 12 links
+
+
+DIRETÓRIO: ./backups/telemed-2025-08-10
+----------------------------------------
+📄 landing-page-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 download-page-fixed.html
+  (sem links)
+
+
+DIRETÓRIO: ./backups/telemed-2025-08-10/public
+----------------------------------------
+📄 agenda-do-dia.html
+  (sem links)
+
+📄 agenda-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 aguardando-medico.html
+  🔗 Links internos:
+    → /
+    → /guia-medicos.html
+    → /index.html
+
+📄 anotacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 area-medica.html
+  🔗 Links internos:
+    → /
+    → /login-medico.html
+    → /medico-cadastro.html
+
+📄 avaliacoes.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 como-funciona.html
+  🔗 Links internos:
+    → /
+    → /dr-ai
+    → /patient-bidding
+    → /precos.html
+    → /faq.html
+
+📄 consulta-por-valor.html
+  🔗 Links internos:
+    → /
+    → /guia-medicos.html
+    → /index.html
+    → /dr-ai.html
+
+📄 consultas-agendadas.html
+  🔗 Links internos:
+    → /index.html
+
+📄 contato.html
+  🔗 Links internos:
+    → /
+
+📄 download.html
+  🔗 Links internos:
+    → /TeleMed_Ultra_v8.7.0.tar.gz
+    → /
+
+📄 dr-ai.html
+  (sem links)
+
+📄 equipe-medica.html
+  🔗 Links internos:
+    → /
+    → /agendamento?especialidade=cardiologia
+    → /agendamento?especialidade=pediatria
+    → /agendamento?especialidade=psiquiatria
+    → /agendamento?especialidade=ginecologia
+    → /agendamento?especialidade=ortopedia
+    → /agendamento?especialidade=dermatologia
+    → /patient-bidding
+    → /dr-ai
+    → /faq.html
+
+📄 estatisticas-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 faq.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /especialidades.html
+    → /contato.html
+    → /dr-ai.html
+    → /
+
+📄 fila-pacientes-medico.html
+  🔗 Links internos:
+    → /index.html
+
+📄 guia-medicos.html
+  🔗 Links internos:
+    → /
+    → /index.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /test-bid-integration.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    ... e mais 22 links
+
+📄 historico-consultas.html
+  🔗 Links internos:
+    → index.html
+
+📄 index.html
+  (sem links)
+
+📄 login-medico.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /recuperar-senha-medico.html
+    → /medico-cadastro.html
+
+📄 medico-cadastro.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /termos-de-uso
+    → /politica-privacidade
+    → /area-medica.html
+
+📄 notificacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 perfil-medico.html
+  🔗 Links internos:
+    → /index.html
+
+📄 politica-privacidade.html
+  🔗 Links internos:
+    → /
+    → /contato.html
+  🌐 Links externos: 1
+
+📄 precos.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+
+📄 preferencias.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 prescricoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 prontuarios.html
+  🔗 Links internos:
+    → /doctor-dashboard
+
+📄 relatorio-receita.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 sobre.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /contato.html
+
+📄 suporte.html
+  🔗 Links internos:
+    → /faq.html
+    → /contato.html
+    → /
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → #
+    → #
+    → #como-funciona
+    → #
+    → #
+    → #
+    → #
+
+📄 termos-de-uso.html
+  🔗 Links internos:
+    → /
+
+📄 test-bid-integration.html
+  (sem links)
+
+📄 test-bidding-flow.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /index.html
+    → /videoconsulta.html
+    → /index.html
+
+📄 test-bidding.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+
+📄 test-redirect.html
+  (sem links)
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /dr-ai.html
+
+📄 videoconsulta.html
+  🔗 Links internos:
+    → /guia-medicos.html
+    → /index.html
+
+
+DIRETÓRIO: ./client
+----------------------------------------
+📄 index.html
+  (sem links)
+
+
+DIRETÓRIO: ./client/public
+----------------------------------------
+📄 dashboard-premium.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+
+DIRETÓRIO: ./dist/public
+----------------------------------------
+📄 dashboard-premium.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 index.html
+  (sem links)
+
+
+DIRETÓRIO: ./perf
+----------------------------------------
+📄 video-baseline.html
+  (sem links)
+
+📄 enhanced-baseline.html
+  (sem links)
+
+📄 enhanced-baseline.report.html
+  (sem links)
+
+📄 index.html
+  🔗 Links internos:
+    → ./enhanced-baseline.html
+    → ./video-baseline.html
+
+
+DIRETÓRIO: ./public
+----------------------------------------
+📄 agenda-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 aguardando-medico.html
+  🔗 Links internos:
+    → /
+    → /guia-medicos.html
+    → /index.html
+
+📄 anotacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 avaliacoes.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 consultas-agendadas.html
+  🔗 Links internos:
+    → /index.html
+
+📄 download.html
+  🔗 Links internos:
+    → TeleMed_Ultra_v8.7.0.zip
+    → TeleMed_Ultra_v8.7.0.tar.gz
+    → TeleMed_Premium_v8.6.0.zip
+    → TeleMed_Premium_v8.6.0.tar.gz
+    → TeleMed_Clean_v8.5.0.zip
+    → TeleMed_Clean_v8.5.0.tar.gz
+
+📄 estatisticas-medico.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /login-medico.html
+
+📄 guia-medicos.html
+  🔗 Links internos:
+    → /
+    → /index.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /test-bid-integration.html
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    ... e mais 22 links
+
+📄 historico-consultas.html
+  🔗 Links internos:
+    → index.html
+
+📄 login-medico.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /recuperar-senha-medico.html
+    → /medico-cadastro.html
+
+📄 medico-cadastro.html
+  🔗 Links internos:
+    → /area-medica.html
+    → /termos-de-uso
+    → /politica-privacidade
+    → /area-medica.html
+
+📄 notificacoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 precos.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+
+📄 preferencias.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 prescricoes.html
+  🔗 Links internos:
+    → /index.html
+
+📄 prontuarios.html
+  🔗 Links internos:
+    → /doctor-dashboard
+
+📄 relatorio-receita.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 sobre.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /contato.html
+
+📄 suporte.html
+  🔗 Links internos:
+    → /faq.html
+    → /contato.html
+    → /
+
+📄 test-bidding.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+
+📄 test-redirect.html
+  (sem links)
+
+📄 videoconsulta.html
+  🔗 Links internos:
+    → /guia-medicos.html
+    → /index.html
+
+📄 dashboard-premium.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 index-backup.html
+  (sem links)
+
+📄 landing-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 relatorios-medicos-pdf.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+
+📄 receitas-digitais.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-do-dia.html
+    → /fila-pacientes-medico.html
+
+📄 dashboard-premium-fixed.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → agenda-medica.html
+    → receitas-digitais.html
+    → videoconsulta.html
+    → dr-ai.html
+    → telemonitoramento-enfermagem.html
+    → centro-avaliacao.html
+    → dr-ai.html
+    → relatorios-medicos-pdf.html
+    → consulta-por-valor.html
+    ... e mais 8 links
+
+📄 indice-completo.html
+  🔗 Links internos:
+    → dashboard-premium-fixed.html
+    → index.html
+    → dashboard-premium-fixed.html
+    → download.html
+    → agenda-do-dia.html
+    → agenda-medico.html
+    → area-medica.html
+    → perfil-medico.html
+    → login-medico.html
+    → medico-cadastro.html
+    ... e mais 31 links
+
+📄 classificador-sem-js.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 dashboard-minimo.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    → telemonitoramento-enfermagem.html
+    → relatorio-receita.html
+    → download.html
+    → videoconsulta-corrigida.html
+    → dr-ai-corrigido.html
+    → consulta-por-valor-corrigida.html
+    ... e mais 3 links
+
+📄 videoconsulta-corrigida.html
+  🔗 Links internos:
+    → #
+    → /index.html
+
+📄 consulta-por-valor.html
+  🔗 Links internos:
+    → index.html
+    → #
+    → #
+
+📄 login.html
+  🔗 Links internos:
+    → #
+    → cadastro.html
+    → ../index.html
+    → #
+
+📄 dashboard-teste-static.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+📄 dashboard-teste-fixed.html
+  🔗 Links internos:
+    → #
+    → #
+    → #
+    → #analytics
+    → #prontuario
+
+📄 sistema-integrado.html
+  (sem links)
+
+📄 telemed-complete.html
+  (sem links)
+
+📄 telemed-ia.html
+  🔗 Links internos:
+    → /
+    → /health
+    → /
+    → /health
+    → /complete
+
+📄 health-connect.html
+  🔗 Links internos:
+    → /
+    → /telemed
+    → /complete
+
+📄 sistema-completo.html
+  🔗 Links internos:
+    → /
+    → /telemed
+    → /health
+
+📄 patient-management.html
+  (sem links)
+
+📄 enhanced-iframe.html
+  🔗 Links internos:
+    → /
+    → /health
+    → /telemed
+
+📄 enhanced-scraped.html
+  🔗 Links internos:
+    → /
+    → /health
+    → /telemed
+
+📄 enhanced-local.html
+  🔗 Links internos:
+    → /
+    → /health
+    → /telemed
+
+📄 enhanced-system.html
+  (sem links)
+
+📄 enhanced-consultation-backup.html
+  (sem links)
+
+📄 dashboard-teste.html
+  🔗 Links internos:
+    → #
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/area-medica.html
+    → /enhanced
+    → /patient-management
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+
+📄 agenda-medica.html
+  🔗 Links internos:
+    → /enhanced
+    → /dashboard
+
+📄 enhanced-consultation.html
+  (sem links)
+
+📄 patient-info.html
+  (sem links)
+
+📄 enhanced-teste.html
+  🔗 Links internos:
+    → #
+    → #
+
+📄 registro-saude.html
+  🔗 Links internos:
+    → /agenda
+    → /consulta
+    → /dashboard
+    → /pacientes
+    → #
+    → /pacientes
+
+📄 meus-pacientes.html
+  🔗 Links internos:
+    → /agenda
+    → /consulta
+    → /dashboard
+    → /pacientes
+
+📄 landing.html
+  🔗 Links internos:
+    → #como
+    → #servicos
+    → #planos
+    → /agenda
+    → /consulta
+    → /agenda
+    → #como
+    → /dashboard
+    → /consulta
+    → /agenda
+    ... e mais 4 links
+
+📄 landing-teste.html
+  🔗 Links internos:
+    → #inicio
+    → #servicos
+    → #beneficios
+    → #medicos
+    → #testagens
+    → #quem-somos
+    → #contato
+    → /dashboard
+    → /consulta
+    → /agenda
+    ... e mais 14 links
+
+📄 classificador-csp-safe.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+📄 classificador-interativo.html
+  (sem links)
+
+📄 fila-pacientes-medico.html
+  🔗 Links internos:
+    → /index.html
+
+📄 pacientes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 demo-webrtc.html
+  (sem links)
+
+📄 teste-classificador.html
+  🔗 Links internos:
+    → index.html
+    → dashboard-premium-fixed.html
+    → agenda-do-dia.html
+    → videoconsulta.html
+    → dr-ai.html
+
+
+DIRETÓRIO: ./public/demo-ativo
+----------------------------------------
+📄 agenda-do-dia.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 area-medica.html
+  🔗 Links internos:
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+  🌐 Links externos: 1
+
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #features
+    → #demo
+    → #about
+    → #contact
+    → area-medica.html
+    → area-medica.html
+    → #demo
+    → area-medica.html
+    → /public/demo-ativo/agenda-do-dia.html
+    ... e mais 12 links
+
+📄 area-medica-backup.html
+  🔗 Links internos:
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+  🌐 Links externos: 1
+
+📄 area-medica-new.html
+  🔗 Links internos:
+    → /demo-ativo/area-medica.html
+    → /demo-ativo/pacientes.html
+    → /demo-ativo/agenda-do-dia.html
+    → /enhanced
+    → /patient-management
+    → /enhanced
+    → /demo-ativo/pacientes.html
+    → /dr-ai-demo
+    → /demo-ativo/configuracoes.html
+    → /demo-ativo/agenda-do-dia.html
+    ... e mais 4 links
+
+📄 configuracoes.html
+  🔗 Links internos:
+    → /demo-ativo/area-medica.html
+    → #
+    → #
+    → #
+    → #
+
+
+DIRETÓRIO: ./public/preview
+----------------------------------------
+📄 cadastro.html
+  🔗 Links internos:
+    → #
+    → #
+    → login.html
+
+📄 centro-avaliacao.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 como-funciona.html
+  🔗 Links internos:
+    → /
+    → /dr-ai
+    → /patient-bidding
+    → /precos.html
+    → /faq.html
+
+📄 consulta-por-valor-corrigida.html
+  🔗 Links internos:
+    → dashboard-minimo.html
+
+📄 contato.html
+  🔗 Links internos:
+    → /
+
+📄 dr-ai-demo.html
+  (sem links)
+
+📄 equipe-medica.html
+  🔗 Links internos:
+    → /
+    → /agendamento?especialidade=cardiologia
+    → /agendamento?especialidade=pediatria
+    → /agendamento?especialidade=psiquiatria
+    → /agendamento?especialidade=ginecologia
+    → /agendamento?especialidade=ortopedia
+    → /agendamento?especialidade=dermatologia
+    → /patient-bidding
+    → /dr-ai
+    → /faq.html
+
+📄 faq.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /especialidades.html
+    → /contato.html
+    → /dr-ai.html
+    → /
+
+📄 politica-privacidade.html
+  🔗 Links internos:
+    → /
+    → /contato.html
+  🌐 Links externos: 1
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /dr-ai.html
+
+📄 test-bidding-flow.html
+  🔗 Links internos:
+    → /consulta-por-valor.html
+    → /index.html
+    → /videoconsulta.html
+    → /index.html
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → #
+    → #
+    → #como-funciona
+    → #
+    → #
+    → #
+    → #
+
+📄 termos-de-uso.html
+  🔗 Links internos:
+    → /
+
+📄 test-bid-integration.html
+  (sem links)
+
+📄 dr-ai-corrigido-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 dr-ai-static.html
+  🔗 Links internos:
+    → index.html
+
+📄 mobile.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 perfil-medico.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 avaliacoes-themed.html
+  🔗 Links internos:
+    → /index.html
+    → /fila-pacientes-medico.html
+    → /videoconsulta.html
+
+📄 precos-themed.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+    → /patient-bidding
+
+📄 sobre-themed.html
+  🔗 Links internos:
+    → /
+    → /patient-bidding
+    → /contato.html
+
+📄 index-demo.html
+  🔗 Links internos:
+    → #
+    → #
+    → ./avaliacoes-themed.html
+    → ./precos-themed.html
+    → ./sobre-themed.html
+    → /preview
+
+📄 agenda-original.html
+  🔗 Links internos:
+    → /enhanced
+    → /dashboard
+
+📄 meus-pacientes-original.html
+  🔗 Links internos:
+    → /agenda
+    → /consulta
+    → /dashboard
+    → /pacientes
+
+📄 registro-saude-original.html
+  🔗 Links internos:
+    → /agenda
+    → /consulta
+    → /dashboard
+    → /pacientes
+    → #
+    → /pacientes
+
+📄 consulta-original.html
+  🔗 Links internos:
+    → #
+    → #
+
+📄 demo-comparacao.html
+  🔗 Links internos:
+    → ?theme=off
+    → ?
+    → #
+    → #
+    → /preview/agenda-original.html
+    → /preview/consulta-original.html
+    → /preview/meus-pacientes-original.html
+    → /preview/registro-saude-original.html
+    → /preview/avaliacoes-themed.html
+    → /preview/precos-themed.html
+    ... e mais 4 links
+
+
+DIRETÓRIO: ./public/public
+----------------------------------------
+📄 sistema-integrado.html
+  🔗 Links internos:
+    → demo-ativo/index.html
+    → react-app/index.html
+    → demo-ativo/index.html
+    → react-app/index.html
+
+
+DIRETÓRIO: ./public/public/demo-ativo
+----------------------------------------
+📄 agenda-do-dia.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 mobile.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 pacientes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 perfil-medico.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+
+📄 area-medica.html
+  🔗 Links internos:
+    → /public/demo-ativo/agenda-do-dia.html
+    → /public/demo-ativo/pacientes.html
+    → /public/demo-ativo/perfil-medico.html
+    → /public/demo-ativo/configuracoes.html
+    → /public/demo-ativo/mobile.html
+  🌐 Links externos: 1
+
+📄 configuracoes.html
+  🔗 Links internos:
+    → /public/demo-ativo/area-medica.html
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+    → #
+
+📄 index.html
+  🔗 Links internos:
+    → #
+    → #features
+    → #demo
+    → #about
+    → #contact
+    → area-medica.html
+    → area-medica.html
+    → #demo
+    → area-medica.html
+    → /public/demo-ativo/agenda-do-dia.html
+    ... e mais 12 links
+
+
+DIRETÓRIO: ./public/public/react-app
+----------------------------------------
+📄 index.html
+  (sem links)
+
+
+DIRETÓRIO: ./public/react-app
+----------------------------------------
+📄 index.html
+  (sem links)
+
+
+DIRETÓRIO: ./render-deploy
+----------------------------------------
+📄 index.html
+  🔗 Links internos:
+    → /
+    → #
+    → /videoconsulta
+    → /agenda-medica
+    → /receitas-digitais
+    → /especialidades
+    → /telemonitoramento-enfermagem
+    → #
+    → #
+    → /dashboard-aquarela
+    ... e mais 36 links
+
+
+DIRETÓRIO: ./render-deploy/pages
+----------------------------------------
+📄 agenda-medica.html
+  🔗 Links internos:
+    → /leilao-consultas.html
+    → /receitas-digitais.html
+    → /login.html
+    → /index.html
+    → javascript:history.back()
+    → #
+
+📄 ansiedade-gad7.html
+  🔗 Links internos:
+    → /
+    → /centro-avaliacao.html
+    → /centro-avaliacao.html
+    → /centro-avaliacao
+
+📄 atendimento-medico.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /pdf-generator.html
+    → /centro-avaliacao.html
+
+📄 bipolar-mdq.html
+  🔗 Links internos:
+    → /
+    → /centro-avaliacao.html
+    → /centro-avaliacao.html
+    → /centro-avaliacao
+
+📄 centro-avaliacao.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → #avaliacoes
+    → #especialistas
+    → #contato
+    → /login.html
+    → #avaliacoes
+    → #profissionais
+
+📄 dashboard-aquarela-backup.html
+  (sem links)
+
+📄 dashboard-aquarela-simple-backup.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /receitas-digitais.html
+    → /videoconsulta.html
+
+📄 dashboard-clean.html
+  (sem links)
+
+📄 dashboard-minimal.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /centro-avaliacao.html
+    → /pdf-generator.html
+    → /triagem-inteligente.html
+    → #
+    → #
+    → #
+    → #
+
+📄 dashboard-pastel.html
+  🔗 Links internos:
+    → #
+    → /index.html
+    → /pdf-generator.html
+    → /centro-avaliacao.html
+    → /triagem-inteligente.html
+    → #
+    → #
+    → #
+
+📄 depressao-phq9.html
+  🔗 Links internos:
+    → /
+    → /centro-avaliacao.html
+    → /centro-avaliacao
+
+📄 dr-ai.html
+  🔗 Links internos:
+    → /
+    → /doctor-dashboard
+
+📄 especialidades.html
+  🔗 Links internos:
+    → /patient-bidding
+
+📄 gad7-ansiedade.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 guia-integracao-hostinger.html
+  (sem links)
+
+📄 integracao-hostinger.html
+  🔗 Links internos:
+    → /dr-ai.html
+    → /triagem-psiquiatrica.html
+    → /telemonitoramento-enfermagem.html
+    → /consulta-por-valor.html
+    → /saiba-mais.html
+    → /especialidades.html
+    → /login.html
+    → /register.html
+    → /index.html
+    → /sistema-indice.html
+
+📄 leilao-consultas.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /index.html
+    → /centro-avaliacao.html
+
+📄 links-verificacao-telemed.html
+  🔗 Links internos:
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/pdf-generator.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/centro-avaliacao.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/ansiedade-gad7.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/depressao-phq9.html
+    → https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/bipolar-mdq.html
+  🌐 Links externos: 1
+
+📄 login.html
+  🔗 Links internos:
+    → #
+    → /register.html
+
+📄 logout.html
+  (sem links)
+
+📄 mdq-bipolar.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 memed-receita-viewer.html
+  🔗 Links internos:
+    → receitas-digitais.html
+    → #
+
+📄 pdf-generator.html
+  🔗 Links internos:
+    → /
+    → javascript:history.back()
+
+📄 phq9-depressao.html
+  🔗 Links internos:
+    → /doctor-dashboard
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 pss10-stress.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 receitas-digitais.html
+  🔗 Links internos:
+    → /agenda-medica.html
+    → /index.html
+    → /leilao-consultas.html
+
+📄 register.html
+  🔗 Links internos:
+    → /
+    → /
+    → #
+    → #
+    → /login.html
+
+📄 saiba-mais.html
+  🔗 Links internos:
+    → /
+    → /
+    → /consulta-por-valor.html
+    → /dr-ai.html
+    → /
+    → /dr-ai.html
+    → /consulta-por-valor.html
+    → /index.html
+    → /triagem-psiquiatrica.html
+    → /telemonitoramento-enfermagem.html
+    ... e mais 1 links
+
+📄 sistema-indice.html
+  🔗 Links internos:
+    → index.html
+    → login.html
+    → register.html
+    → especialidades.html
+    → dr-ai.html
+    → triagem-psiquiatrica.html
+    → telemonitoramento-enfermagem.html
+    → saiba-mais.html
+    → index.html
+    → consulta-por-valor.html
+    ... e mais 6 links
+
+📄 sistema-notificacoes-medicas.html
+  🔗 Links internos:
+    → /index.html
+    → /agenda-medica.html
+    → /index.html
+    → javascript:history.back()
+    → #
+
+📄 stress-pss10.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 tdah-asrs18.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 triagem-psiquiatrica.html
+  🔗 Links internos:
+    → /centro-avaliacao
+    → /centro-avaliacao
+
+📄 telemonitoramento-enfermagem.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+
+📄 entrada.html
+  (sem links)
+
+📄 test-medical-report.html
+  🔗 Links internos:
+    → /api/medical-reports/generate-fictional
+
+📄 landing-page-simple.html
+  🔗 Links internos:
+    → #features
+  🌐 Links externos: 4
+
+📄 download-page.html
+  (sem links)
+
+📄 test-download.html
+  (sem links)
+
+📄 dashboard-aquarela.html
+  🔗 Links internos:
+    → /dashboard-aquarela
+    → /agenda-medica
+    → /receitas-digitais
+    → /videoconsulta
+    → /dr-ai
+    → /leilao-consultas
+    → /triagem-psiquiatrica
+    → /centro-avaliacao
+    → /sistema-notificacoes-medicas
+    → /especialidades
+    ... e mais 8 links
+
+📄 download-page-fixed.html
+  (sem links)
+
+📄 localhost_2025-08-13_11-27-26.report.html
+  (sem links)
+
+📄 videoconsulta.html
+  (sem links)
+
+📄 dr-ai-OLD-backup.html
+  🔗 Links internos:
+    → /
+    → /doctor-dashboard
+
+📄 consulta-por-valor.html
+  (sem links)
+
+
+============================================================
+ANÁLISE DE PÁGINAS PRINCIPAIS
+============================================================
+
+============================================================
+GERANDO MAPA VISUAL
+============================================================
+✅ Arquivo 'mapa_navegacao.dot' gerado
+📊 Para visualizar o diagrama:
+   1. Copie o conteúdo de mapa_navegacao.dot
+   2. Cole em: https://dreampuf.github.io/GraphvizOnline/
+   3. Ou use: https://magjac.com/graphviz-visual-editor/
+
+🎯 RELATÓRIO COMPLETO GERADO!

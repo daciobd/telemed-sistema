@@ -1,0 +1,60 @@
+Cole o Script Abaixo: Este script usa Python para:
+
+Listar todos os arquivos .html no diretório atual (e subdiretórios).
+Extrair links () de cada página.
+Gerar um relatório simples mostrando "Página X linka para Y".
+Se quiser um mapa visual (diagrama), ele pode gerar um arquivo DOT para uso com Graphviz (mas Graphviz não está pré-instalado no Replit; você pode simular ou exportar).
+
+pythonimport os
+from bs4 import BeautifulSoup
+
+# Função para extrair links de um arquivo HTML
+def extrair_links(arquivo):
+    with open(arquivo, 'r', encoding='utf-8') as f:
+        soup = BeautifulSoup(f.read(), 'html.parser')
+        links = [a.get('href') for a in soup.find_all('a') if a.get('href')]
+    return links
+
+# Listar todos os arquivos HTML no diretório e subdiretórios
+mapa = {}
+for root, dirs, files in os.walk('.'):
+    for file in files:
+        if file.endswith('.html'):
+            caminho = os.path.join(root, file)
+            mapa[caminho] = extrair_links(caminho)
+
+# Gerar relatório
+print("Mapa de Páginas e Conexões:")
+for pagina, links in mapa.items():
+    print(f"\nPágina: {pagina}")
+    if links:
+        print("Linka para:")
+        for link in links:
+            print(f" - {link}")
+    else:
+        print("Sem links encontrados.")
+
+# Opcional: Gerar arquivo DOT para diagrama (use Graphviz externamente)
+with open('mapa.dot', 'w') as dot:
+    dot.write('digraph G {\n')
+    for pagina, links in mapa.items():
+        pagina_nome = os.path.basename(pagina)
+        for link in links:
+            if link.endswith('.html'):  # Apenas links internos
+                link_nome = os.path.basename(link)
+                dot.write(f'"{pagina_nome}" -> "{link_nome}";\n')
+    dot.write('}\n')
+print("\nMapa DOT gerado em 'mapa.dot' - Visualize com Graphviz online.")
+
+
+Instale Dependências: No shell do Replit, execute pip install beautifulsoup4 para instalar o BeautifulSoup (necessário para parsear HTML).
+
+
+Execute o Script: No Replit, rode python mapa_links.py no shell. Ele gerará um relatório no console e um arquivo mapa.dot para diagrama (visualize em sites como Graphviz Online: copie o conteúdo de mapa.dot para lá).
+
+
+Limitações:
+
+O script assume links relativos e internos (.html). Para links externos ou absolutos, ajuste o código.
+Se o projeto tiver mais de 40 páginas, o relatório pode ser longo - redirecione a saída para um arquivo (ex.: python mapa_links.py > relatório.txt).
+Para um mapa visual avançado, exporte o DOT e use ferramentas externas como Graphviz ou draw.io.
