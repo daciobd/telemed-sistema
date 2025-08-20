@@ -1,0 +1,132 @@
+quiser aplicar em todas as páginas do /preview, dá pra fazer isso sem editar cada HTML. A ideia é o servidor injetar o tema automaticamente quando servir qualquer arquivo do /preview.
+
+Abaixo vai um patch curto para o server/index.ts (ou onde você criou as rotas do preview). Ele:
+
+injeta a fonte Inter e o CSS /_theme-telemed-pro.css;
+
+adiciona data-theme="telemed-pro" no <body>;
+
+permite ligar/desligar por query (?theme=off) e/ou por variável de ambiente (PREVIEW_THEME);
+
+funciona também no modo ?inspect=1.
+
+1) Garanta o CSS do tema
+
+(é aquele que criamos antes)
+
+public/preview/_theme-telemed-pro.css
+
+2) Patch no servidor (uma vez só)
+
+Cole antes do fallback de SPA, dentro do arquivo onde estão as rotas do /preview.
+
+// ---- THEME: injeção automática para /preview ----
+const PREVIEW_THEME = process.env.PREVIEW_THEME ?? 'telemed-pro';
+
+function applyPreviewTheme(html: string, themeParam?: string) {
+  // se theme=off, não injeta
+  if (themeParam === 'off') return html;
+
+  const theme = themeParam && themeParam !== 'on' ? themeParam : PREVIEW_THEME;
+  if (!theme) return html;
+
+  // injeta link da fonte + CSS do tema no <head>
+  const headInject = `
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/preview/_theme-telemed-pro.css">`;
+
+  if (/<\/head>/i.test(html)) {
+    html = html.replace(/<\/head>/i, headInject + '</head>');
+  } else {
+    html = headInject + html;
+  }
+
+  // marca o body com data-theme, se ainda não tiver
+  if (!/data-theme=/.test(html)) {
+    html = html.replace(/<body([^>]*)>/i, `<body$1 data-theme="${theme}">`);
+  }
+  // fallback se não encontrou <body> (HTML muito simples)
+  if (!/data-theme=/.test(html)) {
+    html = `<body data-theme="${theme}">` + html;
+  }
+  return html;
+}
+
+
+E ajuste as duas respostas do preview:
+
+// 1) /preview index (lista) - se você gera HTML aqui, pode aplicar o tema:
+app.get("/preview", (req, res) => {
+  // ... seu código atual que monta o HTML "indexHtml"
+  const indexHtml = /* string do HTML que você já monta */;
+  const themed = applyPreviewTheme(indexHtml, String(req.query.theme || ''));
+  res.type("html").send(themed);
+});
+
+// 2) /preview/:file (abre o protótipo) - aplica tema e mantém o inspect
+app.get("/preview/:file", (req, res, next) => {
+  const f = req.params.file;
+  const full = path.join(previewDir, f);
+  if (!fs.existsSync(full)) return next();
+  const themeParam = String(req.query.theme || '');
+
+  let html = fs.readFileSync(full, "utf8");
+
+  // se estiver usando o modo "inspect=1", injete o inspector primeiro (seu código atual)
+  if (String(req.query.inspect || "") === "1") {
+    // ... seu trecho que injeta o painel/overlay de inspeção e salva em "html"
+  }
+
+  // por fim, aplica o tema (respeita ?theme=off)
+  html = applyPreviewTheme(html, themeParam);
+
+  return res.type("html").send(html);
+});
+
+
+Se você também tem o endpoint /preview/_map, pode optar por aplicar o applyPreviewTheme nele para o mapa de links ficar com o mesmo visual.
+
+3) Como usar
+
+Habilitar global (sem query): defina o segredo/variável no Replit
+PREVIEW_THEME=telemed-pro
+
+Forçar/desligar por página:
+
+…/preview/landing-v1.html?theme=telemed-pro
+
+…/preview/centro-avaliacao.html?theme=off
+
+Funciona junto com o inspector:
+
+…/preview/centro-avaliacao.html?inspect=1 (usa o tema padrão)
+
+…/preview/centro-avaliacao.html?inspect=1&theme=off (sem tema)
+
+4) Toggle rápido (UI opcional)
+
+Se quiser um switch flutuante nas páginas de preview, adicione após enviar o HTML no handler /:file:
+
+const toggle = `
+<script>
+(function(){
+  const btn=document.createElement('button');
+  btn.textContent='Theme: ${PREVIEW_THEME ? 'on' : 'off'}';
+  Object.assign(btn.style,{position:'fixed',right:'12px',top:'12px',zIndex:99999,
+    background:'#111827',color:'#fff',border:'1px solid #374151',borderRadius:'10px',padding:'6px 10px'});
+  btn.onclick=function(){
+    const u=new URL(location.href);
+    if(u.searchParams.get('theme')==='off'){ u.searchParams.delete('theme'); }
+    else { u.searchParams.set('theme','off'); }
+    location.href=u.toString();
+  };
+  document.body.appendChild(btn);
+})();
+</script>`;
+html = html.replace(/<\/body>/i, toggle + '</body>');
+
+Pronto!
+
+Com isso, todo protótipo do /preview herda o mesmo look da landing, sem mexer em cada arquivo. E você mantém controle fino com ?theme=off quando quiser comparar com o original.

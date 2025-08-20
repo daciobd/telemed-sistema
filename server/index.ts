@@ -337,6 +337,40 @@ app.get("/lp", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../public/landing.html"));
 // });
 
+// ---- THEME: injeção automática para /preview ----
+const PREVIEW_THEME = process.env.PREVIEW_THEME ?? 'telemed-pro';
+
+function applyPreviewTheme(html: string, themeParam?: string) {
+  // se theme=off, não injeta
+  if (themeParam === 'off') return html;
+
+  const theme = themeParam && themeParam !== 'on' ? themeParam : PREVIEW_THEME;
+  if (!theme) return html;
+
+  // injeta link da fonte + CSS do tema no <head>
+  const headInject = `
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/preview/_theme-telemed-pro.css">`;
+
+  if (/<\/head>/i.test(html)) {
+    html = html.replace(/<\/head>/i, headInject + '</head>');
+  } else {
+    html = headInject + html;
+  }
+
+  // marca o body com data-theme, se ainda não tiver
+  if (!/data-theme=/.test(html)) {
+    html = html.replace(/<body([^>]*)>/i, `<body$1 data-theme="${theme}">`);
+  }
+  // fallback se não encontrou <body> (HTML muito simples)
+  if (!/data-theme=/.test(html)) {
+    html = `<body data-theme="${theme}">` + html;
+  }
+  return html;
+}
+
 // PREVIEW ESTÁTICO (coloque ANTES do fallback de SPA!)
 const previewDir = path.join(__dirname, "../public/preview");
 
@@ -346,19 +380,66 @@ app.get("/preview", (req, res) => {
     ? fs.readdirSync(previewDir).filter(f => f.endsWith(".html"))
     : [];
   const list = files.map(f => `<li><a href="/preview/${f}">${f}</a></li>`).join("");
-  res.type("html").send(`
-    <h1>Protótipos</h1>
+  
+  const indexHtml = `
+    <h1>Protótipos TeleMed</h1>
     <ul>${list || "<li>(vazio)</li>"}</ul>
     <p>Coloque seus .html em <code>public/preview/</code></p>
-  `);
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+      <h3>Controle de Tema:</h3>
+      <p>• <strong>Tema ativo:</strong> ${PREVIEW_THEME || 'nenhum'}</p>
+      <p>• Desabilitar: adicione <code>?theme=off</code> na URL</p>
+      <p>• Exemplo: <code>/preview/avaliacoes-themed.html?theme=off</code></p>
+    </div>
+  `;
+  
+  const themed = applyPreviewTheme(indexHtml, String(req.query.theme || ''));
+  res.type("html").send(themed);
 });
 
-// servir os arquivos
-app.use("/preview", (req, res, next) => {
-  const file = req.path.replace(/^\//, "");
-  const target = path.join(previewDir, file || "index.html");
-  if (fs.existsSync(target)) return res.sendFile(target);
-  next();
+// servir os arquivos individuais com tema automático
+app.get("/preview/:file", (req, res, next) => {
+  const f = req.params.file;
+  const full = path.join(previewDir, f);
+  if (!fs.existsSync(full)) return next();
+  
+  const themeParam = String(req.query.theme || '');
+  let html = fs.readFileSync(full, "utf8");
+
+  // se estiver usando o modo "inspect=1", injete o inspector primeiro
+  if (String(req.query.inspect || "") === "1") {
+    // mantém compatibilidade com modo inspect se implementado no futuro
+  }
+
+  // aplica o tema (respeita ?theme=off)
+  html = applyPreviewTheme(html, themeParam);
+
+  // adiciona toggle rápido de tema
+  const toggleScript = `
+<script>
+(function(){
+  const btn=document.createElement('button');
+  btn.textContent='Theme: ${themeParam === 'off' ? 'OFF' : 'ON'}';
+  Object.assign(btn.style,{position:'fixed',right:'12px',top:'12px',zIndex:99999,
+    background:'#111827',color:'#fff',border:'1px solid #374151',borderRadius:'10px',padding:'6px 10px',
+    fontSize:'12px',cursor:'pointer',fontFamily:'Inter,sans-serif'});
+  btn.onclick=function(){
+    const u=new URL(location.href);
+    if(u.searchParams.get('theme')==='off'){ u.searchParams.delete('theme'); }
+    else { u.searchParams.set('theme','off'); }
+    location.href=u.toString();
+  };
+  document.body.appendChild(btn);
+})();
+</script>`;
+  
+  if (/<\/body>/i.test(html)) {
+    html = html.replace(/<\/body>/i, toggleScript + '</body>');
+  } else {
+    html += toggleScript;
+  }
+
+  return res.type("html").send(html);
 });
 
 // ====== SPA fallback para rotas React ======
