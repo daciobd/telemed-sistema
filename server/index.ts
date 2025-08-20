@@ -254,6 +254,28 @@ app.get('/registro-saude', (req, res) => {
   res.status(404).send('PHR page not found');
 });
 
+// CANONICAL: Gestão Avançada - Painel Administrativo
+app.get('/gestao-avancada', (req, res) => {
+  console.log('📊 Rota CANÔNICA /gestao-avancada acessada - Painel Admin');
+  const gestaoHtml = path.join(__dirname, '../public/gestao-avancada.html');
+  if (fs.existsSync(gestaoHtml)) {
+    console.log('✅ Servindo gestao-avancada.html (CANÔNICA)');
+    return res.sendFile(gestaoHtml);
+  }
+  res.status(404).send('Gestão Avançada page not found');
+});
+
+// CANONICAL: Área Médica - Gestão de Pacientes  
+app.get('/area-medica', (req, res) => {
+  console.log('🏥 Rota CANÔNICA /area-medica acessada - Gestão Pacientes');
+  const areaHtml = path.join(__dirname, '../public/area-medica.html');
+  if (fs.existsSync(areaHtml)) {
+    console.log('✅ Servindo area-medica.html (CANÔNICA)');
+    return res.sendFile(areaHtml);
+  }
+  res.status(404).send('Área Médica page not found');
+});
+
 // TESTE: Landing Page Premium
 app.get('/landing-teste', (req, res) => {
   console.log('🏠 Rota TESTE /landing-teste acessada - Landing Premium');
@@ -447,7 +469,8 @@ app.get("/preview/:file", (req, res, next) => {
 app.use(express.static(distDir)); // serve build se houver
 
 // Qualquer rota não-API cai no SPA (evita 404 em rotas diretas)
-app.get(/^\/(?!api|perf|assets|static|favicon\.ico).*/i, (req, res, next) => {
+// EXCEÇÃO: páginas HTML específicas não devem cair no SPA
+app.get(/^\/(?!api|perf|assets|static|favicon\.ico|.*\.html$).*/i, (req, res, next) => {
   try {
     // Se em desenvolvimento com Vite
     if (process.env.NODE_ENV !== 'production') {
@@ -1144,15 +1167,28 @@ app.get('/demo-ativo/:page', (req, res) => {
   res.status(404).send('Página não encontrada');
 });
 
-// Rota específica para area-medica.html
+// Rota específica para area-medica.html - VERSÃO DEFINITIVA
 app.get('/area-medica.html', (req, res) => {
   try {
-    const html = fs.readFileSync(path.join(__dirname, '../public/demo-ativo/area-medica.html'), 'utf-8');
-    console.log('📱 Servindo área médica: /public/demo-ativo/area-medica.html');
+    const html = fs.readFileSync(path.join(__dirname, '../public/area-medica-nova.html'), 'utf-8');
+    console.log('🏥 Servindo NOVA área médica: /public/area-medica-nova.html');
     res.setHeader('Cache-Control', 'public, max-age=3600');
     res.send(html);
   } catch (err) {
-    console.error('❌ Erro ao carregar área médica:', err);
+    console.error('❌ Erro ao carregar nova área médica:', err);
+    res.status(404).send('Página não encontrada');
+  }
+});
+
+// Rota específica para gestao-avancada.html - VERSÃO DEFINITIVA
+app.get('/gestao-avancada.html', (req, res) => {
+  try {
+    const html = fs.readFileSync(path.join(__dirname, '../public/gestao-avancada.html'), 'utf-8');
+    console.log('📊 Servindo gestão avançada: /public/gestao-avancada.html');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.send(html);
+  } catch (err) {
+    console.error('❌ Erro ao carregar gestão avançada:', err);
     res.status(404).send('Página não encontrada');
   }
 });

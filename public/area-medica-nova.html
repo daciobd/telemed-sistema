@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="telemed-pro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed Pro - Área Médica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #0f172a 50%, #1e293b 75%, #0f172a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #e2e8f0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        header {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+        }
+        
+        .logo-section .subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        nav a.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .back-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .patients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .patient-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .patient-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .patient-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .patient-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            margin-right: 1rem;
+        }
+        
+        .patient-info h4 {
+            color: #f1f5f9;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .patient-info p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .patient-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .patient-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .patient-details .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .detail-value {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .patient-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .patients-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .patient-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>TeleMed Pro</h1>
+                <div class="subtitle">Área Médica</div>
+            </div>
+            <nav>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/agenda">Agenda</a>
+                <a href="/area-medica.html" class="active">Área Médica</a>
+                <a href="/gestao-avancada.html">Gestão Avançada</a>
+            </nav>
+            <a href="/dashboard" class="back-btn">← Voltar</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Área Médica</h2>
+            <p>Gestão completa de pacientes, consultas e atendimentos médicos</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>3</h3>
+                <p>Pacientes Ativos</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>12</h3>
+                <p>Consultas Realizadas</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>5</h3>
+                <p>Consultas Pendentes</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>98%</h3>
+                <p>Satisfação dos Pacientes</p>
+            </div>
+        </div>
+
+        <div class="patients-grid">
+            <div class="patient-card">
+                <div class="patient-header">
+                    <div class="patient-avatar">JS</div>
+                    <div class="patient-info">
+                        <h4>João Silva</h4>
+                        <p>35 anos • Masculino</p>
+                    </div>
+                </div>
+                
+                <div class="patient-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Última Consulta:</span>
+                        <span class="detail-value">18/08/2025</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge status-active">Ativo</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Especialidade:</span>
+                        <span class="detail-value">Cardiologia</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Próxima Consulta:</span>
+                        <span class="detail-value">25/08/2025 14:30</span>
+                    </div>
+                </div>
+                
+                <div class="patient-actions">
+                    <a href="/patient-info?id=1" class="btn btn-secondary">Ver Perfil</a>
+                    <a href="/consulta?patient=joao" class="btn btn-primary">Iniciar Consulta</a>
+                </div>
+            </div>
+
+            <div class="patient-card">
+                <div class="patient-header">
+                    <div class="patient-avatar">MO</div>
+                    <div class="patient-info">
+                        <h4>Maria Oliveira</h4>
+                        <p>42 anos • Feminino</p>
+                    </div>
+                </div>
+                
+                <div class="patient-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Última Consulta:</span>
+                        <span class="detail-value">15/08/2025</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge status-pending">Pendente</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Especialidade:</span>
+                        <span class="detail-value">Endocrinologia</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Próxima Consulta:</span>
+                        <span class="detail-value">22/08/2025 10:00</span>
+                    </div>
+                </div>
+                
+                <div class="patient-actions">
+                    <a href="/patient-info?id=2" class="btn btn-secondary">Ver Perfil</a>
+                    <a href="/consulta?patient=maria" class="btn btn-primary">Iniciar Consulta</a>
+                </div>
+            </div>
+
+            <div class="patient-card">
+                <div class="patient-header">
+                    <div class="patient-avatar">CM</div>
+                    <div class="patient-info">
+                        <h4>Carlos Mendes</h4>
+                        <p>28 anos • Masculino</p>
+                    </div>
+                </div>
+                
+                <div class="patient-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Última Consulta:</span>
+                        <span class="detail-value">12/08/2025</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status:</span>
+                        <span class="status-badge status-active">Ativo</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Especialidade:</span>
+                        <span class="detail-value">Dermatologia</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Próxima Consulta:</span>
+                        <span class="detail-value">28/08/2025 16:15</span>
+                    </div>
+                </div>
+                
+                <div class="patient-actions">
+                    <a href="/patient-info?id=3" class="btn btn-secondary">Ver Perfil</a>
+                    <a href="/consulta?patient=carlos" class="btn btn-primary">Iniciar Consulta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animações de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Animar cards de estatísticas
+            document.querySelectorAll('.stat-card, .patient-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+
+        // Adicionar funcionalidade de clique para botões
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Adicionar efeito de ripple
+                const ripple = document.createElement('span');
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.6);
+                    transform: scale(0);
+                    animation: ripple-animation 600ms linear;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                `;
+                
+                btn.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Adicionar animação de ripple CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            .btn {
+                position: relative;
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
