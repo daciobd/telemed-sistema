@@ -1,0 +1,170 @@
+Caminho preferido (limpo): transformar os blocos em sidebar sticky
+
+Ideia: colocar “Mais Páginas” e “Páginas Adicionais” numa coluna à direita que participa do layout (nada de position:absolute/fixed), e deixar a coluna sticky abaixo do header.
+
+1) HTML (pequena reorganização)
+
+No arquivo da página /pacientes (ou componente React correspondente), envolva o conteúdo assim:
+
+<main class="page patients">
+  <div class="page-header">…</div>
+
+  <div class="layout">
+    <section class="content">
+      <!-- TODO: tudo que é “Meus Pacientes” + cards, listas etc -->
+      … conteúdo principal …
+    </section>
+
+    <aside class="sidebar">
+      <div id="extra-pages" class="card">… Páginas Adicionais …</div>
+      <div id="more-pages" class="card">… Mais Páginas …</div>
+    </aside>
+  </div>
+</main>
+
+
+Se não quiser mexer em muito HTML, basta embrulhar os dois blocos num <aside class="sidebar"> e posicioná-los após o conteúdo; o CSS abaixo cuida do resto.
+
+2) CSS (grid + sticky, sem sobreposição)
+
+Adicione (ou peça pro Replit colar) em client/src/styles/patients.css (ou arquivo global):
+
+/* Layout em 2 colunas */
+.page.patients .layout{
+  display:grid;
+  grid-template-columns: 1fr 340px;
+  gap:24px;
+  align-items:start;
+}
+
+/* Sidebar gruda sob o header fixo */
+.page.patients .sidebar{
+  position:sticky;
+  top: calc(var(--header-h, 72px) + 12px); /* ajuste se header for maior/menor */
+  z-index: 10; /* abaixo do header */
+}
+
+/* Cartões */
+.page.patients .card{
+  background: var(--card, #1f2937);
+  border: 1px solid var(--border, #2b3645);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.15);
+}
+
+/* Responsivo: 1 coluna e sidebar vai pra cima do conteúdo */
+@media (max-width: 1100px){
+  .page.patients .layout{ grid-template-columns: 1fr; }
+  .page.patients .sidebar{ position: static; order: -1; margin-bottom: 12px; }
+}
+
+3) Header fixo? Informe a altura
+
+Se o header for sticky/fixo, calcule a altura e exponha como CSS var (opcional):
+
+// client/src/lib/ui.ts
+export function setHeaderHeightVar(){
+  const h = document.querySelector('header')?.offsetHeight || 72;
+  document.documentElement.style.setProperty('--header-h', `${h}px`);
+}
+
+
+Chame isso no mount do App. (Sem isso, use o valor fixo top: 84px no CSS).
+
+Hotfix (2 min): manter painéis flutuantes sem sobrepor
+
+Se você não quer mexer na estrutura agora e os blocos estão com position:fixed/absolute, compense o espaço na área do conteúdo:
+
+/* Se os painéis ocupam ~420px na direita */
+.page.patients main,
+.page.patients .content-root,       /* seletores equivalentes ao container do conteúdo */
+.page.patients .container {
+  padding-right: 444px;             /* 420 + respiro */
+}
+
+/* Posiciona o painel flutuante */
+.page.patients .floating-panel-right{
+  position: fixed;
+  right: 24px;
+  top: calc(var(--header-h, 72px) + 12px);
+  width: 420px;
+  z-index: 20;
+}
+
+/* Mobile: desativa o flutuante e remove a compensação */
+@media (max-width: 1100px){
+  .page.patients main,
+  .page.patients .content-root,
+  .page.patients .container { padding-right: 0; }
+  .page.patients .floating-panel-right{ position: static; width: auto; }
+}
+
+
+Troque .floating-panel-right pelo seletor do(s) bloco(s) atual(is). Isso remove a sobreposição imediatamente, mas a solução “sidebar sticky” é mais robusta.
+
+Ajustes de imagem e texto (para cartões de pacientes)
+
+Em listas com avatar + texto, evite que o nome “invada” a foto:
+
+.patient-card{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patient-card img{
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex: 0 0 48px;
+}
+
+.patient-card .info{ min-width: 0; }
+.patient-card .name{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+Pedido direto para o Replit (pronto pra colar)
+
+“Aplique layout em 2 colunas e sidebar sticky na página /pacientes para que os blocos ‘Páginas Adicionais’ e ‘Mais Páginas’ não sobreponham o conteúdo:
+
+Envolva o conteúdo em:
+
+<main class="page patients">
+  <div class="page-header">…</div>
+  <div class="layout">
+    <section class="content">…</section>
+    <aside class="sidebar">
+      <div id="extra-pages" class="card">…</div>
+      <div id="more-pages" class="card">…</div>
+    </aside>
+  </div>
+</main>
+
+
+Adicione este CSS:
+
+.page.patients .layout{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.page.patients .sidebar{position:sticky;top:calc(var(--header-h,72px)+12px);z-index:10}
+.page.patients .card{background:#1f2937;border:1px solid #2b3645;border-radius:12px;padding:12px;box-shadow:0 10px 24px rgba(0,0,0,.15)}
+@media (max-width:1100px){.page.patients .layout{grid-template-columns:1fr}.page.patients .sidebar{position:static;order:-1;margin-bottom:12px}}
+.patient-card{display:flex;align-items:center;gap:12px}
+.patient-card img{width:48px;height:48px;border-radius:12px;object-fit:cover;flex:0 0 48px}
+.patient-card .info{min-width:0}
+.patient-card .name{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+
+
+Se o header é fixo, calcule --header-h na carga do app.”
+
+DoD (Definition of Done)
+
+Nenhum texto “passa por baixo” de painéis flutuantes.
+
+Ao rolar, os painéis ficam visíveis (sticky) sem cobrir conteúdo.
+
+Em telas ≤ 1100px, os painéis descem para antes do conteúdo.
+
+Cartões de pacientes: avatar fixo, nomes truncados com reticências.
