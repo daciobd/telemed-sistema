@@ -1,0 +1,155 @@
+<!-- Breadcrumbs Universal TeleMed Pro -->
+<!-- Cole este código em qualquer página para adicionar breadcrumbs automáticos -->
+
+<style>
+.telemed-breadcrumbs {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin: 10px 0 20px 0;
+    font-size: 14px;
+    backdrop-filter: blur(5px);
+}
+
+.telemed-breadcrumbs ol {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.telemed-breadcrumbs li {
+    display: flex;
+    align-items: center;
+}
+
+.telemed-breadcrumbs li:not(:last-child)::after {
+    content: "›";
+    margin: 0 8px;
+    color: #10b981;
+    font-weight: bold;
+}
+
+.telemed-breadcrumbs a {
+    color: #059669;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.telemed-breadcrumbs a:hover {
+    color: #047857;
+    text-decoration: underline;
+}
+
+.telemed-breadcrumbs .current {
+    color: #374151;
+    font-weight: 600;
+}
+
+.telemed-breadcrumbs .icon {
+    margin-right: 5px;
+    font-size: 16px;
+}
+</style>
+
+<nav class="telemed-breadcrumbs" aria-label="breadcrumb">
+    <ol id="telemed-breadcrumb-list">
+        <!-- Será preenchido automaticamente pelo JavaScript -->
+    </ol>
+</nav>
+
+<script>
+(function() {
+    // Mapeamento de rotas para breadcrumbs
+    const routeMap = {
+        '/': { title: 'Início', icon: '🏠' },
+        '/lp': { title: 'Landing Page', icon: '🚀' },
+        '/agenda': { title: 'Agenda Médica', icon: '📅' },
+        '/consulta': { title: 'Consulta', icon: '🩺' },
+        '/dashboard': { title: 'Dashboard', icon: '📊' },
+        '/preview': { title: 'Preview', icon: '🎨' },
+        '/dr-ai': { title: 'Dr. AI', icon: '🤖' },
+        '/pacientes': { title: 'Meus Pacientes', icon: '👥' },
+        '/receitas': { title: 'Receitas Digitais', icon: '📋' }
+    };
+    
+    // Função para gerar breadcrumbs baseado na URL atual
+    function generateBreadcrumbs() {
+        const path = window.location.pathname;
+        const breadcrumbList = document.getElementById('telemed-breadcrumb-list');
+        
+        if (!breadcrumbList) return;
+        
+        let breadcrumbs = [];
+        
+        // Sempre incluir Home
+        breadcrumbs.push({ title: 'Início', icon: '🏠', url: '/lp' });
+        
+        // Detectar página atual baseado na URL ou título
+        const currentTitle = document.title;
+        
+        if (path.includes('/preview/')) {
+            breadcrumbs.push({ title: 'Preview', icon: '🎨', url: '/preview' });
+            
+            // Página específica do preview
+            const fileName = path.split('/').pop();
+            if (fileName && fileName !== 'index.html') {
+                const pageTitle = fileName.replace('.html', '').replace('-', ' ');
+                breadcrumbs.push({ 
+                    title: pageTitle.charAt(0).toUpperCase() + pageTitle.slice(1), 
+                    icon: '📄', 
+                    current: true 
+                });
+            }
+        } else if (path === '/agenda' || currentTitle.includes('Agenda')) {
+            breadcrumbs.push({ title: 'Agenda Médica', icon: '📅', current: true });
+        } else if (path === '/consulta' || currentTitle.includes('Consulta')) {
+            breadcrumbs.push({ title: 'Consulta', icon: '🩺', current: true });
+        } else if (path === '/dashboard' || currentTitle.includes('Dashboard')) {
+            breadcrumbs.push({ title: 'Dashboard', icon: '📊', current: true });
+        } else if (currentTitle.includes('Pacientes')) {
+            breadcrumbs.push({ title: 'Meus Pacientes', icon: '👥', current: true });
+        } else if (currentTitle.includes('Receitas')) {
+            breadcrumbs.push({ title: 'Receitas Digitais', icon: '📋', current: true });
+        } else if (currentTitle.includes('Dr. AI') || path.includes('dr-ai')) {
+            breadcrumbs.push({ title: 'Dr. AI', icon: '🤖', current: true });
+        } else {
+            // Página genérica
+            const pageTitle = currentTitle.split(' - ')[0] || 'Página Atual';
+            breadcrumbs.push({ title: pageTitle, icon: '📄', current: true });
+        }
+        
+        // Renderizar breadcrumbs
+        breadcrumbList.innerHTML = breadcrumbs.map(crumb => {
+            if (crumb.current) {
+                return `<li><span class="icon">${crumb.icon}</span><span class="current">${crumb.title}</span></li>`;
+            } else {
+                return `<li><a href="${crumb.url}"><span class="icon">${crumb.icon}</span>${crumb.title}</a></li>`;
+            }
+        }).join('');
+    }
+    
+    // Executar quando a página carregar
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', generateBreadcrumbs);
+    } else {
+        generateBreadcrumbs();
+    }
+})();
+</script>
+
+<!-- 
+Como usar:
+1. Copie todo este código
+2. Cole no início do <body> de qualquer página HTML
+3. Os breadcrumbs aparecerão automaticamente baseado na URL e título da página
+
+Funciona em:
+- Todas as rotas canônicas (/agenda, /consulta, /dashboard)
+- Sistema de preview (/preview/*)
+- Páginas personalizadas (baseado no título)
+-->

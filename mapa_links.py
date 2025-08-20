@@ -1,12 +1,27 @@
 import os
 from bs4 import BeautifulSoup
+import json
+from urllib.parse import urljoin, urlparse
+import re
 
 # Função para extrair links de um arquivo HTML
 def extrair_links(arquivo):
     try:
         with open(arquivo, 'r', encoding='utf-8') as f:
             soup = BeautifulSoup(f.read(), 'html.parser')
-            links = [a.get('href') for a in soup.find_all('a') if a.get('href')]
+            
+        links = []
+        for a in soup.find_all('a'):
+            href = a.get('href')
+            if href and not href.startswith(('#', 'javascript:', 'mailto:', 'tel:')):
+                # Filtrar links válidos
+                if href.startswith('http') and 'replit.app' not in href:
+                    # Link externo
+                    links.append({'url': href, 'type': 'external', 'text': a.get_text(strip=True)[:50]})
+                elif href.endswith('.html') or href.startswith('/'):
+                    # Link interno
+                    links.append({'url': href, 'type': 'internal', 'text': a.get_text(strip=True)[:50]})
+        
         return links
     except Exception as e:
         print(f"Erro ao processar {arquivo}: {e}")
@@ -14,12 +29,13 @@ def extrair_links(arquivo):
 
 # Listar todos os arquivos HTML no diretório e subdiretórios
 mapa = {}
+mapa_estruturado = {}
 total_html = 0
 total_links = 0
 
 for root, dirs, files in os.walk('.'):
     # Pular diretórios desnecessários
-    if any(skip in root for skip in ['.git', 'node_modules', '__pycache__', '.vscode']):
+    if any(skip in root for skip in ['.git', 'node_modules', '__pycache__', '.vscode', 'backups', '_archived']):
         continue
         
     for file in files:
@@ -27,6 +43,16 @@ for root, dirs, files in os.walk('.'):
             caminho = os.path.join(root, file)
             links = extrair_links(caminho)
             mapa[caminho] = links
+            
+            # Estrutura JSON mais organizada
+            mapa_estruturado[os.path.basename(file)] = {
+                'path': caminho,
+                'directory': os.path.dirname(caminho),
+                'links': links,
+                'internal_count': len([l for l in links if l['type'] == 'internal']),
+                'external_count': len([l for l in links if l['type'] == 'external'])
+            }
+            
             total_html += 1
             total_links += len(links)
 

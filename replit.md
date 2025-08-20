@@ -40,6 +40,27 @@ Preferred communication style: Simple, everyday language.
 - **CI/CD**: Automated CI/CD pipelines with GitHub Actions.
 - **Monitoring**: Integrated with UptimeRobot, StatusCake, and Slack/Telegram notifications.
 
+## Navigation Analysis & Theme System
+
+### Navigation Analysis Tools
+- **Script Python**: `mapa_links_fixed.py` analisa 411 páginas HTML e 1,602+ links automaticamente
+- **Saída Estruturada**: `mapa_navegacao.json` (JSON detalhado), `mapa_navegacao.dot` (diagrama Graphviz)
+- **Dependências**: `beautifulsoup4` (instalado via packager tool)
+- **Análise Automática**: Detecta links internos/externos, hierarquia de páginas, top 10 páginas mais conectadas
+
+### Theme System Implementation
+- **CSS Escopado**: `public/preview/_theme-telemed-pro.css` com seletor `body[data-theme="telemed-pro"]`
+- **Injeção Automática**: Servidor aplica tema a todas as páginas `/preview/*` via middleware
+- **Variável de Ambiente**: `PREVIEW_THEME=telemed-pro` controla ativação global
+- **Toggle UI**: Botão flutuante JavaScript em cada página para alternar `?theme=off`
+- **Breadcrumbs Universal**: `breadcrumbs_universal.html` com detecção automática de rota
+
+### System Architecture Enhancements
+- **Preview System**: `/preview/index.html` como portal central para demonstrações tematizadas
+- **Fluxo Recomendado**: `Landing (/lp) → Preview (/preview) → Agenda (/agenda) → Consulta (/consulta) → Dashboard (/dashboard)`
+- **Rotas Canônicas**: 6 páginas principais identificadas via análise automatizada
+- **Theme Integration**: Qualquer HTML recebe automaticamente estilo TeleMed Pro sem modificações manuais
+
 ## External Dependencies
 
 - **@neondatabase/serverless**: PostgreSQL database connection.
@@ -57,3 +78,4 @@ Preferred communication style: Simple, everyday language.
 - **MEMED**: Digital prescription platform integration.
 - **WhatsApp**: Notification system for appointment alerts.
 - **WebRTC**: Peer-to-peer video communication.
+- **beautifulsoup4**: HTML parsing for navigation analysis.
