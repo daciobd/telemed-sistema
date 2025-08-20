@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMedConsulta - Demonstração</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff; /* Cor dominante suposta - ajuste conforme imagem2 */
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin: 1rem 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .hero h2 {
+            font-size: 2rem;
+            color: #007bff; /* Ajuste conforme imagem2 */
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .cta-button {
+            background-color: #28a745; /* Cor de chamada à ação - ajuste conforme imagem2 */
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .cta-button:hover {
+            background-color: #218838;
+        }
+        .special-offer {
+            background-color: #ffeb3b; /* Amarelo para destaque - ajuste conforme imagem2 */
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+        .special-offer h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .features {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .features h3 {
+            color: #007bff; /* Ajuste conforme imagem2 */
+            margin-bottom: 2rem;
+        }
+        .feature-item {
+            display: inline-block;
+            width: 30%;
+            margin: 0 1.5%;
+            vertical-align: top;
+        }
+        .feature-item h4 {
+            color: #333;
+        }
+        .feature-item p {
+            color: #666;
+        }
+        .testimonials {
+            padding: 4rem 2rem;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        .testimonials h3 {
+            color: #007bff; /* Ajuste conforme imagem2 */
+            margin-bottom: 2rem;
+        }
+        .testimonial-card {
+            display: inline-block;
+            width: 30%;
+            margin: 0 1.5%;
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .trust-section {
+            padding: 2rem;
+            text-align: center;
+            background-color: #fff;
+            margin: 2rem 0;
+        }
+        .trust-section img {
+            width: 100px;
+            margin: 0 1rem;
+            vertical-align: middle;
+        }
+        .contact {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .contact h3 {
+            color: #007bff; /* Ajuste conforme imagem2 */
+            margin-bottom: 2rem;
+        }
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .contact-form button {
+            background-color: #007bff; /* Ajuste conforme imagem2 */
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+        .final-cta {
+            padding: 3rem 2rem;
+            background-color: #007bff; /* Ajuste conforme imagem2 */
+            color: #fff;
+            text-align: center;
+        }
+        .final-cta h3 {
+            margin-bottom: 1rem;
+        }
+        footer {
+            background-color: #007bff; /* Ajuste conforme imagem2 */
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .feature-item, .testimonial-card {
+                width: 100%;
+                margin-bottom: 2rem;
+            }
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TeleMedConsulta</h1>
+        <nav>
+            <a href="#sobre">Sobre Nós</a>
+            <a href="#recursos">Recursos</a>
+            <a href="#depoimentos">Depoimentos</a>
+            <a href="#contato">Contato</a>
+            <a href="#demo">Demonstração</a>
+        </nav>
+    </header>
+    <section class="hero">
+        <h2>Bem-vindo à Demonstração</h2>
+        <p>Explore uma solução inovadora para consultas médicas online. Acompanhe seus pacientes de forma eficiente e segura com nossa plataforma.</p>
+        <a href="#demo" class="cta-button">Agendar Demonstração</a>
+    </section>
+    <section class="special-offer">
+        <h3>Experimente Grátis por 7 Dias!</h3>
+        <p>Registre-se agora e descubra como nossa plataforma pode transformar seu atendimento.</p>
+        <a href="#registro" class="cta-button">Comece Agora</a>
+    </section>
+    <section class="features" id="recursos">
+        <h3>Recursos Principais</h3>
+        <div class="feature-item">
+            <h4>Acesso Fácil</h4>
+            <p>Conecte-se aos pacientes em poucos cliques.</p>
+        </div>
+        <div class="feature-item">
+            <h4>Segurança Garantida</h4>
+            <p>Proteção total de dados com criptografia avançada.</p>
+        </div>
+        <div class="feature-item">
+            <h4>Suporte Personalizado</h4>
+            <p>Equipe dedicada para ajudá-lo 24/7.</p>
+        </div>
+    </section>
+    <section class="testimonials" id="depoimentos">
+        <h3>Depoimentos</h3>
+        <div class="testimonial-card">
+            <p>"Excelente plataforma! Facilitou muito meu trabalho como médico."</p>
+            <p><strong>- Dr. João Silva</strong></p>
+        </div>
+        <div class="testimonial-card">
+            <p>"Atendimento rápido e seguro. Recomendo a todos!"</p>
+            <p><strong>- Maria Oliveira</strong></p>
+        </div>
+        <div class="testimonial-card">
+            <p>"A melhor solução para telemedicina que já usei."</p>
+            <p><strong>- Carlos Mendes</strong></p>
+        </div>
+    </section>
+    <section class="trust-section">
+        <h3>Confie em Nós</h3>
+        <img src="https://via.placeholder.com/100?text=Certificado+ANS" alt="Certificado ANS">
+        <img src="https://via.placeholder.com/100?text=SBT" alt="Sociedade Brasileira de Telemedicina">
+    </section>
+    <section class="contact" id="contato">
+        <h3>Entre em Contato</h3>
+        <div class="contact-form">
+            <input type="text" placeholder="Nome" required>
+            <input type="email" placeholder="Email" required>
+            <textarea placeholder="Mensagem" rows="4" required></textarea>
+            <button type="submit">Enviar</button>
+        </div>
+    </section>
+    <section class="final-cta" id="demo">
+        <h3>Transforme Seu Atendimento Hoje!</h3>
+        <p>Junte-se a milhares de médicos que confiam na TeleMedConsulta.</p>
+        <a href="#registro" class="cta-button">Comece Agora</a>
+    </section>
+    <footer>
+        <p>&copy; 2025 TeleMedConsulta. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

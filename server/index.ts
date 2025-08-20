@@ -254,6 +254,17 @@ app.get('/registro-saude', (req, res) => {
   res.status(404).send('PHR page not found');
 });
 
+// TESTE: Landing Page Premium
+app.get('/landing-teste', (req, res) => {
+  console.log('🏠 Rota TESTE /landing-teste acessada - Landing Premium');
+  const landingHtml = path.join(__dirname, '../public/landing-teste.html');
+  if (fs.existsSync(landingHtml)) {
+    console.log('✅ Servindo landing-teste.html (TESTE)');
+    return res.sendFile(landingHtml);
+  }
+  res.status(404).send('Landing teste page not found');
+});
+
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
 
 // Enhanced aliases → /consulta
