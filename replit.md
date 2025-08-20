@@ -43,10 +43,11 @@ Preferred communication style: Simple, everyday language.
 ## Navigation Analysis & Theme System
 
 ### Navigation Analysis Tools
-- **Script Python**: `mapa_links_fixed.py` analisa 411 páginas HTML e 1,602+ links automaticamente
-- **Saída Estruturada**: `mapa_navegacao.json` (JSON detalhado), `mapa_navegacao.dot` (diagrama Graphviz)
+- **Script Principal**: `mapa_navegacao_otimizado.py` analisa 412 páginas HTML e 1,630 links com validação completa
+- **Analytics Avançado**: `analytics_navegacao.py` gera relatório HTML interativo com estatísticas detalhadas
+- **Saída Estruturada**: `mapa_navegacao_completo.json` (dados completos), `relatorio_navegacao.html` (relatório visual)
 - **Dependências**: `beautifulsoup4` (instalado via packager tool)
-- **Análise Automática**: Detecta links internos/externos, hierarquia de páginas, top 10 páginas mais conectadas
+- **Resultados**: 53.4% links válidos, 712 links quebrados identificados, 81 páginas órfãs, top 10 hubs mapeados
 
 ### Theme System Implementation
 - **CSS Escopado**: `public/preview/_theme-telemed-pro.css` com seletor `body[data-theme="telemed-pro"]`

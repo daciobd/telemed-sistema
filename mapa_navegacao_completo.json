@@ -1,0 +1,4784 @@
+{
+  "metadata": {
+    "total_pages": 412,
+    "total_links": 1630,
+    "valid_links": 870,
+    "broken_links": 712,
+    "analysis_date": "2025-08-20"
+  },
+  "pages": {
+    "agenda-medica.html": {
+      "path": "./render-deploy/pages/agenda-medica.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/leilao-consultas.html",
+          "type": "internal",
+          "text": "Leilão",
+          "valid": false
+        },
+        {
+          "url": "/receitas-digitais.html",
+          "type": "internal",
+          "text": "Receitas",
+          "valid": false
+        },
+        {
+          "url": "/login.html",
+          "type": "internal",
+          "text": "Sair",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 4
+    },
+    "ansiedade-gad7.html": {
+      "path": "./render-deploy/pages/ansiedade-gad7.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "🧠Centro de Avaliação",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 2
+    },
+    "atendimento-medico.html": {
+      "path": "./render-deploy/pages/atendimento-medico.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Voltar à Agenda",
+          "valid": false
+        },
+        {
+          "url": "/pdf-generator.html",
+          "type": "internal",
+          "text": "Gerar ReceitaPrescrição digital",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "AvaliaçõesTestes psiquiátricos",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "bipolar-mdq.html": {
+      "path": "./render-deploy/pages/bipolar-mdq.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "🧠Centro de Avaliação",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 2
+    },
+    "centro-avaliacao.html": {
+      "path": "./render-deploy/pages/centro-avaliacao.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/login.html",
+          "type": "internal",
+          "text": "Entrar",
+          "valid": false
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 2
+    },
+    "dashboard-aquarela-backup.html": {
+      "path": "./render-deploy/pages/dashboard-aquarela-backup.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dashboard-aquarela-simple-backup.html": {
+      "path": "./render-deploy/pages/dashboard-aquarela-simple-backup.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/receitas-digitais.html",
+          "type": "internal",
+          "text": "Prescrições",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "Videoconsultas",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "dashboard-clean.html": {
+      "path": "./render-deploy/pages/dashboard-clean.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dashboard-minimal.html": {
+      "path": "./render-deploy/pages/dashboard-minimal.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dr. AI",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "Avaliações",
+          "valid": false
+        },
+        {
+          "url": "/pdf-generator.html",
+          "type": "internal",
+          "text": "Documentos",
+          "valid": false
+        },
+        {
+          "url": "/triagem-inteligente.html",
+          "type": "internal",
+          "text": "Triagem",
+          "valid": false
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 4
+    },
+    "dashboard-pastel.html": {
+      "path": "./render-deploy/pages/dashboard-pastel.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dr. AI4",
+          "valid": false
+        },
+        {
+          "url": "/pdf-generator.html",
+          "type": "internal",
+          "text": "Gerar PDF",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "Centro de Avaliações6",
+          "valid": false
+        },
+        {
+          "url": "/triagem-inteligente.html",
+          "type": "internal",
+          "text": "Triagem Inteligente",
+          "valid": false
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 4
+    },
+    "depressao-phq9.html": {
+      "path": "./render-deploy/pages/depressao-phq9.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "🧠Centro de Avaliação",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 1
+    },
+    "dr-ai.html": {
+      "path": "./render-deploy/pages/dr-ai.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/doctor-dashboard",
+          "type": "internal",
+          "text": "📊 Dashboard Médico",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "especialidades.html": {
+      "path": "./render-deploy/pages/especialidades.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "🎯 Sistema de Lances - Você Define o Preço",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "gad7-ansiedade.html": {
+      "path": "./render-deploy/pages/gad7-ansiedade.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "guia-integracao-hostinger.html": {
+      "path": "./render-deploy/pages/guia-integracao-hostinger.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "integracao-hostinger.html": {
+      "path": "./render-deploy/pages/integracao-hostinger.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Dr. AI",
+          "valid": false
+        },
+        {
+          "url": "/triagem-psiquiatrica.html",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica",
+          "valid": false
+        },
+        {
+          "url": "/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "Telemonitoramento",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Sistema de Lances",
+          "valid": false
+        },
+        {
+          "url": "/saiba-mais.html",
+          "type": "internal",
+          "text": "Saiba Mais",
+          "valid": false
+        },
+        {
+          "url": "/especialidades.html",
+          "type": "internal",
+          "text": "Especialidades",
+          "valid": false
+        },
+        {
+          "url": "/login.html",
+          "type": "internal",
+          "text": "Página de Login",
+          "valid": false
+        },
+        {
+          "url": "/register.html",
+          "type": "internal",
+          "text": "Página de Cadastro",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard Médico",
+          "valid": false
+        },
+        {
+          "url": "/sistema-indice.html",
+          "type": "internal",
+          "text": "Índice do Sistema",
+          "valid": false
+        }
+      ],
+      "internal_count": 10,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 10
+    },
+    "leilao-consultas.html": {
+      "path": "./render-deploy/pages/leilao-consultas.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "Avaliações",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "links-verificacao-telemed.html": {
+      "path": "./render-deploy/pages/links-verificacao-telemed.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev",
+          "type": "external",
+          "text": "🏥 TeleMed Sistema - Home",
+          "valid": true
+        },
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai.html",
+          "type": "external",
+          "text": "🧠 Dr. AI - Assistente Médico",
+          "valid": true
+        },
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/pdf-generator.html",
+          "type": "external",
+          "text": "📋 Gerador de PDF Médico",
+          "valid": true
+        },
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/centro-avaliacao.html",
+          "type": "external",
+          "text": "🏥 Centro de Avaliação Psiquiátrica",
+          "valid": true
+        },
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/ansiedade-gad7.html",
+          "type": "external",
+          "text": "📊 Ansiedade GAD-7",
+          "valid": true
+        },
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/depressao-phq9.html",
+          "type": "external",
+          "text": "📊 Depressão PHQ-9",
+          "valid": true
+        },
+        {
+          "url": "https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/bipolar-mdq.html",
+          "type": "external",
+          "text": "📊 Transtorno Bipolar MDQ",
+          "valid": true
+        }
+      ],
+      "internal_count": 0,
+      "external_count": 7,
+      "valid_links": 7,
+      "broken_links": 0
+    },
+    "login.html": {
+      "path": "./render-deploy/pages/login.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/register.html",
+          "type": "internal",
+          "text": "Criar conta grátis",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "logout.html": {
+      "path": "./render-deploy/pages/logout.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "mdq-bipolar.html": {
+      "path": "./render-deploy/pages/mdq-bipolar.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "memed-receita-viewer.html": {
+      "path": "./render-deploy/pages/memed-receita-viewer.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "render-deploy/pages/receitas-digitais.html",
+          "type": "internal",
+          "text": "Voltar às Receitas",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "pdf-generator.html": {
+      "path": "./render-deploy/pages/pdf-generator.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "phq9-depressao.html": {
+      "path": "./render-deploy/pages/phq9-depressao.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/doctor-dashboard",
+          "type": "internal",
+          "text": "📊 Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 0
+    },
+    "pss10-stress.html": {
+      "path": "./render-deploy/pages/pss10-stress.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "receitas-digitais.html": {
+      "path": "./render-deploy/pages/receitas-digitais.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/leilao-consultas.html",
+          "type": "internal",
+          "text": "Leilão",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "register.html": {
+      "path": "./render-deploy/pages/register.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "TeleMedSistema",
+          "valid": true
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Início",
+          "valid": true
+        },
+        {
+          "url": "/login.html",
+          "type": "internal",
+          "text": "Fazer login",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 1
+    },
+    "saiba-mais.html": {
+      "path": "./render-deploy/pages/saiba-mais.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "TeleMedSistema",
+          "valid": true
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Início",
+          "valid": true
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "CONSULTE UM PROFISSIONAL AGORA",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Fazer Triagem Grátis com IA",
+          "valid": false
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Início",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Dr. AI",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Consultas",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard Médico",
+          "valid": false
+        },
+        {
+          "url": "/triagem-psiquiatrica.html",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica",
+          "valid": false
+        },
+        {
+          "url": "/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "Telemonitoramento",
+          "valid": false
+        },
+        {
+          "url": "/notificacoes.html",
+          "type": "internal",
+          "text": "Notificações",
+          "valid": false
+        }
+      ],
+      "internal_count": 11,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 8
+    },
+    "sistema-indice.html": {
+      "path": "./render-deploy/pages/sistema-indice.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "render-deploy/pages/index.html",
+          "type": "internal",
+          "text": "Landing Page PrincipalPágina inicial moderna com i",
+          "valid": false
+        },
+        {
+          "url": "render-deploy/pages/login.html",
+          "type": "internal",
+          "text": "Sistema de LoginAutenticação avançada com login so",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/register.html",
+          "type": "internal",
+          "text": "Cadastro Multi-EtapaRegistro profissional em 3 eta",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/especialidades.html",
+          "type": "internal",
+          "text": "Especialidades Médicas8 especialidades detalhadas ",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/dr-ai.html",
+          "type": "internal",
+          "text": "Dr. AI - Triagem InteligenteSistema de IA médica p",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/triagem-psiquiatrica.html",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica IAPrimeiro sistema do Brasil ",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "TelemonitoramentoAcompanhamento 24/7 com enfermeir",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/saiba-mais.html",
+          "type": "internal",
+          "text": "Saiba MaisInformações detalhadas sobre recursos e ",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/index.html",
+          "type": "internal",
+          "text": "Dashboard Médico ProInterface profissional complet",
+          "valid": false
+        },
+        {
+          "url": "render-deploy/pages/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Sistema de LancesConsultas médicas por lances a pa",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/videoconsulta.html",
+          "type": "internal",
+          "text": "Videoconsultas WebRTCSistema completo de videocham",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/integracao-hostinger.html",
+          "type": "internal",
+          "text": "Integração HostingerSistema completo de links para",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/login.html",
+          "type": "internal",
+          "text": "Fazer Login",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/register.html",
+          "type": "internal",
+          "text": "Cadastrar",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/dr-ai.html",
+          "type": "internal",
+          "text": "Testar Dr. AI",
+          "valid": true
+        },
+        {
+          "url": "render-deploy/pages/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Fazer Lance",
+          "valid": true
+        }
+      ],
+      "internal_count": 16,
+      "external_count": 0,
+      "valid_links": 14,
+      "broken_links": 2
+    },
+    "sistema-notificacoes-medicas.html": {
+      "path": "./render-deploy/pages/sistema-notificacoes-medicas.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "stress-pss10.html": {
+      "path": "./render-deploy/pages/stress-pss10.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "tdah-asrs18.html": {
+      "path": "./render-deploy/pages/tdah-asrs18.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "triagem-psiquiatrica.html": {
+      "path": "./render-deploy/pages/triagem-psiquiatrica.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "← Voltar ao Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "🧠 Outros Testes",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "telemonitoramento-enfermagem.html": {
+      "path": "./render-deploy/pages/telemonitoramento-enfermagem.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/dashboard-aquarela",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "entrada.html": {
+      "path": "./render-deploy/pages/entrada.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "test-medical-report.html": {
+      "path": "./render-deploy/pages/test-medical-report.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/api/medical-reports/generate-fictional",
+          "type": "internal",
+          "text": "📄 Gerar Laudo Fictício (PDF)",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "landing-page-simple.html": {
+      "path": "./render-deploy/pages/landing-page-simple.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "https://telemed-sistema.onrender.com/login",
+          "type": "external",
+          "text": "Login",
+          "valid": true
+        },
+        {
+          "url": "https://telemed-sistema.onrender.com",
+          "type": "external",
+          "text": "Acessar Plataforma",
+          "valid": true
+        },
+        {
+          "url": "https://telemed-sistema.onrender.com",
+          "type": "external",
+          "text": "Comece Agora",
+          "valid": true
+        },
+        {
+          "url": "https://telemed-sistema.onrender.com",
+          "type": "external",
+          "text": "Criar Conta Gratuita",
+          "valid": true
+        }
+      ],
+      "internal_count": 0,
+      "external_count": 4,
+      "valid_links": 4,
+      "broken_links": 0
+    },
+    "download-page.html": {
+      "path": "./render-deploy/pages/download-page.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "test-download.html": {
+      "path": "./render-deploy/pages/test-download.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dashboard-aquarela.html": {
+      "path": "./render-deploy/pages/dashboard-aquarela.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/dashboard-aquarela",
+          "type": "internal",
+          "text": "Dashboard Principal",
+          "valid": true
+        },
+        {
+          "url": "/agenda-medica",
+          "type": "internal",
+          "text": "Agenda Médica",
+          "valid": true
+        },
+        {
+          "url": "/receitas-digitais",
+          "type": "internal",
+          "text": "Receitas Digitais",
+          "valid": true
+        },
+        {
+          "url": "/videoconsulta",
+          "type": "internal",
+          "text": "Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai",
+          "type": "internal",
+          "text": "Dr. AI Assistente",
+          "valid": true
+        },
+        {
+          "url": "/leilao-consultas",
+          "type": "internal",
+          "text": "Leilão Consultas",
+          "valid": true
+        },
+        {
+          "url": "/triagem-psiquiatrica",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "Centro Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/sistema-notificacoes-medicas",
+          "type": "internal",
+          "text": "Notificações SMS",
+          "valid": true
+        },
+        {
+          "url": "/especialidades",
+          "type": "internal",
+          "text": "Especialidades",
+          "valid": true
+        },
+        {
+          "url": "/atendimento-medico",
+          "type": "internal",
+          "text": "Atendimento Médico",
+          "valid": true
+        },
+        {
+          "url": "/memed-receita-viewer",
+          "type": "internal",
+          "text": "MEMED Receitas",
+          "valid": true
+        },
+        {
+          "url": "/ansiedade-gad7",
+          "type": "internal",
+          "text": "Teste GAD-7",
+          "valid": true
+        },
+        {
+          "url": "/depressao-phq9",
+          "type": "internal",
+          "text": "Teste PHQ-9",
+          "valid": true
+        },
+        {
+          "url": "/bipolar-mdq",
+          "type": "internal",
+          "text": "Teste MDQ",
+          "valid": true
+        },
+        {
+          "url": "/telemonitoramento-enfermagem",
+          "type": "internal",
+          "text": "Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "/entrada",
+          "type": "internal",
+          "text": "Página Entrada",
+          "valid": true
+        },
+        {
+          "url": "/login",
+          "type": "internal",
+          "text": "Login Sistema",
+          "valid": true
+        }
+      ],
+      "internal_count": 18,
+      "external_count": 0,
+      "valid_links": 18,
+      "broken_links": 0
+    },
+    "download-page-fixed.html": {
+      "path": "./render-deploy/pages/download-page-fixed.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "localhost_2025-08-13_11-27-26.report.html": {
+      "path": "./render-deploy/pages/localhost_2025-08-13_11-27-26.report.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "videoconsulta.html": {
+      "path": "./render-deploy/pages/videoconsulta.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dr-ai-OLD-backup.html": {
+      "path": "./render-deploy/pages/dr-ai-OLD-backup.html",
+      "directory": "./render-deploy/pages",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/doctor-dashboard",
+          "type": "internal",
+          "text": "📊 Dashboard Médico",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "consulta-por-valor.html": {
+      "path": "./render-deploy/pages/consulta-por-valor.html",
+      "directory": "./render-deploy/pages",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "index.html": {
+      "path": "./render-deploy/index.html",
+      "directory": "./render-deploy",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Início",
+          "valid": true
+        },
+        {
+          "url": "/videoconsulta",
+          "type": "internal",
+          "text": "Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "/agenda-medica",
+          "type": "internal",
+          "text": "Agenda Médica",
+          "valid": true
+        },
+        {
+          "url": "/receitas-digitais",
+          "type": "internal",
+          "text": "Receitas Digitais",
+          "valid": true
+        },
+        {
+          "url": "/especialidades",
+          "type": "internal",
+          "text": "Especialidades",
+          "valid": true
+        },
+        {
+          "url": "/telemonitoramento-enfermagem",
+          "type": "internal",
+          "text": "Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "/dashboard-aquarela",
+          "type": "internal",
+          "text": "Dashboard Médico",
+          "valid": true
+        },
+        {
+          "url": "/atendimento-medico",
+          "type": "internal",
+          "text": "Atendimento",
+          "valid": true
+        },
+        {
+          "url": "/sistema-notificacoes-medicas",
+          "type": "internal",
+          "text": "Notificações SMS",
+          "valid": true
+        },
+        {
+          "url": "/leilao-consultas",
+          "type": "internal",
+          "text": "Leilão Consultas",
+          "valid": true
+        },
+        {
+          "url": "/triagem-psiquiatrica",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/ansiedade-gad7",
+          "type": "internal",
+          "text": "Teste Ansiedade GAD-7",
+          "valid": true
+        },
+        {
+          "url": "/depressao-phq9",
+          "type": "internal",
+          "text": "Teste Depressão PHQ-9",
+          "valid": true
+        },
+        {
+          "url": "/bipolar-mdq",
+          "type": "internal",
+          "text": "Teste Bipolar MDQ",
+          "valid": true
+        },
+        {
+          "url": "/entrada",
+          "type": "internal",
+          "text": "Login",
+          "valid": true
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Início",
+          "valid": true
+        },
+        {
+          "url": "/videoconsulta",
+          "type": "internal",
+          "text": "Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "/agenda-medica",
+          "type": "internal",
+          "text": "Agenda Médica",
+          "valid": true
+        },
+        {
+          "url": "/receitas-digitais",
+          "type": "internal",
+          "text": "Receitas Digitais",
+          "valid": true
+        },
+        {
+          "url": "/especialidades",
+          "type": "internal",
+          "text": "Especialidades",
+          "valid": true
+        },
+        {
+          "url": "/telemonitoramento-enfermagem",
+          "type": "internal",
+          "text": "Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "/dashboard-aquarela",
+          "type": "internal",
+          "text": "Dashboard Médico",
+          "valid": true
+        },
+        {
+          "url": "/atendimento-medico",
+          "type": "internal",
+          "text": "Atendimento",
+          "valid": true
+        },
+        {
+          "url": "/sistema-notificacoes-medicas",
+          "type": "internal",
+          "text": "Notificações SMS",
+          "valid": true
+        },
+        {
+          "url": "/leilao-consultas",
+          "type": "internal",
+          "text": "Leilão Consultas",
+          "valid": true
+        },
+        {
+          "url": "/triagem-psiquiatrica",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/ansiedade-gad7",
+          "type": "internal",
+          "text": "Teste GAD-7",
+          "valid": true
+        },
+        {
+          "url": "/depressao-phq9",
+          "type": "internal",
+          "text": "Teste PHQ-9",
+          "valid": true
+        },
+        {
+          "url": "/bipolar-mdq",
+          "type": "internal",
+          "text": "Teste MDQ",
+          "valid": true
+        },
+        {
+          "url": "/entrada",
+          "type": "internal",
+          "text": "Login",
+          "valid": true
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Início",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai",
+          "type": "internal",
+          "text": "Dr. AI Assistente",
+          "valid": true
+        },
+        {
+          "url": "/receitas-digitais",
+          "type": "internal",
+          "text": "Receitas MEMED",
+          "valid": true
+        },
+        {
+          "url": "/videoconsulta",
+          "type": "internal",
+          "text": "Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "/especialidades",
+          "type": "internal",
+          "text": "Especialidades",
+          "valid": true
+        }
+      ],
+      "internal_count": 37,
+      "external_count": 0,
+      "valid_links": 37,
+      "broken_links": 0
+    },
+    "breadcrumbs_universal.html": {
+      "path": "./breadcrumbs_universal.html",
+      "directory": ".",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "059a1715-597f-4411-9bcb-0e637b8420d1.html": {
+      "path": "./.local/state/replit/agent/design_reference/71ef6736-ac2e-4cc8-81be-f8b48ff1f1e8/059a1715-597f-4411-9bcb-0e637b8420d1.html",
+      "directory": "./.local/state/replit/agent/design_reference/71ef6736-ac2e-4cc8-81be-f8b48ff1f1e8",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dashboard-premium.html": {
+      "path": "./dist/public/dashboard-premium.html",
+      "directory": "./dist/public",
+      "links": [
+        {
+          "url": "/dashboard-aquarela",
+          "type": "internal",
+          "text": "Dashboard Principal",
+          "valid": true
+        },
+        {
+          "url": "/agenda-medica",
+          "type": "internal",
+          "text": "Agenda Médica",
+          "valid": true
+        },
+        {
+          "url": "/receitas-digitais",
+          "type": "internal",
+          "text": "Receitas Digitais",
+          "valid": true
+        },
+        {
+          "url": "/videoconsulta",
+          "type": "internal",
+          "text": "Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai",
+          "type": "internal",
+          "text": "Dr. AI Assistente",
+          "valid": true
+        },
+        {
+          "url": "/leilao-consultas",
+          "type": "internal",
+          "text": "Leilão Consultas",
+          "valid": true
+        },
+        {
+          "url": "/triagem-psiquiatrica",
+          "type": "internal",
+          "text": "Triagem Psiquiátrica",
+          "valid": true
+        },
+        {
+          "url": "/centro-avaliacao",
+          "type": "internal",
+          "text": "Centro Avaliação",
+          "valid": true
+        },
+        {
+          "url": "/sistema-notificacoes-medicas",
+          "type": "internal",
+          "text": "Notificações SMS",
+          "valid": true
+        },
+        {
+          "url": "/especialidades",
+          "type": "internal",
+          "text": "Especialidades",
+          "valid": true
+        },
+        {
+          "url": "/atendimento-medico",
+          "type": "internal",
+          "text": "Atendimento Médico",
+          "valid": true
+        },
+        {
+          "url": "/memed-receita-viewer",
+          "type": "internal",
+          "text": "MEMED Receitas",
+          "valid": true
+        },
+        {
+          "url": "/ansiedade-gad7",
+          "type": "internal",
+          "text": "Teste GAD-7",
+          "valid": true
+        },
+        {
+          "url": "/depressao-phq9",
+          "type": "internal",
+          "text": "Teste PHQ-9",
+          "valid": true
+        },
+        {
+          "url": "/bipolar-mdq",
+          "type": "internal",
+          "text": "Teste MDQ",
+          "valid": true
+        },
+        {
+          "url": "/telemonitoramento-enfermagem",
+          "type": "internal",
+          "text": "Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "/entrada",
+          "type": "internal",
+          "text": "Página Entrada",
+          "valid": true
+        },
+        {
+          "url": "/login",
+          "type": "internal",
+          "text": "Login Sistema",
+          "valid": true
+        }
+      ],
+      "internal_count": 18,
+      "external_count": 0,
+      "valid_links": 18,
+      "broken_links": 0
+    },
+    "agenda-medico.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/agenda-medico.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/doctor-dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/login-medico.html",
+          "type": "internal",
+          "text": "Login Médico",
+          "valid": false
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 1
+    },
+    "aguardando-medico.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/aguardando-medico.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "",
+          "valid": true
+        },
+        {
+          "url": "/guia-medicos.html",
+          "type": "internal",
+          "text": "",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 2
+    },
+    "anotacoes.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/anotacoes.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "avaliacoes.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/avaliacoes.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/fila-pacientes-medico.html",
+          "type": "internal",
+          "text": "Ver Pacientes",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "Nova Consulta",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "consultas-agendadas.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/consultas-agendadas.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "download.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/download.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "TeleMed_Ultra_v8.7.0.zip",
+          "type": "internal",
+          "text": "📦 Download ZIP (Windows)",
+          "valid": true
+        },
+        {
+          "url": "TeleMed_Ultra_v8.7.0.tar.gz",
+          "type": "internal",
+          "text": "📥 Download TAR.GZ",
+          "valid": true
+        },
+        {
+          "url": "TeleMed_Premium_v8.6.0.zip",
+          "type": "internal",
+          "text": "📦 ZIP",
+          "valid": true
+        },
+        {
+          "url": "TeleMed_Premium_v8.6.0.tar.gz",
+          "type": "internal",
+          "text": "📥 TAR.GZ",
+          "valid": true
+        },
+        {
+          "url": "TeleMed_Clean_v8.5.0.zip",
+          "type": "internal",
+          "text": "📦 ZIP",
+          "valid": true
+        },
+        {
+          "url": "TeleMed_Clean_v8.5.0.tar.gz",
+          "type": "internal",
+          "text": "📥 TAR.GZ",
+          "valid": true
+        }
+      ],
+      "internal_count": 6,
+      "external_count": 0,
+      "valid_links": 6,
+      "broken_links": 0
+    },
+    "estatisticas-medico.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/estatisticas-medico.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/doctor-dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/login-medico.html",
+          "type": "internal",
+          "text": "Login Médico",
+          "valid": false
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 1
+    },
+    "guia-medicos.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/guia-medicos.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠 Início",
+          "valid": true
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "👨‍⚕️ Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "🤖 Dr. AI",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "💰 Lances",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "🤖 Dr. AI (Triagem)",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "💰 Sistema de Lances",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "👨‍⚕️ Dashboard Médico",
+          "valid": false
+        },
+        {
+          "url": "/test-bid-integration.html",
+          "type": "internal",
+          "text": "🔧 Teste Completo",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "🤖 Testar Dr. AI Agora",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "💰 Ver Sistema de Lances",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "👨‍⚕️ Acessar Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "🎥 Testar Videoconsulta",
+          "valid": false
+        },
+        {
+          "url": "/test-bid-integration.html",
+          "type": "internal",
+          "text": "🔧 Teste Integração Completa",
+          "valid": false
+        },
+        {
+          "url": "/test-bid-integration.html",
+          "type": "internal",
+          "text": "🚀 Começar Teste Completo",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Acesse o Dashboard Médico",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Acesse o Dr. AI",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Sistema de LancesPacientes fazem lances para consu",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "Videoconsulta WebRTCSistema real de videochamada",
+          "valid": false
+        },
+        {
+          "url": "/test-bid-integration.html",
+          "type": "internal",
+          "text": "Teste DebugFerramenta de debug técnico",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Testar Agora →",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Ver Lances →",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "Iniciar Consulta →",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Acessar Dashboard →",
+          "valid": false
+        },
+        {
+          "url": "/aguardando-medico.html",
+          "type": "internal",
+          "text": "Ver Exemplo →",
+          "valid": false
+        },
+        {
+          "url": "/test-bid-integration.html",
+          "type": "internal",
+          "text": "Debug Tool →",
+          "valid": false
+        },
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "/consulta-por-valor.html",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "/index.html",
+          "valid": false
+        },
+        {
+          "url": "/test-bid-integration.html",
+          "type": "internal",
+          "text": "🔍 Debug Tools",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "👨‍⚕️ Dashboard Médico",
+          "valid": false
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "🏠 Página Inicial",
+          "valid": true
+        }
+      ],
+      "internal_count": 30,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 28
+    },
+    "historico-consultas.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/historico-consultas.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "login-medico.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/login-medico.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/area-medica.html",
+          "type": "internal",
+          "text": "Voltar à Área Médica",
+          "valid": false
+        },
+        {
+          "url": "/recuperar-senha-medico.html",
+          "type": "internal",
+          "text": "Esqueci minha senha",
+          "valid": false
+        },
+        {
+          "url": "/medico-cadastro.html",
+          "type": "internal",
+          "text": "Ainda não sou cadastrado",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "medico-cadastro.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/medico-cadastro.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/area-medica.html",
+          "type": "internal",
+          "text": "Voltar à Área Médica",
+          "valid": false
+        },
+        {
+          "url": "/termos-de-uso",
+          "type": "internal",
+          "text": "Termos de Uso",
+          "valid": true
+        },
+        {
+          "url": "/politica-privacidade",
+          "type": "internal",
+          "text": "Política de Privacidade",
+          "valid": true
+        },
+        {
+          "url": "/area-medica.html",
+          "type": "internal",
+          "text": "Voltar à Área Médica",
+          "valid": false
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 2
+    },
+    "notificacoes.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/notificacoes.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "precos.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/precos.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Assinar Plano",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Assinar Premium",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Começar Agora",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 5,
+      "broken_links": 0
+    },
+    "preferencias.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/preferencias.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Ver Agenda",
+          "valid": false
+        },
+        {
+          "url": "/fila-pacientes-medico.html",
+          "type": "internal",
+          "text": "Ver Pacientes",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "prescricoes.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/prescricoes.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "prontuarios.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/prontuarios.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/doctor-dashboard",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "relatorio-receita.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/relatorio-receita.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Ver Agenda",
+          "valid": false
+        },
+        {
+          "url": "/fila-pacientes-medico.html",
+          "type": "internal",
+          "text": "Ver Pacientes",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "sobre.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/sobre.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Fazer Consulta",
+          "valid": true
+        },
+        {
+          "url": "/contato.html",
+          "type": "internal",
+          "text": "Entre em Contato",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 1
+    },
+    "suporte.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/suporte.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/faq.html",
+          "type": "internal",
+          "text": "Ver FAQ",
+          "valid": false
+        },
+        {
+          "url": "/contato.html",
+          "type": "internal",
+          "text": "Contato Geral",
+          "valid": false
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Página Inicial",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 2
+    },
+    "test-bidding.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/test-bidding.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Voltar ao Início",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Sistema React",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "test-redirect.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/test-redirect.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "index-backup.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/index-backup.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "landing-simple.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/landing-simple.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "https://telemed-sistema.onrender.com/login",
+          "type": "external",
+          "text": "Login",
+          "valid": true
+        },
+        {
+          "url": "https://telemed-sistema.onrender.com",
+          "type": "external",
+          "text": "Acessar Plataforma",
+          "valid": true
+        },
+        {
+          "url": "https://telemed-sistema.onrender.com",
+          "type": "external",
+          "text": "Comece Agora",
+          "valid": true
+        },
+        {
+          "url": "https://telemed-sistema.onrender.com",
+          "type": "external",
+          "text": "Criar Conta Gratuita",
+          "valid": true
+        }
+      ],
+      "internal_count": 0,
+      "external_count": 4,
+      "valid_links": 4,
+      "broken_links": 0
+    },
+    "relatorios-medicos-pdf.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/relatorios-medicos-pdf.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "← Voltar ao Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "dashboard-premium-fixed.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "🏠Dashboard Principal",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-medica.html",
+          "type": "internal",
+          "text": "📅Agenda Médica",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/receitas-digitais.html",
+          "type": "internal",
+          "text": "📄Receitas Digitais",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "type": "internal",
+          "text": "📹Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "🧠Dr. AI Assistente",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "📊Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/centro-avaliacao.html",
+          "type": "internal",
+          "text": "⭐Centro de Avaliação",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "🤖Dr.AI - Triagem",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/relatorios-medicos-pdf.html",
+          "type": "internal",
+          "text": "📄Relatórios PDF",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor.html",
+          "type": "internal",
+          "text": "💰Consulta por Valor",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-medica.html",
+          "type": "internal",
+          "text": "📅Agenda MédicaConsultas e horários",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/receitas-digitais.html",
+          "type": "internal",
+          "text": "💊Receitas DigitaisPrescrições MEMED",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "type": "internal",
+          "text": "📹VideoconsultasConsultas online",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "📊TelemonitoramentoMonitoramento 24/7",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/centro-avaliacao.html",
+          "type": "internal",
+          "text": "⭐Centro de AvaliaçãoAvaliações médicas completas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "🤖Dr.AI - TriagemAssistente AI para triagem",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/relatorios-medicos-pdf.html",
+          "type": "internal",
+          "text": "📄Relatórios PDFRelatórios médicos em PDF",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor.html",
+          "type": "internal",
+          "text": "💰Consulta por ValorSistema de lances",
+          "valid": true
+        }
+      ],
+      "internal_count": 18,
+      "external_count": 0,
+      "valid_links": 15,
+      "broken_links": 3
+    },
+    "indice-completo.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/indice-completo.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "← Voltar ao Dashboard",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "🏠 Página Inicial (Landing)",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "📊 Dashboard Premium",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/download.html",
+          "type": "internal",
+          "text": "📥 Downloads",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-do-dia.html",
+          "type": "internal",
+          "text": "📅 Agenda do Dia",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-medico.html",
+          "type": "internal",
+          "text": "📅 Agenda Médico",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/area-medica.html",
+          "type": "internal",
+          "text": "👨‍⚕️ Área Médica",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/perfil-medico.html",
+          "type": "internal",
+          "text": "👤 Perfil Médico",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/login-medico.html",
+          "type": "internal",
+          "text": "🔐 Login Médico",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/medico-cadastro.html",
+          "type": "internal",
+          "text": "📝 Cadastro Médico",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "type": "internal",
+          "text": "📹 Videoconsulta",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor.html",
+          "type": "internal",
+          "text": "💰 Consulta por Valor",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/consultas-agendadas.html",
+          "type": "internal",
+          "text": "📋 Consultas Agendadas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/historico-consultas.html",
+          "type": "internal",
+          "text": "📚 Histórico de Consultas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/aguardando-medico.html",
+          "type": "internal",
+          "text": "⏳ Aguardando Médico",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/fila-pacientes-medico.html",
+          "type": "internal",
+          "text": "👥 Fila de Pacientes",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "🤖 Dr. AI",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "📊 Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/triagem-psiquiatrica.html",
+          "type": "internal",
+          "text": "🧠 Triagem Psiquiátrica",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/prescricoes.html",
+          "type": "internal",
+          "text": "💊 Prescrições",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/prontuarios.html",
+          "type": "internal",
+          "text": "📋 Prontuários",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/relatorio-receita.html",
+          "type": "internal",
+          "text": "📄 Relatório Receita",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/anotacoes.html",
+          "type": "internal",
+          "text": "📝 Anotações",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/avaliacoes.html",
+          "type": "internal",
+          "text": "⭐ Avaliações",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/estatisticas-medico.html",
+          "type": "internal",
+          "text": "📈 Estatísticas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/notificacoes.html",
+          "type": "internal",
+          "text": "🔔 Notificações",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/equipe-medica.html",
+          "type": "internal",
+          "text": "👥 Equipe Médica",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/guia-medicos.html",
+          "type": "internal",
+          "text": "📖 Guia Médicos",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/preferencias.html",
+          "type": "internal",
+          "text": "⚙️ Preferências",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/como-funciona.html",
+          "type": "internal",
+          "text": "❓ Como Funciona",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/faq.html",
+          "type": "internal",
+          "text": "❓ FAQ",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/suporte.html",
+          "type": "internal",
+          "text": "🆘 Suporte",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/contato.html",
+          "type": "internal",
+          "text": "📞 Contato",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/sobre.html",
+          "type": "internal",
+          "text": "ℹ️ Sobre",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/precos.html",
+          "type": "internal",
+          "text": "💳 Preços",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/politica-privacidade.html",
+          "type": "internal",
+          "text": "🔒 Política de Privacidade",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/termos-de-uso.html",
+          "type": "internal",
+          "text": "📋 Termos de Uso",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/test-bidding-flow.html",
+          "type": "internal",
+          "text": "🧪 Test Bidding Flow",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/test-bidding.html",
+          "type": "internal",
+          "text": "🧪 Test Bidding",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/test-bid-integration.html",
+          "type": "internal",
+          "text": "🧪 Test Bid Integration",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/test-redirect.html",
+          "type": "internal",
+          "text": "🧪 Test Redirect",
+          "valid": true
+        }
+      ],
+      "internal_count": 41,
+      "external_count": 0,
+      "valid_links": 36,
+      "broken_links": 5
+    },
+    "classificador-sem-js.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/classificador-sem-js.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "index.html 🔗",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "dashboard-premium-fixed.html 🔗",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-do-dia.html",
+          "type": "internal",
+          "text": "agenda-do-dia.html 🔗",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "type": "internal",
+          "text": "videoconsulta.html 🔗",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "dr-ai.html 🔗",
+          "valid": false
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 3
+    },
+    "dashboard-minimo.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/dashboard-minimo.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-minimo.html",
+          "type": "internal",
+          "text": "🏠Dashboard Principal",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta-corrigida.html",
+          "type": "internal",
+          "text": "📹Videoconsultas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai-corrigido.html",
+          "type": "internal",
+          "text": "🤖Dr.AI - Triagem",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor-corrigida.html",
+          "type": "internal",
+          "text": "💰Consulta por Valor",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "📊Telemonitoramento",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/relatorio-receita.html",
+          "type": "internal",
+          "text": "📄Relatórios Financeiros",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/download.html",
+          "type": "internal",
+          "text": "📥Downloads",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta-corrigida.html",
+          "type": "internal",
+          "text": "📹VideoconsultasConsultas médicas online completas",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai-corrigido.html",
+          "type": "internal",
+          "text": "🤖Dr.AI - TriagemAssistente IA para triagem médica",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor-corrigida.html",
+          "type": "internal",
+          "text": "💰Consulta por ValorSistema de lances para consulta",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "type": "internal",
+          "text": "📊TelemonitoramentoMonitoramento 24/7",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/relatorio-receita.html",
+          "type": "internal",
+          "text": "📄RelatóriosRelatórios financeiros",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/download.html",
+          "type": "internal",
+          "text": "📥DownloadsBaixar sistema completo",
+          "valid": true
+        }
+      ],
+      "internal_count": 13,
+      "external_count": 0,
+      "valid_links": 11,
+      "broken_links": 2
+    },
+    "videoconsulta-corrigida.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/videoconsulta-corrigida.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "dashboard-teste-static.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/dashboard-teste-static.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dashboard-teste-fixed.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/dashboard-teste-fixed.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "sistema-integrado.html": {
+      "path": "./public/public/sistema-integrado.html",
+      "directory": "./public/public",
+      "links": [
+        {
+          "url": "public/public/demo-ativo/index.html",
+          "type": "internal",
+          "text": "Demo Landing",
+          "valid": true
+        },
+        {
+          "url": "public/public/react-app/index.html",
+          "type": "internal",
+          "text": "Consulta Médica",
+          "valid": true
+        },
+        {
+          "url": "public/public/demo-ativo/index.html",
+          "type": "internal",
+          "text": "Abrir Completo",
+          "valid": true
+        },
+        {
+          "url": "public/public/react-app/index.html",
+          "type": "internal",
+          "text": "Abrir Consulta",
+          "valid": true
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 4,
+      "broken_links": 0
+    },
+    "telemed-complete.html": {
+      "path": "./public/telemed-complete.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "telemed-ia.html": {
+      "path": "./public/telemed-ia.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Voltar",
+          "valid": true
+        },
+        {
+          "url": "/health",
+          "type": "internal",
+          "text": "Health Connect",
+          "valid": true
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Voltar",
+          "valid": true
+        },
+        {
+          "url": "/health",
+          "type": "internal",
+          "text": "Health Connect",
+          "valid": true
+        },
+        {
+          "url": "/complete",
+          "type": "internal",
+          "text": "Sistema Completo",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 5,
+      "broken_links": 0
+    },
+    "health-connect.html": {
+      "path": "./public/health-connect.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Voltar",
+          "valid": true
+        },
+        {
+          "url": "/telemed",
+          "type": "internal",
+          "text": "TeleMed IA",
+          "valid": true
+        },
+        {
+          "url": "/complete",
+          "type": "internal",
+          "text": "Sistema Completo",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 0
+    },
+    "sistema-completo.html": {
+      "path": "./public/sistema-completo.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Home",
+          "valid": true
+        },
+        {
+          "url": "/telemed",
+          "type": "internal",
+          "text": "TeleMed IA",
+          "valid": true
+        },
+        {
+          "url": "/health",
+          "type": "internal",
+          "text": "Health Connect",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 0
+    },
+    "patient-management.html": {
+      "path": "./public/patient-management.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "enhanced-iframe.html": {
+      "path": "./public/enhanced-iframe.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Home",
+          "valid": true
+        },
+        {
+          "url": "/health",
+          "type": "internal",
+          "text": "Health Connect",
+          "valid": true
+        },
+        {
+          "url": "/telemed",
+          "type": "internal",
+          "text": "TeleMed IA",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 0
+    },
+    "enhanced-scraped.html": {
+      "path": "./public/enhanced-scraped.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Home",
+          "valid": true
+        },
+        {
+          "url": "/health",
+          "type": "internal",
+          "text": "Health Connect",
+          "valid": true
+        },
+        {
+          "url": "/telemed",
+          "type": "internal",
+          "text": "TeleMed IA",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 0
+    },
+    "enhanced-local.html": {
+      "path": "./public/enhanced-local.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Home",
+          "valid": true
+        },
+        {
+          "url": "/health",
+          "type": "internal",
+          "text": "Health Connect",
+          "valid": true
+        },
+        {
+          "url": "/telemed",
+          "type": "internal",
+          "text": "TeleMed IA",
+          "valid": true
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 0
+    },
+    "enhanced-system.html": {
+      "path": "./public/enhanced-system.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "enhanced-consultation-backup.html": {
+      "path": "./public/enhanced-consultation-backup.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dashboard-teste.html": {
+      "path": "./public/dashboard-teste.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/public/demo-ativo/pacientes.html",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Área Médica",
+          "valid": false
+        },
+        {
+          "url": "/enhanced",
+          "type": "internal",
+          "text": "Consulta IA",
+          "valid": true
+        },
+        {
+          "url": "/patient-management",
+          "type": "internal",
+          "text": "Gestão Avançada",
+          "valid": true
+        },
+        {
+          "url": "/public/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Agenda do DiaTimeline interativaAgendamento rápido",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/pacientes.html",
+          "type": "internal",
+          "text": "Gestão de PacientesCadastro completoHistórico médi",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/perfil-medico.html",
+          "type": "internal",
+          "text": "Perfil do MédicoDados profissionaisCertificaçõesHo",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/configuracoes.html",
+          "type": "internal",
+          "text": "ConfiguraçõesIntegraçõesBackup e segurançaLogs do ",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/mobile.html",
+          "type": "internal",
+          "text": "Demo ResponsivoSimulador de dispositivosPerformanc",
+          "valid": false
+        }
+      ],
+      "internal_count": 9,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 7
+    },
+    "enhanced-consultation.html": {
+      "path": "./public/enhanced-consultation.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "patient-info.html": {
+      "path": "./public/patient-info.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "enhanced-teste.html": {
+      "path": "./public/enhanced-teste.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "registro-saude.html": {
+      "path": "./public/registro-saude.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Consultas",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "← Voltar aos Pacientes",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 5,
+      "broken_links": 0
+    },
+    "meus-pacientes.html": {
+      "path": "./public/meus-pacientes.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Consultas",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": true
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 4,
+      "broken_links": 0
+    },
+    "landing.html": {
+      "path": "./public/landing.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Entrar",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Acessar Plataforma",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Abrir Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Iniciar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Acessar Plataforma",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Consulta IA",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 10,
+      "external_count": 0,
+      "valid_links": 10,
+      "broken_links": 0
+    },
+    "landing-teste.html": {
+      "path": "./public/landing-teste.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Login / Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "⚡ Triagem Grátis",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "📅 Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Login / Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "⚡ Triagem Grátis",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Login / Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "📅 Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "⚡ Triagem Grátis",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Dashboard Médico",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Sistema de Consultas",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "Gestão de Pacientes",
+          "valid": true
+        },
+        {
+          "url": "/registro-saude",
+          "type": "internal",
+          "text": "Registros de Saúde",
+          "valid": true
+        }
+      ],
+      "internal_count": 13,
+      "external_count": 0,
+      "valid_links": 13,
+      "broken_links": 0
+    },
+    "classificador-csp-safe.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/classificador-csp-safe.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "index.html 🔗",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "dashboard-premium-fixed.html 🔗",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-do-dia.html",
+          "type": "internal",
+          "text": "agenda-do-dia.html 🔗",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "type": "internal",
+          "text": "videoconsulta.html 🔗",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "dr-ai.html 🔗",
+          "valid": false
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 3
+    },
+    "classificador-interativo.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/classificador-interativo.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "fila-pacientes-medico.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/fila-pacientes-medico.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "pacientes.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/pacientes.html",
+      "directory": "./backup-merge-definitivo-20250816_130043/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "demo-webrtc.html": {
+      "path": "./public/demo-webrtc.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "teste-classificador.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/teste-classificador.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "index.html 🔗",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "type": "internal",
+          "text": "dashboard-premium-fixed.html 🔗",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/agenda-do-dia.html",
+          "type": "internal",
+          "text": "agenda-do-dia.html 🔗",
+          "valid": false
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "type": "internal",
+          "text": "videoconsulta.html 🔗",
+          "valid": true
+        },
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "type": "internal",
+          "text": "dr-ai.html 🔗",
+          "valid": false
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 3
+    },
+    "agenda-do-dia.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/agenda-do-dia.html",
+      "directory": "./backup-merge-definitivo-20250816_130043/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "mobile.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/mobile.html",
+      "directory": "./backup-merge-definitivo-20250816_130043/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "perfil-medico.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/perfil-medico.html",
+      "directory": "./backup-merge-definitivo-20250816_130043/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "area-medica.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/area-medica.html",
+      "directory": "./backup-merge-definitivo-20250816_130043/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Agenda do DiaGerencie sua agenda médica, consultas",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/pacientes.html",
+          "type": "internal",
+          "text": "Gestão de PacientesSistema completo para cadastro ",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/perfil-medico.html",
+          "type": "internal",
+          "text": "Perfil do MédicoGerencie suas informações profissi",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/configuracoes.html",
+          "type": "internal",
+          "text": "ConfiguraçõesPersonalize o sistema de acordo com s",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/mobile.html",
+          "type": "internal",
+          "text": "Demo ResponsivoVeja como o sistema se adapta a dif",
+          "valid": false
+        },
+        {
+          "url": "https://e6d689c1-512b-4fe0-95e9-97962bd221aa-00-1tscx6q290aml.spock.replit.dev/",
+          "type": "external",
+          "text": "🚀Testar Sistema Real com IA",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 1,
+      "valid_links": 1,
+      "broken_links": 5
+    },
+    "configuracoes.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/configuracoes.html",
+      "directory": "./backup-merge-definitivo-20250816_130043/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "area-medica-backup.html": {
+      "path": "./public/demo-ativo/area-medica-backup.html",
+      "directory": "./public/demo-ativo",
+      "links": [
+        {
+          "url": "/public/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Agenda do DiaGerencie sua agenda médica, consultas",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/pacientes.html",
+          "type": "internal",
+          "text": "Gestão de PacientesSistema completo para cadastro ",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/perfil-medico.html",
+          "type": "internal",
+          "text": "Perfil do MédicoGerencie suas informações profissi",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/configuracoes.html",
+          "type": "internal",
+          "text": "ConfiguraçõesPersonalize o sistema de acordo com s",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/mobile.html",
+          "type": "internal",
+          "text": "Demo ResponsivoVeja como o sistema se adapta a dif",
+          "valid": false
+        },
+        {
+          "url": "https://e6d689c1-512b-4fe0-95e9-97962bd221aa-00-1tscx6q290aml.spock.replit.dev/",
+          "type": "external",
+          "text": "🚀Testar Sistema Real com IA",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 1,
+      "valid_links": 1,
+      "broken_links": 5
+    },
+    "area-medica-new.html": {
+      "path": "./public/demo-ativo/area-medica-new.html",
+      "directory": "./public/demo-ativo",
+      "links": [
+        {
+          "url": "/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/demo-ativo/pacientes.html",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": false
+        },
+        {
+          "url": "/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/enhanced",
+          "type": "internal",
+          "text": "Consulta IA",
+          "valid": true
+        },
+        {
+          "url": "/patient-management",
+          "type": "internal",
+          "text": "Prontuário",
+          "valid": true
+        },
+        {
+          "url": "/enhanced",
+          "type": "internal",
+          "text": "Nova Consulta",
+          "valid": true
+        },
+        {
+          "url": "/demo-ativo/pacientes.html",
+          "type": "internal",
+          "text": "Novo Paciente",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai-demo",
+          "type": "internal",
+          "text": "Dr. AI",
+          "valid": true
+        },
+        {
+          "url": "/demo-ativo/configuracoes.html",
+          "type": "internal",
+          "text": "Configurações",
+          "valid": false
+        },
+        {
+          "url": "/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "AgendaVer compromissos",
+          "valid": false
+        },
+        {
+          "url": "/enhanced",
+          "type": "internal",
+          "text": "Nova ConsultaAtendimento com IA",
+          "valid": true
+        },
+        {
+          "url": "/dashboard-teste",
+          "type": "internal",
+          "text": "RelatóriosAnalytics médicos",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai-demo",
+          "type": "internal",
+          "text": "Dr. AIAssistente médico",
+          "valid": true
+        },
+        {
+          "url": "/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Ver todas",
+          "valid": false
+        }
+      ],
+      "internal_count": 14,
+      "external_count": 0,
+      "valid_links": 7,
+      "broken_links": 7
+    },
+    "cadastro.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/cadastro.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/login.html",
+          "type": "internal",
+          "text": "Faça login aqui",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "como-funciona.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/como-funciona.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai",
+          "type": "internal",
+          "text": "Testar Dr. AI Grátis",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Fazer Meu Lance",
+          "valid": true
+        },
+        {
+          "url": "/precos.html",
+          "type": "internal",
+          "text": "Ver Preços",
+          "valid": false
+        },
+        {
+          "url": "/faq.html",
+          "type": "internal",
+          "text": "FAQ",
+          "valid": false
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 2
+    },
+    "consulta-por-valor-corrigida.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/consulta-por-valor-corrigida.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/dashboard-minimo.html",
+          "type": "internal",
+          "text": "← Voltar ao Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "contato.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/contato.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Voltar à Página Inicial",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "dr-ai-demo.html": {
+      "path": "./public/preview/dr-ai-demo.html",
+      "directory": "./public/preview",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "equipe-medica.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/equipe-medica.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/agendamento?especialidade=cardiologia",
+          "type": "internal",
+          "text": "Consultar Agora",
+          "valid": true
+        },
+        {
+          "url": "/agendamento?especialidade=pediatria",
+          "type": "internal",
+          "text": "Consultar Agora",
+          "valid": true
+        },
+        {
+          "url": "/agendamento?especialidade=psiquiatria",
+          "type": "internal",
+          "text": "Consultar Agora",
+          "valid": true
+        },
+        {
+          "url": "/agendamento?especialidade=ginecologia",
+          "type": "internal",
+          "text": "Consultar Agora",
+          "valid": true
+        },
+        {
+          "url": "/agendamento?especialidade=ortopedia",
+          "type": "internal",
+          "text": "Consultar Agora",
+          "valid": true
+        },
+        {
+          "url": "/agendamento?especialidade=dermatologia",
+          "type": "internal",
+          "text": "Consultar Agora",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Buscar Mais Especialistas",
+          "valid": true
+        },
+        {
+          "url": "/dr-ai",
+          "type": "internal",
+          "text": "Usar Dr. AI para Orientação",
+          "valid": true
+        },
+        {
+          "url": "/faq.html",
+          "type": "internal",
+          "text": "FAQ",
+          "valid": false
+        }
+      ],
+      "internal_count": 10,
+      "external_count": 0,
+      "valid_links": 9,
+      "broken_links": 1
+    },
+    "faq.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/faq.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "Comece sua consulta agora →",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Experimente o Dr. AI gratuitamente →",
+          "valid": false
+        },
+        {
+          "url": "/especialidades.html",
+          "type": "internal",
+          "text": "Ver todas as especialidades →",
+          "valid": false
+        },
+        {
+          "url": "/contato.html",
+          "type": "internal",
+          "text": "Falar com Suporte",
+          "valid": false
+        },
+        {
+          "url": "/dr-ai.html",
+          "type": "internal",
+          "text": "Testar Dr. AI Grátis",
+          "valid": false
+        },
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "← Voltar ao Início",
+          "valid": true
+        }
+      ],
+      "internal_count": 6,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 5
+    },
+    "politica-privacidade.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/politica-privacidade.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/contato.html",
+          "type": "internal",
+          "text": "Página de Contato",
+          "valid": false
+        },
+        {
+          "url": "https://www.gov.br/anpd",
+          "type": "external",
+          "text": "www.gov.br/anpd",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 1,
+      "valid_links": 2,
+      "broken_links": 1
+    },
+    "test-bidding-flow.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/test-bidding-flow.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/consulta-por-valor.html",
+          "type": "internal",
+          "text": "📋 Sistema Completo de Lances",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "👨‍⚕️ Dashboard Médico",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "📹 Videoconsulta WebRTC",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard Médico",
+          "valid": false
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 4
+    },
+    "termos-de-uso.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/termos-de-uso.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 0
+    },
+    "test-bid-integration.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/test-bid-integration.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "dr-ai-corrigido-static.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/dr-ai-corrigido-static.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "Início",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "dr-ai-static.html": {
+      "path": "./backup-merge-definitivo-20250816_130043/dr-ai-static.html",
+      "directory": "./backup-merge-definitivo-20250816_130043",
+      "links": [
+        {
+          "url": "backup-merge-definitivo-20250816_130043/index.html",
+          "type": "internal",
+          "text": "Início",
+          "valid": false
+        }
+      ],
+      "internal_count": 1,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 1
+    },
+    "avaliacoes-themed.html": {
+      "path": "./public/preview/avaliacoes-themed.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Voltar ao Dashboard",
+          "valid": false
+        },
+        {
+          "url": "/fila-pacientes-medico.html",
+          "type": "internal",
+          "text": "Ver Pacientes",
+          "valid": false
+        },
+        {
+          "url": "/videoconsulta.html",
+          "type": "internal",
+          "text": "Nova Consulta",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 3
+    },
+    "precos-themed.html": {
+      "path": "./public/preview/precos-themed.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Agendar Consulta",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Assinar Plano",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Assinar Premium",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Começar Agora",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 5,
+      "broken_links": 0
+    },
+    "sobre-themed.html": {
+      "path": "./public/preview/sobre-themed.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "/",
+          "type": "internal",
+          "text": "Voltar ao Site",
+          "valid": true
+        },
+        {
+          "url": "/patient-bidding",
+          "type": "internal",
+          "text": "Fazer Consulta",
+          "valid": true
+        },
+        {
+          "url": "/contato.html",
+          "type": "internal",
+          "text": "Entre em Contato",
+          "valid": false
+        }
+      ],
+      "internal_count": 3,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 1
+    },
+    "index-demo.html": {
+      "path": "./public/preview/index-demo.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "public/preview/avaliacoes-themed.html",
+          "type": "internal",
+          "text": "Avaliações",
+          "valid": true
+        },
+        {
+          "url": "public/preview/precos-themed.html",
+          "type": "internal",
+          "text": "Preços",
+          "valid": true
+        },
+        {
+          "url": "public/preview/sobre-themed.html",
+          "type": "internal",
+          "text": "Sobre",
+          "valid": true
+        },
+        {
+          "url": "/preview",
+          "type": "internal",
+          "text": "← Voltar ao Preview",
+          "valid": true
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 4,
+      "broken_links": 0
+    },
+    "agenda-original.html": {
+      "path": "./public/preview/agenda-original.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "/enhanced",
+          "type": "internal",
+          "text": "🎥 Consulta Avançada",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "📊 Dashboard",
+          "valid": true
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 0
+    },
+    "meus-pacientes-original.html": {
+      "path": "./public/preview/meus-pacientes-original.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Consultas",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": true
+        }
+      ],
+      "internal_count": 4,
+      "external_count": 0,
+      "valid_links": 4,
+      "broken_links": 0
+    },
+    "registro-saude-original.html": {
+      "path": "./public/preview/registro-saude-original.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": true
+        },
+        {
+          "url": "/consulta",
+          "type": "internal",
+          "text": "Consultas",
+          "valid": true
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": true
+        },
+        {
+          "url": "/pacientes",
+          "type": "internal",
+          "text": "← Voltar aos Pacientes",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 5,
+      "broken_links": 0
+    },
+    "consulta-original.html": {
+      "path": "./public/preview/consulta-original.html",
+      "directory": "./public/preview",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "demo-comparacao.html": {
+      "path": "./public/preview/demo-comparacao.html",
+      "directory": "./public/preview",
+      "links": [
+        {
+          "url": "?theme=off",
+          "type": "internal",
+          "text": "🌞 Tema Original",
+          "valid": true
+        },
+        {
+          "url": "?",
+          "type": "internal",
+          "text": "🌙 TeleMed Pro",
+          "valid": true
+        },
+        {
+          "url": "/preview/agenda-original.html",
+          "type": "internal",
+          "text": "📅 Agenda Médica",
+          "valid": false
+        },
+        {
+          "url": "/preview/consulta-original.html",
+          "type": "internal",
+          "text": "🩺 Nova Consulta",
+          "valid": false
+        },
+        {
+          "url": "/preview/meus-pacientes-original.html",
+          "type": "internal",
+          "text": "👥 Meus Pacientes",
+          "valid": false
+        },
+        {
+          "url": "/preview/registro-saude-original.html",
+          "type": "internal",
+          "text": "📋 Registros",
+          "valid": false
+        },
+        {
+          "url": "/preview/avaliacoes-themed.html",
+          "type": "internal",
+          "text": "Avaliações",
+          "valid": false
+        },
+        {
+          "url": "/preview/precos-themed.html",
+          "type": "internal",
+          "text": "Preços",
+          "valid": false
+        },
+        {
+          "url": "/preview/sobre-themed.html",
+          "type": "internal",
+          "text": "Sobre",
+          "valid": false
+        },
+        {
+          "url": "/preview/agenda-original.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/preview/consulta-original.html",
+          "type": "internal",
+          "text": "Consulta",
+          "valid": false
+        },
+        {
+          "url": "/preview/meus-pacientes-original.html",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": false
+        }
+      ],
+      "internal_count": 12,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 10
+    },
+    "dashboard-medical.html": {
+      "path": "./archive/dashboard-medical.html",
+      "directory": "./archive",
+      "links": [
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dr. AI4",
+          "valid": false
+        },
+        {
+          "url": "/centro-avaliacao.html",
+          "type": "internal",
+          "text": "Avaliações Psiquiátricas",
+          "valid": false
+        },
+        {
+          "url": "/pdf-generator.html",
+          "type": "internal",
+          "text": "Gerador de PDF",
+          "valid": false
+        },
+        {
+          "url": "/triagem-inteligente.html",
+          "type": "internal",
+          "text": "Triagem Inteligente",
+          "valid": false
+        },
+        {
+          "url": "/agenda-medica.html",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 6,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 6
+    },
+    "medical-dashboard-pro.html": {
+      "path": "./archive/legacy/medical-dashboard-pro.html",
+      "directory": "./archive/legacy",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "demo-vs-real.html": {
+      "path": "./archive/legacy/demo-vs-real.html",
+      "directory": "./archive/legacy",
+      "links": [
+        {
+          "url": "/dashboard-medical.html?demo=true",
+          "type": "internal",
+          "text": "Entrar no Modo Demo",
+          "valid": true
+        },
+        {
+          "url": "/dashboard-medical.html",
+          "type": "internal",
+          "text": "Entrar no Modo Real",
+          "valid": false
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 1,
+      "broken_links": 1
+    },
+    "medical_interface_1752674583607.html": {
+      "path": "./attached_assets/medical_interface_1752674583607.html",
+      "directory": "./attached_assets",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "updated_dashboard (1)_1752692301739.html": {
+      "path": "./attached_assets/updated_dashboard (1)_1752692301739.html",
+      "directory": "./attached_assets",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "updated_dashboard_1752691660805.html": {
+      "path": "./attached_assets/updated_dashboard_1752691660805.html",
+      "directory": "./attached_assets",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "test-safe.html": {
+      "path": "./attached_assets/public/test-safe.html",
+      "directory": "./attached_assets/public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "video-baseline.html": {
+      "path": "./perf/video-baseline.html",
+      "directory": "./perf",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "enhanced-baseline.html": {
+      "path": "./perf/enhanced-baseline.html",
+      "directory": "./perf",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "enhanced-baseline.report.html": {
+      "path": "./perf/enhanced-baseline.report.html",
+      "directory": "./perf",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "videoconsulta-OLD-backup.html": {
+      "path": "./backup-public-20250816_124852/videoconsulta-OLD-backup.html",
+      "directory": "./backup-public-20250816_124852",
+      "links": [
+        {
+          "url": "/guia-medicos.html",
+          "type": "internal",
+          "text": "Guia",
+          "valid": false
+        },
+        {
+          "url": "/index.html",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": false
+        }
+      ],
+      "internal_count": 2,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 2
+    },
+    "health-connect-report.html": {
+      "path": "./analysis/health-connect-report.html",
+      "directory": "./analysis",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "lhr-1755430551241.html": {
+      "path": "./.lighthouseci/lhr-1755430551241.html",
+      "directory": "./.lighthouseci",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    }
+  },
+  "analysis": {
+    "top_hubs": [
+      [
+        "indice-completo.html",
+        41
+      ],
+      [
+        "index.html",
+        37
+      ],
+      [
+        "guia-medicos.html",
+        30
+      ],
+      [
+        "dashboard-aquarela.html",
+        18
+      ],
+      [
+        "dashboard-premium.html",
+        18
+      ],
+      [
+        "dashboard-premium-fixed.html",
+        18
+      ],
+      [
+        "sistema-indice.html",
+        16
+      ],
+      [
+        "area-medica-new.html",
+        14
+      ],
+      [
+        "dashboard-minimo.html",
+        13
+      ],
+      [
+        "landing-teste.html",
+        13
+      ]
+    ],
+    "most_referenced": [
+      [
+        "index.html",
+        45
+      ],
+      [
+        "",
+        36
+      ],
+      [
+        "centro-avaliacao",
+        21
+      ],
+      [
+        "dr-ai.html",
+        19
+      ],
+      [
+        "consulta-por-valor.html",
+        16
+      ],
+      [
+        "videoconsulta.html",
+        14
+      ],
+      [
+        "patient-bidding",
+        14
+      ],
+      [
+        "centro-avaliacao.html",
+        12
+      ],
+      [
+        "agenda-do-dia.html",
+        12
+      ],
+      [
+        "agenda",
+        12
+      ]
+    ],
+    "orphan_pages": [
+      "ansiedade-gad7.html",
+      "atendimento-medico.html",
+      "bipolar-mdq.html",
+      "dashboard-aquarela-backup.html",
+      "dashboard-aquarela-simple-backup.html",
+      "dashboard-clean.html",
+      "dashboard-minimal.html",
+      "dashboard-pastel.html",
+      "depressao-phq9.html",
+      "gad7-ansiedade.html",
+      "guia-integracao-hostinger.html",
+      "links-verificacao-telemed.html",
+      "logout.html",
+      "mdq-bipolar.html",
+      "memed-receita-viewer.html",
+      "phq9-depressao.html",
+      "pss10-stress.html",
+      "sistema-notificacoes-medicas.html",
+      "stress-pss10.html",
+      "tdah-asrs18.html"
+    ]
+  }
+}
