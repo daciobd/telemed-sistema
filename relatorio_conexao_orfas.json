@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-08-20T13:12:15.021998",
+  "total_orfas": 20,
+  "categorias": {
+    "avaliacoes": 9,
+    "dashboards": 5,
+    "consultas": 1,
+    "admin": 0,
+    "testes": 0,
+    "backup": 0,
+    "outras": 5
+  },
+  "hubs_conectados": 4,
+  "paginas_orfas_detalhadas": {
+    "avaliacoes": [
+      "ansiedade-gad7.html",
+      "bipolar-mdq.html",
+      "depressao-phq9.html",
+      "gad7-ansiedade.html",
+      "mdq-bipolar.html",
+      "phq9-depressao.html",
+      "pss10-stress.html",
+      "stress-pss10.html",
+      "tdah-asrs18.html"
+    ],
+    "dashboards": [
+      "dashboard-aquarela-backup.html",
+      "dashboard-aquarela-simple-backup.html",
+      "dashboard-clean.html",
+      "dashboard-minimal.html",
+      "dashboard-pastel.html"
+    ],
+    "consultas": [
+      "atendimento-medico.html"
+    ],
+    "admin": [],
+    "testes": [],
+    "backup": [],
+    "outras": [
+      "guia-integracao-hostinger.html",
+      "links-verificacao-telemed.html",
+      "logout.html",
+      "memed-receita-viewer.html",
+      "sistema-notificacoes-medicas.html"
+    ]
+  }
+}

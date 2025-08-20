@@ -1,0 +1,156 @@
+Corrigir Links Quebrados (11 Links Críticos nas Páginas Canônicas)
+Objetivo: Identificar e reparar os 11 links quebrados nas 6 rotas canônicas (Landing, Agenda, Consulta, Dashboard, etc.).
+
+Ação Imediata:
+
+Atualize o Script para Detectar Links Quebrados:
+Modifique o mapa_links.py para validar links e destacar os quebrados nas páginas canônicas. Adicione um filtro para as rotas canônicas:
+pythonimport os
+from bs4 import BeautifulSoup
+
+# Definir páginas canônicas
+CANONICAL_PAGES = {
+    'landing-teste.html': '/lp',
+    'agenda-medica.html': '/agenda',
+    'enhanced-teste.html': '/consulta',
+    'dashboard-teste.html': '/dashboard',
+    # Adicione outras conforme necessário
+}
+
+def extrair_e_validar_links(arquivo):
+    with open(arquivo, 'r', encoding='utf-8') as f:
+        soup = BeautifulSoup(f.read(), 'html.parser')
+        links = [a.get('href') for a in soup.find_all('a') if a.get('href')]
+        valid_links = []
+        broken_links = []
+        for link in links:
+            if not link.startswith(('#', 'javascript')):
+                caminho_completo = os.path.normpath(os.path.join(os.path.dirname(arquivo), link))
+                if not os.path.exists(caminho_completo):
+                    broken_links.append(link)
+                else:
+                    valid_links.append(link)
+        return valid_links, broken_links
+
+mapa = {}
+broken_report = {}
+for root, dirs, files in os.walk('.'):
+    for file in files:
+        if file.endswith('.html'):
+            caminho = os.path.join(root, file)
+            valid_links, broken_links = extrair_e_validar_links(caminho)
+            mapa[os.path.basename(caminho)] = valid_links
+            if broken_links and file in CANONICAL_PAGES:
+                broken_report[file] = broken_links
+
+# Relatório
+print("Relatório de Links Quebrados nas Páginas Canônicas:")
+for pagina, links_quebrados in broken_report.items():
+    print(f"\nPágina: {pagina} ({CANONICAL_PAGES[pagina]})")
+    print("Links Quebrados:")
+    for link in links_quebrados:
+        print(f" - {link}")
+
+# Salvar mapa completo
+with open('mapa_navegacao.json', 'w', encoding='utf-8') as f:
+    json.dump(mapa, f, ensure_ascii=False, indent=2)
+
+Execute o Script: No Replit, rode python mapa_links.py. O relatório listará os 11 links quebrados nas páginas canônicas.
+Correção Manual Rápida:
+
+Abra cada página canônica no Replit (ex.: landing-teste.html).
+Localize os links quebrados no código (use Ctrl+F com o texto do link).
+Substitua por links válidos (ex.: se pagina-inexistente.html aparecer, corrija para agenda-medica.html ou remova se desnecessário).
+
+
+Validação: Rerode o script para confirmar que os 11 links foram corrigidos.
+
+
+Tempo Estimado: 15-20 minutos (depende da complexidade dos links).
+
+2. Conectar Páginas Órfãs (81 Páginas sem Navegação de Entrada)
+Objetivo: Garantir que as 81 páginas órfãs sejam acessíveis a partir de pelo menos uma página principal.
+
+Ação Imediata:
+
+Identifique as Páginas Órfãs:
+Modifique o script para listar páginas sem links de entrada:
+python# Após o loop principal no script acima, adicione:
+todas_paginas = {os.path.basename(f) for f in files if f.endswith('.html')}
+paginas_linkadas = set()
+for links in mapa.values():
+    paginas_linkadas.update(os.path.basename(link) for link in links if link.endswith('.html'))
+orfas = todas_paginas - paginas_linkadas
+
+print("\nPáginas Órfãs (sem navegação de entrada):")
+for pagina in orfas:
+    print(f" - {pagina}")
+
+Conecte Manualmente:
+
+Escolha hubs principais (ex.: agenda-medica.html, dashboard-teste.html) como pontos de entrada.
+Adicione links nas seções relevantes (ex.: um menu "Outras Páginas" ou "Arquivos Adicionais").
+Exemplo em agenda-medica.html:
+html<nav>
+    <a href="/lp">Início</a>
+    <a href="/consulta">Consulta</a>
+    <a href="/dashboard">Dashboard</a>
+    <div>Outras Páginas:
+        <a href="/public/orfa1.html">Orfa 1</a>
+        <a href="/public/orfa2.html">Orfa 2</a>
+    </div>
+</nav>
+
+
+
+Automatize com Script (Opcional):
+
+Crie um script para injetar links das órfãs em um hub:
+pythonwith open('agenda-medica.html', 'r', encoding='utf-8') as f:
+    html = f.read()
+soup = BeautifulSoup(html, 'html.parser')
+nav = soup.find('nav')
+if nav:
+    for orfa in orfas:
+        nav.append(BeautifulSoup(f'<a href="/public/{orfa}">{orfa}</a>', 'html.parser'))
+    with open('agenda-medica.html', 'w', encoding='utf-8') as f:
+        f.write(str(soup))
+
+Execute e valide.
+
+
+
+
+Tempo Estimado: 20-30 minutos (manual) ou 10 minutos (automatizado).
+
+3. Otimizar Hubs (Melhorar Distribuição de Links nos Top 5 Hubs)
+Objetivo: Balancear a carga de links nos top 5 hubs (ex.: agenda-medica.html, index.html, etc.) para melhorar a experiência do usuário.
+
+Ação Imediata:
+
+Identifique os Top 5 Hubs:
+Use o script para listar:
+pythonhubs = sorted([(p, len(l)) for p, l in mapa.items()], key=lambda x: x[1], reverse=True)[:5]
+print("\nTop 5 Hubs:")
+for hub, count in hubs:
+    print(f" - {hub}: {count} links")
+
+Redistribua Links:
+
+Abra cada hub no Replit.
+Se um hub tem muitos links (ex.: >50), mova parte para outros hubs ou crie submenus.
+Exemplo: Em agenda-medica.html, se houver 60 links, separe em "Consultas" e "Gestão":
+html<nav>
+    <h3>Consultas</h3>
+    <a href="/consulta">Nova Consulta</a>
+    <a href="/enhanced-teste.html">Consulta Avançada</a>
+    <h3>Gestão</h3>
+    <a href="/meus-pacientes.html">Pacientes</a>
+    <a href="/registro-saude.html">Registros</a>
+</nav>
+
+
+
+Validação:
+
+Rerode o script e confirme que a distribuição está mais equilibrada (ex.: hubs com 20-30 links cada).

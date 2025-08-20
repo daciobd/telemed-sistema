@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Médica - TeleMed Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agenda Médica - TeleMed Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -1078,219 +1079,206 @@
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-calendar-alt"></i>
+<!-- HEADER -->
+<header class="header">
+<div class="header-content">
+<div class="logo">
+<i class="fas fa-calendar-alt"></i>
                 Agenda Médica - TeleMed Pro
             </div>
-            <div class="header-actions">
-                <a href="/leilao-consultas.html" class="logout-btn" style="background: linear-gradient(135deg, #28a745, #20c997); margin-right: 15px;">
-                    <i class="fas fa-gavel"></i>
+<div class="header-actions">
+<a class="logout-btn" href="/consulta" style="background: linear-gradient(135deg, #28a745, #20c997); margin-right: 15px;">
+<i class="fas fa-gavel"></i>
                     Leilão
                 </a>
-                <a href="/receitas-digitais.html" class="logout-btn" style="background: linear-gradient(135deg, #6f42c1, #5a32a3); margin-right: 15px;">
-                    <i class="fas fa-prescription-bottle-alt"></i>
+<a class="logout-btn" href="/dashboard" style="background: linear-gradient(135deg, #6f42c1, #5a32a3); margin-right: 15px;">
+<i class="fas fa-prescription-bottle-alt"></i>
                     Receitas
                 </a>
-                <div class="datetime-info">
-                    <div class="current-date" id="current-date"></div>
-                    <div class="current-time" id="current-time"></div>
-                </div>
-                <a href="/login.html" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
+<div class="datetime-info">
+<div class="current-date" id="current-date"></div>
+<div class="current-time" id="current-time"></div>
+</div>
+<a class="logout-btn" href="/lp">
+<i class="fas fa-sign-out-alt"></i>
                     Sair
                 </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- BREADCRUMBS -->
-    <div class="breadcrumbs-container">
-        <nav class="breadcrumbs">
-            <a href="/index.html" class="breadcrumb-item">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
+</div>
+</div>
+</header>
+<!-- BREADCRUMBS -->
+<div class="breadcrumbs-container">
+<nav class="breadcrumbs">
+<a class="breadcrumb-item" href="/dashboard">
+<i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
-            <span class="breadcrumb-separator">></span>
-            <a href="javascript:history.back()" class="breadcrumb-item">
-                <i class="fas fa-arrow-left"></i> Voltar
+<span class="breadcrumb-separator">&gt;</span>
+<a class="breadcrumb-item" href="javascript:history.back()">
+<i class="fas fa-arrow-left"></i> Voltar
             </a>
-            <span class="breadcrumb-separator">></span>
-            <span class="breadcrumb-current">Agenda Médica</span>
-            <span class="breadcrumb-separator">></span>
-            <a href="#" onclick="window.scrollTo(0,0); return false;" class="breadcrumb-item">
-                <i class="fas fa-arrow-up"></i> Topo
+<span class="breadcrumb-separator">&gt;</span>
+<span class="breadcrumb-current">Agenda Médica</span>
+<span class="breadcrumb-separator">&gt;</span>
+<a class="breadcrumb-item" href="#" onclick="window.scrollTo(0,0); return false;">
+<i class="fas fa-arrow-up"></i> Topo
             </a>
-        </nav>
-    </div>
-
-    <!-- MAIN CONTAINER -->
-    <div class="container">
-        <!-- STATS BAR -->
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-value" id="total-patients">-</div>
-                <div class="stat-label">Total de Pacientes</div>
-            </div>
-            <div class="stat-card success">
-                <div class="stat-value" id="confirmed-patients">-</div>
-                <div class="stat-label">Confirmados</div>
-            </div>
-            <div class="stat-card warning">
-                <div class="stat-value" id="pending-patients">-</div>
-                <div class="stat-label">Pendentes</div>
-            </div>
-            <div class="stat-card danger">
-                <div class="stat-value" id="rescheduled-patients">-</div>
-                <div class="stat-label">Reagendados</div>
-            </div>
-        </div>
-
-        <!-- CALENDAR SECTION -->
-        <div class="calendar-section">
-            <div class="calendar-header">
-                <h2 class="calendar-title">
-                    <i class="fas fa-calendar-alt"></i>
+</nav>
+</div>
+<!-- MAIN CONTAINER -->
+<div class="container">
+<!-- STATS BAR -->
+<div class="stats-bar">
+<div class="stat-card">
+<div class="stat-value" id="total-patients">-</div>
+<div class="stat-label">Total de Pacientes</div>
+</div>
+<div class="stat-card success">
+<div class="stat-value" id="confirmed-patients">-</div>
+<div class="stat-label">Confirmados</div>
+</div>
+<div class="stat-card warning">
+<div class="stat-value" id="pending-patients">-</div>
+<div class="stat-label">Pendentes</div>
+</div>
+<div class="stat-card danger">
+<div class="stat-value" id="rescheduled-patients">-</div>
+<div class="stat-label">Reagendados</div>
+</div>
+</div>
+<!-- CALENDAR SECTION -->
+<div class="calendar-section">
+<div class="calendar-header">
+<h2 class="calendar-title">
+<i class="fas fa-calendar-alt"></i>
                     Selecionar Data da Agenda
                 </h2>
-                <div class="current-selected-date" id="selected-date-display">
+<div class="current-selected-date" id="selected-date-display">
                     Hoje
                 </div>
-            </div>
-            <div class="calendar-content">
-                <div class="date-selector">
-                    <div class="date-input-group">
-                        <label for="dataSelecionada">Data da Consulta:</label>
-                        <input type="date" id="dataSelecionada" onchange="atualizarAgenda()">
-                    </div>
-                    <div class="quick-dates">
-                        <button class="quick-date-btn active" onclick="selectQuickDate('today')">Hoje</button>
-                        <button class="quick-date-btn" onclick="selectQuickDate('tomorrow')">Amanhã</button>
-                        <button class="quick-date-btn" onclick="selectQuickDate('week')">Próxima Semana</button>
-                        <button class="quick-date-btn" onclick="selectQuickDate('month')">Próximo Mês</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PATIENTS SECTION -->
-        <div class="patients-section">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <i class="fas fa-users"></i>
+</div>
+<div class="calendar-content">
+<div class="date-selector">
+<div class="date-input-group">
+<label for="dataSelecionada">Data da Consulta:</label>
+<input id="dataSelecionada" onchange="atualizarAgenda()" type="date"/>
+</div>
+<div class="quick-dates">
+<button class="quick-date-btn active" onclick="selectQuickDate('today')">Hoje</button>
+<button class="quick-date-btn" onclick="selectQuickDate('tomorrow')">Amanhã</button>
+<button class="quick-date-btn" onclick="selectQuickDate('week')">Próxima Semana</button>
+<button class="quick-date-btn" onclick="selectQuickDate('month')">Próximo Mês</button>
+</div>
+</div>
+</div>
+</div>
+<!-- PATIENTS SECTION -->
+<div class="patients-section">
+<div class="section-header">
+<h2 class="section-title">
+<i class="fas fa-users"></i>
                     Pacientes do Dia
                 </h2>
-                <button class="refresh-btn" onclick="loadPatients()">
-                    <i class="fas fa-sync-alt"></i>
+<button class="refresh-btn" onclick="loadPatients()">
+<i class="fas fa-sync-alt"></i>
                     Atualizar
                 </button>
-            </div>
-
-            <table class="patients-table">
-                <thead>
-                    <tr>
-                        <th>Paciente</th>
-                        <th>Horário</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="patients-tbody">
-                    <!-- Pacientes serão carregados aqui via JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- INVITATION MODAL -->
-    <div id="invitation-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fas fa-video"></i>
+</div>
+<table class="patients-table">
+<thead>
+<tr>
+<th>Paciente</th>
+<th>Horário</th>
+<th>Status</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="patients-tbody">
+<!-- Pacientes serão carregados aqui via JavaScript -->
+</tbody>
+</table>
+</div>
+</div>
+<!-- INVITATION MODAL -->
+<div class="modal" id="invitation-modal">
+<div class="modal-content">
+<div class="modal-header">
+<div class="modal-title">
+<i class="fas fa-video"></i>
                     Convidar para Teleconsulta
                 </div>
-                <button class="modal-close" onclick="closeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="modal-message" id="modal-message"></p>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn primary" onclick="sendInvitation()">
-                    <i class="fas fa-paper-plane"></i>
+<button class="modal-close" onclick="closeModal()">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="modal-body">
+<p class="modal-message" id="modal-message"></p>
+</div>
+<div class="modal-actions">
+<button class="modal-btn primary" onclick="sendInvitation()">
+<i class="fas fa-paper-plane"></i>
                     Enviar Convite
                 </button>
-                <button class="modal-btn secondary" onclick="closeModal()">
+<button class="modal-btn secondary" onclick="closeModal()">
                     Cancelar
                 </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DE REMARCAÇÃO AVANÇADA -->
-    <div id="rescheduleModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fas fa-calendar-alt"></i>
+</div>
+</div>
+</div>
+<!-- MODAL DE REMARCAÇÃO AVANÇADA -->
+<div class="modal" id="rescheduleModal">
+<div class="modal-content">
+<div class="modal-header">
+<div class="modal-title">
+<i class="fas fa-calendar-alt"></i>
                     Remarcar Consulta
                 </div>
-                <button class="modal-close" onclick="closeRescheduleModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="patient-info" id="reschedulePatientInfo">
-                    <!-- Patient info will be populated here -->
-                </div>
-
-                <div class="current-appointment" id="currentAppointmentInfo">
-                    <!-- Current appointment info will be populated here -->
-                </div>
-
-                <div class="form-group">
-                    <label for="newDate">Nova Data:</label>
-                    <input type="date" id="newDate" onchange="loadAvailableSlots()">
-                </div>
-
-                <div class="form-group">
-                    <label>Horários Disponíveis:</label>
-                    <div class="time-slots" id="availableTimeSlots">
-                        <p style="text-align: center; color: #666;">Selecione uma data para ver os horários disponíveis</p>
-                    </div>
-                </div>
-
-                <div class="form-group reschedule-reason">
-                    <label for="rescheduleReason">Motivo da Remarcação:</label>
-                    <select id="rescheduleReason">
-                        <option value="">Selecione um motivo</option>
-                        <option value="medico">Indisponibilidade do médico</option>
-                        <option value="paciente">Solicitação do paciente</option>
-                        <option value="emergencia">Emergência médica</option>
-                        <option value="tecnico">Problemas técnicos</option>
-                        <option value="outro">Outro motivo</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="rescheduleNotes">Observações Adicionais:</label>
-                    <textarea id="rescheduleNotes" rows="3" placeholder="Informações adicionais sobre a remarcação..."></textarea>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeRescheduleModal()">Cancelar</button>
-                <button class="modal-btn success" onclick="confirmReschedule()" id="confirmRescheduleBtn" disabled>
-                    <i class="fas fa-check"></i>
+<button class="modal-close" onclick="closeRescheduleModal()">
+<i class="fas fa-times"></i>
+</button>
+</div>
+<div class="modal-body">
+<div class="patient-info" id="reschedulePatientInfo">
+<!-- Patient info will be populated here -->
+</div>
+<div class="current-appointment" id="currentAppointmentInfo">
+<!-- Current appointment info will be populated here -->
+</div>
+<div class="form-group">
+<label for="newDate">Nova Data:</label>
+<input id="newDate" onchange="loadAvailableSlots()" type="date"/>
+</div>
+<div class="form-group">
+<label>Horários Disponíveis:</label>
+<div class="time-slots" id="availableTimeSlots">
+<p style="text-align: center; color: #666;">Selecione uma data para ver os horários disponíveis</p>
+</div>
+</div>
+<div class="form-group reschedule-reason">
+<label for="rescheduleReason">Motivo da Remarcação:</label>
+<select id="rescheduleReason">
+<option value="">Selecione um motivo</option>
+<option value="medico">Indisponibilidade do médico</option>
+<option value="paciente">Solicitação do paciente</option>
+<option value="emergencia">Emergência médica</option>
+<option value="tecnico">Problemas técnicos</option>
+<option value="outro">Outro motivo</option>
+</select>
+</div>
+<div class="form-group">
+<label for="rescheduleNotes">Observações Adicionais:</label>
+<textarea id="rescheduleNotes" placeholder="Informações adicionais sobre a remarcação..." rows="3"></textarea>
+</div>
+</div>
+<div class="modal-actions">
+<button class="modal-btn secondary" onclick="closeRescheduleModal()">Cancelar</button>
+<button class="modal-btn success" disabled="" id="confirmRescheduleBtn" onclick="confirmReschedule()">
+<i class="fas fa-check"></i>
                     Confirmar Remarcação
                 </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
+</div>
+</div>
+</div>
+<script>
         let patients = [];
         let currentPatient = null;
         let patientResponse = null;

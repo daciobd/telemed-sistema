@@ -1,15 +1,15 @@
 {
   "metadata": {
-    "total_pages": 412,
-    "total_links": 1630,
-    "valid_links": 870,
-    "broken_links": 712,
+    "total_pages": 420,
+    "total_links": 1666,
+    "valid_links": 902,
+    "broken_links": 716,
     "analysis_date": "2025-08-20"
   },
   "pages": {
     "agenda-medica.html": {
-      "path": "./render-deploy/pages/agenda-medica.html",
-      "directory": "./render-deploy/pages",
+      "path": "./backup_links_corrigidos/agenda-medica.html",
+      "directory": "./backup_links_corrigidos",
       "links": [
         {
           "url": "/leilao-consultas.html",
@@ -1485,6 +1485,15 @@
     "breadcrumbs_universal.html": {
       "path": "./breadcrumbs_universal.html",
       "directory": ".",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
+    },
+    "relatorio_navegacao.html": {
+      "path": "./public/relatorio_navegacao.html",
+      "directory": "./public",
       "links": [],
       "internal_count": 0,
       "external_count": 0,
@@ -3141,8 +3150,8 @@
       "broken_links": 0
     },
     "dashboard-teste.html": {
-      "path": "./public/dashboard-teste.html",
-      "directory": "./public",
+      "path": "./backup_links_corrigidos/dashboard-teste.html",
+      "directory": "./backup_links_corrigidos",
       "links": [
         {
           "url": "/public/demo-ativo/pacientes.html",
@@ -3223,8 +3232,8 @@
       "broken_links": 0
     },
     "enhanced-teste.html": {
-      "path": "./public/enhanced-teste.html",
-      "directory": "./public",
+      "path": "./backup_links_corrigidos/enhanced-teste.html",
+      "directory": "./backup_links_corrigidos",
       "links": [],
       "internal_count": 0,
       "external_count": 0,
@@ -3232,8 +3241,8 @@
       "broken_links": 0
     },
     "registro-saude.html": {
-      "path": "./public/registro-saude.html",
-      "directory": "./public",
+      "path": "./backup_links_corrigidos/registro-saude.html",
+      "directory": "./backup_links_corrigidos",
       "links": [
         {
           "url": "/agenda",
@@ -3272,8 +3281,8 @@
       "broken_links": 0
     },
     "meus-pacientes.html": {
-      "path": "./public/meus-pacientes.html",
-      "directory": "./public",
+      "path": "./backup_links_corrigidos/meus-pacientes.html",
+      "directory": "./backup_links_corrigidos",
       "links": [
         {
           "url": "/agenda",
@@ -3376,8 +3385,8 @@
       "broken_links": 0
     },
     "landing-teste.html": {
-      "path": "./public/landing-teste.html",
-      "directory": "./public",
+      "path": "./backup_links_corrigidos/landing-teste.html",
+      "directory": "./backup_links_corrigidos",
       "links": [
         {
           "url": "/dashboard",

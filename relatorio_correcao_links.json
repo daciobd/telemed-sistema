@@ -1,0 +1,419 @@
+{
+  "timestamp": "2025-08-20T13:12:00.500818",
+  "total_paginas": 6,
+  "total_correcoes": 11,
+  "detalhes": {
+    "landing-teste.html": {
+      "arquivo": "landing-teste.html",
+      "path": "./public/landing-teste.html",
+      "links_analisados": 24,
+      "links_corrigidos": 1,
+      "detalhes": [
+        {
+          "original": "#inicio",
+          "corrigido": "#inicio",
+          "valido": true,
+          "texto": "Início",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#servicos",
+          "corrigido": "#servicos",
+          "valido": true,
+          "texto": "Nossos Serviços",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#beneficios",
+          "corrigido": "#beneficios",
+          "valido": true,
+          "texto": "Benefícios",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#medicos",
+          "corrigido": "#medicos",
+          "valido": true,
+          "texto": "Para Médicos",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#testagens",
+          "corrigido": "#testagens",
+          "valido": true,
+          "texto": "Testagens",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#quem-somos",
+          "corrigido": "#quem-somos",
+          "valido": true,
+          "texto": "Quem Somos",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#contato",
+          "corrigido": "#contato",
+          "valido": true,
+          "texto": "Contato",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/dashboard",
+          "corrigido": "/dashboard",
+          "valido": true,
+          "texto": "Login / Dashboard",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/consulta",
+          "corrigido": "/consulta",
+          "valido": true,
+          "texto": "Agendar Consulta",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/agenda",
+          "corrigido": "/agenda",
+          "valido": true,
+          "texto": "⚡ Triagem Grátis",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/consulta",
+          "corrigido": "/consulta",
+          "valido": true,
+          "texto": "📅 Agendar Consulta",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/dashboard",
+          "corrigido": "/dashboard",
+          "valido": true,
+          "texto": "Login / Dashboard",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/agenda",
+          "corrigido": "/agenda",
+          "valido": true,
+          "texto": "⚡ Triagem Grátis",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/dashboard",
+          "corrigido": "/dashboard",
+          "valido": true,
+          "texto": "Login / Dashboard",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/consulta",
+          "corrigido": "/consulta",
+          "valido": true,
+          "texto": "📅 Agendar Consulta",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/agenda",
+          "corrigido": "/agenda",
+          "valido": true,
+          "texto": "⚡ Triagem Grátis",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#servicos",
+          "corrigido": "#servicos",
+          "valido": true,
+          "texto": "Consultas Online",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#servicos",
+          "corrigido": "#servicos",
+          "valido": true,
+          "texto": "Dr. AI",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#servicos",
+          "corrigido": "#servicos",
+          "valido": true,
+          "texto": "Prontuário Digital",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#servicos",
+          "corrigido": "#servicos",
+          "valido": true,
+          "texto": "Prescrições",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/agenda",
+          "corrigido": "/agenda",
+          "valido": true,
+          "texto": "Dashboard Médico",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/consulta",
+          "corrigido": "/consulta",
+          "valido": true,
+          "texto": "Sistema de Consultas",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/pacientes",
+          "corrigido": "/pacientes",
+          "valido": true,
+          "texto": "Gestão de Pacientes",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/registro-saude",
+          "corrigido": "/registro-saude",
+          "valido": false,
+          "texto": "Registros de Saúde",
+          "status": "🔧 /registro-saude → /registro-saude"
+        }
+      ]
+    },
+    "agenda-medica.html": {
+      "arquivo": "agenda-medica.html",
+      "path": "./agenda-medica.html",
+      "links_analisados": 6,
+      "links_corrigidos": 4,
+      "detalhes": [
+        {
+          "original": "/leilao-consultas.html",
+          "corrigido": "/consulta",
+          "valido": false,
+          "texto": "Leilão",
+          "status": "🔧 /leilao-consultas.html → /consulta"
+        },
+        {
+          "original": "/receitas-digitais.html",
+          "corrigido": "/dashboard",
+          "valido": false,
+          "texto": "Receitas",
+          "status": "🔧 /receitas-digitais.html → /dashboard"
+        },
+        {
+          "original": "/login.html",
+          "corrigido": "/lp",
+          "valido": false,
+          "texto": "Sair",
+          "status": "🔧 /login.html → /lp"
+        },
+        {
+          "original": "/index.html",
+          "corrigido": "/dashboard",
+          "valido": false,
+          "texto": "Dashboard",
+          "status": "🔧 /index.html → /dashboard"
+        },
+        {
+          "original": "javascript:history.back()",
+          "corrigido": "javascript:history.back()",
+          "valido": true,
+          "texto": "Voltar",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#",
+          "corrigido": "#",
+          "valido": true,
+          "texto": "Topo",
+          "status": "✅ Válido"
+        }
+      ]
+    },
+    "enhanced-teste.html": {
+      "arquivo": "enhanced-teste.html",
+      "path": "./public/enhanced-teste.html",
+      "links_analisados": 2,
+      "links_corrigidos": 0,
+      "detalhes": [
+        {
+          "original": "#",
+          "corrigido": "#",
+          "valido": true,
+          "texto": "Memed",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#",
+          "corrigido": "#",
+          "valido": true,
+          "texto": "Ver Lista",
+          "status": "✅ Válido"
+        }
+      ]
+    },
+    "dashboard-teste.html": {
+      "arquivo": "dashboard-teste.html",
+      "path": "./public/dashboard-teste.html",
+      "links_analisados": 10,
+      "links_corrigidos": 6,
+      "detalhes": [
+        {
+          "original": "#",
+          "corrigido": "#",
+          "valido": true,
+          "texto": "Dashboard",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/public/demo-ativo/pacientes.html",
+          "corrigido": "pacientes.html",
+          "valido": false,
+          "texto": "Pacientes",
+          "status": "🔧 /public/demo-ativo/pacientes.html → pacientes.html"
+        },
+        {
+          "original": "/public/demo-ativo/area-medica.html",
+          "corrigido": "/public/demo-ativo/area-medica.html",
+          "valido": true,
+          "texto": "Área Médica",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/enhanced",
+          "corrigido": "/enhanced",
+          "valido": false,
+          "texto": "Consulta IA",
+          "status": "🔧 /enhanced → /enhanced"
+        },
+        {
+          "original": "/patient-management",
+          "corrigido": "/patient-management",
+          "valido": false,
+          "texto": "Gestão Avançada",
+          "status": "🔧 /patient-management → /patient-management"
+        },
+        {
+          "original": "/public/demo-ativo/agenda-do-dia.html",
+          "corrigido": "/public/demo-ativo/agenda-do-dia.html",
+          "valido": true,
+          "texto": "Agenda do DiaTimeline interati",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/public/demo-ativo/pacientes.html",
+          "corrigido": "pacientes.html",
+          "valido": false,
+          "texto": "Gestão de PacientesCadastro co",
+          "status": "🔧 /public/demo-ativo/pacientes.html → pacientes.html"
+        },
+        {
+          "original": "/public/demo-ativo/perfil-medico.html",
+          "corrigido": "public/demo-ativo/perfil-medico.html",
+          "valido": false,
+          "texto": "Perfil do MédicoDados profissi",
+          "status": "🔧 /public/demo-ativo/perfil-medico.html → public/demo-ativo/perfil-medico.html"
+        },
+        {
+          "original": "/public/demo-ativo/configuracoes.html",
+          "corrigido": "/public/demo-ativo/configuracoes.html",
+          "valido": true,
+          "texto": "ConfiguraçõesIntegraçõesBackup",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/public/demo-ativo/mobile.html",
+          "corrigido": "public/demo-ativo/mobile.html",
+          "valido": false,
+          "texto": "Demo ResponsivoSimulador de di",
+          "status": "🔧 /public/demo-ativo/mobile.html → public/demo-ativo/mobile.html"
+        }
+      ]
+    },
+    "meus-pacientes.html": {
+      "arquivo": "meus-pacientes.html",
+      "path": "./public/meus-pacientes.html",
+      "links_analisados": 4,
+      "links_corrigidos": 0,
+      "detalhes": [
+        {
+          "original": "/agenda",
+          "corrigido": "/agenda",
+          "valido": true,
+          "texto": "Agenda",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/consulta",
+          "corrigido": "/consulta",
+          "valido": true,
+          "texto": "Consultas",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/dashboard",
+          "corrigido": "/dashboard",
+          "valido": true,
+          "texto": "Dashboard",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/pacientes",
+          "corrigido": "/pacientes",
+          "valido": true,
+          "texto": "Pacientes",
+          "status": "✅ Válido"
+        }
+      ]
+    },
+    "registro-saude.html": {
+      "arquivo": "registro-saude.html",
+      "path": "./public/registro-saude.html",
+      "links_analisados": 6,
+      "links_corrigidos": 0,
+      "detalhes": [
+        {
+          "original": "/agenda",
+          "corrigido": "/agenda",
+          "valido": true,
+          "texto": "Agenda",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/consulta",
+          "corrigido": "/consulta",
+          "valido": true,
+          "texto": "Consultas",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/dashboard",
+          "corrigido": "/dashboard",
+          "valido": true,
+          "texto": "Dashboard",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/pacientes",
+          "corrigido": "/pacientes",
+          "valido": true,
+          "texto": "Pacientes",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "#",
+          "corrigido": "#",
+          "valido": true,
+          "texto": "PHR",
+          "status": "✅ Válido"
+        },
+        {
+          "original": "/pacientes",
+          "corrigido": "/pacientes",
+          "valido": true,
+          "texto": "← Voltar aos Pacientes",
+          "status": "✅ Válido"
+        }
+      ]
+    }
+  }
+}

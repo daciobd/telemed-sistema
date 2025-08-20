@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-08-20T13:12:59.694042",
+  "hubs_analisados": 5,
+  "hubs_otimizados": 3,
+  "limite_links": 25,
+  "top_hubs_original": [
+    [
+      "indice-completo.html",
+      41
+    ],
+    [
+      "index.html",
+      37
+    ],
+    [
+      "guia-medicos.html",
+      30
+    ],
+    [
+      "dashboard-aquarela.html",
+      18
+    ],
+    [
+      "dashboard-premium.html",
+      18
+    ]
+  ]
+}
