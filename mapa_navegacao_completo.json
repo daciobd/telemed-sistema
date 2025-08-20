@@ -1,15 +1,15 @@
 {
   "metadata": {
-    "total_pages": 420,
-    "total_links": 1666,
-    "valid_links": 902,
-    "broken_links": 716,
+    "total_pages": 432,
+    "total_links": 1939,
+    "valid_links": 1002,
+    "broken_links": 889,
     "analysis_date": "2025-08-20"
   },
   "pages": {
     "agenda-medica.html": {
-      "path": "./backup_links_corrigidos/agenda-medica.html",
-      "directory": "./backup_links_corrigidos",
+      "path": "./backup_hubs_conectados/agenda-medica.html",
+      "directory": "./backup_hubs_conectados",
       "links": [
         {
           "url": "/leilao-consultas.html",
@@ -782,110 +782,110 @@
       "broken_links": 8
     },
     "sistema-indice.html": {
-      "path": "./render-deploy/pages/sistema-indice.html",
-      "directory": "./render-deploy/pages",
+      "path": "./backup_hubs_finais/sistema-indice.html",
+      "directory": "./backup_hubs_finais",
       "links": [
         {
-          "url": "render-deploy/pages/index.html",
+          "url": "backup_hubs_finais/index.html",
           "type": "internal",
           "text": "Landing Page PrincipalPágina inicial moderna com i",
           "valid": false
         },
         {
-          "url": "render-deploy/pages/login.html",
+          "url": "backup_hubs_finais/login.html",
           "type": "internal",
           "text": "Sistema de LoginAutenticação avançada com login so",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/register.html",
+          "url": "backup_hubs_finais/register.html",
           "type": "internal",
           "text": "Cadastro Multi-EtapaRegistro profissional em 3 eta",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/especialidades.html",
+          "url": "backup_hubs_finais/especialidades.html",
           "type": "internal",
           "text": "Especialidades Médicas8 especialidades detalhadas ",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/dr-ai.html",
+          "url": "backup_hubs_finais/dr-ai.html",
           "type": "internal",
           "text": "Dr. AI - Triagem InteligenteSistema de IA médica p",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/triagem-psiquiatrica.html",
+          "url": "backup_hubs_finais/triagem-psiquiatrica.html",
           "type": "internal",
           "text": "Triagem Psiquiátrica IAPrimeiro sistema do Brasil ",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/telemonitoramento-enfermagem.html",
+          "url": "backup_hubs_finais/telemonitoramento-enfermagem.html",
           "type": "internal",
           "text": "TelemonitoramentoAcompanhamento 24/7 com enfermeir",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/saiba-mais.html",
+          "url": "backup_hubs_finais/saiba-mais.html",
           "type": "internal",
           "text": "Saiba MaisInformações detalhadas sobre recursos e ",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/index.html",
+          "url": "backup_hubs_finais/index.html",
           "type": "internal",
           "text": "Dashboard Médico ProInterface profissional complet",
           "valid": false
         },
         {
-          "url": "render-deploy/pages/consulta-por-valor.html",
+          "url": "backup_hubs_finais/consulta-por-valor.html",
           "type": "internal",
           "text": "Sistema de LancesConsultas médicas por lances a pa",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/videoconsulta.html",
+          "url": "backup_hubs_finais/videoconsulta.html",
           "type": "internal",
           "text": "Videoconsultas WebRTCSistema completo de videocham",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/integracao-hostinger.html",
+          "url": "backup_hubs_finais/integracao-hostinger.html",
           "type": "internal",
           "text": "Integração HostingerSistema completo de links para",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/login.html",
+          "url": "backup_hubs_finais/login.html",
           "type": "internal",
           "text": "Fazer Login",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/register.html",
+          "url": "backup_hubs_finais/register.html",
           "type": "internal",
           "text": "Cadastrar",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/dr-ai.html",
+          "url": "backup_hubs_finais/dr-ai.html",
           "type": "internal",
           "text": "Testar Dr. AI",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "render-deploy/pages/consulta-por-valor.html",
+          "url": "backup_hubs_finais/consulta-por-valor.html",
           "type": "internal",
           "text": "Fazer Lance",
-          "valid": true
+          "valid": false
         }
       ],
       "internal_count": 16,
       "external_count": 0,
-      "valid_links": 14,
-      "broken_links": 2
+      "valid_links": 0,
+      "broken_links": 16
     },
     "sistema-notificacoes-medicas.html": {
       "path": "./render-deploy/pages/sistema-notificacoes-medicas.html",
@@ -1075,8 +1075,8 @@
       "broken_links": 0
     },
     "dashboard-aquarela.html": {
-      "path": "./render-deploy/pages/dashboard-aquarela.html",
-      "directory": "./render-deploy/pages",
+      "path": "./backup_hubs_finais/dashboard-aquarela.html",
+      "directory": "./backup_hubs_finais",
       "links": [
         {
           "url": "/dashboard-aquarela",
@@ -1251,8 +1251,8 @@
       "broken_links": 0
     },
     "index.html": {
-      "path": "./render-deploy/index.html",
-      "directory": "./render-deploy",
+      "path": "./backup_hubs_otimizados/index.html",
+      "directory": "./backup_hubs_otimizados",
       "links": [
         {
           "url": "/",
@@ -1510,8 +1510,8 @@
       "broken_links": 0
     },
     "dashboard-premium.html": {
-      "path": "./dist/public/dashboard-premium.html",
-      "directory": "./dist/public",
+      "path": "./backup_hubs_finais/dashboard-premium.html",
+      "directory": "./backup_hubs_finais",
       "links": [
         {
           "url": "/dashboard-aquarela",
@@ -1806,8 +1806,8 @@
       "broken_links": 1
     },
     "guia-medicos.html": {
-      "path": "./backup-merge-definitivo-20250816_130043/guia-medicos.html",
-      "directory": "./backup-merge-definitivo-20250816_130043",
+      "path": "./backup_hubs_otimizados/guia-medicos.html",
+      "directory": "./backup_hubs_otimizados",
       "links": [
         {
           "url": "/",
@@ -2364,378 +2364,378 @@
       "broken_links": 0
     },
     "dashboard-premium-fixed.html": {
-      "path": "./backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
-      "directory": "./backup-merge-definitivo-20250816_130043",
+      "path": "./backup_hubs_finais/dashboard-premium-fixed.html",
+      "directory": "./backup_hubs_finais",
       "links": [
         {
-          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "url": "backup_hubs_finais/dashboard-premium-fixed.html",
           "type": "internal",
           "text": "🏠Dashboard Principal",
           "valid": true
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/agenda-medica.html",
+          "url": "backup_hubs_finais/agenda-medica.html",
           "type": "internal",
           "text": "📅Agenda Médica",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/receitas-digitais.html",
+          "url": "backup_hubs_finais/receitas-digitais.html",
           "type": "internal",
           "text": "📄Receitas Digitais",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "url": "backup_hubs_finais/videoconsulta.html",
           "type": "internal",
           "text": "📹Videoconsultas",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "url": "backup_hubs_finais/dr-ai.html",
           "type": "internal",
           "text": "🧠Dr. AI Assistente",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "url": "backup_hubs_finais/telemonitoramento-enfermagem.html",
           "type": "internal",
           "text": "📊Telemonitoramento",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/centro-avaliacao.html",
+          "url": "backup_hubs_finais/centro-avaliacao.html",
           "type": "internal",
           "text": "⭐Centro de Avaliação",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "url": "backup_hubs_finais/dr-ai.html",
           "type": "internal",
           "text": "🤖Dr.AI - Triagem",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/relatorios-medicos-pdf.html",
+          "url": "backup_hubs_finais/relatorios-medicos-pdf.html",
           "type": "internal",
           "text": "📄Relatórios PDF",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor.html",
+          "url": "backup_hubs_finais/consulta-por-valor.html",
           "type": "internal",
           "text": "💰Consulta por Valor",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/agenda-medica.html",
+          "url": "backup_hubs_finais/agenda-medica.html",
           "type": "internal",
           "text": "📅Agenda MédicaConsultas e horários",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/receitas-digitais.html",
+          "url": "backup_hubs_finais/receitas-digitais.html",
           "type": "internal",
           "text": "💊Receitas DigitaisPrescrições MEMED",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "url": "backup_hubs_finais/videoconsulta.html",
           "type": "internal",
           "text": "📹VideoconsultasConsultas online",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "url": "backup_hubs_finais/telemonitoramento-enfermagem.html",
           "type": "internal",
           "text": "📊TelemonitoramentoMonitoramento 24/7",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/centro-avaliacao.html",
+          "url": "backup_hubs_finais/centro-avaliacao.html",
           "type": "internal",
           "text": "⭐Centro de AvaliaçãoAvaliações médicas completas",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "url": "backup_hubs_finais/dr-ai.html",
           "type": "internal",
           "text": "🤖Dr.AI - TriagemAssistente AI para triagem",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/relatorios-medicos-pdf.html",
+          "url": "backup_hubs_finais/relatorios-medicos-pdf.html",
           "type": "internal",
           "text": "📄Relatórios PDFRelatórios médicos em PDF",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor.html",
+          "url": "backup_hubs_finais/consulta-por-valor.html",
           "type": "internal",
           "text": "💰Consulta por ValorSistema de lances",
-          "valid": true
+          "valid": false
         }
       ],
       "internal_count": 18,
       "external_count": 0,
-      "valid_links": 15,
-      "broken_links": 3
+      "valid_links": 1,
+      "broken_links": 17
     },
     "indice-completo.html": {
-      "path": "./backup-merge-definitivo-20250816_130043/indice-completo.html",
-      "directory": "./backup-merge-definitivo-20250816_130043",
+      "path": "./backup_hubs_otimizados/indice-completo.html",
+      "directory": "./backup_hubs_otimizados",
       "links": [
         {
-          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "url": "backup_hubs_otimizados/dashboard-premium-fixed.html",
           "type": "internal",
           "text": "← Voltar ao Dashboard",
-          "valid": true
-        },
-        {
-          "url": "backup-merge-definitivo-20250816_130043/index.html",
-          "type": "internal",
-          "text": "🏠 Página Inicial (Landing)",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/dashboard-premium-fixed.html",
+          "url": "backup_hubs_otimizados/index.html",
+          "type": "internal",
+          "text": "🏠 Página Inicial (Landing)",
+          "valid": true
+        },
+        {
+          "url": "backup_hubs_otimizados/dashboard-premium-fixed.html",
           "type": "internal",
           "text": "📊 Dashboard Premium",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/download.html",
+          "url": "backup_hubs_otimizados/download.html",
           "type": "internal",
           "text": "📥 Downloads",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/agenda-do-dia.html",
+          "url": "backup_hubs_otimizados/agenda-do-dia.html",
           "type": "internal",
           "text": "📅 Agenda do Dia",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/agenda-medico.html",
+          "url": "backup_hubs_otimizados/agenda-medico.html",
           "type": "internal",
           "text": "📅 Agenda Médico",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/area-medica.html",
+          "url": "backup_hubs_otimizados/area-medica.html",
           "type": "internal",
           "text": "👨‍⚕️ Área Médica",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/perfil-medico.html",
+          "url": "backup_hubs_otimizados/perfil-medico.html",
           "type": "internal",
           "text": "👤 Perfil Médico",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/login-medico.html",
+          "url": "backup_hubs_otimizados/login-medico.html",
           "type": "internal",
           "text": "🔐 Login Médico",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/medico-cadastro.html",
+          "url": "backup_hubs_otimizados/medico-cadastro.html",
           "type": "internal",
           "text": "📝 Cadastro Médico",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/videoconsulta.html",
+          "url": "backup_hubs_otimizados/videoconsulta.html",
           "type": "internal",
           "text": "📹 Videoconsulta",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/consulta-por-valor.html",
+          "url": "backup_hubs_otimizados/consulta-por-valor.html",
           "type": "internal",
           "text": "💰 Consulta por Valor",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/consultas-agendadas.html",
+          "url": "backup_hubs_otimizados/consultas-agendadas.html",
           "type": "internal",
           "text": "📋 Consultas Agendadas",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/historico-consultas.html",
+          "url": "backup_hubs_otimizados/historico-consultas.html",
           "type": "internal",
           "text": "📚 Histórico de Consultas",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/aguardando-medico.html",
+          "url": "backup_hubs_otimizados/aguardando-medico.html",
           "type": "internal",
           "text": "⏳ Aguardando Médico",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/fila-pacientes-medico.html",
+          "url": "backup_hubs_otimizados/fila-pacientes-medico.html",
           "type": "internal",
           "text": "👥 Fila de Pacientes",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/dr-ai.html",
+          "url": "backup_hubs_otimizados/dr-ai.html",
           "type": "internal",
           "text": "🤖 Dr. AI",
           "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/telemonitoramento-enfermagem.html",
+          "url": "backup_hubs_otimizados/telemonitoramento-enfermagem.html",
           "type": "internal",
           "text": "📊 Telemonitoramento",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/triagem-psiquiatrica.html",
+          "url": "backup_hubs_otimizados/triagem-psiquiatrica.html",
           "type": "internal",
           "text": "🧠 Triagem Psiquiátrica",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/prescricoes.html",
+          "url": "backup_hubs_otimizados/prescricoes.html",
           "type": "internal",
           "text": "💊 Prescrições",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/prontuarios.html",
+          "url": "backup_hubs_otimizados/prontuarios.html",
           "type": "internal",
           "text": "📋 Prontuários",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/relatorio-receita.html",
+          "url": "backup_hubs_otimizados/relatorio-receita.html",
           "type": "internal",
           "text": "📄 Relatório Receita",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/anotacoes.html",
+          "url": "backup_hubs_otimizados/anotacoes.html",
           "type": "internal",
           "text": "📝 Anotações",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/avaliacoes.html",
+          "url": "backup_hubs_otimizados/avaliacoes.html",
           "type": "internal",
           "text": "⭐ Avaliações",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/estatisticas-medico.html",
+          "url": "backup_hubs_otimizados/estatisticas-medico.html",
           "type": "internal",
           "text": "📈 Estatísticas",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/notificacoes.html",
+          "url": "backup_hubs_otimizados/notificacoes.html",
           "type": "internal",
           "text": "🔔 Notificações",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/equipe-medica.html",
+          "url": "backup_hubs_otimizados/equipe-medica.html",
           "type": "internal",
           "text": "👥 Equipe Médica",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/guia-medicos.html",
+          "url": "backup_hubs_otimizados/guia-medicos.html",
           "type": "internal",
           "text": "📖 Guia Médicos",
           "valid": true
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/preferencias.html",
+          "url": "backup_hubs_otimizados/preferencias.html",
           "type": "internal",
           "text": "⚙️ Preferências",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/como-funciona.html",
+          "url": "backup_hubs_otimizados/como-funciona.html",
           "type": "internal",
           "text": "❓ Como Funciona",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/faq.html",
+          "url": "backup_hubs_otimizados/faq.html",
           "type": "internal",
           "text": "❓ FAQ",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/suporte.html",
+          "url": "backup_hubs_otimizados/suporte.html",
           "type": "internal",
           "text": "🆘 Suporte",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/contato.html",
+          "url": "backup_hubs_otimizados/contato.html",
           "type": "internal",
           "text": "📞 Contato",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/sobre.html",
+          "url": "backup_hubs_otimizados/sobre.html",
           "type": "internal",
           "text": "ℹ️ Sobre",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/precos.html",
+          "url": "backup_hubs_otimizados/precos.html",
           "type": "internal",
           "text": "💳 Preços",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/politica-privacidade.html",
+          "url": "backup_hubs_otimizados/politica-privacidade.html",
           "type": "internal",
           "text": "🔒 Política de Privacidade",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/termos-de-uso.html",
+          "url": "backup_hubs_otimizados/termos-de-uso.html",
           "type": "internal",
           "text": "📋 Termos de Uso",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/test-bidding-flow.html",
+          "url": "backup_hubs_otimizados/test-bidding-flow.html",
           "type": "internal",
           "text": "🧪 Test Bidding Flow",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/test-bidding.html",
+          "url": "backup_hubs_otimizados/test-bidding.html",
           "type": "internal",
           "text": "🧪 Test Bidding",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/test-bid-integration.html",
+          "url": "backup_hubs_otimizados/test-bid-integration.html",
           "type": "internal",
           "text": "🧪 Test Bid Integration",
-          "valid": true
+          "valid": false
         },
         {
-          "url": "backup-merge-definitivo-20250816_130043/test-redirect.html",
+          "url": "backup_hubs_otimizados/test-redirect.html",
           "type": "internal",
           "text": "🧪 Test Redirect",
-          "valid": true
+          "valid": false
         }
       ],
       "internal_count": 41,
       "external_count": 0,
-      "valid_links": 36,
-      "broken_links": 5
+      "valid_links": 2,
+      "broken_links": 39
     },
     "classificador-sem-js.html": {
       "path": "./backup-merge-definitivo-20250816_130043/classificador-sem-js.html",
@@ -3150,11 +3150,11 @@
       "broken_links": 0
     },
     "dashboard-teste.html": {
-      "path": "./backup_links_corrigidos/dashboard-teste.html",
-      "directory": "./backup_links_corrigidos",
+      "path": "./backup_hubs_conectados/dashboard-teste.html",
+      "directory": "./backup_hubs_conectados",
       "links": [
         {
-          "url": "/public/demo-ativo/pacientes.html",
+          "url": "backup_hubs_conectados/pacientes.html",
           "type": "internal",
           "text": "Pacientes",
           "valid": false
@@ -3184,13 +3184,13 @@
           "valid": false
         },
         {
-          "url": "/public/demo-ativo/pacientes.html",
+          "url": "backup_hubs_conectados/pacientes.html",
           "type": "internal",
           "text": "Gestão de PacientesCadastro completoHistórico médi",
           "valid": false
         },
         {
-          "url": "/public/demo-ativo/perfil-medico.html",
+          "url": "backup_hubs_conectados/public/demo-ativo/perfil-medico.html",
           "type": "internal",
           "text": "Perfil do MédicoDados profissionaisCertificaçõesHo",
           "valid": false
@@ -3202,7 +3202,7 @@
           "valid": false
         },
         {
-          "url": "/public/demo-ativo/mobile.html",
+          "url": "backup_hubs_conectados/public/demo-ativo/mobile.html",
           "type": "internal",
           "text": "Demo ResponsivoSimulador de dispositivosPerformanc",
           "valid": false
@@ -3281,8 +3281,8 @@
       "broken_links": 0
     },
     "meus-pacientes.html": {
-      "path": "./backup_links_corrigidos/meus-pacientes.html",
-      "directory": "./backup_links_corrigidos",
+      "path": "./backup_hubs_conectados/meus-pacientes.html",
+      "directory": "./backup_hubs_conectados",
       "links": [
         {
           "url": "/agenda",
@@ -3385,8 +3385,8 @@
       "broken_links": 0
     },
     "landing-teste.html": {
-      "path": "./backup_links_corrigidos/landing-teste.html",
-      "directory": "./backup_links_corrigidos",
+      "path": "./backup_hubs_conectados/landing-teste.html",
+      "directory": "./backup_hubs_conectados",
       "links": [
         {
           "url": "/dashboard",
@@ -3601,6 +3601,15 @@
       "external_count": 0,
       "valid_links": 2,
       "broken_links": 3
+    },
+    "relatorio_navegacao_atualizado.html": {
+      "path": "./public/relatorio_navegacao_atualizado.html",
+      "directory": "./public",
+      "links": [],
+      "internal_count": 0,
+      "external_count": 0,
+      "valid_links": 0,
+      "broken_links": 0
     },
     "agenda-do-dia.html": {
       "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/agenda-do-dia.html",
