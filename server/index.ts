@@ -328,8 +328,14 @@ app.get('/demo-webrtc', (req, res) => {
   res.status(404).send('Demo WebRTC page not found');
 });
 
-// Landing Page route
-app.get('/lp', (req,res) => res.sendFile(path.join(__dirname, '../public/landing.html')));
+app.get("/lp", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/landing.html"));
+});
+
+// (se quiser que a home seja a landing por enquanto)
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../public/landing.html"));
+// });
 
 // ====== SPA fallback para rotas React ======
 // Serve o React SPA para rotas não-API/static
