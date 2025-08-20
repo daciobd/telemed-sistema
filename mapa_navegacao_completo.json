@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "total_pages": 438,
-    "total_links": 2067,
-    "valid_links": 1037,
-    "broken_links": 982,
+    "total_pages": 439,
+    "total_links": 2072,
+    "valid_links": 1039,
+    "broken_links": 985,
     "analysis_date": "2025-08-20"
   },
   "pages": {
@@ -3191,160 +3191,6 @@
       "valid_links": 0,
       "broken_links": 0
     },
-    "dashboard-teste.html": {
-      "path": "./backup_area_medica_integration/dashboard-teste.html",
-      "directory": "./backup_area_medica_integration",
-      "links": [
-        {
-          "url": "backup_area_medica_integration/pacientes.html",
-          "type": "internal",
-          "text": "Pacientes",
-          "valid": false
-        },
-        {
-          "url": "/public/demo-ativo/area-medica.html",
-          "type": "internal",
-          "text": "Área Médica",
-          "valid": false
-        },
-        {
-          "url": "/enhanced",
-          "type": "internal",
-          "text": "Consulta IA",
-          "valid": true
-        },
-        {
-          "url": "/patient-management",
-          "type": "internal",
-          "text": "Gestão Avançada",
-          "valid": true
-        },
-        {
-          "url": "/dashboard-clean.html",
-          "type": "internal",
-          "text": "Dashboard Clean",
-          "valid": false
-        },
-        {
-          "url": "/dashboard-minimal.html",
-          "type": "internal",
-          "text": "Dashboard Minim...",
-          "valid": false
-        },
-        {
-          "url": "/dashboard-pastel.html",
-          "type": "internal",
-          "text": "Dashboard Paste...",
-          "valid": false
-        },
-        {
-          "url": "/depressao-phq9.html",
-          "type": "internal",
-          "text": "Depressao Phq9",
-          "valid": false
-        },
-        {
-          "url": "/gad7-ansiedade.html",
-          "type": "internal",
-          "text": "Gad7 Ansiedade",
-          "valid": false
-        },
-        {
-          "url": "/ansiedade-gad7.html",
-          "type": "internal",
-          "text": "Ansiedade Gad7",
-          "valid": false
-        },
-        {
-          "url": "/bipolar-mdq.html",
-          "type": "internal",
-          "text": "Bipolar Mdq",
-          "valid": false
-        },
-        {
-          "url": "/depressao-phq9.html",
-          "type": "internal",
-          "text": "Depressao Phq9",
-          "valid": false
-        },
-        {
-          "url": "/dashboard-aquarela-backup.html",
-          "type": "internal",
-          "text": "Dashboard Aquarela B...",
-          "valid": false
-        },
-        {
-          "url": "/dashboard-aquarela-simple-backup.html",
-          "type": "internal",
-          "text": "Dashboard Aquarela S...",
-          "valid": false
-        },
-        {
-          "url": "/dashboard-clean.html",
-          "type": "internal",
-          "text": "Dashboard Clean",
-          "valid": false
-        },
-        {
-          "url": "/atendimento-medico.html",
-          "type": "internal",
-          "text": "Atendimento Medico",
-          "valid": false
-        },
-        {
-          "url": "/guia-integracao-hostinger.html",
-          "type": "internal",
-          "text": "Guia Integracao Host...",
-          "valid": false
-        },
-        {
-          "url": "/links-verificacao-telemed.html",
-          "type": "internal",
-          "text": "Links Verificacao Te...",
-          "valid": false
-        },
-        {
-          "url": "/logout.html",
-          "type": "internal",
-          "text": "Logout",
-          "valid": false
-        },
-        {
-          "url": "/public/demo-ativo/agenda-do-dia.html",
-          "type": "internal",
-          "text": "Agenda do DiaTimeline interativaAgendamento rápido",
-          "valid": false
-        },
-        {
-          "url": "backup_area_medica_integration/pacientes.html",
-          "type": "internal",
-          "text": "Gestão de PacientesCadastro completoHistórico médi",
-          "valid": false
-        },
-        {
-          "url": "backup_area_medica_integration/public/demo-ativo/perfil-medico.html",
-          "type": "internal",
-          "text": "Perfil do MédicoDados profissionaisCertificaçõesHo",
-          "valid": false
-        },
-        {
-          "url": "/public/demo-ativo/configuracoes.html",
-          "type": "internal",
-          "text": "ConfiguraçõesIntegraçõesBackup e segurançaLogs do ",
-          "valid": false
-        },
-        {
-          "url": "backup_area_medica_integration/public/demo-ativo/mobile.html",
-          "type": "internal",
-          "text": "Demo ResponsivoSimulador de dispositivosPerformanc",
-          "valid": false
-        }
-      ],
-      "internal_count": 24,
-      "external_count": 0,
-      "valid_links": 2,
-      "broken_links": 22
-    },
     "enhanced-consultation.html": {
       "path": "./public/enhanced-consultation.html",
       "directory": "./public",
@@ -3968,6 +3814,200 @@
       "external_count": 1,
       "valid_links": 1,
       "broken_links": 5
+    },
+    "dashboard-teste.html": {
+      "path": "./backup_area_medica_integration/dashboard-teste.html",
+      "directory": "./backup_area_medica_integration",
+      "links": [
+        {
+          "url": "backup_area_medica_integration/pacientes.html",
+          "type": "internal",
+          "text": "Pacientes",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/area-medica.html",
+          "type": "internal",
+          "text": "Área Médica",
+          "valid": false
+        },
+        {
+          "url": "/enhanced",
+          "type": "internal",
+          "text": "Consulta IA",
+          "valid": true
+        },
+        {
+          "url": "/patient-management",
+          "type": "internal",
+          "text": "Gestão Avançada",
+          "valid": true
+        },
+        {
+          "url": "/dashboard-clean.html",
+          "type": "internal",
+          "text": "Dashboard Clean",
+          "valid": false
+        },
+        {
+          "url": "/dashboard-minimal.html",
+          "type": "internal",
+          "text": "Dashboard Minim...",
+          "valid": false
+        },
+        {
+          "url": "/dashboard-pastel.html",
+          "type": "internal",
+          "text": "Dashboard Paste...",
+          "valid": false
+        },
+        {
+          "url": "/depressao-phq9.html",
+          "type": "internal",
+          "text": "Depressao Phq9",
+          "valid": false
+        },
+        {
+          "url": "/gad7-ansiedade.html",
+          "type": "internal",
+          "text": "Gad7 Ansiedade",
+          "valid": false
+        },
+        {
+          "url": "/ansiedade-gad7.html",
+          "type": "internal",
+          "text": "Ansiedade Gad7",
+          "valid": false
+        },
+        {
+          "url": "/bipolar-mdq.html",
+          "type": "internal",
+          "text": "Bipolar Mdq",
+          "valid": false
+        },
+        {
+          "url": "/depressao-phq9.html",
+          "type": "internal",
+          "text": "Depressao Phq9",
+          "valid": false
+        },
+        {
+          "url": "/dashboard-aquarela-backup.html",
+          "type": "internal",
+          "text": "Dashboard Aquarela B...",
+          "valid": false
+        },
+        {
+          "url": "/dashboard-aquarela-simple-backup.html",
+          "type": "internal",
+          "text": "Dashboard Aquarela S...",
+          "valid": false
+        },
+        {
+          "url": "/dashboard-clean.html",
+          "type": "internal",
+          "text": "Dashboard Clean",
+          "valid": false
+        },
+        {
+          "url": "/atendimento-medico.html",
+          "type": "internal",
+          "text": "Atendimento Medico",
+          "valid": false
+        },
+        {
+          "url": "/guia-integracao-hostinger.html",
+          "type": "internal",
+          "text": "Guia Integracao Host...",
+          "valid": false
+        },
+        {
+          "url": "/links-verificacao-telemed.html",
+          "type": "internal",
+          "text": "Links Verificacao Te...",
+          "valid": false
+        },
+        {
+          "url": "/logout.html",
+          "type": "internal",
+          "text": "Logout",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/agenda-do-dia.html",
+          "type": "internal",
+          "text": "Agenda do DiaTimeline interativaAgendamento rápido",
+          "valid": false
+        },
+        {
+          "url": "backup_area_medica_integration/pacientes.html",
+          "type": "internal",
+          "text": "Gestão de PacientesCadastro completoHistórico médi",
+          "valid": false
+        },
+        {
+          "url": "backup_area_medica_integration/public/demo-ativo/perfil-medico.html",
+          "type": "internal",
+          "text": "Perfil do MédicoDados profissionaisCertificaçõesHo",
+          "valid": false
+        },
+        {
+          "url": "/public/demo-ativo/configuracoes.html",
+          "type": "internal",
+          "text": "ConfiguraçõesIntegraçõesBackup e segurançaLogs do ",
+          "valid": false
+        },
+        {
+          "url": "backup_area_medica_integration/public/demo-ativo/mobile.html",
+          "type": "internal",
+          "text": "Demo ResponsivoSimulador de dispositivosPerformanc",
+          "valid": false
+        }
+      ],
+      "internal_count": 24,
+      "external_count": 0,
+      "valid_links": 2,
+      "broken_links": 22
+    },
+    "gestao-avancada.html": {
+      "path": "./public/gestao-avancada.html",
+      "directory": "./public",
+      "links": [
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "Dashboard",
+          "valid": true
+        },
+        {
+          "url": "/agenda",
+          "type": "internal",
+          "text": "Agenda",
+          "valid": true
+        },
+        {
+          "url": "/area-medica.html",
+          "type": "internal",
+          "text": "Área Médica",
+          "valid": false
+        },
+        {
+          "url": "/gestao-avancada.html",
+          "type": "internal",
+          "text": "Gestão Avançada",
+          "valid": false
+        },
+        {
+          "url": "/dashboard",
+          "type": "internal",
+          "text": "← Voltar",
+          "valid": true
+        }
+      ],
+      "internal_count": 5,
+      "external_count": 0,
+      "valid_links": 3,
+      "broken_links": 2
     },
     "agenda-do-dia.html": {
       "path": "./backup-merge-definitivo-20250816_130043/demo-ativo/agenda-do-dia.html",
@@ -5076,15 +5116,15 @@
         14
       ],
       [
-        "centro-avaliacao.html",
-        12
-      ],
-      [
-        "agenda-do-dia.html",
-        12
+        "dashboard",
+        13
       ],
       [
         "agenda",
+        13
+      ],
+      [
+        "centro-avaliacao.html",
         12
       ]
     ],

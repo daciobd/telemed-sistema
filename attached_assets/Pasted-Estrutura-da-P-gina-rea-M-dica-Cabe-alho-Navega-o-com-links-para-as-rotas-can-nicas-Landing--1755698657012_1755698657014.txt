@@ -1,0 +1,436 @@
+Estrutura da Página "Área Médica"
+
+Cabeçalho: Navegação com links para as rotas canônicas (Landing, Agenda, Consulta, Dashboard).
+Painel Principal: Lista de pacientes com links para perfis e botões para iniciar atendimentos.
+Ações: Botões para nova consulta e logout.
+Estilo: Consistente com o tema TeleMed Pro e responsivo.
+
+Código da Página
+Aqui está o código completo para area-medica.html:
+html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Área Médica</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        nav {
+            margin: 1rem 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .patient-list {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .patient-list h2 {
+            color: #007bff;
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .patient-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .patient-item a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .patient-item a:hover {
+            text-decoration: underline;
+        }
+        .start-consult-btn {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .start-consult-btn:hover {
+            background-color: #218838;
+        }
+        .new-consult-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+        }
+        .new-consult-btn:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .patient-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            .start-consult-btn {
+                margin-top: 10px;
+            }
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TeleMed - Área Médica</h1>
+        <nav>
+            <a href="/lp">Início</a>
+            <a href="/agenda">Agenda</a>
+            <a href="/consulta">Consulta</a>
+            <a href="/dashboard">Dashboard</a>
+        </nav>
+        <button class="logout-btn" onclick="window.location.href='/login.html'">Sair</button>
+    </header>
+    <div class="container">
+        <div class="patient-list">
+            <h2>Lista de Pacientes</h2>
+            <div class="patient-item">
+                <span>Dhelicane Da Silva Costa (ID: 335602)</span>
+                <div>
+                    <a href="/public/patient-profile.html?id=335602">Ver Perfil</a>
+                    <button class="start-consult-btn" onclick="window.location.href='/consulta?patient=335602'">Iniciar Atendimento</button>
+                </div>
+            </div>
+            <div class="patient-item">
+                <span>João Silva (ID: 335603)</span>
+                <div>
+                    <a href="/public/patient-profile.html?id=335603">Ver Perfil</a>
+                    <button class="start-consult-btn" onclick="window.location.href='/consulta?patient=335603'">Iniciar Atendimento</button>
+                </div>
+            </div>
+            <div class="patient-item">
+                <span>Maria Oliveira (ID: 335604)</span>
+                <div>
+                    <a href="/public/patient-profile.html?id=335604">Ver Perfil</a>
+                    <button class="start-consult-btn" onclick="window.location.href='/consulta?patient=335604'">Iniciar Atendimento</button>
+                </div>
+            </div>
+            <button class="new-consult-btn" onclick="window.location.href='/consulta?new=true'">Nova Consulta</button>
+        </div>
+    </div>
+</body>
+</html>
+Detalhes da Implementação
+
+Navegação:
+
+O <nav> inclui links para as rotas canônicas (/lp, /agenda, /consulta, /dashboard), alinhado com o mapa de 1,602+ links.
+O botão "Sair" redireciona para uma página de login fictícia (/login.html).
+
+
+Lista de Pacientes:
+
+Exibe 3 pacientes fictícios com IDs, links para perfis (patient-profile.html?id=XXX) e botões para iniciar atendimentos (/consulta?patient=XXX).
+O botão "Nova Consulta" permite criar um atendimento sem paciente específico (/consulta?new=true).
+
+
+Estilo:
+
+Usa as cores do tema TeleMed Pro (#007bff para cabeçalho e botões primários, #28a745 para ações, #dc3545 para logout).
+Layout responsivo com grid para telas menores.
+
+
+Integração:
+
+Os links para perfis e consultas assumem que patient-profile.html e enhanced-teste.html (ou similar) já existem no diretório /public/.
+Ajuste os caminhos relativos após o deploy no Render.
+
+
+
+Passos para Implementar no Replit
+
+Crie o Arquivo: No Replit, adicione area-medica.html na pasta /public/.
+Cole o Código: Copie o código acima e salve.
+Teste Localmente: Abra em uma nova aba via Replit e verifique a navegação.
+Conecte ao Mapa: Adicione links para area-medica.html nos hubs (ex.: dashboard-teste.html, agenda-medica.html) com <a href="/area-medica.html">Área Médica</a>.
+
+Próximos Passos
+
+Validação: Confirme que os links para perfis e consultas funcionam (ajuste os arquivos de destino se necessário).
+Funcionalidade: Adicione lógica JavaScript para carregar pacientes dinamicamente (ex.: via JSON local).
+Documentação: Atualize o replit.md:
+markdown- **Nova Página**: `area-medica.html` criada para médicos iniciaram atendimentos e acessarem pacientes.
+
+
+Se precisar de ajustes (ex.: mais pacientes, integração com o tema TeleMed Pro), me avise!5,7sVamos criar uma página chamada gestão avançada que será a página onde os administradores terão acesso e dará informações gerais sobre número de pacientes atendidos o tempo para atendimento dos pacientes o nível de satisfação dos clientes o nível de satisfação dos médicos as informações relevantes que os médicos tenham assinalado durante atendimentos que importam para análise da gestão e apresentação de números financeiros para avaliação. ELA SERÁ ACESSADA DO DASHBOARDPensou por 24shtml<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMedConsulta - Gestão Avançada</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            margin: 1rem 0;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            color: #007bff;
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .metric-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .metric-card h3 {
+            color: #28a745;
+            margin: 0 0 10px;
+        }
+        .metric-card p {
+            color: #666;
+            margin: 0;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .table th, .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .back-btn {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+        }
+        .back-btn:hover {
+            background-color: #218838;
+        }
+        @media (max-width: 768px) {
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TeleMedConsulta - Gestão Avançada</h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/agenda">Agenda</a>
+            <a href="/pacientes">Pacientes</a>
+            <a href="/consulta">Consulta</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="section">
+            <h2>Métricas Gerais</h2>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <h3>847</h3>
+                    <p>Pacientes Atendidos</p>
+                </div>
+                <div class="metric-card">
+                    <h3>12 min</h3>
+                    <p>Tempo Médio de Atendimento</p>
+                </div>
+                <div class="metric-card">
+                    <h3>4.7/5</h3>
+                    <p>Nível de Satisfação dos Clientes</p>
+                </div>
+                <div class="metric-card">
+                    <h3>4.5/5</h3>
+                    <p>Nível de Satisfação dos Médicos</p>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Análise de Atendimentos</h2>
+            <p>Informações relevantes assinaladas pelos médicos durante atendimentos:</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Paciente</th>
+                        <th>Informação Relevante</th>
+                        <th>Impacto na Gestão</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>15/08/2025</td>
+                        <td>João Silva</td>
+                        <td>Aumento de consultas por estresse</td>
+                        <td>Necessidade de mais especialistas em saúde mental</td>
+                    </tr>
+                    <tr>
+                        <td>10/08/2025</td>
+                        <td>Maria Oliveira</td>
+                        <td>Demanda alta por exames laboratoriais</td>
+                        <td>Parceria com laboratórios para agilizar resultados</td>
+                    </tr>
+                    <tr>
+                        <td>05/08/2025</td>
+                        <td>Carlos Mendes</td>
+                        <td>Feedback positivo sobre interface</td>
+                        <td>Manter atualizações regulares na plataforma</td>
+                    </tr>
+                    <!-- Adicione mais linhas conforme necessário -->
+                </tbody>
+            </table>
+        </div>
+        <div class="section">
+            <h2>Números Financeiros</h2>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <h3>R$ 150.000</h3>
+                    <p>Receita Total</p>
+                </div>
+                <div class="metric-card">
+                    <h3>R$ 50.000</h3>
+                    <p>Custos Operacionais</p>
+                </div>
+                <div class="metric-card">
+                    <h3>R$ 100.000</h3>
+                    <p>Lucro Líquido</p>
+                </div>
+                <div class="metric-card">
+                    <h3>25%</h3>
+                    <p>Margem de Lucro</p>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Valor (R$)</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Consultas Online</td>
+                        <td>120.000</td>
+                        <td>Receita de atendimentos virtuais</td>
+                    </tr>
+                    <tr>
+                        <td>Parcerias</td>
+                        <td>30.000</td>
+                        <td>Receita de integrações com laboratórios</td>
+                    </tr>
+                    <tr>
+                        <td>Manutenção</td>
+                        <td>20.000</td>
+                        <td>Custos com servidores e atualizações</td>
+                    </tr>
+                    <!-- Adicione mais linhas conforme necessário -->
+                </tbody>
+            </table>
+        </div>
+        <button class="back-btn" onclick="window.location.href='/dashboard'">Voltar ao Dashboard</button>
+    </div>
+</body>
+</html>
+Para integrar ao Dashboard, adicione este link em dashboard-teste.html (ou similar):
+html<a href="/gestao-avancada.html">Gestão Avançada</a>
+Essa página usa dados mock; para real, integre com um backend após deploy no Render. Se precisar de ajustes, me avise!
