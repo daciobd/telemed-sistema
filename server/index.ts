@@ -337,6 +337,30 @@ app.get("/lp", (req, res) => {
 //   res.sendFile(path.join(__dirname, "../public/landing.html"));
 // });
 
+// PREVIEW ESTÁTICO (coloque ANTES do fallback de SPA!)
+const previewDir = path.join(__dirname, "../public/preview");
+
+// lista /preview
+app.get("/preview", (req, res) => {
+  const files = fs.existsSync(previewDir)
+    ? fs.readdirSync(previewDir).filter(f => f.endsWith(".html"))
+    : [];
+  const list = files.map(f => `<li><a href="/preview/${f}">${f}</a></li>`).join("");
+  res.type("html").send(`
+    <h1>Protótipos</h1>
+    <ul>${list || "<li>(vazio)</li>"}</ul>
+    <p>Coloque seus .html em <code>public/preview/</code></p>
+  `);
+});
+
+// servir os arquivos
+app.use("/preview", (req, res, next) => {
+  const file = req.path.replace(/^\//, "");
+  const target = path.join(previewDir, file || "index.html");
+  if (fs.existsSync(target)) return res.sendFile(target);
+  next();
+});
+
 // ====== SPA fallback para rotas React ======
 // Serve o React SPA para rotas não-API/static
 app.use(express.static(distDir)); // serve build se houver
