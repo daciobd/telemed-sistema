@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Agenda Médica • TeleMed Pro</title>
-<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Médica • TeleMed Pro</title>
+    <link rel="icon" type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
         :root {
             --primary: #1e40af;
             --primary-light: #3b82f6;
@@ -463,80 +463,84 @@
     </style>
 </head>
 <body>
-<div style="margin: 15px 0; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid #10b981;"><strong style="color: #10b981; display: block; margin-bottom: 5px;">🏥 Acesso Rápido</strong><a href="/area-medica.html" style="color: #10b981; text-decoration: none; font-weight: 600;">Área Médica - Gestão de Pacientes</a></div><header class="header">
-<div class="header-content">
-<h1>📅 Agenda Médica Avançada</h1>
-<div class="header-actions">
-<a class="btn" href="/enhanced">🎥 Consulta Avançada</a>
-<a class="btn" href="/dashboard">📊 Dashboard</a>
-<button class="btn primary" id="newAppointmentBtn">➕ Nova Consulta</button>
-</div>
-</div>
-</header>
-<div class="container">
-<!-- Calendário -->
-<div class="calendar-section">
-<div class="calendar-header">
-<button class="calendar-nav" id="prevMonth">‹</button>
-<h2 class="calendar-title" id="currentMonth">Agosto 2025</h2>
-<button class="calendar-nav" id="nextMonth">›</button>
-</div>
-<table class="calendar-grid">
-<thead>
-<tr>
-<th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th>
-</tr>
-</thead>
-<tbody id="calendarBody"></tbody>
-</table>
-</div>
-<!-- Horários do Dia -->
-<div class="schedule-section">
-<div class="schedule-header">
-<h2 class="schedule-title" id="scheduleDate">Horários para hoje • 18/08/2025</h2>
-<div class="notifications-toggle">
-<span>Notificações</span>
-<label class="switch">
-<input id="notificationsToggle" type="checkbox"/>
-<span class="slider"></span>
-</label>
-</div>
-</div>
-<div class="appointments-list" id="appointmentsList">
-<!-- Consultas serão inseridas dinamicamente -->
-</div>
-</div>
-</div>
-<!-- Modal de Notificações -->
-<div class="modal" id="notificationsModal">
-<div class="modal-content">
-<div class="modal-header">
-<h2>Configurar Notificações</h2>
-<button class="modal-close" id="modalClose">×</button>
-</div>
-<div class="notification-options">
-<label class="notification-option">
-<input checked="" name="notificationMethod" type="checkbox" value="email"/>
-<span>📧 Email (recomendado)</span>
-</label>
-<label class="notification-option">
-<input name="notificationMethod" type="checkbox" value="push"/>
-<span>🔔 Push Notifications</span>
-</label>
-<label class="notification-option">
-<input name="notificationMethod" type="checkbox" value="sms"/>
-<span>📱 SMS (Premium)</span>
-</label>
-<label class="notification-option">
-<input name="notificationMethod" type="checkbox" value="whatsapp"/>
-<span>💬 WhatsApp Business</span>
-</label>
-</div>
-<div style="margin-top: 1.5rem; text-align: right;">
-<button class="btn primary" id="saveNotifications">Salvar Configurações</button>
-</div>
-</div>
-</div>
-<script src="/js/agenda-medica.js"></script>
+    <header class="header">
+        <div class="header-content">
+            <h1>📅 Agenda Médica Avançada</h1>
+            <div class="header-actions">
+                <a href="/enhanced" class="btn">🎥 Consulta Avançada</a>
+                <a href="/dashboard" class="btn">📊 Dashboard</a>
+                <button class="btn primary" id="newAppointmentBtn">➕ Nova Consulta</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Calendário -->
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <button class="calendar-nav" id="prevMonth">‹</button>
+                <h2 class="calendar-title" id="currentMonth">Agosto 2025</h2>
+                <button class="calendar-nav" id="nextMonth">›</button>
+            </div>
+            <table class="calendar-grid">
+                <thead>
+                    <tr>
+                        <th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Horários do Dia -->
+        <div class="schedule-section">
+            <div class="schedule-header">
+                <h2 class="schedule-title" id="scheduleDate">Horários para hoje • 18/08/2025</h2>
+                <div class="notifications-toggle">
+                    <span>Notificações</span>
+                    <label class="switch">
+                        <input type="checkbox" id="notificationsToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="appointments-list" id="appointmentsList">
+                <!-- Consultas serão inseridas dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Notificações -->
+    <div id="notificationsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurar Notificações</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="notification-options">
+                <label class="notification-option">
+                    <input type="checkbox" name="notificationMethod" value="email" checked>
+                    <span>📧 Email (recomendado)</span>
+                </label>
+                <label class="notification-option">
+                    <input type="checkbox" name="notificationMethod" value="push">
+                    <span>🔔 Push Notifications</span>
+                </label>
+                <label class="notification-option">
+                    <input type="checkbox" name="notificationMethod" value="sms">
+                    <span>📱 SMS (Premium)</span>
+                </label>
+                <label class="notification-option">
+                    <input type="checkbox" name="notificationMethod" value="whatsapp">
+                    <span>💬 WhatsApp Business</span>
+                </label>
+            </div>
+            <div style="margin-top: 1.5rem; text-align: right;">
+                <button class="btn primary" id="saveNotifications">Salvar Configurações</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/agenda-medica.js"></script>
 </body>
 </html>
