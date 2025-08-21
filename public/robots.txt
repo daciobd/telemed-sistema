@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /demo-ativo/
+Disallow: /preview/
+Disallow: /attached_assets/
+Disallow: /backup*/
+Disallow: /*backup*/
+
+Sitemap: https://app.telemed.pro/sitemap.xml
+
+# TeleMed Pro - Telemedicina Profissional
+# Crawl-delay: 1
