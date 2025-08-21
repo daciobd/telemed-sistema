@@ -49,6 +49,8 @@ app.get('/health-check', (req, res) => {
 });
 app.get('/pacientes.html', (req, res) => {
   res.sendFile(__dirname + '/public/pacientes.html');
+});app.get('/landing-teste', (req, res) => {
+  res.sendFile(__dirname + '/landing-teste.html');
 });
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {

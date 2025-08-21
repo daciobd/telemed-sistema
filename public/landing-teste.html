@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TeleMed Pro • Telemedicina Inteligente</title>
-<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TeleMed Pro • Telemedicina Inteligente</title>
+    <link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <style>
         :root {
             --primary: #1e40af;
             --primary-light: #3b82f6;
@@ -40,15 +39,15 @@
         /* Header Premium */
         header {
             background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
             padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .header-content {
+        .nav-container {
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
@@ -57,786 +56,392 @@
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--gradient-hero);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: white;
-            font-size: 20px;
-            box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            background: var(--gradient-hero);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
+            text-decoration: none;
         }
 
-        nav {
+        .nav-links {
             display: flex;
-            gap: 2rem;
-            align-items: center;
+            gap: 1.5rem;
+            list-style: none;
         }
 
-        nav a {
-            color: var(--text-muted);
+        .nav-links a {
+            color: var(--text);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: color 0.3s ease;
         }
 
-        nav a:hover, nav a.active {
-            color: var(--secondary);
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--secondary);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .login-btn {
-            background: var(--surface);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .nav-links a:hover {
+            color: var(--primary-light);
         }
 
         .cta-header-btn {
             background: var(--gradient-hero);
             color: white;
-            border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 12px;
+            border: none;
+            border-radius: 9999px;
             font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .cta-header-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(30, 64, 175, 0.4);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
         }
 
-        /* Hero Section Premium */
-        .hero {
-            text-align: center;
-            padding: 8rem 2rem 6rem;
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 2rem;
             background: var(--gradient-hero);
             position: relative;
             overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-            opacity: 0.1;
         }
 
         .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+            max-width: 700px;
+            z-index: 10;
         }
 
-        .hero h2 {
-            font-size: 4rem;
+        .hero-title {
+            font-size: 3rem;
             font-weight: 800;
-            color: white;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            line-height: 1.1;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--text);
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 3rem;
-            font-weight: 400;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
         }
 
         .cta-button {
-            background: white;
-            color: var(--primary);
-            padding: 1.25rem 2.5rem;
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            border-radius: 9999px;
             font-weight: 600;
             cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
         }
 
-        .cta-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
+        .hero-image {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 60%;
+            height: auto;
+            opacity: 0.8;
         }
 
-        .cta-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
-
-        /* Como Funciona Section */
+        /* Como Funciona */
         .how-it-works {
-            padding: 8rem 2rem;
-            background: var(--bg);
-        }
-
-        .section-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
+            padding: 4rem 2rem;
+            background: var(--surface);
         }
 
         .section-title {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
             color: var(--text);
-            margin-bottom: 1rem;
         }
 
-        .section-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .steps-container {
+        .step-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
         }
 
         .step-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem 2rem;
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 1rem;
             text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-hero);
+            transition: transform 0.3s ease;
         }
 
         .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px);
         }
 
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-hero);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+        .step-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
 
         .step-title {
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            color: var(--text-muted);
+        }
+
+        /* Serviços */
+        .services {
+            padding: 4rem 2rem;
+            background: var(--bg);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--accent);
             margin-bottom: 1rem;
         }
 
-        .step-description {
-            color: var(--text-muted);
-            line-height: 1.7;
-        }
-
-        /* Pricing Section */
+        /* Planos */
         .pricing {
-            padding: 8rem 2rem;
+            padding: 4rem 2rem;
             background: var(--surface);
         }
 
-        .pricing-cards {
+        .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin-top: 4rem;
         }
 
         .pricing-card {
             background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 3rem 2rem;
+            padding: 2rem;
+            border-radius: 1rem;
             text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
+            transition: transform 0.3s ease;
         }
 
-        .pricing-card.featured {
-            border: 2px solid var(--secondary);
-            transform: scale(1.05);
+        .pricing-card:hover {
+            transform: translateY(-10px);
         }
 
-        .pricing-card.featured::before {
-            content: 'MAIS POPULAR';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--secondary);
-            color: white;
-            padding: 0.5rem 2rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--secondary);
-            margin: 1rem 0;
-        }
-
-        .price-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 8rem 2rem;
-            background: var(--bg);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--gradient-hero);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* CTA Section */
-        .final-cta {
-            padding: 8rem 2rem;
-            background: var(--gradient-hero);
-            text-align: center;
-            position: relative;
-        }
-
-        /* CTA Row Styles */
-        .cta-row {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: white;
-            color: var(--primary);
-            border: 2px solid white;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
-
-        .link-accent {
-            color: rgba(255, 255, 255, 0.9);
-            text-decoration: underline;
-            font-weight: 500;
-        }
-
-        .link-accent:hover {
-            color: white;
-            text-decoration: none;
-        }
-
-        .final-cta::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M20 20c0 11.046-8.954 20-20 20v20h40V20H20z'/%3E%3C/g%3E%3C/svg%3E") repeat;
-        }
-
-        .final-cta-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .final-cta h3 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 4rem 2rem 2rem;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
-            color: var(--text);
+        .price-title {
+            font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
-        .footer-section a {
+        .price-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .price-features {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .price-cta {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .price-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.4);
+        }
+
+        /* Rodapé */
+        footer {
+            background: var(--bg);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-links a {
             color: var(--text-muted);
             text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
+            margin: 0 1rem;
             transition: color 0.3s ease;
         }
 
-        .footer-section a:hover {
-            color: var(--secondary);
+        .footer-links a:hover {
+            color: var(--primary-light);
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-
-        /* Responsive */
+        /* Responsividade */
         @media (max-width: 768px) {
-            .hero h2 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .cta-row {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .section-title {
-                font-size: 2.5rem;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            nav {
-                gap: 1rem;
-            }
-            
-            .steps-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .final-cta h3 {
-                font-size: 2.5rem;
-            }
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .nav-links { display: none; }
+            .hero-image { display: none; }
+            .step-grid, .feature-grid, .pricing-grid { grid-template-columns: 1fr; }
         }
 
-        .special-offer {
-            background: linear-gradient(135deg, var(--accent) 0%, #fbbf24 100%);
-            color: var(--bg);
-            padding: 3rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .special-offer::before {
-            content: '⚡';
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
-            font-size: 3rem;
-            opacity: 0.3;
+        /* Animações */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
-<style>
-    .paginas-orfas-menu {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 20px 0;
-        font-size: 0.9rem;
-    }
-    .paginas-orfas-menu h3 {
-        margin: 0 0 10px 0;
-        color: #374151;
-        font-size: 1rem;
-    }
-    .categoria-orfas {
-        margin-bottom: 10px;
-    }
-    .categoria-orfas strong {
-        color: #1f2937;
-        display: block;
-        margin-bottom: 5px;
-    }
-    .categoria-orfas a {
-        display: inline-block;
-        margin: 2px 5px 2px 0;
-        padding: 4px 8px;
-        background: #e5e7eb;
-        color: #374151;
-        text-decoration: none;
-        border-radius: 4px;
-        font-size: 0.8rem;
-    }
-    .categoria-orfas a:hover {
-        background: #d1d5db;
-    }
-    </style></head>
+</head>
 <body>
-<div style="margin: 15px 0; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid #10b981;"><strong style="color: #10b981; display: block; margin-bottom: 5px;">🏥 Acesso Rápido</strong><a href="/area-medica.html" style="color: #10b981; text-decoration: none; font-weight: 600;">Área Médica - Gestão de Pacientes</a></div><header>
-<div class="header-content">
-<div class="logo">
-<div class="logo-icon">TM</div>
-<h1>TeleMed Pro</h1>
-</div>
-<nav>
-<a href="#inicio">Início</a>
-<a href="#servicos">Nossos Serviços</a>
-<a href="#beneficios">Benefícios</a>
-<a href="#medicos">Para Médicos</a>
-<a href="#testagens">Testagens</a>
-<a href="#quem-somos">Quem Somos</a>
-<a href="#contato">Contato</a>
-<a class="login-btn" href="/dashboard">Login / Dashboard</a>
-<a class="cta-header-btn" href="/consulta">Agendar Consulta</a>
-</nav><div style="margin: 15px 0; padding: 10px; background: #f9fafb; border-radius: 8px; border-left: 3px solid #10b981;"><strong style="color: #374151; display: block; margin-bottom: 8px; font-size: 0.9rem;">📄 Mais Páginas</strong><div style="display: flex; flex-wrap: wrap; gap: 8px;"><a href="/guia-integracao-hostinger.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Guia Integracao...</a><a href="/links-verificacao-telemed.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Links Verificac...</a><a href="/logout.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Logout</a><a href="/mdq-bipolar.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Mdq Bipolar</a><a href="/memed-receita-viewer.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Memed Receita V...</a></div></div><div class="paginas-orfas-menu"><h3>📋 Páginas Adicionais</h3><div class="categoria-orfas"><strong>🧠 Avaliações Psiquiátricas</strong><a href="/ansiedade-gad7.html">Ansiedade Gad7</a><a href="/bipolar-mdq.html">Bipolar Mdq</a><a href="/depressao-phq9.html">Depressao Phq9</a><span style="color: #6b7280; font-style: italic;"> (+6 mais)</span></div><div class="categoria-orfas"><strong>📊 Dashboards Alternativos</strong><a href="/dashboard-aquarela-backup.html">Dashboard Aquarela B...</a><a href="/dashboard-aquarela-simple-backup.html">Dashboard Aquarela S...</a><a href="/dashboard-clean.html">Dashboard Clean</a><span style="color: #6b7280; font-style: italic;"> (+2 mais)</span></div><div class="categoria-orfas"><strong>🩺 Consultas Especializadas</strong><a href="/atendimento-medico.html">Atendimento Medico</a></div><div class="categoria-orfas"><strong>📄 Outras Páginas</strong><a href="/guia-integracao-hostinger.html">Guia Integracao Host...</a><a href="/links-verificacao-telemed.html">Links Verificacao Te...</a><a href="/logout.html">Logout</a><span style="color: #6b7280; font-style: italic;"> (+2 mais)</span></div></div>
-</div>
-</header>
-<section class="hero" id="inicio">
-<div class="hero-content">
-<h2>Como funciona?</h2>
-<p class="hero-subtitle">Em apenas 4 passos você agenda sua consulta e inicia seu cuidado.</p>
-<div class="cta-row">
-<a class="btn btn-primary" data-app="" href="/agenda">⚡ Triagem Grátis</a>
-<a class="btn btn-outline" data-app="" href="/consulta">📅 Agendar Consulta</a>
-<a class="link-accent" data-app="" href="/dashboard">Login / Dashboard</a>
-</div>
-</div>
-</section>
-<section class="special-offer">
-<div class="section-container">
-<h3>Experimente Grátis por 7 Dias!</h3>
-<p>Registre-se agora e descubra como nossa plataforma pode transformar seu atendimento médico.</p>
-<div class="cta-row" style="margin-top: 1rem;">
-<a class="btn btn-primary" data-app="" href="/agenda">⚡ Triagem Grátis</a>
-</div>
-</div>
-</section>
-<section class="how-it-works" id="como-funciona">
-<div class="section-container">
-<div class="section-header">
-<h3 class="section-title">Como funciona?</h3>
-<p class="section-subtitle">Em apenas 4 passos você agenda sua consulta e inicia seu cuidado.</p>
-</div>
-<div class="steps-container">
-<div class="step-card">
-<div class="step-number">1</div>
-<h4 class="step-title">Passo 1: Descreva</h4>
-<p class="step-description">Conte o que você sente. Nossa IA, o Dr. AI, analisa seus sintomas e sugere a especialidade certa para você. É gratuito!</p>
-</div>
-<div class="step-card">
-<div class="step-number">2</div>
-<h4 class="step-title">Passo 2: Defina o valor</h4>
-<p class="step-description">Você decide quanto pode pagar pela consulta. Temos opções a partir de R$150 para consultas médicas e R$ 60,00 para nutrição e psicoterapia</p>
-</div>
-<div class="step-card">
-<div class="step-number">3</div>
-<h4 class="step-title">Passo 3: Agende</h4>
-<p class="step-description">Escolha a melhor data e horário ou entre na fila para um atendimento de urgência. Tudo de forma clara e sem surpresas.</p>
-</div>
-<div class="step-card">
-<div class="step-number">4</div>
-<h4 class="step-title">Passo 4: Consulte</h4>
-<p class="step-description">Realize sua consulta por vídeo com um profissional qualificado. Receba seu diagnóstico e plano de tratamento na hora.</p>
-</div>
-</div>
-</div>
-</section>
-<section class="features" id="servicos">
-<div class="section-container">
-<div class="section-header">
-<h3 class="section-title">Nossos Serviços</h3>
-<p class="section-subtitle">Plataforma completa de telemedicina com tecnologia de ponta</p>
-</div>
-<div class="features-grid">
-<div class="feature-card">
-<div class="feature-icon">🧠</div>
-<h4 class="step-title">Dr. AI - Inteligência Artificial</h4>
-<p class="step-description">Triagem inteligente com IA para direcionamento médico preciso e análise de sintomas em tempo real.</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">📹</div>
-<h4 class="step-title">Consultas por Vídeo</h4>
-<p class="step-description">Videochamadas HD com médicos especialistas, prontuário digital e prescrições eletrônicas.</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">🏥</div>
-<h4 class="step-title">Gestão de Pacientes</h4>
-<p class="step-description">Sistema completo de prontuários eletrônicos, histórico médico e acompanhamento contínuo.</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">💊</div>
-<h4 class="step-title">Prescrições Digitais</h4>
-<p class="step-description">Receitas eletrônicas válidas, integração com farmácias e controle de medicamentos.</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">📊</div>
-<h4 class="step-title">Dashboard Médico</h4>
-<p class="step-description">Painel completo com métricas, agenda, histórico de consultas e relatórios detalhados.</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">🔒</div>
-<h4 class="step-title">Segurança LGPD</h4>
-<p class="step-description">Proteção total de dados, criptografia de ponta e conformidade com regulamentações médicas.</p>
-</div>
-</div>
-</div>
-</section>
-<section class="pricing" id="beneficios">
-<div class="section-container">
-<div class="section-header">
-<h3 class="section-title">Planos e Preços</h3>
-<p class="section-subtitle">Escolha o plano ideal para suas necessidades</p>
-</div>
-<div class="pricing-cards">
-<div class="pricing-card">
-<h4 class="step-title">Consulta Básica</h4>
-<div class="price">R$ 150</div>
-<p class="price-subtitle">Consulta médica geral</p>
-<ul style="text-align: left; color: var(--text-muted);">
-<li>✓ Consulta por vídeo</li>
-<li>✓ Receita digital</li>
-<li>✓ Prontuário eletrônico</li>
-<li>✓ Suporte básico</li>
-</ul>
-</div>
-<div class="pricing-card featured">
-<h4 class="step-title">Especialidades</h4>
-<div class="price">R$ 200</div>
-<p class="price-subtitle">Consulta com especialista</p>
-<ul style="text-align: left; color: var(--text-muted);">
-<li>✓ Todas as funcionalidades básicas</li>
-<li>✓ Médicos especialistas</li>
-<li>✓ Exames complementares</li>
-<li>✓ Acompanhamento contínuo</li>
-</ul>
-</div>
-<div class="pricing-card">
-<h4 class="step-title">Bem-estar</h4>
-<div class="price">R$ 60</div>
-<p class="price-subtitle">Nutrição e Psicoterapia</p>
-<ul style="text-align: left; color: var(--text-muted);">
-<li>✓ Consultas de nutrição</li>
-<li>✓ Psicoterapia online</li>
-<li>✓ Planos personalizados</li>
-<li>✓ Acompanhamento mensal</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section class="final-cta" id="agendar">
-<div class="final-cta-content">
-<h3>Transforme Seu Cuidado com a Saúde Hoje!</h3>
-<p style="font-size: 1.3rem; margin-bottom: 3rem; color: rgba(255,255,255,0.9);">
-                Junte-se a milhares de pacientes que confiam na TeleMed Pro para consultas médicas de qualidade.
-            </p>
-<div class="cta-row">
-<a class="btn btn-primary" data-app="" href="/dashboard">Login / Dashboard</a>
-<a class="btn btn-outline" data-app="" href="/consulta">📅 Agendar Consulta</a>
-<a class="link-accent" data-app="" href="/agenda">⚡ Triagem Grátis</a>
-</div>
-</div>
-</section>
-<footer id="contato">
-<div class="footer-content">
-<div class="footer-section">
-<h4>TeleMed Pro</h4>
-<p style="color: var(--text-muted);">Plataforma inteligente de telemedicina com IA para cuidados de saúde acessíveis e eficientes.</p>
-</div>
-<div class="footer-section">
-<h4>Serviços</h4>
-<a href="#servicos">Consultas Online</a>
-<a href="#servicos">Dr. AI</a>
-<a href="#servicos">Prontuário Digital</a>
-<a href="#servicos">Prescrições</a>
-</div>
-<div class="footer-section">
-<h4>Para Médicos</h4>
-<a href="/agenda">Dashboard Médico</a>
-<a href="/consulta">Sistema de Consultas</a>
-<a href="/pacientes">Gestão de Pacientes</a>
-<a href="/registro-saude">Registros de Saúde</a>
-</div>
-<div class="footer-section">
-<h4>Contato</h4>
-<p style="color: var(--text-muted);">📧 contato@telemedpro.com.br</p>
-<p style="color: var(--text-muted);">📱 (11) 99999-9999</p>
-<p style="color: var(--text-muted);">🏥 São Paulo, SP</p>
-</div>
-</div>
-<div class="footer-bottom">
-<p>© 2025 TeleMed Pro. Todos os direitos reservados. | Certificado ANS | LGPD Compliant</p>
-</div>
-</footer>
-<script>
-        console.log('🏠 TeleMed Pro Landing Page carregada com sucesso!');
-        
-        // Smooth scroll para âncoras
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">TeleMed Pro</a>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">Como Funciona</a></li>
+                <li><a href="#services">Serviços</a></li>
+                <li><a href="#pricing">Planos</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+            <button class="cta-header-btn">Comece Agora</button>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Telemedicina Inteligente para o Futuro</h1>
+            <p class="hero-subtitle">Transforme a saúde com consultas online, gestão de pacientes e IA avançada.</p>
+            <button class="cta-button">Experimente Grátis</button>
+        </div>
+        <img alt="TeleMed Interface" class="hero-image" src="https://via.placeholder.com/600x400.png?text=TeleMed+Interface"/>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title">Como Funciona</h2>
+        <div class="step-grid">
+            <div class="step-card">
+                <div class="step-icon">1</div>
+                <h3 class="step-title">Cadastre-se</h3>
+                <p class="step-desc">Crie sua conta em minutos e comece a usar.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">2</div>
+                <h3 class="step-title">Conecte-se</h3>
+                <p class="step-desc">Acesse pacientes e agende consultas online.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">3</div>
+                <h3 class="step-title">Monitore</h3>
+                <p class="step-desc">Use IA para análises e relatórios em tempo real.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <h2 class="section-title">Nossos Serviços</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3 class="step-title">Teleconsultas</h3>
+                <p class="step-desc">Atenda pacientes de qualquer lugar com segurança.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="step-title">Gestão de Pacientes</h3>
+                <p class="step-desc">Organize históricos e dados com facilidade.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="step-title">Inteligência Artificial</h3>
+                <p class="step-desc">Diagnósticos assistidos por IA avançada.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Escolha Seu Plano</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3 class="price-title">Básico</h3>
+                <p class="price-amount">Grátis</p>
+                <ul class="price-features">
+                    <li>10 consultas/mês</li>
+                    <li>Gestão básica</li>
+                </ul>
+                <button class="price-cta">Começar</button>
+            </div>
+            <div class="pricing-card">
+                <h3 class="price-title">Pro</h3>
+                <p class="price-amount">$29/mês</p>
+                <ul class="price-features">
+                    <li>50 consultas/mês</li>
+                    <li>IA avançada</li>
+                    <li>Suporte 24/7</li>
+                </ul>
+                <button class="price-cta">Assinar</button>
+            </div>
+            <div class="pricing-card">
+                <h3 class="price-title">Enterprise</h3>
+                <p class="price-amount">Sob Consulta</p>
+                <ul class="price-features">
+                    <li>Consultas ilimitadas</li>
+                    <li>Personalização total</li>
+                    <li>Equipe dedicada</li>
+                </ul>
+                <button class="price-cta">Contato</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2 class="section-title">Entre em Contato</h2>
+        <p>Estamos aqui para ajudar. Envie-nos uma mensagem!</p>
+        <form>
+            <input placeholder="Seu nome" type="text"/>
+            <input placeholder="Seu e-mail" type="email"/>
+            <textarea placeholder="Sua mensagem"></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Privacidade</a>
+            <a href="#">Termos</a>
+            <a href="#">Suporte</a>
+        </div>
+        <p>&copy; 2025 TeleMed Pro. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();

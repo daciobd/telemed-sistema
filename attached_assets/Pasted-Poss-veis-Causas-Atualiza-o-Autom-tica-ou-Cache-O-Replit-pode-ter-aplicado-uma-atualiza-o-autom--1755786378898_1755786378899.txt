@@ -1,0 +1,46 @@
+Possíveis Causas
+
+Atualização Automática ou Cache: O Replit pode ter aplicado uma atualização automática ou o cache do servidor pode estar servindo uma versão antiga ou corrompida da landing-teste.
+Mudança nos Arquivos: Alguém (ou algo, como um commit acidental) pode ter alterado os arquivos da landing-teste, como index.html, styles.css, ou o script de servidor.
+Configuração do Servidor: Se você usa um arquivo como server.js ou package.json, uma mudança na porta, dependências, ou build pode ter quebrado o deploy.
+Conflito com Dependências: A adição de novas bibliotecas ou a remoção de algo essencial pode ter desestabilizado o ambiente.
+
+Passos para Diagnosticar e Corrigir
+
+Verifique os Arquivos:
+
+Abra a pasta landing-teste no Replit e confira index.html, styles.css, e qualquer arquivo de servidor (ex.: server.js).
+Veja se há alterações recentes ou erros visíveis (ex.: tags HTML mal fechadas).
+
+
+Reinicie o Servidor:
+
+No shell, pare o servidor com Ctrl + C.
+Reinicie com o comando original (ex.: npm start ou node server.js) e observe as mensagens no console. Procure por erros como "port in use" ou "module not found".
+
+
+Teste no Preview:
+
+Acesse o URL do Repl (ex.: https://seu-projeto.seu-usuario.repl.co) e veja o comportamento. Se der "Cannot GET /" ou algo quebrado, anote o erro.
+Faça um hard refresh com Ctrl + Shift + R para limpar o cache do navegador.
+
+
+Reverta para uma Versão Anterior:
+
+No Replit, vá para a aba "Version History" (ícone de relógio à esquerda).
+Procure uma versão anterior quando a landing-teste estava boa e restaure-a. Depois, reinicie o servidor.
+
+
+Cheque os Logs:
+
+Se o Replit estiver integrado a um serviço como Render ou GitHub, veja os logs de deploy (ex.: "Live Tail" no Render) para identificar falhas recentes.
+
+
+Valide o Código:
+
+Se possível, compartilhe o conteúdo atual de index.html ou server.js (cole aqui) para que eu possa verificar se algo foi desconfigurado.
+
+
+
+O que Pode Ter Acontecido
+Pelo que já vimos, o Replit às vezes recarrega o ambiente automaticamente, o que pode sobrescrever configurações. Se a landing-teste dependia de uma estrutura específica (como rotas ou assets), um ajuste manual ou um bug interno pode ter bagunçado tudo. Vamos trabalhar com o que você tem agora.

@@ -1,0 +1,134 @@
+DR.AI-CORRIGIDO.HTML e fiz uma revisão cirúrgica com foco em A11y, performance e integração com as rotas canônicas do seu app.
+
+Diagnóstico rápido
+
+Pontos fortes
+
+Estrutura limpa por seções, CTA claro e “demo” guiada por JS (sem dependências externas).
+
+Gradiente/hero consistente e componentes “card” reutilizáveis.
+
+O que dá para melhorar
+
+Acessibilidade do chat: o container da demo não tem live region/role para leitores de tela; os botões não têm rótulos explícitos.
+
+Preferências do usuário: animações (fade/pulse/typing) não respeitam prefers-reduced-motion.
+
+Performance: Tailwind e Font Awesome via CDN bloqueiam render; dá para pré-carregar/adiar.
+
+SEO/Share: faltam meta description/OG/Twitter e canonical.
+
+Integração: links “Início/Dashboard/Triagem” devem seguir suas rotas canônicas (/agenda, /dashboard, /consulta).
+
+Patch mínimo (copiar e colar)
+1) <head> — metas + carregamento não-bloqueante
+
+Substitua o bloco de links por este (mantém Tailwind/FA, mas menos bloqueante) e acrescente metas:
+
+<!-- metas SEO/Share -->
+<meta name="description" content="Dr. AI: triagem inteligente que analisa sintomas e recomenda a especialidade correta em segundos. Parte do sistema TeleMed.">
+<link rel="canonical" href="https://seu-dominio/ai/dr-ai">
+
+<meta property="og:title" content="Dr. AI — Inteligência Artificial Médica | TeleMed">
+<meta property="og:description" content="Triagem inteligente que analisa sintomas e recomenda a especialidade correta em segundos.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://seu-dominio/ai/dr-ai">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Tailwind (CDN) -->
+<script src="https://cdn.tailwindcss.com" defer></script>
+
+<!-- Font Awesome: preload + apply assíncrono -->
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></noscript>
+
+2) CSS — respeitar prefers-reduced-motion e pequenos ajustes
+
+Adicione ao <style> existente:
+
+/* respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce){
+  * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+/* acessibilidade de foco visível */
+:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }
+
+/* chat com rolagem suave apenas se permitido */
+#demoChat { scroll-behavior: smooth; }
+
+3) Navegação e A11y — rótulos, skip link, live region
+
+Logo após a abertura de <body>, insira um “pular para conteúdo”:
+
+<a href="#demo" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-blue-600 text-white px-3 py-2 rounded">Pular para a demonstração</a>
+
+
+No nav, troque os href e adicione rótulos:
+
+<a href="/agenda" class="text-gray-600 hover:text-blue-600" aria-label="Ir para Agenda">
+  <i class="fas fa-home mr-1" aria-hidden="true"></i>Início
+</a>
+
+
+No container do chat, adicione role e live region:
+
+<div id="demoChat"
+     class="h-96 overflow-y-auto p-6 space-y-4"
+     role="log" aria-live="polite" aria-atomic="false">
+</div>
+
+
+Nos botões principais, deixe os propósitos explícitos:
+
+<button onclick="startDemo()" class="..." aria-label="Iniciar demonstração do Dr. AI">...</button>
+<button onclick="startTriagem()" class="..." aria-label="Iniciar triagem real no sistema">...</button>
+
+4) JS — rotas canônicas + announce para leitores de tela
+
+Troque as funções de navegação pelas rotas do sistema e anuncie novas mensagens:
+
+<script>
+  // rotas canônicas do app
+  const ROUTES = { home: '/agenda', consulta: '/consulta', dash: '/dashboard' };
+
+  function goBack(){ window.location.href = ROUTES.home; }
+  function startTriagem(){
+    if (confirm('Deseja iniciar uma triagem real com o Dr. AI?')) {
+      window.location.href = ROUTES.consulta + '?mode=triage';
+    }
+  }
+
+  // announce para leitores de tela
+  function announce(msg){
+    const live = document.getElementById('demoChat');
+    if(!live) return;
+    const sr = document.createElement('div');
+    sr.className = 'sr-only';
+    sr.textContent = msg;
+    live.appendChild(sr);
+    setTimeout(()=> sr.remove(), 1000);
+  }
+
+  // após addDemoMessage:
+  // ...
+  chatContainer.appendChild(messageDiv);
+  setTimeout(() => { messageDiv.classList.add("active"); }, 100);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  announce(message.message?.replace(/<[^>]*>/g,'') || 'Atualização na demonstração');
+  // ...
+</script>
+
+
+Isso mantém a experiência atual e torna o chat narrável por tecnologias assistivas.
+
+Resultado esperado
+
+Sem CLS perceptível: ícones não bloqueiam o primeiro paint.
+
+A11y: leitor de tela acompanha a demo; foco visível; opção de “pular” direto para o conteúdo.
+
+SEO/Share: título + description + OpenGraph/Twitter.
+
+Integração: CTAs batendo em /consulta, “voltar” indo para /agenda, CTA final para /dashboard.
