@@ -4,11 +4,24 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Dr. AI - Inteligência Artificial Médica | TeleMed</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-            rel="stylesheet"
-        />
+        
+        <!-- metas SEO/Share -->
+        <meta name="description" content="Dr. AI: triagem inteligente que analisa sintomas e recomenda a especialidade correta em segundos. Parte do sistema TeleMed.">
+        <link rel="canonical" href="https://telemedpro.com.br/ai/dr-ai">
+
+        <meta property="og:title" content="Dr. AI — Inteligência Artificial Médica | TeleMed">
+        <meta property="og:description" content="Triagem inteligente que analisa sintomas e recomenda a especialidade correta em segundos.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://telemedpro.com.br/ai/dr-ai">
+        <meta name="twitter:card" content="summary_large_image">
+
+        <!-- Tailwind (CDN) -->
+        <script src="https://cdn.tailwindcss.com" defer></script>
+
+        <!-- Font Awesome: preload + apply assíncrono -->
+        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+        <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></noscript>
         <style>
             .gradient-bg {
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -84,9 +97,55 @@
                     transform: translateY(0);
                 }
             }
+
+            /* respeita quem prefere menos movimento */
+            @media (prefers-reduced-motion: reduce) {
+                * { 
+                    animation-duration: .001ms !important; 
+                    animation-iteration-count: 1 !important; 
+                    transition-duration: .001ms !important; 
+                }
+            }
+
+            /* acessibilidade de foco visível */
+            :focus-visible { 
+                outline: 2px solid #3b82f6; 
+                outline-offset: 2px; 
+            }
+
+            /* chat com rolagem suave apenas se permitido */
+            #demoChat { 
+                scroll-behavior: smooth; 
+            }
+
+            /* classes utilitárias para screen readers */
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+
+            .sr-only:focus {
+                position: static;
+                width: auto;
+                height: auto;
+                padding: inherit;
+                margin: inherit;
+                overflow: visible;
+                clip: auto;
+                white-space: normal;
+            }
         </style>
     </head>
     <body class="bg-gray-50">
+        <!-- Skip Link -->
+        <a href="#demo" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-blue-600 text-white px-3 py-2 rounded">Pular para a demonstração</a>
         <!-- Header -->
         <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,16 +168,18 @@
                     </div>
                     <div class="flex items-center space-x-4">
                         <a
-                            href="index.html"
+                            href="/agenda"
                             class="text-gray-600 hover:text-blue-600 transition-colors"
+                            aria-label="Ir para Agenda"
                         >
-                            <i class="fas fa-home mr-1"></i>Início
+                            <i class="fas fa-home mr-1" aria-hidden="true"></i>Início
                         </a>
                         <button
                             onclick="startDemo()"
                             class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                            aria-label="Iniciar demonstração do Dr. AI"
                         >
-                            <i class="fas fa-play mr-2"></i>Experimentar Agora
+                            <i class="fas fa-play mr-2" aria-hidden="true"></i>Experimentar Agora
                         </button>
                     </div>
                 </div>
@@ -155,8 +216,9 @@
                         <button
                             onclick="startTriagem()"
                             class="bg-yellow-400 text-gray-800 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors flex items-center justify-center"
+                            aria-label="Iniciar triagem real no sistema"
                         >
-                            <i class="fas fa-stethoscope mr-2"></i>Iniciar
+                            <i class="fas fa-stethoscope mr-2" aria-hidden="true"></i>Iniciar
                             Triagem Agora
                         </button>
                     </div>
@@ -278,6 +340,9 @@
                     <div
                         id="demoChat"
                         class="h-96 overflow-y-auto p-6 space-y-4"
+                        role="log" 
+                        aria-live="polite" 
+                        aria-atomic="false"
                     >
                         <!-- Mensagens da demonstração serão inseridas aqui -->
                     </div>
@@ -286,8 +351,9 @@
                         <button
                             onclick="startDemo()"
                             class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                            aria-label="Iniciar demonstração do Dr. AI"
                         >
-                            <i class="fas fa-play mr-2"></i>Iniciar Demonstração
+                            <i class="fas fa-play mr-2" aria-hidden="true"></i>Iniciar Demonstração
                         </button>
                     </div>
                 </div>
@@ -590,15 +656,17 @@
                     <button
                         onclick="startTriagem()"
                         class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center"
+                        aria-label="Iniciar triagem real no sistema"
                     >
-                        <i class="fas fa-robot mr-2"></i>Iniciar Triagem com Dr.
+                        <i class="fas fa-robot mr-2" aria-hidden="true"></i>Iniciar Triagem com Dr.
                         AI
                     </button>
                     <button
                         onclick="goBack()"
                         class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors flex items-center justify-center"
+                        aria-label="Voltar para página inicial"
                     >
-                        <i class="fas fa-arrow-left mr-2"></i>Voltar ao
+                        <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>Voltar ao
                         Dashboard
                     </button>
                 </div>
@@ -606,6 +674,9 @@
         </section>
 
         <script>
+            // rotas canônicas do app
+            const ROUTES = { home: '/agenda', consulta: '/consulta', dash: '/dashboard' };
+
             let demoStep = 0;
             const demoMessages = [
                 {
@@ -711,6 +782,9 @@
 
                 // Scroll to bottom
                 chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                // announce para leitores de tela
+                announce(message.message?.replace(/<[^>]*>/g,'') || 'Atualização na demonstração');
             }
 
             function restartDemo() {
@@ -727,19 +801,24 @@
             }
 
             function startTriagem() {
-                // Simular redirecionamento para triagem real
-                if (confirm("Deseja iniciar uma triagem real com o Dr. AI?")) {
-                    // Aqui você redirecionaria para a página de triagem funcional
-                    showNotification("Redirecionando para triagem...", "info");
-                    setTimeout(() => {
-                        // window.location.href = 'dr-ai-triagem.html'; // Página funcional
-                        alert("Em breve: Triagem funcional será implementada!");
-                    }, 1500);
+                if (confirm('Deseja iniciar uma triagem real com o Dr. AI?')) {
+                    window.location.href = ROUTES.consulta + '?mode=triage';
                 }
             }
 
-            function goBack() {
-                window.location.href = "index.html";
+            function goBack() { 
+                window.location.href = ROUTES.home; 
+            }
+
+            // announce para leitores de tela
+            function announce(msg){
+                const live = document.getElementById('demoChat');
+                if(!live) return;
+                const sr = document.createElement('div');
+                sr.className = 'sr-only';
+                sr.textContent = msg;
+                live.appendChild(sr);
+                setTimeout(()=> sr.remove(), 1000);
             }
 
             function showNotification(message, type) {

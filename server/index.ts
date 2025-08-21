@@ -287,6 +287,17 @@ app.get('/landing-teste', (req, res) => {
   res.status(404).send('Landing teste page not found');
 });
 
+// AI: Dr. AI - Triagem Inteligente
+app.get('/dr-ai', (req, res) => {
+  console.log('🤖 Rota AI /dr-ai acessada - Triagem Inteligente');
+  const drAiHtml = path.join(__dirname, '../public/dr-ai-static.html');
+  if (fs.existsSync(drAiHtml)) {
+    console.log('✅ Servindo dr-ai-static.html (AI)');
+    return res.sendFile(drAiHtml);
+  }
+  res.status(404).send('Dr. AI page not found');
+});
+
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
 
 // Enhanced aliases → /consulta
