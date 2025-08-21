@@ -1,0 +1,88 @@
+Ajustar o Roteamento em server.js
+
+Abra server.js e verifique as rotas existentes. Se /pacientes está funcionando, podemos alinhar a configuração:
+
+Confirme se app.use(express.static('public')) está presente. Se sim, o servidor serve arquivos de public diretamente (ex.: /pacientes.html como /pacientes se configurado como índice).
+Ajuste a rota para corresponder ao comportamento atual. Substitua ou adicione:
+javascriptapp.get('/pacientes', (req, res) => {
+  console.log('Tentando servir pacientes');
+  res.sendFile(__dirname + '/public/pacientes.html');
+});
+
+Se express.static já serve /pacientes, remova a rota app.get('/pacientes.html', ...) para evitar conflitos, mas mantenha o log para debug.
+O arquivo completo deve ficar algo assim:
+javascriptconst express = require('express');
+const app = express();
+
+app.use(express.static('public'));
+
+app.get('/pacientes', (req, res) => {
+  console.log('Tentando servir pacientes');
+  res.sendFile(__dirname + '/public/pacientes.html');
+});
+
+app.listen(3000, () => {
+  console.log('🚀 TeleMed Server Starting...');
+  console.log('✅ TeleMed Server ONLINE na porta 3000');
+  console.log('🌐 URLs disponíveis:');
+  console.log('   🏠 Home: /');
+  console.log('   🤖 TeleMed: /telemed');
+  console.log('   🏥 Health: /health');
+  console.log('   🎯 Complete: /complete');
+  console.log('   🎥 Videoconsulta: /videoconsulta');
+  console.log('   🚀 Enhanced: /enhanced-system');
+  console.log('   🩺 Pacientes: /pacientes');
+});
+
+Salve e reinicie com npm start.
+
+
+
+2. Corrigir o Problema de Texto Sobre Imagem
+
+O problema de texto sobreposto nos cartões de pacientes (ex.: nome sobre o patient-avatar) pode ser devido ao CSS. Abra pacientes.html e ajuste o estilo:
+
+Localize a seção <style> e adicione ou modifique:
+css.patient-card {
+  position: relative;
+}
+
+.patient-avatar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 0; /* Fica atrás do texto */
+}
+
+.patient-info {
+  position: relative;
+  z-index: 1; /* Texto à frente */
+  padding-left: 50px; /* Espaço para evitar sobreposição */
+}
+
+Isso garante que o patient-info (nome e detalhes) fique à frente do patient-avatar e com espaço suficiente.
+Salve e recarregue /pacientes no preview com Ctrl + F5.
+
+
+
+3. Testar
+
+Reinicie o servidor:
+textnpm start
+
+Acesse https://seu-projeto.seu-usuario.repl.co/pacientes no navegador e verifique:
+
+Se a página carrega sem "Cannot GET".
+Se o texto nos cartões (ex.: Maria Silva) não está sobreposto ao avatar.
+
+
+Confira o console do Replit para mensagens como "Tentando servir pacientes".
+
+4. Depuração (Opcional)
+
+Se /pacientes ainda tiver problemas, inspecione o CSS no navegador (F12 > aba "Elements") e veja se .patient-info está sendo sobreposto.
+Adicione mais logs em server.js para rastrear requisições:
+javascriptapp.use((req, res, next) => {
+  console.log('Requisição para:', req.path);
+  next();
+});

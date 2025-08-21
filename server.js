@@ -47,7 +47,9 @@ app.get('/enhanced-system', (req, res) => {
 app.get('/health-check', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
-
+app.get('/pacientes.html', (req, res) => {
+  res.sendFile(__dirname + '/public/pacientes.html');
+});
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ TeleMed Server ONLINE na porta ${PORT}`);
