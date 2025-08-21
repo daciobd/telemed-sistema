@@ -1,0 +1,261 @@
+/* ===== TeleMed Pro Theme Universal ===== */
+.tm {
+  --primary:#1e40af;      /* azul escuro (dashboard) */
+  --primary-2:#3b82f6;    /* azul claro */
+  --secondary:#10b981;    /* verde/acento */
+  --bg:#0f172a;           /* fundo */
+  --surface:#111827;      /* barras */
+  --card:#1f2937;         /* cartões */
+  --border:#2b3645;
+  --text:#f8fafc;         /* texto principal */
+  --muted:#94a3b8;        /* texto secundário */
+  --grad:linear-gradient(135deg,var(--primary),var(--primary-2) 40%,var(--secondary) 100%);
+  color:var(--text);
+  background:linear-gradient(120deg,#0b1320,var(--bg));
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+
+/* Banner/Título da página (pega nomes comuns) */
+.tm .page-header,
+.tm .header,
+.tm .banner,
+.tm .hero,
+.tm header.section {
+  background:var(--grad) !important;
+  color:#fff !important;
+  border-bottom:1px solid rgba(255,255,255,.15);
+  padding-block:16px;
+}
+.tm .page-header h1,
+.tm .header h1,
+.tm .banner h1,
+.tm h1.page-title {
+  color:#fff !important;
+  text-shadow:0 6px 20px rgba(0,0,0,.3);
+}
+
+/* Cards/KPIs/Panels */
+.tm .card,
+.tm .register-card,
+.tm .content-card,
+.tm .profile-card,
+.tm .controls-panel,
+.tm .section,
+.tm .kpi,
+.tm .stat,
+.tm .panel,
+.tm .widget,
+.tm .box {
+  background:var(--card) !important;
+  border:1px solid var(--border) !important;
+  border-radius:14px !important;
+  color:var(--text) !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.25) !important;
+}
+.tm .stat .value,
+.tm .kpi .value,
+.tm .card h3 {
+  color:#fff !important;
+}
+.tm .muted,
+.tm .stat .label,
+.tm .kpi .label {
+  color:var(--muted) !important;
+}
+
+/* Botões (pega classes mais comuns) */
+.tm .btn,
+.tm .save-btn,
+.tm .btn-primary,
+.tm .back-btn,
+.tm .device-btn,
+.tm .page-btn,
+.tm .btn-demo,
+.tm button,
+.tm .button {
+  border-radius:10px !important;
+  font-weight:700 !important;
+  border:1px solid var(--border);
+  background:#1f2937;
+  color:var(--text);
+  transition:transform .06s ease, filter .15s ease;
+  padding:8px 16px;
+}
+.tm .btn:hover,
+.tm button:hover { 
+  transform:translateY(-1px); 
+}
+
+.tm .btn-primary,
+.tm .save-btn {
+  background:var(--grad) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+}
+.tm .btn-primary:hover,
+.tm .save-btn:hover {
+  filter:brightness(1.1);
+  box-shadow:0 4px 15px rgba(30,64,175,.4);
+}
+
+/* Inputs, Selects, Textarea */
+.tm input,
+.tm select,
+.tm textarea {
+  background:var(--surface) !important;
+  border:1px solid var(--border) !important;
+  border-radius:8px !important;
+  color:var(--text) !important;
+  padding:10px 12px !important;
+}
+.tm input:focus,
+.tm select:focus,
+.tm textarea:focus {
+  outline:0 !important;
+  border-color:var(--primary-2) !important;
+  box-shadow:0 0 0 3px rgba(59,130,246,.25) !important;
+}
+.tm input::placeholder,
+.tm textarea::placeholder {
+  color:var(--muted) !important;
+}
+
+/* Labels */
+.tm label {
+  color:var(--text) !important;
+  font-weight:500 !important;
+  margin-bottom:4px;
+}
+
+/* Badges/Chips */
+.tm .badge,
+.tm .chip,
+.tm .tag {
+  background:var(--primary) !important;
+  color:#fff !important;
+  padding:4px 8px !important;
+  border-radius:6px !important;
+  font-size:0.8rem !important;
+  font-weight:600 !important;
+}
+
+/* Tabelas */
+.tm table {
+  background:var(--card) !important;
+  border:1px solid var(--border) !important;
+  border-radius:10px !important;
+  overflow:hidden !important;
+}
+.tm th {
+  background:var(--surface) !important;
+  color:var(--text) !important;
+  padding:12px !important;
+  font-weight:600 !important;
+}
+.tm td {
+  color:var(--text) !important;
+  padding:10px 12px !important;
+  border-top:1px solid var(--border) !important;
+}
+.tm tr:hover {
+  background:rgba(59,130,246,.05) !important;
+}
+
+/* Modais */
+.tm .modal,
+.tm .popup,
+.tm .overlay {
+  background:var(--card) !important;
+  border:1px solid var(--border) !important;
+  border-radius:16px !important;
+  color:var(--text) !important;
+  box-shadow:0 20px 50px rgba(0,0,0,.5) !important;
+}
+
+/* Switches/Toggle */
+.tm .switch,
+.tm .toggle {
+  background:var(--border) !important;
+  border-radius:12px !important;
+}
+.tm .switch.active,
+.tm .toggle.active {
+  background:var(--primary) !important;
+}
+
+/* Títulos/Subtítulos */
+.tm h1,
+.tm h2,
+.tm h3,
+.tm h4,
+.tm h5,
+.tm h6 {
+  color:var(--text) !important;
+  font-weight:700 !important;
+}
+.tm h1 { font-size:2rem !important; }
+.tm h2 { font-size:1.5rem !important; }
+.tm h3 { font-size:1.25rem !important; }
+
+/* Texto muted/secundário */
+.tm .help,
+.tm .description,
+.tm .subtitle,
+.tm .secondary {
+  color:var(--muted) !important;
+}
+
+/* Links */
+.tm a {
+  color:var(--primary-2) !important;
+  text-decoration:none !important;
+  transition:color .3s ease !important;
+}
+.tm a:hover {
+  color:var(--secondary) !important;
+}
+
+/* Scrollbars customizadas (webkit) */
+.tm ::-webkit-scrollbar {
+  width:8px;
+  height:8px;
+}
+.tm ::-webkit-scrollbar-track {
+  background:var(--surface);
+  border-radius:4px;
+}
+.tm ::-webkit-scrollbar-thumb {
+  background:var(--border);
+  border-radius:4px;
+}
+.tm ::-webkit-scrollbar-thumb:hover {
+  background:var(--primary-2);
+}
+
+/* Responsivo - ajustes mobile */
+@media (max-width: 768px) {
+  .tm {
+    font-size:0.9rem;
+  }
+  .tm .btn,
+  .tm button {
+    padding:10px 14px !important;
+    font-size:0.9rem !important;
+  }
+  .tm input,
+  .tm select,
+  .tm textarea {
+    padding:12px !important;
+  }
+}
+
+/* Fix para gradientes inline conflitantes */
+.tm [style*="background:"] {
+  background:var(--card) !important;
+}
+.tm [style*="background-color:"] {
+  background-color:var(--card) !important;
+}
+.tm [style*="color:"] {
+  color:var(--text) !important;
+}

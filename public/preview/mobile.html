@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo Responsivo - TeleMed</title>
+    <link rel="stylesheet" href="../telemed-theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -12,11 +13,9 @@
             box-sizing: border-box;
         }
 
-        body {
+        body.tm {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
             overflow-x: hidden;
         }
 
@@ -538,7 +537,7 @@
         }
     </style>
 </head>
-<body>
+<body class="tm">
     <!-- Indicador de Breakpoint -->
     <div class="breakpoint-indicator"></div>
 

@@ -20,7 +20,7 @@ Preferred communication style: Simple, everyday language.
 - **Demo System**: Professional demo environment with dedicated credentials, instant login buttons, and URL shortcuts for sales presentations and rapid testing.
 - **Accessibility**: WCAG 2.1 conformity with ARIA labels, keyboard navigation, and screen reader support.
 - **Performance**: Optimized images (WebP), lazy loading, CSS variables, and GPU-accelerated animations.
-- **Theme System**: Comprehensive theme system with automatic injection for preview pages, allowing `PREVIEW_THEME` environment variable control and a floating UI switcher.
+- **Theme System**: Comprehensive theme system with automatic injection for preview pages, allowing `PREVIEW_THEME` environment variable control and a floating UI switcher. Universal TeleMed theme (telemed-theme.css) applied to core pages with .tm class for consistent branding across cadastro.html, perfil-medico.html, and mobile.html.
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js framework.
