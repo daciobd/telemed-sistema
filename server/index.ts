@@ -193,10 +193,21 @@ app.get('/patient-management', (req, res) => {
 
 // ====== ROTAS CANÔNICAS OFICIAIS ======
 
-// Root - redirect to agenda (new canonical entry point)
+// Root - redirect to landing (new canonical entry point)
 app.get('/', (req, res) => {
-  console.log('🏠 Rota raiz acessada - Redirecionando para /agenda');
-  res.redirect(301, '/agenda');
+  console.log('🏠 Rota raiz acessada - Redirecionando para /landing');
+  res.redirect(301, '/landing');
+});
+
+// CANONICAL: Landing Page (Landing Oficial)
+app.get('/landing', (req, res) => {
+  console.log('🏠 Rota CANÔNICA /landing acessada - Landing Oficial');
+  const landingHtml = path.join(__dirname, '../public/landing-teste.html');
+  if (fs.existsSync(landingHtml)) {
+    console.log('✅ Servindo landing-teste.html (CANÔNICA OFICIAL)');
+    return res.sendFile(landingHtml);
+  }
+  res.status(404).send('Landing page not found');
 });
 
 // CANONICAL: Agenda (Agenda Médica)
@@ -276,15 +287,10 @@ app.get('/area-medica', (req, res) => {
   res.status(404).send('Área Médica page not found');
 });
 
-// TESTE: Landing Page Premium
+// ALIAS: Landing teste (compatibilidade)
 app.get('/landing-teste', (req, res) => {
-  console.log('🏠 Rota TESTE /landing-teste acessada - Landing Premium');
-  const landingHtml = path.join(__dirname, '../public/landing-teste.html');
-  if (fs.existsSync(landingHtml)) {
-    console.log('✅ Servindo landing-teste.html (TESTE)');
-    return res.sendFile(landingHtml);
-  }
-  res.status(404).send('Landing teste page not found');
+  console.log('🔄 Alias /landing-teste → Redirecionando para /landing');
+  res.redirect(301, '/landing' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
 });
 
 // AI: Dr. AI - Triagem Inteligente
