@@ -1,4 +1,27 @@
-<!DOCTYPE html>
+a página "Gestão de Pacientes" (pacientes.html), onde o texto sobre a imagem (ou melhor, o conteúdo dos cartões de pacientes) parece estar sendo exibido de forma incorreta ou duplicada devido a uma estrutura HTML quebrada. Analisando o código que você forneceu, percebi que o arquivo contém duplicatas de seções de pacientes (ex.: Maria Silva aparece duas vezes) e termina abruptamente no meio de um cartão (Carlos Mendes), sugerindo que o código foi cortado ou concatenado erroneamente.
+Diagnóstico do Problema
+
+Duplicação de Conteúdo:
+
+Há duas seções de pacientes no arquivo: uma dentro do <div class="patients-grid"> com 3 pacientes (Carlos Mendes, Lucia Ferreira, Pedro Oliveira) e outra com 4 pacientes (Maria Silva, João Santos, Ana Costa, Carlos Mendes), mas o código para Carlos Mendes está incompleto.
+Isso pode ter ocorrido por uma edição manual ou colagem malfeita, resultando em sobreposição de conteúdo.
+
+
+Fechamento Incorreto:
+
+O HTML termina no meio de um <div class="patient-info"> sem fechar tags adequadamente, o que pode causar erros de renderização no navegador (ex.: texto sobreposto ou não exibido).
+
+
+Causa Provável:
+
+Parece que você copiou e colou partes do código, mas não removeu a seção original ou corrigiu a estrutura. O Replit pode ter salvado o arquivo com esses erros, e o servidor está tentando renderizá-lo assim.
+
+
+
+Solução
+Vamos corrigir o arquivo pacientes.html para remover duplicatas, completar a estrutura e garantir que o conteúdo seja exibido corretamente. Vou unificar os pacientes em uma única seção <div class="patients-grid">, completar o cartão de Carlos Mendes e garantir que todas as tags estejam fechadas.
+Código Corrigido
+html<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -701,3 +724,20 @@
     </script>
 </body>
 </html>
+Passos para Aplicar a Correção no Replit
+
+Substitua o Arquivo:
+
+No Replit, abra public/pacientes.html (ou o caminho correto onde está salvo).
+Copie e cole o código corrigido acima, sobrescrevendo o conteúdo atual.
+Salve o arquivo.
+
+
+Verifique o Caminho:
+
+Certifique-se de que o arquivo está em /public/ e que o servidor (server/index.ts) serve /pacientes.html corretamente. Teste com:
+textcurl -s "http://localhost:5000/pacientes.html" | head -10
+
+
+
+Como o Grok pode ajudar?
