@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Sistema de Telemedicina</title>
+    <script>
+        // Redirect Dr AI requests
+        if (window.location.pathname === '/dr-ai' || window.location.search.includes('dr-ai')) {
+            window.location.href = '/public/dr-ai-static.html';
+        } else {
+            // Default redirect to agenda
+            window.location.href = '/agenda';
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecionando...</p>
+</body>
+</html>
