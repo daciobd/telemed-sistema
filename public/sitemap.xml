@@ -2,75 +2,81 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://app.telemed.pro/</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/landing</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/landing</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/agenda</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agenda</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/consulta</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/consulta</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/dashboard</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dashboard</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/dr-ai</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/dr-ai</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/login</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/cadastro</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/cadastro</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/medico</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/medico</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/paciente</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/paciente</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/como-funciona</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/como-funciona</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
   <url>
-    <loc>https://app.telemed.pro/privacidade</loc>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/privacidade</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+    <lastmod>2025-08-21</lastmod>
+  </url>
+  <url>
+    <loc>https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/registro-saude</loc>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
     <lastmod>2025-08-21</lastmod>
   </url>
 </urlset>

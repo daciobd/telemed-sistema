@@ -43,7 +43,7 @@ Preferred communication style: Simple, everyday language.
 - **Monitoring**: Integrated with UptimeRobot, StatusCake, and Slack/Telegram notifications.
 - **Automated Backups**: System protecting critical files with tar.gz compression and detailed reporting.
 - **Performance Optimization Framework**: Established framework with memo/useCallback/useMemo, React.lazy+Suspense, Query optimization, sticky headers, and comprehensive instrumentation.
-- **Canonical Routes**: Officialized route structure for `/landing`, `/agenda`, `/consulta`, `/dashboard` with root `/` redirecting to `/landing`. Landing-teste promoted to official landing page. Implemented dual-layer redirect system (server-side and client-side) with query string preservation.
+- **Canonical Routes**: Officialized route structure for `/landing`, `/agenda`, `/consulta`, `/dashboard`, `/registro-saude` with root `/` redirecting to `/landing`. Landing-teste promoted to official landing page. Implemented dual-layer redirect system (server-side and client-side) with query string preservation. PHR (Personal Health Record) route `/registro-saude` implemented with privacy headers, access guards, and security redirects.
 
 ## External Dependencies
 

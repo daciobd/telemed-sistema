@@ -1,0 +1,145 @@
+Vamos oficializar /registro-saude como rota canônica do PHR do paciente e amarrar tudo (aliases, servidor, verificadores, navegação e SEO/privacidade). Aqui vai o pacote prontinho:
+
+1) Atualizar o mapa canônico
+
+Edite scripts/canonical-map.json e adicione /registro-saude + aliases comuns:
+
+{
+  "canonical": {
+    "/": "/agenda",
+    "/agenda": "/agenda",
+    "/consulta": "/consulta",
+    "/dashboard": "/dashboard",
+    "/dr-ai": "/dr-ai",
+    "/cadastro": "/cadastro",
+    "/login": "/login",
+    "/medico": "/medico",
+    "/paciente": "/paciente",
+    "/como-funciona": "/como-funciona",
+    "/privacidade": "/privacidade",
+    "/recuperar-senha": "/recuperar-senha",
+    "/registro-saude": "/registro-saude"
+  },
+  "aliases": {
+    "/landing": "/agenda",
+    "/enhanced": "/consulta",
+    "/enhanced-consultation": "/consulta",
+    "/enhanced-teste": "/consulta",
+    "/enhanced-system": "/consulta",
+    "/video-consultation": "/consulta",
+    "/doctor-dashboard": "/dashboard",
+    "/dashboard-teste": "/dashboard",
+    "/dashboard-teste.html": "/dashboard",
+    "/ai": "/dr-ai",
+    "/ai-console": "/dr-ai",
+    "/politadeprivacidade": "/privacidade",
+    "/privacy": "/privacidade",
+    "/phr": "/registro-saude",
+    "/registro": "/registro-saude",
+    "/meu-registro": "/registro-saude",
+    "/prontuario": "/registro-saude"
+  }
+}
+
+
+Assim, qualquer link antigo tipo /phr cai em /registro-saude (301).
+
+2) Servidor (Express): rota + redirects + “noindex”
+
+No seu server/index.ts (ou .js), adicione:
+
+import path from "node:path";
+import fs from "node:fs";
+
+const pub = path.join(__dirname, "../public/preview");
+
+// 301 dos aliases do PHR → /registro-saude
+["/phr","/registro","/meu-registro","/prontuario"].forEach(from=>{
+  app.get(from, (req,res)=>{
+    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    res.redirect(301, "/registro-saude" + qs);
+  });
+});
+
+// helper: serve o 1º arquivo existente
+function serveFirst(...files: string[]) {
+  const found = files.find(f => fs.existsSync(path.join(pub, f)));
+  return (_req:any, res:any) => {
+    if (found) return res.sendFile(path.join(pub, found));
+    res.status(404).send("Arquivo não encontrado.");
+  };
+}
+
+// ⚠️ PHR – canônica + headers de privacidade
+app.get("/registro-saude", (req,res,next)=>{
+  // Proteção básica: não indexar e não cachear conteúdo sensível
+  res.set({
+    "X-Robots-Tag": "noindex, noarchive, nosnippet",
+    "Cache-Control": "no-store, max-age=0, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0"
+  });
+  next();
+}, 
+// Ajuste os nomes conforme seu repositório:
+serveFirst("registro-saude.html", "phr.html", "ph-record.html")
+);
+
+
+Esses headers evitam indexação e cache do prontuário em produção.
+
+3) Corrigir links no código (codemod)
+
+Seu codemod já existe; rode novamente para pegar os novos aliases:
+
+npm run links:fix:dry
+npm run links:fix
+
+4) Verificação automática
+
+Inclua /registro-saude na semente do verificador (se ainda não estiver):
+
+npm run verify:routes
+npm run verify:links
+
+
+(Seu verify-links.cjs deve adicionar a rota na lista inicial; se não, inclua manualmente em SEED.)
+
+5) Navegação (Paciente/Dashboard)
+
+Garanta que os CTAs apontem para a nova canônica:
+
+public/preview/paciente.html
+
+<!-- dentro do grid de ações -->
+<a class="card btn" href="/registro-saude" style="justify-content:center">Meu Registro de Saúde (PHR)</a>
+
+
+Qualquer menu/rodapé com PHR:
+
+<a href="/registro-saude">Registro de Saúde</a>
+
+6) (Opcional, mas recomendadíssimo) Guard de acesso no front
+
+Se o PHR é só para usuário logado (mesmo em demo), inclua um guard simples no HTML do PHR:
+
+<script>
+  (function(){
+    const u = JSON.parse(localStorage.getItem('telemed_user')||'null');
+    if(!u || u.type!=='patient'){ location.href = '/login?next=%2Fregistro-saude'; }
+  })();
+</script>
+
+
+Em produção, o ideal é também validar sessão no backend.
+
+7) SEO / Sitemap
+
+Como é PHR, não inclua em sitemap se for privado. Se quiser público “shell” educativo, mantenha “noindex” como já fizemos e não liste no /sitemap.xml.
+
+8) Visual (tema unificado)
+
+Se esse HTML do PHR ainda não usa o tema, aplique:
+
+<link rel="stylesheet" href="/telemed-theme.css">
+<body class="tm">

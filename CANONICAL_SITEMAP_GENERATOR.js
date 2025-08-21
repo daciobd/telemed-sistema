@@ -74,6 +74,12 @@ const CANONICAL_ROUTES = {
     description: 'Nossa política de privacidade e proteção de dados pessoais.',
     priority: '0.3',
     changefreq: 'yearly'
+  },
+  '/registro-saude': {
+    title: 'Registro de Saúde (PHR) - TeleMed Pro',
+    description: 'Personal Health Record - Registro completo de saúde do paciente.',
+    priority: '0.1',
+    changefreq: 'never'
   }
 };
 

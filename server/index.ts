@@ -254,9 +254,16 @@ app.get('/pacientes', (req, res) => {
   res.status(404).send('Pacientes page not found');
 });
 
-// CANONICAL: PHR - Registro de Saúde do Paciente
+// ⚠️ PHR (Personal Health Record) – canônica + headers de privacidade  
 app.get('/registro-saude', (req, res) => {
   console.log('📋 Rota CANÔNICA /registro-saude acessada - PHR');
+  // Proteção básica: não indexar e não cachear conteúdo sensível
+  res.set({
+    "X-Robots-Tag": "noindex, noarchive, nosnippet",
+    "Cache-Control": "no-store, max-age=0, must-revalidate", 
+    "Pragma": "no-cache",
+    "Expires": "0"
+  });
   const phrHtml = path.join(__dirname, '../public/registro-saude.html');
   if (fs.existsSync(phrHtml)) {
     console.log('✅ Servindo registro-saude.html (CANÔNICA)');
@@ -371,6 +378,15 @@ app.get('/preview/dr-ai-demo.html', (req, res) => {
 });
 
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
+
+// PHR aliases → /registro-saude (301)
+['/phr', '/registro', '/meu-registro', '/prontuario'].forEach(oldPath => {
+  app.get(oldPath, (req, res) => {
+    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    console.log(`🔄 Alias ${oldPath} → Redirecionando para /registro-saude`);
+    res.redirect(301, '/registro-saude' + queryString);
+  });
+});
 
 // Enhanced aliases → /consulta
 app.get('/enhanced', (req, res) => {

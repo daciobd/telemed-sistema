@@ -1,0 +1,36 @@
+{
+  "canonical": {
+    "/": "/agenda",
+    "/agenda": "/agenda",
+    "/consulta": "/consulta",
+    "/dashboard": "/dashboard",
+    "/dr-ai": "/dr-ai",
+    "/cadastro": "/cadastro",
+    "/login": "/login",
+    "/medico": "/medico",
+    "/paciente": "/paciente",
+    "/como-funciona": "/como-funciona",
+    "/privacidade": "/privacidade",
+    "/recuperar-senha": "/recuperar-senha",
+    "/registro-saude": "/registro-saude"
+  },
+  "aliases": {
+    "/landing": "/agenda",
+    "/enhanced": "/consulta",
+    "/enhanced-consultation": "/consulta",
+    "/enhanced-teste": "/consulta",
+    "/enhanced-system": "/consulta",
+    "/video-consultation": "/consulta",
+    "/doctor-dashboard": "/dashboard",
+    "/dashboard-teste": "/dashboard",
+    "/dashboard-teste.html": "/dashboard",
+    "/ai": "/dr-ai",
+    "/ai-console": "/dr-ai",
+    "/politicadeprivacidade": "/privacidade",
+    "/privacy": "/privacidade",
+    "/phr": "/registro-saude",
+    "/registro": "/registro-saude",
+    "/meu-registro": "/registro-saude",
+    "/prontuario": "/registro-saude"
+  }
+}

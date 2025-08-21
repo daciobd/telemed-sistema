@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Saúde • TeleMed Pro</title>
+    <link rel="stylesheet" href="./telemed-theme.css">
     <link rel="icon" type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -353,8 +354,17 @@
             }
         }
     </style>
+    <script>
+      // Guard de acesso - só para usuários logados (pacientes)
+      (function(){
+        const u = JSON.parse(localStorage.getItem('telemed_user')||'null');
+        if(!u || u.type!=='patient'){ 
+          location.href = '/login?next=%2Fregistro-saude'; 
+        }
+      })();
+    </script>
 </head>
-<body>
+<body class="tm">
     <header class="header">
         <div class="header-content">
             <div class="logo">
