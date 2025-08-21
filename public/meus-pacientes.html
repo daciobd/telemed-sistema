@@ -317,11 +317,24 @@
             align-items: start;
         }
 
-        /* Sidebar sticky sem sobreposição */
+        /* Sidebar sticky com altura fixa e scroll interno */
         .page.patients .pages-sidebar {
             position: sticky;
             top: calc(var(--header-h, 72px) + 12px);
+            max-height: calc(100dvh - (var(--header-h, 72px) + 24px));
+            overflow: auto;
+            padding-right: 4px;
             z-index: 10;
+        }
+
+        /* Scrollbar discreto */
+        .page.patients .pages-sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .page.patients .pages-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+            border-radius: 8px;
         }
 
         /* Visual de cartão para sidebar */
@@ -359,15 +372,18 @@
             text-overflow: ellipsis;
         }
 
-        /* Responsivo: 1 coluna, sidebar sobe para cima do conteúdo */
+        /* Responsividade aprimorada para mobile */
         @media (max-width: 1100px) {
             .page.patients .layout-2col {
                 grid-template-columns: 1fr;
             }
             .page.patients .pages-sidebar {
                 position: static;
+                max-height: none;
+                overflow: visible;
                 order: -1;
                 margin-bottom: 12px;
+                padding-right: 0;
             }
         }
 
@@ -709,15 +725,16 @@
                 document.getElementById('filter-nome').focus();
             }
         });
-        // Detectar altura do header e configurar CSS variable
-        window.addEventListener('load', function() {
-            const header = document.querySelector('.header');
-            if (header) {
-                const headerHeight = header.offsetHeight;
-                document.documentElement.style.setProperty('--header-h', `${headerHeight}px`);
-                console.log(`📏 Header height detectado: ${headerHeight}px`);
-            }
-        });
+        // Função global para calcular altura do header automaticamente
+        (function setHeaderH() {
+            const h = document.querySelector('.header')?.offsetHeight || 72;
+            document.documentElement.style.setProperty('--header-h', `${h}px`);
+            console.log(`📏 Header height configurado: ${h}px`);
+        })();
+        
+        // Reconfigurar na carga da página e redimensionamento
+        window.addEventListener('load', setHeaderH);
+        window.addEventListener('resize', setHeaderH);
     </script>
 </body>
 </html>

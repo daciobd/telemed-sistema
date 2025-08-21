@@ -1,0 +1,77 @@
+Aqui vão 3 micro-ajustes que deixam o layout redondo:
+
+1) Travar a altura do painel e dar scroll interno
+
+Assim ele não “escapa” da viewport quando a página é mais baixa.
+
+/* Sidebar /painel da direita */
+.page.patients .pages-sidebar{
+  position: sticky;
+  top: calc(var(--header-h, 72px) + 12px); /* ajuste fino do offset */
+  max-height: calc(100dvh - (var(--header-h, 72px) + 24px));
+  overflow: auto;
+  padding-right: 4px; /* espaço pro scrollbar */
+}
+
+/* scrollbar discreto (opcional) */
+.page.patients .pages-sidebar::-webkit-scrollbar{ width: 8px; }
+.page.patients .pages-sidebar::-webkit-scrollbar-thumb{
+  background: rgba(148,163,184,.35); border-radius: 8px;
+}
+
+
+Se ainda estiver usando o “flutuante” imediato, aplique as mesmas regras na classe/id atual do painel.
+
+2) Garantir responsividade
+
+No mobile, transforme em bloco normal ou esconda atrás de um “abrir/fechar”.
+
+@media (max-width: 1100px){
+  .page.patients .layout-2col{ grid-template-columns: 1fr; }
+  .page.patients .pages-sidebar{
+    position: static;
+    max-height: none;
+    overflow: visible;
+    order: -1;           /* sobe acima do conteúdo, se quiser */
+    margin-bottom: 12px;
+  }
+}
+
+3) Calcular o top automaticamente (header fixo)
+
+Se o header muda de altura, exponha a var --header-h na carga do app:
+
+// em um efeito global do app
+(function setHeaderH(){
+  const h = document.querySelector('header')?.offsetHeight || 72;
+  document.documentElement.style.setProperty('--header-h', `${h}px`);
+})();
+
+(Opcional) Botão de “recolher” no mobile
+
+Se quiser virar “gaveta”:
+
+<button class="pages-toggle" aria-expanded="true">Páginas</button>
+<aside class="pages-sidebar" id="pagesSidebar">…</aside>
+<script>
+  const t=document.querySelector('.pages-toggle');
+  const s=document.getElementById('pagesSidebar');
+  t?.addEventListener('click',()=>{
+    const open=s.toggleAttribute('hidden');
+    t.setAttribute('aria-expanded', (!open).toString());
+  });
+</script>
+
+@media (max-width:1100px){
+  .pages-toggle{ display:inline-flex; gap:8px; padding:8px 12px; border:1px solid #2b3645; border-radius:10px; background:#111827; color:#fff; }
+}
+
+DoD
+
+Conteúdo nunca fica sob o painel.
+
+Painel não “estoura” a tela: tem scroll interno.
+
+Offset acompanha o header (--header-h).
+
+Em ≤1100px: vira bloco acima do conteúdo (ou gaveta).
