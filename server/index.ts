@@ -298,6 +298,39 @@ app.get('/dr-ai', (req, res) => {
   res.status(404).send('Dr. AI page not found');
 });
 
+// BACKUP: Dr. AI diretamente acessível
+app.get('/dr-ai-static.html', (req, res) => {
+  console.log('🤖 BACKUP: dr-ai-static.html diretamente acessado');
+  const drAiHtml = path.join(__dirname, '../public/dr-ai-static.html');
+  if (fs.existsSync(drAiHtml)) {
+    console.log('✅ Servindo dr-ai-static.html (BACKUP)');
+    return res.sendFile(drAiHtml);
+  }
+  res.status(404).send('Dr. AI backup not found');
+});
+
+// TESTE DIRETO: Dr. AI HTML direto
+app.get('/dr-ai.html', (req, res) => {
+  console.log('🤖 TESTE: dr-ai.html direto');
+  const drAiHtml = path.join(__dirname, '../public/dr-ai.html');
+  if (fs.existsSync(drAiHtml)) {
+    console.log('✅ Servindo dr-ai.html (DIRETO)');
+    return res.sendFile(drAiHtml);
+  }
+  res.status(404).send('Dr. AI direto not found');
+});
+
+// PREVIEW: Dr. AI Demo via rota
+app.get('/preview/dr-ai-demo.html', (req, res) => {
+  console.log('🤖 PREVIEW: dr-ai-demo.html via rota');
+  const drAiHtml = path.join(__dirname, '../public/preview/dr-ai-demo.html');
+  if (fs.existsSync(drAiHtml)) {
+    console.log('✅ Servindo dr-ai-demo.html (PREVIEW)');
+    return res.sendFile(drAiHtml);
+  }
+  res.status(404).send('Dr. AI demo not found');
+});
+
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
 
 // Enhanced aliases → /consulta
