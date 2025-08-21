@@ -287,6 +287,39 @@ app.get('/area-medica', (req, res) => {
   res.status(404).send('Área Médica page not found');
 });
 
+// CANONICAL: Cadastro - Registro de usuários
+app.get('/cadastro', (req, res) => {
+  console.log('📝 Rota CANÔNICA /cadastro acessada - Registro');
+  const cadastroHtml = path.join(__dirname, '../public/cadastro.html');
+  if (fs.existsSync(cadastroHtml)) {
+    console.log('✅ Servindo cadastro.html (CANÔNICA)');
+    return res.sendFile(cadastroHtml);
+  }
+  res.status(404).send('Cadastro page not found');
+});
+
+// CANONICAL: Login - Autenticação
+app.get('/login', (req, res) => {
+  console.log('🔐 Rota CANÔNICA /login acessada - Login');
+  const loginHtml = path.join(__dirname, '../public/login.html');
+  if (fs.existsSync(loginHtml)) {
+    console.log('✅ Servindo login.html (CANÔNICA)');
+    return res.sendFile(loginHtml);
+  }
+  res.status(404).send('Login page not found');
+});
+
+// CANONICAL: Recuperar Senha
+app.get('/recuperar-senha', (req, res) => {
+  console.log('🔑 Rota CANÔNICA /recuperar-senha acessada');
+  const recoverHtml = path.join(__dirname, '../public/recuperar-senha.html');
+  if (fs.existsSync(recoverHtml)) {
+    console.log('✅ Servindo recuperar-senha.html (CANÔNICA)');
+    return res.sendFile(recoverHtml);
+  }
+  res.status(404).send('Recuperar senha page not found');
+});
+
 // ALIAS: Landing teste (compatibilidade)
 app.get('/landing-teste', (req, res) => {
   console.log('🔄 Alias /landing-teste → Redirecionando para /landing');

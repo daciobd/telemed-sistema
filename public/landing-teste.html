@@ -101,14 +101,17 @@
 <body>
   <header>
     <div class="nav-container">
-      <a class="logo" href="#">TeleMed Pro</a>
+      <a class="logo" href="/landing">TeleMed Pro</a>
       <ul class="nav-links">
         <li><a href="#how-it-works">Como Funciona</a></li>
         <li><a href="#services">Serviços</a></li>
         <li><a href="#pricing">Planos</a></li>
         <li><a href="#contact">Contato</a></li>
       </ul>
-      <button class="cta-header-btn">Comece Agora</button>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <a href="/login" style="color:var(--text);text-decoration:none;font-weight:500;padding:0.5rem 1rem;transition:color 0.3s;margin-right:0.5rem">Entrar</a>
+        <a href="/cadastro" class="cta-header-btn" style="text-decoration:none;display:inline-block">Cadastrar</a>
+      </div>
     </div>
   </header>
 
@@ -116,7 +119,10 @@
     <div class="hero-content">
       <h1 class="hero-title">Telemedicina Inteligente para o Futuro</h1>
       <p class="hero-subtitle">Transforme a saúde com consultas online, gestão de pacientes e IA avançada.</p>
-      <button class="cta-button">Experimente Grátis</button>
+      <div style="display:flex;gap:1rem;margin-top:2rem">
+        <a href="/cadastro" class="cta-button" style="text-decoration:none;display:inline-block">Experimente Grátis</a>
+        <a href="/dashboard" style="text-decoration:none;display:inline-block;padding:1rem 2rem;border:2px solid var(--secondary);color:var(--secondary);border-radius:9999px;font-weight:600;transition:all 0.3s">Ver Demo</a>
+      </div>
     </div>
     <img class="hero-image" src="https://via.placeholder.com/600x400.png?text=TeleMed+Interface" alt="TeleMed Interface"/>
   </section>

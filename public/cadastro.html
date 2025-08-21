@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-dr="/dr-ai">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cadastro – TeleMed Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com" defer></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root{--primary:#1e40af;--prim2:#3b82f6;--sec:#10b981;--bg:#0f172a;--surface:#111827;--card:#1f2937;--text:#f8fafc;--mut:#94a3b8;--border:#2b3645;--hero:linear-gradient(135deg,#1e40af 0%,#3b82f6 40%,#10b981 100%)}
+    *{box-sizing:border-box;margin:0;padding:0} body{font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:linear-gradient(135deg,var(--bg),#0b1220);color:var(--text)}
+    .wrap{max-width:960px;margin:0 auto;padding:24px}
+    header{position:sticky;top:0;z-index:40;background:rgba(17,24,39,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(8px)}
+    .nav{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 20px}
+    .brand{font-weight:800;color:#c7d2fe;text-decoration:none}
+    .hero{background:var(--hero);padding:28px 20px;border-bottom:1px solid rgba(255,255,255,.15)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#0f172a;padding:.9rem 1.1rem;border-radius:12px;color:#fff;text-decoration:none;font-weight:700;cursor:pointer;transition:all 0.3s}
+    .btn-primary{background:var(--hero);border-color:transparent}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(59,130,246,.3)}
+    .label{display:block;margin:.4rem 0;color:var(--mut)}
+    input,select,textarea{width:100%;background:#0b1220;border:1px solid var(--border);border-radius:12px;color:#fff;padding:.8rem 1rem}
+    input:focus,select:focus,textarea:focus{outline:0;border-color:var(--prim2);box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+    .steps{display:flex;gap:8px;align-items:center;justify-content:center;margin:10px 0 18px}
+    .dot{width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:800}
+    .dot.active{background:#3b82f6} .dot.done{background:#10b981} .dot.pending{background:#334155;color:#94a3b8}
+    .grid{display:grid;gap:16px} .two{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .help{font-size:.85rem;color:var(--mut)}
+    .sep{display:flex;align-items:center;gap:10px;margin:12px 0}.sep:before,.sep:after{content:"";flex:1;height:1px;background:var(--border)}
+    @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+  </style>
+</head>
+<body>
+<header><div class="nav wrap">
+  <a class="brand" href="/landing">TeleMed Pro</a>
+  <nav style="display:flex;gap:10px">
+    <a class="btn" href="/login">Entrar</a>
+    <a class="btn btn-primary" href="/cadastro">Criar conta</a>
+  </nav>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <h1 style="font-size:1.9rem;font-weight:800;margin-bottom:6px">Crie sua conta</h1>
+  <p class="help">Escolha o tipo de conta, complete seus dados ou use o Google para entrar.</p>
+</div></section>
+
+<main class="wrap">
+  <div class="card">
+    <div class="steps">
+      <div id="s1" class="dot active">1</div><div class="help">→</div>
+      <div id="s2" class="dot pending">2</div><div class="help">→</div>
+      <div id="s3" class="dot pending">3</div>
+    </div>
+
+    <!-- Google Sign-Up -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px">
+      <div id="g_id_onload"
+           data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+           data-context="signup"
+           data-ux_mode="popup"
+           data-auto_prompt="false"
+           data-callback="onGoogleCredential"></div>
+      <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-shape="pill" data-text="signup_with" data-logo_alignment="left"></div>
+      <div class="help">Usaremos seu nome e e-mail do Google. Você poderá completar CRM/CPF depois.</div>
+    </div>
+
+    <div class="sep"><span class="help">ou</span></div>
+
+    <!-- Step 1: Tipo de conta -->
+    <section id="step1">
+      <label class="label">Tipo de conta</label>
+      <div class="grid two">
+        <button class="btn" onclick="pickType('doctor')" id="btnDoctor">
+          <!-- Stethoscope SVG -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 3v6a6 6 0 1 0 12 0V3"/><path d="M8 15a5 5 0 0 0 10 0"/><circle cx="20" cy="10" r="2"/></svg>
+          Médico
+        </button>
+        <button class="btn" onclick="pickType('patient')" id="btnPatient">
+          <!-- User SVG -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a6 6 0 0 1 12 0v2"/></svg>
+          Paciente
+        </button>
+      </div>
+      <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px">
+        <a class="btn" href="/login">Já tenho conta</a>
+        <button class="btn btn-primary" onclick="next1()">Continuar</button>
+      </div>
+    </section>
+
+    <!-- Step 2: Dados pessoais -->
+    <section id="step2" style="display:none">
+      <div class="grid two">
+        <div>
+          <label class="label" for="fullName">Nome completo</label>
+          <input id="fullName" placeholder="Ex.: Ana Costa" autocomplete="name">
+        </div>
+        <div>
+          <label class="label" for="email">E-mail</label>
+          <input id="email" type="email" placeholder="voce@exemplo.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="grid two" id="doctorOnly" style="display:none;margin-top:10px">
+        <div>
+          <label class="label" for="crm">CRM</label>
+          <input id="crm" placeholder="12345-SP">
+        </div>
+        <div>
+          <label class="label" for="specialty">Especialidade</label>
+          <select id="specialty">
+            <option value="">Selecione…</option>
+            <option>Clínica Geral</option><option>Cardiologia</option><option>Dermatologia</option>
+            <option>Endocrinologia</option><option>Pediatria</option><option>Psiquiatria</option>
+            <option>Ginecologia</option><option>Urologia</option><option>Neurologia</option>
+            <option>Ortopedia</option><option>Oftalmologia</option><option>Otorrinolaringologia</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid two" id="patientOnly" style="display:none;margin-top:10px">
+        <div>
+          <label class="label" for="cpf">CPF</label>
+          <input id="cpf" placeholder="000.000.000-00" inputmode="numeric">
+        </div>
+        <div>
+          <label class="label" for="birth">Data de nascimento</label>
+          <input id="birth" type="date">
+        </div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;justify-content:space-between">
+        <button class="btn" onclick="back1()">Voltar</button>
+        <button class="btn btn-primary" onclick="next2()">Continuar</button>
+      </div>
+    </section>
+
+    <!-- Step 3: Senha e termos -->
+    <section id="step3" style="display:none">
+      <div class="grid two">
+        <div>
+          <label class="label" for="pw">Senha</label>
+          <input id="pw" type="password" placeholder="••••••••" autocomplete="new-password">
+          <div class="help" id="pwTips">Use 8+ caracteres, maiúsculas, minúsculas, número e símbolo.</div>
+        </div>
+        <div>
+          <label class="label" for="pw2">Confirmar senha</label>
+          <input id="pw2" type="password" placeholder="••••••••" autocomplete="new-password">
+          <div class="help" id="pwErr" style="color:#f87171;display:none">As senhas não coincidem.</div>
+        </div>
+      </div>
+
+      <label class="label" style="margin-top:10px;cursor:pointer">
+        <input type="checkbox" id="terms" style="width:auto;margin-right:8px"> 
+        Aceito os <a href="/termos" style="color:var(--prim2)">Termos de Uso</a> e a <a href="/privacidade" style="color:var(--prim2)">Política de Privacidade</a>
+      </label>
+
+      <div style="margin-top:12px;display:flex;justify-content:space-between">
+        <button class="btn" onclick="back2()">Voltar</button>
+        <button class="btn btn-primary" onclick="finish()">Criar conta</button>
+      </div>
+    </section>
+  </div>
+
+  <p class="help" style="text-align:center;margin-top:12px">
+    Ao concluir, redirecionaremos para <strong>/dashboard</strong> de acordo com o tipo escolhido.
+  </p>
+</main>
+
+<script>
+  const state = { type:null };
+  const $ = sel => document.querySelector(sel);
+  
+  function mark(step){ 
+    ['s1','s2','s3'].forEach((id,i)=>{ 
+      const el=$('#'+id); 
+      el.className='dot '+(i+1<step?'done':i+1===step?'active':'pending'); 
+    }); 
+  }
+  
+  function pickType(t){ 
+    state.type=t; 
+    $('#btnDoctor').classList.toggle('btn-primary',t==='doctor'); 
+    $('#btnPatient').classList.toggle('btn-primary',t==='patient'); 
+  }
+  
+  function next1(){ 
+    if(!state.type){alert('Escolha médico ou paciente'); return;} 
+    $('#step1').style.display='none'; 
+    $('#step2').style.display='block'; 
+    mark(2); 
+    $('#doctorOnly').style.display= state.type==='doctor'?'grid':'none'; 
+    $('#patientOnly').style.display= state.type==='patient'?'grid':'none'; 
+  }
+  
+  function back1(){ 
+    $('#step2').style.display='none'; 
+    $('#step1').style.display='block'; 
+    mark(1); 
+  }
+  
+  function next2(){
+    const name=$('#fullName').value.trim(), email=$('#email').value.trim();
+    if(!name||!email){ alert('Preencha nome e e-mail'); return; }
+    if(state.type==='doctor' && !$('#crm').value.trim()){ alert('CRM é obrigatório para médicos'); return; }
+    if(state.type==='patient' && !$('#cpf').value.trim()){ alert('CPF é obrigatório para pacientes'); return; }
+    $('#step2').style.display='none'; 
+    $('#step3').style.display='block'; 
+    mark(3);
+  }
+  
+  function back2(){ 
+    $('#step3').style.display='none'; 
+    $('#step2').style.display='block'; 
+    mark(2); 
+  }
+  
+  function finish(){
+    const p1=$('#pw').value, p2=$('#pw2').value, ok=$('#terms').checked;
+    $('#pwErr').style.display = (p1 && p2 && p1!==p2) ? 'block':'none';
+    if(!p1||p1.length<8 || p1!==p2 || !ok){ 
+      alert('Revise a senha (mín. 8 caracteres) e aceite os termos.'); 
+      return; 
+    }
+    
+    const profile = { 
+      name: $('#fullName').value.trim(), 
+      email: $('#email').value.trim(), 
+      type: state.type,
+      crm: state.type==='doctor' ? $('#crm').value.trim() : null,
+      specialty: state.type==='doctor' ? $('#specialty').value : null,
+      cpf: state.type==='patient' ? $('#cpf').value.trim() : null,
+      birth: state.type==='patient' ? $('#birth').value : null,
+      registered: new Date().toISOString()
+    };
+    
+    localStorage.setItem('telemed_user', JSON.stringify(profile));
+    
+    // Redirect para dashboard apropriado
+    window.location.href = '/dashboard';
+  }
+
+  // Google Identity Services: recebe credential JWT, decodifica e segue para a área
+  window.onGoogleCredential = (resp)=>{
+    try{
+      const payload = JSON.parse(atob(resp.credential.split('.')[1]));
+      const profile = { 
+        name: payload.name, 
+        email: payload.email, 
+        picture: payload.picture, 
+        type: state.type || 'patient',
+        googleAuth: true,
+        registered: new Date().toISOString()
+      };
+      localStorage.setItem('telemed_user', JSON.stringify(profile));
+      window.location.href = '/dashboard';
+    }catch(e){ 
+      console.error('Google credential parse error', e); 
+      alert('Falha no login Google. Tente novamente.'); 
+    }
+  }
+
+  // Formatação automática de CPF
+  $('#cpf')?.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    e.target.value = value;
+  });
+</script>
+</body>
+</html>
