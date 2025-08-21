@@ -1,74 +1,153 @@
-# 🔐 CREDENCIAIS DEMO MÉDICAS - TELEMED SISTEMA
+# Credenciais Demo TeleMed Pro
 
-## 👨‍⚕️ CONTAS MÉDICAS DEMO DISPONÍVEIS
+## ✅ Sistema de Login 1-Clique Implementado
 
-### **MÉDICO 1 - Dr. Silva (Cardiologista)**
-- **CRM:** `123456-SP`
-- **Senha:** `medico123`
-- **Especialidade:** Cardiologia
-- **Status:** ✅ Ativa
+### 🎯 Funcionalidades Demonstração
 
-### **MÉDICO 2 - Dr. Santos (Psiquiatra)**
-- **CRM:** `654321-RJ`
-- **Senha:** `doutor456`
-- **Especialidade:** Psiquiatria
-- **Status:** ✅ Ativa
+#### **Botões Demo na Página Login**
+- **👨‍⚕️ Entrar como Médico demo** - Login instantâneo área médica
+- **🧑‍🦰 Entrar como Paciente demo** - Login instantâneo área paciente
 
-### **MÉDICO 3 - Dra. Costa (Clínica Geral)**
-- **CRM:** `789012-MG`
-- **Senha:** `psiquiatra789`
-- **Especialidade:** Psiquiatria
-- **Status:** ✅ Ativa
-
-## 🚀 COMO FAZER LOGIN MÉDICO
-
-### **OPÇÃO 1: Via Página de Login**
-1. Acesse: [Login TeleMed](https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login.html)
-2. No campo **CRM**, digite: `123456-SP`
-3. No campo **Senha**, digite: `medico123`
-4. Clique em **"Entrar como Médico"**
-
-### **OPÇÃO 2: Via URL Direta (Mais Rápida)**
-Clique no link abaixo para login automático:
-
-```
-https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/processar-login?crm=123456-SP&senha=medico123
+#### **URLs Diretas para Demo**
+```bash
+# Login automático por URL
+/login?demo=doctor   → Entra direto como médico
+/login?demo=patient  → Entra direto como paciente
 ```
 
-## 🏥 DASHBOARD MÉDICO PRO
+#### **Credenciais Manuais**
+```
+Médico Demo:
+  Email: medico.demo@telemed.pro
+  Senha: demo1234
 
-Após o login bem-sucedido, você será redirecionado para:
-**URL:** `/medical-dashboard-pro.html`
+Paciente Demo:
+  Email: paciente.demo@telemed.pro  
+  Senha: demo1234
+```
 
-### ✅ FUNCIONALIDADES DISPONÍVEIS:
-- **Dashboard Principal** - Visão geral das atividades
-- **Gerenciar Consultas** - Agenda médica completa
-- **Lista de Pacientes** - Pacientes ativos
-- **Emitir Prescrições** - Sistema de receitas
-- **Telemedicina** - Videoconsultas
-- **Configurações** - Perfil médico
+## 🔧 Implementação Técnica
 
-## 🔧 RESOLUÇÃO DE PROBLEMAS
+### **Dados Demo LocalStorage**
+```javascript
+// Perfil Médico Demo
+{
+  email: 'medico.demo@telemed.pro',
+  name: 'Dr. Demo Silva',
+  type: 'doctor',
+  crm: '12345-SP',
+  specialty: 'Clínica Geral',
+  demo: true
+}
 
-### **Problema: "Acesso Restrito"**
-✅ **CORRIGIDO!** O sistema agora redireciona corretamente para `/medical-dashboard-pro.html`
+// Perfil Paciente Demo  
+{
+  email: 'paciente.demo@telemed.pro',
+  name: 'Paciente Demo Santos',
+  type: 'patient',
+  cpf: '000.000.000-00',
+  demo: true
+}
+```
 
-### **Se ainda houver problemas:**
-1. Limpe o cache do navegador
-2. Use uma aba anônima/privada
-3. Verifique se está usando as credenciais exatas
-4. Teste o link direto de login automático
+### **Funções Implementadas**
 
-## 🔗 LINKS ÚTEIS
+#### **1. demoLogin(kind)**
+```javascript
+function demoLogin(kind){
+  const u = DEMO[kind];
+  localStorage.setItem('telemed_user', JSON.stringify(u));
+  localStorage.setItem('telemed_auth', 'true');
+  window.location.href = '/dashboard';
+}
+```
 
-- **Login Médico:** [/login.html](https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/login.html)
-- **Dashboard Médico:** [/medical-dashboard-pro.html](https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/medical-dashboard-pro.html)
-- **Login Automático Dr. Silva:** [Clique aqui](https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/processar-login?crm=123456-SP&senha=medico123)
+#### **2. Auto-login por URL**
+```javascript
+// Detecta ?demo=doctor|patient na URL
+(function(){
+  const demoType = new URLSearchParams(location.search).get('demo');
+  if (demoType && DEMO[demoType]) {
+    demoLogin(demoType);
+  }
+})();
+```
 
-## ✅ STATUS DO SISTEMA
-- **Servidor:** Rodando na porta 5000
-- **Autenticação:** Funcionando
-- **Dashboard Médico:** Disponível
-- **Redirecionamento:** Corrigido
+#### **3. Validação Credenciais**
+```javascript
+// No formulário login tradicional
+if(email === DEMO.doctor.email && password === 'demo1234') return demoLogin('doctor');
+if(email === DEMO.patient.email && password === 'demo1234') return demoLogin('patient');
+```
 
-**🎯 PROBLEMA RESOLVIDO - Sistema médico 100% funcional!**
+## 🎨 Interface Demo
+
+### **Card Demo Destacado**
+- Background verde translúcido
+- Borda verde sutil
+- Botões responsivos lado a lado
+- Credenciais visíveis com códigos destacados
+
+### **Design System Integrado**
+- Mantém tema TeleMed Pro
+- Cores consistentes `--secondary: #10b981`
+- Typography Inter
+- Transições suaves
+
+## 🚀 Fluxos de Demonstração
+
+### **Demo Médico**
+1. **Acesso**: `/login?demo=doctor` ou botão "Médico demo"
+2. **Redirect**: `/dashboard` (área médica)
+3. **Dados**: Dr. Demo Silva, CRM 12345-SP
+4. **Funcionalidades**: Gestão pacientes, consultas, laudos
+
+### **Demo Paciente**
+1. **Acesso**: `/login?demo=patient` ou botão "Paciente demo"  
+2. **Redirect**: `/dashboard` (área paciente)
+3. **Dados**: Paciente Demo Santos, CPF 000.000.000-00
+4. **Funcionalidades**: Histórico, agendamentos, receitas
+
+### **Apresentação Comercial**
+1. **Landing**: Mostrar landing page `/landing`
+2. **Demo Rápido**: Link direto `/login?demo=doctor`
+3. **Exploração**: Cliente navega livremente
+4. **Conversão**: Botão "Cadastrar" para registro real
+
+## 📱 Compatibilidade
+
+### **Mantém Funcionalidades Existentes**
+- ✅ Google Sign-In funcionando
+- ✅ Login tradicional email/senha
+- ✅ Cadastro multi-step
+- ✅ Recuperação senha
+- ✅ Credenciais legacy (medico@telemed.com)
+
+### **Adições Sem Conflito**
+- ✅ Botões demo visualmente separados
+- ✅ Validação demo prioritária
+- ✅ LocalStorage compatível
+- ✅ Redirecionamento para /dashboard
+
+## 🎯 Casos de Uso
+
+### **Vendas & Marketing**
+- **Demos guiadas**: URLs diretas para apresentações
+- **Trials sem cadastro**: Experiência imediata
+- **Onboarding visual**: Cliente vê interface real
+
+### **Desenvolvimento & QA**
+- **Testes rápidos**: Login instantâneo perfis diferentes
+- **Validação features**: Acesso direto áreas específicas
+- **Debugging**: Dados consistentes demo
+
+### **Suporte & Treinamento**
+- **Reprodução issues**: Ambiente demo controlado
+- **Training staff**: Acesso padronizado
+- **Documentação**: Screenshots consistentes
+
+---
+
+**Sistema Demo 1-Clique implementado e funcional!** 
+
+Pronto para apresentações comerciais e demonstrações técnicas sem necessidade de cadastros ou configurações complexas.

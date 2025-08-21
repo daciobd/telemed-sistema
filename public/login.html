@@ -81,6 +81,19 @@
         <a href="/recuperar-senha">Esqueci minha senha</a>
       </div>
 
+      <!-- Acesso Demo (1-clique) -->
+      <div class="card" style="margin-top:12px;padding:14px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3)">
+        <div class="help" style="margin-bottom:8px;color:var(--secondary);font-weight:600">Acesso rápido para demonstração</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="demoLogin('doctor')" style="flex:1;min-width:180px">👨‍⚕️ Entrar como Médico demo</button>
+          <button class="btn" onclick="demoLogin('patient')" style="flex:1;min-width:180px">🧑‍🦰 Entrar como Paciente demo</button>
+        </div>
+        <div class="help" style="margin-top:8px;font-size:0.8rem">
+          Médico: <code style="background:rgba(0,0,0,0.3);padding:2px 4px;border-radius:4px">medico.demo@telemed.pro</code> / <code style="background:rgba(0,0,0,0.3);padding:2px 4px;border-radius:4px">demo1234</code> &nbsp;•&nbsp;
+          Paciente: <code style="background:rgba(0,0,0,0.3);padding:2px 4px;border-radius:4px">paciente.demo@telemed.pro</code> / <code style="background:rgba(0,0,0,0.3);padding:2px 4px;border-radius:4px">demo1234</code>
+        </div>
+      </div>
+
       <div class="signup">
         <p class="help">Não tem uma conta? <a href="/cadastro" style="color:var(--prim2);text-decoration:none;font-weight:600">Criar conta</a></p>
       </div>
@@ -93,6 +106,40 @@
 
 <script>
   const $ = sel => document.querySelector(sel);
+
+  // Usuários demo (somente front-end)
+  const DEMO = {
+    doctor: {
+      email: 'medico.demo@telemed.pro',
+      name: 'Dr. Demo Silva',
+      type: 'doctor',
+      crm: '12345-SP',
+      specialty: 'Clínica Geral',
+      demo: true
+    },
+    patient: {
+      email: 'paciente.demo@telemed.pro',
+      name: 'Paciente Demo Santos',
+      type: 'patient',
+      cpf: '000.000.000-00',
+      demo: true
+    }
+  };
+
+  function demoLogin(kind){
+    const u = DEMO[kind];
+    localStorage.setItem('telemed_user', JSON.stringify(u));
+    localStorage.setItem('telemed_auth', 'true');
+    window.location.href = '/dashboard';
+  }
+
+  // Auto-login por URL (?demo=doctor|patient)
+  (function(){
+    const demoType = new URLSearchParams(location.search).get('demo');
+    if (demoType && DEMO[demoType]) {
+      demoLogin(demoType);
+    }
+  })();
   
   function showError(message) {
     const errorEl = $('#error');
@@ -113,14 +160,16 @@
       return;
     }
 
-    // Check if user exists in localStorage (demo mode)
+    // Atalhos de demo por credenciais
+    if(email === DEMO.doctor.email && password === 'demo1234') return demoLogin('doctor');
+    if(email === DEMO.patient.email && password === 'demo1234') return demoLogin('patient');
+
+    // Check if user exists in localStorage (existing users)
     const stored = localStorage.getItem('telemed_user');
     if (stored) {
       try {
         const user = JSON.parse(stored);
         if (user.email === email) {
-          // In a real app, you'd validate password against hash
-          // For demo, we'll just check if password length > 0
           localStorage.setItem('telemed_auth', 'true');
           window.location.href = '/dashboard';
           return;
@@ -130,14 +179,14 @@
       }
     }
     
-    // Demo credentials
-    const demoCredentials = [
+    // Legacy demo credentials (mantidos para compatibilidade)
+    const legacyCredentials = [
       { email: 'medico@telemed.com', password: 'telemed123', type: 'doctor', name: 'Dr. João Silva' },
       { email: 'paciente@telemed.com', password: 'telemed123', type: 'patient', name: 'Maria Santos' },
       { email: 'admin@telemed.com', password: 'admin123', type: 'admin', name: 'Admin Sistema' }
     ];
     
-    const validCredential = demoCredentials.find(cred => 
+    const validCredential = legacyCredentials.find(cred => 
       cred.email === email && cred.password === password
     );
     
@@ -152,7 +201,7 @@
       localStorage.setItem('telemed_auth', 'true');
       window.location.href = '/dashboard';
     } else {
-      showError('E-mail ou senha incorretos');
+      showError('E-mail ou senha incorretos. Use as credenciais demo acima ou crie uma conta.');
     }
   });
 

@@ -1,0 +1,93 @@
+deixar credenciais de demonstração (médico e paciente) com login 1-clique sem mexer no backend. Abaixo vai um patch bem objetivo pro login.html (funciona hoje mesmo) + um opcional de backend (Express) se você quiser validar no servidor depois.
+
+✅ Front-end (rápido e suficiente para demo)
+O que faz
+
+Botões “Entrar como Médico Demo / Paciente Demo”.
+
+Aceita e-mail/senha dos demos:
+• médico → medico.demo@telemed.pro / demo1234
+• paciente → paciente.demo@telemed.pro / demo1234
+
+Atalho por URL: .../login?demo=doctor ou .../login?demo=patient.
+
+Mantém o Google Sign-In que já existe.
+
+Patch no public/preview/login.html
+
+Dentro do card (abaixo do separador “ou” e dos inputs de e-mail/senha), cole o bloco “Acesso Demo”:
+
+<!-- Acesso Demo (1-clique) -->
+<div class="card" style="margin-top:12px;padding:14px">
+  <div class="help" style="margin-bottom:8px">Acesso rápido para demonstração</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn" onclick="demoLogin('doctor')">👨‍⚕️ Entrar como Médico demo</button>
+    <button class="btn" onclick="demoLogin('patient')">🧑‍🦰 Entrar como Paciente demo</button>
+  </div>
+  <div class="help" style="margin-top:8px">
+    Médico: <code>medico.demo@telemed.pro</code> / <code>demo1234</code> &nbsp;•&nbsp;
+    Paciente: <code>paciente.demo@telemed.pro</code> / <code>demo1234</code>
+  </div>
+</div>
+
+
+No <script> do login.html, adicione logo no topo do script:
+
+// Usuários demo (somente front-end)
+const DEMO = {
+  doctor: {
+    email: 'medico.demo@telemed.pro',
+    name: 'Dr. Demo',
+    type: 'doctor',
+    crm: '12345-SP',
+    specialty: 'Clínica Geral'
+  },
+  patient: {
+    email: 'paciente.demo@telemed.pro',
+    name: 'Paciente Demo',
+    type: 'patient',
+    cpf: '000.000.000-00'
+  }
+};
+
+function demoLogin(kind){
+  const u = DEMO[kind];
+  localStorage.setItem('telemed_user', JSON.stringify(u));
+  window.location.href = kind === 'doctor' ? '/medico' : '/paciente';
+}
+
+
+Ajuste a função loginEmail() para reconhecer as credenciais demo:
+
+function loginEmail(){
+  const email = document.getElementById('email').value.trim();
+  const pw = document.getElementById('pw').value;
+  if(!email){ alert('Preencha o e-mail'); return; }
+
+  // atalhos de demo por credenciais
+  if(email === DEMO.doctor.email && pw === 'demo1234') return demoLogin('doctor');
+  if(email === DEMO.patient.email && pw === 'demo1234') return demoLogin('patient');
+
+  // fluxo atual "simples"
+  const cur = JSON.parse(localStorage.getItem('telemed_user')||'null') || { email, name: email.split('@')[0], type: 'patient' };
+  localStorage.setItem('telemed_user', JSON.stringify(cur));
+  window.location.href = cur.type === 'doctor' ? '/medico' : '/paciente';
+}
+
+
+Auto-login por URL (opcional, ótimo pra demos guiadas). Ainda no <script>:
+
+// ?demo=doctor|patient → entra direto
+(function(){
+  const as = new URLSearchParams(location.search).get('demo');
+  if (as && DEMO[as]) demoLogin(as);
+})();
+
+
+Pronto! Agora você consegue mostrar o fluxo completo sem digitar nada:
+
+/login?demo=doctor abre direto a Área do Médico
+
+/login?demo=patient abre direto a Área do Paciente
+
+As páginas medico.html e paciente.html já leem localStorage.telemed_user, então os dados “Dr. Demo”/“Paciente Demo” aparecem automaticamente.

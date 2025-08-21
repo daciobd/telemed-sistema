@@ -16,6 +16,8 @@ Preferred communication style: Simple, everyday language.
 - **Routing**: React Router or Next.js App Router for client-side navigation.
 - **Design Principles**: Premium emerald-blue color scheme with sophisticated gradients, translucent sticky header with backdrop-blur, glass morphism effects, and professional medical aesthetics.
 - **Key Features**: Professional login/registration, patient/doctor dashboards, medical specialty pages, appointment scheduling, bidding system, AI-powered psychiatric triage (TDAH-ASRS18, GAD-7, PHQ-9, MDQ, PSS-10), notification center, medical profile management, and SMS/WhatsApp medical notifications system.
+- **Authentication System**: Complete Google Identity Services integration with multi-step registration wizard, demo credentials for 1-click login (medico.demo@telemed.pro/demo1234, paciente.demo@telemed.pro/demo1234), URL-based auto-login (?demo=doctor|patient), and localStorage-based session management.
+- **Demo System**: Professional demo environment with dedicated credentials, instant login buttons, and URL shortcuts for sales presentations and rapid testing.
 - **Accessibility**: WCAG 2.1 conformity with ARIA labels, keyboard navigation, and screen reader support.
 - **Performance**: Optimized images (WebP), lazy loading, CSS variables, and GPU-accelerated animations.
 - **Theme System**: Comprehensive theme system with automatic injection for preview pages, allowing `PREVIEW_THEME` environment variable control and a floating UI switcher.
