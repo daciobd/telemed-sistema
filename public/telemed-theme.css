@@ -10,9 +10,9 @@
   --text:#f8fafc;         /* texto principal */
   --muted:#94a3b8;        /* texto secundário */
   --grad:linear-gradient(135deg,var(--primary),var(--primary-2) 40%,var(--secondary) 100%);
-  color:var(--text);
-  background:linear-gradient(120deg,#0b1320,var(--bg));
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--text) !important;
+  background:linear-gradient(120deg,#0b1320,var(--bg)) !important;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif !important;
 }
 
 /* Banner/Título da página (pega nomes comuns) */
