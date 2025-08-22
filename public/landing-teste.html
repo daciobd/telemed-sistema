@@ -119,9 +119,10 @@
     <div class="hero-content">
       <h1 class="hero-title">Telemedicina Inteligente para o Futuro</h1>
       <p class="hero-subtitle">Transforme a saúde com consultas online, gestão de pacientes e IA avançada.</p>
-      <div style="display:flex;gap:1rem;margin-top:2rem">
+      <div style="display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;align-items:center">
         <a href="/cadastro" class="cta-button" style="text-decoration:none;display:inline-block">Experimente Grátis</a>
-        <a href="/dashboard" style="text-decoration:none;display:inline-block;padding:1rem 2rem;border:2px solid var(--secondary);color:var(--secondary);border-radius:9999px;font-weight:600;transition:all 0.3s">Ver Demo</a>
+        <button onclick="demoLogin('doctor')" class="cta-button" style="background:var(--accent);border:none;cursor:pointer">🩺 Demo Médico</button>
+        <button onclick="demoLogin('patient')" class="cta-button" style="background:var(--secondary);border:none;cursor:pointer">👤 Demo Paciente</button>
       </div>
     </div>
     <img class="hero-image" src="https://via.placeholder.com/600x400.png?text=TeleMed+Interface" alt="TeleMed Interface"/>
@@ -321,6 +322,28 @@
     });
 
     window.addEventListener('load',()=>console.log('⚡ Landing carregada em',Math.round(performance.now()),'ms'));
+
+    // Sistema de demo login instantâneo
+    const DEMO = {
+      doctor: { email:'medico.demo@telemed.pro', name:'Dr. Demo', type:'doctor', crm:'12345-SP', specialty:'Clínica Geral' },
+      patient:{ email:'paciente.demo@telemed.pro', name:'Paciente Demo', type:'patient', cpf:'000.000.000-00' }
+    };
+
+    function demoLogin(kind) {
+      const user = DEMO[kind];
+      if (!user) return alert('Tipo de usuário inválido');
+      
+      // Salva dados do usuário
+      localStorage.setItem('telemed_user', JSON.stringify(user));
+      localStorage.setItem('telemed_auth', 'true');
+      
+      // Redireciona baseado no tipo
+      if (kind === 'doctor') {
+        location.href = '/medico';
+      } else {
+        location.href = '/como-funciona';
+      }
+    }
   </script>
 </body>
 </html>
