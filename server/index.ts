@@ -327,6 +327,28 @@ app.get('/recuperar-senha', (req, res) => {
   res.status(404).send('Recuperar senha page not found');
 });
 
+// CANONICAL: Como Funciona - Landing de Demonstração para Pacientes
+app.get('/como-funciona', (req, res) => {
+  console.log('ℹ️ Rota CANÔNICA /como-funciona acessada - Demo Paciente');
+  const comoFuncionaHtml = path.join(__dirname, '../public/preview/como-funciona.html');
+  if (fs.existsSync(comoFuncionaHtml)) {
+    console.log('✅ Servindo preview/como-funciona.html (CANÔNICA)');
+    return res.sendFile(comoFuncionaHtml);
+  }
+  res.status(404).send('Como Funciona page not found');
+});
+
+// CANONICAL: Médico - Dashboard/Área do Médico
+app.get('/medico', (req, res) => {
+  console.log('🩺 Rota CANÔNICA /medico acessada - Área Médica');
+  const medicoHtml = path.join(__dirname, '../public/preview/perfil-medico.html');
+  if (fs.existsSync(medicoHtml)) {
+    console.log('✅ Servindo preview/perfil-medico.html (CANÔNICA)');
+    return res.sendFile(medicoHtml);
+  }
+  res.status(404).send('Médico page not found');
+});
+
 // ALIAS: Landing teste (compatibilidade)
 app.get('/landing-teste', (req, res) => {
   console.log('🔄 Alias /landing-teste → Redirecionando para /landing');
