@@ -81,6 +81,31 @@ app.use("/api/cid10", cid10);
 app.use("/api/exams", exams);
 app.use("/api/memed", memed);
 
+// Medical feedback API endpoint
+app.post('/api/feedback/medico', async (req, res) => {
+  try {
+    const feedback = req.body;
+    console.log('📋 Feedback médico recebido:', {
+      especialidade: feedback.especialidade,
+      experiencia: feedback.experiencia,
+      navegacao: feedback.navegacao,
+      probabilidadeUso: feedback.probabilidadeUso,
+      timestamp: feedback.timestamp
+    });
+    
+    // Here you would typically save to database
+    // For now, just log and return success
+    res.json({ 
+      success: true, 
+      message: 'Feedback recebido com sucesso',
+      id: `feedback_${Date.now()}`
+    });
+  } catch (error) {
+    console.error('Erro ao processar feedback:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Video consultation control endpoints
 app.post('/api/consultation/upload', upload.array('files'), async (req, res) => {
   try {
@@ -261,6 +286,9 @@ app.get("/recuperar-senha", serveFirst(PREVIEW, "recuperar-senha.html", "recover
 
 // Preços (caso já exista um HTML; do contrário, retornará 404 amigável)
 app.get("/precos",          serveFirst(PREVIEW, "precos.html", "planos.html"));
+
+// Feedback médico
+app.get("/feedback-medico", serveFirst(PREVIEW, "feedback-medico.html"));
 
 // PHR / Registro de Saúde — com headers de privacidade (noindex, no-cache)
 app.get("/registro-saude", (req, res, next) => {

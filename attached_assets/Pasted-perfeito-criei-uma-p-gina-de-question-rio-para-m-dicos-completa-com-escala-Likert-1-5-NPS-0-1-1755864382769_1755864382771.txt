@@ -1,0 +1,472 @@
+perfeito — criei uma página de questionário para médicos completa, com escala Likert (1–5), NPS (0–10), campos abertos, captura de metadados (tempo de resposta, navegador, viewport), acessível (fieldset/legend, aria-live) e já preparada para:
+
+enviar via POST para /api/feedback/medico (se existir),
+
+salvar localmente e baixar JSON se o POST falhar (ótimo para demo).
+
+
+A página segue o tema TeleMed (usa telemed-theme.css) e cabe como rota /feedback-medico.
+
+
+---
+
+1) Página: public/preview/feedback-medico.html
+
+> Cole este arquivo nesse caminho.
+
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Questionário do Médico — TeleMed</title>
+
+  <!-- Tema unificado -->
+  <link rel="stylesheet" href="/telemed-theme.css">
+  <style>
+    body.tm{min-height:100vh}
+    .wrap{max-width:980px;margin:0 auto;padding:24px}
+    .card{background:rgba(255,255,255,.06);backdrop-filter:blur(12px);border:1px solid rgba(148,163,184,.18);border-radius:18px;box-shadow:0 10px 30px rgba(2,6,23,.45);color:#e5e7eb}
+    .card h1,.card h2{margin:0 0 8px}
+    .muted{color:#94a3b8}
+    .grid{display:grid;gap:14px}
+    .two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    fieldset{border:1px solid rgba(148,163,184,.25);border-radius:14px;padding:14px}
+    legend{padding:0 8px;color:#e7e9ff;font-weight:700}
+    label{display:block;margin:.35rem 0 .2rem}
+    input[type="text"],input[type="email"],input[type="number"],select,textarea{
+      width:100%;background:rgba(2,6,23,.55);border:1px solid rgba(148,163,184,.25)!important;color:#e5e7eb;border-radius:12px;padding:.75rem 1rem
+    }
+    textarea{min-height:110px}
+    .likert{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .likert .opt{display:flex;align-items:center;gap:6px;background:rgba(15,23,42,.45);border:1px solid rgba(148,163,184,.18);border-radius:10px;padding:6px 10px}
+    .nps{display:flex;gap:8px;flex-wrap:wrap}
+    .nps label{background:rgba(15,23,42,.45);border:1px solid rgba(148,163,184,.18);border-radius:10px;padding:6px 10px;cursor:pointer}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:.85rem 1.1rem;font-weight:700;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,#4F46E5,#8B5CF6);color:#fff;box-shadow:0 8px 24px rgba(79,70,229,.35)}
+    .btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(148,163,184,.25);color:#e5e7eb}
+    .sep{height:1px;background:rgba(148,163,184,.18);margin:14px 0}
+    .badge{display:inline-block;border:1px solid rgba(148,163,184,.25);background:rgba(255,255,255,.06);border-radius:999px;padding:4px 10px}
+    .required:after{content:" *";color:#F59E0B}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+    .ok{color:#10B981}.warn{color:#F59E0B}.err{color:#EF4444}
+  </style>
+</head>
+<body class="tm">
+  <div class="wrap">
+    <div class="card" style="padding:18px 18px 6px">
+      <div class="topbar">
+        <div>
+          <h1>Questionário — Experiência do Médico</h1>
+          <div class="muted">Leva ~3–5 min. Não colete dados de pacientes. Campos marcados com * são obrigatórios.</div>
+        </div>
+        <a href="/medico" class="badge">← Voltar à Área do Médico</a>
+      </div>
+      <form id="form" class="grid" novalidate>
+        <!-- PERFIL -->
+        <fieldset>
+          <legend>Perfil profissional</legend>
+          <div class="grid two">
+            <div>
+              <label for="especialidade" class="required">Especialidade</label>
+              <select id="especialidade" required>
+                <option value="">Selecione…</option>
+                <option>Clínica Geral</option><option>Cardiologia</option><option>Dermatologia</option>
+                <option>Endocrinologia</option><option>Pediatria</option><option>Psiquiatria</option>
+                <option>Outra</option>
+              </select>
+            </div>
+            <div>
+              <label for="experiencia" class="required">Tempo de experiência</label>
+              <select id="experiencia" required>
+                <option value="">Selecione…</option>
+                <option>0–2 anos</option><option>3–5 anos</option><option>6–10 anos</option><option>11–20 anos</option><option>20+ anos</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid two" style="margin-top:10px">
+            <div>
+              <label for="atuacao">Atuação</label>
+              <select id="atuacao">
+                <option value="">Selecione…</option>
+                <option>Telemedicina</option><option>Clínica/Presencial</option><option>Ambos</option>
+              </select>
+            </div>
+            <div>
+              <label for="dispositivos">Dispositivos usados</label>
+              <select id="dispositivos" multiple>
+                <option>Desktop</option><option>Notebook</option><option>Tablet</option><option>Celular</option>
+              </select>
+              <small class="muted">Use Ctrl/Cmd para múltiplos</small>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- EXPERIÊNCIA DE USO -->
+        <fieldset>
+          <legend>Experiência de uso</legend>
+          <div class="grid two">
+            <div>
+              <label class="required">Facilidade de navegação</label>
+              <div class="likert" role="group" aria-label="Facilidade de navegação">
+                <!-- 1–5 -->
+                <label class="opt"><input type="radio" name="nav" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="nav" value="2">2</label>
+                <label class="opt"><input type="radio" name="nav" value="3">3</label>
+                <label class="opt"><input type="radio" name="nav" value="4">4</label>
+                <label class="opt"><input type="radio" name="nav" value="5">5</label>
+              </div>
+            </div>
+            <div>
+              <label class="required">Intuitivo / fácil de aprender</label>
+              <div class="likert" role="group" aria-label="Intuitivo">
+                <label class="opt"><input type="radio" name="intuitivo" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="intuitivo" value="2">2</label>
+                <label class="opt"><input type="radio" name="intuitivo" value="3">3</label>
+                <label class="opt"><input type="radio" name="intuitivo" value="4">4</label>
+                <label class="opt"><input type="radio" name="intuitivo" value="5">5</label>
+              </div>
+            </div>
+            <div>
+              <label class="required">Visual / organização das telas</label>
+              <div class="likert" role="group" aria-label="Visual">
+                <label class="opt"><input type="radio" name="visual" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="visual" value="2">2</label>
+                <label class="opt"><input type="radio" name="visual" value="3">3</label>
+                <label class="opt"><input type="radio" name="visual" value="4">4</label>
+                <label class="opt"><input type="radio" name="visual" value="5">5</label>
+              </div>
+            </div>
+            <div>
+              <label class="required">Rapidez / desempenho</label>
+              <div class="likert" role="group" aria-label="Rapidez">
+                <label class="opt"><input type="radio" name="perf" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="perf" value="2">2</label>
+                <label class="opt"><input type="radio" name="perf" value="3">3</label>
+                <label class="opt"><input type="radio" name="perf" value="4">4</label>
+                <label class="opt"><input type="radio" name="perf" value="5">5</label>
+              </div>
+            </div>
+            <div>
+              <label class="required">Estabilidade (erros / travamentos)</label>
+              <div class="likert" role="group" aria-label="Estabilidade">
+                <label class="opt"><input type="radio" name="stab" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="stab" value="2">2</label>
+                <label class="opt"><input type="radio" name="stab" value="3">3</label>
+                <label class="opt"><input type="radio" name="stab" value="4">4</label>
+                <label class="opt"><input type="radio" name="stab" value="5">5</label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- VALOR / ADOÇÃO -->
+        <fieldset>
+          <legend>Valor percebido e adoção</legend>
+          <div class="grid two">
+            <div>
+              <label class="required">Utilidade para seu trabalho</label>
+              <div class="likert" role="group" aria-label="Utilidade pessoal">
+                <label class="opt"><input type="radio" name="util_pessoal" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="util_pessoal" value="2">2</label>
+                <label class="opt"><input type="radio" name="util_pessoal" value="3">3</label>
+                <label class="opt"><input type="radio" name="util_pessoal" value="4">4</label>
+                <label class="opt"><input type="radio" name="util_pessoal" value="5">5</label>
+              </div>
+            </div>
+            <div>
+              <label class="required">Utilidade para colegas/equipe</label>
+              <div class="likert" role="group" aria-label="Utilidade equipe">
+                <label class="opt"><input type="radio" name="util_equipe" value="1" required>1</label>
+                <label class="opt"><input type="radio" name="util_equipe" value="2">2</label>
+                <label class="opt"><input type="radio" name="util_equipe" value="3">3</label>
+                <label class="opt"><input type="radio" name="util_equipe" value="4">4</label>
+                <label class="opt"><input type="radio" name="util_equipe" value="5">5</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <label class="required">Probabilidade de usar o sistema regularmente (0 a 10)</label>
+          <div class="nps" role="group" aria-label="Probabilidade de uso">
+            <!-- 0–10 -->
+            <label><input type="radio" name="uso" value="0" required>0</label>
+            <label><input type="radio" name="uso" value="1">1</label>
+            <label><input type="radio" name="uso" value="2">2</label>
+            <label><input type="radio" name="uso" value="3">3</label>
+            <label><input type="radio" name="uso" value="4">4</label>
+            <label><input type="radio" name="uso" value="5">5</label>
+            <label><input type="radio" name="uso" value="6">6</label>
+            <label><input type="radio" name="uso" value="7">7</label>
+            <label><input type="radio" name="uso" value="8">8</label>
+            <label><input type="radio" name="uso" value="9">9</label>
+            <label><input type="radio" name="uso" value="10">10</label>
+          </div>
+        </fieldset>
+
+        <!-- ETAPAS TESTADAS -->
+        <fieldset>
+          <legend>Fluxo testado</legend>
+          <div class="grid two">
+            <div>
+              <label>Marque o que você testou</label>
+              <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+                <label><input type="checkbox" name="fluxo" value="agenda"> Agenda</label>
+                <label><input type="checkbox" name="fluxo" value="convite"> Convite do paciente</label>
+                <label><input type="checkbox" name="fluxo" value="sala-espera"> Sala de espera</label>
+                <label><input type="checkbox" name="fluxo" value="iniciar"> Iniciar consulta</label>
+                <label><input type="checkbox" name="fluxo" value="anamnese"> Formulário de anamnese</label>
+                <label><input type="checkbox" name="fluxo" value="receitas"> Receitas (Memed)</label>
+                <label><input type="checkbox" name="fluxo" value="exames"> Solicitação de exames</label>
+                <label><input type="checkbox" name="fluxo" value="anexos"> Upload de anexos</label>
+                <label><input type="checkbox" name="fluxo" value="chat"> Chat</label>
+                <label><input type="checkbox" name="fluxo" value="dr-ai"> Dr. AI</label>
+                <label><input type="checkbox" name="fluxo" value="mic-cam"> Microfone/Câmera</label>
+              </div>
+            </div>
+            <div>
+              <label>Onde teve dificuldades?</label>
+              <textarea id="dificuldades" placeholder="Descreva onde encontrou barreiras, confusões, passos extras…"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- SUGESTÕES -->
+        <fieldset>
+          <legend>Sugestões e dúvidas</legend>
+          <div class="grid">
+            <div>
+              <label for="mudancas">O que mudaria no sistema?</label>
+              <textarea id="mudancas" placeholder="Ex.: reorganizar botões da consulta, melhorar rótulos, atalhos de teclado…"></textarea>
+            </div>
+            <div>
+              <label for="duvidas">Dúvidas que surgiram</label>
+              <textarea id="duvidas" placeholder="Ex.: Como convidar paciente? Como salvar anamnese?…"></textarea>
+            </div>
+            <div>
+              <label for="faltando">Funcionalidades que sente falta</label>
+              <textarea id="faltando" placeholder="Ex.: anexar áudio, integração com laboratório X, modelos de receituário…"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- CONTATO (opcional) -->
+        <fieldset>
+          <legend>Contato (opcional)</legend>
+          <div class="grid two">
+            <div>
+              <label for="email">Seu e-mail (para follow-up)</label>
+              <input id="email" type="email" placeholder="voce@exemplo.com" autocomplete="email" />
+            </div>
+            <div>
+              <label for="consent">Permite contato para entender melhor?</label>
+              <select id="consent">
+                <option value="">Selecione…</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+            </div>
+          </div>
+          <small class="muted">Não inclua informações de pacientes (sem dados sensíveis/PII).</small>
+        </fieldset>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Enviar feedback</button>
+          <button type="button" id="btnExport" class="btn btn-ghost">Baixar JSON</button>
+          <span id="status" class="muted" aria-live="polite"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const form = document.getElementById('form');
+    const statusEl = document.getElementById('status');
+    const btnExport = document.getElementById('btnExport');
+    const t0 = Date.now();
+
+    function qSelAll(name){ return Array.from(document.querySelectorAll(`[name="${name}"]`)); }
+    function getCheckedValues(name){ return qSelAll(name).filter(i=>i.checked).map(i=>i.value); }
+    function getLikert(name){ const r = qSelAll(name).find(i=>i.checked); return r ? Number(r.value) : null; }
+    function setStatus(msg, cls=''){ statusEl.textContent = msg; statusEl.className = 'muted ' + cls; }
+
+    function collectData(){
+      const dt = {
+        meta: {
+          ts: new Date().toISOString(),
+          msToFill: Date.now() - t0,
+          userAgent: navigator.userAgent,
+          href: location.href,
+          viewport: { w: window.innerWidth, h: window.innerHeight }
+        },
+        perfil: {
+          especialidade: document.getElementById('especialidade').value || null,
+          experiencia:   document.getElementById('experiencia').value || null,
+          atuacao:       document.getElementById('atuacao').value || null,
+          dispositivos:  Array.from(document.getElementById('dispositivos').selectedOptions).map(o=>o.value)
+        },
+        experiencia: {
+          navegacao: getLikert('nav'),
+          intuitivo: getLikert('intuitivo'),
+          visual:    getLikert('visual'),
+          rapidez:   getLikert('perf'),
+          estabilidade: getLikert('stab')
+        },
+        valor: {
+          util_pessoal: getLikert('util_pessoal'),
+          util_equipe:  getLikert('util_equipe'),
+          prob_uso_0_10: (function(){ const r=[...document.querySelectorAll('[name="uso"]')].find(i=>i.checked); return r?Number(r.value):null; })()
+        },
+        fluxo: {
+          testou: getCheckedValues('fluxo'),
+          dificuldades: document.getElementById('dificuldades').value.trim() || null
+        },
+        sugestoes: {
+          mudancas: document.getElementById('mudancas').value.trim() || null,
+          duvidas:  document.getElementById('duvidas').value.trim() || null,
+          faltando: document.getElementById('faltando').value.trim() || null
+        },
+        contato: {
+          email: document.getElementById('email').value.trim() || null,
+          consent: document.getElementById('consent').value || null
+        }
+      };
+      return dt;
+    }
+
+    async function tryPost(json){
+      try{
+        const r = await fetch('/api/feedback/medico', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(json)
+        });
+        if (!r.ok) throw new Error('HTTP '+r.status);
+        return true;
+      }catch(e){
+        console.warn('POST falhou, ficará local/exportável.', e);
+        return false;
+      }
+    }
+
+    function saveLocal(json){
+      const key = 'telemed_feedback_medico';
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push(json);
+      localStorage.setItem(key, JSON.stringify(arr));
+    }
+
+    function downloadJSON(filename, data){
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    form.addEventListener('submit', async (ev)=>{
+      ev.preventDefault();
+
+      // valida mínimos
+      if (!document.getElementById('especialidade').value || !document.getElementById('experiencia').value){
+        setStatus('Preencha Especialidade e Tempo de experiência.', 'warn'); return;
+      }
+      const requiredLikerts = ['nav','intuitivo','visual','perf','stab','uso'];
+      for (const n of requiredLikerts){
+        if (![...document.querySelectorAll(`[name="${n}"]`)].some(i=>i.checked)){
+          setStatus('Responda todas as perguntas obrigatórias (1–5 e 0–10).', 'warn'); return;
+        }
+      }
+
+      const payload = collectData();
+      setStatus('Enviando…');
+
+      const ok = await tryPost(payload);
+      saveLocal(payload);
+      if (ok){
+        setStatus('Obrigado! Feedback enviado com sucesso.', 'ok');
+      } else {
+        setStatus('Feedback salvo localmente. Você pode baixar o JSON.', 'warn');
+      }
+
+      // limpar (opcional)
+      // form.reset();
+    });
+
+    btnExport.addEventListener('click', ()=>{
+      const key = 'telemed_feedback_medico';
+      const data = JSON.parse(localStorage.getItem(key) || '[]');
+      if (!data.length) { setStatus('Não há respostas locais para exportar.', 'warn'); return; }
+      downloadJSON('feedback-medico.json', data);
+      setStatus('Arquivo JSON gerado para download.', 'ok');
+    });
+  })();
+  </script>
+</body>
+</html>
+
+
+---
+
+2) Rota do servidor
+
+No seu server/index.ts (ou .js), adicione:
+
+// GET — página do questionário
+app.get("/feedback-medico", serveFirst(PREVIEW, "feedback-medico.html"));
+
+// POST — coleta (opcional; ativa se quiser persistir no servidor)
+import fs from "node:fs";
+import path from "node:path";
+app.post("/api/feedback/medico", express.json(), (req, res) => {
+  const row = { ts: new Date().toISOString(), ...req.body };
+  const dir = path.join(__dirname, "../data");
+  const f = path.join(dir, "feedback-medico.jsonl");
+  try {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    fs.appendFileSync(f, JSON.stringify(row) + "\n");
+    res.json({ ok: true });
+  } catch (e) {
+    console.error("feedback-medico append failed", e);
+    res.status(500).json({ ok: false });
+  }
+});
+
+> Se não quiser gravar em disco no ambiente atual, pode deixar só o GET — o front já salva localmente e permite baixar JSON.
+
+
+
+
+---
+
+3) Link na área do médico
+
+No public/preview/medico.html, acrescente um botão:
+
+<a class="card btn" href="/feedback-medico" style="justify-content:center">Avaliar experiência</a>
+
+
+---
+
+Teste em 30s
+
+1. Abra /feedback-medico, responda 2–3 itens e Envie.
+
+
+2. Se o POST estiver ativo, veja criar data/feedback-medico.jsonl.
+
+
+3. Se não, clique Baixar JSON: salva localmente o arquivo com as respostas.
+
+
+4. Verifique acessibilidade: Tab navega entre campos; status é lido via aria-live.
+
+
+
+Se quiser, eu adapto as perguntas (p. ex., incluir SUS completo, pesos por fluxo de consulta, escala 7 pontos) ou mudo a destinação dos dados (Sheets, Supabase, Postgres).
+
