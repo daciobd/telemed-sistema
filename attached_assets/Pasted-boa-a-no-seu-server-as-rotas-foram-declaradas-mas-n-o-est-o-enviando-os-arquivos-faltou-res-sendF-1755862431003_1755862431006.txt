@@ -1,0 +1,84 @@
+boa! aí no seu server as rotas foram declaradas mas não estão enviando os arquivos (faltou res.sendFile). Segue um patch enxuto que:
+
+serve exatamente os três arquivos que você listou,
+
+tem fallback seguro (se você renomear “perfil-medico” / “perfildomedico”),
+
+dá 404 amigável quando o arquivo não existir,
+
+e lembra a ordem correta dos middlewares (muito importante por causa do Vite/dev-server).
+
+
+Patch do servidor (cole logo após os imports)
+
+import path from "node:path";
+import fs from "node:fs";
+
+// pastas públicas
+const pub     = path.join(__dirname, "../public");
+const preview = path.join(pub, "preview");
+
+// helper para servir arquivo com fallback e 404 amigável
+function serveFirst(folder: string, ...files: string[]) {
+  const candidate = files.find(f => fs.existsSync(path.join(folder, f)));
+  return (_req: any, res: any) => {
+    if (candidate) return res.sendFile(path.join(folder, candidate));
+    res.status(404).type("text").send(
+      `Arquivo não encontrado.\nProcurado em:\n` + files.map(f => " - " + path.join(folder, f)).join("\n")
+    );
+  };
+}
+
+Suas três rotas canônicas
+
+> Coloque essas rotas antes de qualquer catch-all (app.use('*', ...)) e antes do middleware do Vite/SSR (se houver), senão o dev server intercepta e vira 404.
+
+
+
+// /como-funciona  → public/preview/como-funciona.html
+app.get("/como-funciona", serveFirst(preview, "como-funciona.html"));
+
+// /medico         → public/preview/perfil-medico.html (fallback: perfildomedico.html)
+app.get("/medico", serveFirst(preview, "perfil-medico.html", "perfildomedico.html"));
+
+// /consulta       → public/enhanced-teste.html
+app.get("/consulta", serveFirst(pub, "enhanced-teste.html"));
+
+> Se quiser, já adicione as demais canônicas aqui também (/agenda, /dashboard, etc.) usando o mesmo serveFirst.
+
+
+
+(Opcional) Redirect da raiz
+
+Se a raiz do app deve ir para a agenda (padrão que combinamos):
+
+app.get("/", (req, res) => {
+  const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+  res.redirect(301, "/agenda" + qs);
+});
+
+Ordem recomendada (evita o “Vite está interceptando”)
+
+// 1) middlewares utilitários (compression, timing, etc.)
+// 2) arquivos estáticos (sem index para não roubar as rotas)
+app.use(express.static(pub, { index: false }));
+
+// 3) ROTAS CANÔNICAS (as três acima e as demais do app)
+
+// 4) redirects de aliases → canônicas (se você tiver)
+// 5) catch-all (SPA fallback) — se realmente precisar
+// app.get("*", (_req, res) => res.sendFile(path.join(pub, "index.html")));
+
+Testes rápidos (com o server rodando)
+
+curl -I http://localhost:5000/consulta
+curl -I http://localhost:5000/como-funciona
+curl -I http://localhost:5000/medico
+
+Esperado: HTTP/1.1 200 OK em todos.
+
+
+---
+
+Se quiser, eu já te mando o bloco com todas as canônicas (/agenda, /dashboard, /dr-ai, /cadastro, /login, /paciente, /registro-saude etc.) no mesmo formato serveFirst, incluindo os redirects 301 dos aliases. Só falar que eu despejo aqui prontinho.
+
