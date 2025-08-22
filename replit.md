@@ -43,7 +43,7 @@ Preferred communication style: Simple, everyday language.
 - **Monitoring**: Integrated with UptimeRobot, StatusCake, and Slack/Telegram notifications.
 - **Automated Backups**: System protecting critical files with tar.gz compression and detailed reporting.
 - **Performance Optimization Framework**: Established framework with memo/useCallback/useMemo, React.lazy+Suspense, Query optimization, sticky headers, and comprehensive instrumentation.
-- **Canonical Routes**: Officialized route structure for `/landing`, `/agenda`, `/consulta`, `/dashboard`, `/registro-saude` with root `/` redirecting to `/landing`. Landing-teste promoted to official landing page. Implemented dual-layer redirect system (server-side and client-side) with query string preservation. PHR (Personal Health Record) route `/registro-saude` implemented with privacy headers, access guards, and security redirects.
+- **Canonical Routes System**: Complete normalization with 14 canonical routes (/agenda, /consulta, /dashboard, /medico, /paciente, /como-funciona, /dr-ai, /cadastro, /login, /registro-saude, /privacidade, /precos, /recuperar-senha, /feedback-medico). All files organized in public/preview/ with automated fallbacks via serveFirst() helper. 301 redirects for legacy URLs. Root `/` redirects to `/agenda`. PHR route with privacy headers (noindex, no-cache). Maintenance scripts: audit-pages.cjs, normalize-pages.cjs, codemod-dev-to-canon.cjs.
 
 ## External Dependencies
 

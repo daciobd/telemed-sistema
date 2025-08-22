@@ -11,7 +11,7 @@ const URLsProtegidas = [
     '/fila-pacientes-medico.html',
     '/historico-consultas.html',
     '/notificacoes.html',
-    '/perfil-medico.html',
+    "/medico",
     '/agenda-do-dia.html'
 ];
 

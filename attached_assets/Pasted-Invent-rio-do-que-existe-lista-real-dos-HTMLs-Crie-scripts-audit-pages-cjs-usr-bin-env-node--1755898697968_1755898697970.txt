@@ -1,0 +1,232 @@
+Inventário do que existe (lista real dos HTMLs)
+
+Crie scripts/audit-pages.cjs:
+
+#!/usr/bin/env node
+const fs = require('fs'), path = require('path');
+const PUB = path.join(__dirname, '..', 'public');
+const PREVIEW = path.join(PUB, 'preview');
+
+const EXPECTED = {
+  '/agenda':          ['agenda-medica.html','agenda.html'],
+  '/consulta':        ['enhanced-teste.html','consulta.html','enhanced.html'],
+  '/dashboard':       ['dashboard.html','dashboard-teste.html','dashboard-test.html'],
+  '/medico':          ['perfil-medico.html','perfildomedico.html','medico.html'],
+  '/paciente':        ['mobile.html','paciente.html'],
+  '/como-funciona':   ['como-funciona.html','como funciona.html'],
+  '/dr-ai':           ['DR.AI-CORRIGIDO.HTML','dr-ai-static.html','dr-ai.html'],
+  '/cadastro':        ['cadastro.html'],
+  '/login':          ['login.html'],
+  '/registro-saude':  ['registro-saude.html','phr.html','ph-record.html'],
+  '/privacidade':     ['politadeprivacidade.html','privacidade.html'],
+  '/precos':          ['precos.html','planos.html'],
+  '/recuperar-senha': ['recuperar-senha.html','recovery.html']
+};
+
+function listHtml(dir) {
+  const out = [];
+  function walk(d) {
+    for (const f of fs.readdirSync(d)) {
+      const p = path.join(d,f);
+      const st = fs.statSync(p);
+      if (st.isDirectory()) walk(p);
+      else if (/\.html?$/i.test(f)) out.push(p);
+    }
+  }
+  if (fs.existsSync(dir)) walk(dir);
+  return out;
+}
+
+const all = [...listHtml(PUB), ...listHtml(PREVIEW)];
+function hasAny(cands) {
+  for (const c of cands) {
+    const paths = [
+      path.join(PUB, c),
+      path.join(PREVIEW, c),
+      path.join(PUB, c.toLowerCase()),
+      path.join(PREVIEW, c.toLowerCase())
+    ];
+    if (paths.some(p => fs.existsSync(p))) return 'OK: ' + paths.find(p=>fs.existsSync(p));
+  }
+  return 'MISSING';
+}
+
+console.log('📂 public files:\n', all.map(p=>p.replace(PUB,'public')).sort().join('\n'));
+console.log('\n🔎 Expected canonical targets:\n');
+for (const [route, cands] of Object.entries(EXPECTED)) {
+  console.log(route.padEnd(18), '→', cands.join(', '), '::', hasAny(cands));
+}
+
+
+Rodar:
+
+node scripts/audit-pages.cjs
+
+
+Isso mostra exatamente o que existe e onde.
+
+2) Normalizador: mover/renomear pro lugar certo (com DRY-RUN)
+
+Crie scripts/normalize-pages.cjs:
+
+#!/usr/bin/env node
+const fs = require('fs'), path = require('path');
+const DRY = !!process.env.DRY_RUN;
+const PUB = path.join(__dirname, '..', 'public');
+const PREVIEW = path.join(PUB, 'preview');
+if (!fs.existsSync(PREVIEW)) fs.mkdirSync(PREVIEW, { recursive: true });
+
+const PLAN = {
+  '/agenda':        'agenda-medica.html',
+  '/consulta':      'enhanced-teste.html',
+  '/dashboard':     'dashboard.html',
+  '/medico':        'perfil-medico.html',
+  '/paciente':      'mobile.html',
+  '/como-funciona': 'como-funciona.html',
+  '/dr-ai':         'dr-ai.html',           // será sobrescrito se já houver DR.AI-CORRIGIDO.HTML
+  '/cadastro':      'cadastro.html',
+  '/login':         'login.html',
+  '/registro-saude':'registro-saude.html',
+  '/privacidade':   'privacidade.html',
+  '/precos':        'precos.html',
+  '/recuperar-senha':'recuperar-senha.html'
+};
+
+const CANDIDATES = {
+  '/dashboard': ['dashboard.html','dashboard-teste.html','dashboard-test.html','dashboard.HTML','dashboard-teste.HTML'],
+  '/agenda': ['agenda-medica.html','agenda.html'],
+  '/consulta': ['enhanced-teste.html','consulta.html','enhanced.html'],
+  '/medico': ['perfil-medico.html','perfildomedico.html','medico.html'],
+  '/paciente': ['mobile.html','paciente.html'],
+  '/como-funciona': ['como-funciona.html','como funciona.html'],
+  '/dr-ai': ['DR.AI-CORRIGIDO.HTML','dr-ai-static.html','dr-ai.html'],
+  '/registro-saude': ['registro-saude.html','phr.html','ph-record.html'],
+  '/privacidade': ['politadeprivacidade.html','privacidade.html'],
+  '/precos': ['precos.html','planos.html'],
+  '/recuperar-senha': ['recuperar-senha.html','recovery.html']
+};
+
+function findExisting(name) {
+  const tries = [
+    path.join(PREVIEW, name),
+    path.join(PUB, name),
+    path.join(PREVIEW, name.toLowerCase()),
+    path.join(PUB, name.toLowerCase())
+  ];
+  return tries.find(p => fs.existsSync(p));
+}
+
+function moveToPreview(currentPath, targetFile) {
+  const dest = path.join(PREVIEW, targetFile.toLowerCase());
+  if (currentPath === dest) return;
+  if (DRY) return console.log('[dry-move]', currentPath, '→', dest);
+  fs.renameSync(currentPath, dest);
+  console.log('[move]', currentPath, '→', dest);
+}
+
+for (const [route, target] of Object.entries(PLAN)) {
+  const cands = CANDIDATES[route] || [target];
+  const found = cands.map(findExisting).find(Boolean);
+  if (!found) { console.log('[MISS]', route, '→', target, '(nenhum candidato encontrado)'); continue; }
+  moveToPreview(found, target);
+}
+
+
+Rodar:
+
+DRY_RUN=1 node scripts/normalize-pages.cjs   # só mostra o que faria
+node scripts/normalize-pages.cjs             # aplica (move/renomeia)
+
+
+Isso resolve o dashboard: se estava em public/dashboard.html ou public/preview/dashboard.HTML, ele vira public/preview/dashboard.html (minúsculo, caminho certo).
+
+3) Servidor: rotas + redirects (garante abertura)
+
+Garanta que seu bloco de rotas esteja assim (ou cole por cima):
+
+import path from "node:path";
+import fs from "node:fs";
+
+const PUB     = path.join(__dirname, "../public");
+const PREVIEW = path.join(PUB, "preview");
+
+app.use(require('express').static(PUB, { index: false })); // antes das rotas
+
+function serveFirst(folder, ...files) {
+  const cand = files.find(f => fs.existsSync(path.join(folder, f)));
+  return (_req, res) => {
+    if (cand) return res.sendFile(path.join(folder, cand));
+    res.status(404).type('text').send('Arquivo não encontrado.');
+  };
+}
+
+// Redirects de aliases → canônicas (inclui /dev/agenda → /agenda)
+const redirects = {
+  "/": "/agenda",
+  "/landing": "/agenda",
+  "/enhanced": "/consulta",
+  "/enhanced-consultation": "/consulta",
+  "/enhanced-teste": "/consulta",
+  "/enhanced-system": "/consulta",
+  "/video-consultation": "/consulta",
+  "/doctor-dashboard": "/dashboard",
+  "/dashboard-teste": "/dashboard",
+  "/dashboard-teste.html": "/dashboard",
+  "/schedule": "/agenda",
+  "/dev/agenda": "/agenda"
+};
+Object.entries(redirects).forEach(([from,to])=>{
+  app.get(from, (req,res)=> {
+    const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    res.redirect(301, to + qs);
+  });
+});
+
+// CANÔNICAS (inclui múltiplos nomes possíveis)
+app.get("/agenda",          serveFirst(PREVIEW, "agenda-medica.html", "agenda.html"));
+app.get("/consulta",        serveFirst(PUB,     "enhanced-teste.html", "consulta.html", "enhanced.html"));
+app.get("/dashboard",       serveFirst(PREVIEW, "dashboard.html", "dashboard-teste.html", "dashboard-test.html"));
+
+app.get("/medico",          serveFirst(PREVIEW, "perfil-medico.html", "perfildomedico.html", "medico.html"));
+app.get("/paciente",        serveFirst(PREVIEW, "mobile.html", "paciente.html"));
+app.get("/como-funciona",   serveFirst(PREVIEW, "como-funciona.html", "como funciona.html"));
+app.get("/dr-ai",           serveFirst(PREVIEW, "DR.AI-CORRIGIDO.HTML", "dr-ai-static.html", "dr-ai.html"));
+app.get("/cadastro",        serveFirst(PREVIEW, "cadastro.html"));
+app.get("/login",           serveFirst(PREVIEW, "login.html"));
+app.get("/registro-saude",  (req,res,next)=>{res.set({
+  "X-Robots-Tag":"noindex, noarchive, nosnippet",
+  "Cache-Control":"no-store, max-age=0, must-revalidate"
+}); next();}, serveFirst(PREVIEW, "registro-saude.html", "phr.html", "ph-record.html"));
+app.get("/privacidade",     serveFirst(PREVIEW, "politadeprivacidade.html", "privacidade.html"));
+app.get("/precos",          serveFirst(PREVIEW, "precos.html", "planos.html"));
+app.get("/recuperar-senha", serveFirst(PREVIEW, "recuperar-senha.html", "recovery.html"));
+
+
+Ordem importa! express.static (index:false) → rotas canônicas → redirects → (se tiver) fallback SPA.
+
+4) Consertar links antigos no código
+
+Crie/rode o codemod para zerar /dev/agenda e outros:
+
+// scripts/codemod-dev-to-canon.cjs
+#!/usr/bin/env node
+const fs = require('fs'), glob = require('glob');
+
+const REPLACES = [
+  [/["']\/dev\/agenda[^"']*["']/g, `"/agenda"`],
+  [/["']\/dev\/dashboard[^"']*["']/g, `"/dashboard"`],
+  [/["']\/preview\/dashboard\.HTML["']/g, `"/dashboard"`], // casos hardcoded
+  [/["']\/preview\/[^"']+\.html["']/g, (m)=> m.replace(/"\/preview\/[^"]+\.html"/, '"/"')] // opcional
+];
+
+for (const file of glob.sync('{public,client}/**/*.{html,js,ts,tsx,jsx}', {nodir:true})) {
+  const inTxt = fs.readFileSync(file,'utf8');
+  let outTxt = inTxt;
+  for (const [re, to] of REPLACES) outTxt = outTxt.replace(re, to);
+  if (outTxt !== inTxt) { fs.writeFileSync(file, outTxt); console.log('[write]', file); }
+}
+
+
+Rodar:
+
+node scripts/codemod-dev-to-canon.cjs
