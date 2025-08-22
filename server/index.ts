@@ -18,6 +18,21 @@ import { env } from './config/env.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// pastas públicas
+const pub = path.join(__dirname, "../public");
+const preview = path.join(pub, "preview");
+
+// helper para servir arquivo com fallback e 404 amigável
+function serveFirst(folder: string, ...files: string[]) {
+  const candidate = files.find(f => fs.existsSync(path.join(folder, f)));
+  return (_req: any, res: any) => {
+    if (candidate) return res.sendFile(path.join(folder, candidate));
+    res.status(404).type("text").send(
+      `Arquivo não encontrado.\nProcurado em:\n` + files.map(f => " - " + path.join(folder, f)).join("\n")
+    );
+  };
+}
+
 const app = express();
 
 // Apply enhanced middlewares in order
@@ -153,8 +168,8 @@ if (fs.existsSync(distDir)) {
   }));
 }
 
-// Static assets - explicit routes for better MIME handling
-app.use('/public', express.static(path.join(__dirname, '../public')));
+// Static assets com index: false para não interceptar as rotas
+app.use(express.static(pub, { index: false }));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 app.use('/js', express.static(path.join(__dirname, '../public/js'), {
   etag: false,
@@ -196,65 +211,33 @@ app.get('/patient-management', (req, res) => {
 // Root - redirect to landing (new canonical entry point)
 app.get('/', (req, res) => {
   console.log('🏠 Rota raiz acessada - Redirecionando para /landing');
-  res.redirect(301, '/landing');
+  const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+  res.redirect(301, '/landing' + qs);
 });
+
+// ====== TRÊS ROTAS PRINCIPAIS DO LEILÃO ======
+
+// /como-funciona → public/preview/como-funciona.html
+app.get("/como-funciona", serveFirst(preview, "como-funciona.html"));
+
+// /medico → public/preview/perfil-medico.html (fallback: perfildomedico.html)
+app.get("/medico", serveFirst(preview, "perfil-medico.html", "perfildomedico.html"));
+
+// /consulta → public/enhanced-teste.html
+app.get("/consulta", serveFirst(pub, "enhanced-teste.html"));
+
+// ====== DEMAIS ROTAS CANÔNICAS ======
 
 // CANONICAL: Landing Page (Landing Oficial)
-app.get('/landing', (req, res) => {
-  console.log('🏠 Rota CANÔNICA /landing acessada - Landing Oficial');
-  const landingHtml = path.join(__dirname, '../public/landing-teste.html');
-  if (fs.existsSync(landingHtml)) {
-    console.log('✅ Servindo landing-teste.html (CANÔNICA OFICIAL)');
-    return res.sendFile(landingHtml);
-  }
-  res.status(404).send('Landing page not found');
-});
+app.get('/landing', serveFirst(pub, "landing-teste.html", "landing.html"));
 
 // CANONICAL: Agenda (Agenda Médica)
-app.get('/agenda', (req, res) => {
-  console.log('📅 Rota CANÔNICA /agenda acessada - Agenda Médica');
-  const agendaMedicaHtml = path.join(__dirname, '../public/agenda-medica.html');
-  if (fs.existsSync(agendaMedicaHtml)) {
-    console.log('✅ Servindo agenda-medica.html (CANÔNICA)');
-    return res.sendFile(agendaMedicaHtml);
-  }
-  res.status(404).send('Agenda page not found');
-});
+app.get('/agenda', serveFirst(pub, "agenda-medica.html"));
 
-// CANONICAL: Consulta (Enhanced Teste v2.2)
-app.get('/consulta', (req, res) => {
-  console.log('🎯 Rota CANÔNICA /consulta acessada - Enhanced Teste v2.2');
-  const enhancedTesteHtml = path.join(__dirname, '../public/enhanced-teste.html');
-  if (fs.existsSync(enhancedTesteHtml)) {
-    console.log('✅ Servindo enhanced-teste.html (CANÔNICA)');
-    return res.sendFile(enhancedTesteHtml);
-  }
-  res.status(404).send('Consulta page not found');
-});
+// CANONICAL: Dashboard
+app.get('/dashboard', serveFirst(pub, "dashboard.html"));
 
-// CANONICAL: Dashboard (Dashboard Teste - Versão Definitiva)
-app.get('/dashboard', (req, res) => {
-  console.log('📊 Rota CANÔNICA /dashboard acessada - Dashboard Teste Definitivo');
-  const dashboardTesteHtml = path.join(__dirname, '../public/dashboard-teste.html');
-  if (fs.existsSync(dashboardTesteHtml)) {
-    console.log('✅ Servindo dashboard-teste.html (CANÔNICA DEFINITIVA)');
-    return res.sendFile(dashboardTesteHtml);
-  }
-  res.status(404).send('Dashboard page not found');
-});
-
-// CANONICAL: Pacientes (Meus Pacientes)
-app.get('/pacientes', (req, res) => {
-  console.log('👥 Rota CANÔNICA /pacientes acessada - Meus Pacientes');
-  const pacientesHtml = path.join(__dirname, '../public/meus-pacientes.html');
-  if (fs.existsSync(pacientesHtml)) {
-    console.log('✅ Servindo meus-pacientes.html (CANÔNICA)');
-    return res.sendFile(pacientesHtml);
-  }
-  res.status(404).send('Pacientes page not found');
-});
-
-// ⚠️ PHR (Personal Health Record) – canônica + headers de privacidade  
+// CANONICAL: PHR (Personal Health Record) com headers de privacidade
 app.get('/registro-saude', (req, res) => {
   console.log('📋 Rota CANÔNICA /registro-saude acessada - PHR');
   // Proteção básica: não indexar e não cachear conteúdo sensível
@@ -264,57 +247,23 @@ app.get('/registro-saude', (req, res) => {
     "Pragma": "no-cache",
     "Expires": "0"
   });
-  const phrHtml = path.join(__dirname, '../public/registro-saude.html');
-  if (fs.existsSync(phrHtml)) {
-    console.log('✅ Servindo registro-saude.html (CANÔNICA)');
-    return res.sendFile(phrHtml);
-  }
-  res.status(404).send('PHR page not found');
+  const candidate = ["registro-saude.html"].find(f => fs.existsSync(path.join(pub, f)));
+  if (candidate) return res.sendFile(path.join(pub, candidate));
+  res.status(404).type("text").send("PHR page not found");
 });
 
-// CANONICAL: Gestão Avançada - Painel Administrativo
-app.get('/gestao-avancada', (req, res) => {
-  console.log('📊 Rota CANÔNICA /gestao-avancada acessada - Painel Admin');
-  const gestaoHtml = path.join(__dirname, '../public/gestao-avancada.html');
-  if (fs.existsSync(gestaoHtml)) {
-    console.log('✅ Servindo gestao-avancada.html (CANÔNICA)');
-    return res.sendFile(gestaoHtml);
-  }
-  res.status(404).send('Gestão Avançada page not found');
-});
+// Pacientes
+app.get('/pacientes', serveFirst(pub, "meus-pacientes.html"));
 
-// CANONICAL: Área Médica - Gestão de Pacientes  
-app.get('/area-medica', (req, res) => {
-  console.log('🏥 Rota CANÔNICA /area-medica acessada - Gestão Pacientes');
-  const areaHtml = path.join(__dirname, '../public/area-medica.html');
-  if (fs.existsSync(areaHtml)) {
-    console.log('✅ Servindo area-medica.html (CANÔNICA)');
-    return res.sendFile(areaHtml);
-  }
-  res.status(404).send('Área Médica page not found');
-});
+// Gestão Avançada
+app.get('/gestao-avancada', serveFirst(pub, "gestao-avancada.html"));
 
-// CANONICAL: Cadastro - Registro de usuários
-app.get('/cadastro', (req, res) => {
-  console.log('📝 Rota CANÔNICA /cadastro acessada - Registro');
-  const cadastroHtml = path.join(__dirname, '../public/cadastro.html');
-  if (fs.existsSync(cadastroHtml)) {
-    console.log('✅ Servindo cadastro.html (CANÔNICA)');
-    return res.sendFile(cadastroHtml);
-  }
-  res.status(404).send('Cadastro page not found');
-});
+// Área Médica
+app.get('/area-medica', serveFirst(pub, "area-medica.html"));
 
-// CANONICAL: Login - Autenticação
-app.get('/login', (req, res) => {
-  console.log('🔐 Rota CANÔNICA /login acessada - Login');
-  const loginHtml = path.join(__dirname, '../public/login.html');
-  if (fs.existsSync(loginHtml)) {
-    console.log('✅ Servindo login.html (CANÔNICA)');
-    return res.sendFile(loginHtml);
-  }
-  res.status(404).send('Login page not found');
-});
+// Cadastro e Login
+app.get('/cadastro', serveFirst(pub, "cadastro.html"));
+app.get('/login', serveFirst(pub, "login.html"));
 
 // CANONICAL: Recuperar Senha
 app.get('/recuperar-senha', (req, res) => {
