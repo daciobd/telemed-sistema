@@ -105,41 +105,34 @@
   </div>
 
 <script>
-  const $ = sel => document.querySelector(sel);
-
-  // Usuários demo (somente front-end)
   const DEMO = {
-    doctor: {
-      email: 'medico.demo@telemed.pro',
-      name: 'Dr. Demo Silva',
-      type: 'doctor',
-      crm: '12345-SP',
-      specialty: 'Clínica Geral',
-      demo: true
-    },
-    patient: {
-      email: 'paciente.demo@telemed.pro',
-      name: 'Paciente Demo Santos',
-      type: 'patient',
-      cpf: '000.000.000-00',
-      demo: true
-    }
+    doctor: { email:'medico.demo@telemed.pro', name:'Dr. Demo', type:'doctor', crm:'12345-SP', specialty:'Clínica Geral' },
+    patient:{ email:'paciente.demo@telemed.pro', name:'Paciente Demo', type:'patient', cpf:'000.000.000-00' }
   };
+  const qs = new URLSearchParams(location.search);
+  const NEXT = qs.get('next');           // prioriza next se vier
+  const AFTER_PATIENT = "/como-funciona"; // troque para "/precos" se quiser
 
-  function demoLogin(kind){
-    const u = DEMO[kind];
-    localStorage.setItem('telemed_user', JSON.stringify(u));
-    localStorage.setItem('telemed_auth', 'true');
-    window.location.href = '/dashboard';
+  function go(kind){
+    if (NEXT) return (location.href = NEXT);
+    if (kind === 'doctor') return (location.href = '/medico');
+    return (location.href = AFTER_PATIENT);
   }
-
-  // Auto-login por URL (?demo=doctor|patient)
-  (function(){
-    const demoType = new URLSearchParams(location.search).get('demo');
-    if (demoType && DEMO[demoType]) {
-      demoLogin(demoType);
-    }
-  })();
+  function demoLogin(kind){
+    const u = DEMO[kind]; localStorage.setItem('telemed_user', JSON.stringify(u)); go(kind);
+  }
+  function loginEmail(){
+    const email = document.getElementById('email').value.trim();
+    const pw    = document.getElementById('password').value;
+    if (!email) return alert('Preencha o e-mail');
+    if (email === DEMO.doctor.email && pw === 'demo1234') return demoLogin('doctor');
+    if (email === DEMO.patient.email && pw === 'demo1234') return demoLogin('patient');
+    // fallback simples → paciente
+    const cur = { email, name: email.split('@')[0], type:'patient' };
+    localStorage.setItem('telemed_user', JSON.stringify(cur));
+    go('patient');
+  }
+  (function(){ const as = qs.get('demo'); if (as && DEMO[as]) demoLogin(as); })();
   
   function showError(message) {
     const errorEl = $('#error');
@@ -149,11 +142,10 @@
   }
 
   // Traditional login form
-  $('#loginForm').addEventListener('submit', function(e) {
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    const email = $('#email').value.trim();
-    const password = $('#password').value;
+    loginEmail();
+  });
     
     if (!email || !password) {
       showError('Preencha e-mail e senha');

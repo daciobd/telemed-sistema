@@ -115,6 +115,11 @@
     .examChip:hover{ background:#eef2ff; border-color:#c7d2fe }
     .examBar::-webkit-scrollbar{ height:8px } .examBar::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:99px }
     
+    /* Drawer formulário */
+    .drawer { position: fixed; top:0; right:-420px; width:420px; height:100%; background:#0b1223; color:#fff; border-left:1px solid #243148; transition:right .25s ease; z-index:70; overflow:auto; }
+    .drawer.open { right:0; }
+    .drawer-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #243148; }
+    
     @media (max-width:980px){.page{grid-template-columns:1fr}}
   </style>
 </head>
@@ -289,7 +294,7 @@
       <div class="memedCard">
         <div class="memedHead"><strong>🧾 Integração Memed</strong></div>
         <p>Prescreva medicamentos de forma segura e rápida com assinatura digital automática.</p>
-        <button class="btn primary" id="memedBtn">Nova Receita Memed</button>
+        <button class="btn primary" id="memedBtn" onclick="openPrescription()">Nova Receita Memed</button>
         <ul style="margin:12px 0 0 20px;font-size:14px;color:#374151">
           <li class="ok">Base farmacológica completa</li>
           <li class="ok">Assinatura digital ICP-Brasil</li>
@@ -325,7 +330,7 @@
 <div class="rx-bar" id="rxBar" style="display:none">
   <div>🧾 Receitas: <span class="rx-count" id="rxCount">0</span></div>
   <div class="rx-links">
-    <a href="#" class="rx-link" id="rxMemedLink">Memed</a>
+    <button class="rx-link" onclick="openPrescription()" style="border:none;background:inherit;cursor:pointer">Memed</button>
     <a href="#" class="rx-link" id="rxScroll">Ver Lista</a>
   </div>
 </div>
@@ -478,14 +483,128 @@ function renderExamBar(){
   });
 }
 
-/** ========= botões topo ========= */
-if ($('#btn-invite')) $('#btn-invite').onclick = ()=>{ alert('Convite enviado para o paciente na sala de espera.'); };
-if ($('#btn-start')) $('#btn-start').onclick  = async ()=>{
-  try{ await post(API.start(CONSULT_ID)); $('#state').classList.remove('wait'); $('#state').classList.add('live'); $('#state').innerHTML='<span class="dot"></span> Em atendimento'; }
-  catch(e){ alert('Falha ao iniciar: '+e.message); }
+/** ========= PATCHES CIRÚRGICOS DO FLUXO ========= */
+
+// handshake "leve" por aba – substitua depois por WS
+const cid = new URLSearchParams(location.search).get('consultationId') || 'demo';
+const role = (JSON.parse(localStorage.getItem('telemed_user')||'null')||{}).type === 'doctor' ? 'doctor' : 'patient';
+const ch = new BroadcastChannel('telemed:consult:'+cid);
+
+const ui = {
+  inviteBtn:  document.getElementById('btn-invite'),
+  startBtn:   document.getElementById('btn-start'),
+  waitBadge:  document.getElementById('state'),   // <span id="state">
+  toast:      (msg)=>alert(msg) // troque pelo seu toast
 };
-if ($('#btn-back')) $('#btn-back').onclick   = ()=> history.back();
-if ($('#btn-form')) $('#btn-form').onclick   = ()=> alert('Abrir formulário de anamnese (WIP).');
+
+let invited = false, accepted = false;
+
+ch.onmessage = (e)=>{
+  const { type } = e.data || {};
+  if (type === 'invite' && role === 'patient') {
+    ui.toast('Convite de consulta recebido. Entrando na sala...');
+    ch.postMessage({ type:'accept' });
+    // sinaliza presença do paciente
+    document.body.dataset.waiting = 'false';
+  }
+  if (type === 'accept' && role === 'doctor') {
+    accepted = true;
+    ui.startBtn?.removeAttribute('disabled');
+    ui.waitBadge && (ui.waitBadge.innerHTML = '<span class="dot"></span> Paciente presente');
+    ui.toast('Paciente aceitou o convite. Pode iniciar.');
+  }
+  if (type === 'waiting' && role === 'doctor') {
+    ui.waitBadge && (ui.waitBadge.innerHTML = '<span class="dot"></span> Paciente na sala de espera');
+  }
+};
+
+// Paciente sinaliza que está aguardando
+if (role === 'patient') {
+  document.body.dataset.waiting = 'true';
+  ch.postMessage({ type:'waiting' });
+}
+
+// Botão "Convidar"
+window.onInvitePatient = ()=>{
+  invited = true;
+  ch.postMessage({ type:'invite' });
+  ui.toast('Convite enviado ao paciente (sala de espera).');
+};
+
+// Botão "Iniciar consulta" – só libera após accept
+window.onStartConsult = ()=>{
+  if (!accepted && role === 'doctor') return ui.toast('Aguardando paciente aceitar o convite.');
+  ui.toast('Consulta iniciada!');
+  $('#state').classList.remove('wait'); 
+  $('#state').classList.add('live'); 
+  $('#state').innerHTML='<span class="dot"></span> Em atendimento';
+  // aqui acione seu player/WebRTC
+};
+
+// Botão Voltar
+function goBack(){
+  const from = new URLSearchParams(location.search).get('from');
+  location.href = from || '/agenda';
+}
+
+// Receitas (Memed)
+const MEMED_URL = (window.MEMED_URL || "https://memed.com.br/"); // troque quando tiver o link oficial
+function openPrescription(){
+  window.open(MEMED_URL, "_blank", "noopener");
+}
+
+// Dr. AI (verificação básica)
+async function askDrAI(){
+  const q = (document.getElementById('aiQuestion')||{}).value || 'Dor de cabeça há 2 dias';
+  const btn = document.getElementById('btnDrAI'); btn && (btn.disabled=true);
+  // mock rápido:
+  await new Promise(r=>setTimeout(r,400));
+  alert('Dr. AI: possível cefaleia tensional. Avaliar sinais de alerta; considerar repouso hídrico e analgésico simples.\n\n(Fluxo mockado)');
+  btn && (btn.disabled=false);
+}
+
+// Microfone (ligar/desligar com feedback)
+let mediaStream = null, micOn = true;
+async function ensureMedia(){
+  if (!mediaStream) {
+    try { mediaStream = await navigator.mediaDevices.getUserMedia({ audio:true, video:true }); }
+    catch { alert('Sem permissão de microfone/câmera'); }
+  }
+  return mediaStream;
+}
+async function toggleMic(){
+  await ensureMedia();
+  if (!mediaStream) return;
+  micOn = !micOn;
+  mediaStream.getAudioTracks().forEach(t=>t.enabled = micOn);
+  const s = micOn ? 'Microfone ligado' : 'Microfone desligado';
+  const statusEl = document.getElementById('micStatus');
+  if(statusEl) {
+    statusEl.textContent = s;
+    statusEl.style.display = 'block';
+    setTimeout(() => statusEl.style.display = 'none', 3000);
+  }
+}
+
+// Enviar para sala de espera
+function sendToWaitingRoom(){
+  ch.postMessage({ type:'waiting' });
+  alert('Paciente enviado para sala de espera.');
+}
+
+// Formulário drawer
+function toggleForm(open=true){
+  const el = document.getElementById('formDrawer');
+  if (!el) return;
+  el.classList.toggle('open', !!open);
+  el.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+/** ========= botões topo ========= */
+if ($('#btn-invite')) $('#btn-invite').onclick = onInvitePatient;
+if ($('#btn-start')) $('#btn-start').onclick = onStartConsult;
+if ($('#btn-back')) $('#btn-back').onclick = goBack;
+if ($('#btn-form')) $('#btn-form').onclick = ()=> toggleForm(true);
 if ($('#btn-narrow')) $('#btn-narrow').onclick = ()=> document.body.classList.toggle('narrow');
 if ($('#btn-exit')) $('#btn-exit').onclick   = ()=> { if(confirm('Sair desta tela?')) location.href='/'; };
 if ($('#btn-bell')) $('#btn-bell').onclick   = ()=> { if ($('#bellDot')) $('#bellDot').style.display='none'; };
@@ -495,9 +614,9 @@ if ($('#btn-attach')) $('#btn-attach').onclick = ()=> { if ($('#filepick')) $('#
 if ($('#filepick')) $('#filepick').onchange  = (e)=> { if(e.target.files[0]) { if ($('#bellDot')) $('#bellDot').style.display='grid'; alert('Arquivo anexado: '+e.target.files[0].name); } };
 if ($('#btn-shot')) $('#btn-shot').onclick   = ()=> alert('Captura de imagem (mock).');
 if ($('#btn-chat')) $('#btn-chat').onclick   = ()=> { const chatTab = $('.tab[data-tab="chat"]'); if (chatTab) chatTab.click(); };
-if ($('#btn-mic')) $('#btn-mic').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
+if ($('#btn-mic')) $('#btn-mic').onclick    = toggleMic;
 if ($('#btn-cam')) $('#btn-cam').onclick    = (ev)=> ev.currentTarget.classList.toggle('red');
-if ($('#btn-wait')) $('#btn-wait').onclick   = ()=> alert('Paciente enviado para sala de espera.');
+if ($('#btn-wait')) $('#btn-wait').onclick   = sendToWaitingRoom;
 if ($('#btn-hang')) $('#btn-hang').onclick   = ()=> alert('Chamada finalizada.');
 
 /** ========= chat simples ========= */
@@ -647,5 +766,29 @@ console.log('🎯 Enhanced Teste loaded - TeleMed Professional Interface v2.2');
 renderExamBar();
 updateRxCount();
 </script>
+  <!-- DRAWER FORMULÁRIO -->
+  <div id="formDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <strong>Formulário de Anamnese</strong>
+      <button onclick="toggleForm(false)" style="background:none;border:none;color:#fff;cursor:pointer;font-size:18px">✕</button>
+    </div>
+    <div id="formContent" style="padding:16px">
+      <div style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:500">Sintomas principais</label>
+        <textarea style="width:100%;padding:10px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:#fff" rows="3" placeholder="Descreva os sintomas..."></textarea>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:500">Histórico médico</label>
+        <textarea style="width:100%;padding:10px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:#fff" rows="3" placeholder="Histórico relevante..."></textarea>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:20px">
+        <button style="flex:1;padding:10px;background:#22c55e;color:#fff;border:none;border-radius:8px;cursor:pointer">Salvar</button>
+        <button onclick="toggleForm(false)" style="flex:1;padding:10px;background:#64748b;color:#fff;border:none;border-radius:8px;cursor:pointer">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <span id="micStatus" aria-live="polite" style="position:fixed;bottom:80px;left:20px;background:rgba(0,0,0,0.8);color:#fff;padding:8px 12px;border-radius:8px;display:none"></span>
+
 </body>
 </html>
