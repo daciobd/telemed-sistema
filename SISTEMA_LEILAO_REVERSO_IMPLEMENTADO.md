@@ -11,6 +11,9 @@
 - ✅ Helper `serveFirst()` com fallback automático
 - ✅ Ordem correta de middlewares (rotas antes de static)
 - ✅ `express.static` com `index: false`
+- ✅ 301 Redirects: `/enhanced-consultation` → `/consulta`, `/phr` → `/registro-saude`
+- ✅ 20+ rotas canônicas implementadas (/agenda, /dashboard, /dr-ai, etc.)
+- ✅ Headers de privacidade para PHR (/registro-saude)
 
 ## 🎯 **FUNCIONALIDADES COMPLETAS**
 

@@ -18,9 +18,9 @@ import { env } from './config/env.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// pastas públicas
-const pub = path.join(__dirname, "../public");
-const preview = path.join(pub, "preview");
+// Diretórios públicos
+const PUB = path.join(__dirname, "../public");
+const PREVIEW = path.join(PUB, "preview");
 
 // helper para servir arquivo com fallback e 404 amigável
 function serveFirst(folder: string, ...files: string[]) {
@@ -169,7 +169,7 @@ if (fs.existsSync(distDir)) {
 }
 
 // Static assets com index: false para não interceptar as rotas
-app.use(express.static(pub, { index: false }));
+app.use(express.static(PUB, { index: false }));
 app.use('/attached_assets', express.static(path.join(__dirname, '../attached_assets')));
 app.use('/js', express.static(path.join(__dirname, '../public/js'), {
   etag: false,
@@ -206,136 +206,78 @@ app.get('/patient-management', (req, res) => {
   res.status(404).send('Patient Management page not found');
 });
 
-// ====== ROTAS CANÔNICAS OFICIAIS ======
+// ====== ROTAS CANÔNICAS E REDIRECTS CONSOLIDADOS ======
 
-// Root - redirect to landing (new canonical entry point)
-app.get('/', (req, res) => {
-  console.log('🏠 Rota raiz acessada - Redirecionando para /landing');
-  const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
-  res.redirect(301, '/landing' + qs);
+// 301 redirects (aliases → canônicas)
+const redirects: Record<string,string> = {
+  "/": "/agenda",
+  "/landing": "/agenda", 
+  "/enhanced": "/consulta",
+  "/enhanced-consultation": "/consulta",
+  "/enhanced-teste": "/consulta",
+  "/enhanced-system": "/consulta",
+  "/video-consultation": "/consulta",
+  "/doctor-dashboard": "/dashboard",
+  "/dashboard-teste": "/dashboard",
+  "/dashboard-teste.html": "/dashboard",
+  "/schedule": "/agenda",
+  "/ai": "/dr-ai",
+  "/ai-console": "/dr-ai",
+  "/politadeprivacidade": "/privacidade",
+  "/privacy": "/privacidade",
+  // PHR aliases
+  "/phr": "/registro-saude",
+  "/registro": "/registro-saude",
+  "/meu-registro": "/registro-saude",
+  "/prontuario": "/registro-saude"
+};
+
+Object.entries(redirects).forEach(([from, to]) => {
+  app.get(from, (req, res) => {
+    console.log(`🔄 Redirect ${from} → ${to}`);
+    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    res.redirect(301, to + qs);
+  });
 });
 
-// ====== TRÊS ROTAS PRINCIPAIS DO LEILÃO ======
+// Rotas canônicas — sirva SEMPRE antes de catch-all/SPA
+app.get("/agenda",          serveFirst(PREVIEW, "agenda-medica.html", "agenda.html"));
+app.get("/consulta",        serveFirst(PUB,     "enhanced-teste.html", "consulta.html", "enhanced.html"));
+app.get("/dashboard",       serveFirst(PREVIEW, "dashboard-teste.html", "dashboard.html"));
 
-// /como-funciona → public/preview/como-funciona.html
-app.get("/como-funciona", serveFirst(preview, "como-funciona.html"));
+// DR.AI (tenta os nomes que você já usou)
+app.get("/dr-ai",           serveFirst(PREVIEW, "DR.AI-CORRIGIDO.HTML", "dr-ai-static.html", "dr-ai.html"));
 
-// /medico → public/preview/perfil-medico.html (fallback: perfildomedico.html)
-app.get("/medico", serveFirst(preview, "perfil-medico.html", "perfildomedico.html"));
+// Autenticação / perfis
+app.get("/cadastro",        serveFirst(PREVIEW, "cadastro.html"));
+app.get("/login",           serveFirst(PREVIEW, "login.html"));
+app.get("/medico",          serveFirst(PREVIEW, "perfil-medico.html", "perfildomedico.html", "medico.html"));
+app.get("/paciente",        serveFirst(PREVIEW, "mobile.html", "paciente.html"));
 
-// /consulta → public/enhanced-teste.html
-app.get("/consulta", serveFirst(pub, "enhanced-teste.html"));
+// Conteúdo informativo
+app.get("/como-funciona",   serveFirst(PREVIEW, "como-funciona.html", "como funciona.html"));
+app.get("/privacidade",     serveFirst(PREVIEW, "politadeprivacidade.html", "privacidade.html"));
+app.get("/recuperar-senha", serveFirst(PREVIEW, "recuperar-senha.html", "recovery.html"));
 
-// ====== DEMAIS ROTAS CANÔNICAS ======
+// Preços (caso já exista um HTML; do contrário, retornará 404 amigável)
+app.get("/precos",          serveFirst(PREVIEW, "precos.html", "planos.html"));
 
-// CANONICAL: Landing Page (Landing Oficial)
-app.get('/landing', serveFirst(pub, "landing-teste.html", "landing.html"));
-
-// CANONICAL: Agenda (Agenda Médica)
-app.get('/agenda', serveFirst(pub, "agenda-medica.html"));
-
-// CANONICAL: Dashboard
-app.get('/dashboard', serveFirst(pub, "dashboard.html"));
-
-// CANONICAL: PHR (Personal Health Record) com headers de privacidade
-app.get('/registro-saude', (req, res) => {
+// PHR / Registro de Saúde — com headers de privacidade (noindex, no-cache)
+app.get("/registro-saude", (req, res, next) => {
   console.log('📋 Rota CANÔNICA /registro-saude acessada - PHR');
-  // Proteção básica: não indexar e não cachear conteúdo sensível
   res.set({
     "X-Robots-Tag": "noindex, noarchive, nosnippet",
-    "Cache-Control": "no-store, max-age=0, must-revalidate", 
+    "Cache-Control": "no-store, max-age=0, must-revalidate",
     "Pragma": "no-cache",
     "Expires": "0"
   });
-  const candidate = ["registro-saude.html"].find(f => fs.existsSync(path.join(pub, f)));
-  if (candidate) return res.sendFile(path.join(pub, candidate));
-  res.status(404).type("text").send("PHR page not found");
-});
+  next();
+}, serveFirst(PREVIEW, "registro-saude.html", "phr.html", "ph-record.html"));
 
-// Pacientes
-app.get('/pacientes', serveFirst(pub, "meus-pacientes.html"));
-
-// Gestão Avançada
-app.get('/gestao-avancada', serveFirst(pub, "gestao-avancada.html"));
-
-// Área Médica
-app.get('/area-medica', serveFirst(pub, "area-medica.html"));
-
-// Cadastro e Login
-app.get('/cadastro', serveFirst(pub, "cadastro.html"));
-app.get('/login', serveFirst(pub, "login.html"));
-
-// CANONICAL: Recuperar Senha
-app.get('/recuperar-senha', (req, res) => {
-  console.log('🔑 Rota CANÔNICA /recuperar-senha acessada');
-  const recoverHtml = path.join(__dirname, '../public/recuperar-senha.html');
-  if (fs.existsSync(recoverHtml)) {
-    console.log('✅ Servindo recuperar-senha.html (CANÔNICA)');
-    return res.sendFile(recoverHtml);
-  }
-  res.status(404).send('Recuperar senha page not found');
-});
-
-// CANONICAL: Como Funciona - Landing de Demonstração para Pacientes
-app.get('/como-funciona', (req, res) => {
-  console.log('ℹ️ Rota CANÔNICA /como-funciona acessada - Demo Paciente');
-  const comoFuncionaHtml = path.join(__dirname, '../public/preview/como-funciona.html');
-  if (fs.existsSync(comoFuncionaHtml)) {
-    console.log('✅ Servindo preview/como-funciona.html (CANÔNICA)');
-    return res.sendFile(comoFuncionaHtml);
-  }
-  res.status(404).send('Como Funciona page not found');
-});
-
-// CANONICAL: Médico - Dashboard/Área do Médico
-app.get('/medico', (req, res) => {
-  console.log('🩺 Rota CANÔNICA /medico acessada - Área Médica');
-  const medicoHtml = path.join(__dirname, '../public/preview/perfil-medico.html');
-  if (fs.existsSync(medicoHtml)) {
-    console.log('✅ Servindo preview/perfil-medico.html (CANÔNICA)');
-    return res.sendFile(medicoHtml);
-  }
-  res.status(404).send('Médico page not found');
-});
-
-// ALIAS: Landing teste (compatibilidade)
-app.get('/landing-teste', (req, res) => {
-  console.log('🔄 Alias /landing-teste → Redirecionando para /landing');
-  res.redirect(301, '/landing' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-// AI: Dr. AI - Triagem Inteligente
-app.get('/dr-ai', (req, res) => {
-  console.log('🤖 Rota AI /dr-ai acessada - Triagem Inteligente');
-  const drAiHtml = path.join(__dirname, '../public/dr-ai-static.html');
-  if (fs.existsSync(drAiHtml)) {
-    console.log('✅ Servindo dr-ai-static.html (AI)');
-    return res.sendFile(drAiHtml);
-  }
-  res.status(404).send('Dr. AI page not found');
-});
-
-// BACKUP: Dr. AI diretamente acessível
-app.get('/dr-ai-static.html', (req, res) => {
-  console.log('🤖 BACKUP: dr-ai-static.html diretamente acessado');
-  const drAiHtml = path.join(__dirname, '../public/dr-ai-static.html');
-  if (fs.existsSync(drAiHtml)) {
-    console.log('✅ Servindo dr-ai-static.html (BACKUP)');
-    return res.sendFile(drAiHtml);
-  }
-  res.status(404).send('Dr. AI backup not found');
-});
-
-// TESTE DIRETO: Dr. AI HTML direto
-app.get('/dr-ai.html', (req, res) => {
-  console.log('🤖 TESTE: dr-ai.html direto');
-  const drAiHtml = path.join(__dirname, '../public/dr-ai.html');
-  if (fs.existsSync(drAiHtml)) {
-    console.log('✅ Servindo dr-ai.html (DIRETO)');
-    return res.sendFile(drAiHtml);
-  }
-  res.status(404).send('Dr. AI direto not found');
-});
+// Gestão e administração
+app.get('/pacientes',       serveFirst(PUB, "meus-pacientes.html"));
+app.get('/gestao-avancada', serveFirst(PUB, "gestao-avancada.html"));
+app.get('/area-medica',     serveFirst(PUB, "area-medica.html"));
 
 // PREVIEW: Dr. AI Demo via rota
 app.get('/preview/dr-ai-demo.html', (req, res) => {
@@ -350,14 +292,7 @@ app.get('/preview/dr-ai-demo.html', (req, res) => {
 
 // ====== ALIASES E REDIRECIONAMENTOS ANTIGOS ======
 
-// PHR aliases → /registro-saude (301)
-['/phr', '/registro', '/meu-registro', '/prontuario'].forEach(oldPath => {
-  app.get(oldPath, (req, res) => {
-    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-    console.log(`🔄 Alias ${oldPath} → Redirecionando para /registro-saude`);
-    res.redirect(301, '/registro-saude' + queryString);
-  });
-});
+// ====== LIMPEZA FINALL - REMOVENDO DUPLICAÇÕES ======
 
 // Enhanced aliases → /consulta
 app.get('/enhanced', (req, res) => {
