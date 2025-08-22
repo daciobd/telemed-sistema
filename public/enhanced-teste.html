@@ -139,6 +139,7 @@
         <button class="btn ghost" id="btn-invite" title="Enviar convite ao paciente">Convite</button>
         <span class="state wait" id="state"><span class="dot"></span> Aguardando</span>
         <span class="pill" id="elapsed">18m 19s</span>
+        <span id="waitStatus" class="pill" style="display:none;background:#f59e0b;color:#fff">Sala de espera</span>
         <button class="btn primary" id="btn-start">Iniciar Consulta</button>
         <button class="btn ghost" id="btn-back">Voltar</button>
         <button class="btn ghost" id="btn-form">Formulário</button>
@@ -515,13 +516,26 @@ ch.onmessage = (e)=>{
   }
   if (type === 'waiting' && role === 'doctor') {
     ui.waitBadge && (ui.waitBadge.innerHTML = '<span class="dot"></span> Paciente na sala de espera');
+    const waitStatus = document.getElementById('waitStatus');
+    if(waitStatus) {
+      waitStatus.style.display = 'inline-block';
+      waitStatus.textContent = 'Paciente esperando';
+    }
   }
 };
 
 // Paciente sinaliza que está aguardando
 if (role === 'patient') {
   document.body.dataset.waiting = 'true';
-  ch.postMessage({ type:'waiting' });
+  const isWaiting = new URLSearchParams(location.search).get('waiting')==='1';
+  if (isWaiting) {
+    ch.postMessage({ type:'waiting' });
+    const waitStatus = document.getElementById('waitStatus');
+    if(waitStatus) {
+      waitStatus.style.display = 'inline-block';
+      waitStatus.textContent = 'Na sala de espera';
+    }
+  }
 }
 
 // Botão "Convidar"
@@ -542,7 +556,7 @@ window.onStartConsult = ()=>{
 };
 
 // Botão Voltar
-function goBack(){
+window.goBack = function(){
   const from = new URLSearchParams(location.search).get('from');
   location.href = from || '/agenda';
 }

@@ -219,6 +219,34 @@
       </div>
     </section>
 
+    <!-- Simulador de Leilão Reverso -->
+    <section class="card" id="auctionBox" style="margin-top:16px">
+      <h2 class="section-title">Simular oferta (leilão reverso)</h2>
+      <p class="muted">Faça uma oferta, veja se foi aceita, receba contra-proposta, e vá para a sala de espera quando aceitar.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px">
+        <div>
+          <label class="label">Valor da oferta (R$)</label>
+          <input id="bidValue" type="number" min="0" step="5" value="60" class="inp" />
+        </div>
+        <div>
+          <label class="label">Urgência</label>
+          <select id="bidMode" class="select">
+            <option value="immediate">Imediata (agora)</option>
+            <option value="scheduled">Agendar (próximas 24–72h)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn primary" onclick="placeBid()">Fazer oferta</button>
+        <button class="btn" onclick="quickAccept()">Oferta aceita (teste)</button>
+        <button class="btn ghost" onclick="goWaiting()">Ir para sala de espera</button>
+      </div>
+
+      <div id="bidStatus" class="muted" style="margin-top:10px"></div>
+    </section>
+
     <!-- CTAs finais -->
     <section class="center">
       <h2 class="section-title">Pronto para experimentar?</h2>
@@ -240,5 +268,81 @@
       </div>
     </section>
   </main>
+
+<script>
+(() => {
+  const CID  = 'demo'; // id da consulta para testes
+  const role = 'patient';
+  const chA  = new BroadcastChannel('telemed:auction:'+CID);
+  const chC  = new BroadcastChannel('telemed:consult:'+CID);
+
+  const el = {
+    val:   document.getElementById('bidValue'),
+    mode:  document.getElementById('bidMode'),
+    info:  document.getElementById('bidStatus')
+  };
+
+  // Regras simples de aceitação automática (pode ajustar):
+  const THRESH = { immediate: 120, scheduled: 80 };
+
+  function setInfo(msg){ el.info.textContent = msg; }
+  function ensurePatient(){
+    const u = JSON.parse(localStorage.getItem('telemed_user')||'null');
+    if (!u || u.type!=='patient') {
+      localStorage.setItem('telemed_user', JSON.stringify({ name:'Paciente Demo', email:'paciente.demo@telemed.pro', type:'patient' }));
+    }
+  }
+
+  // Envia lance
+  window.placeBid = function(){
+    ensurePatient();
+    const v = Number(el.val.value||0);
+    const m = el.mode.value;
+    setInfo('Enviando oferta…');
+    chA.postMessage({ type:'bid', value:v, mode:m, cid:CID });
+
+    // Auto-avaliação (apenas para facilitar demo sem o médico):
+    if (v >= THRESH[m]) {
+      setInfo('✅ Oferta aceita automaticamente para teste. Indo para sala de espera…');
+      setTimeout(goWaiting, 1500);
+    } else if (m==='scheduled' && v >= (THRESH.scheduled - 20)) {
+      setInfo('⚖️ Aceita para agendamento. Você pode confirmar o agendamento ou tentar aumentar para atendimento imediato.');
+      // aqui poderíamos abrir um modal de agendamento; por enquanto deixamos a mensagem
+    } else {
+      setInfo('❌ Oferta não aceita. Dica: aumente o valor ou mude a urgência.');
+      // o médico pode enviar contra-proposta via painel dele
+    }
+  };
+
+  // Aceita "na marra" (apenas atalho de teste)
+  window.quickAccept = function(){
+    ensurePatient();
+    setInfo('✅ Oferta marcada como aceita (teste). Indo para sala de espera…');
+    setTimeout(goWaiting, 1000);
+  };
+
+  // Vai para sala de espera e sinaliza presença ao médico
+  window.goWaiting = function(){
+    ensurePatient();
+    chC.postMessage({ type:'waiting', cid:CID });
+    location.href = `/consulta?consultationId=${encodeURIComponent(CID)}&from=/como-funciona&waiting=1`;
+  };
+
+  // Respostas do médico (aceite/recusa/contra-proposta)
+  chA.onmessage = (e)=>{
+    const { type, price, note } = e.data||{};
+    if (type==='accepted') {
+      setInfo(`✅ Médico aceitou por R$ ${price}. Indo para sala de espera…`);
+      setTimeout(goWaiting, 1500);
+    }
+    if (type==='rejected') {
+      setInfo('❌ Médico rejeitou sua oferta. Ajuste o valor e tente novamente.');
+    }
+    if (type==='counter') {
+      setInfo(`💬 Contra-proposta: R$ ${price}. ${note||'Se concordar, clique em "Oferta aceita (teste)" ou refaça sua oferta.'}`);
+    }
+  };
+})();
+</script>
 </body>
 </html>

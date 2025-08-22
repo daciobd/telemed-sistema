@@ -793,6 +793,34 @@
                     </div>
                 </div>
 
+                <!-- Painel de Lances (Leilão Reverso) -->
+                <div class="profile-card" style="margin-top:16px">
+                    <h2 style="margin:0 0 8px;color:#2c3e50;font-size:1.2em">Leilão (teste)</h2>
+                    <div class="help" style="color:#7f8c8d;font-size:0.9em">Simulador para aceitar/rejeitar/contra-propor ofertas do paciente demo.</div>
+
+                    <div style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+                        <div><div class="help" style="color:#7f8c8d;font-size:0.8em">Última oferta</div><div id="lastBid" style="font-weight:600">—</div></div>
+                        <div><div class="help" style="color:#7f8c8d;font-size:0.8em">Urgência</div><div id="lastMode" style="font-weight:600">—</div></div>
+                    </div>
+
+                    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="btn btn-primary" onclick="acceptBid()" style="font-size:0.8em;padding:6px 10px">Aceitar</button>
+                        <button class="btn" onclick="rejectBid()" style="font-size:0.8em;padding:6px 10px;background:#e74c3c;color:white">Rejeitar</button>
+                    </div>
+                    
+                    <div style="margin-top:8px;display:flex;gap:6px;align-items:center">
+                        <input id="counterVal" type="number" min="0" step="5" placeholder="Contra-proposta (R$)" style="flex:1;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:0.8em">
+                        <button class="btn" onclick="counterBid()" style="font-size:0.8em;padding:6px 10px;background:#f39c12;color:white">Contra-propor</button>
+                    </div>
+
+                    <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                        <button class="btn" onclick="invitePatient()" style="font-size:0.8em;padding:6px 10px;background:#16a085;color:white">Convidar</button>
+                        <a class="btn btn-primary" href="/consulta?consultationId=demo&from=/medico" style="font-size:0.8em;padding:6px 10px;text-decoration:none">Abrir consulta</a>
+                    </div>
+
+                    <div id="auctionInfo" class="help" style="margin-top:8px;color:#7f8c8d;font-size:0.8em"></div>
+                </div>
+
                 <!-- Aba Informações Profissionais -->
                 <div id="professional" class="tab-content">
                     <div class="form-section">
@@ -1665,3 +1693,66 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de Leilão Médico
+        (() => {
+          const CID = 'demo';
+          const chA = new BroadcastChannel('telemed:auction:'+CID);
+          const chC = new BroadcastChannel('telemed:consult:'+CID);
+
+          let last = null;
+
+          const el = {
+            bid: document.getElementById('lastBid'),
+            mode: document.getElementById('lastMode'),
+            info: document.getElementById('auctionInfo'),
+            counter: document.getElementById('counterVal')
+          };
+
+          function show(msg){ if(el.info) el.info.textContent = msg; }
+
+          chA.onmessage = (e)=>{
+            const { type, value, mode } = e.data || {};
+            if (type==='bid') {
+              last = { value, mode };
+              if(el.bid) el.bid.textContent  = `R$ ${value}`;
+              if(el.mode) el.mode.textContent = mode==='immediate' ? 'Imediata' : 'Agendada';
+              show('🎯 Nova oferta recebida.');
+            }
+          };
+
+          window.acceptBid = function(){
+            if (!last) return show('Nenhuma oferta para aceitar.');
+            chA.postMessage({ type:'accepted', price:last.value, cid:CID });
+            show('✅ Oferta aceita e paciente será direcionado à sala de espera.');
+            // (opcional) enviar convite logo em seguida
+            setTimeout(invitePatient, 1000);
+          };
+
+          window.rejectBid = function(){
+            if (!last) return show('Nenhuma oferta para rejeitar.');
+            chA.postMessage({ type:'rejected', cid:CID });
+            show('❌ Oferta rejeitada. Aguarde nova proposta do paciente.');
+          };
+
+          window.counterBid = function(){
+            if(!el.counter) return;
+            const price = Number(el.counter.value||0);
+            if (!price) return show('Informe o valor da contra-proposta.');
+            chA.postMessage({ type:'counter', price, note:'Aceito por este valor.' , cid:CID });
+            show(`💬 Contra-proposta enviada: R$ ${price}.`);
+          };
+
+          // convite para consulta (aparece na /consulta do paciente)
+          window.invitePatient = function(){
+            chC.postMessage({ type:'invite', cid:CID });
+            show('📨 Convite enviado. Ao aceitar, você poderá iniciar a consulta.');
+          };
+        })();
+    </script>
+</body>
+</html>
