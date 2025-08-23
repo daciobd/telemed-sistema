@@ -1329,35 +1329,45 @@ app.get('/test-medical-report', (req, res) => {
 // Render-specific: Listen on all interfaces with proper error handling
 const REPLIT_URL = process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`;
 
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log('🔧 Starting Express server on port', PORT, '...');
-});
-
-server.on('error', (err: any) => {
-  console.error('❌ Server error:', err);
-  if (err.code === 'EADDRINUSE') {
-    console.error(`❌ Port ${PORT} is already in use`);
-  }
-});
-
-server.on('listening', async () => {
-  console.log('✅ Server is listening and ready for connections');
-  
-  // Configurar Vite middleware DEPOIS do servidor estar rodando
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+async function listenWithRetry(ports = [Number(process.env.PORT)||5000, 5001, 5002]) {
+  for (const p of ports) {
     try {
-      console.log('⚡ Configurando Vite dev server...');
-      const { setupVite } = await import('./vite.js');
-      await setupVite(app, server);
-      console.log('⚡ Vite dev server configurado com sucesso para React app');
-    } catch (error) {
-      console.error('❌ Erro ao configurar Vite:', error);
+      await new Promise((resolve, reject) => {
+        const srv = app.listen(p, '0.0.0.0', () => {
+          console.log(`✅ Server is listening on http://localhost:${p}`);
+          resolve(srv);
+        });
+        srv.on('error', (e: any) => (e && e.code === 'EADDRINUSE') ? reject(e) : console.error(e));
+        
+        srv.on('listening', async () => {
+          console.log('✅ Server is listening and ready for connections');
+          
+          // Configurar Vite middleware DEPOIS do servidor estar rodando
+          if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            try {
+              console.log('⚡ Configurando Vite dev server...');
+              const { setupVite } = await import('./vite.js');
+              await setupVite(app, srv);
+              console.log('⚡ Vite dev server configurado com sucesso para React app');
+            } catch (error) {
+              console.error('❌ Erro ao configurar Vite:', error);
+            }
+          }
+          
+          // Initialize AI usage tracking watchdog
+          startAIUsageWatchdog();
+        });
+      });
+      return;
+    } catch (e) {
+      console.warn(`⚠️ Porta ${p} em uso, tentando a próxima…`);
     }
   }
-  
-  // Initialize AI usage tracking watchdog
-  startAIUsageWatchdog();
-});
+  console.error('❌ Nenhuma porta disponível.');
+  process.exit(1);
+}
+
+listenWithRetry();
 
 
 
