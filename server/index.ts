@@ -33,6 +33,21 @@ function serveFirst(folder: string, ...files: string[]) {
   };
 }
 
+// helper que procura em PREVIEW e PUBLIC (com tolerância a maiúsculas)
+function serveAny(...relFiles: string[]) {
+  const candidates: string[] = [];
+  for (const rel of relFiles) {
+    const lower = rel.toLowerCase();
+    candidates.push(path.join(PREVIEW, rel),  path.join(PREVIEW, lower));
+    candidates.push(path.join(PUB,     rel),  path.join(PUB,     lower));
+  }
+  const found = candidates.find(p => fs.existsSync(p));
+  return (_req: any, res: any) => {
+    if (found) return res.sendFile(found);
+    res.status(404).type('text').send('Arquivo não encontrado:\n' + candidates.join('\n'));
+  };
+}
+
 const app = express();
 
 // Apply enhanced middlewares in order
@@ -267,7 +282,12 @@ Object.entries(redirects).forEach(([from, to]) => {
 
 // Rotas canônicas — sirva SEMPRE antes de catch-all/SPA
 app.get("/agenda",          serveFirst(PREVIEW, "agenda-medica.html", "agenda.html"));
-app.get("/consulta",        serveFirst(PUB,     "enhanced-teste.html", "consulta.html", "enhanced.html"));
+app.get("/consulta",        serveAny(
+    "enhanced-teste.html",
+    "consulta.html",
+    "enhanced.html",
+    "enhanced-consultation.html" // cobre variações antigas
+  ));
 app.get("/dashboard",       serveFirst(PREVIEW, "dashboard-teste.html", "dashboard.html"));
 
 // DR.AI (tenta os nomes que você já usou)
