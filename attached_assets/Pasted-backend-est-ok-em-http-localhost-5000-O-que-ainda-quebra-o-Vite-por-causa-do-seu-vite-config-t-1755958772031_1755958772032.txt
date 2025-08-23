@@ -1,0 +1,71 @@
+backend está ok em http://localhost:5000. O que ainda quebra é o Vite por causa do seu vite.config.ts: ele usa top-level await + um plugin ESM-only (@replit/vite-plugin-runtime-error-modal). Vamos resolver em 2 passos: (A) garantir que o start-dev.js não usa a API Node do Vite e (B) consertar o vite.config.ts.
+
+A) Pare de iniciar o Vite “via código” (CJS)
+
+Certifique-se de que o seu start-dev.js não faz import('vite')/createServer. Ele deve iniciar o Vite pelo CLI:
+
+Confira se ainda tem import do Vite:
+
+grep -RIn "import(.*vite|createServer|from 'vite')" start-dev.js || true
+
+
+Se aparecer algo, substitua por este bloco (deixe o resto do arquivo como está):
+
+// --- VITE VIA CLI (ESM-friendly) ---
+const { spawn } = require('node:child_process');
+
+function startVite() {
+  if (process.env.SKIP_VITE === '1') {
+    console.log('⏭️  SKIP_VITE=1 → pulando Vite (backend apenas).');
+    return;
+  }
+  const VITE_PORT = process.env.VITE_PORT || '5173';
+  const args = ['vite', '--port', VITE_PORT, '--strictPort'];
+  if (process.env.VITE_HOST) { args.push('--host', process.env.VITE_HOST); }
+
+  console.log(`🎨 Starting Vite frontend on port ${VITE_PORT}...`);
+  const vite = spawn('npx', args, { stdio: 'inherit', shell: true });
+  vite.on('exit', (code) => console.log('Vite exited with code', code));
+}
+
+startVite();
+// --- FIM BLOCO ---
+
+
+Se preferir, rode temporariamente sem Vite para validar as rotas: SKIP_VITE=1 npm run dev.
+
+B) Consertar o vite.config.ts (sem top-level await)
+Opção 1 — Mais simples (recomendada): usar defineConfig(async () => …)
+
+Edite vite.config.ts para ficar assim (adapte seus plugins atuais dentro do return):
+
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react'; // se você usa React; senão remova
+
+export default defineConfig(async () => {
+  // tudo que antes estava com "await" no topo vem pra cá:
+  // exemplo do plugin ESM-only do Replit:
+  const { default: runtimeErrorModal } = await import('@replit/vite-plugin-runtime-error-modal');
+
+  return {
+    plugins: [
+      react(),           // se aplicável
+      runtimeErrorModal()// plugin do Replit (opcional)
+    ],
+    server: {
+      port: Number(process.env.VITE_PORT) || 5173,
+      strictPort: true,
+      host: true
+    },
+    optimizeDeps: {
+      esbuildOptions: { target: 'es2020' }
+    },
+    build: {
+      target: 'es2020'
+    }
+  };
+});
+
+
+O ponto é não ter await no topo do arquivo. Todo await import(...) precisa estar dentro dessa função async.
