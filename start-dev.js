@@ -7,7 +7,7 @@ require('dotenv').config();
  * Sobe o servidor Express (TSX + watch) e o Vite do client em paralelo.
  */
 
-const { spawn } = require('child_process');
+const { spawn } = require('node:child_process');
 const path = require('path');
 
 console.log('🚀 Starting TeleMed Development Environment...');
@@ -38,20 +38,24 @@ const serverProcess = startProcess(
   { env: { PORT: String(PORT) } }
 );
 
-// Sobe o Vite do frontend (pasta client/) após um pequeno atraso
+// --- VITE VIA CLI (sem API Node / sem top-level await) ---
 setTimeout(() => {
-  console.log('🎨 Starting Vite frontend on port 5173...');
-  const clientProcess = startProcess(
-    'npx',
-    ['vite', '--host', '0.0.0.0', '--port', '5173'],
-    'Client',
-    { cwd: path.join(process.cwd(), 'client') }
-  );
+  const VITE_PORT = process.env.VITE_PORT || '5173';
+  console.log(`🎨 Starting Vite frontend on port ${VITE_PORT}...`);
+
+  const vite = spawn('npx', ['vite', '--port', VITE_PORT, '--strictPort'], {
+    stdio: 'inherit',
+    shell: true
+  });
+
+  vite.on('exit', (code) => {
+    console.log('Vite exited with code', code);
+  });
 
   const shutdown = () => {
     console.log('\n🛑 Shutting down development environment...');
     serverProcess.kill();
-    clientProcess.kill();
+    vite.kill();
     process.exit(0);
   };
   process.on('SIGINT', shutdown);
