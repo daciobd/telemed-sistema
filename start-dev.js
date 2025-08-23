@@ -47,7 +47,7 @@ function startVite() {
     return;
   }
   const VITE_PORT = process.env.VITE_PORT || '5173';
-  const args = ['vite', '--config', 'vite.config.simple.ts', '--port', VITE_PORT, '--strictPort'];
+  const args = ['vite', '--config', 'vite.config.simple.ts', '--port', VITE_PORT]; // sem --strictPort → Vite usa próxima porta livre
   if (process.env.VITE_HOST) { args.push('--host', process.env.VITE_HOST); }
 
   console.log(`🎨 Starting Vite frontend on port ${VITE_PORT}...`);
