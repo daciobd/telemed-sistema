@@ -38,19 +38,21 @@ const serverProcess = startProcess(
   { env: { PORT: String(PORT) } }
 );
 
-// --- VITE VIA CLI (sem API Node / sem top-level await) ---
-setTimeout(() => {
+// --- INÍCIO BLOCO VITE VIA CLI ---
+// roda o vite como subprocesso (ESM-friendly), sem usar API Node (CJS)
+
+function startVite() {
+  if (process.env.SKIP_VITE === '1') {
+    console.log('⏭️  SKIP_VITE=1 → pulando Vite (somente backend Express).');
+    return;
+  }
   const VITE_PORT = process.env.VITE_PORT || '5173';
+  const args = ['vite', '--port', VITE_PORT, '--strictPort'];
+  if (process.env.VITE_HOST) { args.push('--host', process.env.VITE_HOST); }
+
   console.log(`🎨 Starting Vite frontend on port ${VITE_PORT}...`);
-
-  const vite = spawn('npx', ['vite', '--port', VITE_PORT, '--strictPort'], {
-    stdio: 'inherit',
-    shell: true
-  });
-
-  vite.on('exit', (code) => {
-    console.log('Vite exited with code', code);
-  });
+  const vite = spawn('npx', args, { stdio: 'inherit', shell: true });
+  vite.on('exit', (code) => console.log('Vite exited with code', code));
 
   const shutdown = () => {
     console.log('\n🛑 Shutting down development environment...');
@@ -60,7 +62,14 @@ setTimeout(() => {
   };
   process.on('SIGINT', shutdown);
   process.on('SIGTERM', shutdown);
+
+  return vite;
+}
+
+setTimeout(() => {
+  startVite();
 }, 3000);
+// --- FIM BLOCO VITE VIA CLI ---
 
 console.log('✅ Development environment starting...');
 console.log('📝 Press Ctrl+C to stop both servers');
