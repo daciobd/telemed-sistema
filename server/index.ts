@@ -1324,7 +1324,7 @@ app.get('/test-medical-report', (req, res) => {
 });
 
 // SPA catch-all route deve estar ANTES das rotas específicas
-// Esta rota é adicionada pelo setupVite() no listener 'listening'
+// Vite agora roda como subprocesso independente via CLI
 
 // Render-specific: Listen on all interfaces with proper error handling
 const REPLIT_URL = process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : `http://localhost:${PORT}`;
@@ -1342,17 +1342,7 @@ async function listenWithRetry(ports = [Number(process.env.PORT)||5000, 5001, 50
         srv.on('listening', async () => {
           console.log('✅ Server is listening and ready for connections');
           
-          // Configurar Vite middleware DEPOIS do servidor estar rodando
-          if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-            try {
-              console.log('⚡ Configurando Vite dev server...');
-              const { setupVite } = await import('./vite.js');
-              await setupVite(app, srv);
-              console.log('⚡ Vite dev server configurado com sucesso para React app');
-            } catch (error) {
-              console.error('❌ Erro ao configurar Vite:', error);
-            }
-          }
+          // Vite agora roda como subprocesso via CLI (não mais API Node)
           
           // Initialize AI usage tracking watchdog
           startAIUsageWatchdog();

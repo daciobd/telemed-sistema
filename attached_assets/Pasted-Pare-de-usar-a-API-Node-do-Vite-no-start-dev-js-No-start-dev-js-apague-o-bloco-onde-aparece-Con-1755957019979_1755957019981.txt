@@ -1,0 +1,62 @@
+Pare de usar a API Node do Vite no start-dev.js
+
+No start-dev.js, apague o bloco onde aparece “⚡ Configurando Vite dev server...” e qualquer uso de import('vite'), createServer, etc. Cole este bloco no lugar:
+
+// --- VITE VIA CLI (sem API Node/CJS) ---
+const { spawn } = require('node:child_process');
+
+function startVite() {
+  if (process.env.SKIP_VITE === '1') {
+    console.log('⏭️  SKIP_VITE=1 → pulando Vite (somente backend Express).');
+    return;
+    }
+  const VITE_PORT = process.env.VITE_PORT || '5173';
+  const args = ['vite', '--port', VITE_PORT, '--strictPort'];
+  if (process.env.VITE_HOST) { args.push('--host', process.env.VITE_HOST); }
+
+  console.log(`🎨 Starting Vite frontend on port ${VITE_PORT}...`);
+  const vite = spawn('npx', args, { stdio: 'inherit', shell: true });
+  vite.on('exit', (code) => console.log('Vite exited with code', code));
+}
+
+startVite();
+// --- FIM BLOCO VITE VIA CLI ---
+
+
+Dica: se o seu start-dev.js imprime “Configurar Vite…” é porque ainda tem o código antigo lá. Remova aquele bloco por completo.
+
+B) (Opcional mas recomendado) Ajuste o vite.config.ts para não ter top-level await
+
+Se no seu vite.config.ts existe await import(...) no topo, envolva a config numa factory assíncrona:
+
+// vite.config.ts
+import { defineConfig } from 'vite';
+// importe seus plugins "normais" aqui (react, tsconfigPaths, etc.)
+
+export default defineConfig(async () => {
+  // tudo que era "await import(...)" vai aqui dentro
+  const { default: runtimeErrorModal } = await import('@replit/vite-plugin-runtime-error-modal');
+
+  return {
+    plugins: [
+      // ...seus plugins existentes
+      runtimeErrorModal(), // exemplo do plugin ESM-only do Replit
+    ],
+    server: {
+      port: Number(process.env.VITE_PORT) || 5173,
+      strictPort: true,
+      host: true,
+    },
+  };
+});
+
+
+Assim você elimina o top-level await; o Vite suporta defineConfig(async () => ({ ... })) numa boa.
+
+C) (Opcional) Scripts úteis no package.json
+{
+  "scripts": {
+    "ports:free": "kill-port 5000 5001 5173 5174 5175 5177",
+    "dev": "npm run ports:free && node start-dev.js"
+  }
+}
