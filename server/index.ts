@@ -22,6 +22,11 @@ const __dirname = path.dirname(__filename);
 const PUB = path.join(__dirname, "../public");
 const PREVIEW = path.join(PUB, "preview");
 
+// util para servir de /public/preview
+const servePreview = (relPath: string) =>
+  (_req: express.Request, res: express.Response) =>
+    res.sendFile(path.join(PREVIEW, relPath));
+
 // helper para servir arquivo com fallback e 404 amigável
 function serveFirst(folder: string, ...files: string[]) {
   const candidate = files.find(f => fs.existsSync(path.join(folder, f)));
@@ -261,6 +266,10 @@ const redirects: Record<string,string> = {
   "/dashboard-teste": "/dashboard",
   "/dashboard-teste.html": "/dashboard",
   "/schedule": "/agenda",
+  "/dev/agenda": "/agenda",
+  "/agenda2": "/agenda", 
+  "/agenda-medica": "/agenda",
+  "/agenda-legacy": "/agenda",
   "/ai": "/dr-ai",
   "/ai-console": "/dr-ai",
   "/politadeprivacidade": "/privacidade",
@@ -281,7 +290,7 @@ Object.entries(redirects).forEach(([from, to]) => {
 });
 
 // Rotas canônicas — sirva SEMPRE antes de catch-all/SPA
-app.get("/agenda",          serveFirst(PREVIEW, "agenda-medica.html", "agenda.html"));
+app.get("/agenda",          servePreview("agenda-avancada.html"));   // <- NOVA AGENDA
 app.get("/consulta",        serveAny(
     "enhanced-teste.html",
     "consulta.html",

@@ -1,0 +1,11 @@
+{
+  "2025-08-18": [
+    { "hora": "09:00", "paciente": "Ana Luiza", "especialidade": "Clínica Geral", "sala": "Sala #ABC123" },
+    { "hora": "10:30", "paciente": "Carlos Mendes", "especialidade": "Psiquiatria", "sala": "Sala #ABC123" }
+  ],
+  "2025-08-29": [
+    { "hora": "11:00", "paciente": "Andrea Martins", "especialidade": "Clínica Geral", "sala": "Sala #ABC123" },
+    { "hora": "11:20", "paciente": "Patrícia Moraes", "especialidade": "Psicologia", "sala": "Sala #ABC123" },
+    { "hora": "11:40", "paciente": "Airton Varela", "especialidade": "Cardiologia", "sala": "Sala #ABC123" }
+  ]
+}

@@ -1,0 +1,249 @@
+Server – aponte as rotas
+
+Edite server/index.ts (ou o seu arquivo Express principal) e ajuste estas rotas:
+
+// topo do arquivo
+import path from "node:path";
+import express from "express";
+const app = express();
+const root = (...p: string[]) => path.join(__dirname, "..", ...p);
+
+// util para servir de /public/preview
+const servePreview = (relPath: string) =>
+  (_req: express.Request, res: express.Response) =>
+    res.sendFile(root("public", "preview", relPath));
+
+// ---- ROTAS CANÔNICAS ----
+app.get("/agenda", servePreview("agenda-avancada.html"));   // <- NOVA AGENDA
+app.get("/consulta", servePreview("enhanced-teste.html"));
+app.get("/dashboard", servePreview("dashboard.html"));
+// ... (demais canônicas mantidas)
+
+// ---- ALIASES / LEGACY → 301 ----
+app.get(["/dev/agenda", "/agenda2", "/agenda-medica", "/agenda-legacy"], (req, res) => {
+  const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+  res.redirect(301, "/agenda" + qs);
+});
+
+
+Reinicie o servidor depois de salvar.
+
+2) Nova página da agenda (HTML)
+
+Crie public/preview/agenda-avancada.html:
+
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agenda Médica Avançada — TeleMed Pro</title>
+  <link rel="preload" as="style" href="/telemed-theme.css" />
+  <link rel="stylesheet" href="/telemed-theme.css" />
+  <style>
+    /* reforço de contraste e layout */
+    .page { max-width: 1200px; margin: 32px auto; padding: 0 16px; }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; }
+    .header h1 { margin:0; font-size: 1.4rem; color: var(--tm-text-strong); }
+    .header .actions { display:flex; gap:.5rem; }
+    .grid { display:grid; grid-template-columns: 380px 1fr; gap: 16px; }
+    .card { background: var(--tm-surface); border: 1px solid var(--tm-border); border-radius: 14px; padding: 16px; box-shadow: var(--tm-shadow-sm); }
+    .monthbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+    .monthbar strong { color: var(--tm-text-strong); font-weight: 700; }
+    .calendar { display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; }
+    .dow { text-align:center; font-size:.83rem; color:var(--tm-text-muted); padding:6px 0; }
+    .day { text-align:center; padding:10px 0; border-radius:10px; cursor:pointer; user-select:none; }
+    .day:hover { background: var(--tm-hover); }
+    .day.is-today { outline: 2px solid var(--tm-primary); }
+    .day.is-other { color: var(--tm-text-soft); }
+    .day.is-selected { background: var(--tm-primary); color: white; }
+    .list-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+    .appt { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border:1px solid var(--tm-border); border-radius:12px; margin-bottom:8px; background: var(--tm-surface-2); }
+    .appt .who { font-weight:600; }
+    .empty { color:var(--tm-text-muted); text-align:center; padding:24px 8px; border:1px dashed var(--tm-border); border-radius:12px; }
+    .btn { background: var(--tm-primary); color: #fff; border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+    .btn.secondary { background: var(--tm-surface-3); color: var(--tm-text-strong); }
+    .chip { padding: 2px 8px; border-radius: 999px; font-size: .8rem; background: var(--tm-primary-soft); color: var(--tm-primary-ink); }
+  </style>
+</head>
+<body class="tm">
+  <div class="page">
+    <div class="header">
+      <h1>📅 Agenda Médica Avançada</h1>
+      <div class="actions">
+        <a class="btn secondary" href="/dashboard">Dashboard</a>
+        <a class="btn secondary" href="/consulta">Consulta Avançada</a>
+        <a class="btn" href="/agenda?demo=1">Popular com exemplos</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- COLUNA ESQUERDA: CALENDÁRIO -->
+      <section class="card">
+        <div class="monthbar">
+          <button id="prev" class="btn secondary" aria-label="Mês anterior">‹</button>
+          <div><strong id="monthLabel">—</strong></div>
+          <button id="next" class="btn secondary" aria-label="Próximo mês">›</button>
+        </div>
+        <div class="calendar" id="calendar">
+          <!-- cabeçalho dias da semana -->
+        </div>
+      </section>
+
+      <!-- COLUNA DIREITA: HORÁRIOS -->
+      <section class="card">
+        <div class="list-head">
+          <div>
+            <div class="chip" id="notifyChip">Notificações: desligadas</div>
+            <h2 id="dayLabel" style="margin:.25rem 0 0; font-size:1rem; color:var(--tm-text-strong)">—</h2>
+          </div>
+          <div>
+            <label style="font-size:.9rem; color:var(--tm-text-muted)">
+              <input type="checkbox" id="notifyToggle" /> Ativar notificações
+            </label>
+          </div>
+        </div>
+        <div id="list"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="/js/agenda-avancada.js"></script>
+</body>
+</html>
+
+3) JS da agenda
+
+Crie public/js/agenda-avancada.js:
+
+(function () {
+  const pt = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" });
+  const dow = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+
+  // estado
+  let view = new Date();        // mês em visualização
+  view.setDate(1);
+  let selected = new Date();    // dia selecionado
+
+  const q = new URLSearchParams(location.search);
+  const demoMode = q.get("demo") === "1" || q.get("demo") === "true";
+
+  // elementos
+  const monthLabel = document.getElementById("monthLabel");
+  const dayLabel   = document.getElementById("dayLabel");
+  const cal        = document.getElementById("calendar");
+  const list       = document.getElementById("list");
+  const prevBtn    = document.getElementById("prev");
+  const nextBtn    = document.getElementById("next");
+  const notifyTg   = document.getElementById("notifyToggle");
+  const notifyChip = document.getElementById("notifyChip");
+
+  prevBtn.onclick = () => { view.setMonth(view.getMonth()-1); render(); };
+  nextBtn.onclick = () => { view.setMonth(view.getMonth()+1); render(); };
+  notifyTg.onchange = () => notifyChip.textContent = `Notificações: ${notifyTg.checked ? "ativadas" : "desligadas"}`;
+
+  function ymd(d){ return d.toISOString().slice(0,10); }
+  function sameDay(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+
+  function render() {
+    // cabeçalho mês
+    monthLabel.textContent = capitalize(pt.format(view));
+    // grid
+    cal.innerHTML = "";
+    // header dow
+    for (const d of dow) {
+      const el = document.createElement("div");
+      el.className = "dow";
+      el.textContent = d;
+      cal.appendChild(el);
+    }
+    // primeiro dia da grade
+    const first = new Date(view);
+    const startDow = first.getDay();
+    const start = new Date(first);
+    start.setDate(first.getDate() - startDow);
+
+    // 6 semanas x 7 dias
+    for (let i=0; i<42; i++){
+      const d = new Date(start);
+      d.setDate(start.getDate()+i);
+      const el = document.createElement("div");
+      el.className = "day";
+      el.textContent = d.getDate();
+
+      if (d.getMonth() !== view.getMonth()) el.classList.add("is-other");
+      if (sameDay(d, new Date())) el.classList.add("is-today");
+      if (sameDay(d, selected)) el.classList.add("is-selected");
+
+      el.onclick = () => { selected = d; render(); };
+      cal.appendChild(el);
+    }
+    // lista do dia
+    renderList();
+  }
+
+  async function renderList() {
+    dayLabel.textContent = `Horários para ${selected.toLocaleDateString("pt-BR")}`;
+    list.innerHTML = "";
+
+    // dados demo (JSON) ou vazio
+    let data = [];
+    if (demoMode) {
+      try {
+        const res = await fetch("/data/demo-appointments.json");
+        const all = await res.json();
+        data = (all[ymd(selected)] || []);
+      } catch (e) {
+        console.warn("demo json não disponível", e);
+      }
+    }
+
+    if (!data.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "Sem horários neste dia. Use “Popular com exemplos” ou crie pelo Dashboard.";
+      list.appendChild(empty);
+      return;
+    }
+
+    for (const appt of data) {
+      const row = document.createElement("div");
+      row.className = "appt";
+      row.innerHTML = `
+        <div>
+          <div class="who">${appt.paciente}</div>
+          <div style="color:var(--tm-text-muted); font-size:.9rem">${appt.especialidade} • ${appt.sala}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px">
+          <div class="chip">${appt.hora}</div>
+          <a class="btn" href="/consulta?from=agenda&slot=${encodeURIComponent(appt.hora)}">Atender</a>
+        </div>
+      `;
+      list.appendChild(row);
+    }
+  }
+
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  // inicial
+  render();
+})();
+
+4) Dados demo (amostras do dia)
+
+Crie public/data/demo-appointments.json com alguns dias e horários (você pode ajustar quando quiser):
+
+{
+  "2025-08-18": [
+    { "hora": "09:00", "paciente": "Ana Luiza", "especialidade": "Clínica Geral", "sala": "Sala #ABC123" },
+    { "hora": "10:30", "paciente": "Carlos Mendes", "especialidade": "Psiquiatria", "sala": "Sala #ABC123" }
+  ],
+  "2025-08-29": [
+    { "hora": "11:00", "paciente": "Andrea Martins", "especialidade": "Clínica Geral", "sala": "Sala #ABC123" },
+    { "hora": "11:20", "paciente": "Patrícia Moraes", "especialidade": "Psicologia", "sala": "Sala #ABC123" },
+    { "hora": "11:40", "paciente": "Airton Varela", "especialidade": "Cardiologia", "sala": "Sala #ABC123" }
+  ]
+}
+
+
+Dica: você pode “popular” qualquer data — é só abrir /agenda?demo=1 e clicar no dia que tem entradas no JSON.

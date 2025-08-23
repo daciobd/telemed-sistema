@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agenda Médica Avançada — TeleMed Pro</title>
+  <link rel="preload" as="style" href="/telemed-theme.css" />
+  <link rel="stylesheet" href="/telemed-theme.css" />
+  <style>
+    /* reforço de contraste e layout */
+    .page { max-width: 1200px; margin: 32px auto; padding: 0 16px; }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; }
+    .header h1 { margin:0; font-size: 1.4rem; color: var(--tm-text-strong); }
+    .header .actions { display:flex; gap:.5rem; }
+    .grid { display:grid; grid-template-columns: 380px 1fr; gap: 16px; }
+    .card { background: var(--tm-surface); border: 1px solid var(--tm-border); border-radius: 14px; padding: 16px; box-shadow: var(--tm-shadow-sm); }
+    .monthbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+    .monthbar strong { color: var(--tm-text-strong); font-weight: 700; }
+    .calendar { display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; }
+    .dow { text-align:center; font-size:.83rem; color:var(--tm-text-muted); padding:6px 0; }
+    .day { text-align:center; padding:10px 0; border-radius:10px; cursor:pointer; user-select:none; }
+    .day:hover { background: var(--tm-hover); }
+    .day.is-today { outline: 2px solid var(--tm-primary); }
+    .day.is-other { color: var(--tm-text-soft); }
+    .day.is-selected { background: var(--tm-primary); color: white; }
+    .list-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 8px; }
+    .appt { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border:1px solid var(--tm-border); border-radius:12px; margin-bottom:8px; background: var(--tm-surface-2); }
+    .appt .who { font-weight:600; }
+    .empty { color:var(--tm-text-muted); text-align:center; padding:24px 8px; border:1px dashed var(--tm-border); border-radius:12px; }
+    .btn { background: var(--tm-primary); color: #fff; border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+    .btn.secondary { background: var(--tm-surface-3); color: var(--tm-text-strong); }
+    .chip { padding: 2px 8px; border-radius: 999px; font-size: .8rem; background: var(--tm-primary-soft); color: var(--tm-primary-ink); }
+  </style>
+</head>
+<body class="tm">
+  <div class="page">
+    <div class="header">
+      <h1>📅 Agenda Médica Avançada</h1>
+      <div class="actions">
+        <a class="btn secondary" href="/dashboard">Dashboard</a>
+        <a class="btn secondary" href="/consulta">Consulta Avançada</a>
+        <a class="btn" href="/agenda?demo=1">Popular com exemplos</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- COLUNA ESQUERDA: CALENDÁRIO -->
+      <section class="card">
+        <div class="monthbar">
+          <button id="prev" class="btn secondary" aria-label="Mês anterior">‹</button>
+          <div><strong id="monthLabel">—</strong></div>
+          <button id="next" class="btn secondary" aria-label="Próximo mês">›</button>
+        </div>
+        <div class="calendar" id="calendar">
+          <!-- cabeçalho dias da semana -->
+        </div>
+      </section>
+
+      <!-- COLUNA DIREITA: HORÁRIOS -->
+      <section class="card">
+        <div class="list-head">
+          <div>
+            <div class="chip" id="notifyChip">Notificações: desligadas</div>
+            <h2 id="dayLabel" style="margin:.25rem 0 0; font-size:1rem; color:var(--tm-text-strong)">—</h2>
+          </div>
+          <div>
+            <label style="font-size:.9rem; color:var(--tm-text-muted)">
+              <input type="checkbox" id="notifyToggle" /> Ativar notificações
+            </label>
+          </div>
+        </div>
+        <div id="list"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="/js/agenda-avancada.js"></script>
+</body>
+</html>
