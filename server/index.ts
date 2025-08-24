@@ -54,6 +54,7 @@ app.get('/privacidade',      serveCanonical('preview/privacidade.html'));
 app.get('/precos',           serveCanonical('preview/precos.html'));
 app.get('/recuperar-senha',  serveCanonical('preview/recuperar-senha.html'));
 app.get('/feedback-medico',  serveCanonical('preview/feedback-medico.html'));
+app.get('/guia-orientacao',  serveCanonical('preview/guia-orientacao.html'));
 
 // --- Redirects de aliases/legados → canônicas (preservando querystring) ---
 const r301 = (to: string) => (req: any, res: any) => {

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Guia de Orientação — TeleMed Sistema</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/theme-telemed.css" />
+  <style>
+    :root{--pri:#0ea5e9;--ink:#111827;--muted:#6b7280;--ok:#16a34a;--warn:#f59e0b;--err:#ef4444}
+    body{background:linear-gradient(180deg,#f8fafc 0%,#eef2ff 100%);font-family:system-ui,-apple-system,sans-serif}
+    .container{max-width:900px;margin:0 auto;padding:20px}
+    .header{text-align:center;background:#fff;border-radius:20px;padding:30px;box-shadow:0 10px 26px rgba(2,6,23,.08);margin-bottom:30px}
+    .title{margin:0 0 10px;font-size:2.5rem;color:var(--ink)}
+    .subtitle{color:var(--muted);font-size:1.1rem;margin:0}
+    .section{background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(2,6,23,.06);padding:25px;margin-bottom:20px}
+    .section h2{margin:0 0 15px;color:var(--ink);font-size:1.4rem;display:flex;align-items:center;gap:10px}
+    .section h3{margin:20px 0 10px;color:var(--ink);font-size:1.1rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:15px}
+    .card{border:1px solid #e5e7eb;border-radius:12px;padding:15px;background:#f8fafc}
+    .card h4{margin:0 0 8px;color:var(--ink);font-size:1rem}
+    .card p{margin:0;color:var(--muted);font-size:0.9rem;line-height:1.4}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:600;transition:all .2s}
+    .btn-primary{background:var(--pri);color:#fff;border:2px solid var(--pri)}
+    .btn-secondary{background:transparent;color:var(--pri);border:2px solid var(--pri)}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(14,165,233,.3)}
+    .nav-buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:20px 0}
+    .step{background:#eef2ff;border-left:4px solid var(--pri);padding:15px;margin:10px 0;border-radius:0 8px 8px 0}
+    .step strong{color:var(--pri)}
+    .icon{width:24px;height:24px;display:inline-block}
+    .demo-links{background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:20px;margin:20px 0}
+    .demo-links h3{margin:0 0 15px;color:#0369a1}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+    .demo-link{display:block;padding:10px 15px;background:#fff;border:1px solid #e0f2fe;border-radius:8px;text-decoration:none;color:#0369a1;font-size:0.9rem;transition:all .2s}
+    .demo-link:hover{background:#f0f9ff;border-color:#0369a1}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">🩺 Bem-vindo ao TeleMed Sistema</h1>
+      <p class="subtitle">Guia completo para navegar e utilizar nossa plataforma de telemedicina</p>
+    </div>
+
+    <div class="section">
+      <h2>
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Como começar
+      </h2>
+      
+      <div class="step">
+        <strong>Passo 1:</strong> Escolha seu perfil - Você é médico ou paciente? Cada perfil tem funcionalidades específicas.
+      </div>
+      
+      <div class="step">
+        <strong>Passo 2:</strong> Explore o dashboard principal - Todas as funcionalidades estão organizadas em cards intuitivos.
+      </div>
+      
+      <div class="step">
+        <strong>Passo 3:</strong> Teste as funcionalidades - Use os links de demonstração para conhecer cada recurso.
+      </div>
+      
+      <div class="nav-buttons">
+        <a href="/dashboard" class="btn btn-primary">🏠 Ir para o Dashboard</a>
+        <a href="/cadastro" class="btn btn-secondary">📝 Fazer Cadastro</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        Principais Funcionalidades
+      </h2>
+      
+      <div class="grid">
+        <div class="card">
+          <h4>🗓️ Agenda Médica</h4>
+          <p>Sistema completo de agendamento com timeline interativa e notificações em tempo real.</p>
+        </div>
+        
+        <div class="card">
+          <h4>💬 Consultas Online</h4>
+          <p>Videochamadas seguras com chat integrado e prescrições digitais.</p>
+        </div>
+        
+        <div class="card">
+          <h4>🧠 Testes Psiquiátricos</h4>
+          <p>Escalas validadas como GAD-7, PHQ-9, ASRS-18 com relatórios automáticos.</p>
+        </div>
+        
+        <div class="card">
+          <h4>👥 Gestão de Pacientes</h4>
+          <p>Cadastro completo, histórico médico e relatórios personalizados.</p>
+        </div>
+        
+        <div class="card">
+          <h4>🎯 Sala de Espera</h4>
+          <p>Sistema de fila virtual com teste de áudio/vídeo e notificações.</p>
+        </div>
+        
+        <div class="card">
+          <h4>📱 Interface Responsiva</h4>
+          <p>Acesso completo via mobile, tablet e desktop com sincronização.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-links">
+      <h3>🚀 Links para Demonstração</h3>
+      <p style="margin-bottom:15px;color:#374151">Clique nos links abaixo para explorar cada funcionalidade:</p>
+      
+      <div class="demo-grid">
+        <a href="/dashboard" class="demo-link">🏠 Dashboard Principal</a>
+        <a href="/agenda" class="demo-link">🗓️ Agenda Avançada</a>
+        <a href="/consulta" class="demo-link">💬 Consulta Online</a>
+        <a href="/centro-de-testes" class="demo-link">🧠 Centro de Testes</a>
+        <a href="/sala-de-espera?mock=1" class="demo-link">🎯 Sala de Espera (Demo)</a>
+        <a href="/medico" class="demo-link">👨‍⚕️ Perfil Médico</a>
+        <a href="/paciente" class="demo-link">👤 Área do Paciente</a>
+        <a href="/como-funciona" class="demo-link">❓ Como Funciona</a>
+        <a href="/precos" class="demo-link">💰 Preços e Planos</a>
+        <a href="/dr-ai" class="demo-link">🤖 Dr. IA</a>
+        <a href="/demo-responsivo" class="demo-link">📱 Demo Responsivo</a>
+        <a href="/registro-saude" class="demo-link">📋 Registro de Saúde</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Perguntas Frequentes
+      </h2>
+      
+      <h3>Como faço para agendar uma consulta?</h3>
+      <p>Acesse a <a href="/agenda" style="color:var(--pri)">Agenda</a>, clique em um horário disponível e preencha os dados do paciente. O sistema mostrará médicos disponíveis e você pode fazer um lance pelo valor desejado.</p>
+      
+      <h3>Como funciona a Sala de Espera?</h3>
+      <p>Após agendar, você recebe um link personalizado. Na <a href="/sala-de-espera" style="color:var(--pri)">Sala de Espera</a> você pode testar câmera/microfone, ver sua posição na fila e será redirecionado automaticamente quando for sua vez.</p>
+      
+      <h3>Preciso instalar algum aplicativo?</h3>
+      <p>Não! Todo o sistema funciona diretamente no navegador. Recomendamos Chrome, Firefox ou Safari atualizados para melhor experiência.</p>
+      
+      <h3>Como acesso meu histórico médico?</h3>
+      <p>No <a href="/dashboard" style="color:var(--pri)">Dashboard</a>, clique em "Gestão de Pacientes" para ver histórico completo, exames e prescrições anteriores.</p>
+    </div>
+
+    <div class="section">
+      <h2>
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25v1.5M12 18.75v1.5m9.75-9.75h-1.5M3.75 12h-1.5"/>
+        </svg>
+        Suporte e Contato
+      </h2>
+      
+      <p>Se precisar de ajuda adicional:</p>
+      <ul style="margin:10px 0;padding-left:20px;color:var(--muted)">
+        <li>Use o chat de suporte disponível em todas as páginas</li>
+        <li>Consulte a página <a href="/como-funciona" style="color:var(--pri)">Como Funciona</a> para tutoriais detalhados</li>
+        <li>Entre em contato pelo <a href="/feedback-medico" style="color:var(--pri)">formulário de feedback</a></li>
+      </ul>
+      
+      <div class="nav-buttons">
+        <a href="/dashboard" class="btn btn-primary">🚀 Começar Agora</a>
+        <a href="/como-funciona" class="btn btn-secondary">📖 Saiba Mais</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
