@@ -1,0 +1,311 @@
+Orientação ao Replit — LP oficial, sessões e Centro de Testes
+0) Resumo do que muda
+
+LP oficial: / redireciona para /lp.
+
+Sessões novas na /lp:
+
+Dr. Aí (botão “Conheça o Doutor Aí” → /dr-ai)
+
+Centro de Testes (ansiedade/depressão etc.) com botão → /centro-de-testes
+
+Recursos/Políticas com links: /privacidade, /como-funciona (Sobre a TeleMed), /faq
+
+Dashboard: card e item de menu lateral para /centro-de-testes.
+
+Rotas/Sitemap/Verificador: adicionar /lp, /centro-de-testes, /faq às canônicas.
+
+A) Backend — rotas e landing oficial
+
+Edite server/index.ts (mantenha seus imports/serveCanonical):
+
+// --- Rotas CANÔNICAS ---
+app.get('/', (_req, res) => res.redirect(301, '/lp')); // LP como landing oficial
+
+// LP (ajuste o caminho do arquivo conforme sua estrutura real)
+app.get('/lp',            serveCanonical('lp.html')); // ou 'preview/lp.html' se for o seu caso
+
+app.get('/agenda',        serveCanonical('preview/agenda-avancada.html'));
+app.get('/consulta',      serveCanonical('preview/enhanced-teste.html'));
+app.get('/dashboard',     serveCanonical('preview/dashboard.html'));
+
+app.get('/medico',        serveCanonical('preview/perfil-medico.html'));
+app.get('/paciente',      serveCanonical('preview/mobile.html'));
+
+// NOVA: Centro de Testes
+app.get('/centro-de-testes', serveCanonical('preview/centro-de-testes.html'));
+
+// (opcional) FAQ simples
+app.get('/faq',           serveCanonical('preview/faq.html'));
+
+app.get('/como-funciona', serveCanonical('preview/como-funciona.html'));
+app.get('/dr-ai',         serveCanonical('dr-ai.html'));
+
+app.get('/cadastro',      serveCanonical('cadastro.html'));
+app.get('/login',         serveCanonical('preview/login.html'));
+
+app.get('/registro-saude', serveCanonical('preview/registro-saude.html'));
+app.get('/privacidade',    serveCanonical('preview/privacidade.html'));
+app.get('/precos',         serveCanonical('preview/precos.html'));
+app.get('/recuperar-senha',serveCanonical('preview/recuperar-senha.html'));
+app.get('/feedback-medico',serveCanonical('preview/feedback-medico.html'));
+
+// --- Redirects de aliases/legados → canônicas (preserva querystring) ---
+const r301 = (to: string) => (req: any, res: any) => {
+  const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  res.redirect(301, to + qs);
+};
+
+// Home/landing velhos → /lp
+app.get(['/home','/index.html','/landing','/inicio'], r301('/lp'));
+
+app.get(['/dev/agenda','/agenda2','/agenda-legacy'], r301('/agenda'));
+app.get(
+  ['/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system','/video-consultation'],
+  r301('/consulta')
+);
+app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('/dashboard'));
+
+// Aliases para Centro de Testes
+app.get(['/testes','/centro-testes','/testes-psiquiatricos','/screening'], r301('/centro-de-testes'));
+
+
+Reinicie:
+
+npm run dev
+
+B) LP — adicionar as 3 sessões
+
+Abra o arquivo da LP (ex.: public/lp.html ou public/preview/lp.html) e insira antes do footer:
+
+<!-- Sessão: Dr. Aí -->
+<section id="dr-ai" style="padding:56px 0;background:#f8fafc">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="font-size:32px;margin:0 0 12px">Conheça o Dr. Aí</h2>
+    <p style="max-width:720px;line-height:1.6;margin:0 0 20px">
+      Um assistente clínico que ajuda no raciocínio diagnóstico e padroniza condutas.
+      Veja a demonstração interativa e entenda como ele funciona no dia a dia.
+    </p>
+    <a class="btn btn-primary" href="/dr-ai" style="display:inline-block;padding:12px 18px;border-radius:12px;background:#0ea5e9;color:#fff;text-decoration:none">
+      Conheça o Doutor Aí →
+    </a>
+  </div>
+</section>
+
+<!-- Sessão: Centro de Testes -->
+<section id="centro-de-testes" style="padding:56px 0;background:#ffffff">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="font-size:32px;margin:0 0 12px">Centro de Testes</h2>
+    <p style="max-width:720px;line-height:1.6;margin:0 0 20px">
+      Avaliações padronizadas de saúde mental (ex.: ansiedade, depressão, TDAH).
+      Resultados rápidos e orientados para uso clínico.
+    </p>
+    <a class="btn btn-outline" href="/centro-de-testes" style="display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid #0ea5e9;color:#0ea5e9;text-decoration:none">
+      Ir para o Centro de Testes →
+    </a>
+  </div>
+</section>
+
+<!-- Sessão: Recursos e Políticas -->
+<section id="recursos" style="padding:56px 0;background:#f8fafc">
+  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
+    <h2 style="font-size:32px;margin:0 0 12px">Recursos e Políticas</h2>
+    <ul style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+      <li><a href="/privacidade">Política de Privacidade</a></li>
+      <li><a href="/como-funciona">Sobre a TeleMed</a></li>
+      <li><a href="/faq">FAQ</a></li>
+    </ul>
+  </div>
+</section>
+
+
+Se usar Tailwind/estilos globais, pode adaptar as classes — deixei inline para ser “colar e ver”.
+
+C) Centro de Testes — página simples
+
+Crie public/preview/centro-de-testes.html (conteúdo base; ajuste/expandir depois):
+
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Centro de Testes – TeleMed</title>
+  <meta name="description" content="Avaliações padronizadas: ansiedade (GAD-7), depressão (PHQ-9) e mais." />
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="canonical" href="/centro-de-testes" />
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0}
+    .container{max-width:1100px;margin:0 auto;padding:24px 16px}
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{border:1px solid #e5e7eb;border-radius:16px;padding:16px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:12px;text-decoration:none}
+    .btn-primary{background:#0ea5e9;color:#fff}
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>Centro de Testes</h1>
+    <p>Escolha um protocolo e comece a avaliação.</p>
+  </header>
+
+  <main class="container grid">
+    <div class="card">
+      <h3>Ansiedade (GAD-7)</h3>
+      <p>Rastreamento de transtorno de ansiedade generalizada.</p>
+      <a class="btn btn-primary" href="/centro-de-testes?tool=gad7">Iniciar</a>
+    </div>
+    <div class="card">
+      <h3>Depressão (PHQ-9)</h3>
+      <p>Severidade de sintomas depressivos.</p>
+      <a class="btn btn-primary" href="/centro-de-testes?tool=phq9">Iniciar</a>
+    </div>
+    <div class="card">
+      <h3>TDAH (ASRS)</h3>
+      <p>Rastreamento de sintomas de TDAH em adultos.</p>
+      <a class="btn btn-primary" href="/centro-de-testes?tool=asrs">Iniciar</a>
+    </div>
+  </main>
+
+  <footer class="container" style="padding:24px 16px 48px;color:#6b7280">
+    <small>Resultados são indicativos e não substituem avaliação médica.</small>
+  </footer>
+</body>
+</html>
+
+
+Se já existir um “centro” próprio, basta linkar para ele a partir da LP e do Dashboard (mantendo a rota /centro-de-testes).
+
+D) FAQ — placeholder (opcional)
+
+Crie public/preview/faq.html simples (se ainda não houver):
+
+<!doctype html><html lang="pt-br"><head>
+<meta charset="utf-8"><title>FAQ – TeleMed</title>
+<meta name="robots" content="index,follow"><link rel="canonical" href="/faq">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head><body style="font-family:system-ui;max-width:900px;margin:24px auto;padding:0 16px">
+<h1>FAQ</h1>
+<h3>O que é o Dr. Aí?</h3><p>Assistente clínico com demonstração em <a href="/dr-ai">/dr-ai</a>.</p>
+<h3>Privacidade</h3><p>Veja <a href="/privacidade">Política de Privacidade</a>.</p>
+<h3>Como funciona</h3><p>Leia <a href="/como-funciona">Sobre a TeleMed</a>.</p>
+</body></html>
+
+E) Dashboard — card + menu para o Centro de Testes
+1) Card
+
+No public/preview/dashboard.html, adicione dentro da grade de cards:
+
+<div class="card">
+  <h3>Centro de Testes</h3>
+  <p>Avaliações padronizadas: GAD-7, PHQ-9, ASRS e mais.</p>
+  <a class="btn btn-primary" href="/centro-de-testes">Abrir</a>
+</div>
+
+2) Menu lateral
+
+No mesmo arquivo (ou layout compartilhado), acrescente no <nav>:
+
+<li><a href="/centro-de-testes">Centro de Testes</a></li>
+
+F) Verificador e SEO
+1) scripts/verify-links.cjs
+
+Inclua novas canônicas e aliases:
+
+const CANONICAL = new Set([
+  '/','/lp','/agenda','/consulta','/dashboard',
+  '/medico','/paciente','/centro-de-testes','/faq',
+  '/como-funciona','/dr-ai','/cadastro','/login',
+  '/registro-saude','/privacidade','/precos',
+  '/recuperar-senha','/feedback-medico'
+]);
+
+const ALIASES = [
+  '/home','/index.html','/landing','/inicio',
+  '/dev/agenda','/agenda2','/agenda-legacy',
+  '/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system',
+  '/doctor-dashboard','/dashboard-teste','/dashboard-teste.html',
+  '/video-consultation',
+  '/testes','/centro-testes','/testes-psiquiatricos','/screening'
+];
+
+
+Rode:
+
+npm run verify:links
+
+2) scripts/build-sitemap.cjs
+
+Adicione /lp, /centro-de-testes, /faq:
+
+const routes = [
+  '/','/lp','/agenda','/consulta','/dashboard',
+  '/medico','/paciente','/centro-de-testes','/faq',
+  '/como-funciona','/dr-ai','/cadastro','/login',
+  '/registro-saude','/privacidade','/precos',
+  '/recuperar-senha','/feedback-medico'
+];
+
+
+Gerar (dev porta 5001 no seu caso atual):
+
+CANONICAL_BASE_URL=http://localhost:5001 node scripts/build-sitemap.cjs
+
+G) QA — critérios de aceite
+
+Landing oficial
+
+curl -s -o /dev/null -w "/ -> %{http_code} %{redirect_url}\n" http://localhost:5001/
+# Esperado: 301 http://localhost:5001/lp
+
+
+LP tem as 3 sessões (visuais OK) e botões funcionando:
+
+“Conheça o Doutor Aí” → /dr-ai
+
+“Ir para o Centro de Testes” → /centro-de-testes
+
+Links: /privacidade, /como-funciona, /faq
+
+Dashboard
+
+Existe card “Centro de Testes” com botão → /centro-de-testes
+
+Menu lateral tem item “Centro de Testes” → /centro-de-testes
+
+Smokes
+
+for p in /lp /centro-de-testes /faq /dr-ai /privacidade /como-funciona; do
+  curl -s -o /dev/null -w "$p -> %{http_code}\n" http://localhost:5001$p
+done
+
+
+Esperado: 200 para todos.
+
+Redirects
+
+for p in / /home /index.html /landing /inicio /testes /centro-testes /testes-psiquiatricos /screening; do
+  curl -s -o /dev/null -w "$p -> %{http_code} %{redirect_url}\n" http://localhost:5001$p
+done
+
+
+Esperado: 301 para as canônicas (/lp e /centro-de-testes).
+
+Verificador & SEO
+
+npm run verify:links
+curl -I http://localhost:5001/sitemap.xml
+curl -I http://localhost:5001/robots.txt
+
+
+Esperado: verificador ✅; SEO endpoints 200 e com as novas rotas.
+
+H) Mensagem de commit sugerida
+feat(lp): tornar /lp landing oficial + novas sessões
+- root -> 301 /lp
+- LP: seção Dr. Aí (/dr-ai), Centro de Testes (/centro-de-testes), Recursos (/privacidade, /como-funciona, /faq)
+- add /centro-de-testes (página base) e /faq (placeholder)
+- dashboard: card + menu para Centro de Testes
+- verify-links: add /lp, /centro-de-testes, /faq; add aliases
+- sitemap: incluir novas rotas

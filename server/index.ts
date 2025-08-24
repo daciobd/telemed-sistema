@@ -264,8 +264,6 @@ app.get('/patient-management', (req, res) => {
 
 // 301 redirects (aliases → canônicas)
 const redirects: Record<string,string> = {
-  "/": "/agenda",
-  "/landing": "/agenda", 
   "/enhanced": "/consulta",
   "/enhanced-consultation": "/consulta",
   "/enhanced-teste": "/consulta",
@@ -299,9 +297,12 @@ Object.entries(redirects).forEach(([from, to]) => {
 });
 
 // --- Rotas CANÔNICAS ---
-app.get('/', (_req, res) => res.redirect(301, '/agenda'));
+app.get('/', (_req, res) => res.redirect(301, '/lp')); // LP como landing oficial
 
-app.get('/agenda',       serveCanonical('preview/agenda-avancada.html')); // nova agenda
+// LP (ajuste o caminho do arquivo conforme sua estrutura real)
+app.get('/lp',            serveCanonical('lp.html')); // LP oficial
+
+app.get('/agenda',        serveCanonical('preview/agenda-avancada.html'));
 app.get('/consulta',     serveCanonical('preview/enhanced-teste.html'));
 app.get('/dashboard',    serveCanonical('preview/dashboard.html'));
 
@@ -310,6 +311,12 @@ app.get('/paciente',     serveCanonical('preview/mobile.html'));
 
 // NOVA: gestão de pacientes (canônica)
 app.get('/pacientes',    serveCanonical('preview/meus-pacientes-original.html'));
+
+// NOVA: Centro de Testes
+app.get('/centro-de-testes', serveCanonical('preview/centro-de-testes.html'));
+
+// (opcional) FAQ simples
+app.get('/faq',           serveCanonical('preview/faq.html'));
 
 app.get('/como-funciona',serveCanonical('preview/como-funciona.html'));
 app.get('/dr-ai',        serveCanonical('dr-ai.html'));
@@ -329,12 +336,18 @@ const r301 = (to: string) => (req: any, res: any) => {
   res.redirect(301, to + qs);
 };
 
+// Home/landing velhos → /lp
+app.get(['/home','/index.html','/landing','/inicio'], r301('/lp'));
+
 app.get(['/dev/agenda','/agenda2','/agenda-legacy'], r301('/agenda'));
 app.get(
   ['/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system','/video-consultation'],
   r301('/consulta')
 );
 app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('/dashboard'));
+
+// Aliases para Centro de Testes
+app.get(['/testes','/centro-testes','/testes-psiquiatricos','/screening'], r301('/centro-de-testes'));
 
 // Opcionais (backlinks externos diretos para arquivos públicos):
 app.get(['/public/demo-ativo/agenda-do-dia.html'], r301('/agenda'));
