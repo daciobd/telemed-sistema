@@ -343,6 +343,9 @@ app.get('/precos',         serveCanonical('consulta-por-valor.html'));
 app.get('/recuperar-senha',serveCanonical('preview/recuperar-senha.html'));
 app.get('/feedback-medico',serveCanonical('preview/feedback-medico.html'));
 
+// Sala de Espera
+app.get('/sala-de-espera', serveCanonical('preview/sala-de-espera.html'));
+
 // --- Redirects de aliases/legados → canônicas (preserva querystring) ---
 const r301 = (to: string) => (req: any, res: any) => {
   const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
@@ -361,6 +364,9 @@ app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('
 
 // Aliases para Centro de Testes
 app.get(['/testes','/centro-testes','/testes-psiquiatricos','/screening'], r301('/centro-de-testes'));
+
+// Aliases para Sala de Espera
+app.get(['/waiting-room','/aguardando'], r301('/sala-de-espera'));
 
 // Redirects úteis (antigos → canônicas)
 app.get(['/politica-de-privacidade','/politicas'], r301('/privacidade'));

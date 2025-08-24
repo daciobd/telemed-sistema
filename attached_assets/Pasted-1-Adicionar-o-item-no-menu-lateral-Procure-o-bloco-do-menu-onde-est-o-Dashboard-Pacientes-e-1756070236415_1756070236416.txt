@@ -1,0 +1,158 @@
+1) Adicionar o item no menu lateral
+
+Procure o bloco do menu (onde estão “Dashboard”, “Pacientes”, etc.) e insira esta linha onde preferir (ex.: logo após “Consulta IA”):
+
+<!-- Sala de Espera (link dinâmico; o JS abaixo completa com ?ticket=...) -->
+<li>
+  <a id="menu-waiting" class="menu-link" href="/sala-de-espera" aria-disabled="true">Sala de Espera</a>
+</li>
+
+
+Se o seu HTML usa outra tag/classe para os itens do menu, mantenha-as e apenas garanta o id="menu-waiting".
+
+2) Adicionar o card no grid principal
+
+No grid de cards (onde já tem “Agenda do Dia”, “Gestão de Pacientes”, “Perfil do Médico”, “Configurações”…), adicione:
+
+<div class="card">
+  <div class="card-body">
+    <h3>Sala de Espera</h3>
+    <ul class="muted" style="margin:8px 0 12px">
+      <li>Mostra sua posição na fila e o tempo estimado</li>
+      <li>Teste de câmera/microfone e notificações</li>
+      <li>Entra automaticamente quando o médico chamar</li>
+    </ul>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a id="btn-waiting" class="btn btn-primary" href="/sala-de-espera" aria-disabled="true">Ir para a Sala de Espera</a>
+      <a class="btn" href="/sala-de-espera?mock=1" target="_blank" rel="noopener">Ver demo (mock)</a>
+    </div>
+    <div id="waiting-hint" class="muted" style="margin-top:8px"></div>
+  </div>
+</div>
+
+3) JS para montar o link com ticket (e nome/médico/esp/horário)
+
+Cole uma vez antes de </body> (ou no seu arquivo JS do dashboard):
+
+<script>
+// util: pega/guarda dados do último agendamento
+(function(){
+  const $ = (s,r=document)=>r.querySelector(s);
+  const qs = new URLSearchParams(location.search);
+
+  // 1) de onde vem os dados?
+  // a) querystring (ex.: dashboard?ticket=XYZ&nome=...&medico=...&esp=...&horario=...)
+  const dataFromQS = {
+    ticket: qs.get('ticket'),
+    nome:   qs.get('nome'),
+    medico: qs.get('medico'),
+    esp:    qs.get('especialidade') || qs.get('esp'),
+    horario:qs.get('horario')
+  };
+
+  // b) localStorage (preenchido após agendar; ver snippet da etapa 4)
+  const ls = (k)=>localStorage.getItem('tm_'+k) || '';
+  const dataFromLS = {
+    ticket: ls('ticket'),
+    nome:   ls('nome'),
+    medico: ls('medico'),
+    esp:    ls('esp'),
+    horario:ls('horario')
+  };
+
+  // c) escolhe: QS tem prioridade; senão, LS
+  const data = Object.fromEntries(
+    Object.entries(dataFromQS).map(([k,v])=>[k, v || dataFromLS[k] || ''])
+  );
+
+  // se vier algo pela QS, persistimos
+  if (data.ticket) {
+    for (const [k,v] of Object.entries(data)) {
+      if (v) localStorage.setItem('tm_'+k, v);
+    }
+  }
+
+  // 2) monta a URL final
+  function makeWaitingURL(withMock=false){
+    const params = new URLSearchParams();
+    if (data.ticket)  params.set('ticket', data.ticket);
+    if (data.nome)    params.set('nome', data.nome);
+    if (data.medico)  params.set('medico', data.medico);
+    if (data.esp)     params.set('especialidade', data.esp);
+    if (data.horario) params.set('horario', data.horario);
+    if (withMock)     params.set('mock','1');
+    const qs = params.toString();
+    return '/sala-de-espera' + (qs ? ('?'+qs) : '');
+  }
+
+  // 3) aplica nos botões/menus
+  const menu = $('#menu-waiting');
+  const btn  = $('#btn-waiting');
+  const hint = $('#waiting-hint');
+
+  const hasTicket = !!data.ticket;
+  const url = makeWaitingURL(false);
+
+  if (menu) {
+    menu.href = hasTicket ? url : '/sala-de-espera';
+    menu.setAttribute('aria-disabled', String(!hasTicket));
+    if (!hasTicket) menu.classList.add('is-disabled'); // opcional: estilo cinza
+  }
+  if (btn) {
+    btn.href = hasTicket ? url : '/sala-de-espera';
+    btn.setAttribute('aria-disabled', String(!hasTicket));
+  }
+  if (hint) {
+    hint.textContent = hasTicket
+      ? `Próxima consulta: ${data.horario || '—'} • Médico: ${data.medico || '—'} • Ticket: ${data.ticket}`
+      : 'Dica: depois de agendar, este botão levará você direto para a sua Sala de Espera.';
+  }
+})();
+</script>
+
+
+Com ticket presente (via ?ticket= ou salvo no localStorage), o link fica ativo e já leva com todos os parâmetros.
+Sem ticket, continua apontando para /sala-de-espera (sem QS), e mostramos a dica.
+
+4) Opcional — salvar os dados na hora do agendamento
+
+Se você controla o “sucesso do agendamento” (na Agenda/Consulta), salve os dados para o Dashboard recuperar depois:
+
+<script>
+// chame isto no momento em que o agendamento é confirmado
+function tm_storeWaitingData({ticket, nome, medico, esp, horario}){
+  if (ticket)  localStorage.setItem('tm_ticket',  ticket);
+  if (nome)    localStorage.setItem('tm_nome',    nome);
+  if (medico)  localStorage.setItem('tm_medico',  medico);
+  if (esp)     localStorage.setItem('tm_esp',     esp);
+  if (horario) localStorage.setItem('tm_horario', horario);
+}
+</script>
+
+
+Exemplo de uso:
+
+tm_storeWaitingData({
+  ticket: 'ABC123',
+  nome: 'Maria Silva',
+  medico: 'Dr. João',
+  esp: 'Cardiologia',
+  horario: '14:30'
+});
+
+5) Rotas/SEO/checks
+
+Servidor (se ainda não adicionou):
+
+app.get('/sala-de-espera', serveCanonical('preview/sala-de-espera.html'));
+
+
+Verificador:
+
+Em scripts/verify-links.cjs, adicione '/sala-de-espera' ao CANONICAL.
+
+Rode npm run verify:links (deve ficar verde).
+
+Smoke:
+
+curl -I "$BASE/sala-de-espera"

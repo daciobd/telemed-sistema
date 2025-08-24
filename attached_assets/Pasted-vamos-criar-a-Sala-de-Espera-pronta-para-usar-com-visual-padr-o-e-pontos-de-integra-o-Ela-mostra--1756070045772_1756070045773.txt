@@ -1,0 +1,340 @@
+vamos criar a Sala de Espera pronta para usar, com visual padrão e pontos de integração.
+Ela mostra posição na fila, tempo estimado, teste de áudio/vídeo, notificações, dicas e entra automaticamente na consulta quando o médico chamar.
+
+1) Rota canônica
+
+No server/index.ts (junto das outras canônicas):
+
+app.get('/sala-de-espera', serveCanonical('preview/sala-de-espera.html'));
+
+
+(opcional – aliases comuns)
+
+app.get(['/waiting-room','/aguardando'], (req,res)=>{
+  const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  res.redirect(301, '/sala-de-espera' + qs);
+});
+
+2) Verificador e Sitemap
+
+Em scripts/verify-links.cjs, adicione '/sala-de-espera' ao CANONICAL.
+
+Em scripts/build-sitemap.cjs, inclua '/sala-de-espera' no array de routes (se quiser indexar).
+
+3) Página (cole como public/preview/sala-de-espera.html)
+
+Funciona “autônoma”: usa o tema global se existir (/css/theme-telemed.css), mas tem CSS complementar no <style>.
+Teste rápido: …/sala-de-espera?ticket=ABC123&nome=Maria&medico=Dr.%20João&especialidade=Cardiologia&horario=14:30&mock=1
+
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Sala de Espera — TeleMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="canonical" href="/sala-de-espera" />
+  <link rel="stylesheet" href="/css/theme-telemed.css" />
+  <style>
+    :root{--pri:#0ea5e9;--ink:#111827;--muted:#6b7280;--ok:#16a34a;--warn:#f59e0b;--err:#ef4444}
+    body{background:linear-gradient(180deg,#f8fafc 0%,#eef2ff 100%)}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    .header{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:20px;padding:16px 20px;box-shadow:0 10px 26px rgba(2,6,23,.08);margin-bottom:16px}
+    .title{margin:0;font-size:1.5rem}
+    .muted{color:var(--muted)}
+    .grid{display:grid;gap:16px}
+    .main{grid-template-columns:1.1fr .9fr}
+    .card{background:#fff;border-radius:18px;box-shadow:0 8px 22px rgba(2,6,23,.06)}
+    .card-body{padding:18px}
+    .chip{display:inline-flex;gap:6px;align-items:center;border-radius:999px;padding:6px 10px;background:#eef2ff;color:#3730a3;font-weight:600}
+    .status-dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
+    .s-ok{background:var(--ok)} .s-warn{background:var(--warn)} .s-err{background:var(--err)} .s-idle{background:#9ca3af}
+    .progress{height:10px;background:#eef2f7;border-radius:999px;overflow:hidden}
+    .progress > div{height:100%;background:linear-gradient(90deg,#22d3ee,#3b82f6);width:0%}
+    .video-wrap{background:#0b1220;border-radius:14px;display:grid;place-items:center;min-height:220px;color:#b3c1d1}
+    video{width:100%;max-height:340px;border-radius:12px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .btn{display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#fff;cursor:pointer}
+    .btn-primary{background:var(--pri);border-color:var(--pri);color:#fff}
+    .btn-ghost{background:transparent;border-color:#e5e7eb}
+    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .kpi .item{background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:12px;text-align:center}
+    .kpi .num{font-weight:800;font-size:1.4rem}
+    .right .card{height:100%}
+    @media(max-width:1024px){.main{grid-template-columns:1fr}}
+    .note{font-size:.9rem;color:var(--muted)}
+    .danger{color:var(--err);font-weight:600}
+    .success{color:var(--ok);font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <h1 class="title">Sala de Espera</h1>
+        <div id="sub" class="muted">Seu médico está se preparando…</div>
+      </div>
+      <div class="row">
+        <a class="btn" href="/dashboard">← Voltar</a>
+        <button id="help" class="btn">❓ Ajuda</button>
+      </div>
+    </header>
+
+    <section class="grid main">
+      <!-- Coluna principal -->
+      <div class="left grid">
+        <!-- Status da fila -->
+        <article class="card">
+          <div class="card-body">
+            <div class="row" style="justify-content:space-between;align-items:center">
+              <div class="row">
+                <span class="status-dot s-idle" id="statusDot"></span>
+                <strong id="statusTxt">Aguardando</strong>
+                <span class="chip" id="ticketChip">Código: —</span>
+              </div>
+              <button id="refresh" class="btn">↻ Atualizar</button>
+            </div>
+
+            <div class="kpi" style="margin-top:12px">
+              <div class="item"><div class="num" id="pos">—</div><div>Posição na fila</div></div>
+              <div class="item"><div class="num" id="eta">—</div><div>Tempo estimado</div></div>
+              <div class="item"><div class="num" id="ahead">—</div><div>Na sua frente</div></div>
+            </div>
+
+            <div class="progress" style="margin:14px 0 6px">
+              <div id="bar"></div>
+            </div>
+            <div class="note">Esta é uma estimativa — ela se atualiza automaticamente.</div>
+
+            <div id="cta" style="margin-top:14px"></div>
+          </div>
+        </article>
+
+        <!-- Testes de áudio e vídeo -->
+        <article class="card">
+          <div class="card-body">
+            <h3>Teste rápido de áudio e vídeo</h3>
+            <div class="video-wrap" id="videoWrap">
+              <video id="cam" playsinline autoplay muted></video>
+              <div id="noCam" class="note">Conceda permissão para câmera/microfone para ver a prévia.</div>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <button id="btnCam" class="btn btn-primary">🎥 Iniciar câmera</button>
+              <button id="btnMic" class="btn">🎤 Testar microfone</button>
+              <button id="btnStop" class="btn btn-ghost">⏹️ Parar</button>
+            </div>
+            <div id="micLevel" class="note">Nível do microfone: —</div>
+          </div>
+        </article>
+
+        <!-- Mensagem para o médico -->
+        <article class="card">
+          <div class="card-body">
+            <h3>Deixe uma mensagem para o médico</h3>
+            <textarea id="msg" rows="3" style="width:100%;border-radius:12px;border:1px solid #e5e7eb;padding:10px" placeholder="Ex.: Preciso avisar que estou com febre desde ontem…"></textarea>
+            <div class="row" style="margin-top:10px">
+              <button id="send" class="btn">✉️ Enviar mensagem</button>
+              <span id="sendStatus" class="note"></span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Coluna lateral -->
+      <aside class="right">
+        <article class="card">
+          <div class="card-body">
+            <h3>Seu atendimento</h3>
+            <div id="who" class="note" style="margin-bottom:10px"></div>
+
+            <h4>Notificações</h4>
+            <div class="row">
+              <label class="row"><input id="notif" type="checkbox" style="transform:scale(1.2)"> Ativar notificação quando for chamado</label>
+              <span id="notifState" class="note"></span>
+            </div>
+
+            <h4 style="margin-top:14px">Checklist</h4>
+            <ul class="note">
+              <li>Ambiente silencioso e com boa iluminação</li>
+              <li>Documento com foto em mãos</li>
+              <li>Fone de ouvido (opcional, melhora o som)</li>
+              <li>Conexão estável (Wi-Fi ou 4G/5G)</li>
+            </ul>
+
+            <h4 style="margin-top:14px">Dicas rápidas</h4>
+            <details><summary>Minha câmera não aparece</summary><div class="note">Verifique permissões do navegador e feche outros apps que usam a câmera.</div></details>
+            <details><summary>O médico atrasou</summary><div class="note">Aguarde — a equipe pode estar finalizando o atendimento anterior. Se preferir, reagende pela <a href="/agenda">Agenda</a>.</div></details>
+          </div>
+        </article>
+      </aside>
+    </section>
+  </div>
+
+  <script>
+  (function(){
+    // util
+    const $=(s,r=document)=>r.querySelector(s);
+    const qs=new URLSearchParams(location.search);
+    const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+    const fmtM=(n)=>String(n).padStart(2,'0');
+
+    // dados iniciais via querystring
+    const ticket = qs.get('ticket')||'—';
+    const nome   = qs.get('nome')||'Paciente';
+    const medico = qs.get('medico')||'Seu Médico';
+    const esp    = qs.get('especialidade')||qs.get('esp')||'Clínica Geral';
+    const hora   = qs.get('horario')||'—';
+    const mock   = qs.has('mock'); // modo demo
+
+    // UI inicial
+    $('#ticketChip').textContent = 'Código: ' + ticket;
+    $('#who').innerHTML = `<strong>${nome}</strong> • ${esp}<br>Médico: <strong>${medico}</strong> • Horário: <strong>${hora}</strong>`;
+    $('#sub').textContent = 'Fique à vontade — avisaremos quando for a sua vez.';
+
+    // status
+    let progress=0, called=false, stream=null, micAnalyser=null, micRAF=null;
+
+    function setStatus(kind, txt){
+      const map={idle:'s-idle', ok:'s-ok', warn:'s-warn', err:'s-err'};
+      $('#statusDot').className='status-dot '+(map[kind]||'s-idle');
+      $('#statusTxt').textContent=txt;
+    }
+    function setKpis(p, etaMin, ahead){
+      $('#pos').textContent = p;
+      $('#eta').textContent = etaMin ? `${etaMin} min` : '—';
+      $('#ahead').textContent = ahead ?? '—';
+      progress = Math.max(0, Math.min(100, Math.round((p>0? (1/(p)):1)*100)));
+      $('#bar').style.width = progress + '%';
+    }
+    function setCTA(status){
+      const box=$('#cta');
+      if(status==='ready'){
+        setStatus('ok','Chamado!'); 
+        box.innerHTML = `<a class="btn btn-primary" id="go" href="/consulta?ticket=${encodeURIComponent(ticket)}">Entrar na consulta</a> <span class="note">Você será redirecionado automaticamente em 5s…</span>`;
+        setTimeout(()=>{ const go=$('#go'); if(go) go.click(); }, 5000);
+      }else{
+        box.innerHTML='';
+      }
+    }
+
+    // Poll de status — integração:
+    // Ideal: GET /api/consultas/status?ticket=... -> {status:'waiting|ready|cancelled', position, ahead, etaMin}
+    async function fetchStatus(){
+      if(mock){
+        // simulação: depois de algumas iterações o paciente é chamado
+        const start=(window._mockStart||(window._mockStart=Date.now()));
+        const elapsed = (Date.now()-start)/1000;
+        const phase = Math.floor(elapsed/20); // muda a cada 20s
+        const position = Math.max(1, 3-phase);
+        const etaMin = Math.max(0, 6 - phase*2);
+        const status = phase>=3 ? 'ready' : 'waiting';
+        return {status, position, ahead:Math.max(0, position-1), etaMin};
+      }
+      try{
+        const res = await fetch(`/api/consultas/status?ticket=${encodeURIComponent(ticket)}&t=${Date.now()}`, {cache:'no-store'});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        return await res.json();
+      }catch(e){
+        console.warn('status fallback', e);
+        return {status:'waiting', position:2, ahead:1, etaMin:3}; // fallback seguro
+      }
+    }
+
+    async function poll(){
+      const data = await fetchStatus();
+      setKpis(data.position ?? 2, data.etaMin ?? 3, data.ahead ?? 1);
+      if(data.status==='ready' && !called){ called=true; setCTA('ready'); notify('Chegou a sua vez! Clique para entrar.'); }
+      else if(data.status==='waiting'){ setStatus('warn','Aguardando'); setCTA('waiting'); }
+      else if(data.status==='cancelled'){ setStatus('err','Consulta cancelada'); setCTA('cancelled'); }
+    }
+
+    // notificações
+    function notify(msg){
+      if(!('Notification' in window)) return;
+      if(Notification.permission==='granted'){ new Notification('TeleMed', {body:msg}); }
+    }
+    $('#notif').addEventListener('change', async (e)=>{
+      if(e.target.checked){
+        try{
+          const perm = await Notification.requestPermission();
+          $('#notifState').textContent = (perm==='granted') ? 'Notificações ativadas.' : 'Permissão negada.';
+        }catch{ $('#notifState').textContent='Não suportado no navegador.'; }
+      }else{
+        $('#notifState').textContent='Notificações desativadas.';
+      }
+    });
+
+    // câmera/microfone
+    async function startCam(){
+      try{
+        stream = await navigator.mediaDevices.getUserMedia({video:true, audio:true});
+        $('#cam').srcObject = stream;
+        $('#noCam').style.display='none';
+        // mic level
+        const ctx = new (window.AudioContext||window.webkitAudioContext)();
+        const src = ctx.createMediaStreamSource(stream);
+        micAnalyser = ctx.createAnalyser(); micAnalyser.fftSize=512;
+        src.connect(micAnalyser);
+        const buf = new Uint8Array(micAnalyser.frequencyBinCount);
+        const loop = ()=>{ micAnalyser.getByteFrequencyData(buf); const v = Math.round(buf.reduce((a,b)=>a+b,0)/buf.length/2.55); $('#micLevel').textContent='Nível do microfone: '+v+'%'; micRAF=requestAnimationFrame(loop); };
+        loop();
+      }catch(e){
+        $('#noCam').textContent='Não foi possível acessar câmera/microfone: '+e.message;
+      }
+    }
+    function stopMedia(){
+      if(micRAF) cancelAnimationFrame(micRAF);
+      if(stream) stream.getTracks().forEach(t=>t.stop());
+      stream=null; $('#cam').srcObject=null; $('#noCam').style.display='';
+      $('#micLevel').textContent='Nível do microfone: —';
+    }
+    $('#btnCam').addEventListener('click', startCam);
+    $('#btnStop').addEventListener('click', stopMedia);
+    $('#btnMic').addEventListener('click', ()=> notify('Se você ouviu este alerta, as notificações estão funcionando.'));
+
+    // mensagem para o médico — integração: POST /api/consultas/mensagem {ticket, texto}
+    $('#send').addEventListener('click', async ()=>{
+      const texto = $('#msg').value.trim();
+      if(!texto) return;
+      try{
+        if(!mock){
+          await fetch('/api/consultas/mensagem', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ticket, texto})});
+        }
+        $('#sendStatus').textContent='Mensagem enviada 👍'; $('#msg').value='';
+        setTimeout(()=>$('#sendStatus').textContent='', 2500);
+      }catch{ $('#sendStatus').textContent='Falha ao enviar. Tente novamente.'; }
+    });
+
+    // refresh manual
+    $('#refresh').addEventListener('click', poll);
+    $('#help').addEventListener('click', ()=> alert('Dúvidas comuns:\n• Permita acesso à câmera/microfone\n• Ative notificações para ser avisado\n• Você entra automaticamente quando for chamado'));
+
+    // loop de atualização
+    poll();
+    setInterval(poll, 15000); // 15s
+  })();
+  </script>
+</body>
+</html>
+
+4) Integração (quando quiser ligar no backend)
+
+GET /api/consultas/status?ticket=...
+Resposta esperada:
+
+{"status":"waiting","position":2,"ahead":1,"etaMin":3}
+
+
+status pode ser waiting | ready | cancelled.
+
+POST /api/consultas/mensagem
+Body: {"ticket":"ABC123","texto":"..."} → 200/204.
+
+Enquanto não integrar, teste com ?mock=1 que simula a fila e te chama após ~60s.
+
+5) Testes rápidos
+# 200 na rota
+curl -I http://localhost:5001/sala-de-espera
+
+# demo simulada
+# abra no navegador:
+# http://localhost:5001/sala-de-espera?ticket=ABC123&nome=Maria&medico=Dr.%20Joao&especialidade=Cardiologia
