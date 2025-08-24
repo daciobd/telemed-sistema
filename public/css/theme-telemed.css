@@ -73,6 +73,25 @@ input,select,textarea{width:100%;padding:10px 12px;border:1px solid #e5e7eb;bord
 label{font-weight:600;display:block;margin:.3rem 0}
 .form-row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 
+/* LP > Especialidades: thumbnails uniformes */
+#especialidades .card { 
+  display: flex; 
+  flex-direction: column; 
+}
+
+#especialidades .card > img {
+  display: block;
+  width: 100%;
+  height: 220px;               /* altura fixa para uniformizar */
+  object-fit: cover;           /* preenche e corta o excesso */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+#especialidades .card .card-body { 
+  flex: 1; 
+}
+
 /* Ícones SVG padronizados */
 .icon{width:20px;height:20px;vertical-align:-3px;display:inline-block}
 .icon-lg{width:28px;height:28px}

@@ -1,0 +1,75 @@
+dá pra padronizar o tamanho das thumbs só com CSS, sem mexer no HTML. A ideia é “forçar” a mesma altura em todas as imagens, usando object-fit: cover (elas cortam o excesso e ficam uniformes). Vou te passar duas opções:
+
+Opção 1 — Só CSS (mais rápida)
+
+Deixa todas as imagens do grid com a mesma altura; as grandes encolhem, as pequenas crescem com corte para manter o enquadramento.
+
+Cole isso no seu CSS global (ex.: public/css/theme-telemed.css) ou dentro da <head> da LP:
+
+/* LP > Especialidades: thumbnails uniformes */
+#especialidades .card { display: flex; flex-direction: column; }
+#especialidades .card > img {
+  display: block;
+  width: 100%;
+  height: var(--thumb-h, 200px); /* ajuste aqui: 180–240px */
+  object-fit: cover;             /* preenche e corta o excesso */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+#especialidades .card .card-body { flex: 1; }
+
+
+Quer maiores? aumente --thumb-h (ex.: 220px ou 240px).
+Quer menores? diminua (ex.: 170px).
+
+Se preferir deixar fixo sem variável:
+
+#especialidades .card > img { height: 220px; }
+
+Opção 2 — Aspect ratio (mais elegante, mesmo recorte em todas)
+
+Usa aspect-ratio para padronizar proporção (ex.: 4:3) e deixa o navegador calcular a altura.
+
+CSS:
+
+/* container com razão 4:3 */
+#especialidades .thumb {
+  aspect-ratio: 4 / 3;      /* mude para 16/9 se quiser mais panorâmico */
+  overflow: hidden;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+#especialidades .thumb > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+HTML (troca mínima em cada card):
+
+<div class="card">
+  <div class="thumb">
+    <img src="/assets/especialidades/clinica.jpg" alt="Clínica Geral">
+  </div>
+  <div class="card-body">
+    <strong>Clínica Geral</strong><br>
+    <span class="muted">Avaliação inicial</span>
+  </div>
+</div>
+
+Dicas rápidas
+
+Coloque loading="lazy" nas imagens (melhora performance):
+
+<img loading="lazy" src="/assets/.../clinica.jpg" alt="Clínica Geral">
+
+
+Se alguma foto ficar “cortando” algo importante, troque por um arquivo com composição melhor (rosto centralizado) — object-fit: cover prioriza o centro.
+
+Se quiser 4 colunas grandes em desktop:
+
+@media (min-width: 1024px){
+  #especialidades .grid.cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
