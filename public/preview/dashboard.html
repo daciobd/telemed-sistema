@@ -422,6 +422,11 @@
 <svg class="icon" viewbox="0 0 24 24"><path d="M9 11H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2z"></path><path d="M13 21h4a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2z"></path><path d="M5 21v-7a9 9 0 0 1 9-9"></path></svg>
                 Centro de Testes
             </a>
+            <!-- Sala de Espera (link dinâmico; o JS abaixo completa com ?ticket=...) -->
+            <a id="menu-waiting" href="/sala-de-espera" aria-disabled="true">
+<svg class="icon" viewbox="0 0 24 24"><path d="M3 6h18v12H3z"></path><circle cx="8" cy="12" r="2"></circle><circle cx="16" cy="12" r="2"></circle><path d="M12 7v10"></path></svg>
+                Sala de Espera
+            </a>
 <div class="section-title">Ações Rápidas</div>
 <div class="quick-actions">
 <button class="btn primary" onclick="window.open('/enhanced', '_blank')">Nova Consulta</button>
@@ -545,6 +550,29 @@
 <li>Performance otimizada</li>
 <li>Interface adaptativa</li>
 </ul>
+</div>
+</a>
+<a class="module-card" href="/sala-de-espera" title="Sala de Espera">
+<div class="module-icon">
+<svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22">
+<path d="M3 6h18v12H3z"></path>
+<circle cx="8" cy="12" r="2"></circle>
+<circle cx="16" cy="12" r="2"></circle>
+<path d="M12 7v10"></path>
+</svg>
+</div>
+<div>
+<h4 class="module-title">Sala de Espera</h4>
+<ul class="module-list">
+<li>Mostra sua posição na fila e o tempo estimado</li>
+<li>Teste de câmera/microfone e notificações</li>
+<li>Entra automaticamente quando o médico chamar</li>
+</ul>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+<a id="btn-waiting" class="btn btn-primary" href="/sala-de-espera" aria-disabled="true" style="padding:6px 12px;font-size:0.8rem;border-radius:6px;text-decoration:none;display:inline-block;color:white;background:#0ea5e9;border:1px solid #0ea5e9">Ir para a Sala de Espera</a>
+<a href="/sala-de-espera?mock=1" target="_blank" rel="noopener" style="padding:6px 12px;font-size:0.8rem;border-radius:6px;text-decoration:none;display:inline-block;color:#0ea5e9;background:transparent;border:1px solid #0ea5e9">Ver demo (mock)</a>
+</div>
+<div id="waiting-hint" style="margin-top:8px;font-size:0.8rem;color:#6b7280"></div>
 </div>
 </a>
 </section>
@@ -801,6 +829,89 @@
             console.log('✅ Gráficos: KPIs, Consultas por Hora, NPS, Fila de Prioridade');
             console.log('🎨 Interface: Sidebar, módulos, heatmap, timeline');
         });
+
+        // util: pega/guarda dados do último agendamento
+        (function(){
+          const $ = (s,r=document)=>r.querySelector(s);
+          const qs = new URLSearchParams(location.search);
+
+          // 1) de onde vem os dados?
+          // a) querystring (ex.: dashboard?ticket=XYZ&nome=...&medico=...&esp=...&horario=...)
+          const dataFromQS = {
+            ticket: qs.get('ticket'),
+            nome:   qs.get('nome'),
+            medico: qs.get('medico'),
+            esp:    qs.get('especialidade') || qs.get('esp'),
+            horario:qs.get('horario')
+          };
+
+          // b) localStorage (preenchido após agendar; ver snippet da etapa 4)
+          const ls = (k)=>localStorage.getItem('tm_'+k) || '';
+          const dataFromLS = {
+            ticket: ls('ticket'),
+            nome:   ls('nome'),
+            medico: ls('medico'),
+            esp:    ls('esp'),
+            horario:ls('horario')
+          };
+
+          // c) escolhe: QS tem prioridade; senão, LS
+          const data = Object.fromEntries(
+            Object.entries(dataFromQS).map(([k,v])=>[k, v || dataFromLS[k] || ''])
+          );
+
+          // se vier algo pela QS, persistimos
+          if (data.ticket) {
+            for (const [k,v] of Object.entries(data)) {
+              if (v) localStorage.setItem('tm_'+k, v);
+            }
+          }
+
+          // 2) monta a URL final
+          function makeWaitingURL(withMock=false){
+            const params = new URLSearchParams();
+            if (data.ticket)  params.set('ticket', data.ticket);
+            if (data.nome)    params.set('nome', data.nome);
+            if (data.medico)  params.set('medico', data.medico);
+            if (data.esp)     params.set('especialidade', data.esp);
+            if (data.horario) params.set('horario', data.horario);
+            if (withMock)     params.set('mock','1');
+            const qs = params.toString();
+            return '/sala-de-espera' + (qs ? ('?'+qs) : '');
+          }
+
+          // 3) aplica nos botões/menus
+          const menu = $('#menu-waiting');
+          const btn  = $('#btn-waiting');
+          const hint = $('#waiting-hint');
+
+          const hasTicket = !!data.ticket;
+          const url = makeWaitingURL(false);
+
+          if (menu) {
+            menu.href = hasTicket ? url : '/sala-de-espera';
+            menu.setAttribute('aria-disabled', String(!hasTicket));
+            if (!hasTicket) menu.style.opacity = '0.6'; // opcional: estilo cinza
+          }
+          if (btn) {
+            btn.href = hasTicket ? url : '/sala-de-espera';
+            btn.setAttribute('aria-disabled', String(!hasTicket));
+          }
+          if (hint) {
+            hint.textContent = hasTicket
+              ? `Próxima consulta: ${data.horario || '—'} • Médico: ${data.medico || '—'} • Ticket: ${data.ticket}`
+              : 'Dica: depois de agendar, este botão levará você direto para a sua Sala de Espera.';
+          }
+        })();
+
+        // chame isto no momento em que o agendamento é confirmado
+        function tm_storeWaitingData({ticket, nome, medico, esp, horario}){
+          if (ticket)  localStorage.setItem('tm_ticket',  ticket);
+          if (nome)    localStorage.setItem('tm_nome',    nome);
+          if (medico)  localStorage.setItem('tm_medico',  medico);
+          if (esp)     localStorage.setItem('tm_esp',     esp);
+          if (horario) localStorage.setItem('tm_horario', horario);
+        }
     </script>
 </body>
 </html>

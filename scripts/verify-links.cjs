@@ -7,7 +7,8 @@ const CANONICAL = new Set([
   '/medico', '/configuracoes', '/demo-responsivo', // <<< adicionadas
   '/paciente','/centro-de-testes','/precos','/dr-ai','/faq',
   '/sobre','/privacidade','/termos-de-uso','/registro-saude',
-  '/triagem-psiquiatrica','/feedback-medico','/login','/cadastro'
+  '/triagem-psiquiatrica','/feedback-medico','/login','/cadastro',
+  '/sala-de-espera' // <<< Sala de Espera adicionada
 ]);
 
 const ALIASES = [
