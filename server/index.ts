@@ -314,7 +314,7 @@ app.get('/paciente',        serveCanonical('preview/mobile.html'));
 app.get('/configuracoes',   serveCanonical('demo-ativo/configuracoes.html'));
 
 // Demo Responsivo (escolha o arquivo que vocês usam)
-app.get('/demo-responsivo', serveCanonical('preview/mobile.html')); // mobile como responsivo
+app.get('/demo-responsivo', serveCanonical('preview/demo-responsivo.html')); // novo demo responsivo
 
 // NOVA: gestão de pacientes (canônica)
 app.get('/pacientes',    serveCanonical('preview/meus-pacientes-original.html'));

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Demo Responsivo – TeleMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="canonical" href="/demo-responsivo" />
+
+  <!-- Estilo unificado (estética TeleMed) -->
+  <style>
+    :root{
+      --rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06);
+      --primary:#0ea5e9; --ink:#111827; --muted:#6b7280; --bg:#f8fafc; --surface:#fff;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    a{color:#0ea5e9;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:24px 16px}
+    .header{display:flex;gap:16px;justify-content:space-between;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:18px 22px;border-radius:20px;box-shadow:var(--shadow);margin-bottom:18px}
+    .title{font-size:1.75rem;font-weight:700;margin:0}
+    .subtitle{color:var(--muted);margin:2px 0 0}
+    .btn{display:inline-flex;gap:8px;align-items:center;padding:10px 16px;border-radius:12px;border:1px solid rgba(0,0,0,.08);background:#fff;color:var(--ink);text-decoration:none}
+    .btn-primary{background:var(--primary);color:#fff;border:none}
+    .btn-outline{background:#fff;color:#0ea5e9;border:1px solid #0ea5e9}
+    .btn.active{box-shadow:0 0 0 2px rgba(14,165,233,.25)}
+    .chip{display:inline-block;padding:4px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:.8rem}
+
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0 18px}
+    .frame{background:#0b1220;padding:20px;border-radius:24px;box-shadow:0 20px 60px rgba(2,6,23,.35);margin:0 auto;position:relative;overflow:hidden;transition:all .4s ease}
+    .frame.desktop{width:100%;max-width:1200px;height:700px}
+    .frame.tablet{width:768px;max-width:90vw;height:600px}
+    .frame.mobile{width:375px;max-width:90vw;height:667px}
+    .content{width:100%;height:100%;background:#f3f4f6;border-radius:14px;overflow:hidden;position:relative}
+    .page{position:absolute;inset:0;padding:20px;overflow:auto;opacity:0;transform:translateX(6%);transition:opacity .3s ease, transform .3s ease}
+    .page.active{opacity:1;transform:none}
+    .page-header{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:14px}
+    .nav{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{padding:8px 14px;border-radius:999px;background:#e6f6fe;color:#075985;font-size:.9rem}
+    .pill.active{background:#0ea5e9;color:#fff}
+    .grid{display:grid;gap:14px}
+    .grid.stats{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+    .stat{background:#fff;border-radius:14px;padding:18px;text-align:center;box-shadow:var(--shadow)}
+    .stat .num{font-size:1.8rem;font-weight:700}
+    .card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+    .list{max-height:220px;overflow:auto}
+    .row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eef2f7}
+    .row:last-child{border-bottom:none}
+    .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#0284c7);display:grid;place-items:center;color:#fff;font-weight:700}
+    .form{display:grid;gap:12px}
+    .form .field{display:grid;gap:6px}
+    .form input,.form select{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;font:inherit}
+    .panel{background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-top:18px}
+    .panel h3{margin:0 0 12px}
+    .indicator{position:fixed;top:16px;left:16px;background:rgba(17,24,39,.9);color:#fff;padding:8px 12px;border-radius:999px;font-size:.85rem;z-index:1000}
+    @media (max-width:768px){
+      .frame{width:95vw !important;height:70vh !important}
+      .grid.stats{grid-template-columns:repeat(2,1fr)}
+      .page-header{flex-direction:column;gap:10px;align-items:flex-start}
+    }
+    @media (max-width:576px){
+      .grid.stats{grid-template-columns:1fr}
+      .row{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <!-- Indicador de breakpoints -->
+  <div class="indicator" aria-live="polite">Desktop</div>
+
+  <div class="container">
+    <header class="header">
+      <div>
+        <h1 class="title">Demo Responsivo</h1>
+        <p class="subtitle">Veja como o TeleMed se adapta a qualquer dispositivo</p>
+      </div>
+      <a class="btn" href="/dashboard" aria-label="Voltar ao Dashboard">← Voltar ao Dashboard</a>
+    </header>
+
+    <!-- Simulador de dispositivos -->
+    <nav class="toolbar" aria-label="Dispositivos">
+      <button type="button" class="btn btn-outline device" data-device="desktop" aria-pressed="true">💻 Desktop</button>
+      <button type="button" class="btn btn-outline device" data-device="tablet">📱 Tablet</button>
+      <button type="button" class="btn btn-outline device" data-device="mobile">📲 Mobile</button>
+    </nav>
+
+    <!-- Frame -->
+    <section class="frame desktop" id="frame" aria-label="Área de demonstração">
+      <div class="content">
+        <!-- Página: Dashboard -->
+        <article class="page active" id="pg-dashboard" role="region" aria-labelledby="h-dashboard">
+          <div class="page-header">
+            <h2 id="h-dashboard">Dashboard</h2>
+            <div class="nav" role="tablist" aria-label="Navegação">
+              <span class="pill active" role="tab" aria-selected="true">Dashboard</span>
+              <span class="pill" role="tab">Pacientes</span>
+              <span class="pill" role="tab">Agenda</span>
+              <span class="pill" role="tab">Relatórios</span>
+            </div>
+          </div>
+
+          <div class="grid stats">
+            <div class="stat"><div class="num" data-stat="pacientes">847</div><div class="muted">Pacientes</div></div>
+            <div class="stat"><div class="num" data-stat="consultas">12</div><div class="muted">Consultas Hoje</div></div>
+            <div class="stat"><div class="num" data-stat="presc">5</div><div class="muted">Prescrições</div></div>
+            <div class="stat"><div class="num" data-stat="nota">4.9</div><div class="muted">Avaliação</div></div>
+          </div>
+
+          <div class="card">
+            <h3>Próximas Consultas <span class="chip">Hoje</span></h3>
+            <div class="list" aria-live="polite">
+              <div class="row"><div class="avatar">MS</div><div><strong>Maria Silva</strong><br><span class="muted">08:00 — Consulta de rotina</span></div></div>
+              <div class="row"><div class="avatar">JS</div><div><strong>João Santos</strong><br><span class="muted">09:30 — Teleconsulta</span></div></div>
+              <div class="row"><div class="avatar">AC</div><div><strong>Ana Costa</strong><br><span class="muted">10:00 — Caso urgente</span></div></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Página: Formulário -->
+        <article class="page" id="pg-form" role="region" aria-labelledby="h-form">
+          <div class="page-header">
+            <h2 id="h-form">Novo Paciente</h2>
+            <div class="nav"><span class="pill">Dashboard</span><span class="pill active">Novo</span></div>
+          </div>
+
+          <div class="card">
+            <h3>Informações do Paciente</h3>
+            <form class="form" onsubmit="return false">
+              <div class="field"><label for="nm">Nome Completo</label><input id="nm" placeholder="Digite o nome completo" /></div>
+              <div class="field"><label for="em">E-mail</label><input id="em" type="email" placeholder="exemplo@email.com" /></div>
+              <div class="field"><label for="tel">Telefone</label><input id="tel" type="tel" placeholder="(11) 99999-9999" /></div>
+              <div class="field">
+                <label for="age">Idade</label>
+                <select id="age">
+                  <option>Selecione…</option><option>18–30 anos</option><option>31–50 anos</option><option>51–70 anos</option><option>70+ anos</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" id="save">💾 Salvar Paciente</button>
+            </form>
+          </div>
+        </article>
+
+        <!-- Página: Lista -->
+        <article class="page" id="pg-list" role="region" aria-labelledby="h-list">
+          <div class="page-header">
+            <h2 id="h-list">Lista de Pacientes</h2>
+            <div class="nav"><span class="pill active">Pacientes</span><span class="pill">Agenda</span></div>
+          </div>
+
+          <div class="card"><h3>Buscar</h3><input placeholder="Buscar por nome, e-mail ou telefone…" /></div>
+
+          <div class="card">
+            <h3>Recentes</h3>
+            <div class="list">
+              <div class="row"><div class="avatar">MS</div><div><strong>Maria Silva</strong><br><span class="muted">45 anos • Feminino • maria@email.com</span></div></div>
+              <div class="row"><div class="avatar">JS</div><div><strong>João Santos</strong><br><span class="muted">38 anos • Masculino • joao@email.com</span></div></div>
+              <div class="row"><div class="avatar">AC</div><div><strong>Ana Costa</strong><br><span class="muted">52 anos • Feminino • ana@email.com</span></div></div>
+              <div class="row"><div class="avatar">CM</div><div><strong>Carlos Mendes</strong><br><span class="muted">67 anos • Masculino • carlos@email.com</span></div></div>
+              <div class="row"><div class="avatar">LF</div><div><strong>Lucia Ferreira</strong><br><span class="muted">29 anos • Feminino • lucia@email.com</span></div></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Painel de Controles -->
+    <section class="panel" aria-label="Controles da demonstração">
+      <h3>Controles</h3>
+      <div class="toolbar" aria-label="Páginas">
+        <button type="button" class="btn page" data-page="dashboard" aria-pressed="true">🏠 Dashboard</button>
+        <button type="button" class="btn page" data-page="form">➕ Formulário</button>
+        <button type="button" class="btn page" data-page="list">📋 Lista</button>
+      </div>
+      <p class="muted">Dica: use <strong>Ctrl+1/2/3</strong> para trocar de dispositivo.</p>
+    </section>
+  </div>
+
+  <script>
+    // utilitários
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+    // estado
+    const state = { device: 'desktop', page: 'dashboard' };
+
+    // indicador de breakpoint
+    const indicator = $('.indicator');
+    const updateIndicator = () => {
+      const w = window.innerWidth;
+      indicator.textContent =
+        w <= 576 ? 'Mobile' :
+        w <= 768 ? 'Tablet' :
+        w <= 992 ? 'Desktop' : 'Desktop Large';
+    };
+    window.addEventListener('resize', updateIndicator);
+
+    // alternar dispositivo
+    function setDevice(dev){
+      state.device = dev;
+      const frame = $('#frame');
+      frame.classList.remove('desktop','tablet','mobile');
+      frame.classList.add(dev);
+      $$('.device').forEach(b => b.classList.toggle('active', b.dataset.device===dev));
+    }
+
+    // alternar página
+    function setPage(pg){
+      state.page = pg;
+      $$('.page').forEach(b => b.classList.toggle('active', b.dataset.page===pg));
+      $$('.page.active', document).forEach(() =>{}); // noop para manter seleção
+      $$('.content .page').forEach(p => p.classList.toggle('active', p.id === 'pg-'+pg));
+    }
+
+    // anima números
+    function animateStats(){
+      $$('[data-stat]').forEach(el=>{
+        const end = parseInt(el.textContent,10)||0; let cur=0; const step=Math.max(1, Math.round(end/30));
+        const t = setInterval(()=>{cur+=step; if(cur>=end){cur=end; clearInterval(t);} el.textContent=cur;}, 30);
+      });
+    }
+
+    // acessibilidade: atalhos
+    document.addEventListener('keydown', (e)=>{
+      if(!e.ctrlKey) return;
+      if(e.key==='1') setDevice('desktop');
+      if(e.key==='2') setDevice('tablet');
+      if(e.key==='3') setDevice('mobile');
+    });
+
+    // listeners
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // binds
+      $$('.device').forEach(btn => btn.addEventListener('click', ()=> setDevice(btn.dataset.device)));
+      $$('.page').forEach(btn => btn.addEventListener('click', ()=> setPage(btn.dataset.page)));
+
+      // init
+      setDevice('desktop');
+      setPage('dashboard');
+      animateStats();
+      updateIndicator();
+    });
+
+    // simulação de preenchimento do formulário
+    setTimeout(()=>{
+      const nm=$('#nm'), em=$('#em'), tel=$('#tel'), age=$('#age');
+      if(nm) nm.value='João Silva Santos';
+      if(em) em.value='joao@exemplo.com';
+      if(tel) tel.value='(11) 99999-8888';
+      if(age) age.selectedIndex=2;
+    }, 1500);
+  </script>
+</body>
+</html>
