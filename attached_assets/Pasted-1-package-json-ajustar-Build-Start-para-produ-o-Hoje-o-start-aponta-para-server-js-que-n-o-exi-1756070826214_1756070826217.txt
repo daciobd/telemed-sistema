@@ -1,3 +1,47 @@
+1) package.json — ajustar Build/Start para produção
+
+Hoje o start aponta para server.js (que não existe) e não há passo de build.
+Troque para compilar TS → dist/ e rodar o servidor compilado.
+
+{
+  "name": "telemed-hibrido",
+  "version": "1.0.0",
+  "main": "dist/server/index.js",
+  "type": "commonjs",
+  "engines": { "node": "20.x" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "postbuild": "CANONICAL_BASE_URL=${CANONICAL_BASE_URL:-http://localhost:5000} node scripts/build-sitemap.cjs",
+    "start": "node dist/server/index.js",
+    "dev": "node start-dev.js",
+
+    "test:contracts": "node scripts/contract-tests.cjs",
+    "verify:auth": "node scripts/verify-auth.cjs",
+    "test:a11y": "node scripts/a11y.cjs",
+    "test:all": "node scripts/run-all-tests.js",
+    "smoke:api": "node scripts/contract-tests.cjs && echo '✓ APIs funcionando'",
+    "smoke:full": "npm run test:contracts && npm run verify:auth && echo '✓ Smoke tests OK'",
+    "verify\\:routes": "node scripts/verify-routes.cjs",
+    "verify:routes": "node scripts/verify-routes.cjs",
+    "test:canonical": "node scripts/test-canonical-routes.js",
+    "test:a11y:canonical": "node scripts/a11y-canonical.cjs",
+    "test:perf:canonical": "node scripts/perf-canonical.js",
+    "canonical:hygiene": "node scripts/canonical-hygiene.js",
+    "codemod:routes": "node scripts/codemod-canonical-routes.cjs",
+    "test:frontend:redirects": "node scripts/test-frontend-redirects.js"
+  }
+}
+
+
+Se preferir não compilar, dá para usar tsx no start ("start": "tsx server/index.ts"), mas compilar é o caminho mais estável no Render.
+
+2) server/index.ts — estático com caminho robusto + rotas canônicas
+
+Seu server atual usa __dirname + '../public'. Compilado, isso vira dist/server → apontaria para dist/public (que não existe).
+Troque para process.cwd() e adicione o snapshot das canônicas + redirects.
+
+Substitua inteiro por este:
+
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
