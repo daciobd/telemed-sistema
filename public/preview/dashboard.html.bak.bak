@@ -461,7 +461,7 @@
 </ul>
 </div>
 </a>
-<a class="module-card" href="public/demo-ativo/perfil-medico.html" title="Perfil do Médico">
+<a class="module-card" href="/perfil-medico" title="Perfil do Médico">
 <div class="module-icon">
 <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22">
 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
