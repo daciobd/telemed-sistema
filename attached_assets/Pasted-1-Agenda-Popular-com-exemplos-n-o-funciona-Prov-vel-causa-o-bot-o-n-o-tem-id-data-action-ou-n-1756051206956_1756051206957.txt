@@ -1,0 +1,178 @@
+1) Agenda – “Popular com exemplos” não funciona
+
+Provável causa: o botão não tem id/data-action ou não há JS amarrando o clique à função que preenche a lista.
+
+1.1. Garanta o id do botão
+
+No public/preview/agenda-avancada.html, deixe o botão assim (ou adicione um, se não existir):
+
+<button id="popular-exemplos" class="btn btn-primary">Popular com exemplos</button>
+
+1.2. Script idempotente para semear horários do dia selecionado
+
+Cole este <script> no final do body (ou no seu JS dessa página). Ele usa localStorage para não duplicar e re-renderiza a lista do dia:
+
+<script>
+(() => {
+  const BTN_SEL = '#popular-exemplos, [data-action="seed-examples"]';
+  const LS_KEY = 'agenda:slots:v1';
+
+  const fmt = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${dd}`;
+  };
+
+  const getSelectedDate = () => {
+    // tente ler da UI (troque o seletor conforme seu calendário)
+    const el = document.querySelector('[data-date-selected]');
+    if (el) return el.getAttribute('data-date-selected');
+    return fmt(new Date());
+  };
+
+  const readAll = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+  const writeAll = (obj) => localStorage.setItem(LS_KEY, JSON.stringify(obj));
+
+  const dedup = (arr) => {
+    const seen = new Set();
+    return arr.filter(s => {
+      const key = `${s.t}-${(s.name||'')}-${(s.kind||'')}`;
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    });
+  };
+
+  const seed = (isoDate) => {
+    const all = readAll();
+    const base = all[isoDate] || [];
+    const samples = [
+      { t: '09:00', name: 'Maria Souza',   kind: 'Retorno'  },
+      { t: '10:30', name: 'João Santos',   kind: 'Primeira' },
+      { t: '14:00', name: 'Ana Costa',     kind: 'Telemed'  },
+      { t: '16:15', name: 'Carlos Mendes', kind: 'Retorno'  },
+    ];
+    all[isoDate] = dedup([...base, ...samples]).sort((a,b)=>a.t.localeCompare(b.t));
+    writeAll(all);
+    render(isoDate);
+  };
+
+  const render = (isoDate) => {
+    // troque o seletor pelo contêiner onde os horários aparecem
+    const box = document.querySelector('[data-agenda-dia]') || document.querySelector('#lista-horarios');
+    if (!box) return;
+
+    const day = (readAll()[isoDate] || []);
+    box.innerHTML = day.length
+      ? day.map(s => `
+          <div class="slot">
+            <strong>${s.t}</strong> — ${s.name} <span class="badge">${s.kind||''}</span>
+          </div>
+        `).join('')
+      : '<p>Sem horários neste dia. Use "Popular com exemplos" ou crie pelo Dashboard.</p>';
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector(BTN_SEL);
+    if (btn) {
+      btn.addEventListener('click', () => seed(getSelectedDate()));
+    }
+    render(getSelectedDate());
+  });
+})();
+</script>
+
+
+Se seu calendário já tem uma função renderDay(...), pode trocar a render(...) por ela.
+
+2) Perfil do Médico — aplicar estética padrão + link correto
+
+A página que você mostrou ainda está fora do “visual padrão”. Vamos colocar um tema consistente com os demais (cards com cantos 16px, sombras suaves, grid responsivo) e garantir o botão “Voltar ao Dashboard”.
+
+2.1. Corrija o link de volta
+
+Em public/demo-ativo/perfil-medico.html, troque o href do botão:
+
+<a class="btn btn-ghost" href="/dashboard">Voltar ao Dashboard</a>
+
+2.2. “Drop-in CSS” de unificação visual
+
+Cole este <style> no <head> depois de outros estilos (ele ajusta cards, tipografia e grid):
+
+<style>
+:root{
+  --rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06);
+  --primary:#0ea5e9; --ink:#111827; --muted:#6b7280; --bg:#f8fafc;
+}
+body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;}
+.container{max-width:1100px;margin:0 auto;padding:24px 16px;}
+.header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:18px 22px;border-radius:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.btn{display:inline-block;padding:10px 16px;border-radius:12px;text-decoration:none;border:1px solid rgba(0,0,0,.08)}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-ghost{background:#fff;color:var(--ink)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:#fff;border-radius:var(--rounded);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;font-weight:600;color:var(--ink);border-bottom:1px solid #eef2f7}
+.card-body{padding:16px 20px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.metric{background:#f9fafb;border-radius:12px;padding:14px;text-align:center}
+.metric strong{display:block;font-size:1.3rem;color:var(--ink)}
+.metric span{color:var(--muted);font-size:.9rem}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover}
+@media(max-width:768px){.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+
+Com isso, você não precisa mexer muito no HTML — apenas garanta que os blocos usem .card, .card-header, .card-body, e a grade .metrics onde estiverem os números (consultas, avaliação, etc.). O botão “Salvar Alterações” pode usar .btn.btn-primary.
+
+3) “Configurações” — texto sobre imagens & estética padrão
+
+Você anexou um arquivo com a estrutura das seções (Segurança, Integrações, Backup, Sistema, Logs). Vou aplicar duas correções: (a) remover overlays de texto sobre imagens, (b) aplicar o mesmo padrão visual do item 2. (baseado no conteúdo que você enviou com essas seções) 
+
+3.1. Correção do overlay de texto
+
+No arquivo de configurações (ex.: public/demo-ativo/configuracoes.html), inclua este bloco de CSS no <head> após os estilos existentes:
+
+<style>
+/* Imagens sem texto por cima */
+.figure, .card-figure{position:relative;margin:0}
+.figure img, .card-figure img{display:block;width:100%;height:auto;object-fit:cover;border-radius:12px}
+.figure .overlay, .card-figure .overlay, .on-image-text{
+  position:static !important; background:none !important; color:inherit !important;
+  padding:0 !important; margin-top:12px; display:block; text-shadow:none !important;
+}
+/* Padronização visual básica (mesmo look do Perfil) */
+:root{--rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06); --primary:#0ea5e9; --ink:#111827; --muted:#6b7280}
+body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+.container{max-width:1100px;margin:0 auto;padding:24px 16px}
+.header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:18px 22px;border-radius:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.btn{display:inline-block;padding:10px 16px;border-radius:12px;text-decoration:none;border:1px solid rgba(0,0,0,.08)}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-secondary{background:#fff;color:var(--ink)}
+.card{background:#fff;border-radius:var(--rounded);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;font-weight:600;color:var(--ink);border-bottom:1px solid #eef2f7}
+.card-body{padding:16px 20px}
+.section{background:#f8fafc;border-left:4px solid var(--primary);border-radius:12px;padding:18px;margin:14px 0}
+</style>
+
+3.2. Voltar ao Dashboard (link correto)
+
+Troque qualquer “voltar ao dashboard” antigo por:
+
+<a href="/dashboard" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Voltar ao Dashboard</a>
+
+
+Observação: no arquivo que você mandou, o botão ainda aponta para area-medica.html. Substitua por /dashboard para manter a canônica.
+
+4) (Opcional) CLI para aplicar rápido
+
+Se preferir fazer no terminal (raiz do projeto):
+
+# 1) Ajustar link do perfil
+gsed -i 's#/public/demo-ativo/area-medica\.html#/dashboard#g' public/demo-ativo/perfil-medico.html 2>/dev/null || sed -i '' 's#/public/demo-ativo/area-medica\.html#/dashboard#g' public/demo-ativo/perfil-medico.html
+
+# 2) Garantir id do botão "Popular com exemplos"
+grep -q 'id="popular-exemplos"' public/preview/agenda-avancada.html || \
+  gsed -i '0,/<button/{s/<button/<button id="popular-exemplos"/}' public/preview/agenda-avancada.html 2>/dev/null || true
+
+# (depois cole o <script> da agenda manualmente – é grande)

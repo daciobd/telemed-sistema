@@ -375,6 +375,26 @@
                 padding: 0 1rem;
             }
         }
+
+/* Imagens sem texto por cima */
+.figure, .card-figure{position:relative;margin:0}
+.figure img, .card-figure img{display:block;width:100%;height:auto;object-fit:cover;border-radius:12px}
+.figure .overlay, .card-figure .overlay, .on-image-text{
+  position:static !important; background:none !important; color:inherit !important;
+  padding:0 !important; margin-top:12px; display:block; text-shadow:none !important;
+}
+/* Padronização visual básica (mesmo look do Perfil) */
+:root{--rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06); --primary:#0ea5e9; --ink:#111827; --muted:#6b7280}
+body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+.container{max-width:1100px;margin:0 auto;padding:24px 16px}
+.header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:18px 22px;border-radius:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.btn{display:inline-block;padding:10px 16px;border-radius:12px;text-decoration:none;border:1px solid rgba(0,0,0,.08)}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-secondary{background:#fff;color:var(--ink)}
+.card{background:#fff;border-radius:var(--rounded);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;font-weight:600;color:var(--ink);border-bottom:1px solid #eef2f7}
+.card-body{padding:16px 20px}
+.section{background:#f8fafc;border-left:4px solid var(--primary);border-radius:12px;padding:18px;margin:14px 0}
     </style>
 </head>
 <body>
@@ -385,7 +405,7 @@
                 TeleMed Sistema
             </div>
             <div class="nav-actions">
-                <a href="/demo-ativo/area-medica.html" class="btn btn-outline">
+                <a href="/dashboard" class="btn btn-outline">
                     <i class="fas fa-arrow-left"></i>
                     Voltar ao Dashboard
                 </a>

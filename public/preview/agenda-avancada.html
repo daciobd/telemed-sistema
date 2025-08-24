@@ -49,7 +49,7 @@
       <div class="actions">
         <a class="btn secondary" href="/dashboard">Dashboard</a>
         <a class="btn secondary" href="/consulta">Consulta Avançada</a>
-        <a class="btn" href="/agenda?demo=1">Popular com exemplos</a>
+        <button id="popular-exemplos" class="btn">Popular com exemplos</button>
       </div>
     </div>
 
@@ -83,6 +83,78 @@
       </section>
     </div>
   </div>
+
+<script>
+(() => {
+  const BTN_SEL = '#popular-exemplos, [data-action="seed-examples"]';
+  const LS_KEY = 'agenda:slots:v1';
+
+  const fmt = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${dd}`;
+  };
+
+  const getSelectedDate = () => {
+    // tente ler da UI (troque o seletor conforme seu calendário)
+    const el = document.querySelector('[data-date-selected]');
+    if (el) return el.getAttribute('data-date-selected');
+    return fmt(new Date());
+  };
+
+  const readAll = () => JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+  const writeAll = (obj) => localStorage.setItem(LS_KEY, JSON.stringify(obj));
+
+  const dedup = (arr) => {
+    const seen = new Set();
+    return arr.filter(s => {
+      const key = `${s.t}-${(s.name||'')}-${(s.kind||'')}`;
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    });
+  };
+
+  const seed = (isoDate) => {
+    const all = readAll();
+    const base = all[isoDate] || [];
+    const samples = [
+      { t: '09:00', name: 'Maria Souza',   kind: 'Retorno'  },
+      { t: '10:30', name: 'João Santos',   kind: 'Primeira' },
+      { t: '14:00', name: 'Ana Costa',     kind: 'Telemed'  },
+      { t: '16:15', name: 'Carlos Mendes', kind: 'Retorno'  },
+    ];
+    all[isoDate] = dedup([...base, ...samples]).sort((a,b)=>a.t.localeCompare(b.t));
+    writeAll(all);
+    render(isoDate);
+  };
+
+  const render = (isoDate) => {
+    // troque o seletor pelo contêiner onde os horários aparecem
+    const box = document.querySelector('[data-agenda-dia]') || document.querySelector('#lista-horarios') || document.querySelector('#list');
+    if (!box) return;
+
+    const day = (readAll()[isoDate] || []);
+    box.innerHTML = day.length
+      ? day.map(s => `
+          <div class="appt">
+            <div class="who"><strong>${s.t}</strong> — ${s.name}</div>
+            <span class="chip">${s.kind||''}</span>
+          </div>
+        `).join('')
+      : '<div class="empty">Sem horários neste dia. Use "Popular com exemplos" ou crie pelo Dashboard.</div>';
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector(BTN_SEL);
+    if (btn) {
+      btn.addEventListener('click', () => seed(getSelectedDate()));
+      console.log('✅ Botão Popular com exemplos configurado');
+    }
+    render(getSelectedDate());
+  });
+})();
+</script>
 
   <script src="/js/agenda-avancada.js"></script>
 </body>
