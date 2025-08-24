@@ -1,12 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /demo-ativo/
-Disallow: /preview/
-Disallow: /attached_assets/
-Disallow: /backup*/
-Disallow: /*backup*/
 
-Sitemap: https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/sitemap.xml
+Disallow: /preview/       # só lab interno
+Disallow: /demo-ativo/    # demo interna
 
-# TeleMed Pro - Telemedicina Profissional
-# Crawl-delay: 1
+Sitemap: http://localhost:5001/sitemap.xml

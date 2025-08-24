@@ -327,7 +327,10 @@ const r301 = (to: string) => (req: any, res: any) => {
 };
 
 app.get(['/dev/agenda','/agenda2','/agenda-legacy'], r301('/agenda'));
-app.get(['/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system'], r301('/consulta'));
+app.get(
+  ['/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system','/video-consultation'],
+  r301('/consulta')
+);
 app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('/dashboard'));
 
 // Gestão e administração
