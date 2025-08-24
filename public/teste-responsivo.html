@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Simples</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .frame { background: #333; color: white; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .btn { background: #0ea5e9; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>TESTE DE DEBUG</h1>
+    <p>Se você vê isto, o servidor está funcionando.</p>
+    
+    <div class="frame">
+        <h2>Frame de teste</h2>
+        <p>Este deveria aparecer como um retângulo escuro com texto branco.</p>
+    </div>
+    
+    <button class="btn" onclick="alert('JavaScript funcionando!')">Testar JS</button>
+    
+    <script>
+        console.log('✅ JavaScript carregado');
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('✅ DOM Ready');
+        });
+    </script>
+</body>
+</html>
