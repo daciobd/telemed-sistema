@@ -306,8 +306,15 @@ app.get('/agenda',        serveCanonical('preview/agenda-avancada.html'));
 app.get('/consulta',     serveCanonical('preview/enhanced-teste.html'));
 app.get('/dashboard',    serveCanonical('preview/dashboard.html'));
 
-app.get('/medico',       serveCanonical('preview/perfil-medico.html'));
-app.get('/paciente',     serveCanonical('preview/mobile.html'));
+// Perfil do Médico (usar o arquivo que vocês mantêm)
+app.get('/medico',          serveCanonical('preview/perfil-medico.html')); // <<< aponta pro arquivo real
+app.get('/paciente',        serveCanonical('preview/mobile.html'));
+
+// Configurações (estética + overlay corrigidos)
+app.get('/configuracoes',   serveCanonical('demo-ativo/configuracoes.html'));
+
+// Demo Responsivo (escolha o arquivo que vocês usam)
+app.get('/demo-responsivo', serveCanonical('preview/mobile.html')); // mobile como responsivo
 
 // NOVA: gestão de pacientes (canônica)
 app.get('/pacientes',    serveCanonical('preview/meus-pacientes-original.html'));
@@ -363,6 +370,11 @@ app.get('/faq.html', r301('/faq'));
 app.get('/feedback', r301('/feedback-medico'));
 app.get('/consulta-por-valor', r301('/precos'));
 app.get('/triagem', r301('/triagem-psiquiatrica'));
+
+// Aliases que ainda aparecem no Dashboard/HTMLs antigos:
+app.get(['/public/demo-ativo/perfil-medico.html','/preview/perfil-medico.html','/area-medica.html'], r301('/medico'));
+app.get(['/public/demo-ativo/configuracoes.html','/config.html'], r301('/configuracoes'));
+app.get(['/responsive-demo.html','/demo-responsivo.html','/demo-ativo/responsivo.html'], r301('/demo-responsivo'));
 
 // Opcionais (backlinks externos diretos para arquivos públicos):
 app.get(['/public/demo-ativo/agenda-do-dia.html'], r301('/agenda'));
