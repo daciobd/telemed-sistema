@@ -73,6 +73,40 @@
             color: white;
         }
 
+        /* Cards mais limpos e responsivos */
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,.06);
+            overflow: hidden;
+        }
+        .card-header { padding: 16px 20px; font-weight: 600; }
+        .card-body   { padding: 16px 20px; }
+        .btn {
+            display:inline-block; padding:10px 16px; border-radius:12px;
+            text-decoration:none; border:1px solid rgba(0,0,0,.08);
+        }
+        .btn-primary { background:#0ea5e9; color:#fff; border:none; }
+        .btn-ghost   { background:#fff; color:#111; }
+        img.avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; }
+        .grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); }
+
+        /* Remove overlays e garante que texto fique em bloco separado */
+        .figure, .card-figure { position:relative; margin:0; }
+        .figure img, .card-figure img { display:block; width:100%; height:auto; object-fit:cover; }
+        .figure .overlay, .card-figure .overlay, .on-image-text { 
+            position: static !important;
+            background: none !important;
+            color: inherit !important;
+            padding: 0 !important;
+            margin-top: 12px; /* texto abaixo da imagem */
+        }
+        /* Tipografia e espaçamento */
+        .settings .section { margin: 16px 0; }
+        .settings label { display:block; font-weight:600; margin-bottom:8px; }
+        .settings input, .settings select {
+            width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px;
+        }
+
         .btn-primary {
             background: #667eea;
             color: white;

@@ -308,6 +308,9 @@ app.get('/dashboard',    serveCanonical('preview/dashboard.html'));
 app.get('/medico',       serveCanonical('preview/perfil-medico.html'));
 app.get('/paciente',     serveCanonical('preview/mobile.html'));
 
+// NOVA: gestão de pacientes (canônica)
+app.get('/pacientes',    serveCanonical('preview/meus-pacientes-original.html'));
+
 app.get('/como-funciona',serveCanonical('preview/como-funciona.html'));
 app.get('/dr-ai',        serveCanonical('dr-ai.html'));
 
@@ -333,8 +336,11 @@ app.get(
 );
 app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('/dashboard'));
 
-// Gestão e administração
-app.get('/pacientes',       serveFirst(PUB, "meus-pacientes.html"));
+// Opcionais (backlinks externos diretos para arquivos públicos):
+app.get(['/public/demo-ativo/agenda-do-dia.html'], r301('/agenda'));
+app.get(['/pacientes.html','/public/preview/meus-pacientes-original.html'], r301('/pacientes'));
+
+// Gestão e administração (mantido apenas para compatibilidade)
 app.get('/gestao-avancada', serveFirst(PUB, "gestao-avancada.html"));
 app.get('/area-medica',     serveFirst(PUB, "area-medica.html"));
 

@@ -1163,7 +1163,7 @@
                 <div class="demo-card fade-in">
                     <h3>👥 Gestão de Pacientes</h3>
                     <p>Sistema completo com cadastro, histórico médico, busca avançada e relatórios.</p>
-                    <a href="/public/demo-ativo/pacientes" class="btn">
+                    <a href="/public/demo-ativo/pacientes.html" class="btn">
                         <i class="fas fa-users"></i>
                         Gerenciar Pacientes
                     </a>
@@ -1212,7 +1212,7 @@
                     <h3>Funcionalidades</h3>
                     <ul>
                         <li><a href="/agenda">Gestão de Agenda</a></li>
-                        <li><a href="/public/demo-ativo/pacientes">Cadastro de Pacientes</a></li>
+                        <li><a href="/public/demo-ativo/pacientes.html">Cadastro de Pacientes</a></li>
                         <li><a href="/public/demo-ativo/perfil-medico.html">Perfil Profissional</a></li>
                         <li><a href="/public/demo-ativo/configuracoes.html">Configurações Avançadas</a></li>
                     </ul>

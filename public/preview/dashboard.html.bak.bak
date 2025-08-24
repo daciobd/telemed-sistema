@@ -404,7 +404,7 @@
 <div class="section-title">Ações Rápidas</div>
 <div class="quick-actions">
 <button class="btn primary" onclick="window.open('/enhanced', '_blank')">Nova Consulta</button>
-<button class="btn secondary" onclick="window.open('/pacientes', '_blank')">Novo Paciente</button>
+<button class="btn secondary" onclick="window.open('/public/demo-ativo/pacientes.html', '_blank')">Novo Paciente</button>
 <button class="btn secondary" onclick="window.open('/enhanced', '_blank')">Teleconsulta</button>
 <button class="btn secondary" onclick="window.open('/patient-management', '_blank')">Prescrição</button>
 </div>
@@ -425,7 +425,7 @@
 </div>
 <!-- Módulos do Sistema -->
 <section class="modules">
-<a class="module-card" href="/agenda" title="Agenda do Dia">
+<a class="module-card" href="/public/demo-ativo/agenda-do-dia.html" title="Agenda do Dia">
 <div class="module-icon">
 <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22">
 <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
@@ -477,7 +477,7 @@
 </ul>
 </div>
 </a>
-<a class="module-card" href="/configuracoes" title="Configurações">
+<a class="module-card" href="/public/demo-ativo/configuracoes.html" title="Configurações">
 <div class="module-icon">
 <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22">
 <circle cx="12" cy="12" r="3"></circle>

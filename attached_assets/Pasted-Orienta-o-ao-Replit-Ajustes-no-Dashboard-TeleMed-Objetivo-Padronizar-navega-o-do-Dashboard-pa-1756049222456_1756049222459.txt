@@ -1,0 +1,238 @@
+Orientação ao Replit — Ajustes no Dashboard (TeleMed)
+Objetivo
+
+Padronizar navegação do Dashboard para as rotas canônicas.
+
+Corrigir links que apontam para páginas antigas ou de /public/.
+
+Pequenos reparos visuais em perfil do médico e configurações.
+
+Atualizar verificador/SEO para refletir as rotas definitivas.
+
+A. Backend (rotas canônicas e redirects)
+
+Vamos criar a rota canônica /pacientes apontando para o HTML correto e adicionar redirects para caminhos antigos.
+
+1) server/index.ts
+
+Localize o bloco de rotas e adicione/ajuste conforme abaixo (mantenha seus imports e a função serveCanonical):
+
+// --- Rotas CANÔNICAS ---
+app.get('/', (_req, res) => res.redirect(301, '/agenda'));
+
+app.get('/agenda',        serveCanonical('preview/agenda-avancada.html'));
+app.get('/consulta',      serveCanonical('preview/enhanced-teste.html'));
+app.get('/dashboard',     serveCanonical('preview/dashboard.html'));
+
+app.get('/medico',        serveCanonical('preview/perfil-medico.html'));
+app.get('/paciente',      serveCanonical('preview/mobile.html'));
+
+// NOVA: gestão de pacientes (canônica)
+app.get('/pacientes',     serveCanonical('preview/meus-pacientes-original.html'));
+
+app.get('/como-funciona', serveCanonical('preview/como-funciona.html'));
+app.get('/dr-ai',         serveCanonical('dr-ai.html'));
+
+app.get('/cadastro',      serveCanonical('cadastro.html'));
+app.get('/login',         serveCanonical('preview/login.html'));
+
+app.get('/registro-saude', serveCanonical('preview/registro-saude.html'));
+app.get('/privacidade',    serveCanonical('preview/privacidade.html'));
+app.get('/precos',         serveCanonical('preview/precos.html'));
+app.get('/recuperar-senha',serveCanonical('preview/recuperar-senha.html'));
+app.get('/feedback-medico',serveCanonical('preview/feedback-medico.html'));
+
+// --- Redirects de aliases/legados → canônicas (preserva querystring) ---
+const r301 = (to: string) => (req: any, res: any) => {
+  const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  res.redirect(301, to + qs);
+};
+
+app.get(['/dev/agenda','/agenda2','/agenda-legacy'], r301('/agenda'));
+app.get(
+  ['/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system','/video-consultation'],
+  r301('/consulta')
+);
+app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('/dashboard'));
+
+// Opcionais (backlinks externos diretos para arquivos públicos):
+app.get(['/public/demo-ativo/agenda-do-dia.html'],      r301('/agenda'));
+app.get(['/pacientes.html','/public/preview/meus-pacientes-original.html'], r301('/pacientes'));
+
+
+Reinicie o dev:
+
+npm run dev
+
+B. Frontend — consertar links do Dashboard
+
+Trocas obrigatórias de href (em header/sidebar/cards do dashboard e páginas relacionadas):
+
+AGENDA
+
+Errado: /public/demo-ativo/agenda-do-dia.html
+
+Certo: /agenda
+
+Gestão de Pacientes
+
+Errado: /pacientes.html ou /public/preview/meus-pacientes-original.html
+
+Certo: /pacientes
+
+Dashboard (botão de volta)
+
+Em public/demo-ativo/perfil-medico.html, certifique-se de que o botão “Dashboard” aponta para /dashboard.
+
+Busca e troca rápidas
+
+Execute na raiz para localizar e substituir com segurança (faça commit depois).
+
+# Ver o que ainda aponta para caminhos errados
+grep -RInE "/public/demo-ativo/agenda-do-dia\.html|/pacientes\.html|/public/preview/meus-pacientes-original\.html" public || true
+
+# Substituir para canônicos
+LC_ALL=C sed -i.bak 's#/public/demo-ativo/agenda-do-dia\.html#/agenda#g' $(grep -RIl "/public/demo-ativo/agenda-do-dia\.html" public || true)
+LC_ALL=C sed -i.bak 's#/pacientes\.html#/pacientes#g' $(grep -RIl "/pacientes\.html" public || true)
+LC_ALL=C sed -i.bak 's#/public/preview/meus-pacientes-original\.html#/pacientes#g' $(grep -RIl "/public/preview/meus-pacientes-original\.html" public || true)
+
+# Conferir que não há mais apontamentos
+grep -RInE "/public/demo-ativo/agenda-do-dia\.html|/pacientes\.html|/public/preview/meus-pacientes-original\.html" public || echo "✅ Sem links antigos"
+
+C. Ajustes de estética
+1) public/demo-ativo/perfil-medico.html
+
+Garanta “voltar ao Dashboard” com href="/dashboard".
+
+Sugestões de higiene rápida (adicione dentro de <style> dessa página ou no seu CSS global):
+
+/* Cards mais limpos e responsivos */
+.card {
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+.card-header { padding: 16px 20px; font-weight: 600; }
+.card-body   { padding: 16px 20px; }
+.btn {
+  display:inline-block; padding:10px 16px; border-radius:12px;
+  text-decoration:none; border:1px solid rgba(0,0,0,.08);
+}
+.btn-primary { background:#0ea5e9; color:#fff; border:none; }
+.btn-ghost   { background:#fff; color:#111; }
+img.avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; }
+.grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); }
+
+2) public/demo-ativo/configuracoes.html
+
+“retirar texto que aparece sobre imagens”: mova o texto para fora das imagens ou elimine o overlay.
+
+Correção rápida via CSS (mantém texto legível sem sobrepor a imagem):
+
+/* Remove overlays e garante que texto fique em bloco separado */
+.figure, .card-figure { position:relative; margin:0; }
+.figure img, .card-figure img { display:block; width:100%; height:auto; object-fit:cover; }
+.figure .overlay, .card-figure .overlay, .on-image-text { 
+  position: static !important;
+  background: none !important;
+  color: inherit !important;
+  padding: 0 !important;
+  margin-top: 12px; /* texto abaixo da imagem */
+}
+/* Tipografia e espaçamento */
+.settings .section { margin: 16px 0; }
+.settings label { display:block; font-weight:600; margin-bottom:8px; }
+.settings input, .settings select {
+  width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px;
+}
+
+
+Se existir HTML com algo como <div class="overlay">Texto</div> imediatamente após a imagem, pode trocar a classe para .caption e remover qualquer position:absolute ou top/bottom.
+
+D. Verificador + SEO atualizados
+1) scripts/verify-links.cjs
+
+Inclua /pacientes na lista canônica; marque os antigos como aliases para alertar devs no futuro.
+
+// ...
+const CANONICAL = new Set([
+  '/agenda','/consulta','/dashboard','/medico','/paciente','/pacientes',
+  '/como-funciona','/dr-ai','/cadastro','/login','/registro-saude',
+  '/privacidade','/precos','/recuperar-senha','/feedback-medico','/'
+]);
+
+const ALIASES = [
+  '/dev/agenda','/agenda2','/agenda-legacy',
+  '/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system',
+  '/doctor-dashboard','/dashboard-teste','/dashboard-teste.html',
+  '/video-consultation',
+  // antigos/indevidos
+  '/pacientes.html','/public/preview/meus-pacientes-original.html',
+  '/public/demo-ativo/agenda-do-dia.html'
+];
+
+
+Rode:
+
+npm run verify:links
+
+
+Esperado: ✅ Nenhum link interno problemático.
+
+2) Sitemap/robots
+
+Adicionar /pacientes ao sitemap:
+
+scripts/build-sitemap.cjs → acrescente '/pacientes' no array routes:
+
+const routes = [
+  '/','/agenda','/consulta','/dashboard',
+  '/medico','/paciente','/pacientes','/como-funciona','/dr-ai',
+  '/cadastro','/login','/registro-saude','/privacidade',
+  '/precos','/recuperar-senha','/feedback-medico'
+];
+
+
+Gerar para o ambiente de dev atual (porta 5001):
+
+CANONICAL_BASE_URL=http://localhost:5001 node scripts/build-sitemap.cjs
+
+E. QA (critérios de aceite)
+1) Smokes 200
+for p in /agenda /consulta /dashboard /medico /paciente /pacientes /como-funciona /dr-ai /cadastro /login /registro-saude /privacidade /precos /recuperar-senha /feedback-medico; do
+  curl -s -o /dev/null -w "$p -> %{http_code}\n" http://localhost:5001$p
+done
+
+
+Esperado: todos -> 200.
+
+2) Redirects 301
+for p in /dev/agenda /enhanced /doctor-dashboard /enhanced-consultation /video-consultation /pacientes.html /public/preview/meus-pacientes-original.html /public/demo-ativo/agenda-do-dia.html; do
+  curl -s -o /dev/null -w "$p -> %{http_code} %{redirect_url}\n" http://localhost:5001$p
+done
+
+
+Esperado: todos -> 301 apontando para a canônica (/agenda, /consulta, /dashboard, /pacientes).
+
+3) Verificador
+npm run verify:links
+
+
+Esperado: ✅
+
+4) SEO endpoints
+curl -I http://localhost:5001/sitemap.xml
+curl -I http://localhost:5001/robots.txt
+
+
+Esperado: 200 em ambos; sitemap.xml com .../pacientes.
+
+F. Commit & mensagem sugerida
+feat(routes): add /pacientes canonical + redirects; fix dashboard links
+- new canonical: /pacientes -> preview/meus-pacientes-original.html
+- redirects: pacientes.html, preview/meus-pacientes-original.html, demo-ativo/agenda-do-dia.html
+- dashboard/nav: /agenda, /pacientes, /dashboard
+- perfil-medico: button -> /dashboard
+- configuracoes: remove overlay text on images; minor CSS hygiene
+- verify-links: add /pacientes to canonical; flag old paths as aliases
+- sitemap: include /pacientes

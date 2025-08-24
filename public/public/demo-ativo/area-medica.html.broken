@@ -470,7 +470,7 @@
                     <h2 class="nav-title">🏥 Módulos do Sistema</h2>
                     <div class="nav-grid">
                         <!-- Agenda do Dia -->
-                        <a href="/public/demo-ativo/agenda-do-dia.html" class="nav-card nav-agenda">
+                        <a href="/agenda" class="nav-card nav-agenda">
                             <i class="fas fa-calendar-alt icon"></i>
                             <h3>Agenda do Dia</h3>
                             <p>Gerencie sua agenda médica, consultas e horários de atendimento</p>
@@ -483,7 +483,7 @@
                         </a>
 
                         <!-- Gestão de Pacientes -->
-                        <a href="/public/demo-ativo/pacientes.html" class="nav-card nav-pacientes">
+                        <a href="/public/demo-ativo/pacientes" class="nav-card nav-pacientes">
                             <i class="fas fa-user-friends icon"></i>
                             <h3>Gestão de Pacientes</h3>
                             <p>Sistema completo para cadastro e acompanhamento de pacientes</p>
@@ -540,15 +540,15 @@
                 <div class="quick-actions fade-in">
                     <h3><i class="fas fa-bolt"></i> Ações Rápidas</h3>
                     <div class="actions-grid">
-                        <a href="/public/demo-ativo/agenda-do-dia.html" class="action-btn">
+                        <a href="/agenda" class="action-btn">
                             <i class="fas fa-calendar-plus"></i>
                             Nova Consulta
                         </a>
-                        <a href="/public/demo-ativo/pacientes.html" class="action-btn">
+                        <a href="/public/demo-ativo/pacientes" class="action-btn">
                             <i class="fas fa-user-plus"></i>
                             Novo Paciente
                         </a>
-                        <a href="/public/demo-ativo/agenda-do-dia.html" class="action-btn">
+                        <a href="/agenda" class="action-btn">
                             <i class="fas fa-video"></i>
                             Teleconsulta
                         </a>

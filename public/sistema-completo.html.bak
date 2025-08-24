@@ -88,7 +88,7 @@
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-bold mb-6">⚡ Acesso Rápido</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <button onclick="window.open('/demo-ativo/pacientes')" class="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <button onclick="window.open('/demo-ativo/pacientes.html')" class="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                     <i class="fas fa-user-plus text-3xl mb-2 text-blue-600"></i>
                     <p class="text-sm font-medium">Novo Paciente</p>
                 </button>

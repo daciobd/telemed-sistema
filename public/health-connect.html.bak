@@ -61,7 +61,7 @@
                 </div>
                 <h3 class="text-xl font-semibold mb-2">Gestão de Pacientes</h3>
                 <p class="text-gray-600 mb-4">Sistema completo de cadastro e acompanhamento de pacientes</p>
-                <button onclick="window.open('/demo-ativo/pacientes')" class="bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-700">
+                <button onclick="window.open('/demo-ativo/pacientes.html')" class="bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-700">
                     <i class="fas fa-users mr-2"></i>Gerenciar Pacientes
                 </button>
             </div>

@@ -156,7 +156,7 @@ cat > public/telemed-ia.html << 'EOF'
                             <p class="text-sm text-gray-600">67 anos • Ativo</p>
                         </div>
                     </div>
-                    <button onclick="window.open('/demo-ativo/pacientes')" class="w-full bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700">
+                    <button onclick="window.open('/demo-ativo/pacientes.html')" class="w-full bg-blue-600 text-white py-2 rounded text-sm hover:bg-blue-700">
                         Iniciar Consulta IA
                     </button>
                 </div>
@@ -170,7 +170,7 @@ cat > public/telemed-ia.html << 'EOF'
                             <p class="text-sm text-gray-600">29 anos • Ativo</p>
                         </div>
                     </div>
-                    <button onclick="window.open('/demo-ativo/pacientes')" class="w-full bg-green-600 text-white py-2 rounded text-sm hover:bg-green-700">
+                    <button onclick="window.open('/demo-ativo/pacientes.html')" class="w-full bg-green-600 text-white py-2 rounded text-sm hover:bg-green-700">
                         Iniciar Consulta IA
                     </button>
                 </div>
@@ -184,7 +184,7 @@ cat > public/telemed-ia.html << 'EOF'
                             <p class="text-sm text-gray-600">41 anos • Inativo</p>
                         </div>
                     </div>
-                    <button onclick="window.open('/demo-ativo/pacientes')" class="w-full bg-purple-600 text-white py-2 rounded text-sm hover:bg-purple-700">
+                    <button onclick="window.open('/demo-ativo/pacientes.html')" class="w-full bg-purple-600 text-white py-2 rounded text-sm hover:bg-purple-700">
                         Reativar Consulta
                     </button>
                 </div>
