@@ -14,30 +14,16 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://telemed.pro/paciente">
     
-    <link rel="stylesheet" href="../telemed-theme.css">
+    <link rel="stylesheet" href="/css/theme-telemed.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Removido - usando telemed-theme.css */
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
+        .header{
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 20px 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -46,13 +32,13 @@
         }
 
         .header-left h1 {
-            color: #2c3e50;
+            color: var(--ink);
             font-size: 2.2em;
             margin-bottom: 5px;
         }
 
         .header-left .subtitle {
-            color: #7f8c8d;
+            color: var(--muted);
             font-size: 1.1em;
         }
 
@@ -67,8 +53,8 @@
 
         .device-btn {
             background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #3498db;
-            color: #3498db;
+            border: 2px solid var(--primary);
+            color: var(--primary);
             padding: 12px 20px;
             border-radius: 25px;
             cursor: pointer;
