@@ -14,107 +14,183 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://telemed.pro/lp">
   
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/theme-telemed.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <style>
-    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .btn { transition: all 0.3s ease; }
-    .btn:hover { transform: translateY(-2px); }
-  </style>
 </head>
-<body class="font-sans bg-gray-50">
-  <!-- Header -->
-  <header class="gradient-bg text-white py-20">
-    <div class="container mx-auto px-4 text-center">
-      <h1 class="text-5xl font-bold mb-4">TeleMed</h1>
-      <p class="text-xl mb-8 max-w-2xl mx-auto">
-        Plataforma completa de telemedicina com inteligência artificial, 
-        centro de avaliações psiquiátricas e gestão médica integrada.
-      </p>
-      <div class="space-x-4">
-        <a href="/dashboard" class="btn bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
-          Acessar Dashboard
-        </a>
-        <a href="/consulta" class="btn border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600">
-          Nova Consulta
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Features principais -->
-  <section class="py-16">
-    <div class="container mx-auto px-4">
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="text-center p-6 bg-white rounded-lg shadow">
-          <i class="fas fa-stethoscope text-4xl text-blue-600 mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Consultas Online</h3>
-          <p class="text-gray-600">Videoconsultas profissionais com prontuário eletrônico integrado.</p>
-        </div>
-        <div class="text-center p-6 bg-white rounded-lg shadow">
-          <i class="fas fa-brain text-4xl text-green-600 mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Inteligência Artificial</h3>
-          <p class="text-gray-600">Dr. AI para auxiliar no diagnóstico e condução clínica.</p>
-        </div>
-        <div class="text-center p-6 bg-white rounded-lg shadow">
-          <i class="fas fa-chart-line text-4xl text-purple-600 mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Avaliações Psiquiátricas</h3>
-          <p class="text-gray-600">Centro de testes com escalas validadas (GAD-7, PHQ-9, ASRS).</p>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>TeleMed</h1>
+        <p class="hero-subtitle">
+          Plataforma completa de telemedicina com inteligência artificial, 
+          centro de avaliações psiquiátricas e gestão médica integrada.
+        </p>
+        <div class="hero-buttons">
+          <a href="/dashboard" class="btn btn-primary">
+            Acessar Dashboard
+          </a>
+          <a href="/consulta" class="btn btn-outline">
+            Nova Consulta
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-<!-- Sessão: Dr. Aí -->
-<section id="dr-ai" style="padding:56px 0;background:#f8fafc">
-  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
-    <h2 style="font-size:32px;margin:0 0 12px">Conheça o Dr. Aí</h2>
-    <p style="max-width:720px;line-height:1.6;margin:0 0 20px">
-      Um assistente clínico que ajuda no raciocínio diagnóstico e padroniza condutas.
-      Veja a demonstração interativa e entenda como ele funciona no dia a dia.
-    </p>
-    <a class="btn btn-primary" href="/dr-ai" style="display:inline-block;padding:12px 18px;border-radius:12px;background:#0ea5e9;color:#fff;text-decoration:none">
-      Conheça o Doutor Aí →
-    </a>
-  </div>
-</section>
+  <!-- Por que escolher a TeleMed? -->
+  <section class="section" id="por-que-telemed">
+    <div class="container">
+      <h2 class="center">Por que escolher a TeleMed?</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center">
+        <div class="prose">
+          <div class="card mb-3">
+            <div class="card-body">
+              <span class="badge">Especialidades</span>
+              <p>Na TeleMed, você tem acesso imediato a <strong>médicos experientes de todo o Brasil</strong>, com atendimento online por vídeo, direto do celular ou computador, sem complicação.</p>
+            </div>
+          </div>
 
-<!-- Sessão: Centro de Testes -->
-<section id="centro-de-testes" style="padding:56px 0;background:#ffffff">
-  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
-    <h2 style="font-size:32px;margin:0 0 12px">Centro de Testes</h2>
-    <p style="max-width:720px;line-height:1.6;margin:0 0 20px">
-      Avaliações padronizadas de saúde mental (ex.: ansiedade, depressão, TDAH).
-      Resultados rápidos e orientados para uso clínico.
-    </p>
-    <a class="btn btn-outline" href="/centro-de-testes" style="display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid #0ea5e9;color:#0ea5e9;text-decoration:none">
-      Ir para o Centro de Testes →
-    </a>
-  </div>
-</section>
+          <div class="card mb-3">
+            <div class="card-body">
+              <h3>A qualquer hora, de qualquer lugar.</h3>
+              <p>Plataforma 24h/7. Tudo o que você precisa é de Internet. Atendimentos com conforto e privacidade.</p>
+              <a class="btn btn-outline" href="/como-funciona?tab=horarios">Saiba Mais</a>
+            </div>
+          </div>
 
-<!-- Sessão: Recursos e Políticas -->
-<section id="recursos" style="padding:56px 0;background:#f8fafc">
-  <div class="container" style="max-width:1100px;margin:0 auto;padding:0 16px">
-    <h2 style="font-size:32px;margin:0 0 12px">Recursos e Políticas</h2>
-    <ul style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-      <li><a href="/privacidade" style="color:#0ea5e9;text-decoration:none">Política de Privacidade</a></li>
-      <li><a href="/como-funciona" style="color:#0ea5e9;text-decoration:none">Sobre a TeleMed</a></li>
-      <li><a href="/faq" style="color:#0ea5e9;text-decoration:none">FAQ</a></li>
-    </ul>
-  </div>
-</section>
+          <div class="card">
+            <div class="card-body">
+              <span class="badge">Quero uma consulta</span>
+              <p><strong>Consulta completa, com documentos válidos.</strong> Emissão de receitas, atestados e pedidos de exame de forma segura e digital.</p>
+              <a class="btn btn-outline" href="/agenda">Saiba Mais</a>
+            </div>
+          </div>
+        </div>
+
+        <figure class="figure center">
+          <img loading="lazy" src="/assets/lp/hero-saude.jpg" alt="Pessoa saudável com braços abertos">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Revolucionamos o atendimento médico -->
+  <section class="section" id="revolucionamos">
+    <div class="container">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:center">
+        <figure class="figure">
+          <img loading="lazy" src="/assets/lp/revolucionamos.jpg" alt="Profissional de saúde usando tablet">
+        </figure>
+
+        <div class="prose">
+          <h2>Revolucionamos o atendimento médico</h2>
+          <p>Nossa plataforma une tecnologia de ponta e cuidado humanizado para oferecer a melhor experiência.</p>
+
+          <ul class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+            <li class="card"><div class="card-body"><strong>Dr. AI</strong><br><span class="muted">Triagem inteligente e apoio ao raciocínio.</span></div></li>
+            <li class="card"><div class="card-body"><strong>Médicos com RQE</strong><br><span class="muted">Profissionais qualificados e registrados.</span></div></li>
+            <li class="card"><div class="card-body"><strong>Reagende com quem gostou</strong><br><span class="muted">Continue com o mesmo médico.</span></div></li>
+            <li class="card"><div class="card-body"><strong>Telemonitoramento</strong><br><span class="muted">Acompanhamento de enfermagem após a consulta.</span></div></li>
+          </ul>
+
+          <div class="mt-3">
+            <a class="btn btn-primary" href="/dr-ai">Conheça o Dr. AI</a>
+            <a class="btn" href="/consulta">Consulta Avançada</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Especialidades Atendidas -->
+  <section class="section" id="especialidades">
+    <div class="container center">
+      <h2>Especialidades Atendidas</h2>
+      <p class="muted">Cuidado especializado para todas as suas necessidades de saúde</p>
+
+      <div class="grid cards mt-3">
+        <div class="card"><img src="/assets/especialidades/clinica.jpg" alt=""><div class="card-body"><strong>Clínica Geral</strong><br><span class="muted">Avaliação inicial</span></div></div>
+        <div class="card"><img src="/assets/especialidades/pediatria.jpg" alt=""><div class="card-body"><strong>Pediatria</strong><br><span class="muted">Crianças e adolescentes</span></div></div>
+        <div class="card"><img src="/assets/especialidades/ortopedia.jpg" alt=""><div class="card-body"><strong>Ortopedia</strong><br><span class="muted">Ossos e coluna</span></div></div>
+        <div class="card"><img src="/assets/especialidades/dermato.jpg" alt=""><div class="card-body"><strong>Dermatologia</strong><br><span class="muted">Pele, cabelo e unhas</span></div></div>
+        <div class="card"><img src="/assets/especialidades/gineco.jpg" alt=""><div class="card-body"><strong>Ginecologia</strong><br><span class="muted">Saúde feminina</span></div></div>
+        <div class="card"><img src="/assets/especialidades/psiquiatria.jpg" alt=""><div class="card-body"><strong>Psiquiatria</strong><br><span class="muted">Transtornos emocionais</span></div></div>
+        <div class="card"><img src="/assets/especialidades/psicoterapia.jpg" alt=""><div class="card-body"><strong>Psicoterapia</strong><br><span class="muted">Escuta qualificada</span></div></div>
+        <div class="card"><img src="/assets/especialidades/nutricao.jpg" alt=""><div class="card-body"><strong>Nutrição</strong><br><span class="muted">Planos personalizados</span></div></div>
+      </div>
+
+      <div class="mt-3">
+        <a class="btn btn-primary" href="/como-funciona?tab=especialidades">Ver todas especialidades</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Como funciona? -->
+  <section class="section" id="como-funciona">
+    <div class="container center">
+      <h2>Como funciona?</h2>
+      <p class="muted">Em 4 passos você agenda sua consulta</p>
+
+      <div class="grid cards mt-3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        <div class="card"><div class="card-body"><div class="badge">1</div><strong>Descreva</strong><br><span class="muted">Conte o que sente; o Dr. AI sugere a especialidade.</span></div></div>
+        <div class="card"><div class="card-body"><div class="badge">2</div><strong>Defina o valor</strong><br><span class="muted">Modelos transparentes; veja também <a href="/precos">preços</a>.</span></div></div>
+        <div class="card"><div class="card-body"><div class="badge">3</div><strong>Agende</strong><br><span class="muted">Escolha dia e hora ou entre na fila.</span></div></div>
+        <div class="card"><div class="card-body"><div class="badge">4</div><strong>Consulte</strong><br><span class="muted">Atendimento por vídeo, com documentos digitais.</span></div></div>
+      </div>
+
+      <div class="mt-3">
+        <a class="btn btn-primary" href="/como-funciona">Saiba Mais</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Como nos destacamos da concorrência -->
+  <section class="section" id="comparativo">
+    <div class="container">
+      <h2 class="center">Como nos destacamos da concorrência</h2>
+      <p class="center muted">Veja como a TeleMed Consulta se compara</p>
+
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:center">
+        <div class="card">
+          <div class="card-body">
+            <table aria-label="Comparativo de recursos">
+              <thead>
+                <tr><th>Recurso</th><th>TeleMed</th><th>Outros</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Triagem com IA</td><td>✅</td><td>❌</td></tr>
+                <tr><td>Reagendar com o mesmo médico</td><td>✅</td><td>❌</td></tr>
+                <tr><td>Telemonitoramento de enfermagem</td><td>✅</td><td>❌</td></tr>
+                <tr><td>Médicos com RQE</td><td>✅</td><td>❌</td></tr>
+                <tr><td>Transparência no valor</td><td>✅</td><td>❌</td></tr>
+                <tr><td>Atendimento por especialistas</td><td>✅</td><td>Limitado</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <figure class="figure center">
+          <img loading="lazy" src="/assets/lp/comparativo.jpg" alt="Médico analisando exames">
+        </figure>
+      </div>
+    </div>
+  </section>
+
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-12">
-    <div class="container mx-auto px-4 text-center">
-      <h3 class="text-2xl font-bold mb-4">TeleMed</h3>
-      <p class="text-gray-400 mb-6">Transformando o atendimento médico através da tecnologia</p>
-      <div class="flex justify-center space-x-6">
-        <a href="/agenda" class="text-gray-400 hover:text-white">Agenda</a>
-        <a href="/dashboard" class="text-gray-400 hover:text-white">Dashboard</a>
-        <a href="/centro-de-testes" class="text-gray-400 hover:text-white">Centro de Testes</a>
-        <a href="/privacidade" class="text-gray-400 hover:text-white">Privacidade</a>
+  <footer class="footer">
+    <div class="container">
+      <div class="center">
+        <h3>TeleMed</h3>
+        <p class="muted">Transformando o atendimento médico através da tecnologia</p>
+        <div class="footer-links">
+          <a href="/agenda">Agenda</a>
+          <a href="/dashboard">Dashboard</a>
+          <a href="/centro-de-testes">Centro de Testes</a>
+          <a href="/privacidade">Privacidade</a>
+        </div>
       </div>
     </div>
   </footer>

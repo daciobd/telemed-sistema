@@ -1,0 +1,146 @@
+0) Garanta o tema (se ainda não tiver no <head>)
+<link rel="stylesheet" href="/css/theme-telemed.css">
+
+
+(é o mesmo tema que usamos no resto do projeto; se não existir, me fala que te mando o arquivo de novo.)
+
+1) “Por que escolher a TeleMed?”
+<section class="section" id="por-que-telemed">
+  <div class="container">
+    <h2 class="center">Por que escolher a TeleMed?</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center">
+      <div class="prose">
+        <div class="card mb-3">
+          <div class="card-body">
+            <span class="badge">Especialidades</span>
+            <p>Na TeleMed, você tem acesso imediato a <strong>médicos experientes de todo o Brasil</strong>, com atendimento online por vídeo, direto do celular ou computador, sem complicação.</p>
+          </div>
+        </div>
+
+        <div class="card mb-3">
+          <div class="card-body">
+            <h3>A qualquer hora, de qualquer lugar.</h3>
+            <p>Plataforma 24h/7. Tudo o que você precisa é de Internet. Atendimentos com conforto e privacidade.</p>
+            <a class="btn btn-outline" href="/como-funciona?tab=horarios">Saiba Mais</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <span class="badge">Quero uma consulta</span>
+            <p><strong>Consulta completa, com documentos válidos.</strong> Emissão de receitas, atestados e pedidos de exame de forma segura e digital.</p>
+            <a class="btn btn-outline" href="/agenda">Saiba Mais</a>
+          </div>
+        </div>
+      </div>
+
+      <figure class="figure center">
+        <!-- troque o src pela sua imagem -->
+        <img loading="lazy" src="/assets/lp/hero-saude.jpg" alt="Pessoa saudável com braços abertos">
+      </figure>
+    </div>
+  </div>
+</section>
+
+2) “Revolucionamos o atendimento médico”
+<section class="section" id="revolucionamos">
+  <div class="container">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:center">
+      <figure class="figure">
+        <img loading="lazy" src="/assets/lp/revolucionamos.jpg" alt="Profissional de saúde usando tablet">
+      </figure>
+
+      <div class="prose">
+        <h2>Revolucionamos o atendimento médico</h2>
+        <p>Nossa plataforma une tecnologia de ponta e cuidado humanizado para oferecer a melhor experiência.</p>
+
+        <ul class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+          <li class="card"><div class="card-body"><strong>Dr. AI</strong><br><span class="muted">Triagem inteligente e apoio ao raciocínio.</span></div></li>
+          <li class="card"><div class="card-body"><strong>Médicos com RQE</strong><br><span class="muted">Profissionais qualificados e registrados.</span></div></li>
+          <li class="card"><div class="card-body"><strong>Reagende com quem gostou</strong><br><span class="muted">Continue com o mesmo médico.</span></div></li>
+          <li class="card"><div class="card-body"><strong>Telemonitoramento</strong><br><span class="muted">Acompanhamento de enfermagem após a consulta.</span></div></li>
+        </ul>
+
+        <div class="mt-3">
+          <a class="btn btn-primary" href="/dr-ai">Conheça o Dr. AI</a>
+          <a class="btn" href="/consulta">Consulta Avançada</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+3) “Especialidades Atendidas” (grade de cartões)
+<section class="section" id="especialidades">
+  <div class="container center">
+    <h2>Especialidades Atendidas</h2>
+    <p class="muted">Cuidado especializado para todas as suas necessidades de saúde</p>
+
+    <div class="grid cards mt-3">
+      <!-- troque as imagens pelos seus arquivos -->
+      <div class="card"><img src="/assets/especialidades/clinica.jpg" alt=""><div class="card-body"><strong>Clínica Geral</strong><br><span class="muted">Avaliação inicial</span></div></div>
+      <div class="card"><img src="/assets/especialidades/pediatria.jpg" alt=""><div class="card-body"><strong>Pediatria</strong><br><span class="muted">Crianças e adolescentes</span></div></div>
+      <div class="card"><img src="/assets/especialidades/ortopedia.jpg" alt=""><div class="card-body"><strong>Ortopedia</strong><br><span class="muted">Ossos e coluna</span></div></div>
+      <div class="card"><img src="/assets/especialidades/dermato.jpg" alt=""><div class="card-body"><strong>Dermatologia</strong><br><span class="muted">Pele, cabelo e unhas</span></div></div>
+      <div class="card"><img src="/assets/especialidades/gineco.jpg" alt=""><div class="card-body"><strong>Ginecologia</strong><br><span class="muted">Saúde feminina</span></div></div>
+      <div class="card"><img src="/assets/especialidades/psiquiatria.jpg" alt=""><div class="card-body"><strong>Psiquiatria</strong><br><span class="muted">Transtornos emocionais</span></div></div>
+      <div class="card"><img src="/assets/especialidades/psicoterapia.jpg" alt=""><div class="card-body"><strong>Psicoterapia</strong><br><span class="muted">Escuta qualificada</span></div></div>
+      <div class="card"><img src="/assets/especialidades/nutricao.jpg" alt=""><div class="card-body"><strong>Nutrição</strong><br><span class="muted">Planos personalizados</span></div></div>
+    </div>
+
+    <div class="mt-3">
+      <a class="btn btn-primary" href="/como-funciona?tab=especialidades">Ver todas especialidades</a>
+    </div>
+  </div>
+</section>
+
+4) “Como funciona?” (4 passos)
+<section class="section" id="como-funciona">
+  <div class="container center">
+    <h2>Como funciona?</h2>
+    <p class="muted">Em 4 passos você agenda sua consulta</p>
+
+    <div class="grid cards mt-3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="card"><div class="card-body"><div class="badge">1</div><strong>Descreva</strong><br><span class="muted">Conte o que sente; o Dr. AI sugere a especialidade.</span></div></div>
+      <div class="card"><div class="card-body"><div class="badge">2</div><strong>Defina o valor</strong><br><span class="muted">Modelos transparentes; veja também <a href="/precos">preços</a>.</span></div></div>
+      <div class="card"><div class="card-body"><div class="badge">3</div><strong>Agende</strong><br><span class="muted">Escolha dia e hora ou entre na fila.</span></div></div>
+      <div class="card"><div class="card-body"><div class="badge">4</div><strong>Consulte</strong><br><span class="muted">Atendimento por vídeo, com documentos digitais.</span></div></div>
+    </div>
+
+    <div class="mt-3">
+      <a class="btn btn-primary" href="/como-funciona">Saiba Mais</a>
+    </div>
+  </div>
+</section>
+
+5) “Como nos destacamos da concorrência” (tabela + imagem)
+<section class="section" id="comparativo">
+  <div class="container">
+    <h2 class="center">Como nos destacamos da concorrência</h2>
+    <p class="center muted">Veja como a TeleMed Consulta se compara</p>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:center">
+      <div class="card">
+        <div class="card-body">
+          <table aria-label="Comparativo de recursos">
+            <thead>
+              <tr><th>Recurso</th><th>TeleMed</th><th>Outros</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Triagem com IA</td><td>✅</td><td>❌</td></tr>
+              <tr><td>Reagendar com o mesmo médico</td><td>✅</td><td>❌</td></tr>
+              <tr><td>Telemonitoramento de enfermagem</td><td>✅</td><td>❌</td></tr>
+              <tr><td>Médicos com RQE</td><td>✅</td><td>❌</td></tr>
+              <tr><td>Transparência no valor</td><td>✅</td><td>❌</td></tr>
+              <tr><td>Atendimento por especialistas</td><td>✅</td><td>Limitado</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <figure class="figure center">
+        <img loading="lazy" src="/assets/lp/comparativo.jpg" alt="Médico analisando exames">
+      </figure>
+    </div>
+  </div>
+</section>
