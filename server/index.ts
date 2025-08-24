@@ -27,6 +27,15 @@ const servePreview = (relPath: string) =>
   (_req: express.Request, res: express.Response) =>
     res.sendFile(path.join(PREVIEW, relPath));
 
+// util serveCanonical para rotas principais
+const serveCanonical = (relPath: string) =>
+  (_req: express.Request, res: express.Response) => {
+    const fullPath = relPath.startsWith('preview/') 
+      ? path.join(PUB, relPath)
+      : path.join(PUB, relPath);
+    res.sendFile(fullPath);
+  };
+
 // helper para servir arquivo com fallback e 404 amigável
 function serveFirst(folder: string, ...files: string[]) {
   const candidate = files.find(f => fs.existsSync(path.join(folder, f)));
@@ -289,47 +298,37 @@ Object.entries(redirects).forEach(([from, to]) => {
   });
 });
 
-// Rotas canônicas — sirva SEMPRE antes de catch-all/SPA
-app.get("/agenda",          servePreview("agenda-avancada.html"));   // <- NOVA AGENDA
-app.get("/consulta",        serveAny(
-    "enhanced-teste.html",
-    "consulta.html",
-    "enhanced.html",
-    "enhanced-consultation.html" // cobre variações antigas
-  ));
-app.get("/dashboard",       serveFirst(PREVIEW, "dashboard-teste.html", "dashboard.html"));
+// --- Rotas CANÔNICAS ---
+app.get('/', (_req, res) => res.redirect(301, '/agenda'));
 
-// DR.AI (tenta os nomes que você já usou)
-app.get("/dr-ai",           serveFirst(PREVIEW, "DR.AI-CORRIGIDO.HTML", "dr-ai-static.html", "dr-ai.html"));
+app.get('/agenda',       serveCanonical('preview/agenda-avancada.html')); // nova agenda
+app.get('/consulta',     serveCanonical('preview/enhanced-teste.html'));
+app.get('/dashboard',    serveCanonical('preview/dashboard.html'));
 
-// Autenticação / perfis
-app.get("/cadastro",        serveFirst(PREVIEW, "cadastro.html"));
-app.get("/login",           serveFirst(PREVIEW, "login.html"));
-app.get("/medico",          serveFirst(PREVIEW, "perfil-medico.html", "perfildomedico.html", "medico.html"));
-app.get("/paciente",        serveFirst(PREVIEW, "mobile.html", "paciente.html"));
+app.get('/medico',       serveCanonical('preview/perfil-medico.html'));
+app.get('/paciente',     serveCanonical('preview/mobile.html'));
 
-// Conteúdo informativo
-app.get("/como-funciona",   serveFirst(PREVIEW, "como-funciona.html", "como funciona.html"));
-app.get("/privacidade",     serveFirst(PREVIEW, "politadeprivacidade.html", "privacidade.html"));
-app.get("/recuperar-senha", serveFirst(PREVIEW, "recuperar-senha.html", "recovery.html"));
+app.get('/como-funciona',serveCanonical('preview/como-funciona.html'));
+app.get('/dr-ai',        serveCanonical('dr-ai.html'));
 
-// Preços (caso já exista um HTML; do contrário, retornará 404 amigável)
-app.get("/precos",          serveFirst(PREVIEW, "precos.html", "planos.html"));
+app.get('/cadastro',     serveCanonical('cadastro.html'));
+app.get('/login',        serveCanonical('preview/login.html'));
 
-// Feedback médico
-app.get("/feedback-medico", serveFirst(PREVIEW, "feedback-medico.html"));
+app.get('/registro-saude', serveCanonical('preview/registro-saude.html'));
+app.get('/privacidade',    serveCanonical('preview/privacidade.html'));
+app.get('/precos',         serveCanonical('preview/precos.html'));
+app.get('/recuperar-senha',serveCanonical('preview/recuperar-senha.html'));
+app.get('/feedback-medico',serveCanonical('preview/feedback-medico.html'));
 
-// PHR / Registro de Saúde — com headers de privacidade (noindex, no-cache)
-app.get("/registro-saude", (req, res, next) => {
-  console.log('📋 Rota CANÔNICA /registro-saude acessada - PHR');
-  res.set({
-    "X-Robots-Tag": "noindex, noarchive, nosnippet",
-    "Cache-Control": "no-store, max-age=0, must-revalidate",
-    "Pragma": "no-cache",
-    "Expires": "0"
-  });
-  next();
-}, serveFirst(PREVIEW, "registro-saude.html", "phr.html", "ph-record.html"));
+// --- Redirects de aliases/legados → canônicas (preserva querystring) ---
+const r301 = (to: string) => (req: any, res: any) => {
+  const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+  res.redirect(301, to + qs);
+};
+
+app.get(['/dev/agenda','/agenda2','/agenda-legacy'], r301('/agenda'));
+app.get(['/enhanced','/enhanced-consultation','/enhanced-teste','/enhanced-system'], r301('/consulta'));
+app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('/dashboard'));
 
 // Gestão e administração
 app.get('/pacientes',       serveFirst(PUB, "meus-pacientes.html"));
@@ -351,42 +350,7 @@ app.get('/preview/dr-ai-demo.html', (req, res) => {
 
 // ====== LIMPEZA FINALL - REMOVENDO DUPLICAÇÕES ======
 
-// Enhanced aliases → /consulta
-app.get('/enhanced', (req, res) => {
-  console.log('🔄 Alias /enhanced → Redirecionando para /consulta');
-  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-app.get('/enhanced-consultation', (req, res) => {
-  console.log('🔄 Alias /enhanced-consultation → Redirecionando para /consulta');
-  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-app.get('/enhanced-teste', (req, res) => {
-  console.log('🔄 Alias /enhanced-teste → Redirecionando para /consulta');
-  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-app.get('/enhanced-system', (req, res) => {
-  console.log('🔄 Alias /enhanced-system → Redirecionando para /consulta');
-  res.redirect(301, '/consulta' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-// Dashboard aliases → /dashboard
-app.get('/dashboard-teste', (req, res) => {
-  console.log('🔄 Alias /dashboard-teste → Redirecionando para /dashboard');
-  res.redirect(301, '/dashboard' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-app.get('/dashboard-teste.html', (req, res) => {
-  console.log('🔄 Alias /dashboard-teste.html → Redirecionando para /dashboard');
-  res.redirect(301, '/dashboard' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
-
-app.get('/doctor-dashboard', (req, res) => {
-  console.log('🔄 Alias /doctor-dashboard → Redirecionando para /dashboard');
-  res.redirect(301, '/dashboard' + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : ''));
-});
+// Legacy aliases removed - now handled by r301 system above
 
 // ====== PÁGINAS AUXILIARES ======
 
