@@ -4,10 +4,11 @@ const path = require('path');
 
 const BASE = process.env.CANONICAL_BASE_URL || 'http://localhost:5000';
 const routes = [
-  '/','/agenda','/consulta','/dashboard',
-  '/medico','/paciente','/como-funciona','/dr-ai',
-  '/cadastro','/login','/registro-saude','/privacidade',
-  '/precos','/recuperar-senha','/feedback-medico'
+  '/','/lp','/agenda','/consulta','/dashboard',
+  '/medico','/paciente','/centro-de-testes','/triagem-psiquiatrica',
+  '/precos','/dr-ai','/faq','/sobre','/privacidade','/termos-de-uso',
+  '/cadastro','/login','/registro-saude','/recuperar-senha','/feedback-medico',
+  '/como-funciona'
 ];
 
 const body = `<?xml version="1.0" encoding="UTF-8"?>

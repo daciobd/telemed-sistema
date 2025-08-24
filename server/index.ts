@@ -318,6 +318,12 @@ app.get('/centro-de-testes', serveCanonical('preview/centro-de-testes.html'));
 // (opcional) FAQ simples
 app.get('/faq',           serveCanonical('preview/faq.html'));
 
+// Paginas preview com estética padronizada  
+app.get('/sobre',               serveCanonical('sobre.html'));                           // "Sobre a TeleMed"
+app.get('/termos-de-uso',       serveCanonical('preview/termos-de-uso.html'));
+app.get('/teste-bid',           serveCanonical('preview/teste-bid-integration.html'));   // noindex via meta
+app.get('/triagem-psiquiatrica',serveCanonical('preview/triagem-psiquiatrica.html'));
+
 app.get('/como-funciona',serveCanonical('preview/como-funciona.html'));
 app.get('/dr-ai',        serveCanonical('dr-ai.html'));
 
@@ -326,7 +332,7 @@ app.get('/login',        serveCanonical('preview/login.html'));
 
 app.get('/registro-saude', serveCanonical('preview/registro-saude.html'));
 app.get('/privacidade',    serveCanonical('preview/privacidade.html'));
-app.get('/precos',         serveCanonical('preview/precos.html'));
+app.get('/precos',         serveCanonical('consulta-por-valor.html'));
 app.get('/recuperar-senha',serveCanonical('preview/recuperar-senha.html'));
 app.get('/feedback-medico',serveCanonical('preview/feedback-medico.html'));
 
@@ -348,6 +354,15 @@ app.get(['/doctor-dashboard','/dashboard-teste','/dashboard-teste.html'], r301('
 
 // Aliases para Centro de Testes
 app.get(['/testes','/centro-testes','/testes-psiquiatricos','/screening'], r301('/centro-de-testes'));
+
+// Redirects úteis (antigos → canônicas)
+app.get(['/politica-de-privacidade','/politicas'], r301('/privacidade'));
+app.get(['/termos','/termos-uso'], r301('/termos-de-uso'));
+app.get(['/sobre-thelemed','/sobre-a-telemed'], r301('/sobre'));
+app.get('/faq.html', r301('/faq'));
+app.get('/feedback', r301('/feedback-medico'));
+app.get('/consulta-por-valor', r301('/precos'));
+app.get('/triagem', r301('/triagem-psiquiatrica'));
 
 // Opcionais (backlinks externos diretos para arquivos públicos):
 app.get(['/public/demo-ativo/agenda-do-dia.html'], r301('/agenda'));

@@ -1,0 +1,285 @@
+A) Criar o tema único (CSS drop-in)
+
+Criaremos um CSS único que “uniformiza” tudo sem precisar editar o HTML de cada página (resolve tipografia, cards, grids, botões, legibilidade, overlays de texto sobre imagens, etc.).
+
+mkdir -p public/css
+
+cat > public/css/theme-telemed.css <<'EOF'
+:root{
+  --rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06);
+  --primary:#0ea5e9; --ink:#111827; --muted:#6b7280; --bg:#f8fafc;
+  --surface:#ffffff; --link:#0ea5e9; --danger:#ef4444; --ok:#10b981;
+}
+
+/* Base */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.55}
+a{color:var(--link);text-decoration:none} a:hover{text-decoration:underline}
+img{max-width:100%;height:auto;border:0}
+
+/* Containers e layout */
+.container{max-width:1100px;margin:0 auto;padding:24px 16px}
+.grid{display:grid;gap:16px}
+.grid.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.section{padding:40px 0}
+
+/* Cards e painéis */
+.card{background:var(--surface);border-radius:var(--rounded);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;font-weight:600;border-bottom:1px solid #eef2f7}
+.card-body{padding:16px 20px}
+.badge{display:inline-block;font-size:.8rem;padding:.15rem .5rem;border-radius:999px;background:#eef2ff;color:#3730a3}
+
+/* Botões */
+.btn{display:inline-block;padding:10px 16px;border-radius:12px;border:1px solid rgba(0,0,0,.08);text-decoration:none}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-ghost{background:#fff;color:var(--ink)}
+.btn-outline{background:#fff;color:var(--link);border:1px solid var(--link)}
+
+/* Tabelas e listas legíveis */
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #eef2f7}
+thead th{background:#f9fafb;font-weight:600}
+ul,ol{padding-left:1.2rem}
+
+/* Tipografia de texto longo (privacidade, termos, faq, feedback) */
+main, article, .prose{max-width:900px;margin:0 auto}
+.prose h1,h1{font-size:2rem;margin:1rem 0 .5rem}
+.prose h2,h2{font-size:1.5rem;margin:1.25rem 0 .5rem}
+.prose h3,h3{font-size:1.2rem;margin:1rem 0 .5rem}
+.prose p{margin:.5rem 0;color:#1f2937}
+.prose small, .muted{color:var(--muted)}
+.prose blockquote{margin:1rem 0;padding:1rem;border-left:4px solid #e5e7eb;background:#f9fafb;border-radius:12px}
+
+/* FAQ (details/summary) */
+details{background:#f9fafb;border-radius:12px;margin:.5rem 0;border:1px solid #eef2f7}
+summary{cursor:pointer;padding:.8rem 1rem;font-weight:600;list-style:none}
+details > *:not(summary){padding:0 1rem 1rem}
+
+/* “Texto sobre imagem” → vira legenda abaixo */
+.figure,.card-figure{position:relative;margin:0}
+.figure img,.card-figure img{display:block;width:100%;height:auto;object-fit:cover;border-radius:12px}
+.figure .overlay,.card-figure .overlay,.on-image-text{
+  position:static !important;background:none !important;color:inherit !important;
+  padding:0 !important;margin-top:12px;display:block;text-shadow:none !important;
+}
+
+/* Pricing / consulta por valor */
+.pricing{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.price-card{border:1px solid #e5e7eb;border-radius:16px;padding:18px;text-align:left;background:#fff}
+.price{font-size:2rem;font-weight:700}
+.cta{margin-top:12px}
+
+/* Feedback (legibilidade) */
+.feedback-list .item{background:#fff;border:1px solid #eef2f7;border-radius:16px;padding:14px;margin:10px 0}
+.feedback-list .author{font-weight:600}
+.feedback-list .meta{color:var(--muted);font-size:.9rem}
+
+/* Triagem/Forms */
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;font:inherit}
+label{font-weight:600;display:block;margin:.3rem 0}
+.form-row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+/* Ícones SVG padronizados */
+.icon{width:20px;height:20px;vertical-align:-3px;display:inline-block}
+.icon-lg{width:28px;height:28px}
+
+/* Helpers */
+.center{text-align:center}
+.mt-2{margin-top:.5rem} .mt-3{margin-top:.75rem} .mt-4{margin-top:1rem}
+.mb-2{margin-bottom:.5rem} .mb-3{margin-bottom:.75rem} .mb-4{margin-bottom:1rem}
+EOF
+
+B) Injetar o tema e canonical nas páginas de public/preview
+
+Script que garante <link rel="stylesheet" href="/css/theme-telemed.css"> e <link rel="canonical" ...> em cada arquivo listado.
+
+mkdir -p scripts
+
+cat > scripts/apply-theme.cjs <<'EOF'
+#!/usr/bin/env node
+const fs = require('fs'), path = require('path');
+const root = path.join(__dirname,'..','public','preview');
+
+const pages = [
+  ['consulta-por-valor.html',          '/precos'],
+  ['doutor-ai-corrigido-static.html',  '/dr-ai'],
+  ['faq.html',                         '/faq'],
+  ['feedback.html',                    '/feedback-medico'],
+  ['privacidade.html',                 '/privacidade'],          // ou 'politica-de-privacidade.html'
+  ['registro-saude.html',              '/registro-saude'],
+  ['sobre-thelemed.html',              '/sobre'],
+  ['termos-de-uso.html',               '/termos-de-uso'],
+  ['teste-bid-integration.html',       '/teste-bid'],           // ficará noindex
+  ['triagem-psiquiatrica.html',        '/triagem-psiquiatrica'],
+  // 'como-funciona.html' já está ok e canônica
+];
+
+for (const [file, route] of pages) {
+  const fp = path.join(root, file);
+  if (!fs.existsSync(fp)) { console.warn('! não achei', file); continue; }
+  let html = fs.readFileSync(fp,'utf8');
+
+  // injeta link CSS
+  if (!html.includes('theme-telemed.css')) {
+    html = html.replace(/<\/head>/i,
+      `  <link rel="stylesheet" href="/css/theme-telemed.css">\n</head>`);
+  }
+
+  // injeta canonical
+  const canTag = `<link rel="canonical" href="${route}">`;
+  if (!html.includes('rel="canonical"')) {
+    html = html.replace(/<\/head>/i, `  ${canTag}\n</head>`);
+  } else {
+    html = html.replace(/<link[^>]+rel="canonical"[^>]*>/i, canTag);
+  }
+
+  // teste-bid → noindex
+  if (route === '/teste-bid' && !html.includes('name="robots"')) {
+    html = html.replace(/<\/head>/i,
+      `  <meta name="robots" content="noindex,nofollow">\n</head>`);
+  }
+
+  // garante wrappers leve (sem quebrar páginas)
+  if (!/class="container"/.test(html)) {
+    html = html.replace(/<body([^>]*)>/i, `<body$1>\n<div class="container">`);
+    html = html.replace(/<\/body>/i, `</div>\n</body>`);
+  }
+
+  fs.writeFileSync(fp, html, 'utf8');
+  console.log('→ aplicado tema e canonical em', file, '->', route);
+}
+EOF
+
+chmod +x scripts/apply-theme.cjs
+node scripts/apply-theme.cjs
+
+C) Rotas canônicas no servidor
+
+Ajuste server/index.ts para mapear cada página à rota pública “bonita”:
+
+// LP e demais já configurados acima…
+
+// Paginas preview com estética padronizada
+app.get('/precos',              serveCanonical('preview/consulta-por-valor.html'));      // “consulta por valor”
+app.get('/dr-ai',               serveCanonical('preview/doutor-ai-corrigido-static.html'));// Dr Aí
+app.get('/faq',                 serveCanonical('preview/faq.html'));
+app.get('/feedback-medico',     serveCanonical('preview/feedback.html'));
+app.get('/privacidade',         serveCanonical('preview/privacidade.html'));             // ou 'politica-de-privacidade.html'
+app.get('/registro-saude',      serveCanonical('preview/registro-saude.html'));
+app.get('/sobre',               serveCanonical('preview/sobre-thelemed.html'));          // “Sobre a TeleMed”
+app.get('/termos-de-uso',       serveCanonical('preview/termos-de-uso.html'));
+app.get('/teste-bid',           serveCanonical('preview/teste-bid-integration.html'));   // noindex via meta
+app.get('/triagem-psiquiatrica',serveCanonical('preview/triagem-psiquiatrica.html'));
+
+// Redirects úteis (antigos → canônicas)
+app.get(['/politica-de-privacidade','/politicas'], r301('/privacidade'));
+app.get(['/termos','/termos-uso'],                 r301('/termos-de-uso'));
+app.get(['/sobre-thelemed','/sobre-a-telemed'],    r301('/sobre'));
+app.get(['/faq.html','/feedback','/consulta-por-valor','/triagem'], (req,res,next)=>{
+  const map = { '/faq.html':'/faq','/feedback':'/feedback-medico','/consulta-por-valor':'/precos','/triagem':'/triagem-psiquiatrica' };
+  const p = req.path; if (map[p]) return r301(map[p])(req,res); next();
+});
+
+
+Reinicie:
+
+npm run dev
+
+D) Sitemap/Verificador
+
+1) scripts/build-sitemap.cjs → inclua as novas rotas (mantenha as antigas):
+
+const routes = [
+  '/','/lp','/agenda','/consulta','/dashboard',
+  '/medico','/paciente','/centro-de-testes','/triagem-psiquiatrica',
+  '/precos','/dr-ai','/faq','/sobre','/privacidade','/termos-de-uso',
+  '/cadastro','/login','/registro-saude','/precos','/recuperar-senha','/feedback-medico'
+  // NÃO incluir /teste-bid no sitemap
+];
+
+
+Gerar (ajuste BASE se estiver na 5001):
+
+CANONICAL_BASE_URL=http://localhost:5001 node scripts/build-sitemap.cjs
+
+
+2) scripts/verify-links.cjs → adicione às canônicas:
+
+const CANONICAL = new Set([
+  '/','/lp','/agenda','/consulta','/dashboard',
+  '/medico','/paciente','/centro-de-testes','/triagem-psiquiatrica',
+  '/precos','/dr-ai','/faq','/sobre','/privacidade','/termos-de-uso',
+  '/cadastro','/login','/registro-saude','/recuperar-senha','/feedback-medico'
+]);
+
+
+Rode:
+
+npm run verify:links
+
+E) Ícones do sobre-thelemed.html → SVG
+
+Crie uma pastinha de ícones e troque <i class="..."> por <img class="icon"> ou inline SVG.
+
+mkdir -p public/assets/icons
+# exemplo: coloque seus .svg lá (serviço, segurança, velocidade…)
+
+
+No HTML, substitua:
+
+<!-- antes -->
+<i class="fa fa-shield"></i> Segurança
+<!-- depois -->
+<img class="icon" src="/assets/icons/shield.svg" alt=""> Segurança
+
+
+O CSS do tema já padroniza .icon e .icon-lg.
+
+F) “teste-bid-integration.html” — checagem rápida do código de propostas
+
+Adicione ao final da página um teste simples; no console você verá o status:
+
+<script>
+(function(){
+  try{
+    // Exemplo: espera window.BID_PROPOSTAS ou similar
+    const propostas = window.BID_PROPOSTAS || window.propostas || [];
+    console.group('Teste BID – Propostas');
+    console.log('Qtd:', propostas.length, propostas);
+    if(!Array.isArray(propostas) || propostas.length === 0) {
+      console.warn('⚠️ Nenhuma proposta encontrada.');
+    } else {
+      const ok = propostas.every(p => p.titulo && p.valor && p.cta);
+      console.log('Estrutura OK?', ok);
+      if (!ok) console.warn('⚠️ Estrutura inválida: cada proposta deve ter {titulo, valor, cta}.');
+    }
+    // Teste de CTA
+    const ctas = document.querySelectorAll('[data-bid-cta]');
+    console.log('CTAs encontrados:', ctas.length);
+    ctas.forEach(btn => btn.addEventListener('click', ()=>console.log('CTA click', btn.dataset.bidCta)));
+    console.groupEnd();
+  }catch(e){ console.error('Teste BID falhou:', e); }
+})();
+</script>
+
+
+Se sua variável global tiver outro nome, ajuste window.BID_PROPOSTAS.
+
+G) QA — critérios de aceite
+# 1) 200 nas novas canônicas
+for p in /precos /dr-ai /faq /feedback-medico /privacidade /registro-saude /sobre /termos-de-uso /triagem-psiquiatrica; do
+  curl -s -o /dev/null -w "$p -> %{http_code}\n" http://localhost:5001$p
+done
+
+# 2) Redirects úteis
+for p in /faq.html /feedback /consulta-por-valor /triagem /politica-de-privacidade /termos /termos-uso /sobre-thelemed; do
+  curl -s -o /dev/null -w "$p -> %{http_code} %{redirect_url}\n" http://localhost:5001$p
+done
+
+# 3) Verificador
+npm run verify:links
+
+# 4) SEO
+curl -I http://localhost:5001/sitemap.xml
+curl -I http://localhost:5001/robots.txt
