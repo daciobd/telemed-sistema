@@ -1,160 +1,585 @@
 <!doctype html>
 <html lang="pt-br">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Demo Responsivo – TeleMed</title>
-<link rel="canonical" href="/demo-responsivo">
-<style>
-:root{--rounded:16px;--shadow:0 6px 18px rgba(0,0,0,.06);--primary:#0ea5e9;--ink:#111827;--muted:#6b7280;--bg:#f8fafc;--surface:#fff}
-*{box-sizing:border-box} html{scroll-behavior:smooth}
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
-a{color:#0ea5e9;text-decoration:none}
-.container{max-width:1100px;margin:0 auto;padding:24px 16px}
-.header{display:flex;gap:16px;justify-content:space-between;align-items:center;background:#fff;padding:18px 22px;border-radius:20px;box-shadow:var(--shadow);margin-bottom:18px}
-.title{font-size:1.6rem;margin:0}.subtitle{margin:2px 0 0;color:var(--muted)}
-.btn{display:inline-flex;gap:8px;align-items:center;padding:10px 16px;border-radius:12px;border:1px solid rgba(0,0,0,.08);background:#fff;color:var(--ink)}
-.btn-outline{background:#fff;color:#0ea5e9;border-color:#0ea5e9}.btn-primary{background:var(--primary);color:#fff;border:none}
-.btn.active{box-shadow:0 0 0 2px rgba(14,165,233,.25)}
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0 18px}
-.frame{background:#0b1220;padding:20px;border-radius:24px;box-shadow:0 20px 60px rgba(2,6,23,.35);margin:0 auto;position:relative;overflow:hidden;transition:all .3s ease}
-.frame.desktop{width:100%;max-width:1200px;height:700px}
-.frame.tablet{width:768px;max-width:90vw;height:600px}
-.frame.mobile{width:375px;max-width:90vw;height:667px}
-.content{width:100%;height:100%;background:#f3f4f6;border-radius:14px;overflow:hidden;position:relative}
-.page{position:absolute;inset:0;padding:20px;overflow:auto;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
-.page.active{opacity:1;transform:none}
-.page-header{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:14px}
-.nav{display:flex;gap:8px;flex-wrap:wrap}
-.pill{padding:8px 14px;border-radius:999px;background:#e6f6fe;color:#075985;font-size:.9rem}.pill.active{background:#0ea5e9;color:#fff}
-.grid{display:grid;gap:14px}.grid.stats{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-.stat{background:#fff;border-radius:14px;padding:18px;text-align:center;box-shadow:var(--shadow)} .stat .num{font-size:1.8rem;font-weight:700}
-.card{background:#fff;border-radius:14px;padding:18px;box-shadow:var(--shadow)}
-.list{max-height:220px;overflow:auto}.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #eef2f7}.row:last-child{border-bottom:none}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#0ea5e9,#0284c7);display:grid;place-items:center;color:#fff;font-weight:700}
-.panel{background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-top:18px}
-.indicator{position:fixed;top:16px;left:16px;background:#111827;color:#fff;padding:8px 12px;border-radius:999px;font-size:.85rem;z-index:1000}
-@media (max-width:768px){.frame{width:95vw !important;height:70vh !important}.grid.stats{grid-template-columns:repeat(2,1fr)}.page-header{flex-direction:column;gap:10px;align-items:flex-start}}
-@media (max-width:576px){.grid.stats{grid-template-columns:1fr}.row{flex-direction:column;align-items:flex-start}}
-/* sanity: mostra mensagem se JS não rodar */
-noscript .nojs{display:block} .nojs{display:none;color:#b91c1c;background:#fee2e2;border:1px solid #fecaca;padding:10px;border-radius:12px;margin:10px 0}
-</style>
-</head>
-<body>
-<div class="indicator" aria-live="polite">…</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Demo Responsivo – TeleMed</title>
+    <link rel="canonical" href="/demo-responsivo" />
+    <style>
+      :root {
+        --rounded: 16px;
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        --primary: #0ea5e9;
+        --ink: #111827;
+        --muted: #6b7280;
+        --bg: #f8fafc;
+        --surface: #fff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+      }
+      a {
+        color: #0ea5e9;
+        text-decoration: none;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px 16px;
+      }
+      .header {
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        padding: 18px 22px;
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
+      }
+      .title {
+        font-size: 1.6rem;
+        margin: 0;
+      }
+      .subtitle {
+        margin: 2px 0 0;
+        color: var(--muted);
+      }
+      .btn {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: #fff;
+        color: var(--ink);
+      }
+      .btn-outline {
+        background: #fff;
+        color: #0ea5e9;
+        border-color: #0ea5e9;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+      }
+      .btn.active {
+        box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.25);
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 12px 0 18px;
+      }
+      .frame {
+        background: #0b1220;
+        padding: 20px;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(2, 6, 23, 0.35);
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+      .frame.desktop {
+        width: 100%;
+        max-width: 1200px;
+        height: 700px;
+      }
+      .frame.tablet {
+        width: 768px;
+        max-width: 90vw;
+        height: 600px;
+      }
+      .frame.mobile {
+        width: 375px;
+        max-width: 90vw;
+        height: 667px;
+      }
+      .content {
+        width: 100%;
+        height: 100%;
+        background: #f3f4f6;
+        border-radius: 14px;
+        overflow: hidden;
+        position: relative;
+      }
+      .page {
+        position: absolute;
+        inset: 0;
+        padding: 20px;
+        overflow: auto;
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 0.25s ease,
+          transform 0.25s ease;
+      }
+      .page.active {
+        opacity: 1;
+        transform: none;
+      }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: var(--shadow);
+        margin-bottom: 14px;
+      }
+      .nav {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .pill {
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #e6f6fe;
+        color: #075985;
+        font-size: 0.9rem;
+      }
+      .pill.active {
+        background: #0ea5e9;
+        color: #fff;
+      }
+      .grid {
+        display: grid;
+        gap: 14px;
+      }
+      .grid.stats {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+      .stat {
+        background: #fff;
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .stat .num {
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+      .card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+      .list {
+        max-height: 220px;
+        overflow: auto;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eef2f7;
+      }
+      .row:last-child {
+        border-bottom: none;
+      }
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+      }
+      .panel {
+        background: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: var(--shadow);
+        margin-top: 18px;
+      }
+      .indicator {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        background: #111827;
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        z-index: 1000;
+      }
+      @media (max-width: 768px) {
+        .frame {
+          width: 95vw !important;
+          height: 70vh !important;
+        }
+        .grid.stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .page-header {
+          flex-direction: column;
+          gap: 10px;
+          align-items: flex-start;
+        }
+      }
+      @media (max-width: 576px) {
+        .grid.stats {
+          grid-template-columns: 1fr;
+        }
+        .row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+      /* sanity: mostra mensagem se JS não rodar */
+      noscript .nojs {
+        display: block;
+      }
+      .nojs {
+        display: none;
+        color: #b91c1c;
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        padding: 10px;
+        border-radius: 12px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="indicator" aria-live="polite">…</div>
 
-<div class="container">
-  <header class="header">
-    <div>
-      <h1 class="title">Demo Responsivo</h1>
-      <p class="subtitle">Veja como o TeleMed se adapta a qualquer dispositivo</p>
-    </div>
-    <a class="btn" href="/dashboard">← Voltar ao Dashboard</a>
-  </header>
-
-  <noscript><div class="nojs">Ative o JavaScript para visualizar a demonstração.</div></noscript>
-
-  <nav class="toolbar" aria-label="Dispositivos">
-    <button type="button" class="btn btn-outline device" data-device="desktop" aria-pressed="true">💻 Desktop</button>
-    <button type="button" class="btn btn-outline device" data-device="tablet">📱 Tablet</button>
-    <button type="button" class="btn btn-outline device" data-device="mobile">📲 Mobile</button>
-  </nav>
-
-  <section class="frame desktop" id="frame" aria-label="Área de demonstração">
-    <div class="content">
-      <!-- Página: Dashboard -->
-      <article class="page active" id="pg-dashboard" role="region" aria-labelledby="h-dashboard">
-        <div class="page-header">
-          <h2 id="h-dashboard">Dashboard</h2>
-          <div class="nav" role="tablist" aria-label="Navegação">
-            <span class="pill active" role="tab" aria-selected="true">Dashboard</span>
-            <span class="pill" role="tab">Pacientes</span>
-            <span class="pill" role="tab">Agenda</span>
-          </div>
+    <div class="container">
+      <header class="header">
+        <div>
+          <h1 class="title">Demo Responsivo</h1>
+          <p class="subtitle">
+            Veja como o TeleMed se adapta a qualquer dispositivo
+          </p>
         </div>
+        <a class="btn" href="/dashboard">← Voltar ao Dashboard</a>
+      </header>
 
-        <div class="grid stats">
-          <div class="stat"><div class="num" data-stat="pacientes">847</div><div class="muted">Pacientes</div></div>
-          <div class="stat"><div class="num" data-stat="consultas">12</div><div class="muted">Consultas Hoje</div></div>
-          <div class="stat"><div class="num" data-stat="presc">5</div><div class="muted">Prescrições</div></div>
-          <div class="stat"><div class="num" data-stat="nota">4.9</div><div class="muted">Avaliação</div></div>
-        </div>
+      <noscript
+        ><div class="nojs">
+          Ative o JavaScript para visualizar a demonstração.
+        </div></noscript
+      >
 
-        <div class="card">
-          <h3>Próximas Consultas <span class="pill">Hoje</span></h3>
-          <div class="list" aria-live="polite">
-            <div class="row"><div class="avatar">MS</div><div><strong>Maria Silva</strong><br><span class="muted">08:00 — Consulta de rotina</span></div></div>
-            <div class="row"><div class="avatar">JS</div><div><strong>João Santos</strong><br><span class="muted">09:30 — Teleconsulta</span></div></div>
-            <div class="row"><div class="avatar">AC</div><div><strong>Ana Costa</strong><br><span class="muted">10:00 — Caso urgente</span></div></div>
-          </div>
-        </div>
-      </article>
+      <nav class="toolbar" aria-label="Dispositivos">
+        <button
+          type="button"
+          class="btn btn-outline device"
+          data-device="desktop"
+          aria-pressed="true"
+        >
+          💻 Desktop
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline device"
+          data-device="tablet"
+        >
+          📱 Tablet
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline device"
+          data-device="mobile"
+        >
+          📲 Mobile
+        </button>
+      </nav>
 
-      <!-- Página: Formulário -->
-      <article class="page" id="pg-form" role="region" aria-labelledby="h-form">
-        <div class="page-header">
-          <h2 id="h-form">Novo Paciente</h2>
-          <div class="nav"><span class="pill">Dashboard</span><span class="pill active">Novo</span></div>
-        </div>
-
-        <div class="card">
-          <h3>Informações do Paciente</h3>
-          <form class="form" onsubmit="return false">
-            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-              <label>Nome<input placeholder="Nome completo"></label>
-              <label>E-mail<input type="email" placeholder="email@exemplo.com"></label>
-              <label>Telefone<input type="tel" placeholder="(11) 99999-9999"></label>
-              <label>Idade<select><option>Selecione…</option><option>18–30</option><option>31–50</option><option>51–70</option></select></label>
+      <section
+        class="frame desktop"
+        id="frame"
+        aria-label="Área de demonstração"
+      >
+        <div class="content">
+          <!-- Página: Dashboard -->
+          <article
+            class="page active"
+            id="pg-dashboard"
+            role="region"
+            aria-labelledby="h-dashboard"
+          >
+            <div class="page-header">
+              <h2 id="h-dashboard">Dashboard</h2>
+              <div class="nav" role="tablist" aria-label="Navegação">
+                <span class="pill active" role="tab" aria-selected="true"
+                  >Dashboard</span
+                >
+                <span class="pill" role="tab">Pacientes</span>
+                <span class="pill" role="tab">Agenda</span>
+              </div>
             </div>
-            <button class="btn btn-primary" style="margin-top:10px">Salvar</button>
-          </form>
-        </div>
-      </article>
 
-      <!-- Página: Lista -->
-      <article class="page" id="pg-list" role="region" aria-labelledby="h-list">
-        <div class="page-header">
-          <h2 id="h-list">Lista de Pacientes</h2>
-          <div class="nav"><span class="pill active">Pacientes</span><span class="pill">Agenda</span></div>
-        </div>
+            <div class="grid stats">
+              <div class="stat">
+                <div class="num" data-stat="pacientes">847</div>
+                <div class="muted">Pacientes</div>
+              </div>
+              <div class="stat">
+                <div class="num" data-stat="consultas">12</div>
+                <div class="muted">Consultas Hoje</div>
+              </div>
+              <div class="stat">
+                <div class="num" data-stat="presc">5</div>
+                <div class="muted">Prescrições</div>
+              </div>
+              <div class="stat">
+                <div class="num" data-stat="nota">4.9</div>
+                <div class="muted">Avaliação</div>
+              </div>
+            </div>
 
-        <div class="card"><h3>Buscar</h3><input placeholder="Buscar por nome, e-mail ou telefone…" style="width:100%;padding:10px;border-radius:10px;border:1px solid #e5e7eb"></div>
+            <div class="card">
+              <h3>Próximas Consultas <span class="pill">Hoje</span></h3>
+              <div class="list" aria-live="polite">
+                <div class="row">
+                  <div class="avatar">MS</div>
+                  <div>
+                    <strong>Maria Silva</strong><br /><span class="muted"
+                      >08:00 — Consulta de rotina</span
+                    >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="avatar">JS</div>
+                  <div>
+                    <strong>João Santos</strong><br /><span class="muted"
+                      >09:30 — Teleconsulta</span
+                    >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="avatar">AC</div>
+                  <div>
+                    <strong>Ana Costa</strong><br /><span class="muted"
+                      >10:00 — Caso urgente</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
 
-        <div class="card">
-          <h3>Recentes</h3>
-          <div class="list">
-            <div class="row"><div class="avatar">MS</div><div><strong>Maria Silva</strong><br><span class="muted">45 anos • Feminino • maria@email.com</span></div></div>
-            <div class="row"><div class="avatar">JS</div><div><strong>João Santos</strong><br><span class="muted">38 anos • Masculino • joao@email.com</span></div></div>
-            <div class="row"><div class="avatar">AC</div><div><strong>Ana Costa</strong><br><span class="muted">52 anos • Feminino • ana@email.com</span></div></div>
-          </div>
+          <!-- Página: Formulário -->
+          <article
+            class="page"
+            id="pg-form"
+            role="region"
+            aria-labelledby="h-form"
+          >
+            <div class="page-header">
+              <h2 id="h-form">Novo Paciente</h2>
+              <div class="nav">
+                <span class="pill">Dashboard</span
+                ><span class="pill active">Novo</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Informações do Paciente</h3>
+              <form class="form" onsubmit="return false">
+                <div
+                  class="grid"
+                  style="
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 12px;
+                  "
+                >
+                  <label>Nome<input placeholder="Nome completo" /></label>
+                  <label
+                    >E-mail<input type="email" placeholder="email@exemplo.com"
+                  /></label>
+                  <label
+                    >Telefone<input type="tel" placeholder="(11) 99999-9999"
+                  /></label>
+                  <label
+                    >Idade<select>
+                      <option>Selecione…</option>
+                      <option>18–30</option>
+                      <option>31–50</option>
+                      <option>51–70</option>
+                    </select></label
+                  >
+                </div>
+                <button class="btn btn-primary" style="margin-top: 10px">
+                  Salvar
+                </button>
+              </form>
+            </div>
+          </article>
+
+          <!-- Página: Lista -->
+          <article
+            class="page"
+            id="pg-list"
+            role="region"
+            aria-labelledby="h-list"
+          >
+            <div class="page-header">
+              <h2 id="h-list">Lista de Pacientes</h2>
+              <div class="nav">
+                <span class="pill active">Pacientes</span
+                ><span class="pill">Agenda</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>Buscar</h3>
+              <input
+                placeholder="Buscar por nome, e-mail ou telefone…"
+                style="
+                  width: 100%;
+                  padding: 10px;
+                  border-radius: 10px;
+                  border: 1px solid #e5e7eb;
+                "
+              />
+            </div>
+
+            <div class="card">
+              <h3>Recentes</h3>
+              <div class="list">
+                <div class="row">
+                  <div class="avatar">MS</div>
+                  <div>
+                    <strong>Maria Silva</strong><br /><span class="muted"
+                      >45 anos • Feminino • maria@email.com</span
+                    >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="avatar">JS</div>
+                  <div>
+                    <strong>João Santos</strong><br /><span class="muted"
+                      >38 anos • Masculino • joao@email.com</span
+                    >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="avatar">AC</div>
+                  <div>
+                    <strong>Ana Costa</strong><br /><span class="muted"
+                      >52 anos • Feminino • ana@email.com</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
-      </article>
+      </section>
+
+      <section class="panel" aria-label="Controles">
+        <h3>Controles</h3>
+        <div class="toolbar">
+          <button
+            type="button"
+            class="btn page"
+            data-page="dashboard"
+            aria-pressed="true"
+          >
+            🏠 Dashboard
+          </button>
+          <button type="button" class="btn page" data-page="form">
+            ➕ Formulário
+          </button>
+          <button type="button" class="btn page" data-page="list">
+            📋 Lista
+          </button>
+        </div>
+        <p class="muted">
+          Dica: use <strong>Ctrl+1/2/3</strong> para trocar de dispositivo.
+        </p>
+      </section>
     </div>
-  </section>
 
-  <section class="panel" aria-label="Controles">
-    <h3>Controles</h3>
-    <div class="toolbar">
-      <button type="button" class="btn page" data-page="dashboard" aria-pressed="true">🏠 Dashboard</button>
-      <button type="button" class="btn page" data-page="form">➕ Formulário</button>
-      <button type="button" class="btn page" data-page="list">📋 Lista</button>
-    </div>
-    <p class="muted">Dica: use <strong>Ctrl+1/2/3</strong> para trocar de dispositivo.</p>
-  </section>
-</div>
-
-<script>
-(()=>{ // estado + util
-const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const state={device:'desktop',page:'dashboard'};
-const indicator=$('.indicator');
-const updateIndicator=()=>{const w=innerWidth;indicator.textContent=w<=576?'Mobile':w<=768?'Tablet':'Desktop Large';};
-function setDevice(dev){state.device=dev;const frame=$('#frame');frame.classList.remove('desktop','tablet','mobile');frame.classList.add(dev);$$('.device').forEach(b=>b.classList.toggle('active',b.dataset.device===dev));}
-function setPage(pg){state.page=pg;$$('.btn.page').forEach(b=>b.classList.toggle('active',b.dataset.page===pg));$$('.content .page').forEach(p=>p.classList.toggle('active',p.id==='pg-'+pg));}
-function animateStats(){ $$('[data-stat]').forEach(el=>{ const end=+el.textContent||0; let cur=0; const step=Math.max(1,Math.round(end/30)); const t=setInterval(()=>{cur+=step;if(cur>=end){cur=end;clearInterval(t);} el.textContent=cur;},30); });}
-addEventListener('resize',updateIndicator);
-document.addEventListener('DOMContentLoaded',()=>{ $$('.device').forEach(b=>b.addEventListener('click',()=>setDevice(b.dataset.device))); $$('.btn.page').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.page))); setDevice('desktop'); setPage('dashboard'); animateStats(); updateIndicator(); });
-})();
-</script>
-</body>
+    <script>
+      (() => {
+        // estado + util
+        const $ = (s, r = document) => r.querySelector(s),
+          $$ = (s, r = document) => [...r.querySelectorAll(s)];
+        const state = { device: "desktop", page: "dashboard" };
+        const indicator = $(".indicator");
+        const updateIndicator = () => {
+          const w = innerWidth;
+          indicator.textContent =
+            w <= 576 ? "Mobile" : w <= 768 ? "Tablet" : "Desktop Large";
+        };
+        function setDevice(dev) {
+          state.device = dev;
+          const frame = $("#frame");
+          frame.classList.remove("desktop", "tablet", "mobile");
+          frame.classList.add(dev);
+          $$(".device").forEach((b) =>
+            b.classList.toggle("active", b.dataset.device === dev),
+          );
+        }
+        function setPage(pg) {
+          state.page = pg;
+          $$(".btn.page").forEach((b) =>
+            b.classList.toggle("active", b.dataset.page === pg),
+          );
+          $$(".content .page").forEach((p) =>
+            p.classList.toggle("active", p.id === "pg-" + pg),
+          );
+        }
+        function animateStats() {
+          $$("[data-stat]").forEach((el) => {
+            const end = +el.textContent || 0;
+            let cur = 0;
+            const step = Math.max(1, Math.round(end / 30));
+            const t = setInterval(() => {
+              cur += step;
+              if (cur >= end) {
+                cur = end;
+                clearInterval(t);
+              }
+              el.textContent = cur;
+            }, 30);
+          });
+        }
+        addEventListener("resize", updateIndicator);
+        document.addEventListener("DOMContentLoaded", () => {
+          $$(".device").forEach((b) =>
+            b.addEventListener("click", () => setDevice(b.dataset.device)),
+          );
+          $$(".btn.page").forEach((b) =>
+            b.addEventListener("click", () => setPage(b.dataset.page)),
+          );
+          setDevice("desktop");
+          setPage("dashboard");
+          animateStats();
+          updateIndicator();
+        });
+      })();
+    </script>
+  </body>
 </html>
