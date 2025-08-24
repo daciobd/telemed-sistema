@@ -14,19 +14,11 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://telemed.pro/centro-de-testes">
   
+  <link rel="stylesheet" href="/css/theme-telemed.css">
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f8fafc}
-    .container{max-width:1100px;margin:0 auto;padding:24px 16px}
-    .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-    .card{border:1px solid #e5e7eb;border-radius:16px;padding:16px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-    .btn{display:inline-block;padding:10px 14px;border-radius:12px;text-decoration:none;transition:all 0.2s}
-    .btn-primary{background:#0ea5e9;color:#fff}
-    .btn-primary:hover{background:#0284c7}
     .header{text-align:center;margin-bottom:2rem}
     .header h1{font-size:2.5rem;margin:0 0 0.5rem;color:#1f2937}
     .header p{font-size:1.2rem;color:#6b7280;max-width:600px;margin:0 auto}
-    .card h3{color:#1f2937;margin:0 0 0.5rem}
-    .card p{color:#6b7280;margin:0 0 1rem}
     .back-link{display:inline-block;margin-bottom:1rem;color:#0ea5e9;text-decoration:none}
     .back-link:hover{text-decoration:underline}
   </style>
@@ -40,41 +32,53 @@
       <p>Escolha um protocolo e comece a avaliação padronizada de saúde mental.</p>
     </header>
 
-    <main class="grid">
+    <main class="grid cards">
       <div class="card">
-        <h3>Ansiedade (GAD-7)</h3>
-        <p>Rastreamento de transtorno de ansiedade generalizada. Escala validada internacionalmente.</p>
-        <a class="btn btn-primary" href="/gad7-ansiedade">Iniciar GAD-7</a>
+        <div class="card-header">Ansiedade (GAD-7)</div>
+        <div class="card-body">
+          <p>Rastreamento de transtorno de ansiedade generalizada. Escala validada internacionalmente.</p>
+          <a class="btn btn-primary" href="/triagem-psiquiatrica?teste=gad7">Iniciar GAD-7</a>
+        </div>
       </div>
       
       <div class="card">
-        <h3>Depressão (PHQ-9)</h3>
-        <p>Severidade de sintomas depressivos. Ferramenta amplamente utilizada na prática clínica.</p>
-        <a class="btn btn-primary" href="/phq9-depressao">Iniciar PHQ-9</a>
+        <div class="card-header">Depressão (PHQ-9)</div>
+        <div class="card-body">
+          <p>Severidade de sintomas depressivos. Ferramenta amplamente utilizada na prática clínica.</p>
+          <a class="btn btn-primary" href="/triagem-psiquiatrica?teste=phq9">Iniciar PHQ-9</a>
+        </div>
       </div>
       
       <div class="card">
-        <h3>TDAH (ASRS-18)</h3>
-        <p>Rastreamento de sintomas de TDAH em adultos. Baseado nos critérios do DSM-5.</p>
-        <a class="btn btn-primary" href="/tdah-asrs18">Iniciar ASRS-18</a>
+        <div class="card-header">TDAH (ASRS-18)</div>
+        <div class="card-body">
+          <p>Rastreamento de sintomas de TDAH em adultos. Baseado nos critérios do DSM-5.</p>
+          <a class="btn btn-primary" href="/triagem-psiquiatrica?teste=asrs18">Iniciar ASRS-18</a>
+        </div>
       </div>
       
       <div class="card">
-        <h3>Stress (PSS-10)</h3>
-        <p>Escala de Estresse Percebido. Avalia o nível de estresse percebido nas últimas semanas.</p>
-        <a class="btn btn-primary" href="/stress-pss10">Iniciar PSS-10</a>
+        <div class="card-header">Stress (PSS-10)</div>
+        <div class="card-body">
+          <p>Escala de Estresse Percebido. Avalia o nível de estresse percebido nas últimas semanas.</p>
+          <a class="btn btn-primary" href="/triagem-psiquiatrica?teste=pss10">Iniciar PSS-10</a>
+        </div>
       </div>
       
       <div class="card">
-        <h3>Bipolaridade (MDQ)</h3>
-        <p>Questionário de Transtorno do Humor. Triagem para episódios maníacos ou hipomaníacos.</p>
-        <a class="btn btn-primary" href="/bipolar-mdq">Iniciar MDQ</a>
+        <div class="card-header">Bipolaridade (MDQ)</div>
+        <div class="card-body">
+          <p>Questionário de Transtorno do Humor. Triagem para episódios maníacos ou hipomaníacos.</p>
+          <a class="btn btn-primary" href="/triagem-psiquiatrica?teste=mdq">Iniciar MDQ</a>
+        </div>
       </div>
       
       <div class="card">
-        <h3>Triagem com IA</h3>
-        <p>Avaliação psiquiátrica assistida por inteligência artificial com múltiplas escalas.</p>
-        <a class="btn btn-primary" href="/dr-ai">Iniciar Dr. AI</a>
+        <div class="card-header">Triagem com IA</div>
+        <div class="card-body">
+          <p>Avaliação psiquiátrica assistida por inteligência artificial com múltiplas escalas.</p>
+          <a class="btn btn-primary" href="/dr-ai">Iniciar Dr. AI</a>
+        </div>
       </div>
     </main>
 
