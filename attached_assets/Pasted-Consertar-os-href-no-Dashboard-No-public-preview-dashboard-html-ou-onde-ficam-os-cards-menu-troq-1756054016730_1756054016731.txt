@@ -1,0 +1,77 @@
+Consertar os href no Dashboard
+
+No public/preview/dashboard.html (ou onde ficam os cards/menu), troque para canônicas:
+
+Perfil do Médico: href="/medico"
+
+Configurações: href="/configuracoes"
+
+Demo Responsivo: href="/demo-responsivo"
+
+Atalhos por terminal (raiz do projeto):
+
+# PERFIL DO MÉDICO
+grep -RIl "/public/demo-ativo/perfil-medico\.html\|/preview/perfil-medico\.html\|/area-medica\.html" public \
+  | xargs -r sed -i 's#/public/demo-ativo/perfil-medico\.html#/medico#g; s#/preview/perfil-medico\.html#/medico#g; s#/area-medica\.html#/medico#g'
+
+# CONFIGURAÇÕES
+grep -RIl "/public/demo-ativo/configuracoes\.html\|/config\.html" public \
+  | xargs -r sed -i 's#/public/demo-ativo/configuracoes\.html#/configuracoes#g; s#/config\.html#/configuracoes#g'
+
+# DEMO RESPONSIVO (ajuste os nomes que existirem no seu repo)
+grep -RIl "/responsive-demo\.html\|/demo-responsivo\.html\|/demo-ativo/responsivo\.html" public \
+  | xargs -r sed -i 's#/responsive-demo\.html#/demo-responsivo#g; s#/demo-responsivo\.html#/demo-responsivo#g; s#/demo-ativo/responsivo\.html#/demo-responsivo#g'
+
+
+Se o Dashboard usa componentes/shared layout, rode os comandos e abra o arquivo para confirmar os 3 href.
+
+3) Aplicar estética padrão nessas páginas
+
+Se ainda não estiver usando o tema único, habilite-o nos dois arquivos:
+
+# PERFIL
+grep -q "theme-telemed.css" public/demo-ativo/perfil-medico.html || \
+  sed -i 's#</head>#  <link rel="stylesheet" href="/css/theme-telemed.css">\n</head>#' public/demo-ativo/perfil-medico.html
+
+# CONFIGURAÇÕES
+grep -q "theme-telemed.css" public/demo-ativo/configuracoes.html || \
+  sed -i 's#</head>#  <link rel="stylesheet" href="/css/theme-telemed.css">\n</head>#' public/demo-ativo/configuracoes.html
+
+# DEMO RESPONSIVO (ajuste o caminho real do arquivo)
+grep -q "theme-telemed.css" public/preview/demo-responsivo.html 2>/dev/null && \
+  sed -i 's#</head>#  <link rel="stylesheet" href="/css/theme-telemed.css">\n</head>#' public/preview/demo-responsivo.html
+
+
+O theme-telemed.css foi o que te passei antes. Se não existir, me avisa que te mando ele de novo — ou copie de /public/css/theme-telemed.css do seu repo.
+
+Remover “texto sobre imagem” (overlay) nas Configurações
+
+Garanta que este CSS está no <head> de public/demo-ativo/configuracoes.html (ou dentro do seu CSS global):
+
+<style>
+.figure,.card-figure{position:relative;margin:0}
+.figure img,.card-figure img{display:block;width:100%;height:auto;object-fit:cover;border-radius:12px}
+.figure .overlay,.card-figure .overlay,.on-image-text{
+  position:static !important; background:none !important; color:inherit !important;
+  padding:0 !important; margin-top:12px; display:block; text-shadow:none !important;
+}
+</style>
+
+4) Verificador e Sitemap
+
+Inclua novas canônicas no scripts/verify-links.cjs:
+
+const CANONICAL = new Set([
+  '/', '/lp', '/agenda', '/consulta', '/dashboard',
+  '/medico', '/configuracoes', '/demo-responsivo', // <<< adicionadas
+  '/paciente','/centro-de-testes','/precos','/dr-ai','/faq',
+  '/sobre','/privacidade','/termos-de-uso','/registro-saude',
+  '/triagem-psiquiatrica','/feedback-medico','/login','/cadastro'
+]);
+
+const ALIASES = [
+  '/public/demo-ativo/perfil-medico.html',
+  '/preview/perfil-medico.html','/area-medica.html',
+  '/public/demo-ativo/configuracoes.html','/config.html',
+  '/responsive-demo.html','/demo-responsivo.html','/demo-ativo/responsivo.html'
+];

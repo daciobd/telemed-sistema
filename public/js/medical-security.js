@@ -65,7 +65,7 @@ function verificarAcesso(url) {
             localStorage.setItem('medical_redirect_after_login', url);
             
             // Redirecionar para área médica com parâmetro
-            window.location.href = `/area-medica.html?redirect=${encodeURIComponent(url)}`;
+            window.location.href = `/medico?redirect=${encodeURIComponent(url)}`;
             return false;
         }
     }
@@ -132,7 +132,7 @@ function logoutMedico() {
     console.log('🔓 Logout realizado com sucesso');
     
     // Redirecionar para área médica
-    window.location.href = '/area-medica.html';
+    window.location.href = '/medico';
 }
 
 // Função para obter dados do médico logado

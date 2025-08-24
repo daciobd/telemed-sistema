@@ -7,7 +7,7 @@
     "rollback_available": true,
     "migration_date": "2025-08-18",
     "links_mapping": {
-      "/demo-ativo/area-medica.html": "/demo-ativo/area-medica-new.html",
+      "/demo-ativo/medico": "/demo-ativo/area-medica-new.html",
       "/area-medica": "/demo-ativo/area-medica-new.html"
     },
     "preserved_links": [

@@ -496,7 +496,7 @@
                         </a>
 
                         <!-- Perfil do Médico -->
-                        <a href="/public/demo-ativo/perfil-medico.html" class="nav-card nav-perfil">
+                        <a href="/medico" class="nav-card nav-perfil">
                             <i class="fas fa-user-md icon"></i>
                             <h3>Perfil do Médico</h3>
                             <p>Gerencie suas informações profissionais e configurações pessoais</p>
@@ -509,7 +509,7 @@
                         </a>
 
                         <!-- Configurações -->
-                        <a href="/public/demo-ativo/configuracoes.html" class="nav-card nav-config">
+                        <a href="/configuracoes" class="nav-card nav-config">
                             <i class="fas fa-cogs icon"></i>
                             <h3>Configurações</h3>
                             <p>Personalize o sistema de acordo com suas necessidades</p>
@@ -552,7 +552,7 @@
                             <i class="fas fa-video"></i>
                             Teleconsulta
                         </a>
-                        <a href="/public/demo-ativo/configuracoes.html" class="action-btn">
+                        <a href="/configuracoes" class="action-btn">
                             <i class="fas fa-prescription"></i>
                             Prescrição
                         </a>

@@ -389,7 +389,7 @@
 <svg class="icon" viewbox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 Pacientes
             </a>
-<a href="/area-medica.html">
+<a href="/medico">
 <svg class="icon" viewbox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 Área Médica
             </a>
@@ -477,7 +477,7 @@
 </ul>
 </div>
 </a>
-<a class="module-card" href="/public/demo-ativo/configuracoes.html" title="Configurações">
+<a class="module-card" href="/configuracoes" title="Configurações">
 <div class="module-icon">
 <svg fill="none" height="22" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="22">
 <circle cx="12" cy="12" r="3"></circle>

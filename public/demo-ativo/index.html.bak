@@ -1172,7 +1172,7 @@
                 <div class="demo-card fade-in">
                     <h3>👤 Perfil Médico</h3>
                     <p>Configure seus dados profissionais, certificações e preferências do sistema.</p>
-                    <a href="/public/demo-ativo/perfil-medico.html" class="btn">
+                    <a href="/medico" class="btn">
                         <i class="fas fa-user-md"></i>
                         Editar Perfil
                     </a>
@@ -1181,7 +1181,7 @@
                 <div class="demo-card fade-in">
                     <h3>⚙️ Configurações</h3>
                     <p>Personalize completamente o sistema com configurações avançadas e integrações.</p>
-                    <a href="/public/demo-ativo/configuracoes.html" class="btn">
+                    <a href="/configuracoes" class="btn">
                         <i class="fas fa-cogs"></i>
                         Configurar Sistema
                     </a>
@@ -1213,14 +1213,14 @@
                     <ul>
                         <li><a href="/agenda">Gestão de Agenda</a></li>
                         <li><a href="/public/demo-ativo/pacientes.html">Cadastro de Pacientes</a></li>
-                        <li><a href="/public/demo-ativo/perfil-medico.html">Perfil Profissional</a></li>
-                        <li><a href="/public/demo-ativo/configuracoes.html">Configurações Avançadas</a></li>
+                        <li><a href="/medico">Perfil Profissional</a></li>
+                        <li><a href="/configuracoes">Configurações Avançadas</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Demonstração</h3>
                     <ul>
-                        <li><a href="/public/demo-ativo/area-medica.html">Dashboard Principal</a></li>
+                        <li><a href="/public/demo-ativo/medico">Dashboard Principal</a></li>
                         <li><a href="/public/demo-ativo/mobile.html">Demo Responsivo</a></li>
                         <li><a href="#features">Recursos Completos</a></li>
                         <li><a href="#demo">Teste Interativo</a></li>
@@ -1391,7 +1391,7 @@
 
         // Verificar se o sistema demo está acessível
         function checkDemoAvailability() {
-            fetch('/public/demo-ativo/area-medica.html')
+            fetch('/public/demo-ativo/medico')
                 .then(response => {
                     if (response.ok) {
                         console.log('✅ Sistema demo disponível');
@@ -1546,7 +1546,7 @@
             
             // Analytics simulado
             console.log('📊 TeleMed Landing Page carregada com sucesso!');
-            console.log('🔗 Demo disponível em: /public/demo-ativo/area-medica.html');
+            console.log('🔗 Demo disponível em: /public/demo-ativo/medico');
         });
 
         // Easter egg - Konami code
