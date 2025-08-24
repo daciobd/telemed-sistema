@@ -1,0 +1,39 @@
+Perfil do Médico — aplicar estética padrão + link correto
+
+A página que você mostrou ainda está fora do “visual padrão”. Vamos colocar um tema consistente com os demais (cards com cantos 16px, sombras suaves, grid responsivo) e garantir o botão “Voltar ao Dashboard”.
+
+2.1. Corrija o link de volta
+
+Em public/demo-ativo/perfil-medico.html, troque o href do botão:
+
+<a class="btn btn-ghost" href="/dashboard">Voltar ao Dashboard</a>
+
+2.2. “Drop-in CSS” de unificação visual
+
+Cole este <style> no <head> depois de outros estilos (ele ajusta cards, tipografia e grid):
+
+<style>
+:root{
+  --rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06);
+  --primary:#0ea5e9; --ink:#111827; --muted:#6b7280; --bg:#f8fafc;
+}
+body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;}
+.container{max-width:1100px;margin:0 auto;padding:24px 16px;}
+.header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:18px 22px;border-radius:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.btn{display:inline-block;padding:10px 16px;border-radius:12px;text-decoration:none;border:1px solid rgba(0,0,0,.08)}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-ghost{background:#fff;color:var(--ink)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:#fff;border-radius:var(--rounded);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;font-weight:600;color:var(--ink);border-bottom:1px solid #eef2f7}
+.card-body{padding:16px 20px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.metric{background:#f9fafb;border-radius:12px;padding:14px;text-align:center}
+.metric strong{display:block;font-size:1.3rem;color:var(--ink)}
+.metric span{color:var(--muted);font-size:.9rem}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover}
+@media(max-width:768px){.metrics{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+
+Com isso, você não precisa mexer muito no HTML — apenas garanta que os blocos usem .card, .card-header, .card-body, e a grade .metrics onde estiverem os números (consultas, avaliação, etc.). O botão “Salvar Alterações” pode usar .btn.btn-primary.
