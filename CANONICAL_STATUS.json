@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-19T19:39:10.502Z",
+  "timestamp": "2025-08-24T12:59:44.899Z",
   "canonical_routes": {
     "agenda": {
       "path": "/agenda",
@@ -50,8 +50,8 @@
     }
   ],
   "checks": {
-    "legacy_files": 3,
-    "sitemap": true,
+    "legacy_files": 2,
+    "sitemap": false,
     "test_scripts": 4,
     "spa_fallback": false
   },
