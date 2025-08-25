@@ -1024,14 +1024,26 @@
               return; // a continuação ocorrerá na próxima página
             }
 
+            // Debug antes de procurar elemento
+            console.log('🎭 showStep - Passo:', idx, 'de', steps.length);
+            console.log('📍 Procurando elemento:', s?.sel, 'em token:', s?.token);
+            const elementos = document.querySelectorAll(s.sel);
+            console.log('🔍 Elementos encontrados:', elementos.length, 'para seletor:', s.sel);
+
             // Espera o elemento existir para posicionar o destaque
             try {
               const el = await waitForElement(s.sel, {tries:30, interval:200});
+              console.log('✅ Elemento encontrado! Mostrando tour...');
               el.scrollIntoView({behavior:'smooth', block:'center'});
               setTimeout(()=> place(el, s.t, s.d), 250);
               if (btnNext) btnNext.textContent = (idx === steps.length - 1) ? 'Concluir' : 'Próximo';
             } catch(e){
               // Se não achou o alvo nesta página, pule para o próximo passo
+              console.error('❌ Elemento não encontrado:', s.sel, e);
+              console.log('🔍 Links disponíveis:');
+              document.querySelectorAll('a[href]').forEach((link, i) => {
+                if (i < 5) console.log('  ', i+':', link.href, '"'+link.textContent?.trim()+'"');
+              });
               idx++;
               showStep();
             }
