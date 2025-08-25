@@ -928,27 +928,28 @@
           // ===== 1) DEFINIÇÃO DOS TOURS COM path =====
           const tours = {
             paciente: [
-              // Múltiplas funcionalidades do dashboard antes de navegar
+              // Múltiplas funcionalidades do dashboard
               { token:'dashboard',     sel:'a[href*="agenda"]',           t:'📅 Agenda do Dia',     d:'Confira seus horários e próximas consultas agendadas.' },
               { token:'dashboard',     sel:'a[href="/meus-pacientes"]',   t:'👥 Gestão de Pacientes', d:'Acesse informações de outros pacientes da família.' },
               { token:'dashboard',     sel:'a[href*="enhanced"]',         t:'🤖 Consulta IA',       d:'Faça perguntas ao Dr. IA para orientações iniciais.' },
               { token:'dashboard',     sel:'.btn-nova-consulta',          t:'🩺 Nova Consulta',     d:'Agende rapidamente uma nova teleconsulta.' },
               { token:'dashboard',     sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Acesse questionários de saúde mental (GAD-7, PHQ-9).' },
-              // Agora navega para outras páginas
-              { token:'agenda',        sel:'a[href*="sala-de-espera"]',   t:'⏰ Sala de Espera',    d:'Teste câmera/microfone e aguarde ser chamado.' },
-              { token:'sala-de-espera',sel:'a[href*="consulta"]',         t:'💻 Consulta Online',   d:'Entre com 1 clique na sala de vídeo segura.' },
-              { token:'consulta',      sel:'a[href*="registro-saude"]',   t:'📋 Registro de Saúde', d:'Envie exames e veja seu histórico médico organizado.' }
+              // Navegação para páginas existentes (seletores seguros)
+              { token:'agenda-avancada', sel:'main, .container, body',      t:'📋 Agenda Avançada',       d:'Aqui você gerencia todos os seus agendamentos e horários.' },
+              { token:'sala-de-espera',  sel:'main, .container, body',      t:'⏱️ Sala de Espera',        d:'Local para aguardar e testar equipamentos antes da consulta.' },
+              { token:'centro-de-testes', sel:'main, .container, body',     t:'🧪 Centro de Testes',      d:'Acesse questionários de triagem e avaliação psiquiátrica.' }
             ],
             medico: [
               // Múltiplas funcionalidades do dashboard para médicos
-              { token:'dashboard',     sel:'a[href*="agenda"]',           t:'📅 Agenda Médica',     d:'Gerencie horários, confirmações e atendimentos.' },
-              { token:'dashboard',     sel:'a[href="/meus-pacientes"]',   t:'👥 Meus Pacientes',    d:'Visualize histórico e dados dos seus pacientes.' },
-              { token:'dashboard',     sel:'a[href*="gestao-avancada"]',  t:'⚙️ Gestão Avançada',   d:'Relatórios, estatísticas e ferramentas administrativas.' },
-              { token:'dashboard',     sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Aplique questionários GAD-7/PHQ-9 e gere relatórios.' },
-              { token:'dashboard',     sel:'.btn-nova-consulta',          t:'🩺 Novo Atendimento',  d:'Inicie rapidamente um novo atendimento.' },
-              // Navegação para outras páginas
-              { token:'agenda',        sel:'a[href*="medico"]',           t:'👨‍⚕️ Perfil Médico',     d:'Ajuste dados profissionais e configurações.' },
-              { token:'medico',        sel:'a[href*="consulta"]',         t:'💻 Teleconsulta',      d:'Inicie teleconsulta com chat e prescrição digital.' }
+              { token:'dashboard',       sel:'a[href*="agenda"]',           t:'📅 Agenda Médica',     d:'Gerencie horários, confirmações e atendimentos.' },
+              { token:'dashboard',       sel:'a[href="/meus-pacientes"]',   t:'👥 Meus Pacientes',    d:'Visualize histórico e dados dos seus pacientes.' },
+              { token:'dashboard',       sel:'a[href*="gestao-avancada"]',  t:'⚙️ Gestão Avançada',   d:'Relatórios, estatísticas e ferramentas administrativas.' },
+              { token:'dashboard',       sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Aplique questionários GAD-7/PHQ-9 e gere relatórios.' },
+              { token:'dashboard',       sel:'.btn-nova-consulta',          t:'🩺 Novo Atendimento',  d:'Inicie rapidamente um novo atendimento.' },
+              // Navegação para páginas que existem
+              { token:'agenda-avancada', sel:'.patient-card:first-child',     t:'📈 Paciente em Destaque', d:'Veja detalhes do próximo paciente a ser atendido.' },
+              { token:'perfil-medico',   sel:'.profile-section',             t:'🎖️ Dados Profissionais', d:'Mantenha suas informações médicas atualizadas.' },
+              { token:'centro-de-testes', sel:'.test-card:first-child',       t:'📋 Questionários Médicos', d:'Aplique testes padronizados em seus pacientes.' }
             ]
           };
 
