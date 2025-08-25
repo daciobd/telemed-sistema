@@ -928,28 +928,26 @@
           // ===== 1) DEFINIÇÃO DOS TOURS COM path =====
           const tours = {
             paciente: [
-              // Múltiplas funcionalidades do dashboard
-              { token:'dashboard',     sel:'a[href*="agenda"]',           t:'📅 Agenda do Dia',     d:'Confira seus horários e próximas consultas agendadas.' },
-              { token:'dashboard',     sel:'a[href="/meus-pacientes"]',   t:'👥 Gestão de Pacientes', d:'Acesse informações de outros pacientes da família.' },
-              { token:'dashboard',     sel:'a[href*="enhanced"]',         t:'🤖 Consulta IA',       d:'Faça perguntas ao Dr. IA para orientações iniciais.' },
-              { token:'dashboard',     sel:'.btn-nova-consulta',          t:'🩺 Nova Consulta',     d:'Agende rapidamente uma nova teleconsulta.' },
-              { token:'dashboard',     sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Acesse questionários de saúde mental (GAD-7, PHQ-9).' },
-              // Navegação para páginas existentes (seletores seguros)
-              { token:'agenda-avancada', sel:'main, .container, body',      t:'📋 Agenda Avançada',       d:'Aqui você gerencia todos os seus agendamentos e horários.' },
-              { token:'sala-de-espera',  sel:'main, .container, body',      t:'⏱️ Sala de Espera',        d:'Local para aguardar e testar equipamentos antes da consulta.' },
-              { token:'centro-de-testes', sel:'main, .container, body',     t:'🧪 Centro de Testes',      d:'Acesse questionários de triagem e avaliação psiquiátrica.' }
+              // Tour focado apenas no dashboard - sem navegação para evitar problemas de login
+              { token:'dashboard',     sel:'.modules .module-card:nth-child(1)', t:'📅 Agenda do Dia',     d:'Confira seus horários e próximas consultas agendadas.' },
+              { token:'dashboard',     sel:'.modules .module-card:nth-child(2)', t:'👥 Gestão de Pacientes', d:'Acesse informações de outros pacientes da família.' },
+              { token:'dashboard',     sel:'.modules .module-card:nth-child(3)', t:'💼 Área Médica',       d:'Funcionalidades específicas para profissionais de saúde.' },
+              { token:'dashboard',     sel:'.modules .module-card:nth-child(4)', t:'🤖 Consulta IA',       d:'Faça perguntas ao Dr. IA para orientações iniciais.' },
+              { token:'dashboard',     sel:'.quick-actions .btn:first-child',    t:'🩺 Nova Consulta',     d:'Agende rapidamente uma nova teleconsulta.' },
+              { token:'dashboard',     sel:'.sidebar .nav a:last-child',         t:'🧪 Centro de Testes',  d:'Acesse questionários de saúde mental (GAD-7, PHQ-9).' },
+              { token:'dashboard',     sel:'.topbar .search',                    t:'🔍 Busca Inteligente', d:'Procure pacientes, exames e sintomas rapidamente.' },
+              { token:'dashboard',     sel:'.charts-grid',                      t:'📊 Relatórios Visuais', d:'Acompanhe estatísticas e métricas do sistema.' }
             ],
             medico: [
-              // Múltiplas funcionalidades do dashboard para médicos
-              { token:'dashboard',       sel:'a[href*="agenda"]',           t:'📅 Agenda Médica',     d:'Gerencie horários, confirmações e atendimentos.' },
-              { token:'dashboard',       sel:'a[href="/meus-pacientes"]',   t:'👥 Meus Pacientes',    d:'Visualize histórico e dados dos seus pacientes.' },
-              { token:'dashboard',       sel:'a[href*="gestao-avancada"]',  t:'⚙️ Gestão Avançada',   d:'Relatórios, estatísticas e ferramentas administrativas.' },
-              { token:'dashboard',       sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Aplique questionários GAD-7/PHQ-9 e gere relatórios.' },
-              { token:'dashboard',       sel:'.btn-nova-consulta',          t:'🩺 Novo Atendimento',  d:'Inicie rapidamente um novo atendimento.' },
-              // Navegação para páginas que existem
-              { token:'agenda-avancada', sel:'.patient-card:first-child',     t:'📈 Paciente em Destaque', d:'Veja detalhes do próximo paciente a ser atendido.' },
-              { token:'perfil-medico',   sel:'.profile-section',             t:'🎖️ Dados Profissionais', d:'Mantenha suas informações médicas atualizadas.' },
-              { token:'centro-de-testes', sel:'.test-card:first-child',       t:'📋 Questionários Médicos', d:'Aplique testes padronizados em seus pacientes.' }
+              // Tour focado apenas no dashboard para médicos - sem navegação
+              { token:'dashboard',       sel:'.modules .module-card:nth-child(1)', t:'📅 Agenda Médica',     d:'Gerencie horários, confirmações e atendimentos.' },
+              { token:'dashboard',       sel:'.modules .module-card:nth-child(2)', t:'👥 Meus Pacientes',    d:'Visualize histórico e dados dos seus pacientes.' },
+              { token:'dashboard',       sel:'.modules .module-card:nth-child(3)', t:'💼 Área Médica',       d:'Ferramentas avançadas para profissionais.' },
+              { token:'dashboard',       sel:'.modules .module-card:nth-child(4)', t:'🤖 Consulta IA',       d:'Use inteligência artificial para diagnósticos.' },
+              { token:'dashboard',       sel:'.quick-actions .btn:first-child',    t:'🩺 Nova Consulta',     d:'Inicie rapidamente um novo atendimento.' },
+              { token:'dashboard',       sel:'.sidebar .nav a:last-child',         t:'🧪 Centro de Testes',  d:'Aplique questionários GAD-7/PHQ-9 e gere relatórios.' },
+              { token:'dashboard',       sel:'.topbar .search',                    t:'🔍 Busca de Pacientes', d:'Encontre rapidamente pacientes e históricos.' },
+              { token:'dashboard',       sel:'.charts-grid',                      t:'📊 Analytics Médicos', d:'Acompanhe estatísticas dos seus atendimentos.' }
             ]
           };
 
