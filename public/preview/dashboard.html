@@ -914,7 +914,9 @@
         }
 
         // === TOUR MULTI-PÁGINA ===
-        (function(){
+        document.addEventListener('DOMContentLoaded', function(){
+          console.log('🚀 DOM carregado, iniciando tour...');
+          
           const $ = (s)=>document.querySelector(s);
           
           // Debug: verificar se função $ funciona
@@ -928,7 +930,7 @@
           const btnNext = document.querySelector("#tourNext");
           const btnSkip = document.querySelector("#tourSkip");
           
-          console.log('🎯 Elementos encontrados após querySelector direto:', {
+          console.log('🎯 Elementos encontrados após DOM carregado:', {
             overlay: !!overlay, spot: !!spot, tip: !!tip,
             tipTitle: !!tipTitle, tipText: !!tipText,
             btnNext: !!btnNext, btnSkip: !!btnSkip
@@ -1161,7 +1163,7 @@
           });
 
           console.log('🏠 Dashboard carregado com tour multi-página');
-        })();
+        });
     </script>
 
   <!-- Tour overlay elements -->
