@@ -47,7 +47,7 @@ app.get('/sala-de-espera',   serveCanonical('preview/sala-de-espera.html'));
 // Perfis
 app.get('/medico',           serveCanonical('preview/perfil-medico.html'));
 app.get('/paciente',         serveCanonical('preview/mobile.html'));
-app.get('/configuracoes',    serveCanonical('preview/perfil-medico.html')); // fallback para perfil médico
+app.get('/configuracoes',    serveCanonical('preview/perfil-medico.html')); // usa perfil médico como configurações
 
 // Funcionalidades
 app.get('/centro-de-testes', serveCanonical('preview/centro-de-testes.html'));
