@@ -1,0 +1,334 @@
+Arquitetura de Integração da Assinatura Digital - Sistema ReceitaCerta
+
+## 1. Visão Geral da Arquitetura
+
+A implementação da assinatura digital no sistema ReceitaCerta seguirá uma arquitetura modular que separa claramente as responsabilidades entre o frontend (interface do usuário), o backend (lógica de negócio) e os serviços externos de assinatura digital. Esta abordagem garante flexibilidade, manutenibilidade e conformidade com os padrões da ICP-Brasil.
+
+### Componentes Principais:
+
+1. **Frontend React**: Interface do usuário para iniciar e acompanhar o processo de assinatura
+2. **Backend Node.js/Express**: Orquestração do processo de assinatura e integração com PSAs
+3. **Provedor de Serviços de Assinatura (PSA)**: Serviço externo para assinatura digital ICP-Brasil
+4. **Banco de Dados**: Armazenamento de metadados das assinaturas e logs de auditoria
+5. **Sistema de Arquivos**: Armazenamento seguro dos documentos assinados
+
+## 2. Provedores de Serviços de Assinatura (PSAs) Identificados
+
+Com base na pesquisa realizada, foram identificados os seguintes provedores que oferecem APIs para assinatura digital ICP-Brasil:
+
+### 2.1 IntegraICP
+- **URL**: https://developers.integraicp.com.br/
+- **Características**: Plataforma que reúne múltiplos PSAs brasileiros
+- **Vantagens**: API unificada, múltiplos provedores em uma única integração
+- **Adequação**: Alta - ideal para flexibilidade e redundância
+
+### 2.2 Assinatura Eletrônica GOV.BR
+- **URL**: https://manual-integracao-assinatura-eletronica.servicos.gov.br/
+- **Características**: Serviço governamental oficial
+- **Vantagens**: Gratuito, alta confiabilidade, suporte oficial
+- **Adequação**: Média - limitado a interações com entes públicos
+
+### 2.3 Serpro Assinador Digital
+- **URL**: https://www.serpro.gov.br/assinador-digital/
+- **Características**: Serviço da empresa pública Serpro
+- **Vantagens**: Confiabilidade governamental, padrão ICP-Brasil
+- **Adequação**: Alta - adequado para documentos médicos
+
+### 2.4 ArqSign (Arquivar)
+- **URL**: https://arquivar.com.br/arqsign/
+- **Características**: Plataforma comercial de assinatura eletrônica
+- **Vantagens**: Interface amigável, suporte comercial
+- **Adequação**: Média - foco em assinatura eletrônica simples
+
+### 2.5 sDoc (Safeweb)
+- **URL**: https://sdocs.safeweb.com.br/
+- **Características**: Solução especializada em certificados ICP-Brasil
+- **Vantagens**: Especialização em ICP-Brasil, validade jurídica garantida
+- **Adequação**: Alta - foco específico em assinatura digital
+
+## 3. Arquitetura Técnica Detalhada
+
+### 3.1 Fluxo de Assinatura Digital
+
+```
+[Frontend] → [Backend] → [PSA] → [ICP-Brasil] → [Documento Assinado]
+    ↓           ↓          ↓
+[Interface] [Orquestração] [Assinatura] → [Verificação] → [Armazenamento]
+```
+
+### 3.2 Componentes do Backend
+
+#### 3.2.1 Serviço de Assinatura Digital
+**Arquivo**: `server/digital-signature-service.ts`
+
+Responsabilidades:
+- Preparação do documento para assinatura
+- Comunicação com o PSA selecionado
+- Validação da assinatura retornada
+- Armazenamento do documento assinado
+
+#### 3.2.2 Controlador de Assinatura
+**Arquivo**: `server/signature-controller.ts`
+
+Responsabilidades:
+- Recebimento das requisições do frontend
+- Validação dos dados de entrada
+- Orquestração do processo de assinatura
+- Retorno do status e resultados
+
+#### 3.2.3 Adaptadores de PSA
+**Arquivo**: `server/psa-adapters/`
+
+Responsabilidades:
+- Implementação específica para cada PSA
+- Padronização da interface de comunicação
+- Tratamento de erros específicos de cada provedor
+
+### 3.3 Componentes do Frontend
+
+#### 3.3.1 Modal de Assinatura Digital
+**Arquivo**: `client/src/components/digital-signature-modal.tsx`
+
+Responsabilidades:
+- Interface para seleção do método de assinatura
+- Exibição do progresso da assinatura
+- Tratamento de erros e feedback ao usuário
+
+#### 3.3.2 Serviço de Assinatura (Frontend)
+**Arquivo**: `client/src/services/signature-service.ts`
+
+Responsabilidades:
+- Comunicação com o backend
+- Gerenciamento de estado da assinatura
+- Polling para verificação de status
+
+## 4. Modelo de Dados
+
+### 4.1 Tabela de Assinaturas Digitais
+
+```sql
+CREATE TABLE digital_signatures (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    prescription_id UUID NOT NULL REFERENCES prescriptions(id),
+    doctor_id UUID NOT NULL REFERENCES users(id),
+    signature_provider VARCHAR(50) NOT NULL,
+    signature_id VARCHAR(255) NOT NULL,
+    certificate_serial VARCHAR(255),
+    certificate_issuer VARCHAR(255),
+    signature_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+    verification_status VARCHAR(20) DEFAULT 'pending',
+    signature_hash VARCHAR(512),
+    document_hash VARCHAR(512),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### 4.2 Tabela de Logs de Assinatura
+
+```sql
+CREATE TABLE signature_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    signature_id UUID NOT NULL REFERENCES digital_signatures(id),
+    action VARCHAR(50) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    details JSONB,
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+## 5. APIs e Endpoints
+
+### 5.1 Endpoints do Backend
+
+#### POST /api/signatures/initiate
+Inicia o processo de assinatura digital
+
+**Request Body:**
+```json
+{
+    "prescriptionId": "uuid",
+    "provider": "integra_icp|gov_br|serpro",
+    "certificateType": "e-cpf"
+}
+```
+
+**Response:**
+```json
+{
+    "signatureId": "uuid",
+    "redirectUrl": "https://psa.provider.com/sign/...",
+    "status": "initiated"
+}
+```
+
+#### GET /api/signatures/{signatureId}/status
+Verifica o status da assinatura
+
+**Response:**
+```json
+{
+    "signatureId": "uuid",
+    "status": "completed|pending|failed",
+    "signedDocumentUrl": "https://...",
+    "certificateInfo": {
+        "serial": "...",
+        "issuer": "...",
+        "validFrom": "...",
+        "validTo": "..."
+    }
+}
+```
+
+#### POST /api/signatures/{signatureId}/verify
+Verifica a validade da assinatura
+
+**Response:**
+```json
+{
+    "isValid": true,
+    "verificationDetails": {
+        "certificateValid": true,
+        "documentIntegrity": true,
+        "timestampValid": true
+    }
+}
+```
+
+### 5.2 Integração com PSAs
+
+#### 5.2.1 IntegraICP API
+```typescript
+interface IntegraICPRequest {
+    document: string; // Base64 encoded PDF
+    signerCpf: string;
+    redirectUrl: string;
+    webhookUrl: string;
+}
+
+interface IntegraICPResponse {
+    transactionId: string;
+    signUrl: string;
+    status: string;
+}
+```
+
+#### 5.2.2 GOV.BR API
+```typescript
+interface GovBrRequest {
+    documento: string;
+    hashDocumento: string;
+    algoritmoHash: "SHA256";
+    urlRetorno: string;
+}
+
+interface GovBrResponse {
+    protocolo: string;
+    urlAssinatura: string;
+    status: string;
+}
+```
+
+## 6. Segurança e Conformidade
+
+### 6.1 Medidas de Segurança
+
+1. **Criptografia em Trânsito**: Todas as comunicações via HTTPS/TLS 1.3
+2. **Validação de Entrada**: Sanitização rigorosa de todos os dados de entrada
+3. **Autenticação**: Verificação da identidade do médico antes da assinatura
+4. **Logs de Auditoria**: Registro detalhado de todas as operações
+5. **Armazenamento Seguro**: Documentos assinados em storage criptografado
+
+### 6.2 Conformidade LGPD
+
+1. **Minimização de Dados**: Coleta apenas dos dados necessários
+2. **Consentimento**: Consentimento explícito para processamento
+3. **Direito ao Esquecimento**: Capacidade de remoção de dados
+4. **Portabilidade**: Exportação de dados em formato estruturado
+
+### 6.3 Conformidade ICP-Brasil
+
+1. **Certificados Válidos**: Verificação da cadeia de certificação
+2. **Algoritmos Aprovados**: Uso apenas de algoritmos homologados
+3. **Formato PAdES**: Assinaturas em formato padrão ICP-Brasil
+4. **Carimbo de Tempo**: Inclusão opcional de timestamp
+
+## 7. Tratamento de Erros e Recuperação
+
+### 7.1 Cenários de Erro
+
+1. **Certificado Inválido**: Certificado expirado ou revogado
+2. **Falha de Comunicação**: Problemas de rede com PSA
+3. **Documento Corrompido**: Integridade do documento comprometida
+4. **Timeout**: Processo de assinatura excede tempo limite
+
+### 7.2 Estratégias de Recuperação
+
+1. **Retry Automático**: Tentativas automáticas com backoff exponencial
+2. **Fallback de PSA**: Alternância automática entre provedores
+3. **Notificação de Erro**: Alertas claros para o usuário
+4. **Logs Detalhados**: Rastreamento completo para debugging
+
+## 8. Performance e Escalabilidade
+
+### 8.1 Otimizações
+
+1. **Cache de Certificados**: Cache local de informações de certificados
+2. **Processamento Assíncrono**: Assinatura em background com webhooks
+3. **Compressão de Documentos**: Otimização do tamanho dos PDFs
+4. **CDN para Documentos**: Distribuição global dos documentos assinados
+
+### 8.2 Monitoramento
+
+1. **Métricas de Performance**: Tempo de resposta dos PSAs
+2. **Taxa de Sucesso**: Percentual de assinaturas bem-sucedidas
+3. **Alertas**: Notificações automáticas de problemas
+4. **Dashboard**: Visualização em tempo real do status do sistema
+
+## 9. Implementação Faseada
+
+### Fase 1: Infraestrutura Base
+- Implementação do serviço de assinatura
+- Integração com um PSA (IntegraICP)
+- Interface básica de assinatura
+
+### Fase 2: Múltiplos Provedores
+- Integração com GOV.BR e Serpro
+- Sistema de fallback automático
+- Otimizações de performance
+
+### Fase 3: Funcionalidades Avançadas
+- Assinatura em lote
+- Verificação automática
+- Relatórios e analytics
+
+### Fase 4: Integração Completa
+- Assinatura móvel
+- Integração com HSM
+- Compliance avançado
+
+## 10. Considerações de Implementação
+
+### 10.1 Escolha do PSA Principal
+
+Recomenda-se iniciar com a **IntegraICP** como PSA principal devido a:
+- API bem documentada
+- Suporte a múltiplos provedores
+- Flexibilidade de integração
+- Suporte comercial disponível
+
+### 10.2 Estratégia de Backup
+
+Implementar **GOV.BR** como PSA secundário para:
+- Redundância em caso de falhas
+- Opção gratuita para redução de custos
+- Conformidade com padrões governamentais
+
+### 10.3 Testes e Validação
+
+1. **Ambiente de Sandbox**: Testes em ambiente controlado
+2. **Certificados de Teste**: Uso de certificados específicos para desenvolvimento
+3. **Validação Cruzada**: Verificação com múltiplos validadores
+4. **Testes de Carga**: Simulação de alto volume de assinaturas
+
+Esta arquitetura fornece uma base sólida para a implementação da assinatura digital no sistema ReceitaCerta, garantindo conformidade legal, segurança e escalabilidade.
