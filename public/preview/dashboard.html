@@ -915,12 +915,7 @@
 
         // === TOUR MULTI-PÁGINA ===
         document.addEventListener('DOMContentLoaded', function(){
-          console.log('🚀 DOM carregado, iniciando tour...');
-          
           const $ = (s)=>document.querySelector(s);
-          
-          // Debug: verificar se função $ funciona
-          console.log('🔍 Testando função $:', $("#tourOverlay"));
           
           const overlay = document.querySelector("#tourOverlay");
           const spot = document.querySelector("#tourSpot");
@@ -929,28 +924,31 @@
           const tipText = document.querySelector("#tourText");
           const btnNext = document.querySelector("#tourNext");
           const btnSkip = document.querySelector("#tourSkip");
-          
-          console.log('🎯 Elementos encontrados após DOM carregado:', {
-            overlay: !!overlay, spot: !!spot, tip: !!tip,
-            tipTitle: !!tipTitle, tipText: !!tipText,
-            btnNext: !!btnNext, btnSkip: !!btnSkip
-          });
 
           // ===== 1) DEFINIÇÃO DOS TOURS COM path =====
           const tours = {
             paciente: [
-              { token:'dashboard',     sel:'a[href*="agenda"]',           t:'Agenda',            d:'Confira seus horários e próximas consultas.' },
-              { token:'agenda',        sel:'a[href*="sala-de-espera"]',   t:'Sala de Espera',    d:'Teste câmera/microfone e aguarde o chamado.' },
-              { token:'sala-de-espera',sel:'a[href*="consulta"]',         t:'Consulta Online',   d:'Entre com 1 clique na sala de vídeo segura.' },
-              { token:'consulta',      sel:'a[href*="registro-saude"]',   t:'Registro de Saúde', d:'Envie exames e veja seu histórico organizado.' },
-              { token:'registro-saude',sel:'a[href*="paciente"]',         t:'Área do Paciente',  d:'Gerencie documentos, prescrições e dados.' }
+              // Múltiplas funcionalidades do dashboard antes de navegar
+              { token:'dashboard',     sel:'a[href*="agenda"]',           t:'📅 Agenda do Dia',     d:'Confira seus horários e próximas consultas agendadas.' },
+              { token:'dashboard',     sel:'a[href="/meus-pacientes"]',   t:'👥 Gestão de Pacientes', d:'Acesse informações de outros pacientes da família.' },
+              { token:'dashboard',     sel:'a[href*="enhanced"]',         t:'🤖 Consulta IA',       d:'Faça perguntas ao Dr. IA para orientações iniciais.' },
+              { token:'dashboard',     sel:'.btn-nova-consulta',          t:'🩺 Nova Consulta',     d:'Agende rapidamente uma nova teleconsulta.' },
+              { token:'dashboard',     sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Acesse questionários de saúde mental (GAD-7, PHQ-9).' },
+              // Agora navega para outras páginas
+              { token:'agenda',        sel:'a[href*="sala-de-espera"]',   t:'⏰ Sala de Espera',    d:'Teste câmera/microfone e aguarde ser chamado.' },
+              { token:'sala-de-espera',sel:'a[href*="consulta"]',         t:'💻 Consulta Online',   d:'Entre com 1 clique na sala de vídeo segura.' },
+              { token:'consulta',      sel:'a[href*="registro-saude"]',   t:'📋 Registro de Saúde', d:'Envie exames e veja seu histórico médico organizado.' }
             ],
             medico: [
-              { token:'dashboard',     sel:'a[href*="dashboard"]',        t:'Dashboard',         d:'Visão geral, atalhos para pacientes e laudos.' },
-              { token:'dashboard',     sel:'a[href*="agenda"]',           t:'Agenda',            d:'Gerencie horários, confirmações e atendimentos.' },
-              { token:'agenda',        sel:'a[href*="medico"]',           t:'Perfil Médico',     d:'Ajuste dados profissionais e configurações.' },
-              { token:'medico',        sel:'a[href*="consulta"]',         t:'Atendimento',       d:'Inicie teleconsulta com chat e prescrição.' },
-              { token:'consulta',      sel:'a[href*="centro-de-testes"]', t:'Centro de Testes',  d:'Aplique GAD‑7/PHQ‑9 e gere relatórios.' }
+              // Múltiplas funcionalidades do dashboard para médicos
+              { token:'dashboard',     sel:'a[href*="agenda"]',           t:'📅 Agenda Médica',     d:'Gerencie horários, confirmações e atendimentos.' },
+              { token:'dashboard',     sel:'a[href="/meus-pacientes"]',   t:'👥 Meus Pacientes',    d:'Visualize histórico e dados dos seus pacientes.' },
+              { token:'dashboard',     sel:'a[href*="gestao-avancada"]',  t:'⚙️ Gestão Avançada',   d:'Relatórios, estatísticas e ferramentas administrativas.' },
+              { token:'dashboard',     sel:'a[href*="centro-de-testes"]', t:'🧪 Centro de Testes',  d:'Aplique questionários GAD-7/PHQ-9 e gere relatórios.' },
+              { token:'dashboard',     sel:'.btn-nova-consulta',          t:'🩺 Novo Atendimento',  d:'Inicie rapidamente um novo atendimento.' },
+              // Navegação para outras páginas
+              { token:'agenda',        sel:'a[href*="medico"]',           t:'👨‍⚕️ Perfil Médico',     d:'Ajuste dados profissionais e configurações.' },
+              { token:'medico',        sel:'a[href*="consulta"]',         t:'💻 Teleconsulta',      d:'Inicie teleconsulta com chat e prescrição digital.' }
             ]
           };
 
@@ -1007,26 +1005,12 @@
           }
 
           function place(el, title, text){
-            console.log('🎯 PLACE() INICIADO:', {el, title, text});
-            console.log('🔍 Elementos disponíveis:', {overlay: !!overlay, spot: !!spot, tip: !!tip});
+            if (!overlay || !spot || !tip) return;
             
-            if (!overlay || !spot || !tip) {
-              console.error('❌ PLACE() ABORTADO - elementos faltando:', {overlay: !!overlay, spot: !!spot, tip: !!tip});
-              return;
-            }
-            
-            console.log('✅ Todos elementos existem, aplicando estilos...');
             const r = el.getBoundingClientRect();
-            console.log('📏 Posição do elemento:', r);
-            
             overlay.style.display = 'block';
             spot.style.display = 'block';
             tip.style.display  = 'block';
-            
-            console.log('🎨 Estilos display aplicados - verificando:');
-            console.log('  overlay.style.display:', overlay.style.display);
-            console.log('  spot.style.display:', spot.style.display);
-            console.log('  tip.style.display:', tip.style.display);
             
             spot.style.left = (window.scrollX + r.left - 6) + "px";
             spot.style.top  = (window.scrollY + r.top  - 6) + "px";
@@ -1036,8 +1020,6 @@
             if (tipText) tipText.textContent = text;
             tip.style.left = (window.scrollX + r.left) + "px";
             tip.style.top  = (window.scrollY + r.bottom + 12) + "px";
-            
-            console.log('🎯 PLACE() CONCLUÍDO - elementos devem estar visíveis!');
           }
 
           // ===== 4) LÓGICA DE NAVEGAÇÃO ENTRE PÁGINAS =====
@@ -1058,40 +1040,15 @@
               return; // a continuação ocorrerá na próxima página
             }
 
-            // Debug antes de procurar elemento
-            console.log('🎭 showStep - Passo:', idx, 'de', steps.length);
-            console.log('📍 Procurando elemento:', s?.sel, 'em token:', s?.token);
-            const elementos = document.querySelectorAll(s.sel);
-            console.log('🔍 Elementos encontrados:', elementos.length, 'para seletor:', s.sel);
 
             // Espera o elemento existir para posicionar o destaque
             try {
               const el = await waitForElement(s.sel, {tries:30, interval:200});
-              console.log('✅ Elemento encontrado! Mostrando tour...');
-              console.log('🎯 Elemento:', el, 'posição:', el.getBoundingClientRect());
-              console.log('🔍 Verificando elementos de tour:', {
-                overlay: !!overlay, spot: !!spot, tip: !!tip,
-                overlayDisplay: overlay?.style.display,
-                spotDisplay: spot?.style.display,
-                tipDisplay: tip?.style.display
-              });
               el.scrollIntoView({behavior:'smooth', block:'center'});
-              setTimeout(()=> {
-                console.log('📍 Chamando place() com:', s.t, s.d);
-                place(el, s.t, s.d);
-                console.log('✅ place() executado - verificando elementos:');
-                console.log('  overlay display:', overlay?.style.display);
-                console.log('  spot display:', spot?.style.display);
-                console.log('  tip display:', tip?.style.display);
-              }, 250);
+              setTimeout(()=> place(el, s.t, s.d), 250);
               if (btnNext) btnNext.textContent = (idx === steps.length - 1) ? 'Concluir' : 'Próximo';
             } catch(e){
               // Se não achou o alvo nesta página, pule para o próximo passo
-              console.error('❌ Elemento não encontrado:', s.sel, e);
-              console.log('🔍 Links disponíveis:');
-              document.querySelectorAll('a[href]').forEach((link, i) => {
-                if (i < 5) console.log('  ', i+':', link.href, '"'+link.textContent?.trim()+'"');
-              });
               idx++;
               showStep();
             }
@@ -1145,9 +1102,6 @@
 
             const s = loadState();
 
-            console.log('🏠 Dashboard carregado!');
-            console.log('🔍 Query params:', { qRole, qStep });
-            console.log('💾 Estado salvo:', s);
 
             if (qRole){ 
               console.log('▶️ Iniciando tour via query param:', qRole, qStep);
@@ -1158,11 +1112,8 @@
               console.log('▶️ Iniciando tour via localStorage:', s.role, s.idx);
               startTour(s.role, s.idx); 
             } else {
-              console.log('⏸️ Nenhum tour para iniciar');
             }
           });
-
-          console.log('🏠 Dashboard carregado com tour multi-página');
         });
     </script>
 
