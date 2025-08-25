@@ -640,39 +640,55 @@
 
   const tours = {
     paciente: [
-      { path:'/dashboard',        sel:'a[href="/agenda"]',              t:'Agenda',             d:'Confira seus horários e próximas consultas.' },
-      { path:'/agenda',           sel:'a[href^="/sala-de-espera"]',     t:'Sala de Espera',     d:'Teste câmera/microfone e aguarde o chamado.' },
-      { path:'/sala-de-espera',   sel:'a[href="/consulta"]',            t:'Consulta Online',    d:'Entre com 1 clique na sala de vídeo segura.' },
-      { path:'/consulta',         sel:'a[href="/registro-saude"]',      t:'Registro de Saúde',  d:'Envie exames e veja seu histórico organizado.' },
-      { path:'/registro-saude',   sel:'a[href="/paciente"]',            t:'Área do Paciente',   d:'Gerencie documentos, prescrições e dados.' }
+      { token:'dashboard',     sel:'a[href*="agenda"]',           t:'Agenda',            d:'Confira seus horários e próximas consultas.' },
+      { token:'agenda',        sel:'a[href*="sala-de-espera"]',   t:'Sala de Espera',    d:'Teste câmera/microfone e aguarde o chamado.' },
+      { token:'sala-de-espera',sel:'a[href*="consulta"]',         t:'Consulta Online',   d:'Entre com 1 clique na sala de vídeo segura.' },
+      { token:'consulta',      sel:'a[href*="registro-saude"]',   t:'Registro de Saúde', d:'Envie exames e veja seu histórico organizado.' },
+      { token:'registro-saude',sel:'a[href*="paciente"]',         t:'Área do Paciente',  d:'Gerencie documentos, prescrições e dados.' }
     ],
     medico: [
-      { path:'/dashboard',        sel:'a[href="/dashboard"]',           t:'Dashboard',          d:'Visão geral, atalhos para pacientes e laudos.' },
-      { path:'/dashboard',        sel:'a[href="/agenda"]',              t:'Agenda',             d:'Gerencie horários, confirmações e atendimentos.' },
-      { path:'/agenda',           sel:'a[href="/medico"]',              t:'Perfil Médico',      d:'Ajuste dados profissionais e configurações.' },
-      { path:'/medico',           sel:'a[href="/consulta"]',            t:'Atendimento',        d:'Inicie teleconsulta com chat e prescrição.' },
-      { path:'/consulta',         sel:'a[href="/centro-de-testes"]',    t:'Resultados',         d:'Aplique GAD‑7/PHQ‑9 e gere relatórios.' }
+      { token:'dashboard',     sel:'a[href*="dashboard"]',        t:'Dashboard',         d:'Visão geral, atalhos para pacientes e laudos.' },
+      { token:'dashboard',     sel:'a[href*="agenda"]',           t:'Agenda',            d:'Gerencie horários, confirmações e atendimentos.' },
+      { token:'agenda',        sel:'a[href*="medico"]',           t:'Perfil Médico',     d:'Ajuste dados profissionais e configurações.' },
+      { token:'medico',        sel:'a[href*="consulta"]',         t:'Atendimento',       d:'Inicie teleconsulta com chat e prescrição.' },
+      { token:'consulta',      sel:'a[href*="centro-de-testes"]', t:'Centro de Testes',  d:'Aplique GAD‑7/PHQ‑9 e gere relatórios.' }
     ]
   };
 
   const QS = new URLSearchParams(location.search);
-  const STORAGE_KEY = 'telemed_autotour';
-  const STORAGE_ROLE = 'telemed_autotour_role';
-  const STORAGE_IDX  = 'telemed_autotour_step';
+
+  // --- Auto-detecção de prefixo (/preview/) e extensão (.html)
+  const path = location.pathname;
+  const prefix = path.startsWith('/preview/') ? '/preview/' : '/';
+  const usesHtml = /\.html?$/.test(path);
+
+  // Monta URL segura para um token de página
+  function urlFor(token){
+    if (usesHtml) return prefix + token + '.html';
+    return prefix + token;
+  }
+
+  // Checa se estou nesta página por token
+  function isOn(token){
+    return location.pathname.includes(token);
+  }
+
+  const K_FLAG='telemed_autotour', K_ROLE='telemed_autotour_role', K_IDX='telemed_autotour_step';
 
   function saveState(role, idx){
+    try { localStorage.setItem(K_FLAG,'1'); localStorage.setItem(K_ROLE,role); localStorage.setItem(K_IDX,String(idx)); } catch(e){}
+  }
+  function loadState(){
     try {
-      localStorage.setItem(STORAGE_KEY, '1');
-      localStorage.setItem(STORAGE_ROLE, role);
-      localStorage.setItem(STORAGE_IDX, String(idx));
-    } catch(e){}
+      return {
+        has: localStorage.getItem(K_FLAG)==='1',
+        role: localStorage.getItem(K_ROLE),
+        idx: Number(localStorage.getItem(K_IDX)||'0')||0
+      };
+    } catch(e){ return {has:false,role:null,idx:0}; }
   }
   function clearState(){
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(STORAGE_ROLE);
-      localStorage.removeItem(STORAGE_IDX);
-    } catch(e){}
+    try { localStorage.removeItem(K_FLAG); localStorage.removeItem(K_ROLE); localStorage.removeItem(K_IDX); } catch(e){}
   }
 
   function waitForElement(selector, {tries=30, interval=200}={}){
@@ -713,12 +729,12 @@
     const s = steps[idx];
     if (!s){ endTour(); return; }
 
-    if (!location.pathname.startsWith(s.path)){
+    if (!isOn(s.token)){
       if (overlay) overlay.style.display = 'none';
       if (spot) spot.style.display = 'none';
       if (tip) tip.style.display  = 'none';
       saveState(role, idx);
-      const url = s.path + '?autotour='+encodeURIComponent(role)+'&tourStep='+idx;
+      const url = urlFor(s.token) + '?autotour='+encodeURIComponent(role)+'&tourStep='+idx;
       location.assign(url);
       return;
     }
