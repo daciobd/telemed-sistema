@@ -99,7 +99,7 @@ function Sidebar(){
       <nav className="nav">
         <a className="active" href="#"><Icon path="M3 12l9-9 9 9 M9 21V9h6v12"/> Dashboard</a>
         <a href="#"><Icon path="M3 21v-1a5 5 0 0 1 5-5a5 5 0 0 1 5 5v1 M12 21v-1a5 5 0 0 1 5-5a5 5 0 0 1 5 5v1 M8 11a3 3 0 1 0 0-6 a3 3 0 0 0 0 6 M16 11a3 3 0 1 0 0-6 a3 3 0 0 0 0 6"/> Pacientes</a>
-        <a href="#"><Icon path="M12 12c2.2 0 4-1.8 4-4S14.2 4 12 4 8 5.8 8 8s1.8 4 4 4z M20 20a8 8 0 10-16 0"/> Médicos</a>
+        <a href="https://84622708-9db0-420a-a1f1-6a7a55403590-00-2d2fgen7wjybm.picard.replit.dev/agenda"><Icon path="M12 12c2.2 0 4-1.8 4-4S14.2 4 12 4 8 5.8 8 8s1.8 4 4 4z M20 20a8 8 0 10-16 0"/> Médicos</a>
         <a href="#analytics"><Icon path="M4 19V5 M10 19V9 M16 19V13 M22 19V3"/> Analytics</a>
         <a href="#prontuario"><Icon path="M4 6h12 M4 12h12 M4 18h12 M18 6h2v12h-2"/> Prontuário</a>
         <div className="section-title">Ações Rápidas</div>
@@ -247,7 +247,7 @@ export default function DashboardTeleMed(){
               </ul>
             </div>
           </a>
-          <a className="module-card" href="#config" title="Configurações">
+          <a className="module-card" href="public/demo-ativo/configuracoes.html" title="Configurações">
             <div className="module-icon">
               <IconMulti size={22} paths={[
                 "M4 6h16",
