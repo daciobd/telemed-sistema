@@ -47,6 +47,8 @@ app.get('/sala-de-espera',   serveCanonical('preview/sala-de-espera.html'));
 // Perfis
 app.get('/medico',           serveCanonical('preview/perfil-medico.html'));
 app.get('/paciente',         serveCanonical('preview/mobile.html'));
+app.get('/meus-pacientes',   serveCanonical('preview/meus-pacientes-original.html'));
+app.get('/agenda-medica',    serveCanonical('preview/agenda-medica.html'));
 app.get('/configuracoes',    serveCanonical('preview/perfil-medico.html')); // usa perfil médico como configurações
 
 // Funcionalidades
@@ -108,7 +110,7 @@ app.get(['/public/demo-ativo/configuracoes.html','/config.html'], r301('/configu
 app.get(['/responsive-demo.html','/demo-responsivo.html','/demo-ativo/responsivo.html'], r301('/demo-responsivo'));
 
 // páginas antigas de pacientes
-app.get(['/pacientes','/pacientes.html','/public/preview/meus-pacientes-original.html'], r301('/dashboard'));
+app.get(['/pacientes','/pacientes.html','/public/preview/meus-pacientes-original.html'], r301('/meus-pacientes'));
 
 // Outros links do dashboard
 app.get('/enhanced', r301('/consulta')); // enhanced → consulta
