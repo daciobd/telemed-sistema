@@ -33,6 +33,69 @@
     .demo-link{display:block;padding:10px 15px;background:#fff;border:1px solid #e0f2fe;border-radius:8px;text-decoration:none;color:#0369a1;font-size:0.9rem;transition:all .2s}
     .demo-link:hover{background:#f0f9ff;border-color:#0369a1}
   
+  /* === Seção Hero Principal === */
+  .hero-section{
+    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    border-radius:20px;
+    padding:40px;
+    text-align:center;
+    color:white;
+    margin-bottom:30px;
+    box-shadow:0 15px 35px rgba(102,126,234,.3)
+  }
+  .hero-title{
+    font-size:1.8rem;
+    font-weight:700;
+    margin:0 0 15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px
+  }
+  .hero-subtitle{
+    font-size:1.1rem;
+    opacity:0.9;
+    margin:0 0 30px;
+    line-height:1.5
+  }
+  .hero-buttons{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap
+  }
+  .btn-hero{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:1rem;
+    transition:all .3s;
+    border:2px solid transparent
+  }
+  .btn-hero.primary{
+    background:rgba(255,255,255,.95);
+    color:#667eea;
+    box-shadow:0 5px 15px rgba(0,0,0,.15)
+  }
+  .btn-hero.primary:hover{
+    background:#fff;
+    transform:translateY(-2px);
+    box-shadow:0 8px 25px rgba(0,0,0,.2)
+  }
+  .btn-hero.secondary{
+    background:transparent;
+    color:#fff;
+    border-color:rgba(255,255,255,.4)
+  }
+  .btn-hero.secondary:hover{
+    background:rgba(255,255,255,.1);
+    border-color:#fff;
+    transform:translateY(-1px)
+  }
 
   /* === Onboarding Tour (overlay + tooltip) === */
   .tour-overlay{position:fixed;inset:0;background:rgba(2,6,23,.55);backdrop-filter:blur(2px);z-index:9998;display:none}
@@ -59,6 +122,29 @@
     <div class="header">
       <h1 class="title">🩺 Bem-vindo ao TeleMed Sistema</h1>
       <p class="subtitle">Guia completo para navegar e utilizar nossa plataforma de telemedicina</p>
+    </div>
+
+    <!-- Seção Hero Principal -->
+    <div class="hero-section">
+      <h2 class="hero-title">
+        <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        Explore Nossa Plataforma
+      </h2>
+      <p class="hero-subtitle">
+        Conheça todas as funcionalidades do TeleMed Sistema.<br>
+        Descubra como utilizar todas as funcionalidades da nossa<br>
+        plataforma de telemedicina. Guia passo a passo para médicos e pacientes.
+      </p>
+      <div class="hero-buttons">
+        <a href="/dashboard?autotour=paciente" class="btn-hero primary" id="btnTourPrincipal">
+          📍 FAÇA UM TOUR EXPLICATIVO DO SISTEMA
+        </a>
+        <a href="/dashboard" class="btn-hero secondary">
+          📋 GUIA COMPLETO
+        </a>
+      </div>
     </div>
 
     <div class="section">
@@ -377,6 +463,11 @@
   // Botões manuais no guia (se existirem)
   $("#startTourPaciente")?.addEventListener('click', ()=> startTour('paciente', 0));
   $("#startTourMedico")?.addEventListener('click',  ()=> startTour('medico', 0));
+
+  // Botão principal "FAÇA UM TOUR EXPLICATIVO DO SISTEMA" 
+  $("#btnTourPrincipal")?.addEventListener('click', ()=>{
+    try { localStorage.setItem(K_FLAG,'1'); localStorage.setItem(K_ROLE,'paciente'); localStorage.setItem(K_IDX,'0'); } catch(e){}
+  });
 
   // Botão "Começar Agora" → grava flag (guia)
   $("#btnComecarAgora")?.addEventListener('click', ()=>{
