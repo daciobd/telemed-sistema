@@ -1034,8 +1034,22 @@
             try {
               const el = await waitForElement(s.sel, {tries:30, interval:200});
               console.log('✅ Elemento encontrado! Mostrando tour...');
+              console.log('🎯 Elemento:', el, 'posição:', el.getBoundingClientRect());
+              console.log('🔍 Verificando elementos de tour:', {
+                overlay: !!overlay, spot: !!spot, tip: !!tip,
+                overlayDisplay: overlay?.style.display,
+                spotDisplay: spot?.style.display,
+                tipDisplay: tip?.style.display
+              });
               el.scrollIntoView({behavior:'smooth', block:'center'});
-              setTimeout(()=> place(el, s.t, s.d), 250);
+              setTimeout(()=> {
+                console.log('📍 Chamando place() com:', s.t, s.d);
+                place(el, s.t, s.d);
+                console.log('✅ place() executado - verificando elementos:');
+                console.log('  overlay display:', overlay?.style.display);
+                console.log('  spot display:', spot?.style.display);
+                console.log('  tip display:', tip?.style.display);
+              }, 250);
               if (btnNext) btnNext.textContent = (idx === steps.length - 1) ? 'Concluir' : 'Próximo';
             } catch(e){
               // Se não achou o alvo nesta página, pule para o próximo passo
