@@ -912,6 +912,74 @@
           if (esp)     localStorage.setItem('tm_esp',     esp);
           if (horario) localStorage.setItem('tm_horario', horario);
         }
+
+        // === AUTO-TOUR LOGIC ===
+        (function() {
+            // Check URL parameters for autotour
+            const urlParams = new URLSearchParams(window.location.search);
+            const autoTour = urlParams.get('autotour');
+            
+            if (autoTour && (autoTour === 'paciente' || autoTour === 'medico')) {
+                console.log(`🎯 Dashboard: Auto-tour ${autoTour} detectado`);
+                
+                // Save in localStorage
+                localStorage.setItem('telemed_autotour_pending', autoTour);
+                localStorage.setItem('telemed_autotour_timestamp', Date.now());
+                
+                // Remove parameter from URL
+                const newUrl = window.location.pathname + window.location.hash;
+                window.history.replaceState({}, document.title, newUrl);
+                
+                // Check if tour script is available
+                if (typeof startTour === 'function') {
+                    // Tour script is available, start immediately
+                    console.log(`🚀 Iniciando tour ${autoTour} automaticamente`);
+                    setTimeout(() => startTour(autoTour), 1500);
+                } else {
+                    // No tour script in this page, show notification
+                    console.log(`📍 Tour ${autoTour} agendado para próxima página com script`);
+                    
+                    // Show a subtle notification
+                    const notification = document.createElement('div');
+                    notification.innerHTML = `
+                        <div style="position:fixed;top:20px;right:20px;z-index:9999;background:#0ea5e9;color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 10px 26px rgba(2,6,23,.18);font-size:14px;font-weight:600;">
+                            🎯 Tour ${autoTour === 'paciente' ? 'do Paciente' : 'do Médico'} agendado
+                            <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#fff;margin-left:12px;cursor:pointer;">×</button>
+                        </div>
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    // Auto-remove notification after 5 seconds
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 5000);
+                }
+            }
+            
+            // Check for pending tour from localStorage
+            const pendingTour = localStorage.getItem('telemed_autotour_pending');
+            const tourTimestamp = localStorage.getItem('telemed_autotour_timestamp');
+            
+            if (pendingTour && tourTimestamp) {
+                const timeDiff = Date.now() - parseInt(tourTimestamp);
+                
+                // If tour is less than 2 minutes old and we have tour script available
+                if (timeDiff < 120000 && typeof startTour === 'function') {
+                    console.log(`🎯 Executando tour pendente: ${pendingTour}`);
+                    
+                    // Clear pending tour
+                    localStorage.removeItem('telemed_autotour_pending');
+                    localStorage.removeItem('telemed_autotour_timestamp');
+                    
+                    // Start tour
+                    setTimeout(() => startTour(pendingTour), 1500);
+                }
+            }
+            
+            console.log('🏠 Dashboard carregado com suporte a auto-tour');
+        })();
     </script>
 </body>
 </html>

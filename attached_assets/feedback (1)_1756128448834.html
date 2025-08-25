@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feedback — TeleMed</title>
+  <style>
+    body{font-family:system-ui,-apple-system,sans-serif;background:#f8fafc;margin:0}
+    .wrap{max-width:720px;margin:32px auto;padding:0 16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px;box-shadow:0 10px 26px rgba(2,6,23,.06)}
+    h1{margin:0 0 12px}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input,textarea,select{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+    .btn{padding:10px 14px;border-radius:10px;border:2px solid #0ea5e9;background:#0ea5e9;color:#fff;font-weight:700;cursor:pointer}
+    .btn.secondary{background:transparent;color:#0ea5e9}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Seu feedback</h1>
+      <p>Conte como foi sua experiência. Isso nos ajuda a melhorar rapidamente.</p>
+      <form method="post" action="/api/feedback">
+        <div class="row">
+          <div>
+            <label for="perfil">Perfil</label>
+            <select id="perfil" name="perfil" required>
+              <option value="">Selecione…</option>
+              <option value="medico">Médico</option>
+              <option value="paciente">Paciente</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div>
+            <label for="nota">Nota (1 a 5)</label>
+            <select id="nota" name="nota" required>
+              <option value="5">5 — Excelente</option>
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1 — Precisa melhorar</option>
+            </select>
+          </div>
+        </div>
+        <label for="elogios">O que você mais gostou?</label>
+        <textarea id="elogios" name="elogios" rows="3"></textarea>
+
+        <label for="sugestoes">O que mudaria?</label>
+        <textarea id="sugestoes" name="sugestoes" rows="4" required></textarea>
+
+        <label for="contato">Contato (opcional)</label>
+        <input id="contato" name="contato" placeholder="Seu e‑mail ou telefone" />
+
+        <div class="actions">
+          <button type="reset" class="btn secondary">Limpar</button>
+          <button type="submit" class="btn">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
