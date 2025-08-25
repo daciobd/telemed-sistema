@@ -916,9 +916,23 @@
         // === TOUR MULTI-PÁGINA ===
         (function(){
           const $ = (s)=>document.querySelector(s);
-          const overlay = $("#tourOverlay"), spot = $("#tourSpot"), tip = $("#tourTip");
-          const tipTitle = $("#tourTitle"), tipText = $("#tourText");
-          const btnNext = $("#tourNext"), btnSkip = $("#tourSkip");
+          
+          // Debug: verificar se função $ funciona
+          console.log('🔍 Testando função $:', $("#tourOverlay"));
+          
+          const overlay = document.querySelector("#tourOverlay");
+          const spot = document.querySelector("#tourSpot");
+          const tip = document.querySelector("#tourTip");
+          const tipTitle = document.querySelector("#tourTitle");
+          const tipText = document.querySelector("#tourText");
+          const btnNext = document.querySelector("#tourNext");
+          const btnSkip = document.querySelector("#tourSkip");
+          
+          console.log('🎯 Elementos encontrados após querySelector direto:', {
+            overlay: !!overlay, spot: !!spot, tip: !!tip,
+            tipTitle: !!tipTitle, tipText: !!tipText,
+            btnNext: !!btnNext, btnSkip: !!btnSkip
+          });
 
           // ===== 1) DEFINIÇÃO DOS TOURS COM path =====
           const tours = {
