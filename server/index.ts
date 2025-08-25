@@ -47,7 +47,7 @@ app.get('/sala-de-espera',   serveCanonical('preview/sala-de-espera.html'));
 // Perfis
 app.get('/medico',           serveCanonical('preview/perfil-medico.html'));
 app.get('/paciente',         serveCanonical('preview/mobile.html'));
-app.get('/configuracoes',    serveCanonical('preview/configuracoes.html'));
+app.get('/configuracoes',    serveCanonical('preview/perfil-medico.html')); // fallback para perfil médico
 
 // Funcionalidades
 app.get('/centro-de-testes', serveCanonical('preview/centro-de-testes.html'));
@@ -59,12 +59,12 @@ app.get('/cadastro',         serveCanonical('cadastro.html'));
 app.get('/login',            serveCanonical('preview/login.html'));
 
 // Institucional
-app.get('/sobre',            serveCanonical('sobre.html'));
+app.get('/sobre',            serveCanonical('preview/sobre-themed.html'));
 app.get('/faq',              serveCanonical('preview/faq.html'));
 app.get('/registro-saude',   serveCanonical('preview/registro-saude.html'));
 app.get('/privacidade',      serveCanonical('preview/privacidade.html'));
 app.get('/termos-de-uso',    serveCanonical('preview/termos-de-uso.html'));
-app.get('/precos',           serveCanonical('consulta-por-valor.html'));
+app.get('/precos',           serveCanonical('preview/precos.html'));
 app.get('/recuperar-senha',  serveCanonical('preview/recuperar-senha.html'));
 app.get('/feedback-medico',  serveCanonical('preview/feedback-medico.html'));
 app.get('/guia-orientacao',  serveCanonical('preview/guia-orientacao.html'));
@@ -98,6 +98,10 @@ app.get('/feedback', r301('/feedback-medico'));
 app.get('/consulta-por-valor', r301('/precos'));
 app.get('/triagem', r301('/triagem-psiquiatrica'));
 
+// Rotas adicionais usadas no Dashboard
+app.get('/gestao-avancada.html', serveCanonical('gestao-avancada.html')); // gestão avançada
+app.get('/perfil-medico',        r301('/medico')); // redirect para canonical
+
 // Aliases que ainda aparecem no Dashboard/HTMLs antigos:
 app.get(['/public/demo-ativo/perfil-medico.html','/preview/perfil-medico.html','/area-medica.html'], r301('/medico'));
 app.get(['/public/demo-ativo/configuracoes.html','/config.html'], r301('/configuracoes'));
@@ -105,6 +109,26 @@ app.get(['/responsive-demo.html','/demo-responsivo.html','/demo-ativo/responsivo
 
 // páginas antigas de pacientes
 app.get(['/pacientes','/pacientes.html','/public/preview/meus-pacientes-original.html'], r301('/dashboard'));
+
+// Outros links do dashboard
+app.get('/enhanced', r301('/consulta')); // enhanced → consulta
+
+// Dashboards alternativos - fallback para main dashboard se não existirem
+app.get('/dashboard-clean.html', r301('/dashboard'));
+app.get('/dashboard-minimal.html', r301('/dashboard'));
+app.get('/dashboard-pastel.html', r301('/dashboard'));
+
+// Testes psiquiátricos - redirect para centro de testes
+app.get('/depressao-phq9.html', r301('/centro-de-testes'));
+app.get('/gad7-ansiedade.html', r301('/centro-de-testes'));
+app.get('/ansiedade-gad7.html', r301('/centro-de-testes'));
+app.get('/bipolar-mdq.html', r301('/centro-de-testes'));
+
+// Outros links órfãos do dashboard
+app.get('/atendimento-medico.html', r301('/consulta'));
+app.get('/guia-integracao-hostinger.html', r301('/guia-orientacao'));
+app.get('/links-verificacao-telemed.html', r301('/dashboard'));
+app.get('/logout.html', r301('/login'));
 
 // Porta
 const PORT = Number(process.env.PORT) || 5000;
