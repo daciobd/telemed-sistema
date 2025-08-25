@@ -1052,13 +1052,16 @@
 
           // ===== 5) API pública e gatilhos =====
           async function startTour(requestedRole, startIndex=0){
+            console.log('🎯 startTour chamado:', requestedRole, startIndex);
             role  = requestedRole;
             steps = (tours[role]||[]);
+            console.log('📋 Steps encontrados:', steps.length, 'para role:', role);
             if (!steps.length){ 
-              console.warn('Tour não encontrado para: '+role); 
+              console.error('❌ Tour não encontrado para: '+role); 
               return; 
             }
             idx = Math.max(0, Math.min(startIndex, steps.length-1));
+            console.log('🎯 Iniciando no passo:', idx, 'de', steps.length);
             saveState(role, idx);
             showStep();
           }

@@ -496,10 +496,12 @@
   window.addEventListener('load', ()=>{
     const qRole = QS.get('autotour');
     const qStep = Number(QS.get('tourStep')||'0')||0;
-    const s = loadState();
 
+    // ❌ REMOVIDO: não queremos auto-resume na página do guia
+    // apenas resume via query params para deep-linking
     if (qRole){ startTour(qRole, qStep); return; }
-    if (s.has && s.role){ startTour(s.role, s.idx); }
+    
+    // 🚫 Sem auto-resume via localStorage na página do guia
   });
 
   // === Help Panel ===
