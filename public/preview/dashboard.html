@@ -991,11 +991,27 @@
           }
 
           function place(el, title, text){
-            if (!overlay || !spot || !tip) return;
+            console.log('🎯 PLACE() INICIADO:', {el, title, text});
+            console.log('🔍 Elementos disponíveis:', {overlay: !!overlay, spot: !!spot, tip: !!tip});
+            
+            if (!overlay || !spot || !tip) {
+              console.error('❌ PLACE() ABORTADO - elementos faltando:', {overlay: !!overlay, spot: !!spot, tip: !!tip});
+              return;
+            }
+            
+            console.log('✅ Todos elementos existem, aplicando estilos...');
             const r = el.getBoundingClientRect();
+            console.log('📏 Posição do elemento:', r);
+            
             overlay.style.display = 'block';
             spot.style.display = 'block';
             tip.style.display  = 'block';
+            
+            console.log('🎨 Estilos display aplicados - verificando:');
+            console.log('  overlay.style.display:', overlay.style.display);
+            console.log('  spot.style.display:', spot.style.display);
+            console.log('  tip.style.display:', tip.style.display);
+            
             spot.style.left = (window.scrollX + r.left - 6) + "px";
             spot.style.top  = (window.scrollY + r.top  - 6) + "px";
             spot.style.width  = (r.width + 12) + "px";
@@ -1004,6 +1020,8 @@
             if (tipText) tipText.textContent = text;
             tip.style.left = (window.scrollX + r.left) + "px";
             tip.style.top  = (window.scrollY + r.bottom + 12) + "px";
+            
+            console.log('🎯 PLACE() CONCLUÍDO - elementos devem estar visíveis!');
           }
 
           // ===== 4) LÓGICA DE NAVEGAÇÃO ENTRE PÁGINAS =====
