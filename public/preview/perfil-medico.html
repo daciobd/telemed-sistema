@@ -1975,18 +1975,10 @@ body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh
     const qRole = QS.get('autotour');
     const qStep = Number(QS.get('tourStep') || '0');
 
-    const hasPending = localStorage.getItem(STORAGE_KEY) === '1';
-    const sRole = localStorage.getItem(STORAGE_ROLE);
-    const sIdx  = Number(localStorage.getItem(STORAGE_IDX) || '0');
+    const s = loadState();
 
-    if (qRole){
-      startTour(qRole, isNaN(qStep) ? 0 : qStep);
-      return;
-    }
-
-    if (hasPending && sRole){
-      startTour(sRole, isNaN(sIdx) ? 0 : sIdx);
-    }
+    if (qRole){ startTour(qRole, qStep); return; }
+    if (s.has && s.role){ startTour(s.role, s.idx); }
   });
 
   console.log('👨‍⚕️ Perfil Médico carregado com tour multi-página');
