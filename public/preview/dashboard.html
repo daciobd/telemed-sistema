@@ -1082,8 +1082,21 @@
 
             const s = loadState();
 
-            if (qRole){ startTour(qRole, qStep); return; }
-            if (s.has && s.role){ startTour(s.role, s.idx); }
+            console.log('🏠 Dashboard carregado!');
+            console.log('🔍 Query params:', { qRole, qStep });
+            console.log('💾 Estado salvo:', s);
+
+            if (qRole){ 
+              console.log('▶️ Iniciando tour via query param:', qRole, qStep);
+              startTour(qRole, qStep); 
+              return; 
+            }
+            if (s.has && s.role){ 
+              console.log('▶️ Iniciando tour via localStorage:', s.role, s.idx);
+              startTour(s.role, s.idx); 
+            } else {
+              console.log('⏸️ Nenhum tour para iniciar');
+            }
           });
 
           console.log('🏠 Dashboard carregado com tour multi-página');

@@ -466,7 +466,19 @@
 
   // Botão principal "FAÇA UM TOUR EXPLICATIVO DO SISTEMA" 
   $("#btnTourPrincipal")?.addEventListener('click', ()=>{
-    try { localStorage.setItem(K_FLAG,'1'); localStorage.setItem(K_ROLE,'paciente'); localStorage.setItem(K_IDX,'0'); } catch(e){}
+    console.log('🚀 Clique no botão tour detectado!');
+    try { 
+      localStorage.setItem(K_FLAG,'1'); 
+      localStorage.setItem(K_ROLE,'paciente'); 
+      localStorage.setItem(K_IDX,'0');
+      console.log('✅ LocalStorage configurado:', {
+        flag: localStorage.getItem(K_FLAG),
+        role: localStorage.getItem(K_ROLE),
+        idx: localStorage.getItem(K_IDX)
+      });
+    } catch(e){
+      console.error('❌ Erro ao configurar localStorage:', e);
+    }
   });
 
   // Botão "Começar Agora" → grava flag (guia)
