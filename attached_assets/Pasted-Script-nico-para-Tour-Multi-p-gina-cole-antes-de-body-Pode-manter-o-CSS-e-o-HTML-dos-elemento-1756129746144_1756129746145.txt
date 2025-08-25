@@ -1,0 +1,195 @@
+Script único para Tour Multi‑página (cole antes de </body>)
+
+Pode manter o CSS e o HTML dos elementos (#tourOverlay, #tourSpot, #tourTip). Só troque o <script> do tour pelo abaixo em todas as páginas do fluxo.
+
+<script>
+(function(){
+  const $ = (s)=>document.querySelector(s);
+  const overlay = $("#tourOverlay"), spot = $("#tourSpot"), tip = $("#tourTip");
+  const tipTitle = $("#tourTitle"), tipText = $("#tourText");
+  const btnNext = $("#tourNext"), btnSkip = $("#tourSkip");
+
+  // ===== 1) DEFINIÇÃO DOS TOURS COM path =====
+  const tours = {
+    paciente: [
+      { path:'/dashboard',        sel:'a[href="/agenda"]',              t:'Agenda',             d:'Confira seus horários e próximas consultas.' },
+      { path:'/agenda',           sel:'a[href^="/sala-de-espera"]',     t:'Sala de Espera',     d:'Teste câmera/microfone e aguarde o chamado.' },
+      { path:'/sala-de-espera',   sel:'a[href="/consulta"]',            t:'Consulta Online',    d:'Entre com 1 clique na sala de vídeo segura.' },
+      { path:'/consulta',         sel:'a[href="/registro-saude"]',      t:'Registro de Saúde',  d:'Envie exames e veja seu histórico organizado.' },
+      { path:'/registro-saude',   sel:'a[href="/paciente"]',            t:'Área do Paciente',   d:'Gerencie documentos, prescrições e dados.' }
+    ],
+    medico: [
+      { path:'/dashboard',        sel:'a[href="/dashboard"]',           t:'Dashboard',          d:'Visão geral, atalhos para pacientes e laudos.' },
+      { path:'/dashboard',        sel:'a[href="/agenda"]',              t:'Agenda',             d:'Gerencie horários, confirmações e atendimentos.' },
+      { path:'/agenda',           sel:'a[href="/medico"]',              t:'Perfil Médico',      d:'Ajuste dados profissionais e configurações.' },
+      { path:'/medico',           sel:'a[href="/consulta"]',            t:'Atendimento',        d:'Inicie teleconsulta com chat e prescrição.' },
+      { path:'/consulta',         sel:'a[href="/centro-de-testes"]',    t:'Resultados',         d:'Aplique GAD‑7/PHQ‑9 e gere relatórios.' }
+    ]
+  };
+
+  // ===== 2) STORAGE + QUERY =====
+  const QS = new URLSearchParams(location.search);
+  const STORAGE_KEY = 'telemed_autotour';
+  const STORAGE_ROLE = 'telemed_autotour_role';
+  const STORAGE_IDX  = 'telemed_autotour_step';
+
+  function saveState(role, idx){
+    try {
+      localStorage.setItem(STORAGE_KEY, '1');
+      localStorage.setItem(STORAGE_ROLE, role);
+      localStorage.setItem(STORAGE_IDX, String(idx));
+    } catch(e){}
+  }
+  function clearState(){
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_ROLE);
+      localStorage.removeItem(STORAGE_IDX);
+    } catch(e){}
+  }
+
+  // ===== 3) AUX: esperar elemento existir antes de mostrar overlay =====
+  function waitForElement(selector, {tries=30, interval=200}={}){
+    return new Promise((resolve,reject)=>{
+      let count = 0;
+      const iv = setInterval(()=>{
+        const el = document.querySelector(selector);
+        if (el){
+          clearInterval(iv);
+          resolve(el);
+        } else if (++count >= tries){
+          clearInterval(iv);
+          reject(new Error('Elemento não encontrado: '+selector));
+        }
+      }, interval);
+    });
+  }
+
+  function place(el, title, text){
+    const r = el.getBoundingClientRect();
+    overlay.style.display = 'block';
+    spot.style.display = 'block';
+    tip.style.display  = 'block';
+    spot.style.left = (window.scrollX + r.left - 6) + "px";
+    spot.style.top  = (window.scrollY + r.top  - 6) + "px";
+    spot.style.width  = (r.width + 12) + "px";
+    spot.style.height = (r.height + 12) + "px";
+    tipTitle.textContent = title;
+    tipText.textContent = text;
+    tip.style.left = (window.scrollX + r.left) + "px";
+    tip.style.top  = (window.scrollY + r.bottom + 12) + "px";
+  }
+
+  // ===== 4) LÓGICA DE NAVEGAÇÃO ENTRE PÁGINAS =====
+  let role = null, steps = [], idx = 0;
+
+  async function showStep(){
+    const s = steps[idx];
+    if (!s){ endTour(); return; }
+
+    // Se o passo pertence a outra página, navegar e retomar lá
+    if (!location.pathname.startsWith(s.path)){
+      overlay.style.display = 'none';
+      spot.style.display = 'none';
+      tip.style.display  = 'none';
+      saveState(role, idx); // salva onde parou
+      const url = s.path + '?autotour='+encodeURIComponent(role)+'&tourStep='+idx;
+      location.assign(url);
+      return; // a continuação ocorrerá na próxima página
+    }
+
+    // Espera o elemento existir para posicionar o destaque
+    try {
+      const el = await waitForElement(s.sel, {tries:30, interval:200});
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(()=> place(el, s.t, s.d), 250);
+      btnNext.textContent = (idx === steps.length - 1) ? 'Concluir' : 'Próximo';
+    } catch(e){
+      // Se não achou o alvo nesta página, pule para o próximo passo
+      idx++;
+      showStep();
+    }
+  }
+
+  function next(){
+    idx++;
+    if (idx >= steps.length){ endTour(); return; }
+    showStep();
+  }
+
+  function endTour(){
+    overlay.style.display = 'none';
+    spot.style.display = 'none';
+    tip.style.display  = 'none';
+    clearState();
+  }
+
+  // ===== 5) API pública e gatilhos =====
+  async function startTour(requestedRole, startIndex=0){
+    role  = requestedRole;
+    steps = (tours[role]||[]);
+    if (!steps.length){ alert('Tour não encontrado para: '+role); return; }
+    idx = Math.max(0, Math.min(startIndex, steps.length-1));
+    saveState(role, idx);
+    showStep();
+  }
+
+  // Expor para chamadas externas (ex.: outros scripts)
+  window._telemedStartTour = (r)=> startTour(r, 0);
+
+  // Botões manuais (guia)
+  $("#startTourPaciente")?.addEventListener('click', ()=> startTour('paciente', 0));
+  $("#startTourMedico")?.addEventListener('click',  ()=> startTour('medico', 0));
+
+  // Botão "Começar Agora" → grava flag (já existente no seu guia)
+  $("#btnComecarAgora")?.addEventListener('click', ()=>{
+    try { localStorage.setItem(STORAGE_KEY, '1'); localStorage.setItem(STORAGE_ROLE, 'paciente'); localStorage.setItem(STORAGE_IDX, '0'); } catch(e){}
+  });
+
+  // ESC para sair do tour
+  document.addEventListener('keydown', (ev)=>{
+    if (ev.key === 'Escape') endTour();
+  });
+
+  btnNext?.addEventListener('click', next);
+  btnSkip?.addEventListener('click', endTour);
+
+  // ===== 6) RETOMADA AUTOMÁTICA AO CARREGAR A PÁGINA =====
+  window.addEventListener('load', ()=>{
+    // Prioriza query params (permite deep‑link)
+    const qRole = QS.get('autotour');
+    const qStep = Number(QS.get('tourStep') || '0');
+
+    const hasPending = localStorage.getItem(STORAGE_KEY) === '1';
+    const sRole = localStorage.getItem(STORAGE_ROLE);
+    const sIdx  = Number(localStorage.getItem(STORAGE_IDX) || '0');
+
+    // Caso 1: veio com ?autotour=... → começa/retoma pelo query
+    if (qRole){
+      startTour(qRole, isNaN(qStep) ? 0 : qStep);
+      return;
+    }
+
+    // Caso 2: havia tour pendente no storage (ex.: clicou no guia e chegou aqui)
+    if (hasPending && sRole){
+      startTour(sRole, isNaN(sIdx) ? 0 : sIdx);
+    }
+  });
+})();
+</script>
+
+O que isso resolve
+
+Navegação entre páginas: se o próximo passo é de outra rota, o script redireciona e retoma automaticamente no passo certo.
+
+Overlay só aparece quando há alvo: evita ficar “esfumaçado” sem nada destacado.
+
+Retomada robusta: funciona com ?autotour=paciente&tourStep=N ou usando localStorage.
+
+Dicas rápidas de uso
+
+Inclua esse <script> no guia, dashboard, agenda, sala de espera, consulta, registro‑saúde e perfil médico.
+
+Mantenha os elementos HTML do overlay/tooltip (os <div id="tourOverlay|tourSpot|tourTip">) em todas essas páginas (pode copiar do guia).
+
+O botão “Começar Agora” do guia pode continuar com href="/dashboard?autotour=paciente" — o script já sabe retomar.

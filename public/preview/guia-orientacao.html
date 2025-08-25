@@ -233,265 +233,196 @@
 
 
   <script>
-  (function(){
-    const $ = (sel) => document.querySelector(sel);
-    const overlay = $("#tourOverlay"), spot = $("#tourSpot"), tip = $("#tourTip");
-    const tipTitle = $("#tourTitle"), tipText = $("#tourText");
-    const skipBtn = $("#tourSkip"), nextBtn = $("#tourNext");
-    const helpBtn = $("#helpBtn"), helpPanel = $("#helpPanel");
+(function(){
+  const $ = (s)=>document.querySelector(s);
+  const overlay = $("#tourOverlay"), spot = $("#tourSpot"), tip = $("#tourTip");
+  const tipTitle = $("#tourTitle"), tipText = $("#tourText");
+  const btnNext = $("#tourNext"), btnSkip = $("#tourSkip");
+  const helpBtn = $("#helpBtn"), helpPanel = $("#helpPanel");
 
-    // === Tour configuration ===
-    const tourSteps = {
-      paciente: [
-        {
-          target: 'body',
-          title: '🎯 Bem-vindo ao TeleMed!',
-          text: 'Vamos fazer um tour rápido pelas principais funcionalidades para pacientes.',
-          position: 'center'
-        },
-        {
-          target: '.demo-link[href="/agenda"]',
-          title: '🗓️ Agenda sua consulta',
-          text: 'Aqui você agenda consultas, escolhe médicos e define valores. Sistema de lances transparente.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/sala-de-espera?mock=1"]',
-          title: '🎯 Sala de Espera Virtual',
-          text: 'Aguarde sua consulta aqui. Teste câmera/microfone e veja sua posição na fila.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/consulta"]',
-          title: '💬 Consulta Online',
-          text: 'Videochamada segura com seu médico. Chat, receitas e atestados digitais.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/centro-de-testes"]',
-          title: '🧠 Testes Psiquiátricos',
-          text: 'Realize avaliações como GAD-7 (ansiedade) e PHQ-9 (depressão) antes da consulta.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/paciente"]',
-          title: '👤 Sua Área Pessoal',
-          text: 'Histórico médico, exames anteriores e perfil de saúde completo.',
-          position: 'bottom'
+  // ===== 1) DEFINIÇÃO DOS TOURS COM path =====
+  const tours = {
+    paciente: [
+      { path:'/dashboard',        sel:'a[href="/agenda"]',              t:'Agenda',             d:'Confira seus horários e próximas consultas.' },
+      { path:'/agenda',           sel:'a[href^="/sala-de-espera"]',     t:'Sala de Espera',     d:'Teste câmera/microfone e aguarde o chamado.' },
+      { path:'/sala-de-espera',   sel:'a[href="/consulta"]',            t:'Consulta Online',    d:'Entre com 1 clique na sala de vídeo segura.' },
+      { path:'/consulta',         sel:'a[href="/registro-saude"]',      t:'Registro de Saúde',  d:'Envie exames e veja seu histórico organizado.' },
+      { path:'/registro-saude',   sel:'a[href="/paciente"]',            t:'Área do Paciente',   d:'Gerencie documentos, prescrições e dados.' }
+    ],
+    medico: [
+      { path:'/dashboard',        sel:'a[href="/dashboard"]',           t:'Dashboard',          d:'Visão geral, atalhos para pacientes e laudos.' },
+      { path:'/dashboard',        sel:'a[href="/agenda"]',              t:'Agenda',             d:'Gerencie horários, confirmações e atendimentos.' },
+      { path:'/agenda',           sel:'a[href="/medico"]',              t:'Perfil Médico',      d:'Ajuste dados profissionais e configurações.' },
+      { path:'/medico',           sel:'a[href="/consulta"]',            t:'Atendimento',        d:'Inicie teleconsulta com chat e prescrição.' },
+      { path:'/consulta',         sel:'a[href="/centro-de-testes"]',    t:'Resultados',         d:'Aplique GAD‑7/PHQ‑9 e gere relatórios.' }
+    ]
+  };
+
+  // ===== 2) STORAGE + QUERY =====
+  const QS = new URLSearchParams(location.search);
+  const STORAGE_KEY = 'telemed_autotour';
+  const STORAGE_ROLE = 'telemed_autotour_role';
+  const STORAGE_IDX  = 'telemed_autotour_step';
+
+  function saveState(role, idx){
+    try {
+      localStorage.setItem(STORAGE_KEY, '1');
+      localStorage.setItem(STORAGE_ROLE, role);
+      localStorage.setItem(STORAGE_IDX, String(idx));
+    } catch(e){}
+  }
+  function clearState(){
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_ROLE);
+      localStorage.removeItem(STORAGE_IDX);
+    } catch(e){}
+  }
+
+  // ===== 3) AUX: esperar elemento existir antes de mostrar overlay =====
+  function waitForElement(selector, {tries=30, interval=200}={}){
+    return new Promise((resolve,reject)=>{
+      let count = 0;
+      const iv = setInterval(()=>{
+        const el = document.querySelector(selector);
+        if (el){
+          clearInterval(iv);
+          resolve(el);
+        } else if (++count >= tries){
+          clearInterval(iv);
+          reject(new Error('Elemento não encontrado: '+selector));
         }
-      ],
-      medico: [
-        {
-          target: 'body',
-          title: '🩺 Bem-vindo, Doutor(a)!',
-          text: 'Tour rápido pelas ferramentas essenciais para médicos na plataforma.',
-          position: 'center'
-        },
-        {
-          target: '.demo-link[href="/dashboard"]',
-          title: '🏠 Dashboard Médico',
-          text: 'Visão geral de consultas, agenda, pacientes e métricas do dia.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/agenda"]',
-          title: '🗓️ Gestão de Agenda',
-          text: 'Configure horários, veja agendamentos e gerencie disponibilidade.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/medico"]',
-          title: '👨‍⚕️ Perfil Profissional',
-          text: 'Configure especialidades, valores, disponibilidade e informações do CRM.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/consulta"]',
-          title: '💬 Atendimento Online',
-          text: 'Interface completa: videochamada, prescrição digital, anotações e histórico.',
-          position: 'bottom'
-        },
-        {
-          target: '.demo-link[href="/centro-de-testes"]',
-          title: '🧠 Resultados de Testes',
-          text: 'Veja resultados dos testes psiquiátricos que seus pacientes fizeram.',
-          position: 'bottom'
-        }
-      ]
-    };
+      }, interval);
+    });
+  }
 
-    let currentTour = null;
-    let currentStep = 0;
+  function place(el, title, text){
+    const r = el.getBoundingClientRect();
+    overlay.style.display = 'block';
+    spot.style.display = 'block';
+    tip.style.display  = 'block';
+    spot.style.left = (window.scrollX + r.left - 6) + "px";
+    spot.style.top  = (window.scrollY + r.top  - 6) + "px";
+    spot.style.width  = (r.width + 12) + "px";
+    spot.style.height = (r.height + 12) + "px";
+    tipTitle.textContent = title;
+    tipText.textContent = text;
+    tip.style.left = (window.scrollX + r.left) + "px";
+    tip.style.top  = (window.scrollY + r.bottom + 12) + "px";
+  }
 
-    function startTour(type) {
-      if (!tourSteps[type]) return;
-      
-      currentTour = tourSteps[type];
-      currentStep = 0;
-      
-      overlay.style.display = 'block';
-      showStep(0);
-      
-      // Save tour state
-      localStorage.setItem('telemed_last_tour', type);
-      console.log(`🎯 Tour ${type} iniciado`);
-    }
+  // ===== 4) LÓGICA DE NAVEGAÇÃO ENTRE PÁGINAS =====
+  let role = null, steps = [], idx = 0;
 
-    function showStep(stepIndex) {
-      if (!currentTour || stepIndex >= currentTour.length) {
-        endTour();
-        return;
-      }
-      
-      const step = currentTour[stepIndex];
-      const target = step.target === 'body' ? document.body : $(step.target);
-      
-      if (!target && step.target !== 'body') {
-        console.warn('Target not found:', step.target);
-        nextStep();
-        return;
-      }
-      
-      // Update tooltip content
-      tipTitle.textContent = step.title;
-      tipText.textContent = step.text;
-      
-      // Update button text
-      nextBtn.textContent = stepIndex === currentTour.length - 1 ? 'Finalizar' : 'Próximo';
-      
-      if (step.target === 'body') {
-        // Center the tooltip
-        spot.style.display = 'none';
-        tip.style.position = 'fixed';
-        tip.style.top = '50%';
-        tip.style.left = '50%';
-        tip.style.transform = 'translate(-50%, -50%)';
-      } else {
-        // Position spotlight and tooltip
-        const rect = target.getBoundingClientRect();
-        const scrollY = window.scrollY;
-        const scrollX = window.scrollX;
-        
-        spot.style.display = 'block';
-        spot.style.top = `${rect.top + scrollY - 8}px`;
-        spot.style.left = `${rect.left + scrollX - 8}px`;
-        spot.style.width = `${rect.width + 16}px`;
-        spot.style.height = `${rect.height + 16}px`;
-        
-        // Position tooltip
-        tip.style.position = 'absolute';
-        tip.style.transform = 'none';
-        
-        if (step.position === 'bottom') {
-          tip.style.top = `${rect.top + scrollY + rect.height + 20}px`;
-          tip.style.left = `${rect.left + scrollX}px`;
-        } else if (step.position === 'top') {
-          tip.style.bottom = `${window.innerHeight - (rect.top + scrollY) + 20}px`;
-          tip.style.left = `${rect.left + scrollX}px`;
-        } else {
-          tip.style.top = `${rect.top + scrollY}px`;
-          tip.style.left = `${rect.right + scrollX + 20}px`;
-        }
-        
-        // Ensure tooltip stays in viewport
-        setTimeout(() => {
-          const tipRect = tip.getBoundingClientRect();
-          if (tipRect.right > window.innerWidth) {
-            tip.style.left = `${window.innerWidth - tipRect.width - 20}px`;
-          }
-          if (tipRect.bottom > window.innerHeight) {
-            tip.style.top = `${window.innerHeight - tipRect.height - 20}px`;
-          }
-        }, 10);
-        
-        // Smooth scroll to target
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      
-      tip.style.display = 'block';
-    }
+  async function showStep(){
+    const s = steps[idx];
+    if (!s){ endTour(); return; }
 
-    function nextStep() {
-      currentStep++;
-      showStep(currentStep);
-    }
-
-    function endTour() {
+    // Se o passo pertence a outra página, navegar e retomar lá
+    if (!location.pathname.startsWith(s.path)){
       overlay.style.display = 'none';
       spot.style.display = 'none';
-      tip.style.display = 'none';
-      
-      currentTour = null;
-      currentStep = 0;
-      
-      console.log('🎯 Tour finalizado');
-      
-      // Optional: Show completion message
-      setTimeout(() => {
-        if (confirm('Tour concluído! Deseja ir para o Dashboard?')) {
-          window.location.href = '/dashboard';
-        }
-      }, 500);
+      tip.style.display  = 'none';
+      saveState(role, idx); // salva onde parou
+      const url = s.path + '?autotour='+encodeURIComponent(role)+'&tourStep='+idx;
+      location.assign(url);
+      return; // a continuação ocorrerá na próxima página
     }
 
-    // Event listeners
-    $("#startTourPaciente")?.addEventListener('click', () => startTour('paciente'));
-    $("#startTourMedico")?.addEventListener('click', () => startTour('medico'));
-    
-    nextBtn.addEventListener('click', nextStep);
-    skipBtn.addEventListener('click', endTour);
-    
-    // ESC key to exit tour
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && currentTour) {
-        endTour();
-      }
-    });
+    // Espera o elemento existir para posicionar o destaque
+    try {
+      const el = await waitForElement(s.sel, {tries:30, interval:200});
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(()=> place(el, s.t, s.d), 250);
+      btnNext.textContent = (idx === steps.length - 1) ? 'Concluir' : 'Próximo';
+    } catch(e){
+      // Se não achou o alvo nesta página, pule para o próximo passo
+      idx++;
+      showStep();
+    }
+  }
 
-    // Auto-tour logic: Check URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const autoTour = urlParams.get('autotour');
-    
-    if (autoTour && (autoTour === 'paciente' || autoTour === 'medico')) {
-      console.log(`🎯 Auto-tour detectado: ${autoTour}`);
-      localStorage.setItem('telemed_autotour_pending', autoTour);
-      
-      // Remove the parameter from URL
-      const newUrl = window.location.pathname;
-      window.history.replaceState({}, document.title, newUrl);
-      
-      // Start tour after a brief delay
-      setTimeout(() => startTour(autoTour), 1000);
+  function next(){
+    idx++;
+    if (idx >= steps.length){ endTour(); return; }
+    showStep();
+  }
+
+  function endTour(){
+    overlay.style.display = 'none';
+    spot.style.display = 'none';
+    tip.style.display  = 'none';
+    clearState();
+  }
+
+  // ===== 5) API pública e gatilhos =====
+  async function startTour(requestedRole, startIndex=0){
+    role  = requestedRole;
+    steps = (tours[role]||[]);
+    if (!steps.length){ alert('Tour não encontrado para: '+role); return; }
+    idx = Math.max(0, Math.min(startIndex, steps.length-1));
+    saveState(role, idx);
+    showStep();
+  }
+
+  // Expor para chamadas externas (ex.: outros scripts)
+  window._telemedStartTour = (r)=> startTour(r, 0);
+
+  // Botões manuais (guia)
+  $("#startTourPaciente")?.addEventListener('click', ()=> startTour('paciente', 0));
+  $("#startTourMedico")?.addEventListener('click',  ()=> startTour('medico', 0));
+
+  // Botão "Começar Agora" → grava flag (já existente no seu guia)
+  $("#btnComecarAgora")?.addEventListener('click', ()=>{
+    try { localStorage.setItem(STORAGE_KEY, '1'); localStorage.setItem(STORAGE_ROLE, 'paciente'); localStorage.setItem(STORAGE_IDX, '0'); } catch(e){}
+  });
+
+  // ESC para sair do tour
+  document.addEventListener('keydown', (ev)=>{
+    if (ev.key === 'Escape') endTour();
+  });
+
+  btnNext?.addEventListener('click', next);
+  btnSkip?.addEventListener('click', endTour);
+
+  // ===== 6) RETOMADA AUTOMÁTICA AO CARREGAR A PÁGINA =====
+  window.addEventListener('load', ()=>{
+    // Prioriza query params (permite deep‑link)
+    const qRole = QS.get('autotour');
+    const qStep = Number(QS.get('tourStep') || '0');
+
+    const hasPending = localStorage.getItem(STORAGE_KEY) === '1';
+    const sRole = localStorage.getItem(STORAGE_ROLE);
+    const sIdx  = Number(localStorage.getItem(STORAGE_IDX) || '0');
+
+    // Caso 1: veio com ?autotour=... → começa/retoma pelo query
+    if (qRole){
+      startTour(qRole, isNaN(qStep) ? 0 : qStep);
+      return;
     }
 
-    // "Começar Agora" button functionality
-    $("#btnComecarAgora")?.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      // Save autotour flag
-      localStorage.setItem('telemed_autotour_pending', 'paciente');
-      console.log('🚀 Auto-tour paciente agendado');
-      
-      // Redirect to dashboard with autotour parameter
-      window.location.href = '/dashboard?autotour=paciente';
-    });
+    // Caso 2: havia tour pendente no storage (ex.: clicou no guia e chegou aqui)
+    if (hasPending && sRole){
+      startTour(sRole, isNaN(sIdx) ? 0 : sIdx);
+    }
+  });
 
-    // === Help Panel ===
-    helpBtn.addEventListener('click', () => {
-      const isVisible = helpPanel.style.display === 'block';
-      helpPanel.style.display = isVisible ? 'none' : 'block';
-    });
+  // === Help Panel ===
+  helpBtn?.addEventListener('click', () => {
+    const isVisible = helpPanel.style.display === 'block';
+    helpPanel.style.display = isVisible ? 'none' : 'block';
+  });
 
-    // Close help panel when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!helpBtn.contains(e.target) && !helpPanel.contains(e.target)) {
-        helpPanel.style.display = 'none';
-      }
-    });
+  // Close help panel when clicking outside
+  document.addEventListener('click', (e) => {
+    if (helpBtn && helpPanel && !helpBtn.contains(e.target) && !helpPanel.contains(e.target)) {
+      helpPanel.style.display = 'none';
+    }
+  });
 
-    console.log('🩺 Guia de Orientação carregado com tour interativo');
-    console.log('📍 Tours disponíveis: paciente, médico');
-  })();
+  console.log('🩺 Guia de Orientação carregado com tour multi-página');
+  console.log('📍 Tours disponíveis: paciente, médico');
+})();
   </script>
 </body>
 </html>
