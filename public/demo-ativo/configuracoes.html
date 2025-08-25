@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -366,11 +367,11 @@
             .config-layout {
                 grid-template-columns: 1fr;
             }
-            
+
             .sidebar {
                 position: static;
             }
-            
+
             .container {
                 padding: 0 1rem;
             }
@@ -627,14 +628,14 @@ body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh
             // Hide all sections
             const sections = document.querySelectorAll('.content-section');
             sections.forEach(section => section.classList.remove('active'));
-            
+
             // Remove active class from all nav links
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => link.classList.remove('active'));
-            
+
             // Show selected section
             document.getElementById(sectionId).classList.add('active');
-            
+
             // Add active class to clicked nav link
             event.target.classList.add('active');
         }
@@ -643,10 +644,10 @@ body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh
             // Simulate saving
             const saveBtn = event.target;
             const originalText = saveBtn.innerHTML;
-            
+
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
             saveBtn.disabled = true;
-            
+
             setTimeout(() => {
                 saveBtn.innerHTML = '<i class="fas fa-check"></i> Salvo!';
                 setTimeout(() => {
@@ -659,10 +660,10 @@ body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh
         function connectPaymentGateway(gateway) {
             const btn = event.target;
             const originalText = btn.innerHTML;
-            
+
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
             btn.disabled = true;
-            
+
             setTimeout(() => {
                 btn.innerHTML = '<i class="fas fa-check-circle"></i> Conectado';
                 btn.classList.remove('btn-primary');

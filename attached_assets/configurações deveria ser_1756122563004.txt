@@ -1,0 +1,681 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleMed - Configurações do Sistema</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Cards mais limpos e responsivos */
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,.06);
+            overflow: hidden;
+        }
+        .card-header { padding: 16px 20px; font-weight: 600; }
+        .card-body   { padding: 16px 20px; }
+        .btn {
+            display:inline-block; padding:10px 16px; border-radius:12px;
+            text-decoration:none; border:1px solid rgba(0,0,0,.08);
+        }
+        .btn-primary { background:#0ea5e9; color:#fff; border:none; }
+        .btn-ghost   { background:#fff; color:#111; }
+        img.avatar { width:96px; height:96px; border-radius:50%; object-fit:cover; }
+        .grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); }
+
+        /* Remove overlays e garante que texto fique em bloco separado */
+        .figure, .card-figure { position:relative; margin:0; }
+        .figure img, .card-figure img { display:block; width:100%; height:auto; object-fit:cover; }
+        .figure .overlay, .card-figure .overlay, .on-image-text { 
+            position: static !important;
+            background: none !important;
+            color: inherit !important;
+            padding: 0 !important;
+            margin-top: 12px; /* texto abaixo da imagem */
+        }
+        /* Tipografia e espaçamento */
+        .settings .section { margin: 16px 0; }
+        .settings label { display:block; font-weight:600; margin-bottom:8px; }
+        .settings input, .settings select {
+            width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .config-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: fit-content;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: #666;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .config-group {
+            margin-bottom: 2rem;
+        }
+
+        .config-group h3 {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: #fafafa;
+        }
+
+        .config-info h4 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .config-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-online {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .config-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+/* Imagens sem texto por cima */
+.figure, .card-figure{position:relative;margin:0}
+.figure img, .card-figure img{display:block;width:100%;height:auto;object-fit:cover;border-radius:12px}
+.figure .overlay, .card-figure .overlay, .on-image-text{
+  position:static !important; background:none !important; color:inherit !important;
+  padding:0 !important; margin-top:12px; display:block; text-shadow:none !important;
+}
+/* Padronização visual básica (mesmo look do Perfil) */
+:root{--rounded:16px; --shadow:0 6px 18px rgba(0,0,0,.06); --primary:#0ea5e9; --ink:#111827; --muted:#6b7280}
+body{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 100%);min-height:100vh;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+.container{max-width:1100px;margin:0 auto;padding:24px 16px}
+.header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);padding:18px 22px;border-radius:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.btn{display:inline-block;padding:10px 16px;border-radius:12px;text-decoration:none;border:1px solid rgba(0,0,0,.08)}
+.btn-primary{background:var(--primary);color:#fff;border:none}
+.btn-secondary{background:#fff;color:var(--ink)}
+.card{background:#fff;border-radius:var(--rounded);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:16px 20px;font-weight:600;color:var(--ink);border-bottom:1px solid #eef2f7}
+.card-body{padding:16px 20px}
+.section{background:#f8fafc;border-left:4px solid var(--primary);border-radius:12px;padding:18px;margin:14px 0}
+    </style>
+  <link rel="stylesheet" href="/css/theme-telemed.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div style="display:flex;align-items:center;gap:20px;">
+                <div style="font-size:14px;">
+                    <a href="/lp" style="color:#6b7280;text-decoration:none;">← Início</a> 
+                    <span style="color:#d1d5db;margin:0 8px;">/</span>
+                    <a href="/dashboard" style="color:#6b7280;text-decoration:none;">Dashboard</a>
+                </div>
+                <div class="logo">
+                    <i class="fas fa-user-md"></i>
+                    TeleMed Sistema
+                </div>
+            </div>
+            <div class="nav-actions">
+                <a href="/dashboard" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar ao Dashboard
+                </a>
+                <button class="btn btn-primary" onclick="saveAllConfigurations()">
+                    <i class="fas fa-save"></i>
+                    Salvar Tudo
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-cog"></i>
+                Configurações do Sistema
+            </h1>
+            <p class="page-subtitle">Gerencie todas as configurações da plataforma TeleMed</p>
+        </div>
+
+        <div class="config-layout">
+            <aside class="sidebar">
+                <h3 class="sidebar-title">Menu de Configurações</h3>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" onclick="showSection('geral')">
+                            <i class="fas fa-cog"></i>
+                            Geral
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('notificacoes')">
+                            <i class="fas fa-bell"></i>
+                            Notificações
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('seguranca')">
+                            <i class="fas fa-shield-alt"></i>
+                            Segurança
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="showSection('integracao')">
+                            <i class="fas fa-plug"></i>
+                            Integrações
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <!-- Seção Geral -->
+                <div id="geral" class="content-section active">
+                    <h2 class="section-title">
+                        <i class="fas fa-cog"></i>
+                        Configurações Gerais
+                    </h2>
+
+                    <div class="config-group">
+                        <h3><i class="fas fa-sms"></i> SMS e Notificações</h3>
+
+                        <div class="config-item">
+                            <div class="config-info">
+                                <h4>SMS Automático</h4>
+                                <p>Enviar lembretes de consulta por SMS</p>
+                            </div>
+                            <div class="config-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="smsProvider">Provedor SMS</label>
+                                <select id="smsProvider">
+                                    <option value="">Selecione...</option>
+                                    <option value="twilio">Twilio</option>
+                                    <option value="zenvia">Zenvia</option>
+                                    <option value="totalvoice">Total Voice</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="smsCredits">Créditos SMS Restantes</label>
+                                <input type="number" id="smsCredits" value="2847" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Notificações -->
+                <div id="notificacoes" class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-bell"></i>
+                        Configurações de Notificações
+                    </h2>
+
+                    <div class="config-group">
+                        <h3><i class="fas fa-envelope"></i> Email</h3>
+
+                        <div class="config-item">
+                            <div class="config-info">
+                                <h4>Notificações por Email</h4>
+                                <p>Receber notificações importantes por email</p>
+                            </div>
+                            <div class="config-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notificationFrequency">Frequência de Notificações</label>
+                            <select id="notificationFrequency">
+                                <option value="immediate" selected>Imediata</option>
+                                <option value="5min">A cada 5 minutos</option>
+                                <option value="15min">A cada 15 minutos</option>
+                                <option value="1hour">A cada hora</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Segurança -->
+                <div id="seguranca" class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Configurações de Segurança
+                    </h2>
+
+                    <div class="config-group">
+                        <h3><i class="fas fa-key"></i> Autenticação</h3>
+
+                        <div class="config-item">
+                            <div class="config-info">
+                                <h4>Autenticação em Dois Fatores (2FA)</h4>
+                                <p>Exigir 2FA para todos os usuários</p>
+                            </div>
+                            <div class="config-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="config-item">
+                            <div class="config-info">
+                                <h4>Criptografia de Dados</h4>
+                                <p>Criptografar dados sensíveis (AES-256)</p>
+                            </div>
+                            <div class="config-control">
+                                <span class="status-indicator status-online">
+                                    <i class="fas fa-check-circle"></i>
+                                    Ativo
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção Integrações -->
+                <div id="integracao" class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-plug"></i>
+                        Integrações de Sistema
+                    </h2>
+
+                    <div class="config-group">
+                        <h3><i class="fas fa-credit-card"></i> Gateways de Pagamento</h3>
+
+                        <div class="config-item">
+                            <div class="config-info">
+                                <h4>Stripe</h4>
+                                <p>Gateway de pagamento internacional</p>
+                            </div>
+                            <div class="config-control">
+                                <span class="status-indicator status-online">
+                                    <i class="fas fa-check-circle"></i>
+                                    Conectado
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="config-item">
+                            <div class="config-info">
+                                <h4>PagSeguro</h4>
+                                <p>Gateway de pagamento nacional</p>
+                            </div>
+                            <div class="config-control">
+                                <button class="btn btn-primary" onclick="connectPaymentGateway('pagseguro')">
+                                    <i class="fas fa-plug"></i>
+                                    Conectar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+        }
+
+        function saveAllConfigurations() {
+            // Simulate saving
+            const saveBtn = event.target;
+            const originalText = saveBtn.innerHTML;
+            
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+            saveBtn.disabled = true;
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Salvo!';
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                }, 1000);
+            }, 2000);
+        }
+
+        function connectPaymentGateway(gateway) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Conectado';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-success');
+                btn.disabled = false;
+            }, 3000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de configurações TeleMed carregada!');
+        });
+    </script>
+</body>
+</html>

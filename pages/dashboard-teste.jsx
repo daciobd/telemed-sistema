@@ -247,7 +247,7 @@ export default function DashboardTeleMed(){
               </ul>
             </div>
           </a>
-          <a className="module-card" href="public/demo-ativo/configuracoes.html" title="Configurações">
+          <a className="module-card" href="/demo-ativo/configuracoes.html" title="Configurações">
             <div className="module-icon">
               <IconMulti size={22} paths={[
                 "M4 6h16",
