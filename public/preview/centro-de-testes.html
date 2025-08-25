@@ -121,8 +121,8 @@
 
   // Monta URL segura para um token de página
   function urlFor(token){
-    if (usesHtml) return prefix + token + '.html';
-    return prefix + token;
+    // Sempre usa /preview/ e .html para este sistema
+    return '/preview/' + token + '.html';
   }
 
   // Checa se estou nesta página por token
