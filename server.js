@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const PUBLIC_DIR = path.join(__dirname, 'public');
 
 console.log('🚀 TeleMed Server Starting...');
 
@@ -49,8 +50,10 @@ app.get('/health-check', (req, res) => {
 });
 app.get('/pacientes.html', (req, res) => {
   res.sendFile(__dirname + '/public/pacientes.html');
-});app.get('/landing-teste', (req, res) => {
-  res.sendFile(__dirname + '/landing-teste.html');
+});
+
+app.get('/landing-teste', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'app', 'landing-teste.html'));
 });
 // Iniciar servidor
 app.listen(PORT, '0.0.0.0', () => {
