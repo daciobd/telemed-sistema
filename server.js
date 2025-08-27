@@ -11,7 +11,7 @@ app.use(express.static('public'));
 
 // Rotas principais
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'sistema-integrado.html'));
+    res.sendFile(path.join(PUBLIC_DIR, 'lp.html'));
 });
 
 app.get('/telemed', (req, res) => {
