@@ -1,0 +1,53 @@
+LP está ok e sem 404 de imagem. O “branco” no /dashboard não é 404: o HTML do documento vem com 200, mas nada é renderizado. Nesses casos geralmente é:
+
+o arquivo publicado para /dashboard está vazio/placeholder, ou
+
+o HTML aponta para assets em caminhos que não existem na publicação (mas não aparece 404 porque não há nenhum asset referenciado), ou
+
+um extension script do navegador reclama no console e dá ruído (as mensagens “listener indicated an asynchronous response…” são de extensões; pode ignorar/abrir em janela anônima).
+
+Vamos direto ao ponto: garantir que existe um HTML real em public_live/dashboard/index.html e que ele aponta para os assets certos.
+
+1) Verifique se há arquivo publicado e se tem conteúdo
+ls -lh public_live/dashboard || true
+wc -l public_live/dashboard/index.html || true
+
+
+Se não existir ou tiver poucas linhas, ele não foi publicado de verdade.
+
+2) Descubra o “dashboard bom” no repo
+# tente encontrar onde está o HTML do dashboard
+find public -type f -iname '*dashboard*.html' -o -iname 'dashboard.html'
+grep -RIn "<title>.*Dashboard\|id=\"dashboard\"" public | cut -d: -f1 | sort -u
+
+
+Você deve ver algo tipo public/demo-ativo/dashboard.html (ou similar).
+
+3) Publique-o na rota estática
+
+Escolha o caminho real que apareceu no passo anterior (exemplo usando public/demo-ativo/dashboard.html):
+
+mkdir -p public_live/dashboard
+cp -f public/demo-ativo/dashboard.html public_live/dashboard/index.html
+
+4) Normalize caminhos dos assets dentro do dashboard
+
+O objetivo é apontar tudo para as pastas que você já publicou em public_live (/css, /js, /img, /assets).
+
+# normaliza referências relativas (../css, ./css etc.) para /css, /js, /img
+sed -i 's|href="\(\.\./\)*css/|href="/css/|g; s|src="\(\.\./\)*css/|src="/css/|g' public_live/dashboard/index.html
+sed -i 's|href="\(\.\./\)*js/|href="/js/|g;  s|src="\(\.\./\)*js/|src="/js/|g'   public_live/dashboard/index.html
+sed -i 's|href="\(\.\./\)*img/|href="/img/|g; s|src="\(\.\./\)*img/|src="/img/|g' public_live/dashboard/index.html
+
+# se o arquivo tiver caminhos "demo-ativo/assets" ou "./assets", force para /assets
+sed -i 's|href="[^"]*assets/|href="/assets/|g; s|src="[^"]*assets/|src="/assets/|g' public_live/dashboard/index.html
+
+
+Obs.: se o dashboard usa um bundle (app.js, styles.css, imagens), certifique-se de que esses arquivos existem em public/css, public/js, public/img ou public/assets, e que você já os copiou para public_live (você já fez o rsync do /css e /js; se o dashboard usa imagens próprias, copie-as para public_live/img ou public_live/assets).
+
+5) Versione
+git add public_live/dashboard/index.html
+git commit -m "chore(dashboard): publicar /dashboard como página estática"
+git push
+
+6) Testes rápidos

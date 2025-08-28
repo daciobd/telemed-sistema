@@ -1121,6 +1121,18 @@
             } else {
             }
           });
+
+          // Auto-hydrate navigation links with APP_URL (same as landing page)
+          window.APP_URL = window.APP_URL || '';
+          
+          document.querySelectorAll('a[href^="/"]').forEach(a => {
+            const href = a.getAttribute('href');
+            if (href && href.startsWith('/') && !href.startsWith('//') && !href.includes('http')) {
+              a.href = window.APP_URL + href;
+            }
+          });
+          
+          console.log('🌐 Dashboard navigation hydrated with APP_URL:', window.APP_URL || 'localhost');
         });
     </script>
 
