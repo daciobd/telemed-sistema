@@ -1,0 +1,95 @@
+Corrigir render.yaml (substituir tudo por este conteúdo)
+
+Isso considera sua home em lp.html e páginas estáticas em public_live/<rota>/index.html.
+
+staticSites:
+  - name: telemed-static
+    publishPath: public_live
+    buildCommand: ""
+    routes:
+      # Home
+      - type: rewrite
+        source: /
+        destination: /lp.html
+
+      # Rotas canônicas (cada uma serve seu index.html estático)
+      - type: rewrite
+        source: /dashboard
+        destination: /dashboard/index.html
+      - type: rewrite
+        source: /consulta
+        destination: /consulta/index.html
+      - type: rewrite
+        source: /medico
+        destination: /medico/index.html
+      - type: rewrite
+        source: /centro-de-testes
+        destination: /centro-de-testes/index.html
+      - type: rewrite
+        source: /gestao-avancada
+        destination: /gestao-avancada/index.html
+      - type: rewrite
+        source: /meus-pacientes
+        destination: /meus-pacientes/index.html
+      - type: rewrite
+        source: /agenda
+        destination: /agenda/index.html
+      - type: rewrite
+        source: /sala-de-espera
+        destination: /sala-de-espera/index.html
+      - type: rewrite
+        source: /como-funciona
+        destination: /como-funciona/index.html
+      - type: rewrite
+        source: /precos
+        destination: /precos/index.html
+
+      # Demo responsivo
+      - type: rewrite
+        source: /demo-responsivo
+        destination: /demo-responsivo/index.html
+      - type: rewrite
+        source: /demo-responsivo/
+        destination: /demo-responsivo/index.html
+
+
+Se preferir, você pode sobrescrever pelo terminal com um heredoc (evita erros de identação):
+
+cat > render.yaml <<'YAML'
+# (cole aqui exatamente o YAML acima)
+YAML
+
+sed -n '1,200p' render.yaml
+
+2) Garanta que o arquivo da rota existe
+
+O erro “Permission denied” apareceu porque você tentou executar um arquivo HTML no shell (public_live/demo-responsivo/index.html). Para checar se existe, use ls/sed, não execute.
+
+# Verificar
+ls -la public_live/demo-responsivo || true
+
+# Se ainda não existir, crie a pasta e copie a página
+mkdir -p public_live/demo-responsivo
+
+# Tente copiar de onde você tem a versão boa do demo:
+# (ajuste a origem conforme seu repo; alguns caminhos comuns:)
+if [ -f public/preview/demo-responsivo.html ]; then
+  cp -f public/preview/demo-responsivo.html public_live/demo-responsivo/index.html
+elif [ -f public_live/preview/demo-responsivo.html ]; then
+  cp -f public_live/preview/demo-responsivo.html public_live/demo-responsivo/index.html
+fi
+
+# confira:
+sed -n '1,80p' public_live/demo-responsivo/index.html
+
+3) Deploy e teste
+
+Faça o deploy no Render (ele lê o render.yaml e publica public_live).
+
+Teste:
+
+https://SEU_APP.onrender.com/demo-responsivo/
+
+DevTools → Network → filtre por CSS/JS e confirme theme-telemed.css e all.min.css com 200.
+
+O 404 de favicon.ico deve sumir se o <link rel="icon" href="/favicon.ico"> estiver presente e o arquivo existir.

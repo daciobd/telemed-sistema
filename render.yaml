@@ -1,55 +1,49 @@
 staticSites:
   - name: telemed-static
     publishPath: public_live
-    # Se você não tem etapa de build no Replit, deixe vazio:
     buildCommand: ""
     routes:
-      # Rotas do SPA -> sempre servir o index do React
+      # Home
+      - type: rewrite
+        source: /
+        destination: /lp.html
+
+      # Rotas canônicas (cada uma serve seu index.html estático)
       - type: rewrite
         source: /dashboard
-        destination: /react-app/index.html
-      - type: rewrite
-        source: /cadastro
-        destination: /react-app/index.html
+        destination: /dashboard/index.html
       - type: rewrite
         source: /consulta
-        destination: /react-app/index.html
-      - type: rewrite
-        source: /dr-ai
-        destination: /react-app/index.html
+        destination: /consulta/index.html
       - type: rewrite
         source: /medico
-        destination: /react-app/index.html
+        destination: /medico/index.html
       - type: rewrite
         source: /centro-de-testes
-        destination: /react-app/index.html
+        destination: /centro-de-testes/index.html
       - type: rewrite
         source: /gestao-avancada
-        destination: /react-app/index.html
+        destination: /gestao-avancada/index.html
       - type: rewrite
         source: /meus-pacientes
-        destination: /react-app/index.html
+        destination: /meus-pacientes/index.html
       - type: rewrite
         source: /agenda
-        destination: /react-app/index.html
+        destination: /agenda/index.html
       - type: rewrite
         source: /sala-de-espera
-        destination: /react-app/index.html
+        destination: /sala-de-espera/index.html
       - type: rewrite
         source: /como-funciona
-        destination: /react-app/index.html
+        destination: /como-funciona/index.html
       - type: rewrite
         source: /precos
-        destination: /react-app/index.html
+        destination: /precos/index.html
+
+      # Demo responsivo
       - type: rewrite
         source: /demo-responsivo
         destination: /demo-responsivo/index.html
-
-      # Fallback: qualquer rota em /react-app/... também volta ao index do SPA
       - type: rewrite
-        source: /react-app/*
-        destination: /react-app/index.html
-
-      # Observação: arquivos estáticos (css/js/img/assets) continuam
-      # sendo servidos diretamente porque EXISTEM no publishPath.
-      # O rewrite só é aplicado quando não há arquivo físico.
+        source: /demo-responsivo/
+        destination: /demo-responsivo/index.html
