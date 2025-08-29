@@ -1,58 +1,52 @@
-services:
-  - type: static_site
-    name: telemed-sistema
-    buildCommand: echo "Static site deployment"
-    publishDir: public_live
+staticSites:
+  - name: telemed-static
+    publishPath: public_live
+    # Se você não tem etapa de build no Replit, deixe vazio:
+    buildCommand: ""
     routes:
+      # Rotas do SPA -> sempre servir o index do React
       - type: rewrite
         source: /dashboard
-        destination: /dashboard/index.html
+        destination: /react-app/index.html
       - type: rewrite
         source: /cadastro
-        destination: /cadastro/index.html
+        destination: /react-app/index.html
       - type: rewrite
         source: /consulta
-        destination: /consulta/index.html
-      - type: rewrite
-        source: /medico
-        destination: /medico/index.html
-      - type: rewrite
-        source: /centro-de-testes
-        destination: /centro-de-testes/index.html
-      - type: rewrite
-        source: /como-funciona
-        destination: /como-funciona/index.html
-      - type: rewrite
-        source: /precos
-        destination: /precos/index.html
-      - type: rewrite
-        source: /sala-de-espera
-        destination: /sala-de-espera/index.html
-      - type: rewrite
-        source: /gestao-avancada
-        destination: /gestao-avancada/index.html
-      - type: rewrite
-        source: /meus-pacientes
-        destination: /meus-pacientes/index.html
-      - type: rewrite
-        source: /agenda
-        destination: /agenda/index.html
+        destination: /react-app/index.html
       - type: rewrite
         source: /dr-ai
-        destination: /dr-ai/index.html
-    headers:
-      - path: "*.html"
-        headers:
-          Cache-Control: "public, max-age=3600"
-      - path: "*.css"
-        headers:
-          Cache-Control: "public, max-age=31536000"
-      - path: "*.js"
-        headers:
-          Cache-Control: "public, max-age=31536000"
-      - path: "*.jpg"
-        headers:
-          Cache-Control: "public, max-age=31536000"
-      - path: "*.png"
-        headers:
-          Cache-Control: "public, max-age=31536000"
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /medico
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /centro-de-testes
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /gestao-avancada
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /meus-pacientes
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /agenda
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /sala-de-espera
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /como-funciona
+        destination: /react-app/index.html
+      - type: rewrite
+        source: /precos
+        destination: /react-app/index.html
+
+      # Fallback: qualquer rota em /react-app/... também volta ao index do SPA
+      - type: rewrite
+        source: /react-app/*
+        destination: /react-app/index.html
+
+      # Observação: arquivos estáticos (css/js/img/assets) continuam
+      # sendo servidos diretamente porque EXISTEM no publishPath.
+      # O rewrite só é aplicado quando não há arquivo físico.
