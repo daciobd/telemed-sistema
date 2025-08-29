@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TeleMed — Plataforma de Telemedicina</title>
-<script src="/js/app-url.js"></script>
   <meta name="description" content="Plataforma completa de telemedicina com Dr. AI, centro de testes psiquiátricos e gestão médica integrada." />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://telemed.pro/lp" />
@@ -29,10 +28,10 @@
           centro de avaliações psiquiátricas e gestão médica integrada.
         </p>
         <div class="hero-buttons">
-          <a href="/dashboard" class="btn btn-primary">
+          <a data-path="/dashboard/" class="btn btn-primary">
             Acessar Dashboard
           </a>
-          <a href="/cadastro" class="btn btn-outline">
+          <a data-path="/consulta/" class="btn btn-outline">
             Nova Consulta
           </a>
         </div>
@@ -57,7 +56,7 @@
             <div class="card-body">
               <h3>A qualquer hora, de qualquer lugar.</h3>
               <p>Plataforma 24h/7. Tudo o que você precisa é de Internet. Atendimentos com conforto e privacidade.</p>
-              <a class="btn btn-outline" href="/como-funciona?tab=horarios">Saiba Mais</a>
+              <a class="btn btn-outline" data-path="/como-funciona?tab=horarios">Saiba Mais</a>
             </div>
           </div>
 
@@ -65,7 +64,7 @@
             <div class="card-body">
               <span class="badge">Quero uma consulta</span>
               <p><strong>Consulta completa, com documentos válidos.</strong> Emissão de receitas, atestados e pedidos de exame de forma segura e digital.</p>
-              <a class="btn btn-outline" href="/como-funciona">Saiba Mais</a>
+              <a class="btn btn-outline" data-path="/como-funciona/">Saiba Mais</a>
             </div>
           </div>
         </div>
@@ -98,8 +97,8 @@
           </ul>
 
           <div class="mt-3">
-            <a class="btn btn-primary" href="/dr-ai">Conheça o Dr. AI</a>
-            <a class="btn" href="/consulta">Consulta Avançada</a>
+            <a class="btn btn-primary" data-path="/dr-ai/">Conheça o Dr. AI</a>
+            <a class="btn" data-path="/consulta/">Consulta Avançada</a>
           </div>
         </div>
       </div>
@@ -141,7 +140,7 @@
             Descubra como utilizar todas as funcionalidades da nossa plataforma de telemedicina. 
             Guia passo a passo para médicos e pacientes.
           </p>
-          <a href="/preview/guia-orientacao.html" class="btn" style="background: white; color: #667eea; font-weight: bold; font-size: 1.1rem; padding: 1rem 2rem; border: none;">
+          <a data-path="/preview/guia-orientacao.html" class="btn" style="background: white; color: #667eea; font-weight: bold; font-size: 1.1rem; padding: 1rem 2rem; border: none;">
             📖 Explorar Guia Completo →
           </a>
         </div>
@@ -157,13 +156,13 @@
 
       <div class="grid cards mt-3" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
         <div class="card"><div class="card-body"><div class="badge">1</div><strong>Descreva</strong><br><span class="muted">Conte o que sente; o Dr. AI sugere a especialidade.</span></div></div>
-        <div class="card"><div class="card-body"><div class="badge">2</div><strong>Defina o valor</strong><br><span class="muted">Modelos transparentes; veja também <a href="/precos">preços</a>.</span></div></div>
+        <div class="card"><div class="card-body"><div class="badge">2</div><strong>Defina o valor</strong><br><span class="muted">Modelos transparentes; veja também <a data-path="/precos/">preços</a>.</span></div></div>
         <div class="card"><div class="card-body"><div class="badge">3</div><strong>Agende</strong><br><span class="muted">Escolha dia e hora ou entre na fila.</span></div></div>
         <div class="card"><div class="card-body"><div class="badge">4</div><strong>Consulte</strong><br><span class="muted">Atendimento por vídeo, com documentos digitais.</span></div></div>
       </div>
 
       <div class="mt-3">
-        <a class="btn btn-primary" href="/como-funciona">Saiba Mais</a>
+        <a class="btn btn-primary" data-path="/como-funciona/">Saiba Mais</a>
       </div>
     </div>
   </section>
@@ -208,18 +207,27 @@
         <h3>TeleMed</h3>
         <p class="muted">Transformando o atendimento médico através da tecnologia</p>
         <div class="footer-links">
-          <a href="/agenda">Agenda</a>
-          <a href="/dashboard">Dashboard</a>
-          <a href="/centro-de-testes">Centro de Testes</a>
-          <a href="/privacidade">Privacidade</a>
+          <a data-path="/agenda/">Agenda</a>
+          <a data-path="/dashboard/">Dashboard</a>
+          <a data-path="/centro-de-testes/">Centro de Testes</a>
+          <a data-path="/privacidade">Privacidade</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script>
+    // Auto-hydrate navigation links with APP_URL
+    window.APP_URL = window.APP_URL || '';
+    
+    document.querySelectorAll('a[data-path]').forEach(a => {
+      const path = a.getAttribute('data-path');
+      a.href = window.APP_URL + path;
+    });
+    
     console.log('🚀 TeleMed LP oficial carregada');
     console.log('🔗 Links: Dr. AI, Centro de Testes, Recursos disponíveis');
+    console.log('🌐 APP_URL configured:', window.APP_URL || 'localhost');
   </script>
 </body>
 </html>

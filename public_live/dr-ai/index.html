@@ -1,105 +1,141 @@
-<!doctype html>
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <title>Dr. AI – TeleMed</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="canonical" href="/dr-ai" />
-  <!-- Tema unificado (garanta public/css/theme-telemed.css) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. AI | TeleMed - Inteligência Artificial Médica</title>
+  <meta name="description" content="Conheça o Dr. AI: sua IA médica que entende sintomas, identifica riscos e sugere especialistas em segundos.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" href="/assets/favicon.ico">
   <link rel="stylesheet" href="/css/theme-telemed.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
-    /* Hero com gradiente e CTA */
-    .hero{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 40%,#22d3ee 100%);color:#fff;border-radius:20px;box-shadow:0 16px 40px rgba(2,6,23,.2);padding:32px 20px;margin:16px 0}
-    .hero h1{margin:0 0 8px;font-size:2rem}
-    .hero p{margin:0 0 16px;color:#eaf6ff}
-    .hero .actions{display:flex;gap:10px;flex-wrap:wrap}
-    /* Cards de passos/benefícios */
-    .icon{width:24px;height:24px;display:inline-block;vertical-align:-4px}
-    .grid.benefits{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-    .step-num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:999px;background:#e6f6fe;color:#075985;font-weight:700;margin-right:8px}
-    /* Vídeo/preview opcional */
+    .hero{text-align:center;padding:40px 0}
+    .hero h1{font-size:2rem;color:var(--ink);margin-bottom:12px}
+    .hero p{font-size:1.1rem;color:var(--muted);margin-bottom:24px}
+    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .demo{max-width:700px;margin:0 auto}
+    .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:12px 0}
+    .field{display:flex;flex-direction:column}
+    .result{background:#f9fafb;border-radius:12px;padding:16px}
+    .risk{padding:2px 8px;border-radius:6px;font-weight:600}
+    .risk.baixo{background:#d1fae5;color:#065f46}
+    .risk.moderado{background:#fef3c7;color:#92400e}
+    .risk.alto{background:#fee2e2;color:#991b1b}
+    .note{color:var(--muted);font-size:.9rem}
+    .step-num{display:inline-block;width:24px;height:24px;background:var(--primary);color:#fff;border-radius:50%;text-align:center;line-height:24px;font-size:.8rem;margin-right:8px}
+    .grid.cards.tight{gap:12px}
     .video{background:#0b1220;border-radius:16px;min-height:220px;display:grid;place-items:center;color:#b3c1d1}
-    @media (min-width: 1024px){
-      .hero h1{font-size:2.2rem}
-    }
+    @media (min-width:1024px){ .hero h1{font-size:2.2rem} }
   </style>
 </head>
 <body>
   <div class="container">
-    <a class="btn" href="/dashboard" aria-label="Voltar ao Dashboard">← Voltar</a>
+    <a class="btn" href="/dashboard/">← Voltar</a>
 
     <!-- HERO -->
     <section class="hero">
       <h1>Conheça o Dr. AI</h1>
       <p>Sua IA médica que entende sintomas, identifica riscos e sugere especialistas em segundos.</p>
       <div class="actions">
-        <a class="btn btn-primary" href="/consulta?demo=1">Ver Demonstração</a>
-        <a class="btn btn-outline" href="/consulta">Iniciar Triagem Agora</a>
+        <a class="btn btn-primary" href="#demo-pacientes">Demonstração para Pacientes</a>
+        <a class="btn btn-outline" href="/consulta?demo=1">Versão para Médicos (na Consulta)</a>
       </div>
     </section>
 
-    <!-- COMO FUNCIONA -->
+    <!-- COMO FUNCIONA (resumo em 3 passos) -->
     <section class="section">
       <div class="prose center">
         <h2>Como o Dr. AI funciona</h2>
         <p class="muted">Triagem inteligente em 3 passos</p>
       </div>
-
-      <div class="grid cards mt-3" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
-        <article class="card">
-          <div class="card-body">
-            <div><span class="step-num">1</span><strong>Descreva os sintomas</strong></div>
-            <p class="mt-2">Conte em linguagem natural. O Dr. AI entende contexto, duração e intensidade.</p>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-body">
-            <div><span class="step-num">2</span><strong>Análise inteligente</strong></div>
-            <p class="mt-2">A IA cruza sinais com diretrizes clínicas e identifica sinais de alerta.</p>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-body">
-            <div><span class="step-num">3</span><strong>Encaminhamento seguro</strong></div>
-            <p class="mt-2">Sugere especialidade e próximos passos. Você pode seguir para o agendamento.</p>
-          </div>
-        </article>
+      <div class="grid cards tight mt-3">
+        <article class="card"><div class="card-body">
+          <div><span class="step-num">1</span><strong>Descreva os sintomas</strong></div>
+          <p class="mt-2">Conte em linguagem natural; o Dr. AI entende contexto, duração e intensidade.</p>
+        </div></article>
+        <article class="card"><div class="card-body">
+          <div><span class="step-num">2</span><strong>Análise inteligente</strong></div>
+          <p class="mt-2">A IA verifica sinais de alerta e cruza com diretrizes clínicas.</p>
+        </div></article>
+        <article class="card"><div class="card-body">
+          <div><span class="step-num">3</span><strong>Próximos passos</strong></div>
+          <p class="mt-2">Sugere especialidade e orienta a seguir para o agendamento.</p>
+        </div></article>
       </div>
     </section>
 
-    <!-- BENEFÍCIOS -->
-    <section class="section">
+    <!-- DEMONSTRAÇÃO PARA PACIENTES -->
+    <section class="section" id="demo-pacientes" aria-labelledby="h-demo">
       <div class="prose center">
-        <h2>Por que usar o Dr. AI?</h2>
+        <h2 id="h-demo">Demonstração para Pacientes</h2>
+        <p class="muted">Simule uma triagem: preencha abaixo e veja o resultado</p>
       </div>
-      <div class="grid benefits mt-3">
-        <div class="card"><div class="card-body">
-          <strong>Rápido e disponível 24/7</strong>
-          <p class="muted">Sem fila. Comece agora, do celular ou computador.</p>
-        </div></div>
-        <div class="card"><div class="card-body">
-          <strong>Baseado em evidências</strong>
-          <p class="muted">Regras clínicas e sinais de alerta atualizados.</p>
-        </div></div>
-        <div class="card"><div class="card-body">
-          <strong>Privacidade</strong>
-          <p class="muted">Dados tratados conforme a <a href="/privacidade">Política de Privacidade</a>.</p>
-        </div></div>
-        <div class="card"><div class="card-body">
-          <strong>Integração com a consulta</strong>
-          <p class="muted">Leva o resumo para a <a href="/consulta">Consulta Avançada</a> e facilita o diagnóstico.</p>
-        </div></div>
+
+      <div class="demo mt-3">
+        <form id="demoForm">
+          <div class="form-row">
+            <div class="field" style="grid-column:1/-1">
+              <label for="sx">O que você está sentindo?</label>
+              <textarea id="sx" rows="3" placeholder="Ex.: dor no peito, falta de ar, febre, manchas na pele..."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="dur">Há quanto tempo?</label>
+              <select id="dur">
+                <option value="0-24h">0–24h</option>
+                <option value="2-7d">2–7 dias</option>
+                <option value="8-14d">8–14 dias</option>
+                <option value="15d+">15 dias ou mais</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="sev">Intensidade</label>
+              <!-- sem oninput inline -->
+              <input id="sev" type="range" min="0" max="10" value="5" />
+              <div><small>Valor: <strong id="sevOut">5</strong>/10</small></div>
+            </div>
+          </div>
+
+          <details class="mt-3">
+            <summary><strong>Algum destes sinais de alerta?</strong></summary>
+            <div class="form-row mt-2">
+              <label><input type="checkbox" class="rf" value="dor-peito"> Dor forte no peito</label>
+              <label><input type="checkbox" class="rf" value="falta-ar"> Falta de ar intensa</label>
+              <label><input type="checkbox" class="rf" value="desmaio"> Desmaio/confusão</label>
+              <label><input type="checkbox" class="rf" value="sangramento"> Sangramento importante</label>
+              <label><input type="checkbox" class="rf" value="febre-alta"> Febre alta persistente</label>
+              <label><input type="checkbox" class="rf" value="ideacao"> Ideação suicida</label>
+              <label><input type="checkbox" class="rf" value="rigidez-nuca"> Rigidez na nuca</label>
+            </div>
+          </details>
+
+          <div class="mt-3">
+            <!-- type=button evita submit da página -->
+            <button type="button" id="run" class="btn btn-primary">Analisar</button>
+            <button type="button" id="clear" class="btn">Limpar</button>
+          </div>
+        </form>
+
+        <div id="resultado" class="result mt-3" aria-live="polite"></div>
+        <p class="note mt-3">
+          <strong>Atenção:</strong> esta é uma demonstração educacional e <u>não substitui</u> atendimento médico.
+          Em caso de emergência, procure um serviço de urgência.
+        </p>
       </div>
     </section>
 
-    <!-- PRÉVIA / DEMO -->
+    <!-- PRÉVIA / VERSÃO MÉDICOS -->
     <section class="section">
       <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:center">
-        <div class="video">Prévia da triagem (simulada)</div>
+        <div class="video">Prévia visual (opcional)</div>
         <div class="prose">
-          <h3>Veja uma demonstração</h3>
-          <p>Entenda o fluxo de triagem e como o resultado chega ao médico.</p>
-          <a class="btn btn-primary" href="/consulta?demo=1">Abrir demonstração</a>
+          <h3>Para médicos</h3>
+          <p>Veja o Dr. AI dentro da <strong>Consulta Avançada</strong>, com integração ao prontuário e resumo clínico.</p>
+          <a class="btn btn-primary" href="/consulta?demo=1">Abrir versão para Médicos</a>
         </div>
       </div>
     </section>
@@ -108,9 +144,112 @@
     <section class="section center">
       <h3>Pronto para começar?</h3>
       <p class="muted">Leva menos de 2 minutos para a primeira avaliação.</p>
-      <a class="btn btn-primary" href="/consulta">Iniciar Triagem</a>
-      <a class="btn" href="/centro-de-testes">Centro de Testes</a>
+      <a class="btn btn-primary" href="/consulta/">Iniciar Triagem</a>
+      <a class="btn" href="/centro-de-testes/">Centro de Testes</a>
     </section>
   </div>
+
+  <script>
+(function(){
+  // helpers
+  const $  = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+  const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+  // mapeamento simples de palavras-chave → especialidade
+  const MAP = [
+    { esp:'Cardiologia',  kw:['peito','palpitacao','taquicardia','falta de ar','pressao alta','dor no peito'] },
+    { esp:'Dermatologia', kw:['pele','mancha','coceira','lesao','acne','dermatite','rash'] },
+    { esp:'Psiquiatria',  kw:['ansiedade','panico','depressao','humor','insonia','ideacao','suicida'] },
+    { esp:'Ortopedia',    kw:['lombar','queda','torcao','osso','coluna','entorse','fratura'] },
+    { esp:'Gastro',       kw:['abdominal','nausea','vomito','diarreia','azia','refluxo'] },
+    { esp:'Clínica Geral',kw:['gripe','febre','tosse','dor garganta','mal estar','cansaco'] }
+  ];
+
+  function sugerirEspecialidade(texto){
+    const t = norm(texto);
+    for (const row of MAP){ if (row.kw.some(k => t.includes(k))) return row.esp; }
+    return 'Clínica Geral';
+  }
+
+  function classificarRisco(sev, dur, redflags){
+    if (redflags.length) return {nivel:'Alto', class:'alto', msg:'Sinal de alerta informado'};
+    if (sev>=8)          return {nivel:'Alto', class:'alto', msg:'Intensidade muito alta'};
+    if (sev>=5 && (dur==='15d+' || dur==='8-14d'))
+                         return {nivel:'Moderado', class:'moderado', msg:'Sintomas persistentes'};
+    return {nivel:'Baixo', class:'baixo', msg:'Sem sinais importantes detectados'};
+  }
+
+  function renderResultado({esp, risco}){
+    const qsEsp = encodeURIComponent(esp);
+    const hrefConsulta = `/consulta?esp=${qsEsp}`;
+    const hrefAgenda   = `/agenda?esp=${qsEsp}`;
+
+    return `
+      <div class="card">
+        <div class="card-body">
+          <h3>Resultado da Demonstração</h3>
+          <p><strong>Especialidade sugerida:</strong> ${esp}</p>
+          <p><strong>Classificação do risco:</strong> <span class="risk ${risco.class}">${risco.nivel}</span> <span class="muted">— ${risco.msg}</span></p>
+          <div class="next mt-2">
+            ${(
+              risco.class==='alto' ? [
+                'Procure atendimento de urgência se os sintomas forem intensos ou súbitos.',
+                'Se estiver em segurança, siga para uma avaliação médica.'
+              ] :
+              risco.class==='moderado' ? [
+                `Agende uma consulta com ${esp} nas próximas 24–72h.`
+              ] : [
+                `Você pode iniciar por ${esp}.`
+              ]
+            ).map(s=>`<div>• ${s}</div>`).join('')}
+            <div>• Leve a descrição dos sintomas para agilizar sua consulta.</div>
+          </div>
+          <div class="mt-3">
+            <a class="btn btn-primary" href="${hrefConsulta}">Iniciar Triagem Agora</a>
+            <a class="btn" href="${hrefAgenda}">Agendar ${esp}</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function runDemo(){
+    const sx   = $('#sx').value.trim();
+    const dur  = $('#dur').value;
+    const sev  = +$('#sev').value;
+    const rfs  = $$('.rf:checked').map(c=>c.value);
+
+    const esp   = sugerirEspecialidade(sx);
+    const risco = classificarRisco(sev, dur, rfs);
+    $('#resultado').innerHTML = renderResultado({esp, risco});
+  }
+
+  function resetDemo(){
+    $('#sx').value = '';
+    $('#dur').value = '0-24h';
+    $('#sev').value = 5;
+    $('#sevOut').textContent = '5';
+    $$('.rf:checked').forEach(c=>c.checked=false);
+    $('#resultado').innerHTML = '';
+  }
+
+  // liga eventos só quando DOM estiver pronto
+  document.addEventListener('DOMContentLoaded', () => {
+    // slider: atualiza valor sem inline oninput
+    const sev = $('#sev'), sevOut = $('#sevOut');
+    const updateSev = () => { if (sevOut) sevOut.textContent = sev.value; };
+    sev.addEventListener('input', updateSev);
+    updateSev();
+
+    // botões
+    $('#run').addEventListener('click', (e)=>{ e.preventDefault(); runDemo(); });
+    $('#clear').addEventListener('click', (e)=>{ e.preventDefault(); resetDemo(); });
+
+    // enter no textarea envia análise
+    $('#demoForm').addEventListener('submit', (e)=>{ e.preventDefault(); runDemo(); });
+  });
+})();
+  </script>
 </body>
 </html>

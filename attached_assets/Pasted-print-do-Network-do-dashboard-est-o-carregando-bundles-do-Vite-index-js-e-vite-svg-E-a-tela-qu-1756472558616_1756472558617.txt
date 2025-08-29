@@ -1,0 +1,61 @@
+print do Network do /dashboard estão carregando bundles do Vite (index-*.js e vite.svg). E a tela que abre é a de consulta (“Aguardando Paciente – Sala #ABC123”). Ou seja: o arquivo que está em public_live/dashboard/index.html é o HTML da consulta, não o do dashboard com sidebar/cards.
+
+E o 404 do guia é porque o arquivo não foi publicado em public_live/preview/guia-orientacao.html.
+
+Vamos direto ao ponto com 3 correções rápidas:
+
+1) Garantir que cada rota serve o HTML certo
+# Achar quem é quem
+grep -RIn --include="*.html" -E "Aguardando Paciente|Sala #ABC123|Faltam 4 campos" public public_live
+grep -RIn --include="*.html" -E "Agenda do Dia|Gestão de Pacientes|Perfil do Médico|Centro de Testes" public public_live
+
+
+Você deve ver:
+
+o HTML da consulta contendo “Aguardando Paciente / Sala #ABC123” (normalmente algo como public/consulta/index.html ou public/demo-ativo/consulta.html);
+
+o HTML do dashboard contendo “Agenda do Dia / Gestão de Pacientes…” (muitas vezes public/demo-ativo/dashboard.html).
+
+Agora publique cada um na sua rota:
+
+# Cria pastas de rota “limpa”
+mkdir -p public_live/{dashboard,consulta}
+
+# COPIE O CAMINHO CORRETO QUE O GREP RETORNAR (abaixo são exemplos):
+# Dashboard "cards"
+cp -f public/demo-ativo/dashboard.html  public_live/dashboard/index.html
+
+# Consulta “Aguardando Paciente”
+cp -f public/consulta/index.html       public_live/consulta/index.html
+
+git add public_live/dashboard/index.html public_live/consulta/index.html
+git commit -m "fix(rotas): dashboard=/dashboard e consulta=/consulta"
+git push
+
+
+Abra:
+
+/dashboard/ → deve aparecer o dashboard com sidebar/cards;
+
+/consulta/ → a tela “Aguardando Paciente… Sala #ABC123”.
+
+2) Consertar o Guia (404)
+
+Primeiro, localize o arquivo do guia no código-fonte:
+
+grep -RIn --include="*.html" -E "Guia de Orientação|Guia Completo|guia-orientacao" public
+
+
+Quando achar, publique:
+
+mkdir -p public_live/preview
+# EXEMPLO – troque pelo caminho real que o grep mostrar:
+cp -f public/preview/guia-orientacao.html public_live/preview/guia-orientacao.html
+
+git add public_live/preview/guia-orientacao.html
+git commit -m "feat(preview): publicar guia de orientação"
+git push
+
+
+Se na landing você está usando data-path="/preview/guia-orientacao.html", já fica ok.
+Se estiver hardcoded com outra pasta, ajuste para /preview/guia-orientacao.html.

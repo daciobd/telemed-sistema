@@ -1,15 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Pacientes • TeleMed Pro</title>
-    <link rel="icon" type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Meus Pacientes • TeleMed Pro</title>
+<link href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect rx='12' width='64' height='64' fill='%231e40af'/%3E%3Ctext x='32' y='42' font-family='Inter,Arial' font-size='36' text-anchor='middle' fill='white'%3ETM%3C/text%3E%3C/svg%3E" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
         :root {
             --primary: #1e40af;
             --primary-light: #3b82f6;
@@ -309,6 +309,84 @@
             }
         }
 
+        /* Layout 2 colunas para pacientes */
+        .page.patients .layout-2col {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Sidebar sticky com altura fixa e scroll interno */
+        .page.patients .pages-sidebar {
+            position: sticky;
+            top: calc(var(--header-h, 72px) + 12px);
+            max-height: calc(100dvh - (var(--header-h, 72px) + 24px));
+            overflow: auto;
+            padding-right: 4px;
+            z-index: 10;
+        }
+
+        /* Scrollbar discreto */
+        .page.patients .pages-sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .page.patients .pages-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+            border-radius: 8px;
+        }
+
+        /* Visual de cartão para sidebar */
+        .page.patients .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+            margin-bottom: 12px;
+        }
+
+        /* Cards com avatar (evita texto invadir imagem) */
+        .patient-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .patient-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex: 0 0 48px;
+        }
+        
+        .patient-card .info {
+            min-width: 0;
+        }
+        
+        .patient-card .name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        /* Responsividade aprimorada para mobile */
+        @media (max-width: 1100px) {
+            .page.patients .layout-2col {
+                grid-template-columns: 1fr;
+            }
+            .page.patients .pages-sidebar {
+                position: static;
+                max-height: none;
+                overflow: visible;
+                order: -1;
+                margin-bottom: 12px;
+                padding-right: 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -333,168 +411,247 @@
             }
         }
     </style>
-</head>
+<style>
+    .paginas-orfas-menu {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 0;
+        font-size: 0.9rem;
+    }
+    .paginas-orfas-menu h3 {
+        margin: 0 0 10px 0;
+        color: #374151;
+        font-size: 1rem;
+    }
+    .categoria-orfas {
+        margin-bottom: 10px;
+    }
+    .categoria-orfas strong {
+        color: #1f2937;
+        display: block;
+        margin-bottom: 5px;
+    }
+    .categoria-orfas a {
+        display: inline-block;
+        margin: 2px 5px 2px 0;
+        padding: 4px 8px;
+        background: #e5e7eb;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+    .categoria-orfas a:hover {
+        background: #d1d5db;
+    }
+    </style></head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">TM</div>
-                <h1>TeleMed Pro</h1>
-            </div>
-            <nav class="nav-links">
-                <a href="/agenda">Agenda</a>
-                <a href="/consulta">Consultas</a>
-                <a href="/dashboard">Dashboard</a>
-                <a href="/pacientes" class="active">Pacientes</a>
-            </nav>
-        </div>
-    </header>
+<div style="margin: 15px 0; padding: 10px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border-left: 3px solid #10b981;"><strong style="color: #10b981; display: block; margin-bottom: 5px;">🏥 Acesso Rápido</strong><a href="/medico/" style="color: #10b981; text-decoration: none; font-weight: 600;">Área Médica - Gestão de Pacientes</a></div><header class="header">
+<div class="header-content">
+<div class="logo">
+<div class="logo-icon">TM</div>
+<h1>TeleMed Pro</h1>
+</div>
+<nav class="nav-links">
+<a href="/agenda/">Agenda</a>
+<a href="/consulta/">Consultas</a>
+<a href="/dashboard/">Dashboard</a>
+<a class="active" href="/pacientes">Pacientes</a>
+</nav>
+</div>
+</header>
+<main class="page patients">
+<div class="page-header container">
+<h1 class="page-title">👥 Meus Pacientes</h1>
+</div>
 
-    <main class="container">
-        <h1 class="page-title">👥 Meus Pacientes</h1>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-number" id="total-pacientes">5</span>
-                <div class="stat-label">Total de Pacientes</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="clinica-geral">3</span>
-                <div class="stat-label">Clínica Geral</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="psiquiatria">1</span>
-                <div class="stat-label">Psiquiatria</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="cardiologia">1</span>
-                <div class="stat-label">Cardiologia</div>
-            </div>
-        </div>
-
-        <div class="filter-bar">
-            <input type="text" id="filter-id" placeholder="🔍 ID Persona">
-            <input type="text" id="filter-nome" placeholder="👤 Nome">
-            <input type="text" id="filter-sobrenome" placeholder="📝 Sobrenome completo">
-            <input type="text" id="filter-mae" placeholder="👩 Nome da Mãe">
-            <input type="text" id="filter-identificacao" placeholder="🆔 Identificação">
-            <select id="filter-especialidade">
-                <option value="">-- Especialidade --</option>
-                <option value="Clínica Geral">Clínica Geral</option>
-                <option value="Psiquiatria">Psiquiatria</option>
-                <option value="Cardiologia">Cardiologia</option>
-                <option value="Dermatologia">Dermatologia</option>
-                <option value="Ginecologia">Ginecologia</option>
-                <option value="Pediatria">Pediatria</option>
-                <option value="Neurologia">Neurologia</option>
-            </select>
-            <button class="filter-btn" onclick="filterPatients()">
+<div class="layout-2col container">
+<section class="content">
+<div class="stats-grid">
+<div class="stat-card">
+<span class="stat-number" id="total-pacientes">5</span>
+<div class="stat-label">Total de Pacientes</div>
+</div>
+<div class="stat-card">
+<span class="stat-number" id="clinica-geral">3</span>
+<div class="stat-label">Clínica Geral</div>
+</div>
+<div class="stat-card">
+<span class="stat-number" id="psiquiatria">1</span>
+<div class="stat-label">Psiquiatria</div>
+</div>
+<div class="stat-card">
+<span class="stat-number" id="cardiologia">1</span>
+<div class="stat-label">Cardiologia</div>
+</div>
+</div>
+<div class="filter-bar">
+<input id="filter-id" placeholder="🔍 ID Persona" type="text"/>
+<input id="filter-nome" placeholder="👤 Nome" type="text"/>
+<input id="filter-sobrenome" placeholder="📝 Sobrenome completo" type="text"/>
+<input id="filter-mae" placeholder="👩 Nome da Mãe" type="text"/>
+<input id="filter-identificacao" placeholder="🆔 Identificação" type="text"/>
+<select id="filter-especialidade">
+<option value="">-- Especialidade --</option>
+<option value="Clínica Geral">Clínica Geral</option>
+<option value="Psiquiatria">Psiquiatria</option>
+<option value="Cardiologia">Cardiologia</option>
+<option value="Dermatologia">Dermatologia</option>
+<option value="Ginecologia">Ginecologia</option>
+<option value="Pediatria">Pediatria</option>
+<option value="Neurologia">Neurologia</option>
+</select>
+<button class="filter-btn" onclick="filterPatients()">
                 🔍 Filtrar
             </button>
-        </div>
-
-        <div class="patients-table-container">
-            <table class="patients-table" id="patients-table">
-                <thead>
-                    <tr>
-                        <th>ID Persona</th>
-                        <th>Nome Completo</th>
-                        <th>Identificação</th>
-                        <th>Data de Nascimento</th>
-                        <th>Idade</th>
-                        <th>Sexo</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                        <th>Especialidade</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-especialidade="Clínica Geral">
-                        <td class="patient-id">335602</td>
-                        <td class="patient-name">Dhelicane Da Silva Costa</td>
-                        <td>032.689.843-70</td>
-                        <td>23/09/1988</td>
-                        <td>36 anos</td>
-                        <td>Feminino</td>
-                        <td>dhelicanecosta@icloud.com</td>
-                        <td>+55 21 99504-0225</td>
-                        <td>Clínica Geral</td>
-                        <td class="action-buttons">
-                            <button class="action-btn" onclick="viewPHR('335602')">📋 Ver PHR</button>
-                            <button class="action-btn secondary" onclick="newOfflineAttention('335602')">🏥 Nova Atenção</button>
-                        </td>
-                    </tr>
-                    <tr data-especialidade="Psiquiatria">
-                        <td class="patient-id">4537263</td>
-                        <td class="patient-name">Hadassa Da Silva Santos Garcia</td>
-                        <td>141.080.897-60</td>
-                        <td>01/08/1991</td>
-                        <td>34 anos</td>
-                        <td>Feminino</td>
-                        <td>silvadassa@gmail.com</td>
-                        <td>+55 21 96018-4773</td>
-                        <td>Psiquiatria</td>
-                        <td class="action-buttons">
-                            <button class="action-btn" onclick="viewPHR('4537263')">📋 Ver PHR</button>
-                            <button class="action-btn secondary" onclick="newOfflineAttention('4537263')">🏥 Nova Atenção</button>
-                        </td>
-                    </tr>
-                    <tr data-especialidade="Clínica Geral">
-                        <td class="patient-id">4849323</td>
-                        <td class="patient-name">William Lopes Do Nascimento</td>
-                        <td>028.762.671-79</td>
-                        <td>10/09/1997</td>
-                        <td>27 anos</td>
-                        <td>Masculino</td>
-                        <td>02876267179@mail.com</td>
-                        <td>+55 21 96017-25613</td>
-                        <td>Clínica Geral</td>
-                        <td class="action-buttons">
-                            <button class="action-btn" onclick="viewPHR('4849323')">📋 Ver PHR</button>
-                            <button class="action-btn secondary" onclick="newOfflineAttention('4849323')">🏥 Nova Atenção</button>
-                        </td>
-                    </tr>
-                    <tr data-especialidade="Cardiologia">
-                        <td class="patient-id">5150400</td>
-                        <td class="patient-name">Erika Carvalho Mendes</td>
-                        <td>118.922.797-22</td>
-                        <td>04/05/1987</td>
-                        <td>38 anos</td>
-                        <td>Feminino</td>
-                        <td>erka.c.mendes@gmail.com</td>
-                        <td>+55 21 96017-25613</td>
-                        <td>Cardiologia</td>
-                        <td class="action-buttons">
-                            <button class="action-btn" onclick="viewPHR('5150400')">📋 Ver PHR</button>
-                            <button class="action-btn secondary" onclick="newOfflineAttention('5150400')">🏥 Nova Atenção</button>
-                        </td>
-                    </tr>
-                    <tr data-especialidade="Clínica Geral">
-                        <td class="patient-id">5155665</td>
-                        <td class="patient-name">Natália Da Silva Mello</td>
-                        <td>099.415.657-08</td>
-                        <td>27/12/1982</td>
-                        <td>42 anos</td>
-                        <td>Feminino</td>
-                        <td>natalla.cathiva@gmail.com</td>
-                        <td>+55 19 61725-613</td>
-                        <td>Clínica Geral</td>
-                        <td class="action-buttons">
-                            <button class="action-btn" onclick="viewPHR('5155665')">📋 Ver PHR</button>
-                            <button class="action-btn secondary" onclick="newOfflineAttention('5155665')">🏥 Nova Atenção</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <button class="back-btn" onclick="history.back()">
+</div>
+<div class="patients-table-container">
+<table class="patients-table" id="patients-table">
+<thead>
+<tr>
+<th>ID Persona</th>
+<th>Nome Completo</th>
+<th>Identificação</th>
+<th>Data de Nascimento</th>
+<th>Idade</th>
+<th>Sexo</th>
+<th>Email</th>
+<th>Telefone</th>
+<th>Especialidade</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody>
+<tr data-especialidade="Clínica Geral">
+<td class="patient-id">335602</td>
+<td class="patient-name">Dhelicane Da Silva Costa</td>
+<td>032.689.843-70</td>
+<td>23/09/1988</td>
+<td>36 anos</td>
+<td>Feminino</td>
+<td>dhelicanecosta@icloud.com</td>
+<td>+55 21 99504-0225</td>
+<td>Clínica Geral</td>
+<td class="action-buttons">
+<button class="action-btn" onclick="viewPHR('335602')">📋 Ver PHR</button>
+<button class="action-btn secondary" onclick="newOfflineAttention('335602')">🏥 Nova Atenção</button>
+</td>
+</tr>
+<tr data-especialidade="Psiquiatria">
+<td class="patient-id">4537263</td>
+<td class="patient-name">Hadassa Da Silva Santos Garcia</td>
+<td>141.080.897-60</td>
+<td>01/08/1991</td>
+<td>34 anos</td>
+<td>Feminino</td>
+<td>silvadassa@gmail.com</td>
+<td>+55 21 96018-4773</td>
+<td>Psiquiatria</td>
+<td class="action-buttons">
+<button class="action-btn" onclick="viewPHR('4537263')">📋 Ver PHR</button>
+<button class="action-btn secondary" onclick="newOfflineAttention('4537263')">🏥 Nova Atenção</button>
+</td>
+</tr>
+<tr data-especialidade="Clínica Geral">
+<td class="patient-id">4849323</td>
+<td class="patient-name">William Lopes Do Nascimento</td>
+<td>028.762.671-79</td>
+<td>10/09/1997</td>
+<td>27 anos</td>
+<td>Masculino</td>
+<td>02876267179@mail.com</td>
+<td>+55 21 96017-25613</td>
+<td>Clínica Geral</td>
+<td class="action-buttons">
+<button class="action-btn" onclick="viewPHR('4849323')">📋 Ver PHR</button>
+<button class="action-btn secondary" onclick="newOfflineAttention('4849323')">🏥 Nova Atenção</button>
+</td>
+</tr>
+<tr data-especialidade="Cardiologia">
+<td class="patient-id">5150400</td>
+<td class="patient-name">Erika Carvalho Mendes</td>
+<td>118.922.797-22</td>
+<td>04/05/1987</td>
+<td>38 anos</td>
+<td>Feminino</td>
+<td>erka.c.mendes@gmail.com</td>
+<td>+55 21 96017-25613</td>
+<td>Cardiologia</td>
+<td class="action-buttons">
+<button class="action-btn" onclick="viewPHR('5150400')">📋 Ver PHR</button>
+<button class="action-btn secondary" onclick="newOfflineAttention('5150400')">🏥 Nova Atenção</button>
+</td>
+</tr>
+<tr data-especialidade="Clínica Geral">
+<td class="patient-id">5155665</td>
+<td class="patient-name">Natália Da Silva Mello</td>
+<td>099.415.657-08</td>
+<td>27/12/1982</td>
+<td>42 anos</td>
+<td>Feminino</td>
+<td>natalla.cathiva@gmail.com</td>
+<td>+55 19 61725-613</td>
+<td>Clínica Geral</td>
+<td class="action-buttons">
+<button class="action-btn" onclick="viewPHR('5155665')">📋 Ver PHR</button>
+<button class="action-btn secondary" onclick="newOfflineAttention('5155665')">🏥 Nova Atenção</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="back-btn" onclick="history.back()">
             ← Voltar
         </button>
-    </main>
+</section>
 
-    <script>
+<aside class="pages-sidebar">
+<div class="card">
+<strong style="color: #374151; display: block; margin-bottom: 8px; font-size: 0.9rem;">📄 Mais Páginas</strong>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+<a href="/phq9-depressao.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Phq9 Depressao</a>
+<a href="/pss10-stress.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Pss10 Stress</a>
+<a href="/sistema-notificacoes-medicas.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Sistema Notific...</a>
+<a href="/stress-pss10.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Stress Pss10</a>
+<a href="/tdah-asrs18.html" style="padding: 4px 8px; background: #e5e7eb; color: #374151; text-decoration: none; border-radius: 4px; font-size: 0.8rem;">Tdah Asrs18</a>
+</div>
+</div>
+
+<div class="card paginas-orfas-menu">
+<h3>📋 Páginas Adicionais</h3>
+<div class="categoria-orfas">
+<strong>🧠 Avaliações Psiquiátricas</strong>
+<a href="/ansiedade-gad7.html">Ansiedade Gad7</a>
+<a href="/bipolar-mdq.html">Bipolar Mdq</a>
+<a href="/depressao-phq9.html">Depressao Phq9</a>
+<span style="color: #6b7280; font-style: italic;"> (+6 mais)</span>
+</div>
+<div class="categoria-orfas">
+<strong>📊 Dashboards Alternativos</strong>
+<a href="/dashboard-aquarela-backup.html">Dashboard Aquarela B...</a>
+<a href="/dashboard-aquarela-simple-backup.html">Dashboard Aquarela S...</a>
+<a href="/dashboard-clean.html">Dashboard Clean</a>
+<span style="color: #6b7280; font-style: italic;"> (+2 mais)</span>
+</div>
+<div class="categoria-orfas">
+<strong>🩺 Consultas Especializadas</strong>
+<a href="/atendimento-medico.html">Atendimento Medico</a>
+</div>
+<div class="categoria-orfas">
+<strong>📄 Outras Páginas</strong>
+<a href="/guia-integracao-hostinger.html">Guia Integracao Host...</a>
+<a href="/links-verificacao-telemed.html">Links Verificacao Te...</a>
+<a href="/logout.html">Logout</a>
+<span style="color: #6b7280; font-style: italic;"> (+2 mais)</span>
+</div>
+</div>
+</aside>
+
+</div>
+</main>
+<script>
         console.log('👥 Meus Pacientes carregado com sucesso!');
         console.log('🔍 Sistema de filtros avançado ativo');
         console.log('📊 Estatísticas dinâmicas implementadas');
@@ -568,6 +725,16 @@
                 document.getElementById('filter-nome').focus();
             }
         });
+        // Função global para calcular altura do header automaticamente
+        (function setHeaderH() {
+            const h = document.querySelector('.header')?.offsetHeight || 72;
+            document.documentElement.style.setProperty('--header-h', `${h}px`);
+            console.log(`📏 Header height configurado: ${h}px`);
+        })();
+        
+        // Reconfigurar na carga da página e redimensionamento
+        window.addEventListener('load', setHeaderH);
+        window.addEventListener('resize', setHeaderH);
     </script>
 </body>
 </html>
