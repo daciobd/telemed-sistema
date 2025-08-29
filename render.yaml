@@ -41,6 +41,9 @@ staticSites:
       - type: rewrite
         source: /precos
         destination: /react-app/index.html
+      - type: rewrite
+        source: /demo-responsivo
+        destination: /demo-responsivo/index.html
 
       # Fallback: qualquer rota em /react-app/... também volta ao index do SPA
       - type: rewrite

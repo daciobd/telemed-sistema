@@ -1,0 +1,49 @@
+<!-- public/preview/demo-responsivo.html  (fonte) -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Demo Responsivo — TeleMed Pro</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Favicon (evita o 404) -->
+  <link rel="icon" href="/favicon.ico" />
+
+  <!-- Tema TeleMed -->
+  <link rel="stylesheet" href="/css/all.min.css" />
+  <link rel="stylesheet" href="/css/theme-telemed.css" />
+  <!-- Se usar algum estilo local, inclua aqui -->
+  <!-- <link rel="stylesheet" href="/css/demo-responsivo.css" /> -->
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand"><div class="badge">TM</div><strong>TeleMed Pro</strong></div>
+      <nav class="nav">
+        <a class="btn" href="/dashboard/">Dashboard</a>
+        <a class="btn" href="/consulta/">Consulta</a>
+      </nav>
+    </header>
+
+    <main class="content">
+      <h1>Demo Responsivo</h1>
+      <p>Teste o layout em diferentes larguras. Este demo usa o tema oficial.</p>
+      <div class="grid">
+        <div class="card"><div class="card-body">Card 1</div></div>
+        <div class="card"><div class="card-body">Card 2</div></div>
+        <div class="card"><div class="card-body">Card 3</div></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Utilitários e hidratação de links -->
+  <script src="/js/express-utils.js"></script>
+  <script>
+    // hidratação de data-path (se você preferir usar data-path nos links)
+    window.APP_URL = window.APP_URL || '';
+    document.querySelectorAll('a[data-path]').forEach(a=>{
+      const p = a.getAttribute('data-path'); a.href = window.APP_URL + p;
+    });
+  </script>
+</body>
+</html>
