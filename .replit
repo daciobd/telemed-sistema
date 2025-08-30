@@ -4,7 +4,7 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["chromium", "fltk", "unzip", "zip", "rsync"]
+packages = ["chromium", "fltk", "unzip", "zip", "rsync", "nano"]
 
 [deployment]
 deploymentTarget = "gce"
