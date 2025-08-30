@@ -1,56 +1,56 @@
-        staticSites:
-        - name: telemed-static
-          publishPath: public_live
-          buildCommand: ""   # sem build no Replit
+staticSites:
+- name: telemed-static
+  publishPath: public_live
+  buildCommand: ""
 
-          routes:
-            # 1) DEMO RESPONSIVO (precisa vir antes do SPA!)
-            - type: rewrite
-              source: /demo-responsivo
-              destination: /demo-responsivo/index.html
-            - type: rewrite
-              source: /demo-responsivo/
-              destination: /demo-responsivo/index.html
+  routes:
+    # DEMO RESPONSIVO (fica antes do SPA)
+    - type: rewrite
+      source: /demo-responsivo
+      destination: /demo-responsivo/index.html
+    - type: rewrite
+      source: /demo-responsivo/
+      destination: /demo-responsivo/index.html
 
-            # 2) Rotas do SPA (React) – servem /react-app/index.html
-            - type: rewrite
-              source: /dashboard
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /cadastro
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /consulta
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /dr-ai
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /medico
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /centro-de-testes
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /gestao-avancada
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /meus-pacientes
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /agenda
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /sala-de-espera
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /como-funciona
-              destination: /react-app/index.html
-            - type: rewrite
-              source: /precos
-              destination: /react-app/index.html
+    # SPA (React)
+    - type: rewrite
+      source: /dashboard
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /cadastro
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /consulta
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /dr-ai
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /medico
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /centro-de-testes
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /gestao-avancada
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /meus-pacientes
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /agenda
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /sala-de-espera
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /como-funciona
+      destination: /react-app/index.html
+    - type: rewrite
+      source: /precos
+      destination: /react-app/index.html
 
-            # 3) Fallback para qualquer coisa dentro de /react-app
-            - type: rewrite
-              source: /react-app/*
-              destination: /react-app/index.html
+    # Fallback do SPA
+    - type: rewrite
+      source: /react-app/*
+      destination: /react-app/index.html

@@ -233,7 +233,7 @@
         <a href="/como-funciona" class="demo-link">❓ Como Funciona</a>
         <a href="/precos" class="demo-link">💰 Preços e Planos</a>
         <a href="/dr-ai" class="demo-link">🤖 Dr. IA</a>
-        <a href="/demo-responsivo" class="demo-link">📱 Demo Responsivo</a>
+        <a href="/demo-responsivo/" class="demo-link">📱 Demo Responsivo</a>
         <a href="/registro-saude" class="demo-link">📋 Registro de Saúde</a>
       </div>
     </div>
